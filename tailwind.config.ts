@@ -57,6 +57,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        faredown: {
+          blue: "hsl(var(--faredown-blue))",
+          orange: "hsl(var(--faredown-orange))",
+          green: "hsl(var(--faredown-green))",
+          red: "hsl(var(--faredown-red))",
+          gray: "hsl(var(--faredown-gray))",
+          light: "hsl(var(--faredown-light))",
+        },
+        price: {
+          up: "hsl(var(--price-up))",
+          down: "hsl(var(--price-down))",
+          neutral: "hsl(var(--price-neutral))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
