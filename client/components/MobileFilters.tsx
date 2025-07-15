@@ -44,30 +44,27 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
               {
                 label: "Price (Low to High)",
                 value: "price_asc",
-                active: true,
               },
               {
                 label: "Price (High to Low)",
                 value: "price_desc",
-                active: false,
               },
               {
                 label: "Duration (Shortest)",
                 value: "duration_asc",
-                active: false,
               },
               {
                 label: "Departure Time",
                 value: "departure_asc",
-                active: false,
               },
-              { label: "Best Value", value: "best_value", active: false },
+              { label: "Best Value", value: "best_value" },
             ].map((option) => (
               <button
                 key={option.value}
+                onClick={() => setSelectedSort(option.value)}
                 className={cn(
                   "w-full flex items-center justify-between p-3 rounded-lg border-2 touch-manipulation",
-                  option.active
+                  selectedSort === option.value
                     ? "border-blue-600 bg-blue-50"
                     : "border-gray-200 hover:border-gray-300",
                 )}
@@ -75,12 +72,16 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
                 <span
                   className={cn(
                     "text-sm font-medium",
-                    option.active ? "text-blue-700" : "text-gray-700",
+                    selectedSort === option.value
+                      ? "text-blue-700"
+                      : "text-gray-700",
                   )}
                 >
                   {option.label}
                 </span>
-                {option.active && <Check className="w-5 h-5 text-blue-600" />}
+                {selectedSort === option.value && (
+                  <Check className="w-5 h-5 text-blue-600" />
+                )}
               </button>
             ))}
           </div>
