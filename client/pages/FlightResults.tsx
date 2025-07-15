@@ -1117,10 +1117,8 @@ export default function FlightResults() {
                     <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
                       {cityData[selectedFromCity]?.code || "BOM"}
                     </div>
-                    <span className="text-sm text-gray-700 font-medium">
-                      {cityData[selectedFromCity]?.airport ||
-                        "Chhatrapati Shivaji International"}
-                      ...
+                    <span className="text-sm text-gray-700 font-medium truncate">
+                      {cityData[selectedFromCity]?.name || "Mumbai"}
                     </span>
                   </div>
                 </button>
