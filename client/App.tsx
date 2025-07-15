@@ -11,6 +11,7 @@ import Account from "./pages/Account";
 import Booking from "./pages/Booking";
 import Hotels from "./pages/Hotels";
 import HotelResults from "./pages/HotelResults";
+import HotelDetails from "./pages/HotelDetails";
 import HotelBooking from "./pages/HotelBooking";
 import Sightseeing from "./pages/Sightseeing";
 import SportsEvents from "./pages/SportsEvents";
