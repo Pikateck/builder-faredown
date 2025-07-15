@@ -34,8 +34,19 @@ export function calculateTotalPrice(
 
 export function formatPriceWithSymbol(
   priceInUSD: number,
-  currency: Currency,
+  currencyOrCode: Currency | string,
 ): string {
+  // Handle both Currency object and currency code string
+  let currency: Currency;
+
+  if (typeof currencyOrCode === "string") {
+    // Find currency by code
+    const foundCurrency = CURRENCIES.find((c) => c.code === currencyOrCode);
+    currency = foundCurrency || CURRENCIES[0]; // Default to USD if not found
+  } else {
+    currency = currencyOrCode;
+  }
+
   const convertedPrice = priceInUSD * currency.rate;
   return `${currency.symbol}${convertedPrice.toFixed(2)}`;
 }
