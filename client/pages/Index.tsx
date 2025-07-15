@@ -571,13 +571,13 @@ export default function Index() {
 
                 {/* Search inputs */}
                 <div className="flex flex-col gap-3 sm:gap-2 mt-3 sm:mt-2 w-full overflow-visible">
-                  <div className="relative flex-1">
-                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium">
+                  <div className="relative w-full">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Leaving from
                     </label>
                     <button
                       onClick={() => setShowFromCities(!showFromCities)}
-                      className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-full w-full hover:border-blue-600"
+                      className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-3 sm:py-2 h-full w-full hover:border-blue-600 min-h-[48px] sm:min-h-[40px]"
                     >
                       <Plane className="w-4 h-4 text-gray-500 mr-2" />
                       <div className="flex items-center space-x-2">
