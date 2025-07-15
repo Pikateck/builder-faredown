@@ -2961,6 +2961,12 @@ export default function FlightResults() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Mobile Filters Modal */}
+      <MobileFilters
+        isOpen={showMobileFilters}
+        onClose={() => setShowMobileFilters(false)}
+      />
     </div>
   );
 }
