@@ -4,48 +4,22 @@ import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, Heart } from "lucide-react";
 
 export default function Hotels() {
-  const navigate = useNavigate();
-
-  // Search form states
-  const [destination, setDestination] = useState("");
-  const [checkInDate, setCheckInDate] = useState("2024-12-15");
-  const [checkOutDate, setCheckOutDate] = useState("2024-12-18");
-  const [guests, setGuests] = useState({ adults: 2, children: 0, rooms: 1 });
-  const [showGuestSelector, setShowGuestSelector] = useState(false);
-  const [showDestinations, setShowDestinations] = useState(false);
-
-  // UI states
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  // Sample destinations data
-  const popularDestinations = [
-    { city: "Dubai", country: "UAE", hotels: 1240, image: "🏙️" },
-    { city: "Mumbai", country: "India", hotels: 856, image: "🌆" },
-    { city: "Singapore", country: "Singapore", hotels: 523, image: "🏨" },
-    { city: "London", country: "UK", hotels: 1150, image: "🏛️" },
-    { city: "Paris", country: "France", hotels: 967, image: "🗼" },
-    { city: "New York", country: "USA", hotels: 1325, image: "🗽" },
+  const recentSearches = [
+    {
+      destination: "Dubai",
+      dates: "Aug 1 - Aug 5 people",
+      image:
+        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100",
+    },
   ];
 
-  const handleSearch = () => {
-    // Navigate to hotel results with search parameters
-    const searchParams = new URLSearchParams({
-      destination,
-      checkIn: checkInDate,
-      checkOut: checkOutDate,
-      adults: guests.adults.toString(),
-      children: guests.children.toString(),
-      rooms: guests.rooms.toString(),
-    });
-
-    navigate(`/hotels/results?${searchParams}`);
-  };
-
-  const handleSignOut = () => {
-    setIsLoggedIn(false);
-    setUserName("");
+  const interestedProperty = {
+    name: "Grand Hyatt Dubai",
+    location: "Dubai - Deira Creek",
+    rating: 8.1,
+    ratingText: "Excellent",
+    reviews: 234,
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300",
   };
 
   return (
