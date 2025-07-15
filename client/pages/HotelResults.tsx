@@ -192,7 +192,7 @@ export default function HotelResults() {
   };
 
   const handleClearFilters = () => {
-    setPriceRange([0, 1000]);
+    setPriceRange([0, 50000]); // Appropriate range for INR
     setSelectedRating([]);
     setSelectedAmenities([]);
     setSortBy("recommended");
