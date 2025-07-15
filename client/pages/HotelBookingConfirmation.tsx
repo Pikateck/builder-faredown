@@ -15,7 +15,7 @@ import {
   Phone,
   Star,
   Share2,
-  Print,
+  Printer,
   CreditCard,
   Hotel,
   Plane,
