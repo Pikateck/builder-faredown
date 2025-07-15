@@ -166,7 +166,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
   const getSeatClass = (seat, flightLeg) => {
     const status = getSeatStatus(seat, flightLeg);
     const baseClass =
-      "w-8 h-8 text-xs rounded cursor-pointer transition-all duration-200 flex items-center justify-center font-medium";
+      "w-8 h-8 sm:w-9 sm:h-9 text-xs sm:text-sm rounded cursor-pointer transition-all duration-200 flex items-center justify-center font-medium touch-manipulation";
 
     switch (status) {
       case "unavailable":
@@ -918,7 +918,7 @@ export default function BookingFlow() {
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
     { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
-    { name: "Honduras", code: "+504", flag: "🇭🇳" },
+    { name: "Honduras", code: "+504", flag: "🇭��" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
     { name: "Hungary", code: "+36", flag: "🇭��" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
