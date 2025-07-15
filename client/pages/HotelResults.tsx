@@ -58,7 +58,7 @@ export default function HotelResults() {
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
   const [sortBy, setSortBy] = useState("recommended");
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 50000]); // Appropriate range for INR
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
