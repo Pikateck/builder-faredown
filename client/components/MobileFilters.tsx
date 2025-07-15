@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { X, Settings, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,15 @@ interface MobileFiltersProps {
 }
 
 export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
+  const [selectedSort, setSelectedSort] = useState("price_asc");
+  const [selectedAirlines, setSelectedAirlines] = useState<string[]>([
+    "Emirates",
+  ]);
+  const [selectedStops, setSelectedStops] = useState<string[]>(["Direct"]);
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([
+    "Afternoon",
+  ]);
+
   if (!isOpen) return null;
 
   return (
