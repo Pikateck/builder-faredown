@@ -1036,14 +1036,16 @@ export default function Index() {
                     )}
                   </div>
 
-                  <Link
-                    to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
-                    className="w-full sm:w-auto"
-                  >
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 sm:py-2 rounded h-12 font-medium text-sm w-full sm:w-auto min-h-[56px] sm:min-h-[40px] touch-manipulation">
-                      Search
-                    </Button>
-                  </Link>
+                  <div className="lg:max-w-[100px] w-full lg:w-auto">
+                    <Link
+                      to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
+                      className="w-full"
+                    >
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
+                        Search
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
