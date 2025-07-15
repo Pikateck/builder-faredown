@@ -166,7 +166,7 @@ export function EnhancedBargainModal({
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Negotiation logic
-    const originalTotalPrice = priceCalculation.totalPrice;
+    const originalTotalPrice = priceCalculation.total;
     const minAcceptablePrice = originalTotalPrice * 0.75; // 25% max discount
     const goodPrice = originalTotalPrice * 0.85; // 15% discount is good
     const discountPercentage =
