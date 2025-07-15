@@ -2169,7 +2169,9 @@ export default function FlightResults() {
                     {/* Expanded Ticket Options */}
                     {expandedTicketOptions === flight.id && (
                       <div className="border-t border-gray-200 bg-gray-50">
-                        <div className="grid grid-cols-3 divide-x divide-gray-200">
+                        <div
+                          className={`grid ${flight.fareTypes.length === 2 ? "grid-cols-2" : "grid-cols-3"} divide-x divide-gray-200`}
+                        >
                           {flight.fareTypes.map((fareType, index) => (
                             <div key={index} className="p-4 text-center">
                               <div className="mb-2 relative group">
