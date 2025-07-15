@@ -930,7 +930,7 @@ export default function BookingFlow() {
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
     { name: "Indonesia", code: "+62", flag: "🇮🇩" },
-    { name: "Iran", code: "+98", flag: "����🇷" },
+    { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮���" },
@@ -1478,7 +1478,7 @@ export default function BookingFlow() {
             <div>
               <div className="text-sm text-[#666] mb-1">
                 One way • {travellers.length} traveller
-                {travellers.length > 1 ? "s" : ""} �� Sat, Aug 3
+                {travellers.length > 1 ? "s" : ""} • Sat, Aug 3
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
                 Mumbai to Dubai
@@ -2583,33 +2583,50 @@ export default function BookingFlow() {
                     )}
                   </div>
 
-                  {/* Child Section - Collapsible */}
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between items-center text-gray-900">
-                      <button
-                        onClick={() => setShowChildFare(!showChildFare)}
-                        className="flex items-center space-x-1"
-                      >
-                        <span>Child (1)</span>
-                        <ChevronDown
-                          className={`w-3 h-3 transition-transform ${showChildFare ? "rotate-180" : ""}`}
-                        />
-                      </button>
-                      <span>{formatCurrency(34503)}</span>
-                    </div>
-                    {showChildFare && (
-                      <div className="ml-4 space-y-1">
-                        <div className="flex justify-between text-[#666]">
-                          <span>Flight fare</span>
-                          <span>{formatCurrency(31212)}</span>
-                        </div>
-                        <div className="flex justify-between text-[#666]">
-                          <span>Airline taxes and fees</span>
-                          <span>{formatCurrency(3291)}</span>
-                        </div>
+                  {/* Child Section - Collapsible (only show if children exist) */}
+                  {passengersFromState.children > 0 && (
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-center text-gray-900">
+                        <button
+                          onClick={() => setShowChildFare(!showChildFare)}
+                          className="flex items-center space-x-1"
+                        >
+                          <span>
+                            Child{passengersFromState.children > 1 ? "ren" : ""}{" "}
+                            ({passengersFromState.children})
+                          </span>
+                          <ChevronDown
+                            className={`w-3 h-3 transition-transform ${showChildFare ? "rotate-180" : ""}`}
+                          />
+                        </button>
+                        <span>
+                          {formatCurrency(calculateTotalChildrenPrice())}
+                        </span>
                       </div>
-                    )}
-                  </div>
+                      {showChildFare && (
+                        <div className="ml-4 space-y-1">
+                          <div className="flex justify-between text-[#666]">
+                            <span>Flight fare</span>
+                            <span>
+                              {formatCurrency(
+                                calculateChildPrice() *
+                                  passengersFromState.children,
+                              )}
+                            </span>
+                          </div>
+                          <div className="flex justify-between text-[#666]">
+                            <span>Airline taxes and fees</span>
+                            <span>
+                              {formatCurrency(
+                                calculateChildTaxes() *
+                                  passengersFromState.children,
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Extras in Price Details */}
