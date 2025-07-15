@@ -1,0 +1,234 @@
+import React from "react";
+import { X, Settings, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
+interface MobileFiltersProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
+      <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-gray-900">Filters & Sort</h2>
+        <button
+          onClick={onClose}
+          className="p-2 text-gray-500 hover:text-gray-700 touch-manipulation"
+        >
+          <X className="w-6 h-6" />
+        </button>
+      </div>
+
+      <div className="p-4">
+        {/* Sort Options */}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold text-gray-900 mb-3">
+            Sort by
+          </h3>
+          <div className="space-y-2">
+            {[
+              {
+                label: "Price (Low to High)",
+                value: "price_asc",
+                active: true,
+              },
+              {
+                label: "Price (High to Low)",
+                value: "price_desc",
+                active: false,
+              },
+              {
+                label: "Duration (Shortest)",
+                value: "duration_asc",
+                active: false,
+              },
+              {
+                label: "Departure Time",
+                value: "departure_asc",
+                active: false,
+              },
+              { label: "Best Value", value: "best_value", active: false },
+            ].map((option) => (
+              <button
+                key={option.value}
+                className={cn(
+                  "w-full flex items-center justify-between p-3 rounded-lg border-2 touch-manipulation",
+                  option.active
+                    ? "border-blue-600 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300",
+                )}
+              >
+                <span
+                  className={cn(
+                    "text-sm font-medium",
+                    option.active ? "text-blue-700" : "text-gray-700",
+                  )}
+                >
+                  {option.label}
+                </span>
+                {option.active && <Check className="w-5 h-5 text-blue-600" />}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Price Range */}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold text-gray-900 mb-3">
+            Price Range
+          </h3>
+          <div className="px-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-600">₹15,000</span>
+              <span className="text-sm text-gray-600">₹80,000+</span>
+            </div>
+            <div className="relative">
+              <div className="h-2 bg-gray-200 rounded-full">
+                <div
+                  className="h-2 bg-blue-600 rounded-full"
+                  style={{ width: "60%" }}
+                ></div>
+              </div>
+              <div className="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -mt-1 -ml-2"></div>
+              <div className="absolute right-2/5 top-0 w-4 h-4 bg-blue-600 rounded-full -mt-1 -ml-2"></div>
+            </div>
+            <div className="flex items-center justify-between mt-2">
+              <span className="text-sm font-medium text-gray-900">₹32,000</span>
+              <span className="text-sm font-medium text-gray-900">₹50,000</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Airlines */}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold text-gray-900 mb-3">
+            Airlines
+          </h3>
+          <div className="space-y-3">
+            {[
+              { name: "Emirates", count: 4, checked: true },
+              { name: "IndiGo", count: 6, checked: false },
+              { name: "Air India", count: 3, checked: false },
+              { name: "Qatar Airways", count: 2, checked: false },
+              { name: "Etihad", count: 1, checked: false },
+            ].map((airline) => (
+              <label
+                key={airline.name}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={airline.checked}
+                    className="w-5 h-5 text-blue-600 rounded border-gray-300"
+                  />
+                  <span className="text-sm text-gray-700">{airline.name}</span>
+                </div>
+                <span className="text-xs text-gray-500">({airline.count})</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Stops */}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold text-gray-900 mb-3">Stops</h3>
+          <div className="space-y-3">
+            {[
+              { label: "Direct", count: 8, checked: true },
+              { label: "1 Stop", count: 12, checked: false },
+              { label: "2+ Stops", count: 4, checked: false },
+            ].map((stop) => (
+              <label
+                key={stop.label}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={stop.checked}
+                    className="w-5 h-5 text-blue-600 rounded border-gray-300"
+                  />
+                  <span className="text-sm text-gray-700">{stop.label}</span>
+                </div>
+                <span className="text-xs text-gray-500">({stop.count})</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Departure Time */}
+        <div className="mb-8">
+          <h3 className="text-base font-semibold text-gray-900 mb-3">
+            Departure Time
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { label: "Morning", time: "6AM - 12PM", checked: false },
+              { label: "Afternoon", time: "12PM - 6PM", checked: true },
+              { label: "Evening", time: "6PM - 12AM", checked: false },
+              { label: "Night", time: "12AM - 6AM", checked: false },
+            ].map((timeSlot) => (
+              <label key={timeSlot.label} className="cursor-pointer">
+                <div
+                  className={cn(
+                    "p-3 rounded-lg border-2 text-center touch-manipulation",
+                    timeSlot.checked
+                      ? "border-blue-600 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300",
+                  )}
+                >
+                  <input
+                    type="checkbox"
+                    checked={timeSlot.checked}
+                    className="sr-only"
+                  />
+                  <div
+                    className={cn(
+                      "text-sm font-medium",
+                      timeSlot.checked ? "text-blue-700" : "text-gray-700",
+                    )}
+                  >
+                    {timeSlot.label}
+                  </div>
+                  <div
+                    className={cn(
+                      "text-xs",
+                      timeSlot.checked ? "text-blue-600" : "text-gray-500",
+                    )}
+                  >
+                    {timeSlot.time}
+                  </div>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex space-x-3 pt-4 border-t border-gray-200">
+          <Button
+            variant="outline"
+            className="flex-1 py-3 touch-manipulation"
+            onClick={() => {
+              // Clear all filters logic
+            }}
+          >
+            Clear All
+          </Button>
+          <Button
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 touch-manipulation"
+            onClick={onClose}
+          >
+            Apply Filters
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
