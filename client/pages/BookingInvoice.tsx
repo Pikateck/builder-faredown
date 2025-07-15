@@ -213,7 +213,7 @@ export default function BookingInvoice() {
             Download PDF
           </Button>
           <Button onClick={handlePrint} variant="outline">
-            <Print className="w-4 h-4 mr-2" />
+            <Printer className="w-4 h-4 mr-2" />
             Print Invoice
           </Button>
           <Button onClick={handleShare} variant="outline">
