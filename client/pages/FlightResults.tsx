@@ -1239,16 +1239,16 @@ export default function FlightResults() {
                 )}
               </div>
 
-              <div className="relative overflow-visible lg:max-w-[200px] w-full lg:w-auto">
+              <div className="relative overflow-visible lg:max-w-[280px] w-full lg:w-auto">
                 <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium">
                   Travel dates
                 </label>
                 <button
                   onClick={() => setShowCalendar(!showCalendar)}
-                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[180px] hover:border-blue-500"
+                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[250px] hover:border-blue-500"
                 >
                   <svg
-                    className="w-4 h-4 text-gray-500 mr-2"
+                    className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -1260,7 +1260,7 @@ export default function FlightResults() {
                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className="text-sm text-gray-700 font-medium">
+                  <span className="text-sm text-gray-700 font-medium truncate">
                     {tripType === "one-way"
                       ? selectedDepartureDate
                       : `${selectedDepartureDate} - ${selectedReturnDate}`}
