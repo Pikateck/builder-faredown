@@ -735,7 +735,7 @@ export default function Index() {
                     </button>
 
                     {showCalendar && (
-                      <div className="absolute top-14 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-[650px] overflow-hidden">
+                      <div className="absolute top-14 left-0 right-0 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-full sm:w-[650px] max-w-[650px] overflow-hidden">
                         <div className="flex justify-between items-center p-4 bg-white border-b border-gray-200">
                           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                             <ChevronLeft className="w-4 h-4 text-gray-600" />
