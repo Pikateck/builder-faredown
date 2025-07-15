@@ -284,6 +284,39 @@ export default function HotelDetails() {
                   <span>{hotel.email}</span>
                 </div>
               </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mt-6">
+                <Button
+                  onClick={() =>
+                    handleBargainClick(
+                      hotel.roomTypes[0] || {
+                        name: "Standard Room",
+                        price: hotel.currentPrice,
+                        features: ["King Bed", "City View"],
+                        maxGuests: 2,
+                      },
+                    )
+                  }
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
+                >
+                  <TrendingDown className="w-4 h-4 mr-2" />
+                  Bargain Best Price
+                </Button>
+                <Button
+                  onClick={() =>
+                    handleBooking(
+                      hotel.roomTypes[0] || {
+                        name: "Standard Room",
+                        price: hotel.currentPrice,
+                      },
+                    )
+                  }
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  Book Now
+                </Button>
+              </div>
             </div>
           </div>
         </div>
