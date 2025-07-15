@@ -123,6 +123,11 @@ export default function HotelDetails() {
     );
   };
 
+  const handleBargainClick = (roomType: any) => {
+    setSelectedRoomType(roomType);
+    setIsBargainModalOpen(true);
+  };
+
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "gallery", label: "Gallery" },
