@@ -134,7 +134,7 @@ export default function HotelBookingConfirmation() {
       color: "bg-blue-600 hover:bg-blue-700",
     },
     {
-      icon: Print,
+      icon: Printer,
       label: "Print Confirmation",
       action: handlePrintConfirmation,
       color: "bg-gray-600 hover:bg-gray-700",
