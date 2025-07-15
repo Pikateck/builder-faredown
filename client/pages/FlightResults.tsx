@@ -135,6 +135,11 @@ export default function FlightResults() {
   const [userName, setUserName] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
+  // Mobile UI states
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [showSortOptions, setShowSortOptions] = useState(false);
+  const [showSearchEdit, setShowSearchEdit] = useState(false);
+
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
