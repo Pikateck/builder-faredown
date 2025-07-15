@@ -316,7 +316,13 @@ export function HotelSearchForm({
                 className="w-full justify-start text-left"
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {checkOut ? format(checkOut, "MMM dd, yyyy") : "Select date"}
+                {checkOut
+                  ? checkOut.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
