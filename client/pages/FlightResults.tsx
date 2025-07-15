@@ -731,19 +731,24 @@ export default function FlightResults() {
           'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
       }}
     >
-      {/* Header - Same as landing page */}
-      <header className="bg-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3">
+      {/* Header - Enhanced for mobile */}
+      <header className="bg-blue-700 text-white sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold tracking-tight">
-                faredown.com
-              </span>
-            </Link>
+            <div className="flex items-center space-x-3">
+              <Link to="/" className="flex items-center space-x-2">
+                <span className="text-base sm:text-xl font-bold tracking-tight">
+                  faredown.com
+                </span>
+              </Link>
+              <div className="text-xs sm:text-sm text-blue-200 hidden sm:block">
+                / Flight Results
+              </div>
+            </div>
             <div className="flex items-center space-x-2 md:space-x-6">
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="md:hidden text-white p-2"
+                className="md:hidden text-white p-2 touch-manipulation"
               >
                 <Menu className="w-6 h-6" />
               </button>
