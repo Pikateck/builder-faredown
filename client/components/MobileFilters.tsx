@@ -164,9 +164,9 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
           <h3 className="text-base font-semibold text-gray-900 mb-3">Stops</h3>
           <div className="space-y-3">
             {[
-              { label: "Direct", count: 8, checked: true },
-              { label: "1 Stop", count: 12, checked: false },
-              { label: "2+ Stops", count: 4, checked: false },
+              { label: "Direct", count: 8 },
+              { label: "1 Stop", count: 12 },
+              { label: "2+ Stops", count: 4 },
             ].map((stop) => (
               <label
                 key={stop.label}
@@ -175,7 +175,16 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
-                    checked={stop.checked}
+                    checked={selectedStops.includes(stop.label)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedStops([...selectedStops, stop.label]);
+                      } else {
+                        setSelectedStops(
+                          selectedStops.filter((label) => label !== stop.label),
+                        );
+                      }
+                    }}
                     className="w-5 h-5 text-blue-600 rounded border-gray-300"
                   />
                   <span className="text-sm text-gray-700">{stop.label}</span>
