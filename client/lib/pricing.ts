@@ -47,8 +47,8 @@ export function formatPriceWithSymbol(
     currency = currencyOrCode;
   }
 
-  const convertedPrice = priceInUSD * currency.rate;
-  return `${currency.symbol}${convertedPrice.toFixed(2)}`;
+  const convertedPrice = Math.round(priceInUSD * currency.rate);
+  return `${currency.symbol}${convertedPrice.toLocaleString()}`;
 }
 
 export function formatPrice(
