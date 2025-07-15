@@ -1,805 +1,469 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Header } from "@/components/Header";
+import { HotelCard } from "@/components/HotelCard";
+import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { EnhancedBargainModal } from "@/components/EnhancedBargainModal";
+import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
+  SlidersHorizontal,
   MapPin,
-  Star,
-  Wifi,
-  Car,
-  Coffee,
-  Dumbbell,
-  Waves,
+  CalendarIcon,
   Users,
-  Calendar,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  X,
-  Menu,
+  Star,
   Filter,
-  SortAsc,
-  Heart,
-  User,
-  BookOpen,
-  Award,
-  LogOut,
-  CreditCard,
-  Settings,
+  TrendingDown,
+  Grid,
+  List,
 } from "lucide-react";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { formatPriceWithSymbol } from "@/lib/pricing";
 
-// Sample hotel data - this would come from your echo-space project
-const hotelData = [
-  {
-    id: 1,
-    name: "The Ritz-Carlton Dubai",
-    location: "Downtown Dubai, Dubai",
-    rating: 4.8,
-    reviews: 2847,
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
-    price: 25600,
-    originalPrice: 32000,
-    amenities: ["wifi", "pool", "gym", "parking", "restaurant"],
-    roomType: "Deluxe Room",
-    cancellation: "Free cancellation",
-    breakfast: "Breakfast included",
-    discount: 20,
-  },
-  {
-    id: 2,
-    name: "JW Marriott Marquis Dubai",
-    location: "Business Bay, Dubai",
-    rating: 4.7,
-    reviews: 1923,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400",
-    price: 18900,
-    originalPrice: 23625,
-    amenities: ["wifi", "pool", "gym", "spa", "restaurant"],
-    roomType: "Superior Room",
-    cancellation: "Free cancellation",
-    breakfast: "Breakfast included",
-    discount: 15,
-  },
-  {
-    id: 3,
-    name: "Atlantis The Palm",
-    location: "Palm Jumeirah, Dubai",
-    rating: 4.6,
-    reviews: 3156,
-    image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400",
-    price: 42000,
-    originalPrice: 50000,
-    amenities: ["wifi", "pool", "gym", "waterpark", "restaurant"],
-    roomType: "Ocean View Suite",
-    cancellation: "Non-refundable",
-    breakfast: "Breakfast not included",
-    discount: 16,
-  },
-  {
-    id: 4,
-    name: "Grand Hyatt Mumbai",
-    location: "Bandra Kurla Complex, Mumbai",
-    rating: 4.5,
-    reviews: 1567,
-    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400",
-    price: 12800,
-    originalPrice: 16000,
-    amenities: ["wifi", "pool", "gym", "spa", "restaurant"],
-    roomType: "Grand Room",
-    cancellation: "Free cancellation",
-    breakfast: "Breakfast included",
-    discount: 20,
-  },
-];
-
-// Amenity icons mapping
-const amenityIcons = {
-  wifi: Wifi,
-  pool: Waves,
-  gym: Dumbbell,
-  parking: Car,
-  restaurant: Coffee,
-  spa: "🧖",
-  waterpark: "🏊",
-};
+interface Hotel {
+  id: number;
+  name: string;
+  location: string;
+  images: string[];
+  rating: number;
+  reviews: number;
+  originalPrice: number;
+  currentPrice: number;
+  description: string;
+  amenities: string[];
+  features: string[];
+  roomTypes: {
+    name: string;
+    price: number;
+    features: string[];
+  }[];
+}
 
 export default function HotelResults() {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { selectedCurrency } = useCurrency();
+  const [sortBy, setSortBy] = useState("recommended");
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [selectedRating, setSelectedRating] = useState<number[]>([]);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
+  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   // Get search parameters
-  const destination = searchParams.get("destination") || "Dubai, UAE";
-  const checkIn = searchParams.get("checkIn") || "2024-12-15";
-  const checkOut = searchParams.get("checkOut") || "2024-12-18";
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const rooms = parseInt(searchParams.get("rooms") || "1");
+  const destination = searchParams.get("destination") || "";
+  const checkIn = searchParams.get("checkIn") || "";
+  const checkOut = searchParams.get("checkOut") || "";
+  const adults = searchParams.get("adults") || "2";
+  const children = searchParams.get("children") || "0";
+  const rooms = searchParams.get("rooms") || "1";
 
-  // UI States
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [showSortOptions, setShowSortOptions] = useState(false);
-  const [sortBy, setSortBy] = useState<"price" | "rating" | "distance">(
-    "price",
-  );
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  // Filter States
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
-  const [selectedRating, setSelectedRating] = useState(0);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-
-  // Bargaining States
-  const [showBargainModal, setShowBargainModal] = useState(false);
-  const [bargainHotel, setBargainHotel] = useState<any>(null);
-  const [bargainStep, setBargainStep] = useState<
-    "input" | "progress" | "result"
-  >("input");
-  const [bargainPrice, setBargainPrice] = useState("");
-  const [bargainProgress, setBargainProgress] = useState(0);
-  const [bargainResult, setBargainResult] = useState<
-    "accepted" | "rejected" | "counter" | null
-  >(null);
-  const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
-  const [usedPrices, setUsedPrices] = useState<Set<string>>(new Set());
-
-  // Format currency
-  const formatCurrency = (amount: number) => {
-    return `₹${amount.toLocaleString("en-IN")}`;
+  // Handle search function
+  const handleSearch = () => {
+    // For now, just refresh the page with current parameters
+    // In a real app, this would trigger a new search
+    window.location.reload();
   };
 
-  // Calculate number of nights
-  const calculateNights = () => {
-    const checkInDate = new Date(checkIn);
-    const checkOutDate = new Date(checkOut);
-    const diffTime = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  // Mock hotel data
+  const mockHotels: Hotel[] = [
+    {
+      id: 1,
+      name: "Grand Plaza Hotel",
+      location: `${destination || "New York, NY"}`,
+      images: [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600",
+      ],
+      rating: 4.8,
+      reviews: 1234,
+      originalPrice: 299,
+      currentPrice: 179,
+      description:
+        "Experience luxury in the heart of the city with stunning views, world-class amenities, and exceptional service.",
+      amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
+      features: ["City View", "Business Center", "Concierge", "Room Service"],
+      roomTypes: [
+        {
+          name: "Standard Room",
+          price: 179,
+          features: ["King Bed", "City View", "Free WiFi"],
+        },
+        {
+          name: "Deluxe Suite",
+          price: 259,
+          features: ["Living Area", "Ocean View", "Mini Bar"],
+        },
+        {
+          name: "Presidential Suite",
+          price: 499,
+          features: ["2 Bedrooms", "Private Balcony", "Butler Service"],
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Ocean View Resort",
+      location: `${destination || "Miami, FL"}`,
+      images: [
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600",
+      ],
+      rating: 4.6,
+      reviews: 856,
+      originalPrice: 449,
+      currentPrice: 269,
+      description:
+        "Beachfront paradise with pristine white sand beaches, crystal clear waters, and tropical luxury.",
+      amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
+      features: [
+        "Beachfront",
+        "All-Inclusive Available",
+        "Water Sports",
+        "Sunset Views",
+      ],
+      roomTypes: [
+        {
+          name: "Ocean View Room",
+          price: 269,
+          features: ["Queen Bed", "Ocean View", "Balcony"],
+        },
+        {
+          name: "Beach Villa",
+          price: 399,
+          features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: "Mountain Lodge",
+      location: `${destination || "Aspen, CO"}`,
+      images: [
+        "https://images.unsplash.com/photo-1549294413-26f195200c16?w=600",
+        "https://images.unsplash.com/photo-1578645510447-e20b4311e3ce?w=600",
+      ],
+      rating: 4.9,
+      reviews: 567,
+      originalPrice: 199,
+      currentPrice: 129,
+      description:
+        "Cozy mountain retreat with fireplace, ski-in/ski-out access, and breathtaking alpine views.",
+      amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
+      features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
+      roomTypes: [
+        {
+          name: "Mountain Room",
+          price: 129,
+          features: ["Fireplace", "Mountain View", "Cozy Decor"],
+        },
+        {
+          name: "Alpine Suite",
+          price: 199,
+          features: ["Separate Living Area", "Hot Tub", "Ski Storage"],
+        },
+      ],
+    },
+  ];
+
+  const handleBargainClick = (
+    hotel: Hotel,
+    currentSearchParams?: URLSearchParams,
+  ) => {
+    setSelectedHotel(hotel);
+    setIsBargainModalOpen(true);
   };
 
-  const nights = calculateNights();
+  const handleClearFilters = () => {
+    setPriceRange([0, 1000]);
+    setSelectedRating([]);
+    setSelectedAmenities([]);
+    setSortBy("recommended");
+  };
 
-  // Filter and sort hotels
-  const filteredHotels = hotelData
-    .filter((hotel) => {
-      if (hotel.price < priceRange.min || hotel.price > priceRange.max)
-        return false;
-      if (selectedRating > 0 && hotel.rating < selectedRating) return false;
-      if (selectedAmenities.length > 0) {
-        const hasAllAmenities = selectedAmenities.every((amenity) =>
-          hotel.amenities.includes(amenity),
+  const filteredHotels = mockHotels.filter((hotel) => {
+    const withinPriceRange =
+      hotel.currentPrice >= priceRange[0] &&
+      hotel.currentPrice <= priceRange[1];
+    const meetsRating =
+      selectedRating.length === 0 ||
+      selectedRating.some((rating) => hotel.rating >= rating);
+    const hasAmenities =
+      selectedAmenities.length === 0 ||
+      selectedAmenities.every((amenity) => hotel.amenities.includes(amenity));
+
+    return withinPriceRange && meetsRating && hasAmenities;
+  });
+
+  const sortedHotels = [...filteredHotels].sort((a, b) => {
+    switch (sortBy) {
+      case "price-low":
+        return a.currentPrice - b.currentPrice;
+      case "price-high":
+        return b.currentPrice - a.currentPrice;
+      case "rating":
+        return b.rating - a.rating;
+      case "savings":
+        return (
+          b.originalPrice - b.currentPrice - (a.originalPrice - a.currentPrice)
         );
-        if (!hasAllAmenities) return false;
-      }
-      return true;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case "price":
-          return a.price - b.price;
-        case "rating":
-          return b.rating - a.rating;
-        case "distance":
-          return 0; // Would implement distance calculation
-        default:
-          return 0;
-      }
-    });
-
-  // Bargaining functions
-  const handleBargain = (hotel: any) => {
-    setBargainHotel(hotel);
-    setShowBargainModal(true);
-    setBargainStep("input");
-    setBargainPrice("");
-    setBargainProgress(0);
-    setBargainResult(null);
-    setAiOfferPrice(null);
-  };
-
-  const generateAICounterOffer = (userPrice: number, originalPrice: number) => {
-    const discountRequested = (originalPrice - userPrice) / originalPrice;
-
-    if (discountRequested <= 0.3) {
-      return Math.random() < 0.8 ? userPrice : Math.round(userPrice * 1.05);
-    } else if (discountRequested <= 0.5) {
-      const minOffer = Math.round(originalPrice * 0.7);
-      return Math.max(userPrice, Math.round(originalPrice * 0.75));
-    } else {
-      return Math.round(originalPrice * 0.65);
+      default:
+        return b.rating - a.rating;
     }
-  };
-
-  const startBargaining = () => {
-    if (!bargainHotel || !bargainPrice) return;
-
-    const targetPrice = parseInt(bargainPrice);
-    const currentPrice = bargainHotel.price;
-    const priceKey = `${bargainHotel.id}-${targetPrice}`;
-
-    if (usedPrices.has(priceKey)) {
-      alert(
-        "You've already tried this price! Please enter a different amount.",
-      );
-      return;
-    }
-
-    if (targetPrice >= currentPrice) {
-      alert("Please enter a price lower than the current price!");
-      return;
-    }
-
-    setUsedPrices((prev) => new Set([...prev, priceKey]));
-    setBargainStep("progress");
-    setBargainProgress(0);
-
-    const progressInterval = setInterval(() => {
-      setBargainProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-
-          const aiOfferPrice = generateAICounterOffer(
-            targetPrice,
-            currentPrice,
-          );
-          setAiOfferPrice(aiOfferPrice);
-
-          const isExactMatch = aiOfferPrice === targetPrice;
-          setBargainResult(isExactMatch ? "accepted" : "counter");
-          setBargainStep("result");
-
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 150);
-  };
-
-  const handleBooking = (hotel: any, finalPrice?: number) => {
-    navigate("/hotels/booking", {
-      state: {
-        selectedHotel: hotel,
-        checkIn,
-        checkOut,
-        guests: { adults, children, rooms },
-        negotiatedPrice: finalPrice || hotel.price,
-        nights,
-      },
-    });
-  };
-
-  const handleSignOut = () => {
-    setIsLoggedIn(false);
-    setUserName("");
-  };
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-blue-700 text-white sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Link to="/" className="flex items-center space-x-2">
-                <span className="text-base sm:text-xl font-bold tracking-tight">
-                  faredown.com
-                </span>
-              </Link>
-              <div className="text-xs sm:text-sm text-blue-200 hidden sm:block">
-                / Hotel Results
-              </div>
-            </div>
+      <Header />
 
-            <div className="flex items-center space-x-2 md:space-x-6">
-              <button
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="md:hidden text-white p-2 touch-manipulation"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
-
-              <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <Link
-                  to="/flights"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4"
-                >
-                  <span>Flights</span>
-                </Link>
-                <Link
-                  to="/hotels"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold border-b-2 border-white py-4"
-                >
-                  <span>Hotels</span>
-                </Link>
-              </nav>
-
-              <div className="flex items-center space-x-3">
-                {isLoggedIn ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
-                      <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-black">
-                          {userName.charAt(0)}
-                        </span>
-                      </div>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem onClick={handleSignOut}>
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Sign out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="bg-white text-blue-700"
-                    >
-                      Register
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-800 text-white"
-                    >
-                      Sign in
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+      {/* Hotel Search Bar - Booking.com style */}
+      <div className="bg-[#003580] py-2 sm:py-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
+          <BookingSearchForm />
         </div>
-      </header>
+      </div>
 
-      {/* Search Summary */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">
-                Hotels in {destination}
-              </h1>
-              <p className="text-sm text-gray-600 mt-1">
-                {checkIn} - {checkOut} • {nights} night{nights > 1 ? "s" : ""} •{" "}
-                {adults + children} guest{adults + children > 1 ? "s" : ""} •{" "}
-                {rooms} room{rooms > 1 ? "s" : ""}
-              </p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm">
-                Modify Search
-              </Button>
-            </div>
+      {/* Breadcrumb */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
+          <div className="flex items-center text-sm text-gray-600">
+            <span>United Arab Emirates</span>
+            <span className="mx-2">›</span>
+            <span>Dubai</span>
+            <span className="mx-2">›</span>
+            <span className="text-gray-900 font-medium">Search results</span>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Mobile Filter Toggle */}
-          <div className="lg:hidden">
-            <Button
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              variant="outline"
-              className="w-full flex items-center justify-center space-x-2 py-3"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Filters & Sort</span>
-            </Button>
-          </div>
-
-          {/* Desktop Filters Sidebar */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
+        <div className="flex gap-4 sm:gap-6">
+          {/* Desktop Filters */}
           <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-lg border p-6 sticky top-24">
-              <h3 className="font-semibold text-gray-900 mb-4">
-                Filter Results
+            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
+              <h3 className="text-lg font-semibold mb-4 flex items-center">
+                <Filter className="w-5 h-5 mr-2 text-[#003580]" />
+                Filter by
               </h3>
+              <EnhancedFilters
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
+                selectedAmenities={selectedAmenities}
+                setSelectedAmenities={setSelectedAmenities}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                onClearFilters={handleClearFilters}
+              />
+            </div>
+          </div>
 
-              {/* Price Range */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">
-                  Price per night
-                </h4>
-                <div className="space-y-2">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100000"
-                    step="1000"
-                    value={priceRange.max}
-                    onChange={(e) =>
-                      setPriceRange((prev) => ({
-                        ...prev,
-                        max: parseInt(e.target.value),
-                      }))
-                    }
-                    className="w-full"
+          {/* Mobile Filter Button */}
+          <div className="lg:hidden fixed bottom-4 left-4 z-50">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button className="rounded-full w-12 h-12 sm:w-14 sm:h-14 shadow-lg touch-manipulation">
+                  <SlidersHorizontal className="w-5 h-5 sm:w-6 sm:h-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-80 sm:w-96">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center text-sm sm:text-base">
+                    <Filter className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[#003580]" />
+                    Filter by
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="mt-6">
+                  <EnhancedFilters
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
+                    selectedAmenities={selectedAmenities}
+                    setSelectedAmenities={setSelectedAmenities}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    onClearFilters={handleClearFilters}
                   />
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>₹0</span>
-                    <span>₹{priceRange.max.toLocaleString()}</span>
-                  </div>
                 </div>
-              </div>
-
-              {/* Star Rating */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Star Rating</h4>
-                <div className="space-y-2">
-                  {[5, 4, 3, 2, 1].map((rating) => (
-                    <label
-                      key={rating}
-                      className="flex items-center cursor-pointer"
-                    >
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={rating}
-                        checked={selectedRating === rating}
-                        onChange={() => setSelectedRating(rating)}
-                        className="mr-3"
-                      />
-                      <div className="flex items-center">
-                        {Array.from({ length: rating }, (_, i) => (
-                          <Star
-                            key={i}
-                            className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                          />
-                        ))}
-                        <span className="ml-2 text-sm">
-                          {rating} star{rating > 1 ? "s" : ""} & up
-                        </span>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Amenities */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Amenities</h4>
-                <div className="space-y-2">
-                  {["wifi", "pool", "gym", "parking", "restaurant", "spa"].map(
-                    (amenity) => (
-                      <label
-                        key={amenity}
-                        className="flex items-center cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedAmenities.includes(amenity)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedAmenities((prev) => [
-                                ...prev,
-                                amenity,
-                              ]);
-                            } else {
-                              setSelectedAmenities((prev) =>
-                                prev.filter((a) => a !== amenity),
-                              );
-                            }
-                          }}
-                          className="mr-3"
-                        />
-                        <span className="text-sm capitalize">{amenity}</span>
-                      </label>
-                    ),
-                  )}
-                </div>
-              </div>
-            </div>
+              </SheetContent>
+            </Sheet>
           </div>
 
-          {/* Hotel Results */}
+          {/* Results */}
           <div className="flex-1">
-            {/* Sort Options */}
-            <div className="bg-white rounded-lg border p-4 mb-6">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">
-                  {filteredHotels.length} hotels found
-                </span>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Sort by:</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="border border-gray-300 rounded px-3 py-1 text-sm"
-                  >
-                    <option value="price">Price (Low to High)</option>
-                    <option value="rating">Rating (High to Low)</option>
-                    <option value="distance">Distance</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Hotel Cards */}
-            <div className="space-y-6">
-              {filteredHotels.map((hotel) => (
-                <div
-                  key={hotel.id}
-                  className="bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="flex flex-col md:flex-row">
-                    {/* Hotel Image */}
-                    <div className="md:w-1/3">
-                      <img
-                        src={hotel.image}
-                        alt={hotel.name}
-                        className="w-full h-48 md:h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
-                      />
-                    </div>
-
-                    {/* Hotel Details */}
-                    <div className="md:w-2/3 p-6">
-                      <div className="flex flex-col h-full">
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <h3 className="text-xl font-semibold text-gray-900 mb-1">
-                                {hotel.name}
-                              </h3>
-                              <div className="flex items-center text-sm text-gray-600 mb-2">
-                                <MapPin className="w-4 h-4 mr-1" />
-                                {hotel.location}
-                              </div>
-                            </div>
-                            <button className="text-gray-400 hover:text-red-500">
-                              <Heart className="w-5 h-5" />
-                            </button>
-                          </div>
-
-                          <div className="flex items-center mb-3">
-                            <div className="flex items-center">
-                              {Array.from({ length: 5 }, (_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-4 h-4 ${
-                                    i < Math.floor(hotel.rating)
-                                      ? "fill-yellow-400 text-yellow-400"
-                                      : "text-gray-300"
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                            <span className="ml-2 text-sm text-gray-600">
-                              {hotel.rating} ({hotel.reviews} reviews)
-                            </span>
-                          </div>
-
-                          <div className="flex flex-wrap items-center gap-2 mb-4">
-                            {hotel.amenities.slice(0, 4).map((amenity) => {
-                              const IconComponent = amenityIcons[amenity];
-                              return (
-                                <div
-                                  key={amenity}
-                                  className="flex items-center text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded"
-                                >
-                                  {typeof IconComponent === "string" ? (
-                                    <span className="mr-1">
-                                      {IconComponent}
-                                    </span>
-                                  ) : (
-                                    <IconComponent className="w-3 h-3 mr-1" />
-                                  )}
-                                  <span className="capitalize">{amenity}</span>
-                                </div>
-                              );
-                            })}
-                            {hotel.amenities.length > 4 && (
-                              <span className="text-xs text-blue-600">
-                                +{hotel.amenities.length - 4} more
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="text-sm text-gray-600 mb-4">
-                            <div>{hotel.roomType}</div>
-                            <div className="text-green-600">
-                              {hotel.cancellation}
-                            </div>
-                            <div>{hotel.breakfast}</div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-end justify-between">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-2xl font-bold text-gray-900">
-                                {formatCurrency(hotel.price)}
-                              </span>
-                              <span className="text-sm text-gray-500">
-                                per night
-                              </span>
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {formatCurrency(hotel.price * nights)} total for{" "}
-                              {nights} nights
-                            </div>
-                            {hotel.discount > 0 && (
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="text-sm text-gray-500 line-through">
-                                  {formatCurrency(hotel.originalPrice)}
-                                </span>
-                                <Badge className="bg-green-100 text-green-800">
-                                  {hotel.discount}% off
-                                </Badge>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="flex flex-col gap-2">
-                            <Button
-                              onClick={() => handleBargain(hotel)}
-                              variant="outline"
-                              className="border-orange-500 text-orange-600 hover:bg-orange-50"
-                            >
-                              🏷️ Bargain
-                            </Button>
-                            <Button
-                              onClick={() => handleBooking(hotel)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white"
-                            >
-                              Book Now
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bargaining Modal */}
-      <Dialog open={showBargainModal} onOpenChange={setShowBargainModal}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Bargain for {bargainHotel?.name}</DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4">
-            {bargainStep === "input" && (
-              <>
-                <div className="text-center">
-                  <div className="text-lg font-semibold text-gray-900 mb-2">
-                    Current Price: {formatCurrency(bargainHotel?.price || 0)}
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Enter your desired price and our AI will negotiate for you
+            {/* Results Header with View Toggle and Sort */}
+            <div className="mb-4 sm:mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3 sm:gap-0">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                    Dubai: {sortedHotels.length} properties found
+                  </h1>
+                  <p className="text-gray-600 mt-1 text-sm sm:text-base">
+                    Search for great hotels, homes and much more...
                   </p>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Your Offer (per night)
-                  </label>
-                  <Input
-                    type="number"
-                    placeholder="Enter your price"
-                    value={bargainPrice}
-                    onChange={(e) => setBargainPrice(e.target.value)}
-                    className="text-center text-lg font-semibold"
-                  />
-                </div>
-
-                <div className="flex space-x-3">
+                {/* View Mode Toggle - Hidden on mobile, shown on tablet+ */}
+                <div className="hidden md:flex items-center space-x-2 flex-shrink-0">
                   <Button
-                    onClick={() => setShowBargainModal(false)}
-                    variant="outline"
-                    className="flex-1"
+                    variant={viewMode === "list" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className="p-2 touch-manipulation"
                   >
-                    Cancel
+                    <List className="w-4 h-4" />
                   </Button>
                   <Button
-                    onClick={startBargaining}
-                    className="flex-1 bg-orange-600 hover:bg-orange-700"
-                    disabled={!bargainPrice}
+                    variant={viewMode === "grid" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setViewMode("grid")}
+                    className="p-2 touch-manipulation"
                   >
-                    Start Bargaining
+                    <Grid className="w-4 h-4" />
                   </Button>
                 </div>
-              </>
-            )}
+              </div>
 
-            {bargainStep === "progress" && (
-              <div className="text-center space-y-4">
-                <div className="text-lg font-semibold">
-                  AI is negotiating...
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-150"
-                    style={{ width: `${bargainProgress}%` }}
-                  ></div>
-                </div>
-                <p className="text-sm text-gray-600">
-                  Our AI is working to get you the best deal
+              {/* Sort Dropdown for Mobile/Tablet */}
+              <div className="lg:hidden mb-3 sm:mb-4">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-full h-10 sm:h-12 text-sm sm:text-base touch-manipulation">
+                    <SelectValue placeholder="Sort by..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem
+                      value="recommended"
+                      className="text-sm sm:text-base"
+                    >
+                      Our top picks
+                    </SelectItem>
+                    <SelectItem
+                      value="price-low"
+                      className="text-sm sm:text-base"
+                    >
+                      Price (lowest first)
+                    </SelectItem>
+                    <SelectItem
+                      value="price-high"
+                      className="text-sm sm:text-base"
+                    >
+                      Price (highest first)
+                    </SelectItem>
+                    <SelectItem value="rating" className="text-sm sm:text-base">
+                      Best reviewed & lowest price
+                    </SelectItem>
+                    <SelectItem
+                      value="stars-high"
+                      className="text-sm sm:text-base"
+                    >
+                      Property rating (high to low)
+                    </SelectItem>
+                    <SelectItem
+                      value="distance"
+                      className="text-sm sm:text-base"
+                    >
+                      Distance from downtown
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div
+              className={
+                viewMode === "grid"
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6"
+                  : "space-y-3 sm:space-y-6"
+              }
+            >
+              {sortedHotels.map((hotel) => (
+                <HotelCard
+                  key={hotel.id}
+                  hotel={hotel}
+                  onBargainClick={handleBargainClick}
+                  viewMode={viewMode}
+                />
+              ))}
+            </div>
+
+            {sortedHotels.length === 0 && (
+              <div className="text-center py-8 sm:py-12 px-4">
+                <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
+                  No hotels found
+                </h3>
+                <p className="text-gray-600 text-sm sm:text-base">
+                  Try adjusting your filters or search criteria
                 </p>
               </div>
             )}
-
-            {bargainStep === "result" && (
-              <div className="text-center space-y-4">
-                {bargainResult === "accepted" ? (
-                  <>
-                    <div className="text-green-600 text-xl font-bold">
-                      🎉 Offer Accepted!
-                    </div>
-                    <div className="text-lg">
-                      Final Price: {formatCurrency(parseInt(bargainPrice))}
-                    </div>
-                    <Button
-                      onClick={() => {
-                        setShowBargainModal(false);
-                        handleBooking(bargainHotel, parseInt(bargainPrice));
-                      }}
-                      className="w-full bg-green-600 hover:bg-green-700"
-                    >
-                      Book at This Price
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <div className="text-orange-600 text-xl font-bold">
-                      💼 Counter Offer
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-600 mb-2">
-                        Hotel's counter offer:
-                      </div>
-                      <div className="text-2xl font-bold text-blue-600">
-                        {formatCurrency(aiOfferPrice || 0)}
-                      </div>
-                    </div>
-                    <div className="flex space-x-3">
-                      <Button
-                        onClick={() => setShowBargainModal(false)}
-                        variant="outline"
-                        className="flex-1"
-                      >
-                        Decline
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setShowBargainModal(false);
-                          handleBooking(
-                            bargainHotel,
-                            aiOfferPrice || bargainHotel?.price,
-                          );
-                        }}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700"
-                      >
-                        Accept Offer
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </div>
+
+      <EnhancedBargainModal
+        roomType={
+          selectedHotel
+            ? {
+                id: "standard",
+                name: "Standard Room",
+                description: "Comfortable standard room",
+                image: selectedHotel.images[0],
+                marketPrice: selectedHotel.originalPrice,
+                totalPrice: selectedHotel.currentPrice,
+                features: selectedHotel.features || [],
+                maxOccupancy: 2,
+                bedType: "1 double bed",
+                size: "6.7 km from downtown",
+                cancellation: "Free cancellation",
+              }
+            : null
+        }
+        hotel={
+          selectedHotel
+            ? {
+                id: selectedHotel.id,
+                name: selectedHotel.name,
+                location: selectedHotel.location,
+                checkIn:
+                  searchParams.get("checkIn") || new Date().toISOString(),
+                checkOut:
+                  searchParams.get("checkOut") ||
+                  new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+              }
+            : null
+        }
+        isOpen={isBargainModalOpen}
+        onClose={() => {
+          setIsBargainModalOpen(false);
+          setSelectedHotel(null);
+        }}
+        checkInDate={
+          searchParams.get("checkIn")
+            ? new Date(searchParams.get("checkIn")!)
+            : new Date()
+        }
+        checkOutDate={
+          searchParams.get("checkOut")
+            ? new Date(searchParams.get("checkOut")!)
+            : new Date(Date.now() + 24 * 60 * 60 * 1000)
+        }
+        roomsCount={parseInt(searchParams.get("rooms") || "1")}
+      />
     </div>
   );
 }
