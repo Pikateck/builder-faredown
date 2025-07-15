@@ -2005,10 +2005,10 @@ export default function FlightResults() {
                             </div>
                           </div>
 
-                          {/* Emirates Airlines Label */}
+                          {/* Airline Label */}
                           <div className="mt-4">
                             <span className="text-sm text-gray-600">
-                              Emirates Airlines
+                              {flight.airline}
                             </span>
                           </div>
                         </div>
