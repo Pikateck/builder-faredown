@@ -1773,15 +1773,15 @@ export default function FlightResults() {
                 <div key={flight.id}>
                   <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                     {/* Green Header */}
-                    <div className="bg-green-50 px-4 py-2 border-b border-green-200">
-                      <span className="text-green-700 text-sm font-medium">
+                    <div className="bg-green-50 px-3 sm:px-4 py-2 border-b border-green-200">
+                      <span className="text-green-700 text-xs sm:text-sm font-medium">
                         Flexible ticket upgrade available
                       </span>
                     </div>
 
                     {/* Flight Content */}
-                    <div className="p-4">
-                      <div className="flex items-start justify-between">
+                    <div className="p-3 sm:p-4">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                         {/* Left Side - Flight Details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-6">
