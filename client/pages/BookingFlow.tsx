@@ -2725,10 +2725,16 @@ export default function BookingFlow() {
                   <div className="flex justify-between items-center font-semibold text-lg">
                     <span>Total</span>
                     <span>
-                      {formatCurrency(92328 + calculateExtrasTotal())}
+                      {formatCurrency(
+                        calculateBaseFareTotal() +
+                          calculateExtrasTotal() +
+                          getTotalSeatFees(),
+                      )}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">taxes and fees</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    taxes and fees included
+                  </p>
                 </div>
 
                 <div className="bg-[#f2f6fa] border border-[#009fe3]/20 rounded-lg p-3">
