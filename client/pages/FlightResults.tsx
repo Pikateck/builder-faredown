@@ -877,7 +877,7 @@ export default function FlightResults() {
                         { code: "EUR", symbol: "€", name: "Euro" },
                         { code: "GBP", symbol: "£", name: "British Pound" },
                         { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                        { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+                        { code: "AED", symbol: "��.إ", name: "UAE Dirham" },
                         { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
                         { code: "JPY", symbol: "¥", name: "Japanese Yen" },
                         { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
@@ -1559,11 +1559,13 @@ export default function FlightResults() {
                 )}
               </div>
 
-              <Link to="/flights">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm">
-                  Search
-                </Button>
-              </Link>
+              <div className="lg:max-w-[100px] w-full lg:w-auto">
+                <Link to="/flights">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full">
+                    Search
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
