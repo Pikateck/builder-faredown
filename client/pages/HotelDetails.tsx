@@ -491,6 +491,38 @@ export default function HotelDetails() {
           </div>
         </div>
       </div>
+
+      {/* Bargain Modal */}
+      {selectedRoomType && (
+        <EnhancedBargainModal
+          roomType={{
+            id: selectedRoomType.name.toLowerCase().replace(/\s+/g, "-"),
+            name: selectedRoomType.name,
+            description: selectedRoomType.features.join(", "),
+            image: hotel.images[0],
+            marketPrice: selectedRoomType.price * 1.2, // Simulate original price
+            totalPrice: selectedRoomType.price,
+            features: selectedRoomType.features,
+            maxOccupancy: selectedRoomType.maxGuests,
+            bedType: "King Bed",
+          }}
+          hotel={{
+            id: hotel.id,
+            name: hotel.name,
+            location: hotel.location,
+            rating: hotel.rating,
+            image: hotel.images[0],
+          }}
+          isOpen={isBargainModalOpen}
+          onClose={() => {
+            setIsBargainModalOpen(false);
+            setSelectedRoomType(null);
+          }}
+          checkInDate={new Date()}
+          checkOutDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
+          roomsCount={1}
+        />
+      )}
     </div>
   );
 }
