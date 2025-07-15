@@ -711,13 +711,13 @@ export default function Index() {
                     )}
                   </div>
 
-                  <div className="relative overflow-visible w-full">
+                  <div className="relative overflow-visible lg:max-w-[200px] w-full lg:w-auto">
                     <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Travel dates
                     </label>
                     <button
                       onClick={() => setShowCalendar(!showCalendar)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-12 w-full sm:min-w-[180px] hover:border-blue-500 min-h-[56px] sm:min-h-[40px] touch-manipulation"
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[180px] hover:border-blue-500 touch-manipulation"
                     >
                       <svg
                         className="w-4 h-4 text-gray-500 mr-2"
