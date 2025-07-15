@@ -23,7 +23,7 @@ import {
   Car,
   Coffee,
   Dumbbell,
-  Pool,
+  Waves,
   Users,
   Calendar,
   ChevronDown,
