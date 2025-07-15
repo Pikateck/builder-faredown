@@ -205,11 +205,11 @@ export default function Index() {
       }}
     >
       {/* Header */}
-      <header className="bg-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+      <header className="bg-blue-700 text-white sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold tracking-tight">
+              <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
               </span>
             </Link>
@@ -217,7 +217,7 @@ export default function Index() {
               {/* Mobile menu button */}
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="md:hidden text-white p-2"
+                className="md:hidden text-white p-2 touch-manipulation"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -435,18 +435,18 @@ export default function Index() {
         )}
 
         {/* Hero Search Section */}
-        <div className="bg-blue-700 py-4 sm:py-6 md:py-8">
+        <div className="bg-blue-700 py-3 sm:py-6 md:py-8 pb-24 sm:pb-8">
           <div className="max-w-7xl mx-auto px-3 sm:px-4">
             <div className="text-center mb-4 sm:mb-6">
-              <div className="mb-3 sm:mb-4">
+              <div className="mb-2 sm:mb-4">
                 <Badge className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold">
                   🟠 Bargain Mode Activated
                 </Badge>
               </div>
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight px-2">
+              <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4 leading-tight px-2">
                 Upgrade Your Travel in Real Time — With Live AI Bargaining
               </h1>
-              <p className="text-white text-sm sm:text-lg md:text-xl opacity-90 mb-3 sm:mb-4 px-4 leading-relaxed">
+              <p className="text-white text-sm sm:text-lg md:text-xl opacity-90 mb-2 sm:mb-4 px-4 leading-relaxed">
                 The world's first travel portal where you can{" "}
                 <strong>
                   bargain and upgrade your flight, hotel, or holiday
@@ -455,8 +455,8 @@ export default function Index() {
               </p>
             </div>
 
-            {/* Search Form */}
-            <div className="bg-white border-b border-gray-200 overflow-visible rounded-t-lg mx-3 sm:mx-0">
+            {/* Search Form - Hidden on mobile, shown in sticky bottom */}
+            <div className="hidden sm:block bg-white border-b border-gray-200 overflow-visible rounded-t-lg">
               <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
@@ -577,7 +577,7 @@ export default function Index() {
                     </label>
                     <button
                       onClick={() => setShowFromCities(!showFromCities)}
-                      className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-3 sm:py-2 h-full w-full hover:border-blue-600 min-h-[48px] sm:min-h-[40px]"
+                      className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-3 sm:py-2 h-full w-full hover:border-blue-600 min-h-[56px] sm:min-h-[40px] touch-manipulation"
                     >
                       <Plane className="w-4 h-4 text-gray-500 mr-2" />
                       <div className="flex items-center space-x-2">
@@ -645,7 +645,7 @@ export default function Index() {
                     </label>
                     <button
                       onClick={() => setShowToCities(!showToCities)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-full w-full hover:border-blue-500 min-h-[48px] sm:min-h-[40px]"
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-full w-full hover:border-blue-500 min-h-[56px] sm:min-h-[40px] touch-manipulation"
                     >
                       <Plane className="w-4 h-4 text-gray-500 mr-2" />
                       <div className="flex items-center space-x-2">
@@ -712,7 +712,7 @@ export default function Index() {
                     </label>
                     <button
                       onClick={() => setShowCalendar(!showCalendar)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-12 w-full sm:min-w-[180px] hover:border-blue-500 min-h-[48px] sm:min-h-[40px]"
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-12 w-full sm:min-w-[180px] hover:border-blue-500 min-h-[56px] sm:min-h-[40px] touch-manipulation"
                     >
                       <svg
                         className="w-4 h-4 text-gray-500 mr-2"
@@ -913,7 +913,7 @@ export default function Index() {
                     </label>
                     <button
                       onClick={() => setShowTravelers(!showTravelers)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-12 w-full sm:min-w-[140px] hover:border-blue-500 min-h-[48px] sm:min-h-[40px]"
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-12 w-full sm:min-w-[140px] hover:border-blue-500 min-h-[56px] sm:min-h-[40px] touch-manipulation"
                     >
                       <svg
                         className="w-4 h-4 text-gray-500 mr-2"
@@ -1035,7 +1035,7 @@ export default function Index() {
                     to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
                     className="w-full sm:w-auto"
                   >
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 sm:py-2 rounded h-12 font-medium text-sm w-full sm:w-auto min-h-[48px] sm:min-h-[40px]">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 sm:py-2 rounded h-12 font-medium text-sm w-full sm:w-auto min-h-[56px] sm:min-h-[40px] touch-manipulation">
                       Search
                     </Button>
                   </Link>
@@ -1045,6 +1045,82 @@ export default function Index() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Sticky Bottom Search Bar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+        <div className="px-4 py-3">
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <button
+              onClick={() => setShowFromCities(!showFromCities)}
+              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
+            >
+              <div className="flex items-center space-x-2">
+                <Plane className="w-4 h-4 text-gray-500" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">From</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {cityData[selectedFromCity]?.code}
+                  </div>
+                </div>
+              </div>
+            </button>
+            <button
+              onClick={() => setShowToCities(!showToCities)}
+              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
+            >
+              <div className="flex items-center space-x-2">
+                <Plane className="w-4 h-4 text-gray-500" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">To</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {cityData[selectedToCity]?.code}
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <button
+              onClick={() => setShowCalendar(!showCalendar)}
+              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
+            >
+              <div className="flex items-center space-x-2">
+                <CalendarIcon className="w-4 h-4 text-gray-500" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">Dates</div>
+                  <div className="text-sm font-medium text-gray-900 truncate">
+                    {tripType === "one-way"
+                      ? selectedDepartureDate.split("-")[0]
+                      : `${selectedDepartureDate.split("-")[0]} - ${selectedReturnDate.split("-")[0]}`}
+                  </div>
+                </div>
+              </div>
+            </button>
+            <button
+              onClick={() => setShowTravelers(!showTravelers)}
+              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
+            >
+              <div className="flex items-center space-x-2">
+                <Users className="w-4 h-4 text-gray-500" />
+                <div className="text-left">
+                  <div className="text-xs text-gray-500">Travelers</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {travelers.adults + travelers.children}
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+          <Link
+            to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
+            className="w-full"
+          >
+            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation">
+              Search Flights
+            </Button>
+          </Link>
+        </div>
+      </div>
 
       {/* Why Choose Faredown Section */}
       <section className="py-16 bg-white">
