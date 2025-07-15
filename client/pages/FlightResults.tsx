@@ -1966,7 +1966,9 @@ export default function FlightResults() {
                             🏷️ Bargain
                           </Button>
                           <Button
-                            onClick={() => navigate("/booking-flow")}
+                            onClick={() =>
+                              handleBooking(flight, flight.fareTypes[0])
+                            }
                             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 touch-manipulation"
                           >
                             Select Flight
