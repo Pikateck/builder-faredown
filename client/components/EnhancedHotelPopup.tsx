@@ -434,7 +434,7 @@ export function EnhancedHotelPopup({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pb-6">
+            <div className="flex gap-2 pb-6">
               <Button
                 onClick={handleViewDetails}
                 variant="outline"
@@ -442,6 +442,24 @@ export function EnhancedHotelPopup({
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 View Details
+              </Button>
+              <Button
+                onClick={() => {
+                  // Simple bargain trigger - in a real app, this would open the bargain modal
+                  const params = new URLSearchParams({
+                    hotelId: hotel.id.toString(),
+                    checkIn: checkInDate.toISOString().split("T")[0],
+                    checkOut: checkOutDate.toISOString().split("T")[0],
+                    rooms: roomsCount.toString(),
+                    price: hotel.currentPrice.toString(),
+                    bargain: "true",
+                  });
+                  navigate(`/reserve?${params.toString()}`);
+                }}
+                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
+              >
+                <TrendingDown className="w-4 h-4 mr-2" />
+                Bargain
               </Button>
               <Button onClick={handleBookNow} className="flex-1">
                 Book Now
