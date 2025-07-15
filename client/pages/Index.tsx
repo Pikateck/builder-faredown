@@ -5,6 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
+  MobileCityDropdown,
+  MobileDatePicker,
+  MobileTravelers,
+} from "@/components/MobileDropdowns";
+import {
   formatDateToDDMMMYYYY,
   formatDateToDisplayString,
 } from "@/lib/dateUtils";
