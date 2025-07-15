@@ -1033,8 +1033,9 @@ export default function Index() {
 
                   <Link
                     to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
+                    className="w-full sm:w-auto"
                   >
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 sm:py-2 rounded h-12 font-medium text-sm w-full sm:w-auto min-h-[48px] sm:min-h-[40px]">
                       Search
                     </Button>
                   </Link>
