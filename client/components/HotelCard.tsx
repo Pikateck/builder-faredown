@@ -424,7 +424,7 @@ export function HotelCard({
                 {hotel.originalPrice > hotel.currentPrice && (
                   <span className="text-sm sm:text-lg text-gray-500 line-through">
                     {formatPriceWithSymbol(
-                      originalPriceCalculation.totalPrice,
+                      originalPriceCalculation.total,
                       selectedCurrency.code,
                     )}
                   </span>
