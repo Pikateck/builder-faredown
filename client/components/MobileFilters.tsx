@@ -267,7 +267,10 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
             variant="outline"
             className="flex-1 py-3 touch-manipulation"
             onClick={() => {
-              // Clear all filters logic
+              setSelectedSort("price_asc");
+              setSelectedAirlines([]);
+              setSelectedStops([]);
+              setSelectedTimeSlots([]);
             }}
           >
             Clear All
