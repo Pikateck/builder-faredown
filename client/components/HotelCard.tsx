@@ -417,7 +417,7 @@ export function HotelCard({
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-lg sm:text-2xl font-bold text-[#003580]">
                   {formatPriceWithSymbol(
-                    priceCalculation.totalPrice,
+                    priceCalculation.total,
                     selectedCurrency.code,
                   )}
                 </span>
