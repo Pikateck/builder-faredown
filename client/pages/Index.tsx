@@ -570,7 +570,7 @@ export default function Index() {
                 </div>
 
                 {/* Search inputs */}
-                <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 w-full overflow-visible">
+                <div className="flex flex-col gap-3 sm:gap-2 mt-3 sm:mt-2 w-full overflow-visible">
                   <div className="relative flex-1">
                     <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium">
                       Leaving from
