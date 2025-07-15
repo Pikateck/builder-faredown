@@ -1787,18 +1787,18 @@ export default function FlightResults() {
                           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6">
                             {/* Emirates Logos Column */}
                             <div className="flex flex-row sm:flex-col space-x-3 sm:space-x-0 sm:space-y-6">
-                              <div className="w-12 h-12 bg-white rounded flex items-center justify-center border border-gray-200">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded flex items-center justify-center border border-gray-200">
                                 <img
                                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F45a75b9f2a454bad9256908da5526720?format=webp&width=800"
                                   alt="Emirates"
                                   className="w-10 h-8 object-contain"
                                 />
                               </div>
-                              <div className="w-12 h-12 bg-white rounded flex items-center justify-center border border-gray-200">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded flex items-center justify-center border border-gray-200">
                                 <img
                                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F45a75b9f2a454bad9256908da5526720?format=webp&width=800"
                                   alt="Emirates"
-                                  className="w-10 h-8 object-contain"
+                                  className="w-8 h-6 sm:w-10 sm:h-8 object-contain"
                                 />
                               </div>
                             </div>
