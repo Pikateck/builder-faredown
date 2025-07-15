@@ -287,7 +287,7 @@ export function EnhancedBargainModal({
                     <span>Total Price:</span>
                     <span className="text-[#003580]">
                       {formatPriceWithSymbol(
-                        priceCalculation.totalPrice,
+                        priceCalculation.total,
                         selectedCurrency.code,
                       )}
                     </span>
@@ -323,7 +323,7 @@ export function EnhancedBargainModal({
               <div className="text-xs text-gray-500 mt-1">
                 Minimum suggested:{" "}
                 {formatPriceWithSymbol(
-                  Math.round(priceCalculation.totalPrice * 0.75),
+                  Math.round(priceCalculation.total * 0.75),
                   selectedCurrency.code,
                 )}
               </div>
@@ -395,7 +395,7 @@ export function EnhancedBargainModal({
 
       case "counter_offer":
         const savings =
-          priceCalculation.totalPrice - (bargainState.currentCounterOffer || 0);
+          priceCalculation.total - (bargainState.currentCounterOffer || 0);
         return (
           <div className="space-y-4">
             <div className="text-center">
@@ -435,7 +435,7 @@ export function EnhancedBargainModal({
               <div className="text-sm text-gray-600 mb-1">Original Price</div>
               <div className="text-lg text-gray-500 line-through mb-3">
                 {formatPriceWithSymbol(
-                  priceCalculation.totalPrice,
+                  priceCalculation.total,
                   selectedCurrency.code,
                 )}
               </div>
@@ -484,7 +484,7 @@ export function EnhancedBargainModal({
         const finalPrice =
           bargainState.currentCounterOffer ||
           bargainState.userOffers[bargainState.userOffers.length - 1];
-        const finalSavings = priceCalculation.totalPrice - finalPrice;
+        const finalSavings = priceCalculation.total - finalPrice;
         return (
           <div className="space-y-4 text-center">
             <div className="flex flex-col items-center">
@@ -506,8 +506,8 @@ export function EnhancedBargainModal({
               <div className="text-green-700">
                 You saved{" "}
                 {formatPriceWithSymbol(finalSavings, selectedCurrency.code)}(
-                {Math.round((finalSavings / priceCalculation.totalPrice) * 100)}
-                % off)
+                {Math.round((finalSavings / priceCalculation.total) * 100)}%
+                off)
               </div>
             </div>
 
@@ -561,7 +561,7 @@ export function EnhancedBargainModal({
               <div className="text-sm text-red-700">
                 Suggested minimum:{" "}
                 {formatPriceWithSymbol(
-                  Math.round(priceCalculation.totalPrice * 0.75),
+                  Math.round(priceCalculation.total * 0.75),
                   selectedCurrency.code,
                 )}
               </div>
