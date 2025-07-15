@@ -229,17 +229,6 @@ export default function HotelResults() {
     }
   });
 
-  // Debug logging
-  console.log("HotelResults Debug:", {
-    mockHotelsCount: mockHotels.length,
-    filteredHotelsCount: filteredHotels.length,
-    sortedHotelsCount: sortedHotels.length,
-    priceRange,
-    selectedRating,
-    selectedAmenities,
-    selectedCurrency,
-  });
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
