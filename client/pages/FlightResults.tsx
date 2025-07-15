@@ -1506,6 +1506,31 @@ export default function FlightResults() {
             </div>
           </div>
         </div>
+
+        {/* Mobile Search Summary */}
+        <div className="sm:hidden bg-white mx-3 rounded-lg shadow-sm border">
+          <div className="px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="text-sm text-gray-600">BOM → DXB</div>
+                <div className="text-sm text-gray-600">•</div>
+                <div className="text-sm text-gray-600">Dec 9-16</div>
+                <div className="text-sm text-gray-600">•</div>
+                <div className="text-sm text-gray-600">
+                  {travelers.adults + travelers.children} travelers
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-blue-600 px-2 py-1 h-auto text-xs"
+                onClick={() => setShowSearchEdit(!showSearchEdit)}
+              >
+                Edit
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Main Content */}
