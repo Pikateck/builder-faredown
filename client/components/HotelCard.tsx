@@ -84,18 +84,14 @@ export function HotelCard({
   // Calculate total pricing
   const priceCalculation = calculateTotalPrice(
     hotel.currentPrice,
-    checkInDate,
-    checkOutDate,
+    totalNights,
     roomsCount,
-    selectedCurrency.code,
   );
 
   const originalPriceCalculation = calculateTotalPrice(
     hotel.originalPrice,
-    checkInDate,
-    checkOutDate,
+    totalNights,
     roomsCount,
-    selectedCurrency.code,
   );
 
   const discount = Math.round(
