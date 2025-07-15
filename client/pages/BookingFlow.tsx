@@ -925,7 +925,7 @@ export default function BookingFlow() {
     { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭��" },
-    { name: "Hong Kong", code: "+852", flag: "���🇰" },
+    { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
     { name: "Hungary", code: "+36", flag: "🇭��" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
@@ -2552,12 +2552,12 @@ export default function BookingFlow() {
                         onClick={() => setShowAdultFare(!showAdultFare)}
                         className="flex items-center space-x-1"
                       >
-                        <span>Adults (2)</span>
+                        <span>Adults ({passengersFromState.adults})</span>
                         <ChevronDown
                           className={`w-3 h-3 transition-transform ${showAdultFare ? "rotate-180" : ""}`}
                         />
                       </button>
-                      <span>{formatCurrency(57825)}</span>
+                      <span>{formatCurrency(calculateTotalAdultsPrice())}</span>
                     </div>
                     {showAdultFare && (
                       <div className="ml-4 space-y-1">
