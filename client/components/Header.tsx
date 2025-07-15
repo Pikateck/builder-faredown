@@ -23,24 +23,6 @@ interface HeaderProps {
   className?: string;
 }
 
-const currencies = [
-  { code: "USD", symbol: "$", name: "US Dollar" },
-  { code: "EUR", symbol: "€", name: "Euro" },
-  { code: "GBP", symbol: "£", name: "British Pound" },
-  { code: "INR", symbol: "₹", name: "Indian Rupee" },
-  { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-  { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
-  { code: "JPY", symbol: "¥", name: "Japanese Yen" },
-  { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
-  { code: "KRW", symbol: "₩", name: "South Korean Won" },
-  { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
-  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
-  { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
-  { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-  { code: "THB", symbol: "฿", name: "Thai Baht" },
-  { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" },
-];
-
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
