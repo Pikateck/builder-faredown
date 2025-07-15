@@ -1,9 +1,9 @@
+/* Import mobile enhancements */
+@import "./styles/mobile-enhancements.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import mobile enhancements */
-@import "./styles/mobile-enhancements.css";
 
 @layer base {
   /**
