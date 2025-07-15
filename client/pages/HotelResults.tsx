@@ -198,22 +198,19 @@ export default function HotelResults() {
     setSortBy("recommended");
   };
 
-  const filteredHotels = mockHotels; // Temporarily bypass filtering
+  const filteredHotels = mockHotels.filter((hotel) => {
+    const withinPriceRange =
+      hotel.currentPrice >= priceRange[0] &&
+      hotel.currentPrice <= priceRange[1];
+    const meetsRating =
+      selectedRating.length === 0 ||
+      selectedRating.some((rating) => hotel.rating >= rating);
+    const hasAmenities =
+      selectedAmenities.length === 0 ||
+      selectedAmenities.every((amenity) => hotel.amenities.includes(amenity));
 
-  // Original filtering logic (commented out for debugging)
-  // const filteredHotels = mockHotels.filter((hotel) => {
-  //   const withinPriceRange =
-  //     hotel.currentPrice >= priceRange[0] &&
-  //     hotel.currentPrice <= priceRange[1];
-  //   const meetsRating =
-  //     selectedRating.length === 0 ||
-  //     selectedRating.some((rating) => hotel.rating >= rating);
-  //   const hasAmenities =
-  //     selectedAmenities.length === 0 ||
-  //     selectedAmenities.every((amenity) => hotel.amenities.includes(amenity));
-
-  //   return withinPriceRange && meetsRating && hasAmenities;
-  // });
+    return withinPriceRange && meetsRating && hasAmenities;
+  });
 
   const sortedHotels = [...filteredHotels].sort((a, b) => {
     switch (sortBy) {
