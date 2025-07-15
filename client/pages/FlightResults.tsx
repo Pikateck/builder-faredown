@@ -1830,24 +1830,99 @@ export default function FlightResults() {
 
                     {/* Flight Content */}
                     <div className="p-3 sm:p-4">
-                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                      {/* Mobile Layout */}
+                      <div className="block sm:hidden">
+                        {/* Mobile Header */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-2">
+                            <img
+                              src={flight.logo}
+                              alt={flight.airline}
+                              className="w-8 h-8 object-contain rounded"
+                            />
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {flight.airline}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {flight.aircraft}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-gray-900">
+                              ₹
+                              {flight.fareTypes[0].price.toLocaleString(
+                                "en-IN",
+                              )}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              per person
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Mobile Flight Times */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-gray-900">
+                              {flight.departureTime}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {flight.departureCode}
+                            </div>
+                          </div>
+                          <div className="flex-1 mx-4">
+                            <div className="text-center">
+                              <div className="text-xs text-gray-500 mb-1">
+                                {flight.duration}
+                              </div>
+                              <div className="h-0.5 bg-gray-300 relative">
+                                <div className="absolute right-0 top-0 w-2 h-2 bg-gray-400 rounded-full transform translate-x-1 -translate-y-0.5"></div>
+                              </div>
+                              <div className="text-xs text-green-600 mt-1">
+                                {flight.flightType}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-gray-900">
+                              {flight.arrivalTime}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {flight.arrivalCode}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Mobile Action Button */}
+                        <button
+                          onClick={() => navigate("/booking-flow")}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium text-sm touch-manipulation"
+                        >
+                          Select Flight
+                        </button>
+                      </div>
+
+                      {/* Desktop Layout */}
+                      <div className="hidden sm:flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                         {/* Left Side - Flight Details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6">
-                            {/* Emirates Logos Column */}
+                            {/* Airline Logos Column */}
                             <div className="flex flex-row sm:flex-col space-x-3 sm:space-x-0 sm:space-y-6">
                               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded flex items-center justify-center border border-gray-200">
                                 <img
-                                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F45a75b9f2a454bad9256908da5526720?format=webp&width=800"
-                                  alt="Emirates"
-                                  className="w-10 h-8 object-contain"
+                                  src={flight.logo}
+                                  alt={flight.airline}
+                                  className="w-8 h-6 object-contain"
                                 />
                               </div>
                               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded flex items-center justify-center border border-gray-200">
                                 <img
-                                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F45a75b9f2a454bad9256908da5526720?format=webp&width=800"
-                                  alt="Emirates"
-                                  className="w-8 h-6 sm:w-10 sm:h-8 object-contain"
+                                  src={flight.logo}
+                                  alt={flight.airline}
+                                  className="w-8 h-6 object-contain"
                                 />
                               </div>
                             </div>
