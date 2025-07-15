@@ -1955,13 +1955,24 @@ export default function FlightResults() {
                           </div>
                         </div>
 
-                        {/* Mobile Action Button */}
-                        <button
-                          onClick={() => navigate("/booking-flow")}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium text-sm touch-manipulation"
-                        >
-                          Select Flight
-                        </button>
+                        {/* Mobile Action Buttons */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <Button
+                            onClick={() =>
+                              handleBargain(flight, flight.fareTypes[0])
+                            }
+                            variant="outline"
+                            className="bg-white border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-medium py-3 touch-manipulation"
+                          >
+                            🏷️ Bargain
+                          </Button>
+                          <Button
+                            onClick={() => navigate("/booking-flow")}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 touch-manipulation"
+                          >
+                            Select Flight
+                          </Button>
+                        </div>
                       </div>
 
                       {/* Desktop Layout */}
