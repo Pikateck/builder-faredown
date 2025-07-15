@@ -121,11 +121,11 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
           </h3>
           <div className="space-y-3">
             {[
-              { name: "Emirates", count: 4, checked: true },
-              { name: "IndiGo", count: 6, checked: false },
-              { name: "Air India", count: 3, checked: false },
-              { name: "Qatar Airways", count: 2, checked: false },
-              { name: "Etihad", count: 1, checked: false },
+              { name: "Emirates", count: 4 },
+              { name: "IndiGo", count: 6 },
+              { name: "Air India", count: 3 },
+              { name: "Qatar Airways", count: 2 },
+              { name: "Etihad", count: 1 },
             ].map((airline) => (
               <label
                 key={airline.name}
@@ -134,7 +134,21 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
-                    checked={airline.checked}
+                    checked={selectedAirlines.includes(airline.name)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedAirlines([
+                          ...selectedAirlines,
+                          airline.name,
+                        ]);
+                      } else {
+                        setSelectedAirlines(
+                          selectedAirlines.filter(
+                            (name) => name !== airline.name,
+                          ),
+                        );
+                      }
+                    }}
                     className="w-5 h-5 text-blue-600 rounded border-gray-300"
                   />
                   <span className="text-sm text-gray-700">{airline.name}</span>
