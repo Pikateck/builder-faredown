@@ -50,9 +50,13 @@ function App() {
             <Route path="/hotels/results" element={<HotelResults />} />
             <Route path="/hotels/:hotelId" element={<HotelDetails />} />
             <Route path="/hotels/booking" element={<HotelBooking />} />
-            <Route path="/reserve" element={<HotelBooking />} />
-            <Route path="/booking-voucher" element={<HotelBooking />} />
-            <Route path="/booking-invoice" element={<HotelBooking />} />
+            <Route path="/reserve" element={<ReservationPage />} />
+            <Route
+              path="/booking-confirmation"
+              element={<HotelBookingConfirmation />}
+            />
+            <Route path="/booking-voucher" element={<BookingVoucher />} />
+            <Route path="/booking-invoice" element={<BookingInvoice />} />
             <Route path="/sightseeing" element={<Sightseeing />} />
             <Route path="/sports-events" element={<SportsEvents />} />
             <Route path="/transfers" element={<Transfers />} />
