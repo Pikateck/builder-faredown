@@ -44,14 +44,10 @@ const currencies = [
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { selectedCurrency, currencies, setCurrency } = useCurrency();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState({
-    code: "INR",
-    symbol: "₹",
-    name: "Indian Rupee",
-  });
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
