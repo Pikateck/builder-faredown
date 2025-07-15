@@ -265,19 +265,6 @@ export default function HotelResults() {
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
-        {/* Debug Info */}
-        <div className="bg-yellow-100 p-4 mb-4 rounded-lg">
-          <p>Debug: Total Hotels: {mockHotels.length}</p>
-          <p>Debug: Filtered Hotels: {filteredHotels.length}</p>
-          <p>Debug: Sorted Hotels: {sortedHotels.length}</p>
-          <p>
-            Debug: Price Range: {priceRange[0]} - {priceRange[1]}
-          </p>
-          <p>
-            Debug: Selected Currency: {selectedCurrency?.code || "undefined"}
-          </p>
-        </div>
-
         <div className="flex gap-4 sm:gap-6">
           {/* Desktop Filters */}
           <div className="hidden lg:block w-80 flex-shrink-0">
