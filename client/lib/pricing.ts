@@ -1,4 +1,4 @@
-import { Currency } from "@/contexts/CurrencyContext";
+import { Currency, CURRENCIES } from "@/contexts/CurrencyContext";
 
 export interface PriceBreakdown {
   basePrice: number;
