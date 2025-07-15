@@ -22,6 +22,7 @@ import {
   Mail,
   Clock,
   Check,
+  TrendingDown,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol, calculateTotalPrice } from "@/lib/pricing";
