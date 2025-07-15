@@ -34,6 +34,8 @@ export default function HotelDetails() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("overview");
   const [isLiked, setIsLiked] = useState(false);
+  const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
+  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
   // Mock hotel data (in a real app, this would be fetched based on hotelId)
   const hotel = {
