@@ -1933,10 +1933,10 @@ export default function FlightResults() {
                               <div className="flex items-center space-x-12">
                                 <div className="text-center">
                                   <div className="text-xl font-bold text-gray-900">
-                                    10:15
+                                    {flight.departureTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    BOM • Aug 9
+                                    {flight.departureCode} • Aug 9
                                   </div>
                                 </div>
 
