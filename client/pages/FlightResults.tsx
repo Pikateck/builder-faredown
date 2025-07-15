@@ -1784,7 +1784,7 @@ export default function FlightResults() {
                       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                         {/* Left Side - Flight Details */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center space-x-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6">
                             {/* Emirates Logos Column */}
                             <div className="flex flex-col space-y-6">
                               <div className="w-12 h-12 bg-white rounded flex items-center justify-center border border-gray-200">
