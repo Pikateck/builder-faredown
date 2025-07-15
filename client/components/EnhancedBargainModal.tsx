@@ -99,12 +99,14 @@ export function EnhancedBargainModal({
   // Calculate pricing when modal opens or currency changes
   useEffect(() => {
     if (roomType && checkInDate && checkOutDate) {
+      const nights = Math.ceil(
+        (checkOutDate.getTime() - checkInDate.getTime()) /
+          (1000 * 60 * 60 * 24),
+      );
       const calculation = calculateTotalPrice(
         roomType.totalPrice,
-        checkInDate,
-        checkOutDate,
+        nights,
         roomsCount,
-        selectedCurrency.code,
       );
       setPriceCalculation(calculation);
     }
