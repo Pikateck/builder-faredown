@@ -781,6 +781,14 @@ export default function BookingFlow() {
   const negotiatedPrice =
     location.state?.negotiatedPrice || selectedFareType?.price || 32168; // fallback price
 
+  // If no flight data, redirect back to flight search
+  useEffect(() => {
+    if (!selectedFlight && !selectedFareType) {
+      console.warn("No flight data found, redirecting to flight search");
+      navigate("/flights");
+    }
+  }, [selectedFlight, selectedFareType, navigate]);
+
   // Function to generate initial travellers based on passenger count
   const generateInitialTravellers = () => {
     const travellers = [];
