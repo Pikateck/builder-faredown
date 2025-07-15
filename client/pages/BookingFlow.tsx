@@ -769,11 +769,17 @@ export default function BookingFlow() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Get passenger data from navigation state
+  // Get passenger data and flight data from navigation state
   const passengersFromState = location.state?.passengers || {
     adults: 1,
     children: 0,
   };
+
+  // Get flight booking data from navigation state
+  const selectedFlight = location.state?.selectedFlight;
+  const selectedFareType = location.state?.selectedFareType;
+  const negotiatedPrice =
+    location.state?.negotiatedPrice || selectedFareType?.price || 32168; // fallback price
 
   // Function to generate initial travellers based on passenger count
   const generateInitialTravellers = () => {
