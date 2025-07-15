@@ -938,7 +938,7 @@ export default function Index() {
                     </button>
 
                     {showTravelers && (
-                      <div className="absolute top-14 right-0 bg-white border border-gray-300 rounded-md shadow-xl p-4 z-50 w-72">
+                      <div className="absolute top-14 left-0 right-0 sm:right-0 sm:left-auto bg-white border border-gray-300 rounded-md shadow-xl p-4 z-50 w-full sm:w-72">
                         <div className="space-y-6">
                           <div className="flex items-center justify-between py-2">
                             <div>
