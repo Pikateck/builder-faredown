@@ -9,6 +9,7 @@ import BookingConfirmation from "./pages/BookingConfirmation";
 import Account from "./pages/Account";
 import Booking from "./pages/Booking";
 import Hotels from "./pages/Hotels";
+import HotelResults from "./pages/HotelResults";
 import Sightseeing from "./pages/Sightseeing";
 import SportsEvents from "./pages/SportsEvents";
 import Transfers from "./pages/Transfers";
