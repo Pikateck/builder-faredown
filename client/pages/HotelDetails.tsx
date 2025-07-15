@@ -366,12 +366,21 @@ export default function HotelDetails() {
                                   per night
                                 </span>
                               </div>
-                              <Button
-                                onClick={() => handleBooking(room)}
-                                className="w-full lg:w-auto"
-                              >
-                                Book Now
-                              </Button>
+                              <div className="flex flex-col lg:flex-row gap-2 w-full lg:w-auto">
+                                <Button
+                                  onClick={() => handleBargainClick(room)}
+                                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
+                                >
+                                  <TrendingDown className="w-4 h-4 mr-1" />
+                                  Bargain
+                                </Button>
+                                <Button
+                                  onClick={() => handleBooking(room)}
+                                  className="bg-blue-600 hover:bg-blue-700"
+                                >
+                                  Book Now
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         </CardContent>
