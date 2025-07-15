@@ -28,8 +28,9 @@ import MobileTrips from "./pages/MobileTrips";
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Routes>
+      <CurrencyProvider>
+        <Router>
+          <Routes>
           {/* Original Web Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/flights" element={<FlightResults />} />
