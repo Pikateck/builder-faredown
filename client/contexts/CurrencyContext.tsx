@@ -46,8 +46,8 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   };
 
   const formatPrice = (priceInUSD: number): string => {
-    const convertedPrice = convertPrice(priceInUSD);
-    return `${selectedCurrency.symbol}${convertedPrice.toFixed(2)}`;
+    const convertedPrice = Math.round(convertPrice(priceInUSD));
+    return `${selectedCurrency.symbol}${convertedPrice.toLocaleString()}`;
   };
 
   const value: CurrencyContextType = {
