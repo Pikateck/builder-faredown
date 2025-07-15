@@ -24,7 +24,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { format } from "date-fns";
+// Removed date-fns dependency - using native Date methods
 
 interface GuestConfig {
   adults: number;
