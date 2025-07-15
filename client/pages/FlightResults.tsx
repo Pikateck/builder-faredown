@@ -1103,7 +1103,7 @@ export default function FlightResults() {
             </div>
 
             {/* Search inputs */}
-            <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 max-w-4xl overflow-visible">
+            <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 max-w-5xl overflow-visible">
               <div className="relative lg:flex-1 lg:max-w-xs w-full lg:w-auto">
                 <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium">
                   Leaving from
