@@ -109,7 +109,7 @@ const hotelData = [
 // Amenity icons mapping
 const amenityIcons = {
   wifi: Wifi,
-  pool: Pool,
+  pool: Waves,
   gym: Dumbbell,
   parking: Car,
   restaurant: Coffee,
