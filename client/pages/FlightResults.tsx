@@ -1534,10 +1534,23 @@ export default function FlightResults() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-6">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
-          {/* Left Sidebar - Filters */}
-          <div className="w-full lg:w-64 lg:flex-shrink-0 space-y-4 lg:space-y-6">
+          {/* Mobile Filter Toggle */}
+          <div className="sm:hidden mb-4">
+            <Button
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              variant="outline"
+              className="w-full flex items-center justify-center space-x-2 py-3 border-2 touch-manipulation"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Filters & Sort</span>
+              <Badge className="bg-blue-100 text-blue-800 ml-2">3 active</Badge>
+            </Button>
+          </div>
+
+          {/* Desktop Sidebar - Filters */}
+          <div className="hidden lg:block w-64 flex-shrink-0 space-y-4 lg:space-y-6">
             {/* Filter by Results */}
             <div className="bg-white rounded-lg border p-4">
               <div className="flex items-center justify-between mb-4">
