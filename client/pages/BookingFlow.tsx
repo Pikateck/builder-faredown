@@ -1195,7 +1195,7 @@ export default function BookingFlow() {
     <div className="min-h-screen bg-[#f2f6fa]">
       {/* Faredown Header */}
       <header className="bg-[#003580] text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
               <span className="text-xl font-bold tracking-tight">
