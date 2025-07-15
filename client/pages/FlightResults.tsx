@@ -1502,7 +1502,7 @@ export default function FlightResults() {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
           {/* Left Sidebar - Filters */}
-          <div className="w-64 flex-shrink-0 space-y-6">
+          <div className="w-full lg:w-64 lg:flex-shrink-0 space-y-4 lg:space-y-6">
             {/* Filter by Results */}
             <div className="bg-white rounded-lg border p-4">
               <div className="flex items-center justify-between mb-4">
