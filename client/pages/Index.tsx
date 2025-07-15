@@ -639,13 +639,13 @@ export default function Index() {
                     )}
                   </div>
 
-                  <div className="relative flex-1">
-                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium">
+                  <div className="relative w-full">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Going to
                     </label>
                     <button
                       onClick={() => setShowToCities(!showToCities)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-full w-full hover:border-blue-500"
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 sm:py-2 h-full w-full hover:border-blue-500 min-h-[48px] sm:min-h-[40px]"
                     >
                       <Plane className="w-4 h-4 text-gray-500 mr-2" />
                       <div className="flex items-center space-x-2">
