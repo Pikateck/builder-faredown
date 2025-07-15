@@ -158,7 +158,7 @@ export function Header({ className }: HeaderProps) {
                       <button
                         key={currency.code}
                         onClick={() => {
-                          setSelectedCurrency(currency);
+                          setCurrency(currency);
                           setShowCurrencyDropdown(false);
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
