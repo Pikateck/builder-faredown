@@ -1,36 +1,7 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Calendar,
-  MapPin,
-  Users,
-  Search,
-  Star,
-  Wifi,
-  Car,
-  Coffee,
-  Dumbbell,
-  Menu,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  User,
-  BookOpen,
-  Award,
-  Heart,
-  LogOut,
-  CreditCard,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { Star, MapPin, Heart } from "lucide-react";
 
 export default function Hotels() {
   const navigate = useNavigate();
