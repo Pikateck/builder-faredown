@@ -435,18 +435,18 @@ export default function Index() {
         )}
 
         {/* Hero Search Section */}
-        <div className="bg-blue-700 py-8">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-6">
-              <div className="mb-4">
-                <Badge className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 text-sm font-semibold">
+        <div className="bg-blue-700 py-4 sm:py-6 md:py-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4">
+            <div className="text-center mb-4 sm:mb-6">
+              <div className="mb-3 sm:mb-4">
+                <Badge className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold">
                   🟠 Bargain Mode Activated
                 </Badge>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 leading-tight px-2">
                 Upgrade Your Travel in Real Time — With Live AI Bargaining
               </h1>
-              <p className="text-white text-xl opacity-90 mb-4">
+              <p className="text-white text-sm sm:text-lg md:text-xl opacity-90 mb-3 sm:mb-4 px-4 leading-relaxed">
                 The world's first travel portal where you can{" "}
                 <strong>
                   bargain and upgrade your flight, hotel, or holiday
