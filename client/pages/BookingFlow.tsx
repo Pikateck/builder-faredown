@@ -930,7 +930,7 @@ export default function BookingFlow() {
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
     { name: "Indonesia", code: "+62", flag: "🇮🇩" },
-    { name: "Iran", code: "+98", flag: "🇮🇷" },
+    { name: "Iran", code: "+98", flag: "����🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮���" },
@@ -1478,7 +1478,7 @@ export default function BookingFlow() {
             <div>
               <div className="text-sm text-[#666] mb-1">
                 One way • {travellers.length} traveller
-                {travellers.length > 1 ? "s" : ""} • Sat, Aug 3
+                {travellers.length > 1 ? "s" : ""} �� Sat, Aug 3
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
                 Mumbai to Dubai
@@ -2563,11 +2563,21 @@ export default function BookingFlow() {
                       <div className="ml-4 space-y-1">
                         <div className="flex justify-between text-[#666]">
                           <span>Flight fare</span>
-                          <span>{formatCurrency(51820)}</span>
+                          <span>
+                            {formatCurrency(
+                              calculateAdultPrice() *
+                                passengersFromState.adults,
+                            )}
+                          </span>
                         </div>
                         <div className="flex justify-between text-[#666]">
                           <span>Airline taxes and fees</span>
-                          <span>{formatCurrency(6005)}</span>
+                          <span>
+                            {formatCurrency(
+                              calculateAdultTaxes() *
+                                passengersFromState.adults,
+                            )}
+                          </span>
                         </div>
                       </div>
                     )}
