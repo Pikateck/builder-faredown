@@ -33,25 +33,25 @@ interface CurrencyProviderProps {
 }
 
 export function CurrencyProvider({ children }: CurrencyProviderProps) {
-  const [currentCurrency, setCurrentCurrency] = useState<Currency>(
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency>(
     CURRENCIES[0],
   ); // Default to USD
 
   const setCurrency = (currency: Currency) => {
-    setCurrentCurrency(currency);
+    setSelectedCurrency(currency);
   };
 
   const convertPrice = (priceInUSD: number): number => {
-    return priceInUSD * currentCurrency.rate;
+    return priceInUSD * selectedCurrency.rate;
   };
 
   const formatPrice = (priceInUSD: number): string => {
     const convertedPrice = convertPrice(priceInUSD);
-    return `${currentCurrency.symbol}${convertedPrice.toFixed(2)}`;
+    return `${selectedCurrency.symbol}${convertedPrice.toFixed(2)}`;
   };
 
   const value: CurrencyContextType = {
-    currentCurrency,
+    selectedCurrency,
     currencies: CURRENCIES,
     setCurrency,
     convertPrice,
