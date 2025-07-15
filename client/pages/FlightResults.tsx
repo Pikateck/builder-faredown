@@ -256,7 +256,7 @@ export default function FlightResults() {
   const airlinesData = [
     {
       id: "EK-emirates",
-      name: "Emirates Airlines",
+      name: "Emirates",
       code: "EK",
       flights: 424,
       selected: true,
