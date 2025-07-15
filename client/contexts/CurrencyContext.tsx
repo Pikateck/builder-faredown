@@ -34,8 +34,8 @@ interface CurrencyProviderProps {
 
 export function CurrencyProvider({ children }: CurrencyProviderProps) {
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>(
-    CURRENCIES[0],
-  ); // Default to USD
+    CURRENCIES[3],
+  ); // Default to INR
 
   const setCurrency = (currency: Currency) => {
     setSelectedCurrency(currency);
