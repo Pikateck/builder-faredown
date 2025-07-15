@@ -921,8 +921,8 @@ export default function FlightResults() {
       {/* Search Form - Exact same as landing page */}
       <div className="bg-blue-700 py-4">
         <div className="bg-white border-b border-gray-200 overflow-visible">
-          <div className="max-w-7xl mx-auto px-4 py-3 overflow-visible">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
+            <div className="flex flex-col gap-4">
               <div className="flex items-center bg-white rounded-lg p-3 flex-1 w-full lg:mr-4">
                 <div className="flex flex-wrap items-center gap-3 md:gap-6">
                   <button
