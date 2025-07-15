@@ -202,29 +202,45 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
           </h3>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: "Morning", time: "6AM - 12PM", checked: false },
-              { label: "Afternoon", time: "12PM - 6PM", checked: true },
-              { label: "Evening", time: "6PM - 12AM", checked: false },
-              { label: "Night", time: "12AM - 6AM", checked: false },
+              { label: "Morning", time: "6AM - 12PM" },
+              { label: "Afternoon", time: "12PM - 6PM" },
+              { label: "Evening", time: "6PM - 12AM" },
+              { label: "Night", time: "12AM - 6AM" },
             ].map((timeSlot) => (
               <label key={timeSlot.label} className="cursor-pointer">
                 <div
                   className={cn(
                     "p-3 rounded-lg border-2 text-center touch-manipulation",
-                    timeSlot.checked
+                    selectedTimeSlots.includes(timeSlot.label)
                       ? "border-blue-600 bg-blue-50"
                       : "border-gray-200 hover:border-gray-300",
                   )}
                 >
                   <input
                     type="checkbox"
-                    checked={timeSlot.checked}
+                    checked={selectedTimeSlots.includes(timeSlot.label)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedTimeSlots([
+                          ...selectedTimeSlots,
+                          timeSlot.label,
+                        ]);
+                      } else {
+                        setSelectedTimeSlots(
+                          selectedTimeSlots.filter(
+                            (label) => label !== timeSlot.label,
+                          ),
+                        );
+                      }
+                    }}
                     className="sr-only"
                   />
                   <div
                     className={cn(
                       "text-sm font-medium",
-                      timeSlot.checked ? "text-blue-700" : "text-gray-700",
+                      selectedTimeSlots.includes(timeSlot.label)
+                        ? "text-blue-700"
+                        : "text-gray-700",
                     )}
                   >
                     {timeSlot.label}
@@ -232,7 +248,9 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
                   <div
                     className={cn(
                       "text-xs",
-                      timeSlot.checked ? "text-blue-600" : "text-gray-500",
+                      selectedTimeSlots.includes(timeSlot.label)
+                        ? "text-blue-600"
+                        : "text-gray-500",
                     )}
                   >
                     {timeSlot.time}
