@@ -460,7 +460,7 @@ export default function Index() {
               <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
-                    <div className="flex flex-wrap items-center gap-3 md:gap-6">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-6 w-full sm:w-auto">
                       <button
                         onClick={() => setTripType("round-trip")}
                         className="flex items-center space-x-2"
