@@ -37,8 +37,10 @@ export function Header({ className }: HeaderProps) {
   };
 
   return (
-    <header className={cn("bg-blue-700 text-white", className)}>
-      <div className="max-w-7xl mx-auto px-4 py-3">
+    <header
+      className={cn("bg-blue-700 text-white sticky top-0 z-40", className)}
+    >
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
