@@ -2018,7 +2018,7 @@ export default function FlightResults() {
                           <div className="mb-2 relative group">
                             <div className="flex items-center justify-center space-x-1">
                               <span className="text-sm font-medium text-gray-900">
-                                Eco Saver
+                                {flight.fareTypes[0].name}
                               </span>
                               <Info className="w-3 h-3 text-gray-400 cursor-help" />
                             </div>
