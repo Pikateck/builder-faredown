@@ -1945,22 +1945,22 @@ export default function FlightResults() {
                                     <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
                                     <div className="w-16 h-px bg-gray-300 mx-2"></div>
                                     <div className="bg-green-600 text-white text-xs px-2 py-1 rounded font-medium">
-                                      Direct
+                                      {flight.flightType}
                                     </div>
                                     <div className="w-16 h-px bg-gray-300 mx-2"></div>
                                     <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
                                   </div>
                                   <div className="text-xs text-gray-500 mt-1">
-                                    3h
+                                    {flight.duration}
                                   </div>
                                 </div>
 
                                 <div className="text-center">
                                   <div className="text-xl font-bold text-gray-900">
-                                    11:45
+                                    {flight.arrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    DXB • Aug 9
+                                    {flight.arrivalCode} • Aug 9
                                   </div>
                                 </div>
                               </div>
