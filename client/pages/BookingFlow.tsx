@@ -925,7 +925,7 @@ export default function BookingFlow() {
     { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭��" },
-    { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
+    { name: "Hong Kong", code: "+852", flag: "���🇰" },
     { name: "Hungary", code: "+36", flag: "🇭��" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
@@ -944,6 +944,43 @@ export default function BookingFlow() {
   const [showAdultFare, setShowAdultFare] = useState(true);
   const [showChildFare, setShowChildFare] = useState(true);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+  // Price calculation functions
+  const calculateAdultPrice = () => {
+    return negotiatedPrice; // Per adult price
+  };
+
+  const calculateChildPrice = () => {
+    return Math.round(negotiatedPrice * 0.75); // 75% of adult price for children
+  };
+
+  const calculateAdultTaxes = () => {
+    return Math.round(calculateAdultPrice() * 0.18); // 18% taxes
+  };
+
+  const calculateChildTaxes = () => {
+    return Math.round(calculateChildPrice() * 0.15); // 15% taxes for children
+  };
+
+  const calculateAdultTotal = () => {
+    return calculateAdultPrice() + calculateAdultTaxes();
+  };
+
+  const calculateChildTotal = () => {
+    return calculateChildPrice() + calculateChildTaxes();
+  };
+
+  const calculateTotalAdultsPrice = () => {
+    return calculateAdultTotal() * passengersFromState.adults;
+  };
+
+  const calculateTotalChildrenPrice = () => {
+    return calculateChildTotal() * passengersFromState.children;
+  };
+
+  const calculateBaseFareTotal = () => {
+    return calculateTotalAdultsPrice() + calculateTotalChildrenPrice();
+  };
   const [countrySearch, setCountrySearch] = useState("");
   const [currentStep, setCurrentStep] = useState(1); // Start at step 1 (Travelers)
 
