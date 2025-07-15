@@ -1970,10 +1970,10 @@ export default function FlightResults() {
                                 <div className="flex items-center space-x-12">
                                   <div className="text-center">
                                     <div className="text-xl font-bold text-gray-900">
-                                      13:00
+                                      {flight.returnDepartureTime}
                                     </div>
                                     <div className="text-sm text-gray-600">
-                                      DXB • Aug 16
+                                      {flight.arrivalCode} • Aug 16
                                     </div>
                                   </div>
 
@@ -1982,22 +1982,22 @@ export default function FlightResults() {
                                       <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
                                       <div className="w-16 h-px bg-gray-300 mx-2"></div>
                                       <div className="bg-green-600 text-white text-xs px-2 py-1 rounded font-medium">
-                                        Direct
+                                        {flight.flightType}
                                       </div>
                                       <div className="w-16 h-px bg-gray-300 mx-2"></div>
                                       <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
                                     </div>
                                     <div className="text-xs text-gray-500 mt-1">
-                                      2h 25m
+                                      {flight.returnDuration}
                                     </div>
                                   </div>
 
                                   <div className="text-center">
                                     <div className="text-xl font-bold text-gray-900">
-                                      02:25
+                                      {flight.returnArrivalTime}
                                     </div>
                                     <div className="text-sm text-gray-600">
-                                      BOM • Aug 17
+                                      {flight.departureCode} • Aug 17
                                     </div>
                                   </div>
                                 </div>
