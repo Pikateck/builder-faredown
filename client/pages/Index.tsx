@@ -1982,6 +1982,45 @@ export default function Index() {
         </div>
       </footer>
 
+      {/* Mobile Dropdown Components */}
+      <MobileCityDropdown
+        isOpen={showFromCities}
+        onClose={() => setShowFromCities(false)}
+        title="Leaving from"
+        cities={cityData}
+        selectedCity={selectedFromCity}
+        onSelectCity={setSelectedFromCity}
+      />
+
+      <MobileCityDropdown
+        isOpen={showToCities}
+        onClose={() => setShowToCities(false)}
+        title="Going to"
+        cities={cityData}
+        selectedCity={selectedToCity}
+        onSelectCity={setSelectedToCity}
+      />
+
+      <MobileDatePicker
+        isOpen={showCalendar}
+        onClose={() => setShowCalendar(false)}
+        tripType={tripType}
+        setTripType={setTripType}
+        selectedDepartureDate={selectedDepartureDate}
+        selectedReturnDate={selectedReturnDate}
+        setSelectedDepartureDate={setSelectedDepartureDate}
+        setSelectedReturnDate={setSelectedReturnDate}
+        selectingDeparture={selectingDeparture}
+        setSelectingDeparture={setSelectingDeparture}
+      />
+
+      <MobileTravelers
+        isOpen={showTravelers}
+        onClose={() => setShowTravelers(false)}
+        travelers={travelers}
+        setTravelers={setTravelers}
+      />
+
       {/* Sign In Modal */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
         <DialogContent className="max-w-md">
