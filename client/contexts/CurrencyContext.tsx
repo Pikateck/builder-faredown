@@ -17,7 +17,7 @@ export const CURRENCIES: Currency[] = [
 ];
 
 interface CurrencyContextType {
-  currentCurrency: Currency;
+  selectedCurrency: Currency;
   currencies: Currency[];
   setCurrency: (currency: Currency) => void;
   convertPrice: (priceInUSD: number) => number;
