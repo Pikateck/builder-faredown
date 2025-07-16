@@ -683,10 +683,10 @@ export default function HotelDetails() {
                                   </div>
                                 </div>
 
-                                <div className="space-y-1">
+                                <div className="space-y-0.5">
                                   <Button
                                     onClick={() => handleBooking(room)}
-                                    className={`w-full font-semibold py-1.5 rounded-md text-xs ${
+                                    className={`w-full font-medium py-1 rounded text-xs h-7 ${
                                       room.statusColor === "green"
                                         ? "bg-green-700 hover:bg-green-800 text-white"
                                         : "bg-blue-800 hover:bg-blue-900 text-white"
@@ -698,15 +698,12 @@ export default function HotelDetails() {
                                   </Button>
                                   <Button
                                     onClick={() => handleBargainClick(room)}
-                                    className="w-full py-1.5 font-semibold bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md text-xs"
+                                    className="w-full py-1 font-medium bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 rounded text-xs h-7"
                                   >
                                     <div className="flex items-center justify-center">
-                                      <span className="mr-1">
-                                        💰 Bargain This Room
-                                      </span>
-                                      <div className="bg-blue-600 text-white px-1.5 py-0.5 rounded text-xs">
+                                      <span className="mr-1">💰 Bargain</span>
+                                      <div className="bg-blue-600 text-white px-1 py-0.5 rounded text-xs">
                                         ₹{room.pricePerNight.toLocaleString()}
-                                        /night
                                       </div>
                                     </div>
                                   </Button>
