@@ -564,7 +564,7 @@ export default function HotelDetails() {
 
                 {/* Available Rooms Section - Compact */}
                 <div className="bg-white rounded-lg border border-gray-200">
-                  <div className="bg-blue-700 text-white p-3 rounded-t-lg">
+                  <div className="bg-blue-700 text-white p-2 rounded-t-lg">
                     <h2 className="text-base font-semibold">
                       Available Rooms - Starting from Cheapest
                     </h2>
