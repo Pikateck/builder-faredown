@@ -165,9 +165,22 @@ export default function HotelDetails() {
       <Header />
 
       {/* Main Container */}
-      <div className="flex">
+      <div className="flex flex-col lg:flex-row">
         {/* Left Sidebar - Filters */}
-        <div className="w-80 bg-white border-r border-gray-200 min-h-screen">
+        <div className="w-full lg:w-80 bg-white border-r border-gray-200 min-h-screen">
+          <div className="lg:hidden p-4 border-b border-gray-200">
+            <button className="flex items-center justify-center w-full py-2 px-4 bg-blue-700 text-white rounded-md">
+              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 6h18M7 12h10M10 18h4"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              Filters
+            </button>
+          </div>
           <div className="p-4">
             {/* Filters Header */}
             <div className="flex items-center mb-6">
@@ -360,7 +373,7 @@ export default function HotelDetails() {
         </div>
 
         {/* Right Content Area */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           {/* Tab Navigation */}
           <div className="bg-white border-b border-gray-200">
             <div className="flex">
@@ -381,11 +394,11 @@ export default function HotelDetails() {
           </div>
 
           {/* Main Content */}
-          <div className="p-6">
+          <div className="p-3 sm:p-4 lg:p-6">
             {activeTab === "overview" && (
               <div className="space-y-6">
                 {/* Hotel Header */}
-                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 lg:p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -437,16 +450,16 @@ export default function HotelDetails() {
                   </div>
 
                   {/* Hotel Image and Details */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
                     <div>
                       <img
                         src={hotel.image}
                         alt={hotel.name}
-                        className="w-full h-64 object-cover rounded-lg"
+                        className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-lg"
                       />
                     </div>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
                         <div>
                           <div className="text-gray-600">Check-in</div>
                           <div className="font-medium">{hotel.checkIn}</div>
@@ -538,7 +551,7 @@ export default function HotelDetails() {
                                   className={`${
                                     room.statusColor === "green"
                                       ? "bg-green-100 text-green-800"
-                                      : "bg-yellow-100 text-yellow-800"
+                                      : "bg-yellow-500 text-yellow-900 font-semibold"
                                   } text-xs flex-shrink-0 self-start sm:self-center`}
                                 >
                                   {room.status}
@@ -605,23 +618,25 @@ export default function HotelDetails() {
 
                               {/* Pricing and Actions */}
                               <div className="lg:col-span-4">
-                                <div className="text-right mb-4">
-                                  <div className="text-3xl font-bold text-gray-900 mb-1">
-                                    ₹32,49,286
-                                  </div>
-                                  <div className="text-sm font-semibold text-gray-900 mb-1">
-                                    Total Price
-                                  </div>
-                                  <div className="text-xs text-gray-600 mb-1">
-                                    Includes all taxes & charges
-                                  </div>
-                                  <div className="text-xs text-gray-600">
-                                    ₹32,850 per night (all-inclusive)
+                                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                                  <div className="text-right">
+                                    <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+                                      ₹32,49,286
+                                    </div>
+                                    <div className="text-sm font-semibold text-gray-900 mb-1">
+                                      Total Price
+                                    </div>
+                                    <div className="text-xs text-gray-600 mb-1">
+                                      Includes all taxes & charges
+                                    </div>
+                                    <div className="text-xs text-gray-600">
+                                      ₹32,850 per night (all-inclusive)
+                                    </div>
                                   </div>
                                 </div>
 
                                 <div className="mb-4">
-                                  <div className="flex items-center text-sm text-green-700 mb-2">
+                                  <div className="flex items-center text-sm font-semibold text-green-700 mb-2">
                                     <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
                                     Cheapest Option Available
                                   </div>
