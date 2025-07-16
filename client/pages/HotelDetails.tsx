@@ -723,6 +723,30 @@ export default function HotelDetails() {
                         ⚡ Upgrade & Save with Bargaining
                       </Button>
                     </div>
+
+                    {/* Pricing - Attractive Right Column */}
+                    <div className="lg:col-span-1">
+                      <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border-2 border-green-200 h-full flex flex-col justify-center shadow-lg">
+                        <div className="text-center">
+                          <div className="text-3xl font-bold text-green-900 mb-1">
+                            ₹
+                            {calculateTotalPrice(
+                              roomTypes[0].pricePerNight,
+                            ).toLocaleString()}
+                          </div>
+                          <div className="text-xs font-medium text-green-700 mb-2">
+                            Total Price
+                          </div>
+                          <div className="text-xs text-green-600 mb-3">
+                            ₹{roomTypes[0].pricePerNight.toLocaleString()}/night
+                          </div>
+                          <div className="text-xs text-green-600 font-medium flex items-center justify-center">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            All taxes included
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* All-Inclusive Pricing */}
