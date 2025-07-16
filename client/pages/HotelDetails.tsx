@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -15,24 +13,16 @@ import { EnhancedBargainModal } from "@/components/EnhancedBargainModal";
 import {
   Star,
   MapPin,
-  Heart,
   Share2,
   ChevronDown,
-  Users,
-  Calendar,
   Bookmark,
-  Download,
   Search,
-  CheckCircle,
   Filter,
 } from "lucide-react";
-import { useCurrency } from "@/contexts/CurrencyContext";
-import { formatPriceWithSymbol } from "@/lib/pricing";
 
 export default function HotelDetails() {
   const { hotelId } = useParams();
   const navigate = useNavigate();
-  const { selectedCurrency } = useCurrency();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
@@ -40,10 +30,7 @@ export default function HotelDetails() {
     new Set(["twin-skyline"]),
   );
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [savedItems, setSavedItems] = useState<any[]>([]);
-  const [showSavedModal, setShowSavedModal] = useState(false);
 
   // Format date to DD-MMM-YYYY
   const formatDate = (dateStr: string) => {
@@ -79,14 +66,10 @@ export default function HotelDetails() {
     totalNights: 4,
     rooms: 1,
     adults: 2,
-    available: true,
   };
 
-  const calculateTotalPrice = (
-    roomPricePerNight: number,
-    nights: number = hotel.totalNights,
-  ) => {
-    return roomPricePerNight * nights;
+  const calculateTotalPrice = (roomPricePerNight: number) => {
+    return roomPricePerNight * hotel.totalNights;
   };
 
   const roomTypes = [
@@ -96,6 +79,11 @@ export default function HotelDetails() {
       type: "1 X Twin Classic",
       details: "Twin bed",
       pricePerNight: 8124,
+      status: "Best Value - Start Here!",
+      statusColor: "green",
+      nonRefundable: true,
+      image:
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
       features: [
         "6.7 km from downtown",
         "Max 2 guests",
@@ -104,11 +92,6 @@ export default function HotelDetails() {
         "Free cancellation",
         "No prepayment needed - pay at the property",
       ],
-      status: "Best Value - Start Here!",
-      statusColor: "green",
-      nonRefundable: true,
-      image:
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
     },
     {
       id: "king-skyline",
@@ -116,82 +99,41 @@ export default function HotelDetails() {
       type: "1 X King Classic",
       details: "1 king bed",
       pricePerNight: 9340,
+      status: "Upgrade for +₹4,864",
+      statusColor: "yellow",
+      image:
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
       features: [
         "6.7 km from downtown",
         "Max 2 guests",
         "1 king bed",
-        "Free stay for your child",
         "Free cancellation",
         "No prepayment needed - pay at the property",
       ],
-      status: "Upgrade for +₹4,864",
-      statusColor: "yellow",
-      nonRefundable: false,
-      image:
-        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
     },
     {
       id: "superior-king",
       name: "Superior King Room",
       type: "1 X Superior King",
-      details: "1 king bed",
       pricePerNight: 9858,
-      features: [
-        "6.7 km from downtown",
-        "Max 2 guests",
-        "1 king bed",
-        "City view",
-        "Free cancellation",
-        "No prepayment needed - pay at the property",
-      ],
       status: "Upgrade for +₹6,936",
       statusColor: "yellow",
-      nonRefundable: false,
-      image:
-        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=300",
     },
     {
       id: "superior-twin-club",
       name: "Superior Twin Room - Club Access",
       type: "2 X Twin Superior Club",
-      details: "2 twin beds",
       pricePerNight: 13762,
-      features: [
-        "6.7 km from downtown",
-        "Max 2 guests",
-        "2 twin beds",
-        "Club lounge access",
-        "Complimentary breakfast",
-        "Free cancellation",
-        "No prepayment needed - pay at the property",
-      ],
       status: "Upgrade for +₹22,552",
       statusColor: "yellow",
-      nonRefundable: false,
-      image:
-        "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=300",
     },
     {
       id: "grand-suite-garden",
       name: "One Bedroom Grand Suite with Garden View",
       type: "1 X Grand Suite",
-      details: "1 king bed + living area",
       pricePerNight: 16038,
-      features: [
-        "6.7 km from downtown",
-        "Max 4 guests",
-        "1 king bed",
-        "Separate living area",
-        "Garden view",
-        "Butler service",
-        "Free cancellation",
-        "No prepayment needed - pay at the property",
-      ],
       status: "Upgrade for +₹31,656",
       statusColor: "yellow",
-      nonRefundable: false,
-      image:
-        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=300",
     },
   ];
 
@@ -203,15 +145,6 @@ export default function HotelDetails() {
     { id: "street-view", label: "Street View" },
     { id: "location", label: "Location" },
   ];
-
-  const handleSave = () => {
-    setIsSaved(!isSaved);
-    if (!isSaved) {
-      setSavedItems([...savedItems, hotel]);
-    } else {
-      setSavedItems(savedItems.filter((item) => item.id !== hotel.id));
-    }
-  };
 
   const handleBargainClick = (roomType: any) => {
     setSelectedRoomType(roomType);
@@ -241,25 +174,10 @@ export default function HotelDetails() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      {/* Saved Items Icon */}
-      <div className="fixed top-20 right-4 z-50">
-        <button
-          onClick={() => setShowSavedModal(true)}
-          className="bg-blue-700 text-white p-2 rounded-full shadow-lg hover:bg-blue-800 relative"
-        >
-          <Bookmark className="w-5 h-5" />
-          {savedItems.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              {savedItems.length}
-            </span>
-          )}
-        </button>
-      </div>
-
       {/* Main Container */}
       <div className="flex">
         {/* Left Sidebar - Filters */}
-        <div className="w-72 bg-white border-r border-gray-200 min-h-screen">
+        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
           <div className="p-4">
             {/* Filters Header */}
             <div className="flex items-center mb-4">
@@ -287,7 +205,7 @@ export default function HotelDetails() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Price Range
               </label>
-              <div className="text-sm text-gray-600 mb-2">₹0 - ₹1,00,000+</div>
+              <div className="text-sm text-gray-600 mb-2">₹1,00,000+</div>
               <div className="px-2">
                 <div className="w-full h-2 bg-gray-200 rounded-full relative">
                   <div
@@ -405,15 +323,10 @@ export default function HotelDetails() {
           <div className="p-4">
             {activeTab === "overview" && (
               <>
-                {/* Hotel Header - Compact Square Design */}
+                {/* Hotel Header */}
                 <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">
-                          ✓ Available
-                        </Badge>
-                      </div>
                       <h1 className="text-xl font-bold text-gray-900 mb-2">
                         {hotel.name}
                       </h1>
@@ -436,10 +349,7 @@ export default function HotelDetails() {
                             ({hotel.reviews} reviews)
                           </span>
                         </div>
-                        <button
-                          className="ml-4 text-blue-600 text-xs hover:underline"
-                          onClick={() => setIsReviewModalOpen(true)}
-                        >
+                        <button className="ml-4 text-blue-600 text-xs hover:underline">
                           Write a review
                         </button>
                       </div>
@@ -457,12 +367,10 @@ export default function HotelDetails() {
                             ? "bg-blue-100 text-blue-700 border-blue-300"
                             : ""
                         }`}
-                        onClick={handleSave}
+                        onClick={() => setIsSaved(!isSaved)}
                       >
                         <Bookmark
-                          className={`w-3 h-3 mr-1 ${
-                            isSaved ? "fill-current" : ""
-                          }`}
+                          className={`w-3 h-3 mr-1 ${isSaved ? "fill-current" : ""}`}
                         />
                         Save
                       </Button>
@@ -478,27 +386,27 @@ export default function HotelDetails() {
                     </div>
                   </div>
 
-                  {/* Hotel Details - Square Grid Layout */}
+                  {/* Hotel Details Grid */}
                   <div className="grid grid-cols-12 gap-3">
-                    {/* Hotel Image - Square */}
+                    {/* Hotel Image */}
                     <div className="col-span-3">
                       <img
                         src={hotel.image}
                         alt={hotel.name}
-                        className="w-full aspect-square object-cover rounded-lg"
+                        className="w-full h-32 object-cover rounded-lg"
                       />
                     </div>
 
-                    {/* Booking Details - Square Boxes */}
+                    {/* Booking Details */}
                     <div className="col-span-6 space-y-2">
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="aspect-square bg-gray-50 rounded flex flex-col items-center justify-center p-2">
+                        <div className="bg-gray-50 rounded p-2 text-center">
                           <div className="text-xs text-gray-600">Check-in</div>
                           <div className="font-semibold text-sm">
                             {formatDate(hotel.checkIn)}
                           </div>
                         </div>
-                        <div className="aspect-square bg-gray-50 rounded flex flex-col items-center justify-center p-2">
+                        <div className="bg-gray-50 rounded p-2 text-center">
                           <div className="text-xs text-gray-600">Check-out</div>
                           <div className="font-semibold text-sm">
                             {formatDate(hotel.checkOut)}
@@ -518,9 +426,9 @@ export default function HotelDetails() {
                       </div>
                     </div>
 
-                    {/* Pricing - Square */}
+                    {/* Pricing */}
                     <div className="col-span-3">
-                      <div className="aspect-square bg-gray-50 rounded flex flex-col items-center justify-center p-3">
+                      <div className="bg-gray-50 rounded p-3 text-center h-full flex flex-col justify-center">
                         <div className="text-xl font-bold text-gray-900">
                           ₹
                           {calculateTotalPrice(
@@ -530,7 +438,7 @@ export default function HotelDetails() {
                         <div className="text-xs font-semibold text-gray-900">
                           Total Price
                         </div>
-                        <div className="text-xs text-gray-600 text-center mt-1">
+                        <div className="text-xs text-gray-600 mt-1">
                           ₹{roomTypes[0].pricePerNight.toLocaleString()} per
                           night (all-inclusive)
                         </div>
@@ -625,7 +533,7 @@ export default function HotelDetails() {
                         </div>
 
                         {/* Expanded Room Details */}
-                        {expandedRooms.has(room.id) && (
+                        {expandedRooms.has(room.id) && room.features && (
                           <div className="mt-3 border-t border-gray-100 pt-3">
                             <div className="grid grid-cols-12 gap-3">
                               {/* Room Image */}
@@ -633,7 +541,7 @@ export default function HotelDetails() {
                                 <img
                                   src={room.image}
                                   alt={room.name}
-                                  className="w-full aspect-square object-cover rounded"
+                                  className="w-full h-24 object-cover rounded"
                                 />
                               </div>
 
@@ -721,157 +629,9 @@ export default function HotelDetails() {
                 </div>
               </>
             )}
-
-            {/* Other tabs content */}
-            {activeTab === "gallery" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {[hotel.image, ...roomTypes.map((r) => r.image)].map(
-                    (img, idx) => (
-                      <img
-                        key={idx}
-                        src={img}
-                        alt={`Gallery image ${idx + 1}`}
-                        className="w-full aspect-square object-cover rounded-lg"
-                      />
-                    ),
-                  )}
-                </div>
-              </div>
-            )}
-
-            {activeTab === "amenities" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <h2 className="text-lg font-semibold mb-3">
-                  Property Amenities
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <h3 className="font-semibold mb-2">Entertainment</h3>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• TV Lounge</li>
-                      <li>• Outdoor freshwater pool</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Facilities</h3>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Hotel</li>
-                      <li>• City centre</li>
-                      <li>• Payment methods accepted</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Room Facilities</h3>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Air conditioning</li>
-                      <li>• Bathroom</li>
-                      <li>• Balcony</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "reviews" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold">
-                    Guest reviews for {hotel.name}
-                  </h2>
-                  <Button
-                    size="sm"
-                    className="bg-blue-700 hover:bg-blue-800 text-white"
-                    onClick={() => setIsReviewModalOpen(true)}
-                  >
-                    Write a review
-                  </Button>
-                </div>
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="bg-blue-700 text-white px-3 py-2 rounded font-bold text-lg">
-                    8.5
-                  </div>
-                  <div>
-                    <div className="font-semibold text-base">Excellent</div>
-                    <div className="text-sm text-gray-600">
-                      {hotel.reviews} reviews
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "street-view" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <h2 className="text-lg font-semibold mb-3">Street View</h2>
-                <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-                  <div className="text-center text-gray-600">
-                    <div className="mb-2">🏢</div>
-                    <div>Street View would load here</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "location" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <h2 className="text-lg font-semibold mb-3">Location & Map</h2>
-                <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-                  <div className="text-center text-gray-600">
-                    <MapPin className="w-8 h-8 mx-auto mb-2" />
-                    <div>Interactive Map would load here</div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
-
-      {/* Saved Items Modal */}
-      <Dialog open={showSavedModal} onOpenChange={setShowSavedModal}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <Bookmark className="w-5 h-5 mr-2" />
-              Saved Hotels ({savedItems.length})
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            {savedItems.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">
-                No saved hotels yet
-              </p>
-            ) : (
-              savedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-3 p-3 border rounded-lg"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-12 h-12 object-cover rounded"
-                  />
-                  <div className="flex-1">
-                    <div className="font-semibold text-sm">{item.name}</div>
-                    <div className="text-xs text-gray-600">
-                      Rating: {item.rating}
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate(`/hotels/${item.id}`)}
-                  >
-                    View
-                  </Button>
-                </div>
-              ))
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Share Modal */}
       <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
@@ -901,56 +661,6 @@ export default function HotelDetails() {
               </Button>
               <Button variant="outline" size="sm">
                 📘 Facebook
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Review Modal */}
-      <Dialog open={isReviewModalOpen} onOpenChange={setIsReviewModalOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Write a review for {hotel.name}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Overall rating *
-              </label>
-              <div className="flex space-x-1">
-                {[1, 2, 3, 4, 5].map((rating) => (
-                  <Star
-                    key={rating}
-                    className="w-6 h-6 text-gray-300 hover:text-yellow-400 cursor-pointer"
-                  />
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Review title *
-              </label>
-              <Input placeholder="Give your review a title" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Your experience *
-              </label>
-              <textarea
-                placeholder="Share your experience"
-                className="w-full p-3 border border-gray-300 rounded-md h-24"
-              />
-            </div>
-            <div className="flex justify-end space-x-3">
-              <Button
-                variant="outline"
-                onClick={() => setIsReviewModalOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button className="bg-blue-700 hover:bg-blue-800 text-white">
-                Submit Review
               </Button>
             </div>
           </div>
