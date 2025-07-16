@@ -24,6 +24,7 @@ import {
   Download,
   Search,
   CheckCircle,
+  Filter,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
@@ -41,6 +42,28 @@ export default function HotelDetails() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [savedItems, setSavedItems] = useState<any[]>([]);
+  const [showSavedModal, setShowSavedModal] = useState(false);
+
+  // Format date to DD-MMM-YYYY
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return `${date.getDate().toString().padStart(2, "0")}-${months[date.getMonth()]}-${date.getFullYear()}`;
+  };
 
   // Mock hotel data
   const hotel = {
@@ -51,8 +74,8 @@ export default function HotelDetails() {
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6?format=webp&width=800",
     rating: 4.5,
     reviews: 1247,
-    checkIn: "01-Aug-2025",
-    checkOut: "05-Aug-2025",
+    checkIn: "2025-07-16",
+    checkOut: "2025-07-19",
     totalNights: 4,
     rooms: 1,
     adults: 2,
@@ -101,7 +124,7 @@ export default function HotelDetails() {
         "Free cancellation",
         "No prepayment needed - pay at the property",
       ],
-      status: "Upgrade for +₹4,560",
+      status: "Upgrade for +₹4,864",
       statusColor: "yellow",
       nonRefundable: false,
       image:
@@ -121,7 +144,7 @@ export default function HotelDetails() {
         "Free cancellation",
         "No prepayment needed - pay at the property",
       ],
-      status: "Upgrade for +₹6,632",
+      status: "Upgrade for +₹6,936",
       statusColor: "yellow",
       nonRefundable: false,
       image:
@@ -142,11 +165,33 @@ export default function HotelDetails() {
         "Free cancellation",
         "No prepayment needed - pay at the property",
       ],
-      status: "Upgrade for +₹22,248",
+      status: "Upgrade for +₹22,552",
       statusColor: "yellow",
       nonRefundable: false,
       image:
         "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=300",
+    },
+    {
+      id: "grand-suite-garden",
+      name: "One Bedroom Grand Suite with Garden View",
+      type: "1 X Grand Suite",
+      details: "1 king bed + living area",
+      pricePerNight: 16038,
+      features: [
+        "6.7 km from downtown",
+        "Max 4 guests",
+        "1 king bed",
+        "Separate living area",
+        "Garden view",
+        "Butler service",
+        "Free cancellation",
+        "No prepayment needed - pay at the property",
+      ],
+      status: "Upgrade for +₹31,656",
+      statusColor: "yellow",
+      nonRefundable: false,
+      image:
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=300",
     },
   ];
 
@@ -158,6 +203,15 @@ export default function HotelDetails() {
     { id: "street-view", label: "Street View" },
     { id: "location", label: "Location" },
   ];
+
+  const handleSave = () => {
+    setIsSaved(!isSaved);
+    if (!isSaved) {
+      setSavedItems([...savedItems, hotel]);
+    } else {
+      setSavedItems(savedItems.filter((item) => item.id !== hotel.id));
+    }
+  };
 
   const handleBargainClick = (roomType: any) => {
     setSelectedRoomType(roomType);
@@ -187,21 +241,29 @@ export default function HotelDetails() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
+      {/* Saved Items Icon */}
+      <div className="fixed top-20 right-4 z-50">
+        <button
+          onClick={() => setShowSavedModal(true)}
+          className="bg-blue-700 text-white p-2 rounded-full shadow-lg hover:bg-blue-800 relative"
+        >
+          <Bookmark className="w-5 h-5" />
+          {savedItems.length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {savedItems.length}
+            </span>
+          )}
+        </button>
+      </div>
+
       {/* Main Container */}
       <div className="flex">
         {/* Left Sidebar - Filters */}
-        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
+        <div className="w-72 bg-white border-r border-gray-200 min-h-screen">
           <div className="p-4">
             {/* Filters Header */}
             <div className="flex items-center mb-4">
-              <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M3 6h18M7 12h10M10 18h4"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <Filter className="w-4 h-4 mr-2" />
               <span className="font-medium text-gray-700">Filters</span>
             </div>
 
@@ -214,7 +276,7 @@ export default function HotelDetails() {
                 <input
                   type="text"
                   placeholder="Enter hotel name..."
-                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <Search className="w-4 h-4 text-gray-400 absolute left-2.5 top-2.5" />
               </div>
@@ -225,17 +287,17 @@ export default function HotelDetails() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Price Range
               </label>
-              <div className="text-sm text-gray-600 mb-2">₹1,00,000+</div>
+              <div className="text-sm text-gray-600 mb-2">₹0 - ₹1,00,000+</div>
               <div className="px-2">
                 <div className="w-full h-2 bg-gray-200 rounded-full relative">
                   <div
                     className="h-2 bg-blue-600 rounded-full"
-                    style={{ width: "75%" }}
+                    style={{ width: "60%" }}
                   ></div>
                   <div className="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -mt-1 cursor-pointer"></div>
                   <div
                     className="absolute top-0 w-4 h-4 bg-blue-600 rounded-full -mt-1 cursor-pointer"
-                    style={{ left: "75%" }}
+                    style={{ left: "60%" }}
                   ></div>
                 </div>
               </div>
@@ -247,158 +309,71 @@ export default function HotelDetails() {
                 Popular Filters
               </label>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <div className="ml-2 flex-1">
-                      <span className="text-sm text-gray-700">
-                        Free cancellation
-                      </span>
-                      <span className="text-xs text-orange-600 ml-1 bg-orange-100 px-1 py-0.5 rounded">
-                        Popular
-                      </span>
-                    </div>
-                  </label>
-                  <span className="text-sm text-gray-500">4106</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <div className="ml-2 flex-1">
-                      <span className="text-sm text-gray-700">
-                        No prepayment
-                      </span>
-                      <span className="text-xs text-orange-600 ml-1 bg-orange-100 px-1 py-0.5 rounded">
-                        Popular
-                      </span>
-                    </div>
-                  </label>
-                  <span className="text-sm text-gray-500">444</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      Downtown Dubai
+                {[
+                  { name: "Free cancellation", count: 4106, popular: true },
+                  { name: "No prepayment", count: 444, popular: true },
+                  { name: "Downtown Dubai", count: 1844 },
+                  { name: "Apartments", count: 5176 },
+                  { name: "5 stars", count: 843 },
+                  { name: "Resorts", count: 59 },
+                  { name: "Breakfast & dinner included", count: 236 },
+                  { name: "Breakfast included", count: 624 },
+                ].map((filter, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <label className="flex items-center flex-1">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <div className="ml-2 flex-1">
+                        <span className="text-sm text-gray-700">
+                          {filter.name}
+                        </span>
+                        {filter.popular && (
+                          <span className="text-xs text-orange-600 ml-1 bg-orange-100 px-1 py-0.5 rounded">
+                            Popular
+                          </span>
+                        )}
+                      </div>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
                     </span>
-                  </label>
-                  <span className="text-sm text-gray-500">1844</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      Apartments
-                    </span>
-                  </label>
-                  <span className="text-sm text-gray-500">5176</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">5 stars</span>
-                  </label>
-                  <span className="text-sm text-gray-500">843</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">Resorts</span>
-                  </label>
-                  <span className="text-sm text-gray-500">59</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      Breakfast & dinner included
-                    </span>
-                  </label>
-                  <span className="text-sm text-gray-500">236</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      Breakfast included
-                    </span>
-                  </label>
-                  <span className="text-sm text-gray-500">624</span>
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Star Rating Filter */}
+            {/* Star Rating */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Star rating
               </label>
               <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">5 stars</span>
-                  </label>
-                  <span className="text-sm text-gray-500">843</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">4 stars</span>
-                  </label>
-                  <span className="text-sm text-gray-500">3644</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center flex-1">
-                    <input
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">3 stars</span>
-                  </label>
-                  <span className="text-sm text-gray-500">424</span>
-                </div>
+                {[
+                  { stars: "5 stars", count: 843 },
+                  { stars: "4 stars", count: 3644 },
+                  { stars: "3 stars", count: 424 },
+                ].map((rating, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <label className="flex items-center flex-1">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {rating.stars}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {rating.count}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Clear All Filters Button */}
+            {/* Clear Filters */}
             <Button variant="outline" className="w-full text-sm">
               Clear All Filters
             </Button>
@@ -429,9 +404,9 @@ export default function HotelDetails() {
           {/* Main Content */}
           <div className="p-4">
             {activeTab === "overview" && (
-              <div className="space-y-4">
-                {/* Hotel Header Card */}
-                <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <>
+                {/* Hotel Header - Compact Square Design */}
+                <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -477,24 +452,24 @@ export default function HotelDetails() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className={`text-xs px-3 py-1 ${
+                        className={`text-xs px-2 py-1 ${
                           isSaved
                             ? "bg-blue-100 text-blue-700 border-blue-300"
                             : ""
                         }`}
-                        onClick={() => setIsSaved(!isSaved)}
+                        onClick={handleSave}
                       >
                         <Bookmark
                           className={`w-3 h-3 mr-1 ${
                             isSaved ? "fill-current" : ""
                           }`}
                         />
-                        {isSaved ? "Saved" : "Save"}
+                        Save
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs px-3 py-1"
+                        className="text-xs px-2 py-1"
                         onClick={() => setIsShareModalOpen(true)}
                       >
                         <Share2 className="w-3 h-3 mr-1" />
@@ -503,65 +478,59 @@ export default function HotelDetails() {
                     </div>
                   </div>
 
-                  {/* Hotel Details Grid */}
-                  <div className="grid grid-cols-12 gap-4">
-                    {/* Hotel Image */}
-                    <div className="col-span-4">
+                  {/* Hotel Details - Square Grid Layout */}
+                  <div className="grid grid-cols-12 gap-3">
+                    {/* Hotel Image - Square */}
+                    <div className="col-span-3">
                       <img
                         src={hotel.image}
                         alt={hotel.name}
-                        className="w-full h-32 object-cover rounded-lg"
+                        className="w-full aspect-square object-cover rounded-lg"
                       />
                     </div>
 
-                    {/* Booking Details */}
-                    <div className="col-span-5 space-y-2">
+                    {/* Booking Details - Square Boxes */}
+                    <div className="col-span-6 space-y-2">
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="text-center p-2 bg-gray-50 rounded">
+                        <div className="aspect-square bg-gray-50 rounded flex flex-col items-center justify-center p-2">
                           <div className="text-xs text-gray-600">Check-in</div>
                           <div className="font-semibold text-sm">
-                            {hotel.checkIn}
+                            {formatDate(hotel.checkIn)}
                           </div>
                         </div>
-                        <div className="text-center p-2 bg-gray-50 rounded">
+                        <div className="aspect-square bg-gray-50 rounded flex flex-col items-center justify-center p-2">
                           <div className="text-xs text-gray-600">Check-out</div>
                           <div className="font-semibold text-sm">
-                            {hotel.checkOut}
+                            {formatDate(hotel.checkOut)}
                           </div>
                         </div>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                        <div>
-                          <div className="font-bold">{hotel.totalNights}</div>
-                          <div className="text-xs text-gray-600">nights</div>
+                      <div className="text-center text-sm">
+                        <div className="font-bold text-lg">
+                          {hotel.totalNights} nights
                         </div>
-                        <div>
-                          <div className="font-bold">{hotel.rooms}</div>
-                          <div className="text-xs text-gray-600">room</div>
+                        <div className="text-xs text-gray-600">
+                          {hotel.rooms} room, {hotel.adults} adults
                         </div>
-                        <div>
-                          <div className="font-bold">{hotel.adults}</div>
-                          <div className="text-xs text-gray-600">adults</div>
+                        <div className="text-xs text-gray-600 mt-1">
+                          Includes taxes and fees
                         </div>
-                      </div>
-                      <div className="text-center text-xs text-gray-600">
-                        Includes taxes and fees
                       </div>
                     </div>
 
-                    {/* Pricing */}
+                    {/* Pricing - Square */}
                     <div className="col-span-3">
-                      <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <div className="aspect-square bg-gray-50 rounded flex flex-col items-center justify-center p-3">
                         <div className="text-xl font-bold text-gray-900">
                           ₹
                           {calculateTotalPrice(
                             roomTypes[0].pricePerNight,
                           ).toLocaleString()}
                         </div>
-                        <div className="text-sm font-semibold text-gray-900">
+                        <div className="text-xs font-semibold text-gray-900">
                           Total Price
                         </div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-600 text-center mt-1">
                           ₹{roomTypes[0].pricePerNight.toLocaleString()} per
                           night (all-inclusive)
                         </div>
@@ -664,7 +633,7 @@ export default function HotelDetails() {
                                 <img
                                   src={room.image}
                                   alt={room.name}
-                                  className="w-full h-24 object-cover rounded"
+                                  className="w-full aspect-square object-cover rounded"
                                 />
                               </div>
 
@@ -707,9 +676,6 @@ export default function HotelDetails() {
                                   <div className="text-xs font-semibold text-gray-900">
                                     Total Price
                                   </div>
-                                  <div className="text-xs text-gray-600">
-                                    ₹{room.pricePerNight.toLocaleString()}/night
-                                  </div>
                                 </div>
 
                                 <div className="mb-2">
@@ -730,24 +696,19 @@ export default function HotelDetails() {
                                         : "bg-blue-700 hover:bg-blue-800 text-white"
                                     }`}
                                   >
-                                    {room.statusColor === "green"
-                                      ? "Reserve Room"
-                                      : "Reserve Upgrade"}
+                                    Reserve Room
                                   </Button>
                                   <Button
                                     onClick={() => handleBargainClick(room)}
                                     className="w-full py-1 font-semibold bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 text-xs"
                                   >
-                                    💰 Bargain This Room
+                                    💰 Bargain Room
                                   </Button>
                                 </div>
 
                                 <div className="mt-2 text-center">
                                   <div className="text-xs text-gray-600">
-                                    🏨 Pay at hotel • No prepayment needed
-                                  </div>
-                                  <div className="text-xs text-gray-600">
-                                    Free cancellation
+                                    🏨 Pay at hotel • Free cancellation
                                   </div>
                                 </div>
                               </div>
@@ -758,7 +719,7 @@ export default function HotelDetails() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </>
             )}
 
             {/* Other tabs content */}
@@ -866,6 +827,51 @@ export default function HotelDetails() {
           </div>
         </div>
       </div>
+
+      {/* Saved Items Modal */}
+      <Dialog open={showSavedModal} onOpenChange={setShowSavedModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Bookmark className="w-5 h-5 mr-2" />
+              Saved Hotels ({savedItems.length})
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            {savedItems.length === 0 ? (
+              <p className="text-gray-500 text-center py-4">
+                No saved hotels yet
+              </p>
+            ) : (
+              savedItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-3 p-3 border rounded-lg"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <div className="flex-1">
+                    <div className="font-semibold text-sm">{item.name}</div>
+                    <div className="text-xs text-gray-600">
+                      Rating: {item.rating}
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate(`/hotels/${item.id}`)}
+                  >
+                    View
+                  </Button>
+                </div>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Share Modal */}
       <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
@@ -980,8 +986,8 @@ export default function HotelDetails() {
             setIsBargainModalOpen(false);
             setSelectedRoomType(null);
           }}
-          checkInDate={new Date(2025, 7, 1)}
-          checkOutDate={new Date(2025, 7, 5)}
+          checkInDate={new Date(2025, 6, 16)}
+          checkOutDate={new Date(2025, 6, 19)}
           roomsCount={1}
           onBookingSuccess={(finalPrice) => {
             setIsBargainModalOpen(false);
