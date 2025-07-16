@@ -50,7 +50,7 @@ const Bookings: React.FC = () => {
       time: "10:15",
       status: "Pending",
       passengers: 1,
-      totalAmount: "$920",
+      totalAmount: "₹76,360",
       bookingRef: "BA789012",
       flightNumber: "BA177",
       seat: "24C",
@@ -58,7 +58,7 @@ const Bookings: React.FC = () => {
       gate: "B12",
       bookingDate: "2024-01-05",
       cancellable: true,
-      refundAmount: "$828",
+      refundAmount: "₹68,724",
       refundStatus: null,
     },
   ];
