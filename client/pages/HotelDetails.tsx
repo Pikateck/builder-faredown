@@ -1062,30 +1062,80 @@ export default function HotelDetails() {
             {activeTab === "street-view" && (
               <div className="bg-white rounded-lg border border-gray-200 p-4">
                 <h2 className="text-xl font-bold mb-4">Street View</h2>
-                <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">🌍</div>
-                    <div className="text-gray-600 font-semibold">
-                      Google Street View
+                <p className="text-gray-600 mb-4">
+                  Explore the area around Grand Hyatt Dubai with Google Street
+                  View
+                </p>
+
+                <div className="mb-4">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
+                    Street View
+                  </Button>
+                </div>
+
+                <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Ffa4f6943ffd14829aa5df4905d0f81df?format=webp&width=800"
+                    alt="Street View of Grand Hyatt Dubai"
+                    className="w-full h-full object-cover"
+                  />
+
+                  {/* Street View Label Overlay */}
+                  <div className="absolute top-4 left-4">
+                    <div className="bg-black bg-opacity-75 text-white px-3 py-1 rounded text-sm">
+                      📍 Street View: Grand Hyatt Dubai
                     </div>
-                    <div className="text-sm text-gray-500 mt-1 mb-3">
-                      Interactive street view of the hotel location
+                  </div>
+
+                  {/* Live Street View Indicator */}
+                  <div className="absolute top-4 right-4">
+                    <div className="bg-green-600 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      Live Street View
                     </div>
-                    <div className="text-xs text-gray-400 bg-gray-200 px-3 py-1 rounded mb-3">
-                      Click below to open Street View in Google Maps
+                  </div>
+
+                  {/* Location Info Overlay */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className="bg-black bg-opacity-75 text-white px-3 py-2 rounded">
+                      <div className="text-sm font-medium">
+                        Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab
+                        Emirates
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Street View Navigation Note */}
+                  <div className="absolute bottom-4 right-4">
+                    <div className="bg-white bg-opacity-90 text-gray-800 px-3 py-1 rounded text-xs">
+                      Drag street view to look around
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>🗺️</span>
+                    <span>
+                      <strong>Interactive View</strong>
+                    </span>
                     <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => {
                         window.open(
                           `https://www.google.com/maps/@25.2048,55.2708,3a,75y,210h,90t/data=!3m6!1e1!3m4!1sAF1QipO8EibS-hL-yfA-v8sVtSxBJBn2J8bv1U_7UW-9!2e10!7i5760!8i2880`,
                           "_blank",
                         );
                       }}
-                      className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                      className="ml-2"
                     >
-                      🌐 Open Street View in Google Maps
+                      Open in Google Maps
                     </Button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Drag to explore around
+                  </p>
                 </div>
               </div>
             )}
