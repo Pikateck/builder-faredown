@@ -651,7 +651,7 @@ export default function ReservationPage() {
                       </div>
                     </div>
 
-                                        {paymentDetails.paymentMethod === "card" && (
+                    {paymentDetails.paymentMethod === "card" && (
                       <>
                         <div>
                           <Label htmlFor="cardNumber">Card Number *</Label>
@@ -670,91 +670,107 @@ export default function ReservationPage() {
                         </div>
 
                         <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <Label>Expiry Month *</Label>
-                        <Select
-                          value={paymentDetails.expiryMonth}
-                          onValueChange={(value) =>
-                            setPaymentDetails((prev) => ({
-                              ...prev,
-                              expiryMonth: value,
-                            }))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="MM" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Array.from({ length: 12 }, (_, i) => (
-                              <SelectItem
-                                key={i + 1}
-                                value={String(i + 1).padStart(2, "0")}
-                              >
-                                {String(i + 1).padStart(2, "0")}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Expiry Year *</Label>
-                        <Select
-                          value={paymentDetails.expiryYear}
-                          onValueChange={(value) =>
-                            setPaymentDetails((prev) => ({
-                              ...prev,
-                              expiryYear: value,
-                            }))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="YYYY" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Array.from({ length: 10 }, (_, i) => (
-                              <SelectItem
-                                key={i}
-                                value={String(new Date().getFullYear() + i)}
-                              >
-                                {new Date().getFullYear() + i}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label htmlFor="cvv">CVV *</Label>
-                        <Input
-                          id="cvv"
-                          value={paymentDetails.cvv}
-                          onChange={(e) =>
-                            setPaymentDetails((prev) => ({
-                              ...prev,
-                              cvv: e.target.value,
-                            }))
-                          }
-                          placeholder="123"
-                          maxLength={4}
-                        />
-                      </div>
-                    </div>
+                          <div>
+                            <Label>Expiry Month *</Label>
+                            <Select
+                              value={paymentDetails.expiryMonth}
+                              onValueChange={(value) =>
+                                setPaymentDetails((prev) => ({
+                                  ...prev,
+                                  expiryMonth: value,
+                                }))
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="MM" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Array.from({ length: 12 }, (_, i) => (
+                                  <SelectItem
+                                    key={i + 1}
+                                    value={String(i + 1).padStart(2, "0")}
+                                  >
+                                    {String(i + 1).padStart(2, "0")}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label>Expiry Year *</Label>
+                            <Select
+                              value={paymentDetails.expiryYear}
+                              onValueChange={(value) =>
+                                setPaymentDetails((prev) => ({
+                                  ...prev,
+                                  expiryYear: value,
+                                }))
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="YYYY" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Array.from({ length: 10 }, (_, i) => (
+                                  <SelectItem
+                                    key={i}
+                                    value={String(new Date().getFullYear() + i)}
+                                  >
+                                    {new Date().getFullYear() + i}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="cvv">CVV *</Label>
+                            <Input
+                              id="cvv"
+                              value={paymentDetails.cvv}
+                              onChange={(e) =>
+                                setPaymentDetails((prev) => ({
+                                  ...prev,
+                                  cvv: e.target.value,
+                                }))
+                              }
+                              placeholder="123"
+                              maxLength={4}
+                            />
+                          </div>
+                        </div>
 
-                    {paymentDetails.paymentMethod === "card" && (
-                      <div>
-                        <Label htmlFor="cardholderName">
-                          Cardholder Name *
-                        </Label>
-                        <Input
-                          id="cardholderName"
-                          value={paymentDetails.cardholderName}
-                          onChange={(e) =>
-                            setPaymentDetails((prev) => ({
-                              ...prev,
-                              cardholderName: e.target.value,
-                            }))
-                          }
-                          placeholder="Name as it appears on card"
-                        />
+                        <div>
+                          <Label htmlFor="cardholderName">
+                            Cardholder Name *
+                          </Label>
+                          <Input
+                            id="cardholderName"
+                            value={paymentDetails.cardholderName}
+                            onChange={(e) =>
+                              setPaymentDetails((prev) => ({
+                                ...prev,
+                                cardholderName: e.target.value,
+                              }))
+                            }
+                            placeholder="Name as it appears on card"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {paymentDetails.paymentMethod === "pay_at_hotel" && (
+                      <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <div className="flex items-center">
+                          <MapPin className="w-5 h-5 text-yellow-600 mr-2" />
+                          <span className="text-yellow-800 font-medium">
+                            Pay at Hotel
+                          </span>
+                        </div>
+                        <p className="text-yellow-700 text-sm mt-1">
+                          You can pay directly at the hotel during check-in.
+                          Accepted payment methods: Cash, Credit Card, Debit
+                          Card.
+                        </p>
                       </div>
                     )}
                   </div>
@@ -790,7 +806,9 @@ export default function ReservationPage() {
                       ) : (
                         <>
                           <Lock className="w-4 h-4 mr-2" />
-                          Complete Payment
+                          {paymentDetails.paymentMethod === "pay_at_hotel"
+                            ? "Confirm Booking"
+                            : "Complete Payment"}
                         </>
                       )}
                     </Button>
