@@ -601,9 +601,9 @@ export default function HotelDetails() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 ml-2 flex-shrink-0">
-                            <div className="p-1 hover:bg-gray-200 rounded flex-shrink-0">
+                            <div className="p-1.5 group-hover:bg-blue-100 rounded-full flex-shrink-0 transition-colors">
                               <ChevronDown
-                                className={`w-4 h-4 transition-transform ${
+                                className={`w-4 h-4 transition-all duration-200 text-gray-600 group-hover:text-blue-600 ${
                                   expandedRooms.has(room.id) ? "rotate-180" : ""
                                 }`}
                               />
