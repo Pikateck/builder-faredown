@@ -687,7 +687,7 @@ export default function HotelDetails() {
                         </div>
 
                         {/* Expanded Room Details */}
-                        {expandedRoom === room.id && room.features && (
+                        {expandedRooms.has(room.id) && room.features && (
                           <div className="bg-white border-t border-gray-200 p-6 mt-2">
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                               {/* Room Image */}
@@ -1083,7 +1083,7 @@ export default function HotelDetails() {
                       }}
                       className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
                     >
-                      ���� Open Street View in Google Maps
+                      🌐 Open Street View in Google Maps
                     </Button>
                   </div>
                 </div>
