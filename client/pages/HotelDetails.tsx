@@ -360,37 +360,173 @@ export default function HotelDetails() {
               </div>
             </div>
 
-            {/* Popular Filters - Shortened */}
+            {/* Popular Filters */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Popular filters
               </label>
               <div className="space-y-1">
-                {filters.popularFilters.slice(0, 3).map((filter, index) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between">
-                      <label className="flex items-center flex-1">
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <div className="ml-2 flex-1">
-                          <span className="text-sm text-gray-700">
-                            {filter.name}
-                          </span>
-                          {filter.subtitle && (
-                            <div className="text-xs text-gray-500">
-                              {filter.subtitle}
-                            </div>
-                          )}
-                        </div>
-                      </label>
-                      <span className="text-sm text-gray-500 ml-2">
-                        {filter.count}
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <div className="ml-2 flex-1">
+                      <span className="text-sm text-gray-700">
+                        Free cancellation
+                      </span>
+                      <span className="text-xs text-orange-600 ml-1">
+                        Popular
                       </span>
                     </div>
-                  </div>
-                ))}
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">4106</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <div className="ml-2 flex-1">
+                      <span className="text-sm text-gray-700">
+                        No prepayment
+                      </span>
+                      <span className="text-xs text-orange-600 ml-1">
+                        Popular
+                      </span>
+                    </div>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">444</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">
+                      Downtown Dubai
+                    </span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">1844</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">
+                      Apartments
+                    </span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">5176</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">5 stars</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">843</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">Resorts</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">59</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">
+                      Breakfast & dinner included
+                    </span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">236</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">
+                      Breakfast included
+                    </span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">624</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Star Rating Filter */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Star rating
+              </label>
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">5 stars</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">843</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">4 stars</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">3644</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">3 stars</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">424</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">2 stars</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">95</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center flex-1">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">1 star</span>
+                  </label>
+                  <span className="text-sm text-gray-500 ml-2">31</span>
+                </div>
               </div>
             </div>
 
