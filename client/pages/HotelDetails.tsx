@@ -555,7 +555,7 @@ export default function HotelDetails() {
                                 <img
                                   src={room.image}
                                   alt={room.name}
-                                  className="w-full h-32 lg:h-24 object-cover rounded"
+                                  className="w-full h-40 lg:h-32 object-cover rounded-lg"
                                 />
                               </div>
 
@@ -827,7 +827,7 @@ export default function HotelDetails() {
                       type: "Family",
                       title: "We are happy",
                       review:
-                        "It's my pleasure to be thankful for the polite service and see my birthday 🎂 Thanks for making it special for me",
+                        "It's my pleasure to be thankful for the polite service and see my birthday �� Thanks for making it special for me",
                       helpful: 0,
                       avatar: "M",
                     },
