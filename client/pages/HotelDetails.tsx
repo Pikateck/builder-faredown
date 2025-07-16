@@ -514,11 +514,11 @@ export default function HotelDetails() {
 
                 {/* Available Rooms Section */}
                 <div className="bg-white rounded-lg border border-gray-200">
-                  <div className="bg-blue-600 text-white p-4 rounded-t-lg">
-                    <h2 className="text-lg font-semibold">
+                  <div className="bg-blue-600 text-white p-3 sm:p-4 rounded-t-lg">
+                    <h2 className="text-base sm:text-lg font-semibold">
                       Available Rooms - Starting from Cheapest
                     </h2>
-                    <p className="text-sm opacity-90">
+                    <p className="text-xs sm:text-sm opacity-90">
                       Start with our cheapest room, then upgrade to better
                       options for just a little more!
                     </p>
@@ -545,20 +545,8 @@ export default function HotelDetails() {
                                 </Badge>
                               )}
                             </div>
-                            {/* Mobile upgrade price */}
-                            {room.upgradePrice &&
-                              room.statusColor !== "green" && (
-                                <div className="mt-1 sm:hidden">
-                                  <Badge className="bg-yellow-100 text-yellow-800 text-xs">
-                                    Upgrade for +₹
-                                    {(
-                                      room.upgradePrice - hotel.perNightPrice
-                                    ).toLocaleString()}
-                                  </Badge>
-                                </div>
-                              )}
                           </div>
-                                                                              <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+                          <div className="flex items-center gap-2 ml-2 flex-shrink-0">
                             <button
                               onClick={() => toggleRoomExpansion(room.id)}
                               className="p-1 hover:bg-gray-100 rounded flex-shrink-0"
@@ -570,15 +558,6 @@ export default function HotelDetails() {
                               />
                             </button>
                           </div>
-                        </div>
-                          <button
-                            onClick={() => toggleRoomExpansion(room.id)}
-                            className="ml-4 p-1"
-                          >
-                            <ChevronDown
-                              className={`w-5 h-5 transition-transform ${expandedRoom === room.id ? "rotate-180" : ""}`}
-                            />
-                          </button>
                         </div>
 
                         {/* Expanded Room Details */}
@@ -623,10 +602,7 @@ export default function HotelDetails() {
                                 <div className="mt-4 flex items-center justify-between">
                                   <div>
                                     <div className="text-2xl font-bold">
-                                      {formatPriceWithSymbol(
-                                        hotel.totalPrice,
-                                        selectedCurrency.code,
-                                      )}
+                                      ₹32,49,286
                                     </div>
                                     <div className="text-sm text-gray-600">
                                       Total Price
@@ -635,11 +611,7 @@ export default function HotelDetails() {
                                       Includes all taxes & charges
                                     </div>
                                     <div className="text-sm text-gray-600">
-                                      {formatPriceWithSymbol(
-                                        hotel.perNightPrice,
-                                        selectedCurrency.code,
-                                      )}{" "}
-                                      per night (all-inclusive)
+                                      ₹32,850 per night (all-inclusive)
                                     </div>
                                   </div>
                                   <div className="space-y-2">
