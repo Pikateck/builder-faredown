@@ -468,27 +468,22 @@ export default function HotelDetails() {
                         </div>
                       </div>
 
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-gray-900">
-                          {formatPriceWithSymbol(
-                            hotel.totalPrice,
-                            selectedCurrency.code,
-                          )}
+                      <div className="bg-gray-50 p-4 rounded-lg text-right">
+                        <div className="text-3xl font-bold text-gray-900">
+                          ₹32,49,286
                         </div>
-                        <div className="text-sm text-gray-600">Total Price</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          Total Price
+                        </div>
                         <div className="text-sm text-gray-600">
                           Includes all taxes & charges
                         </div>
                         <div className="text-sm text-gray-600">
-                          {formatPriceWithSymbol(
-                            hotel.perNightPrice,
-                            selectedCurrency.code,
-                          )}{" "}
-                          per night (all-inclusive)
+                          ₹32,850 per night (all-inclusive)
                         </div>
                       </div>
 
-                      <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+                      <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 rounded-lg">
                         ⚡ Upgrade & Save with Bargaining for All Rooms
                       </Button>
                     </div>
