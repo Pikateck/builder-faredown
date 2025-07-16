@@ -188,11 +188,21 @@ export default function HotelDetails() {
             isMobileFilterOpen ? "fixed inset-0 z-50 bg-white" : "hidden"
           } lg:block lg:relative lg:w-64 bg-white border-r border-gray-200 min-h-screen`}
         >
-          <div className="p-4">
+          <div className="p-4 overflow-y-auto">
             {/* Filters Header */}
-            <div className="flex items-center mb-4">
-              <Filter className="w-4 h-4 mr-2" />
-              <span className="font-medium text-gray-700">Filters</span>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Filter className="w-4 h-4 mr-2" />
+                <span className="font-medium text-gray-700">Filters</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="lg:hidden"
+                onClick={() => setIsMobileFilterOpen(false)}
+              >
+                ✕
+              </Button>
             </div>
 
             {/* Search by Hotel Name */}
