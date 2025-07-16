@@ -929,10 +929,31 @@ export default function HotelDetails() {
                       </div>
                       <h3 className="font-semibold text-lg">Facilities</h3>
                     </div>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Total number of rooms</li>
-                      <li>• Number of floors (main building)</li>
-                      <li>• Hotel</li>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="mr-2">🏨</span> 674 Total rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🏢</span> 40-floor main building
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🛎️</span> Concierge service
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🧳</span> Luggage storage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">💼</span> Business centre
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🏢</span> Meeting rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🚗</span> Valet parking
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🎯</span> Tour desk
+                      </li>
                     </ul>
                   </div>
 
