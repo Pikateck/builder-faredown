@@ -558,18 +558,7 @@ export default function HotelDetails() {
                                 </div>
                               )}
                           </div>
-                          <div className="flex items-center gap-2 ml-2 flex-shrink-0">
-                            {/* Desktop upgrade price */}
-                            {room.upgradePrice &&
-                              room.statusColor !== "green" && (
-                                <Badge className="bg-yellow-100 text-yellow-800 text-xs hidden sm:inline-flex">
-                                  Upgrade for +₹
-                                  {(
-                                    room.upgradePrice - hotel.perNightPrice
-                                  ).toLocaleString()}
-                                </Badge>
-                              )}
-                          </div>
+                                                    <div className="flex items-center gap-2 ml-2 flex-shrink-0">
                           <button
                             onClick={() => toggleRoomExpansion(room.id)}
                             className="ml-4 p-1"
