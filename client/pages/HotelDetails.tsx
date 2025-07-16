@@ -530,7 +530,7 @@ export default function HotelDetails() {
                             </div>
                             <ChevronDown
                               className={`w-4 h-4 text-gray-600 transition-transform ${
-                                expandedRooms.has(room.id) ? "rotate-180" : ""
+                                expandedRoom === room.id ? "rotate-180" : ""
                               }`}
                             />
                           </div>
