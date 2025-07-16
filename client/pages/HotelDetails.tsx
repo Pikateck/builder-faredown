@@ -561,28 +561,36 @@ export default function HotelDetails() {
 
                               {/* Room Details */}
                               <div className="lg:col-span-6">
-                                <h4 className="font-semibold text-sm mb-1">
+                                <h4 className="font-semibold text-lg mb-2 text-gray-900">
                                   {room.type}
                                 </h4>
-                                <div className="text-xs text-gray-600 mb-1">
+                                <div className="text-sm text-gray-600 mb-3">
                                   {room.details}
                                 </div>
                                 {room.nonRefundable && (
-                                  <Badge className="bg-red-100 text-red-800 text-xs mb-2">
+                                  <Badge className="bg-red-100 text-red-800 text-xs mb-3 px-2 py-1">
                                     Non Refundable Rate
                                   </Badge>
                                 )}
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 text-xs">
-                                  {room.features.map((feature, idx) => (
-                                    <div key={idx} className="flex items-start">
-                                      <span className="text-green-600 mr-1">
-                                        •
-                                      </span>
-                                      <span className="text-gray-700">
-                                        {feature}
-                                      </span>
-                                    </div>
-                                  ))}
+                                <div className="space-y-2">
+                                  <h5 className="font-medium text-sm text-gray-900 mb-2">
+                                    Room features:
+                                  </h5>
+                                  <div className="grid grid-cols-1 gap-2 text-sm">
+                                    {room.features.map((feature, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="flex items-start"
+                                      >
+                                        <span className="text-green-600 mr-2 mt-0.5">
+                                          ✓
+                                        </span>
+                                        <span className="text-gray-700">
+                                          {feature}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>
                               </div>
 
@@ -827,7 +835,7 @@ export default function HotelDetails() {
                       type: "Family",
                       title: "We are happy",
                       review:
-                        "It's my pleasure to be thankful for the polite service and see my birthday �� Thanks for making it special for me",
+                        "It's my pleasure to be thankful for the polite service and see my birthday 🎂 Thanks for making it special for me",
                       helpful: 0,
                       avatar: "M",
                     },
