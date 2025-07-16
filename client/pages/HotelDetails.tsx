@@ -693,7 +693,7 @@ export default function HotelDetails() {
                           Includes all taxes & charges
                         </div>
                         <div className="text-xs text-gray-600">
-                          ₹{roomTypes[0].pricePerNight.toLocaleString()} per
+                          ��{roomTypes[0].pricePerNight.toLocaleString()} per
                           night (all-inclusive)
                         </div>
                       </div>
@@ -1333,6 +1333,263 @@ export default function HotelDetails() {
           </div>
         </div>
       </div>
+
+      {/* Share Modal */}
+      <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Share2 className="w-5 h-5 mr-2" />
+              Share this hotel
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold">Grand Hyatt Dubai - faredown</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Check out this amazing hotel: Grand Hyatt Dubai in Near Sheikh
+                Zayed Road & Mall Mall, Dubai, United Arab Emirates. Starting
+                from ₹32,500 per night (all-inclusive)
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                https://faredown.com/hotels/grand-hyatt-dubai-1-50ff6d87f4884ff998
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                className="flex items-center justify-center"
+              >
+                <span className="mr-2">🔗</span>
+                Copy Link
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center justify-center"
+              >
+                <span className="mr-2">💬</span>
+                WhatsApp
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center justify-center"
+              >
+                <span className="mr-2">🐦</span>
+                Twitter
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center justify-center"
+              >
+                <span className="mr-2">📘</span>
+                Facebook
+              </Button>
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setIsShareModalOpen(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Review Modal */}
+      <Dialog open={isReviewModalOpen} onOpenChange={setIsReviewModalOpen}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Star className="w-5 h-5 mr-2" />
+              Write a review for Grand Hyatt Dubai
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Overall rating *
+              </label>
+              <div className="flex space-x-1">
+                {[1, 2, 3, 4, 5].map((rating) => (
+                  <Star
+                    key={rating}
+                    className="w-6 h-6 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-3">
+                Rate your experience
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm mb-1">Staff</div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Star
+                        key={rating}
+                        className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm mb-1">Facilities</div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Star
+                        key={rating}
+                        className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm mb-1">Cleanliness</div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Star
+                        key={rating}
+                        className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm mb-1">Comfort</div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Star
+                        key={rating}
+                        className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm mb-1">Value for money</div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Star
+                        key={rating}
+                        className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm mb-1">Location</div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <Star
+                        key={rating}
+                        className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Review title *
+              </label>
+              <Input placeholder="Give your review a title" />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Tell us about your experience *
+              </label>
+              <textarea
+                placeholder="Share your experience to help other travelers"
+                className="w-full p-3 border border-gray-300 rounded-md resize-none h-24"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Your name *
+                </label>
+                <Input placeholder="Enter your name" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Country *
+                </label>
+                <Input placeholder="Enter your country" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Room type
+                </label>
+                <select className="w-full p-2 border border-gray-300 rounded">
+                  <option>Select room type</option>
+                  <option>Twin Room</option>
+                  <option>King Room</option>
+                  <option>Suite</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Date of stay
+                </label>
+                <Input type="date" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Type of trip
+              </label>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-blue-700 text-white"
+                >
+                  Leisure
+                </Button>
+                <Button variant="outline" size="sm">
+                  Business
+                </Button>
+                <Button variant="outline" size="sm">
+                  Family
+                </Button>
+                <Button variant="outline" size="sm">
+                  Couple
+                </Button>
+                <Button variant="outline" size="sm">
+                  Solo travel
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => setIsReviewModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button className="bg-blue-700 hover:bg-blue-800 text-white">
+                Submit Review
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Enhanced Bargain Modal */}
       {selectedRoomType && (
