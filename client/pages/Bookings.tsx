@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigation } from "../components/Navigation";
+import { Header } from "@/components/Header";
 
 const Bookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"all" | "flights" | "hotels">(
