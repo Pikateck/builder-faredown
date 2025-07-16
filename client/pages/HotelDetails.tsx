@@ -548,8 +548,8 @@ export default function HotelDetails() {
 
                         {/* Expanded Room Details */}
                         {expandedRoom === room.id && room.features && (
-                          <div className="mt-3 border-t border-gray-100 pt-3">
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+                          <div className="bg-white border-t border-gray-200 p-4">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                               {/* Room Image */}
                               <div className="lg:col-span-3">
                                 <img
