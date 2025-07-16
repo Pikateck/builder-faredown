@@ -58,6 +58,7 @@ function App() {
             />
             <Route path="/booking-voucher" element={<BookingVoucher />} />
             <Route path="/booking-invoice" element={<BookingInvoice />} />
+            <Route path="/bookings" element={<Bookings />} />
             <Route path="/sightseeing" element={<Sightseeing />} />
             <Route path="/sports-events" element={<SportsEvents />} />
             <Route path="/transfers" element={<Transfers />} />
