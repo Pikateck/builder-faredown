@@ -680,7 +680,7 @@ export default function HotelDetails() {
                             </div>
                             <ChevronDown
                               className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
-                                expandedRoom === room.id ? "rotate-180" : ""
+                                expandedRooms.has(room.id) ? "rotate-180" : ""
                               }`}
                             />
                           </div>
@@ -1083,7 +1083,7 @@ export default function HotelDetails() {
                       }}
                       className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
                     >
-                      🌐 Open Street View in Google Maps
+                      ���� Open Street View in Google Maps
                     </Button>
                   </div>
                 </div>
