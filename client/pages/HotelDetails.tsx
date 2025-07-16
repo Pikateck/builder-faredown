@@ -27,7 +27,7 @@ export default function HotelDetails() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const [expandedRoom, setExpandedRoom] = useState<string | null>(null);
+  const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
 
   // Mock hotel data with dynamic pricing
   const hotel = {
@@ -271,7 +271,15 @@ export default function HotelDetails() {
   };
 
   const toggleRoomExpansion = (roomId: string) => {
-    setExpandedRoom(expandedRoom === roomId ? null : roomId);
+    setExpandedRooms((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(roomId)) {
+        newSet.delete(roomId);
+      } else {
+        newSet.add(roomId);
+      }
+      return newSet;
+    });
   };
 
   const handleBooking = (roomType: any, bargainPrice?: number) => {
@@ -568,8 +576,11 @@ export default function HotelDetails() {
 
                   <div className="divide-y divide-gray-200">
                     {roomTypes.map((room, index) => (
-                      <div key={room.id} className="p-2 sm:p-3">
-                        <div className="flex items-center justify-between">
+                      <div key={room.id} className="p-1.5 sm:p-2">
+                        <div
+                          className="flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+                          onClick={() => toggleRoomExpansion(room.id)}
+                        >
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-1">
                               <h3 className="font-medium text-sm truncate pr-2">
@@ -589,22 +600,19 @@ export default function HotelDetails() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 ml-2 flex-shrink-0">
-                            <button
-                              onClick={() => toggleRoomExpansion(room.id)}
-                              className="p-1 hover:bg-gray-100 rounded flex-shrink-0"
-                            >
+                            <div className="p-1 hover:bg-gray-200 rounded flex-shrink-0">
                               <ChevronDown
                                 className={`w-4 h-4 transition-transform ${
-                                  expandedRoom === room.id ? "rotate-180" : ""
+                                  expandedRooms.has(room.id) ? "rotate-180" : ""
                                 }`}
                               />
-                            </button>
+                            </div>
                           </div>
                         </div>
 
                         {/* Expanded Room Details */}
-                        {expandedRoom === room.id && room.features && (
-                          <div className="mt-2 border-t border-gray-100 pt-2">
+                        {expandedRooms.has(room.id) && room.features && (
+                          <div className="mt-1 border-t border-gray-100 pt-2">
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-2">
                               {/* Room Image */}
                               <div className="lg:col-span-3">
