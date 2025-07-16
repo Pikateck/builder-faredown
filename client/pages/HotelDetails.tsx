@@ -370,7 +370,7 @@ export default function HotelDetails() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-6 py-4 text-sm font-medium border-b-2 ${
                     activeTab === tab.id
-                      ? "border-blue-600 text-blue-600"
+                      ? "border-blue-700 text-blue-700"
                       : "border-transparent text-gray-500 hover:text-gray-700"
                   }`}
                 >
@@ -514,7 +514,7 @@ export default function HotelDetails() {
 
                 {/* Available Rooms Section */}
                 <div className="bg-white rounded-lg border border-gray-200">
-                  <div className="bg-blue-600 text-white p-3 sm:p-4 rounded-t-lg">
+                  <div className="bg-blue-700 text-white p-3 sm:p-4 rounded-t-lg">
                     <h2 className="text-base sm:text-lg font-semibold">
                       Available Rooms - Starting from Cheapest
                     </h2>
@@ -605,11 +605,11 @@ export default function HotelDetails() {
 
                               {/* Pricing and Actions */}
                               <div className="lg:col-span-4">
-                                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                                  <div className="text-2xl font-bold text-gray-900 mb-1">
+                                <div className="text-right mb-4">
+                                  <div className="text-3xl font-bold text-gray-900 mb-1">
                                     ₹32,49,286
                                   </div>
-                                  <div className="text-sm font-medium text-gray-900 mb-1">
+                                  <div className="text-sm font-semibold text-gray-900 mb-1">
                                     Total Price
                                   </div>
                                   <div className="text-xs text-gray-600 mb-1">
@@ -621,8 +621,8 @@ export default function HotelDetails() {
                                 </div>
 
                                 <div className="mb-4">
-                                  <div className="flex items-center text-sm text-green-600 mb-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                  <div className="flex items-center text-sm text-green-700 mb-2">
+                                    <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
                                     Cheapest Option Available
                                   </div>
                                   <div className="text-xs text-gray-600 mb-3">
@@ -632,13 +632,12 @@ export default function HotelDetails() {
                                 </div>
 
                                 <div className="space-y-2">
-                                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5">
+                                  <Button className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2.5 rounded-md">
                                     Reserve Room
                                   </Button>
                                   <Button
-                                    variant="outline"
                                     onClick={() => handleBargainClick(room)}
-                                    className="w-full py-2.5 font-medium"
+                                    className="w-full py-2.5 font-semibold bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md"
                                   >
                                     💰 Bargain This Room
                                   </Button>
