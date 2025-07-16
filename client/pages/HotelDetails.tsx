@@ -31,6 +31,7 @@ export default function HotelDetails() {
   );
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
 
   // Format date to DD-MMM-YYYY
   const formatDate = (dateStr: string) => {
