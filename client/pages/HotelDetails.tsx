@@ -102,14 +102,43 @@ export default function HotelDetails() {
   const filters = {
     priceRange: { min: 0, max: 100000 },
     popularFilters: [
-      { name: "Free cancellation", count: 4516, selected: false },
-      { name: "No prepayment", count: 444, selected: false },
+      {
+        name: "Free cancellation",
+        count: 4516,
+        selected: false,
+        popular: true,
+      },
+      { name: "No prepayment", count: 444, selected: false, popular: true },
       { name: "Downtown Dubai", count: 1166, selected: false },
       { name: "Apartments", count: 5356, selected: false },
       { name: "5 stars", count: 843, selected: false },
       { name: "Resorts", count: 59, selected: false },
       { name: "Breakfast & dinner included", count: 236, selected: false },
       { name: "Breakfast included", count: 624, selected: false },
+    ],
+    facilities: [
+      { name: "Swimming pool", count: 1234 },
+      { name: "WiFi", count: 5642 },
+      { name: "Parking", count: 3211 },
+      { name: "Restaurant", count: 2876 },
+      { name: "Gym/Fitness center", count: 1543 },
+      { name: "Spa", count: 876 },
+      { name: "Business center", count: 1098 },
+      { name: "Room service", count: 3456 },
+    ],
+    propertyType: [
+      { name: "Hotels", count: 8743 },
+      { name: "Apartments", count: 5356 },
+      { name: "Resorts", count: 234 },
+      { name: "Villas", count: 567 },
+      { name: "Guest houses", count: 123 },
+    ],
+    neighborhood: [
+      { name: "Downtown Dubai", count: 1166 },
+      { name: "Dubai Marina", count: 876 },
+      { name: "Business Bay", count: 543 },
+      { name: "Jumeirah", count: 432 },
+      { name: "Bur Dubai", count: 321 },
     ],
   };
 
@@ -212,16 +241,95 @@ export default function HotelDetails() {
                       <span className="ml-2 text-sm text-gray-700">
                         {filter.name}
                       </span>
-                      {filter.name === "Free cancellation" && (
+                      {filter.popular && (
                         <Badge className="ml-2 bg-orange-100 text-orange-800 text-xs">
                           Popular
                         </Badge>
                       )}
-                      {filter.name === "No prepayment" && (
-                        <Badge className="ml-2 bg-orange-100 text-orange-800 text-xs">
-                          Popular
-                        </Badge>
-                      )}
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Facilities */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Facilities
+              </label>
+              <div className="space-y-2">
+                {filters.facilities.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Property Type */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Property Type
+              </label>
+              <div className="space-y-2">
+                {filters.propertyType.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Neighborhood */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Neighborhood
+              </label>
+              <div className="space-y-2">
+                {filters.neighborhood.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
                     </label>
                     <span className="text-sm text-gray-500">
                       {filter.count}
@@ -642,7 +750,7 @@ export default function HotelDetails() {
                   </div>
                   <ul className="space-y-1 text-sm text-gray-600">
                     <li>• Bathroom</li>
-                    <li>�� Internet access</li>
+                    <li>• Internet access</li>
                     <li>• Tea & coffee making facilities</li>
                     <li>• Carpeted floors</li>
                     <li>• Centrally regulated air conditioning</li>
