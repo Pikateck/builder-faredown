@@ -651,23 +651,25 @@ export default function ReservationPage() {
                       </div>
                     </div>
 
-                    <div>
-                      <Label htmlFor="cardNumber">Card Number *</Label>
-                      <Input
-                        id="cardNumber"
-                        value={paymentDetails.cardNumber}
-                        onChange={(e) =>
-                          setPaymentDetails((prev) => ({
-                            ...prev,
-                            cardNumber: e.target.value,
-                          }))
-                        }
-                        placeholder="1234 5678 9012 3456"
-                        maxLength={19}
-                      />
-                    </div>
+                                        {paymentDetails.paymentMethod === "card" && (
+                      <>
+                        <div>
+                          <Label htmlFor="cardNumber">Card Number *</Label>
+                          <Input
+                            id="cardNumber"
+                            value={paymentDetails.cardNumber}
+                            onChange={(e) =>
+                              setPaymentDetails((prev) => ({
+                                ...prev,
+                                cardNumber: e.target.value,
+                              }))
+                            }
+                            placeholder="1234 5678 9012 3456"
+                            maxLength={19}
+                          />
+                        </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-4">
                       <div>
                         <Label>Expiry Month *</Label>
                         <Select
