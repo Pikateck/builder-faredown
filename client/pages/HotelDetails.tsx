@@ -643,7 +643,7 @@ export default function HotelDetails() {
                   </div>
 
                   {/* Hotel Image and Details - Compact */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
                     <div>
                       <img
                         src={hotel.image}
