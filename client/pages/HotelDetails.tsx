@@ -656,23 +656,20 @@ export default function HotelDetails() {
 
                               {/* Pricing and Actions */}
                               <div className="lg:col-span-4">
-                                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 mb-2">
+                                <div className="bg-gray-50 p-1.5 rounded border border-gray-200 mb-1.5">
                                   <div className="text-right">
-                                    <div className="text-xl font-bold text-gray-900 mb-1">
+                                    <div className="text-lg font-bold text-gray-900">
                                       ₹
                                       {calculateTotalPrice(
                                         room.pricePerNight,
                                       ).toLocaleString()}
                                     </div>
-                                    <div className="text-xs font-semibold text-gray-900 mb-1">
+                                    <div className="text-xs font-semibold text-gray-900">
                                       Total Price
                                     </div>
-                                    <div className="text-xs text-gray-600 mb-1">
-                                      Includes all taxes & charges
-                                    </div>
                                     <div className="text-xs text-gray-600">
-                                      ₹{room.pricePerNight.toLocaleString()} per
-                                      night (all-inclusive)
+                                      ₹{room.pricePerNight.toLocaleString()}
+                                      /night
                                     </div>
                                   </div>
                                 </div>
