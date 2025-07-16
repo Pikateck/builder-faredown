@@ -177,8 +177,8 @@ export default function HotelDetails() {
 
       {/* Main Container */}
       <div className="flex">
-        {/* Left Sidebar - Filters */}
-        <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
+        {/* Left Sidebar - Filters - Hidden on mobile */}
+        <div className="hidden lg:block w-64 bg-white border-r border-gray-200 min-h-screen">
           <div className="p-4">
             {/* Filters Header */}
             <div className="flex items-center mb-4">
