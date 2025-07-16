@@ -547,7 +547,7 @@ export default function HotelDetails() {
                         {/* Expanded Room Details */}
                         {expandedRooms.has(room.id) && room.features && (
                           <div className="mt-3 border-t border-gray-100 pt-3">
-                            <div className="grid grid-cols-12 gap-3">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
                               {/* Room Image */}
                               <div className="col-span-3">
                                 <img
