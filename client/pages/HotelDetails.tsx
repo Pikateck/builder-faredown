@@ -851,10 +851,36 @@ export default function HotelDetails() {
             {activeTab === "amenities" && (
               <div className="bg-white rounded-lg border border-gray-200 p-4">
                 <h2 className="text-xl font-bold mb-4">Property Amenities</h2>
-                <p className="text-gray-600 mb-6">
-                  See the 156+ great amenities and services available for the
-                  guests of your stay
+                <p className="text-blue-600 mb-6 font-medium">
+                  Great facilities! Review score: 9
                 </p>
+
+                {/* Most Popular Facilities */}
+                <div className="mb-8">
+                  <h3 className="font-semibold text-lg mb-4">
+                    Most popular facilities
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {[
+                      { icon: "🏊", text: "2 swimming pools" },
+                      { icon: "💪", text: "Fitness centre" },
+                      { icon: "🚭", text: "Non-smoking rooms" },
+                      { icon: "🍽️", text: "17 restaurants" },
+                      { icon: "🏥", text: "Spa and wellness centre" },
+                      { icon: "🏨", text: "Room service" },
+                    ].map((facility, idx) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col items-center text-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      >
+                        <span className="text-2xl mb-2">{facility.icon}</span>
+                        <span className="text-xs text-gray-700 font-medium">
+                          {facility.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
