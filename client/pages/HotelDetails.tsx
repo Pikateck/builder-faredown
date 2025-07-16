@@ -624,7 +624,7 @@ export default function HotelDetails() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                         <div>
                           <div className="text-gray-600 text-xs">Check-in</div>
                           <div className="font-medium text-sm">
@@ -637,16 +637,17 @@ export default function HotelDetails() {
                             {hotel.checkOut}
                           </div>
                         </div>
-                        <div>
-                          <div className="text-gray-600 text-xs">
-                            Total: {hotel.totalNights} nights
-                          </div>
-                          <div className="font-medium text-sm">
-                            {hotel.rooms} room, {hotel.adults} adults
-                          </div>
-                          <div className="text-gray-600 text-xs">
-                            Excludes taxes and fees
-                          </div>
+                      </div>
+
+                      <div className="text-sm">
+                        <div className="text-gray-600 text-xs">
+                          Total: {hotel.totalNights} nights
+                        </div>
+                        <div className="font-medium text-sm">
+                          {hotel.rooms} room, {hotel.adults} adults
+                        </div>
+                        <div className="text-gray-600 text-xs">
+                          Excludes taxes and fees
                         </div>
                       </div>
 
