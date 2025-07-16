@@ -674,17 +674,12 @@ export default function HotelDetails() {
                                   </div>
                                 </div>
 
-                                <div className="mb-2">
-                                  <div className="flex items-center text-xs font-semibold text-green-700 mb-1">
-                                    <span className="w-2 h-2 bg-green-600 rounded-full mr-1"></span>
+                                <div className="mb-1">
+                                  <div className="flex items-center text-xs font-semibold text-green-700">
+                                    <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-1"></span>
                                     {room.statusColor === "green"
-                                      ? "Cheapest Option Available"
-                                      : "Premium Upgrade Available"}
-                                  </div>
-                                  <div className="text-xs text-gray-600 mb-1">
-                                    {room.statusColor === "green"
-                                      ? "See upgrade options below for better rooms at amazing discounted prices"
-                                      : `Upgrade for just +₹${((room.pricePerNight - 8200) * hotel.totalNights).toLocaleString()} • Try bargaining for an even better deal!`}
+                                      ? "Cheapest Option"
+                                      : "Premium Upgrade"}
                                   </div>
                                 </div>
 
