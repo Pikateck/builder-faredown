@@ -595,33 +595,48 @@ export default function HotelDetails() {
                               </div>
 
                               {/* Pricing and Actions */}
-                              <div className="lg:col-span-3 mt-3 lg:mt-0">
-                                <div className="bg-gray-50 p-2 rounded mb-2 text-center">
-                                  <div className="text-lg font-bold text-gray-900">
+                              <div className="lg:col-span-3 mt-4 lg:mt-0">
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                  <div className="text-2xl font-bold text-gray-900 mb-1">
                                     ₹
                                     {calculateTotalPrice(
                                       room.pricePerNight,
                                     ).toLocaleString()}
                                   </div>
-                                  <div className="text-xs font-semibold text-gray-900">
+                                  <div className="text-sm font-semibold text-gray-900 mb-1">
                                     Total Price
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    ₹{room.pricePerNight.toLocaleString()} per
+                                    night (all-inclusive)
                                   </div>
                                 </div>
 
-                                <div className="mb-2">
-                                  <div className="flex items-center text-xs font-semibold text-green-700">
-                                    <span className="w-1.5 h-1.5 bg-green-600 rounded-full mr-1"></span>
+                                <div className="mb-3">
+                                  <div
+                                    className={`flex items-center text-sm font-medium ${
+                                      room.statusColor === "green"
+                                        ? "text-green-700"
+                                        : "text-blue-700"
+                                    }`}
+                                  >
+                                    <span
+                                      className={`w-2 h-2 rounded-full mr-2 ${
+                                        room.statusColor === "green"
+                                          ? "bg-green-600"
+                                          : "bg-blue-600"
+                                      }`}
+                                    ></span>
                                     {room.statusColor === "green"
                                       ? "Cheapest Option Available"
                                       : "Premium Upgrade Available"}
                                   </div>
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="space-y-3">
                                   <Button
                                     onClick={() => handleBooking(room)}
-                                    size="sm"
-                                    className={`w-full font-medium text-xs px-3 py-2 ${
+                                    className={`w-full font-semibold py-3 text-sm ${
                                       room.statusColor === "green"
                                         ? "bg-green-600 hover:bg-green-700 text-white"
                                         : "bg-blue-600 hover:bg-blue-700 text-white"
@@ -631,9 +646,8 @@ export default function HotelDetails() {
                                   </Button>
                                   <Button
                                     onClick={() => handleBargainClick(room)}
-                                    size="sm"
                                     variant="outline"
-                                    className="w-full font-medium text-xs px-3 py-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+                                    className="w-full font-semibold py-3 text-sm border-blue-600 text-blue-600 hover:bg-blue-50"
                                   >
                                     💰 Bargain This Room
                                   </Button>
