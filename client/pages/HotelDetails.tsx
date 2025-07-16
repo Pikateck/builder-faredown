@@ -323,46 +323,23 @@ export default function HotelDetails() {
           <div className="p-4">
             {activeTab === "overview" && (
               <>
-                {/* Hotel Header */}
-                <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <h1 className="text-xl font-bold text-gray-900 mb-2">
-                        {hotel.name}
-                      </h1>
-                      <div className="flex items-center mb-2">
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < Math.floor(hotel.rating)
-                                  ? "text-yellow-400 fill-current"
-                                  : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                          <span className="ml-1 font-semibold text-sm">
-                            {hotel.rating}
-                          </span>
-                          <span className="ml-1 text-xs text-gray-600">
-                            ({hotel.reviews} reviews)
-                          </span>
-                        </div>
-                        <button className="ml-4 text-blue-600 text-xs hover:underline">
-                          Write a review
-                        </button>
-                      </div>
-                      <div className="flex items-center text-gray-600">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        <span className="text-xs">{hotel.location}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
+                {/* Hotel Header with Large Image */}
+                <div className="bg-white rounded-lg border border-gray-200 mb-4">
+                  {/* Hotel Image - Large and Prominent */}
+                  <div className="relative">
+                    <img
+                      src={hotel.image}
+                      alt={hotel.name}
+                      className="w-full h-64 lg:h-80 object-cover rounded-t-lg"
+                    />
+                    <div className="absolute top-4 right-4 flex items-center gap-2">
+                      <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">
+                        ✅ Available
+                      </Badge>
                       <Button
                         variant="outline"
                         size="sm"
-                        className={`text-xs px-2 py-1 ${
+                        className={`text-xs px-3 py-1 bg-white/90 backdrop-blur ${
                           isSaved
                             ? "bg-blue-100 text-blue-700 border-blue-300"
                             : ""
@@ -377,7 +354,7 @@ export default function HotelDetails() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-xs px-2 py-1"
+                        className="text-xs px-3 py-1 bg-white/90 backdrop-blur"
                         onClick={() => setIsShareModalOpen(true)}
                       >
                         <Share2 className="w-3 h-3 mr-1" />
@@ -386,91 +363,122 @@ export default function HotelDetails() {
                     </div>
                   </div>
 
-                  {/* Hotel Details Grid */}
-                  <div className="grid grid-cols-12 gap-3">
-                    {/* Hotel Image */}
-                    <div className="col-span-3">
-                      <img
-                        src={hotel.image}
-                        alt={hotel.name}
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                    </div>
+                  {/* Hotel Info Section */}
+                  <div className="p-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                      {/* Hotel Details */}
+                      <div className="lg:col-span-2">
+                        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                          {hotel.name}
+                        </h1>
+                        <div className="flex items-center mb-2">
+                          <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-4 h-4 ${
+                                  i < Math.floor(hotel.rating)
+                                    ? "text-yellow-400 fill-current"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                            <span className="ml-1 font-semibold text-sm">
+                              {hotel.rating}
+                            </span>
+                            <span className="ml-1 text-sm text-gray-600">
+                              ({hotel.reviews} reviews)
+                            </span>
+                          </div>
+                          <button className="ml-4 text-blue-600 text-sm hover:underline">
+                            📝 Write a review
+                          </button>
+                        </div>
+                        <div className="flex items-center text-gray-600 mb-4">
+                          <MapPin className="w-4 h-4 mr-2" />
+                          <span className="text-sm">{hotel.location}</span>
+                        </div>
 
-                    {/* Booking Details */}
-                    <div className="col-span-6 space-y-2">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="bg-gray-50 rounded p-2 text-center">
-                          <div className="text-xs text-gray-600">Check-in</div>
-                          <div className="font-semibold text-sm">
-                            {formatDate(hotel.checkIn)}
+                        {/* Booking Details */}
+                        <div className="grid grid-cols-3 gap-3 mb-4">
+                          <div className="bg-gray-50 rounded-lg p-3 text-center">
+                            <div className="text-xs text-gray-600">
+                              Check-in
+                            </div>
+                            <div className="font-semibold text-sm">
+                              {formatDate(hotel.checkIn)}
+                            </div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-3 text-center">
+                            <div className="text-xs text-gray-600">
+                              Check-out
+                            </div>
+                            <div className="font-semibold text-sm">
+                              {formatDate(hotel.checkOut)}
+                            </div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-3 text-center">
+                            <div className="text-xs text-gray-600">Total</div>
+                            <div className="font-semibold text-sm">
+                              {hotel.totalNights} nights
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              {hotel.rooms} room, {hotel.adults} adults
+                            </div>
                           </div>
                         </div>
-                        <div className="bg-gray-50 rounded p-2 text-center">
-                          <div className="text-xs text-gray-600">Check-out</div>
-                          <div className="font-semibold text-sm">
-                            {formatDate(hotel.checkOut)}
+                      </div>
+
+                      {/* Price Summary Box */}
+                      <div className="lg:col-span-1">
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                          <div className="text-2xl font-bold text-gray-900 mb-1">
+                            ₹
+                            {calculateTotalPrice(
+                              roomTypes[0].pricePerNight,
+                            ).toLocaleString()}
                           </div>
-                        </div>
-                      </div>
-                      <div className="text-center text-sm">
-                        <div className="font-bold text-lg">
-                          {hotel.totalNights} nights
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {hotel.rooms} room, {hotel.adults} adults
-                        </div>
-                        <div className="text-xs text-gray-600 mt-1">
-                          Includes taxes and fees
+                          <div className="text-sm font-semibold text-gray-900 mb-1">
+                            Total Price
+                          </div>
+                          <div className="text-xs text-gray-600 mb-1">
+                            Includes all taxes & charges
+                          </div>
+                          <div className="text-xs text-gray-600 mb-3">
+                            ₹{roomTypes[0].pricePerNight.toLocaleString()} per
+                            night (all-inclusive)
+                          </div>
+                          <Button
+                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-md text-sm mb-2"
+                            onClick={() => handleBargainClick(roomTypes[0])}
+                          >
+                            ⚡ Upgrade & Save with Bargaining for All Rooms
+                          </Button>
                         </div>
                       </div>
                     </div>
 
-                    {/* Pricing */}
-                    <div className="col-span-3">
-                      <div className="bg-gray-50 rounded p-3 text-center h-full flex flex-col justify-center">
-                        <div className="text-xl font-bold text-gray-900">
-                          ₹
-                          {calculateTotalPrice(
-                            roomTypes[0].pricePerNight,
-                          ).toLocaleString()}
+                    {/* All-Inclusive Banner */}
+                    <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className="w-3 h-3 text-yellow-400 fill-current"
+                            />
+                          ))}
+                          <span className="font-medium text-yellow-800">
+                            All-Inclusive Pricing
+                          </span>
                         </div>
-                        <div className="text-xs font-semibold text-gray-900">
-                          Total Price
-                        </div>
-                        <div className="text-xs text-gray-600 mt-1">
-                          ₹{roomTypes[0].pricePerNight.toLocaleString()} per
-                          night (all-inclusive)
-                        </div>
-                        <Button
-                          className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-1 text-xs mt-2"
-                          onClick={() => handleBargainClick(roomTypes[0])}
-                        >
-                          ⚡ Upgrade & Save with Bargaining for All Rooms
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* All-Inclusive Banner */}
-                  <div className="mt-3 text-center">
-                    <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
-                      <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="w-3 h-3 text-yellow-400 fill-current"
-                          />
-                        ))}
-                        <span className="font-medium">
-                          All-Inclusive Pricing
+                        <span className="text-gray-500">•</span>
+                        <span className="text-gray-600">
+                          All prices shown include taxes, service charges &
+                          fees. Displayed prices are final with no additional
+                          charges.
                         </span>
                       </div>
-                      <span>•</span>
-                      <span>
-                        All prices shown include taxes, service charges & fees.
-                        Displayed prices are final with no additional charges.
-                      </span>
                     </div>
                   </div>
                 </div>
