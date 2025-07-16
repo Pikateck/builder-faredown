@@ -644,11 +644,11 @@ export default function HotelDetails() {
 
                   {/* Hotel Image and Details - Compact */}
                   <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-                    <div>
+                    <div className="lg:col-span-2">
                       <img
                         src={hotel.image}
                         alt={hotel.name}
-                        className="w-full aspect-square object-cover rounded-lg"
+                        className="w-full h-48 lg:h-56 object-cover rounded-xl shadow-lg"
                       />
                     </div>
                     <div className="space-y-2">
