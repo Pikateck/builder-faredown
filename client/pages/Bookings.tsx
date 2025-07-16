@@ -12,6 +12,13 @@ const Bookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"all" | "flights" | "hotels">(
     "all",
   );
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [viewDetailsModal, setViewDetailsModal] = useState(false);
+  const [manageBookingModal, setManageBookingModal] = useState(false);
+  const [cancelBookingModal, setCancelBookingModal] = useState(false);
+  const [ticketModal, setTicketModal] = useState(false);
+  const [invoiceModal, setInvoiceModal] = useState(false);
+  const [refundModal, setRefundModal] = useState(false);
 
   const flightBookings = [
     {
