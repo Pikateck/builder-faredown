@@ -893,14 +893,30 @@ export default function HotelDetails() {
                       <h3 className="font-semibold text-lg">Entertainment</h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-600">
-                      <li>�� TV Lounge</li>
-                      <li>• Outdoor Freshwater pool</li>
-                      <li>• Hotel</li>
-                      <li>• American Express</li>
-                      <li>• Diners Club</li>
-                      <li>• MasterCard</li>
-                      <li>• Visa</li>
-                      <li>• City centre</li>
+                      <li className="flex items-center">
+                        <span className="mr-2">📺</span> TV Lounge
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🏊</span> Outdoor Freshwater pool
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🎵</span> Live music/performance
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🎲</span> Kids' club
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🎮</span> Nightclub/DJ
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🎪</span> Children's playground
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🏸</span> Tennis court
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">💳</span> Credit cards accepted
+                      </li>
                     </ul>
                   </div>
 
