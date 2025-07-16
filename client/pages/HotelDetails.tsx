@@ -391,7 +391,10 @@ export default function HotelDetails() {
                               ({hotel.reviews} reviews)
                             </span>
                           </div>
-                          <button className="ml-4 text-blue-600 text-sm hover:underline">
+                          <button
+                            onClick={() => setIsWriteReviewModalOpen(true)}
+                            className="ml-4 text-blue-600 text-sm hover:underline"
+                          >
                             📝 Write a review
                           </button>
                         </div>
