@@ -635,7 +635,7 @@ export default function HotelDetails() {
                       >
                         <div
                           className={`flex items-center justify-between cursor-pointer p-5 transition-all duration-200 ${
-                            expandedRoom === room.id
+                            expandedRooms.has(room.id)
                               ? "bg-blue-50 border-l-4 border-blue-500 shadow-sm"
                               : "hover:bg-gray-50 hover:shadow-sm"
                           }`}
