@@ -651,8 +651,8 @@ export default function HotelDetails() {
                         className="w-full h-48 lg:h-56 object-cover rounded-xl shadow-lg"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                    <div className="lg:col-span-2 space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
                         <div>
                           <div className="text-gray-600 text-xs">Check-in</div>
                           <div className="font-medium text-sm">
