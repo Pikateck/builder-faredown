@@ -26,8 +26,8 @@ export default function HotelDetails() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const [expandedRoom, setExpandedRoom] = useState<string | null>(
-    "twin-skyline",
+  const [expandedRooms, setExpandedRooms] = useState<Set<string>>(
+    new Set(["twin-skyline"]),
   );
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
