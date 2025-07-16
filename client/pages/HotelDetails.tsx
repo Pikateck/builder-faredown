@@ -1000,18 +1000,270 @@ export default function HotelDetails() {
                     </h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Bathroom</li>
-                      <li>• Internet access</li>
-                      <li>• Tea & coffee making facilities</li>
-                      <li>• Carpeted floors</li>
-                      <li>• Centrally regulated air conditioning</li>
-                      <li>• Living room</li>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="mr-2">🛁</span> Private bathroom
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">📶</span> Free WiFi
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">☕</span> Tea & coffee facilities
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🟤</span> Carpeted floors
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">❄️</span> Air conditioning
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🛋️</span> Living room
+                      </li>
                     </ul>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Balcony</li>
-                      <li>• Shower</li>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="mr-2">🌅</span> Balcony
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🚿</span> Shower
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">📺</span> Flat-screen TV
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🔐</span> Safe
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">👕</span> Wardrobe
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🪑</span> Desk
+                      </li>
                     </ul>
+                  </div>
+                </div>
+
+                {/* Swimming Pools Section */}
+                <div className="mt-8 bg-gradient-to-r from-blue-100 to-cyan-100 border border-blue-300 rounded-lg p-6">
+                  <div className="flex items-center mb-6">
+                    <span className="text-4xl mr-4">🏊‍♂️</span>
+                    <div>
+                      <h3 className="font-bold text-2xl text-blue-900">
+                        2 Swimming Pools
+                      </h3>
+                      <p className="text-blue-700 text-sm">
+                        Indoor and outdoor pools for year-round enjoyment
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-white rounded-lg p-5 shadow-sm border border-blue-200">
+                      <h4 className="font-bold mb-3 text-blue-800 text-lg">
+                        🏊 Pool 1 - Indoor
+                      </h4>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          Open all year
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          All ages welcome
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          Climate controlled
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          Pool towels provided
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="bg-white rounded-lg p-5 shadow-sm border border-blue-200">
+                      <h4 className="font-bold mb-3 text-blue-800 text-lg">
+                        🌊 Pool 2 - Outdoor
+                      </h4>
+                      <ul className="space-y-2 text-sm text-gray-700">
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          Open all year
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          All ages welcome
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          Poolside service
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2 font-bold">
+                            ✓
+                          </span>{" "}
+                          Sun loungers
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Wellness & Spa Section */}
+                <div className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-300 rounded-lg p-6">
+                  <div className="flex items-center mb-6">
+                    <span className="text-4xl mr-4">💆‍♀️</span>
+                    <div>
+                      <h3 className="font-bold text-2xl text-green-900">
+                        Wellness & Spa
+                      </h3>
+                      <p className="text-green-700 text-sm">
+                        Comprehensive wellness facilities for relaxation and
+                        rejuvenation
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {[
+                      { icon: "🏋️", text: "Fitness centre" },
+                      { icon: "👨‍🏫", text: "Personal trainer" },
+                      { icon: "🧘", text: "Yoga classes" },
+                      { icon: "💆", text: "Full body massage" },
+                      { icon: "💆‍♀️", text: "Head massage" },
+                      { icon: "👐", text: "Hand massage" },
+                      { icon: "💑", text: "Couples massage" },
+                      { icon: "🦶", text: "Foot massage" },
+                      { icon: "🔙", text: "Back massage" },
+                      { icon: "✨", text: "Beauty services" },
+                      { icon: "🏖️", text: "Sun loungers" },
+                      { icon: "🧖‍♀️", text: "Spa facilities" },
+                      { icon: "💨", text: "Steam room" },
+                      { icon: "🔥", text: "Sauna" },
+                      { icon: "💅", text: "Manicure/Pedicure" },
+                      { icon: "💇", text: "Hair salon" },
+                    ].map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center bg-white rounded-lg p-3 shadow-sm border border-green-200 hover:bg-green-50 transition-colors"
+                      >
+                        <span className="text-lg mr-2">{item.icon}</span>
+                        <span className="text-sm text-gray-700 font-medium">
+                          {item.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Additional Amenities Grid */}
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Food & Drink */}
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
+                    <div className="flex items-center mb-4">
+                      <span className="text-2xl mr-3">🍽️</span>
+                      <h3 className="font-bold text-lg text-orange-900">
+                        Food & Drink
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 text-sm">
+                      {[
+                        { icon: "🍽️", text: "17 restaurants" },
+                        { icon: "☕", text: "Coffee house on site" },
+                        { icon: "🍷", text: "Wine/champagne" },
+                        { icon: "🥃", text: "Bar" },
+                        { icon: "🏨", text: "Room service" },
+                        { icon: "🍎", text: "Fresh fruits" },
+                        { icon: "🧒", text: "Kid-friendly buffet" },
+                        { icon: "🥗", text: "Special diet menus" },
+                      ].map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center text-gray-700"
+                        >
+                          <span className="mr-3 text-lg">{item.icon}</span>
+                          <span className="font-medium">{item.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Safety & Security */}
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-5">
+                    <div className="flex items-center mb-4">
+                      <span className="text-2xl mr-3">🔒</span>
+                      <h3 className="font-bold text-lg text-red-900">
+                        Safety & Security
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 text-sm">
+                      {[
+                        { icon: "🔥", text: "Fire extinguishers" },
+                        { icon: "📹", text: "CCTV surveillance" },
+                        { icon: "🚨", text: "Smoke alarms" },
+                        { icon: "🔒", text: "Security alarm" },
+                        { icon: "🔑", text: "Key card access" },
+                        { icon: "🔐", text: "In-room safe" },
+                        { icon: "👮", text: "24-hour security" },
+                        { icon: "🚪", text: "Secure access" },
+                      ].map((item, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center text-gray-700"
+                        >
+                          <span className="mr-3 text-lg">{item.icon}</span>
+                          <span className="font-medium">{item.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Languages Spoken */}
+                  <div className="bg-teal-50 border border-teal-200 rounded-lg p-5">
+                    <div className="flex items-center mb-4">
+                      <span className="text-2xl mr-3">🗣️</span>
+                      <h3 className="font-bold text-lg text-teal-900">
+                        Languages Spoken
+                      </h3>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      {[
+                        { icon: "🇺🇸", text: "English" },
+                        { icon: "🇦🇪", text: "Arabic" },
+                        { icon: "🇩🇪", text: "German" },
+                        { icon: "🇫🇷", text: "French" },
+                        { icon: "🇪🇸", text: "Spanish" },
+                        { icon: "🇮🇳", text: "Hindi" },
+                        { icon: "🇮🇩", text: "Indonesian" },
+                        { icon: "🇮🇹", text: "Italian" },
+                        { icon: "🇯🇵", text: "Japanese" },
+                        { icon: "🇰🇷", text: "Korean" },
+                        { icon: "🇷🇺", text: "Russian" },
+                        { icon: "🇨🇳", text: "Chinese" },
+                      ].map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center text-gray-700 mb-1"
+                        >
+                          <span className="mr-2 text-base">{item.icon}</span>
+                          <span className="font-medium text-xs">
+                            {item.text}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
