@@ -23,6 +23,7 @@ import {
   Bookmark,
   Download,
   Search,
+  CheckCircle,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
