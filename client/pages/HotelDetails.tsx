@@ -719,8 +719,8 @@ export default function HotelDetails() {
                         </div>
                       </div>
 
-                      <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 rounded-lg text-sm">
-                        ⚡ Upgrade & Save with Bargaining for All Rooms
+                      <Button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-semibold py-3 rounded-lg text-sm shadow-lg transform hover:scale-[1.02] transition-all duration-200">
+                        ⚡ Upgrade & Save with Bargaining
                       </Button>
                     </div>
                   </div>
