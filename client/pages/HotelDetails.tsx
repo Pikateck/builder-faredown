@@ -153,15 +153,7 @@ export default function HotelDetails() {
   };
 
   const toggleRoomExpansion = (roomId: string) => {
-    setExpandedRooms((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(roomId)) {
-        newSet.delete(roomId);
-      } else {
-        newSet.add(roomId);
-      }
-      return newSet;
-    });
+    setExpandedRoom((prev) => (prev === roomId ? null : roomId));
   };
 
   const handleBooking = (roomType: any, bargainPrice?: number) => {
