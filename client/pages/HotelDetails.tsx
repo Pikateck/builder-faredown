@@ -562,18 +562,21 @@ export default function HotelDetails() {
 
                         {/* Expanded Room Details */}
                         {expandedRoom === room.id && room.features && (
-                          <div className="mt-4 border-t border-gray-100 pt-4">
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                              <div>
+                          <div className="mt-3 sm:mt-4 border-t border-gray-100 pt-3 sm:pt-4">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
+                              {/* Room Image */}
+                              <div className="lg:col-span-3">
                                 <img
                                   src={room.image}
                                   alt={room.name}
-                                  className="w-full h-32 object-cover rounded-lg"
+                                  className="w-full h-32 sm:h-40 object-cover rounded-lg"
                                 />
                               </div>
-                              <div className="lg:col-span-2">
-                                <div className="mb-4">
-                                  <h4 className="font-medium mb-2">
+
+                              {/* Room Details */}
+                              <div className="lg:col-span-5">
+                                <div className="mb-3">
+                                  <h4 className="font-semibold text-base mb-1">
                                     {room.type}
                                   </h4>
                                   <div className="text-sm text-gray-600 mb-2">
@@ -589,7 +592,7 @@ export default function HotelDetails() {
                                 <div className="space-y-1 text-sm">
                                   {room.features.map((feature, idx) => (
                                     <div key={idx} className="flex items-start">
-                                      <span className="text-green-600 mr-2">
+                                      <span className="text-green-600 mr-2 flex-shrink-0">
                                         •
                                       </span>
                                       <span className="text-gray-600">
@@ -598,50 +601,57 @@ export default function HotelDetails() {
                                     </div>
                                   ))}
                                 </div>
+                              </div>
 
-                                <div className="mt-4 flex items-center justify-between">
-                                  <div>
-                                    <div className="text-2xl font-bold">
-                                      ₹32,49,286
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                      Total Price
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                      Includes all taxes & charges
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                      ₹32,850 per night (all-inclusive)
-                                    </div>
+                              {/* Pricing and Actions */}
+                              <div className="lg:col-span-4">
+                                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                                  <div className="text-2xl font-bold text-gray-900 mb-1">
+                                    ₹32,49,286
                                   </div>
-                                  <div className="space-y-2">
-                                    <div className="flex items-center text-sm text-green-600">
-                                      <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                                      Cheapest Option Available
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                      See upgrade options below for better rooms
-                                      at amazing discounted prices
-                                    </div>
-                                    <div className="flex gap-2">
-                                      <Button className="bg-green-600 hover:bg-green-700">
-                                        Reserve Room
-                                      </Button>
-                                      <Button
-                                        variant="outline"
-                                        onClick={() => handleBargainClick(room)}
-                                      >
-                                        💰 Bargain This Room
-                                      </Button>
-                                    </div>
-                                    <div className="flex items-center text-xs text-gray-600">
-                                      <span>
-                                        🏨 Pay at hotel • No prepayment needed
-                                      </span>
-                                    </div>
-                                    <div className="text-xs text-gray-600">
-                                      Free cancellation
-                                    </div>
+                                  <div className="text-sm font-medium text-gray-900 mb-1">
+                                    Total Price
+                                  </div>
+                                  <div className="text-xs text-gray-600 mb-1">
+                                    Includes all taxes & charges
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    ₹32,850 per night (all-inclusive)
+                                  </div>
+                                </div>
+
+                                <div className="mb-4">
+                                  <div className="flex items-center text-sm text-green-600 mb-2">
+                                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                    Cheapest Option Available
+                                  </div>
+                                  <div className="text-xs text-gray-600 mb-3">
+                                    See upgrade options below for better rooms
+                                    at amazing discounted prices
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5">
+                                    Reserve Room
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => handleBargainClick(room)}
+                                    className="w-full py-2.5 font-medium"
+                                  >
+                                    💰 Bargain This Room
+                                  </Button>
+                                </div>
+
+                                <div className="mt-3 space-y-1">
+                                  <div className="flex items-center text-xs text-gray-600">
+                                    <span>
+                                      🏨 Pay at hotel • No prepayment needed
+                                    </span>
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    Free cancellation
                                   </div>
                                 </div>
                               </div>
