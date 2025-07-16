@@ -404,10 +404,18 @@ export default function HotelDetails() {
               </div>
             </div>
 
-            {/* Clear Filters */}
-            <Button variant="outline" className="w-full text-sm">
-              Clear All Filters
-            </Button>
+            {/* Filter Actions */}
+            <div className="space-y-2">
+              <Button variant="outline" className="w-full text-sm">
+                Clear All Filters
+              </Button>
+              <Button
+                className="w-full text-sm lg:hidden bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => setIsMobileFilterOpen(false)}
+              >
+                Apply Filters
+              </Button>
+            </div>
           </div>
         </div>
 
