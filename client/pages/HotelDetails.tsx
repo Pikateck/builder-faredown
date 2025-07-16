@@ -423,11 +423,11 @@ export default function HotelDetails() {
           </div>
 
           {/* Main Content */}
-          <div className="p-2 sm:p-3">
+          <div className="p-1 sm:p-2">
             {activeTab === "overview" && (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Hotel Header */}
-                <div className="bg-white rounded-lg border border-gray-200 p-3">
+                <div className="bg-white rounded-lg border border-gray-200 p-2 sm:p-3">
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -479,7 +479,7 @@ export default function HotelDetails() {
                   </div>
 
                   {/* Hotel Image and Details - Compact */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     <div>
                       <img
                         src={hotel.image}
@@ -514,7 +514,7 @@ export default function HotelDetails() {
                         </div>
                       </div>
 
-                      <div className="bg-gray-50 p-3 rounded-lg text-right">
+                      <div className="bg-gray-50 p-2 rounded-lg text-right">
                         <div className="text-2xl font-bold text-gray-900">
                           ₹
                           {calculateTotalPrice(
