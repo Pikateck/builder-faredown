@@ -1022,7 +1022,7 @@ export default function HotelDetails() {
                     </ul>
                     <ul className="space-y-2 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="mr-2">🌅</span> Balcony
+                        <span className="mr-2">��</span> Balcony
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🚿</span> Shower
@@ -1408,8 +1408,8 @@ export default function HotelDetails() {
 
                 <div className="relative w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
                   <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Ffa4f6943ffd14829aa5df4905d0f81df?format=webp&width=800"
-                    alt="Street View of Grand Hyatt Dubai"
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fa819714c5cc047bf850c81dad7db477e?format=webp&width=800"
+                    alt="Street View of Grand Hyatt Dubai Entrance"
                     className="w-full h-full object-cover"
                   />
 
