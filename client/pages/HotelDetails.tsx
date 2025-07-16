@@ -883,7 +883,21 @@ export default function HotelDetails() {
                       <span className="text-gray-700">2 swimming pools</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-lg">💪</span>
+                      <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-4 h-4 text-orange-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                      </div>
                       <span className="text-gray-700">Fitness centre</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
@@ -1373,7 +1387,7 @@ export default function HotelDetails() {
                         Indonesian
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Italian
+                        <span className="text-green-600 mr-2">��</span> Italian
                       </li>
                       <li className="flex items-center">
                         <span className="text-green-600 mr-2">✓</span> Japanese
@@ -1555,7 +1569,7 @@ export default function HotelDetails() {
                 {/* Swimming Pools Section */}
                 <div className="mt-8 bg-gradient-to-r from-blue-100 to-cyan-100 border border-blue-300 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">🏊‍♂���</span>
+                    <span className="text-4xl mr-4">🏊‍♂️</span>
                     <div>
                       <h3 className="font-bold text-2xl text-blue-900">
                         2 Swimming Pools
@@ -1759,7 +1773,7 @@ export default function HotelDetails() {
                         { icon: "🇮🇹", text: "Italian" },
                         { icon: "🇯🇵", text: "Japanese" },
                         { icon: "🇰🇷", text: "Korean" },
-                        { icon: "🇷���", text: "Russian" },
+                        { icon: "🇷🇺", text: "Russian" },
                         { icon: "🇨🇳", text: "Chinese" },
                       ].map((item, idx) => (
                         <div
