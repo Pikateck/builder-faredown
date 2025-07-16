@@ -449,7 +449,7 @@ export default function HotelDetails() {
                             night (all-inclusive)
                           </div>
                           <Button
-                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-md text-sm mb-2"
+                            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-md text-sm"
                             onClick={() => handleBargainClick(roomTypes[0])}
                           >
                             ⚡ Upgrade & Save with Bargaining for All Rooms
