@@ -637,6 +637,325 @@ export default function HotelDetails() {
                 </div>
               </>
             )}
+
+            {activeTab === "gallery" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-bold mb-4">Hotel Gallery</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[
+                    hotel.image,
+                    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+                    "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600",
+                    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600",
+                    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600",
+                    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600",
+                  ].map((image, index) => (
+                    <div key={index} className="aspect-video">
+                      <img
+                        src={image}
+                        alt={`${hotel.name} - Image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "amenities" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-bold mb-4">Property Amenities</h2>
+                <p className="text-gray-600 mb-6">
+                  See the 156+ great amenities and services available for the
+                  guests of your stay
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-blue-600 font-bold text-sm">
+                          E
+                        </span>
+                      </div>
+                      <h3 className="font-semibold text-lg">Entertainment</h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• TV Lounge</li>
+                      <li>• Outdoor Freshwater pool</li>
+                      <li>• Hotel</li>
+                      <li>• American Express</li>
+                      <li>• Diners Club</li>
+                      <li>• MasterCard</li>
+                      <li>• Visa</li>
+                      <li>• City centre</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-blue-600 font-bold text-sm">
+                          F
+                        </span>
+                      </div>
+                      <h3 className="font-semibold text-lg">Facilities</h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Total number of rooms</li>
+                      <li>• Number of floors (main building)</li>
+                      <li>• Hotel</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-blue-600 font-bold text-sm">
+                          L
+                        </span>
+                      </div>
+                      <h3 className="font-semibold text-lg">Location</h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Total number of rooms</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <div className="flex items-center mb-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-blue-600 font-bold text-sm">R</span>
+                    </div>
+                    <h3 className="font-semibold text-lg">
+                      Room facilities (Standard room)
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Bathroom</li>
+                      <li>• Internet access</li>
+                      <li>• Tea & coffee making facilities</li>
+                      <li>• Carpeted floors</li>
+                      <li>• Centrally regulated air conditioning</li>
+                      <li>• Living room</li>
+                    </ul>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• Balcony</li>
+                      <li>• Shower</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "reviews" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold">
+                    Guest reviews for {hotel.name}
+                  </h2>
+                  <Button className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm">
+                    📝 Write a review
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <div className="flex items-center mb-4">
+                      <div className="bg-blue-700 text-white px-3 py-1 rounded text-lg font-bold mr-3">
+                        8.5
+                      </div>
+                      <div>
+                        <div className="font-semibold">Excellent</div>
+                        <div className="text-sm text-gray-600">
+                          {hotel.reviews} reviews
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          We aim for 100% real reviews
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { category: "Staff", score: 9.6 },
+                      { category: "Facilities", score: 9 },
+                      { category: "Cleanliness", score: 9.2 },
+                      { category: "Comfort", score: 9.1 },
+                      { category: "Value for money", score: 8.5 },
+                      { category: "Location", score: 8.8 },
+                      { category: "Free WiFi", score: 8.6 },
+                    ].map((item, index) => (
+                      <div key={index} className="text-center">
+                        <div className="text-sm text-gray-600 mb-1">
+                          {item.category}
+                        </div>
+                        <div className="font-bold text-lg">{item.score}</div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-600 h-2 rounded-full"
+                            style={{ width: `${item.score * 10}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {[
+                    {
+                      name: "Mia",
+                      location: "United Arab Emirates",
+                      room: "Twin Room",
+                      date: "August 2023",
+                      type: "Family",
+                      title: "We are happy",
+                      review:
+                        "It's my pleasure to be thankful for the polite service and see my birthday 🎂 Thanks for making it special for me",
+                      helpful: 0,
+                      avatar: "M",
+                    },
+                    {
+                      name: "Rachelle",
+                      location: "United Arab Emirates",
+                      room: "King Room with Skyline View",
+                      date: "July 2023",
+                      type: "Family",
+                      title: "Wonderful",
+                      review:
+                        "The hotel exceeded our expectations in every way. The staff was incredibly friendly and helpful, the room was spacious and clean, and the location was perfect for exploring the city.",
+                      helpful: 3,
+                      avatar: "R",
+                    },
+                  ].map((review, index) => (
+                    <div key={index} className="border-b border-gray-200 pb-4">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center font-bold">
+                          {review.avatar}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-semibold">{review.name}</span>
+                            <span className="text-xs text-gray-500">
+                              {review.location}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500 mb-2">
+                            {review.room} • {review.date} • {review.type}
+                          </div>
+                          <h4 className="font-semibold mb-1">{review.title}</h4>
+                          <p className="text-sm text-gray-700 mb-2">
+                            {review.review}
+                          </p>
+                          <div className="flex items-center gap-4 text-xs">
+                            <button className="text-blue-600 hover:underline">
+                              👍 Helpful ({review.helpful})
+                            </button>
+                            <button className="text-gray-500 hover:underline">
+                              Not helpful
+                            </button>
+                          </div>
+                        </div>
+                        <div className="bg-blue-700 text-white px-2 py-1 rounded text-xs font-bold">
+                          {8 + index}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "street-view" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-bold mb-4">Street View</h2>
+                <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🌍</div>
+                    <div className="text-gray-600">Google Street View</div>
+                    <div className="text-sm text-gray-500 mt-1">
+                      Interactive street view of the hotel location
+                    </div>
+                    <Button className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
+                      Launch Street View
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "location" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-bold mb-4">Location & Map</h2>
+                <p className="text-gray-600 mb-6">
+                  See the exact location of {hotel.name} and nearby attractions
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="lg:col-span-2">
+                    <div className="flex gap-2 mb-4">
+                      <Button className="bg-blue-700 text-white px-3 py-1 text-sm">
+                        Map
+                      </Button>
+                      <Button variant="outline" className="px-3 py-1 text-sm">
+                        Satellite
+                      </Button>
+                      <Button variant="outline" className="px-3 py-1 text-sm">
+                        Terrain
+                      </Button>
+                    </div>
+                    <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center relative">
+                      <div className="text-center">
+                        <div className="text-4xl mb-2">🗺️</div>
+                        <div className="text-gray-600">Interactive Map</div>
+                        <div className="text-sm text-gray-500">
+                          Hotel location and nearby landmarks
+                        </div>
+                      </div>
+                      <div className="absolute top-2 right-2 bg-white rounded px-2 py-1 text-xs shadow">
+                        📍 {hotel.name}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold mb-3">Hotel Details</h3>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="font-medium">Address:</span>
+                        <div className="text-gray-600">{hotel.location}</div>
+                      </div>
+                    </div>
+
+                    <h3 className="font-semibold mt-6 mb-3">
+                      Nearby Landmarks
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Dubai International Airport</span>
+                        <span className="text-gray-500">8.5 km</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Burj Khalifa</span>
+                        <span className="text-gray-500">2.1 km</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Dubai Mall</span>
+                        <span className="text-gray-500">1.8 km</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Business Bay Metro Station</span>
+                        <span className="text-gray-500">0.5 km</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
