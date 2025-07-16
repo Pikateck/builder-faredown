@@ -603,22 +603,25 @@ export default function HotelDetails() {
                                   </div>
                                 </div>
 
-                                <div className="space-y-1">
+                                <div className="space-y-2">
                                   <Button
                                     onClick={() => handleBooking(room)}
-                                    className={`w-full font-semibold py-1 text-xs ${
+                                    size="sm"
+                                    className={`w-full font-medium text-xs px-3 py-2 ${
                                       room.statusColor === "green"
-                                        ? "bg-green-700 hover:bg-green-800 text-white"
-                                        : "bg-blue-700 hover:bg-blue-800 text-white"
+                                        ? "bg-green-600 hover:bg-green-700 text-white"
+                                        : "bg-blue-600 hover:bg-blue-700 text-white"
                                     }`}
                                   >
                                     Reserve Room
                                   </Button>
                                   <Button
                                     onClick={() => handleBargainClick(room)}
-                                    className="w-full py-1 font-semibold bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 text-xs"
+                                    size="sm"
+                                    variant="outline"
+                                    className="w-full font-medium text-xs px-3 py-2 border-blue-600 text-blue-600 hover:bg-blue-50"
                                   >
-                                    💰 Bargain Room
+                                    💰 Bargain This Room
                                   </Button>
                                 </div>
 
