@@ -607,9 +607,13 @@ export default function HotelDetails() {
                                 <Badge
                                   className={`${
                                     room.statusColor === "green"
-                                      ? "bg-green-100 text-green-800 border border-green-200"
+                                      ? "bg-green-500 text-white border border-green-600 shadow-sm"
                                       : "bg-yellow-100 text-yellow-800 border border-yellow-200"
-                                  } text-xs font-medium px-2 py-1`}
+                                  } text-xs font-semibold px-3 py-1 ${
+                                    room.statusColor === "green"
+                                      ? "animate-pulse"
+                                      : ""
+                                  }`}
                                 >
                                   {room.status}
                                 </Badge>
