@@ -28,6 +28,9 @@ export default function HotelDetails() {
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   // Mock hotel data with dynamic pricing
   const hotel = {
@@ -603,11 +606,29 @@ export default function HotelDetails() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" className="text-xs">
-                        <Bookmark className="w-3 h-3 mr-1" />
-                        Saved
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`text-xs ${
+                          isSaved
+                            ? "bg-blue-100 text-blue-700 border-blue-300"
+                            : ""
+                        }`}
+                        onClick={() => setIsSaved(!isSaved)}
+                      >
+                        <Bookmark
+                          className={`w-3 h-3 mr-1 ${
+                            isSaved ? "fill-current" : ""
+                          }`}
+                        />
+                        {isSaved ? "Saved" : "Save"}
                       </Button>
-                      <Button variant="outline" size="sm" className="text-xs">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={() => setIsShareModalOpen(true)}
+                      >
                         <Share2 className="w-3 h-3 mr-1" />
                         Share
                       </Button>
@@ -620,7 +641,7 @@ export default function HotelDetails() {
                       <img
                         src={hotel.image}
                         alt={hotel.name}
-                        className="w-full h-40 sm:h-48 object-cover rounded-lg"
+                        className="w-full aspect-square object-cover rounded-lg"
                       />
                     </div>
                     <div className="space-y-2">
