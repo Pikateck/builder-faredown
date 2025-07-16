@@ -763,7 +763,10 @@ export default function HotelDetails() {
                   <h2 className="text-xl font-bold">
                     Guest reviews for {hotel.name}
                   </h2>
-                  <Button className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm">
+                  <Button
+                    onClick={() => setIsWriteReviewModalOpen(true)}
+                    className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm"
+                  >
                     📝 Write a review
                   </Button>
                 </div>
