@@ -57,7 +57,7 @@ export default function ReservationPage() {
     specialRequests: "",
   });
 
-    const [paymentDetails, setPaymentDetails] = useState({
+  const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: "",
     expiryMonth: "",
     expiryYear: "",
@@ -80,12 +80,13 @@ export default function ReservationPage() {
     dailyHousekeeping: true,
   });
 
-    // Hotel data (would be fetched from API)
+  // Hotel data (would be fetched from API)
   const hotelData = {
     id: searchParams.get("hotelId") || "1",
     name: searchParams.get("hotelName") || "Grand Hyatt Dubai",
     location: "Dubai, United Arab Emirates",
-    image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6",
     rating: 4.8,
     reviews: 1234,
     roomType: searchParams.get("roomType") || "King Room with Skyline View",
@@ -103,7 +104,7 @@ export default function ReservationPage() {
   const guests = parseInt(searchParams.get("guests") || "2");
   const rooms = parseInt(searchParams.get("rooms") || "1");
 
-    // Calculate pricing
+  // Calculate pricing
   const checkInDate = new Date(checkIn);
   const checkOutDate = new Date(checkOut);
   const nights = Math.ceil(
@@ -175,7 +176,7 @@ export default function ReservationPage() {
     );
   };
 
-    const isStepValid = () => {
+  const isStepValid = () => {
     switch (currentStep) {
       case 1:
         return (
@@ -580,7 +581,7 @@ export default function ReservationPage() {
                   </div>
                 )}
 
-                                {/* Step 3: Payment */}
+                {/* Step 3: Payment */}
                 {currentStep === 3 && (
                   <div className="space-y-6">
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -626,7 +627,9 @@ export default function ReservationPage() {
                             type="radio"
                             name="paymentMethod"
                             value="pay_at_hotel"
-                            checked={paymentDetails.paymentMethod === "pay_at_hotel"}
+                            checked={
+                              paymentDetails.paymentMethod === "pay_at_hotel"
+                            }
                             onChange={(e) =>
                               setPaymentDetails((prev) => ({
                                 ...prev,
@@ -639,7 +642,9 @@ export default function ReservationPage() {
                             <MapPin className="w-5 h-5 mr-2 text-gray-600" />
                             <div>
                               <div>Pay at Hotel</div>
-                              <div className="text-xs text-gray-500">Pay during check-in</div>
+                              <div className="text-xs text-gray-500">
+                                Pay during check-in
+                              </div>
                             </div>
                           </div>
                         </label>
@@ -732,20 +737,23 @@ export default function ReservationPage() {
                       </div>
                     </div>
 
-                                        <div>
-                      <Label htmlFor="cardholderName">Cardholder Name *</Label>
-                      <Input
-                        id="cardholderName"
-                        value={paymentDetails.cardholderName}
-                        onChange={(e) =>
-                          setPaymentDetails((prev) => ({
-                            ...prev,
-                            cardholderName: e.target.value,
-                          }))
-                        }
-                        placeholder="Name as it appears on card"
-                      />
-                    </div>
+                    {paymentDetails.paymentMethod === "card" && (
+                      <div>
+                        <Label htmlFor="cardholderName">
+                          Cardholder Name *
+                        </Label>
+                        <Input
+                          id="cardholderName"
+                          value={paymentDetails.cardholderName}
+                          onChange={(e) =>
+                            setPaymentDetails((prev) => ({
+                              ...prev,
+                              cardholderName: e.target.value,
+                            }))
+                          }
+                          placeholder="Name as it appears on card"
+                        />
+                      </div>
                     )}
                   </div>
                 )}
@@ -884,7 +892,7 @@ export default function ReservationPage() {
                   )}
                 </div>
 
-                                <div className="border-t border-gray-200 pt-4">
+                <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">Total</span>
                     <span className="text-xl font-bold text-blue-600">
