@@ -338,8 +338,9 @@ export default function HotelDetails() {
             {/* Price Range */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Price Range
+                Your budget (per night)
               </label>
+              <div className="text-sm text-gray-600 mb-3">₹ 0 - ₹ 40,000+</div>
               <div className="px-2">
                 <div className="w-full h-2 bg-gray-200 rounded-full relative">
                   <div
@@ -352,20 +353,16 @@ export default function HotelDetails() {
                     style={{ left: "60%" }}
                   ></div>
                 </div>
-                <div className="flex justify-between mt-2 text-sm text-gray-600">
-                  <span>₹0</span>
-                  <span>₹1,00,000+</span>
-                </div>
               </div>
             </div>
 
-            {/* Popular Filters */}
+            {/* Deals */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-3">
-                Popular Filters
+                Deals
               </label>
               <div className="space-y-2">
-                {filters.popularFilters.map((filter, index) => (
+                {filters.deals.map((filter, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between"
@@ -374,16 +371,10 @@ export default function HotelDetails() {
                       <input
                         type="checkbox"
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        checked={filter.selected}
                       />
                       <span className="ml-2 text-sm text-gray-700">
                         {filter.name}
                       </span>
-                      {filter.popular && (
-                        <Badge className="ml-2 bg-orange-100 text-orange-800 text-xs">
-                          Popular
-                        </Badge>
-                      )}
                     </label>
                     <span className="text-sm text-gray-500">
                       {filter.count}
@@ -393,13 +384,80 @@ export default function HotelDetails() {
               </div>
             </div>
 
-            {/* Facilities */}
+            {/* Popular Filters */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-3">
-                Facilities
+                Popular filters
               </label>
               <div className="space-y-2">
-                {filters.facilities.map((filter, index) => (
+                {filters.popularFilters.map((filter, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center flex-1">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <div className="ml-2 flex-1">
+                          <span className="text-sm text-gray-700">
+                            {filter.name}
+                          </span>
+                          {filter.subtitle && (
+                            <div className="text-xs text-gray-500">
+                              {filter.subtitle}
+                            </div>
+                          )}
+                        </div>
+                      </label>
+                      <span className="text-sm text-gray-500 ml-2">
+                        {filter.count}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Facilities */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Facilities
+                </label>
+                <button className="text-blue-600 text-sm hover:underline">
+                  Show all 14 ↓
+                </button>
+              </div>
+              <div className="space-y-2">
+                {filters.facilities.slice(0, 5).map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Meals */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Meals
+              </label>
+              <div className="space-y-2">
+                {filters.meals.map((filter, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between"
@@ -449,13 +507,13 @@ export default function HotelDetails() {
               </div>
             </div>
 
-            {/* Neighborhood */}
+            {/* Review Score */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-3">
-                Neighborhood
+                Review score
               </label>
               <div className="space-y-2">
-                {filters.neighborhood.map((filter, index) => (
+                {filters.reviewScore.map((filter, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between"
@@ -475,6 +533,267 @@ export default function HotelDetails() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Reservation Policy */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Reservation policy
+              </label>
+              <div className="space-y-2">
+                {filters.reservationPolicy.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Room Facilities */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Room facilities
+                </label>
+                <button className="text-blue-600 text-sm hover:underline">
+                  Show all 25 ↓
+                </button>
+              </div>
+              <div className="space-y-2">
+                {filters.roomFacilities.slice(0, 5).map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Property Rating */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Property rating
+              </label>
+              <p className="text-xs text-gray-500 mb-3">
+                Find high-quality hotels and vacation rentals
+              </p>
+              <div className="space-y-2">
+                {filters.propertyRating.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Preferred Stay Location */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Preferred stay location
+              </label>
+              <div className="space-y-2">
+                {filters.preferredStayLocation.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Brands */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Brands
+                </label>
+                <button className="text-blue-600 text-sm hover:underline">
+                  Show all 20 ↓
+                </button>
+              </div>
+              <div className="space-y-2">
+                {filters.brands.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Neighborhood */}
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Neighborhood
+                </label>
+                <button className="text-blue-600 text-sm hover:underline">
+                  Show all 25 ↓
+                </button>
+              </div>
+              <div className="space-y-2">
+                {filters.neighborhood.slice(0, 10).map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Distance from center */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Distance from center of Dubai
+              </label>
+              <div className="space-y-2">
+                {filters.distanceFromCenter.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Travel Group */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Travel group
+              </label>
+              <div className="space-y-2">
+                {filters.travelGroup.map((filter, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Location */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Location
+              </label>
+              <p className="text-xs text-gray-500 mb-3">Landmark or airport</p>
+              <input
+                type="text"
+                placeholder="e.g. museums, stations"
+                className="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-3"
+              />
+              <select className="w-full p-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option>1 km</option>
+                <option>3 km</option>
+                <option>5 km</option>
+                <option>10 km</option>
+              </select>
             </div>
 
             {/* Star Rating */}
@@ -995,7 +1314,7 @@ export default function HotelDetails() {
                       Street View
                     </Button>
                     <p className="text-sm text-gray-600 mt-2">
-                      <span className="text-green-600">●●●●</span> Live Street
+                      <span className="text-green-600">●●���●</span> Live Street
                       View
                     </p>
                   </div>
