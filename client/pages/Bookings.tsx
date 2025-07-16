@@ -30,7 +30,7 @@ const Bookings: React.FC = () => {
       time: "14:30",
       status: "Confirmed",
       passengers: 2,
-      totalAmount: "$1,850",
+      totalAmount: "₹1,53,750",
       bookingRef: "EM123456",
       flightNumber: "EK001",
       seat: "12A, 12B",
@@ -38,7 +38,7 @@ const Bookings: React.FC = () => {
       gate: "A15",
       bookingDate: "2024-01-01",
       cancellable: true,
-      refundAmount: "$1,665",
+      refundAmount: "₹1,38,375",
       refundStatus: null,
     },
     {
