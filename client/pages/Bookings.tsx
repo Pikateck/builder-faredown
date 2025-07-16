@@ -1,5 +1,12 @@
 import React, { useState } from "react";
 import { Header } from "@/components/Header";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const Bookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"all" | "flights" | "hotels">(
