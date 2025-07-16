@@ -966,8 +966,26 @@ export default function HotelDetails() {
                       </div>
                       <h3 className="font-semibold text-lg">Location</h3>
                     </div>
-                    <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• Total number of rooms</li>
+                    <ul className="space-y-2 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="mr-2">🏙️</span> City centre location
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🛍️</span> Near shopping malls
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🚇</span> Metro station nearby
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">✈️</span> Airport transfer
+                        available
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🏖️</span> Beach access
+                      </li>
+                      <li className="flex items-center">
+                        <span className="mr-2">🌆</span> Skyline view
+                      </li>
                     </ul>
                   </div>
                 </div>
