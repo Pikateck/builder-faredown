@@ -95,7 +95,7 @@ const Bookings: React.FC = () => {
       guests: 1,
       rooms: 1,
       status: "Confirmed",
-      totalAmount: "$480",
+      totalAmount: "₹39,840",
       bookingRef: "TL234567",
       roomType: "Superior Room",
       bedType: "Queen Bed",
@@ -103,7 +103,7 @@ const Bookings: React.FC = () => {
       phone: "+44 20 7636 1000",
       bookingDate: "2024-01-05",
       cancellable: true,
-      refundAmount: "$432",
+      refundAmount: "₹35,856",
       refundStatus: null,
     },
   ];
@@ -317,7 +317,7 @@ const Bookings: React.FC = () => {
             <div className="space-y-6">
               <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
                 <div className="text-3xl">
-                  {selectedBooking.type === "flight" ? "✈️" : "����"}
+                  {selectedBooking.type === "flight" ? "✈️" : "🏨"}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">
