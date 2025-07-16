@@ -1043,6 +1043,190 @@ export default function HotelDetails() {
           }}
         />
       )}
+
+      {/* Write Review Modal */}
+      <Dialog
+        open={isWriteReviewModalOpen}
+        onOpenChange={setIsWriteReviewModalOpen}
+      >
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">
+              📝 Write a review for {hotel.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Overall rating *
+              </label>
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className="w-6 h-6 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Rate your experience
+                </label>
+                <div className="space-y-3">
+                  {["Staff", "Cleanliness", "Value for money", "Free WiFi"].map(
+                    (category) => (
+                      <div
+                        key={category}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="text-sm">{category}</span>
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+              <div>
+                <div className="space-y-3">
+                  {["Facilities", "Comfort", "Location"].map((category) => (
+                    <div
+                      key={category}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-sm">{category}</span>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Review title *
+              </label>
+              <input
+                type="text"
+                placeholder="Give your review a title"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Tell us about your experience *
+              </label>
+              <textarea
+                placeholder="Share your experience to help other travelers"
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Your name *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your name"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Country *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your country"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Room type
+                </label>
+                <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option>Select room type</option>
+                  <option>Twin Room with Skyline View</option>
+                  <option>King Room with Skyline View</option>
+                  <option>Superior King Room</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Date of stay
+                </label>
+                <input
+                  type="date"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Type of trip
+              </label>
+              <div className="flex gap-2">
+                {["Leisure", "Business", "Family", "Couple", "Solo travel"].map(
+                  (type) => (
+                    <Button
+                      key={type}
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                    >
+                      {type}
+                    </Button>
+                  ),
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                onClick={() => setIsWriteReviewModalOpen(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsWriteReviewModalOpen(false);
+                  // Handle review submission here
+                }}
+                className="flex-1 bg-blue-700 hover:bg-blue-800 text-white"
+              >
+                Submit Review
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
