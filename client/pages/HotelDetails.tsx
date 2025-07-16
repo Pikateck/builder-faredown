@@ -92,7 +92,7 @@ export default function HotelDetails() {
         "Free cancellation",
         "No prepayment needed - pay at the property",
       ],
-      status: "Upgrade for +₹4,560",
+      status: "Upgrade for +��4,560",
       statusColor: "blue",
       nonRefundable: false,
       image:
@@ -883,19 +883,443 @@ export default function HotelDetails() {
               </div>
             )}
 
-            {/* Other tab content remains the same but with reduced spacing */}
+            {/* Gallery Tab */}
             {activeTab === "gallery" && (
               <div className="bg-white rounded-lg border border-gray-200 p-3">
-                <h2 className="text-lg font-semibold mb-3">Hotel Gallery</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {[...Array(6)].map((_, index) => (
-                    <img
-                      key={index}
-                      src={`https://images.unsplash.com/photo-${1566073771259 + index}?w=300`}
-                      alt={`Gallery ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-lg"
-                    />
-                  ))}
+                  <img
+                    src={hotel.image}
+                    alt="Hotel exterior"
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300"
+                    alt="Hotel room"
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=300"
+                    alt="Hotel suite"
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=300"
+                    alt="Hotel lounge"
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=300"
+                    alt="Hotel spa"
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"
+                    alt="Hotel bathroom"
+                    className="w-full aspect-square object-cover rounded-lg"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Amenities Tab */}
+            {activeTab === "amenities" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-semibold mb-3">
+                  Property Amenities
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  See the 156+ great amenities and services available for the
+                  guests of your stay
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Entertainment */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-blue-600 font-bold">E</span>
+                      </div>
+                      <h3 className="font-semibold">Entertainment</h3>
+                    </div>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                      <li>• TV Lounge</li>
+                      <li>• Outdoor freshwater pool</li>
+                    </ul>
+                  </div>
+
+                  {/* Facilities */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-blue-600 font-bold">F</span>
+                      </div>
+                      <h3 className="font-semibold">Facilities</h3>
+                    </div>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                      <li>• Total number of rooms</li>
+                      <li>• Number of floors (main building)</li>
+                      <li>• Hotel</li>
+                      <li>• American Express</li>
+                      <li>• Diners Club</li>
+                      <li>• MasterCard</li>
+                      <li>• Visa</li>
+                      <li>• City centre</li>
+                    </ul>
+                  </div>
+
+                  {/* Location */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <span className="text-blue-600 font-bold">L</span>
+                      </div>
+                      <h3 className="font-semibold">Location</h3>
+                    </div>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                      <li>• Total number of rooms</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Hotel Type */}
+                    <div>
+                      <div className="flex items-center mb-3">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                          <span className="text-blue-600 font-bold">H</span>
+                        </div>
+                        <h3 className="font-semibold">Hotel type</h3>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-600">
+                        <li>• Hotel</li>
+                        <li>• Internet access</li>
+                        <li>• Tea & coffee making facilities</li>
+                        <li>• Carpeted floors</li>
+                      </ul>
+                    </div>
+
+                    {/* Room Facilities */}
+                    <div>
+                      <div className="flex items-center mb-3">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                          <span className="text-blue-600 font-bold">R</span>
+                        </div>
+                        <h3 className="font-semibold">
+                          Room facilities (Standard room)
+                        </h3>
+                      </div>
+                      <ul className="space-y-2 text-sm text-gray-600">
+                        <li>• Bathroom</li>
+                        <li>• Centrally regulated air conditioning</li>
+                        <li>• Living room</li>
+                        <li>• Balcony</li>
+                        <li>• Shower</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Reviews Tab */}
+            {activeTab === "reviews" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold">
+                    Guest reviews for Grand Hyatt Dubai
+                  </h2>
+                  <Button
+                    className="bg-blue-700 hover:bg-blue-800 text-white"
+                    onClick={() => setIsReviewModalOpen(true)}
+                  >
+                    Write a review
+                  </Button>
+                </div>
+
+                {/* Overall Rating */}
+                <div className="flex items-start gap-6 mb-6">
+                  <div className="bg-blue-700 text-white px-3 py-2 rounded font-bold text-lg">
+                    8.5
+                  </div>
+                  <div>
+                    <div className="font-semibold text-lg">Excellent</div>
+                    <div className="text-sm text-gray-600">1247 reviews</div>
+                    <div className="text-sm text-gray-600">
+                      We aim for 100% real reviews
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rating Breakdown */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">Staff</div>
+                    <div className="font-bold text-lg">9.6</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "96%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">Facilities</div>
+                    <div className="font-bold text-lg">9</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "90%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">
+                      Cleanliness
+                    </div>
+                    <div className="font-bold text-lg">9.2</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "92%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">Comfort</div>
+                    <div className="font-bold text-lg">9.1</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "91%" }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">
+                      Value for money
+                    </div>
+                    <div className="font-bold text-lg">8.5</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "85%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">Location</div>
+                    <div className="font-bold text-lg">8.8</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "88%" }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-1">Free WiFi</div>
+                    <div className="font-bold text-lg">8.6</div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
+                        style={{ width: "86%" }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Individual Reviews */}
+                <div className="space-y-6">
+                  <div className="border-b border-gray-200 pb-6">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center text-white font-bold">
+                        M
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <div className="font-semibold">Mia</div>
+                            <div className="text-sm text-gray-600">
+                              United Arab Emirates
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Two Room
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              August 2023
+                            </div>
+                            <div className="text-sm text-gray-600">Family</div>
+                          </div>
+                          <div className="w-8 h-8 bg-blue-700 rounded flex items-center justify-center text-white font-bold">
+                            9
+                          </div>
+                        </div>
+                        <h4 className="font-semibold mb-2">We are happy</h4>
+                        <p className="text-gray-700 mb-3">
+                          It's my pleasure to be thankful for the polite service
+                          and see my birthday 😊 Thanks for making it special
+                          for me
+                        </p>
+                        <div className="flex items-center gap-4 text-sm">
+                          <button className="text-blue-600 hover:underline">
+                            👍 Helpful (0)
+                          </button>
+                          <button className="text-gray-600 hover:underline">
+                            Not helpful
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-b border-gray-200 pb-6">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center text-white font-bold">
+                        R
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <div className="font-semibold">Rachelle</div>
+                            <div className="text-sm text-gray-600">
+                              United Arab Emirates
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              King Room with Skyline View
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              July 2023
+                            </div>
+                            <div className="text-sm text-gray-600">Family</div>
+                          </div>
+                          <div className="w-8 h-8 bg-blue-700 rounded flex items-center justify-center text-white font-bold">
+                            9.1
+                          </div>
+                        </div>
+                        <h4 className="font-semibold mb-2">Wonderful</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Street View Tab */}
+            {activeTab === "street-view" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-semibold mb-3">Street View</h2>
+                <p className="text-gray-600 mb-4">
+                  Explore the area around Grand Hyatt Dubai with Google Street
+                  View
+                </p>
+
+                <div className="mb-4">
+                  <Button className="bg-blue-700 hover:bg-blue-800 text-white">
+                    Street View
+                  </Button>
+                </div>
+
+                <div className="relative">
+                  <div className="bg-gray-900 rounded-lg p-4 h-80">
+                    <div className="flex items-center text-white mb-2">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      <span className="text-sm">
+                        Street View: Grand Hyatt Dubai
+                      </span>
+                    </div>
+                    <div className="text-white text-xs mb-4">
+                      Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab
+                      Emirates
+                    </div>
+
+                    <div className="bg-gray-800 h-60 rounded flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <div className="mb-2">🏢</div>
+                        <div className="text-sm">
+                          Street View would load here
+                        </div>
+                        <div className="text-xs text-gray-400 mt-2">
+                          Interactive 360° view of the hotel
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="absolute top-4 right-4">
+                      <div className="bg-green-600 text-white px-2 py-1 rounded text-xs">
+                        ⭐⭐⭐⭐ Live Street View
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 text-center">
+                    <div className="text-sm text-gray-600">
+                      📍 Interactive View
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Drag to explore around
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Location Tab */}
+            {activeTab === "location" && (
+              <div className="bg-white rounded-lg border border-gray-200 p-4">
+                <h2 className="text-xl font-semibold mb-3">Location & Map</h2>
+                <p className="text-gray-600 mb-4">
+                  Explore the exact location of Grand Hyatt Dubai and nearby
+                  attractions
+                </p>
+
+                <div className="mb-4">
+                  <div className="flex gap-2">
+                    <Button className="bg-blue-700 hover:bg-blue-800 text-white">
+                      Map
+                    </Button>
+                    <Button variant="outline">Satellite</Button>
+                    <Button variant="outline">Terrain</Button>
+                  </div>
+                </div>
+
+                <div className="bg-gray-100 h-80 rounded-lg mb-6 flex items-center justify-center">
+                  <div className="text-center text-gray-600">
+                    <MapPin className="w-12 h-12 mx-auto mb-2" />
+                    <div>Interactive Map would load here</div>
+                    <div className="text-sm mt-2">
+                      Grand Hyatt Dubai location with nearby landmarks
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-semibold mb-3">Hotel Details</h3>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <strong>Address:</strong> Sheikh Zayed Road, Dubai
+                        Healthcare City, Near Sheikh Zayed Road & Mall Mall,
+                        Dubai, United Arab Emirates
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-3">Nearby Landmarks</h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span>Dubai International Airport</span>
+                        <span>8.5 km</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Burj Khalifa</span>
+                        <span>2.1 km</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
