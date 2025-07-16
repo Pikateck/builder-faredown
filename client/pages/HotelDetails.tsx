@@ -488,22 +488,6 @@ export default function HotelDetails() {
                       </Button>
                     </div>
                   </div>
-
-                  <div className="mt-4 text-center">
-                    <div className="flex items-center justify-center gap-1 text-sm">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="w-4 h-4 text-yellow-400 fill-current"
-                        />
-                      ))}
-                      <span className="ml-2">All-Inclusive Pricing</span>
-                    </div>
-                    <div className="text-xs text-gray-600 mt-1">
-                      All prices shown include taxes, service charges & fees.
-                      Displayed prices are final with no additional charges.
-                    </div>
-                  </div>
                 </div>
 
                 {/* Available Rooms Section */}
