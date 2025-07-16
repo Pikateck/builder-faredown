@@ -653,15 +653,19 @@ export default function HotelDetails() {
                     </div>
                     <div className="lg:col-span-2 space-y-3">
                       <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <div className="text-gray-600 text-xs">Check-in</div>
-                          <div className="font-medium text-sm">
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200 text-center shadow-sm">
+                          <div className="text-xs text-blue-600 font-medium">
+                            Check-in
+                          </div>
+                          <div className="font-semibold text-sm text-blue-900 mt-1">
                             {hotel.checkIn}
                           </div>
                         </div>
-                        <div>
-                          <div className="text-gray-600 text-xs">Check-out</div>
-                          <div className="font-medium text-sm">
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-3 rounded-lg border border-blue-200 text-center shadow-sm">
+                          <div className="text-xs text-blue-600 font-medium">
+                            Check-out
+                          </div>
+                          <div className="font-semibold text-sm text-blue-900 mt-1">
                             {hotel.checkOut}
                           </div>
                         </div>
