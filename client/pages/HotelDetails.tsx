@@ -671,15 +671,32 @@ export default function HotelDetails() {
                         </div>
                       </div>
 
-                      <div className="text-sm">
-                        <div className="text-gray-600 text-xs">
-                          Total: {hotel.totalNights} nights
-                        </div>
-                        <div className="font-medium text-sm">
-                          {hotel.rooms} room, {hotel.adults} adults
-                        </div>
-                        <div className="text-gray-600 text-xs">
-                          Excludes taxes and fees
+                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <div className="grid grid-cols-2 gap-4 text-center">
+                          <div>
+                            <div className="font-bold text-xl text-gray-900">
+                              {hotel.totalNights}
+                            </div>
+                            <div className="text-xs text-gray-600">nights</div>
+                          </div>
+                          <div>
+                            <div className="font-bold text-xl text-gray-900">
+                              {hotel.adults}
+                            </div>
+                            <div className="text-xs text-gray-600">adults</div>
+                          </div>
+                          <div>
+                            <div className="font-bold text-xl text-gray-900">
+                              {hotel.rooms}
+                            </div>
+                            <div className="text-xs text-gray-600">room</div>
+                          </div>
+                          <div>
+                            <div className="font-bold text-xl text-green-700">
+                              Free
+                            </div>
+                            <div className="text-xs text-gray-600">cancel</div>
+                          </div>
                         </div>
                       </div>
 
