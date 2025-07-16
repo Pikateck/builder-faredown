@@ -306,6 +306,544 @@ const Bookings: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* View Details Modal */}
+      <Dialog open={viewDetailsModal} onOpenChange={setViewDetailsModal}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Booking Details</DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-6">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <div className="text-3xl">
+                  {selectedBooking.type === "flight" ? "✈️" : "🏨"}
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold">
+                    {selectedBooking.type === "flight"
+                      ? `${selectedBooking.airline} - ${selectedBooking.route}`
+                      : selectedBooking.name}
+                  </h3>
+                  <p className="text-gray-600">
+                    Booking Reference: {selectedBooking.bookingRef}
+                  </p>
+                </div>
+              </div>
+
+              {selectedBooking.type === "flight" ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-medium mb-3">Flight Information</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-gray-600">Flight:</span>{" "}
+                        {selectedBooking.flightNumber}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Date:</span>{" "}
+                        {selectedBooking.date}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Time:</span>{" "}
+                        {selectedBooking.time}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Route:</span>{" "}
+                        {selectedBooking.route}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Terminal:</span>{" "}
+                        {selectedBooking.terminal}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Gate:</span>{" "}
+                        {selectedBooking.gate}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-3">Passenger Information</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-gray-600">Passengers:</span>{" "}
+                        {selectedBooking.passengers}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Seats:</span>{" "}
+                        {selectedBooking.seat}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Status:</span>
+                        <span
+                          className={`ml-1 px-2 py-1 rounded-full text-xs ${getStatusColor(selectedBooking.status)}`}
+                        >
+                          {selectedBooking.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-medium mb-3">Hotel Information</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-gray-600">Hotel:</span>{" "}
+                        {selectedBooking.name}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Location:</span>{" "}
+                        {selectedBooking.location}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Address:</span>{" "}
+                        {selectedBooking.address}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Phone:</span>{" "}
+                        {selectedBooking.phone}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-3">Reservation Details</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-gray-600">Check-in:</span>{" "}
+                        {selectedBooking.checkIn}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Check-out:</span>{" "}
+                        {selectedBooking.checkOut}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Room Type:</span>{" "}
+                        {selectedBooking.roomType}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Bed Type:</span>{" "}
+                        {selectedBooking.bedType}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Guests:</span>{" "}
+                        {selectedBooking.guests}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="border-t pt-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-gray-600">Total Amount:</span>
+                    <span className="text-xl font-bold text-blue-600 ml-2">
+                      {selectedBooking.totalAmount}
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Booked on: {selectedBooking.bookingDate}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Booking Modal */}
+      <Dialog open={manageBookingModal} onOpenChange={setManageBookingModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Manage Booking</DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-2xl mb-2">
+                  {selectedBooking.type === "flight" ? "✈️" : "🏨"}
+                </div>
+                <h4 className="font-medium">
+                  {selectedBooking.type === "flight"
+                    ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                    : selectedBooking.name}
+                </h4>
+                <p className="text-sm text-gray-600">
+                  {selectedBooking.bookingRef}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <Button
+                  onClick={() => {
+                    setManageBookingModal(false);
+                    setTicketModal(true);
+                  }}
+                  variant="outline"
+                  className="w-full justify-start"
+                >
+                  🎫 View{" "}
+                  {selectedBooking.type === "flight"
+                    ? "Boarding Pass"
+                    : "Voucher"}
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setManageBookingModal(false);
+                    setInvoiceModal(true);
+                  }}
+                  variant="outline"
+                  className="w-full justify-start"
+                >
+                  📄 Download Invoice
+                </Button>
+
+                {selectedBooking.cancellable && (
+                  <Button
+                    onClick={() => {
+                      setManageBookingModal(false);
+                      setCancelBookingModal(true);
+                    }}
+                    variant="outline"
+                    className="w-full justify-start text-red-600 border-red-600 hover:bg-red-50"
+                  >
+                    ❌ Cancel Booking
+                  </Button>
+                )}
+
+                <Button
+                  onClick={() => {
+                    setManageBookingModal(false);
+                    setRefundModal(true);
+                  }}
+                  variant="outline"
+                  className="w-full justify-start"
+                >
+                  💰 Check Refund Status
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Ticket/Voucher Modal */}
+      <Dialog open={ticketModal} onOpenChange={setTicketModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedBooking?.type === "flight"
+                ? "Boarding Pass"
+                : "Hotel Voucher"}
+            </DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50">
+                <div className="text-center">
+                  <div className="text-4xl mb-4">
+                    {selectedBooking.type === "flight" ? "✈️" : "🏨"}
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">
+                    {selectedBooking.type === "flight"
+                      ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                      : selectedBooking.name}
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    {selectedBooking.bookingRef}
+                  </p>
+
+                  {selectedBooking.type === "flight" ? (
+                    <div className="text-left space-y-2">
+                      <div className="flex justify-between">
+                        <span>Route:</span>
+                        <span className="font-medium">
+                          {selectedBooking.route}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Date:</span>
+                        <span className="font-medium">
+                          {selectedBooking.date}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Time:</span>
+                        <span className="font-medium">
+                          {selectedBooking.time}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Seat:</span>
+                        <span className="font-medium">
+                          {selectedBooking.seat}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-left space-y-2">
+                      <div className="flex justify-between">
+                        <span>Check-in:</span>
+                        <span className="font-medium">
+                          {selectedBooking.checkIn}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Check-out:</span>
+                        <span className="font-medium">
+                          {selectedBooking.checkOut}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Room:</span>
+                        <span className="font-medium">
+                          {selectedBooking.roomType}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Guests:</span>
+                        <span className="font-medium">
+                          {selectedBooking.guests}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex space-x-3">
+                <Button className="flex-1">📱 Download to Phone</Button>
+                <Button variant="outline" className="flex-1">
+                  🖨️ Print
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Invoice Modal */}
+      <Dialog open={invoiceModal} onOpenChange={setInvoiceModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Invoice</DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-6">
+              <div className="border rounded-lg p-6 bg-white">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-blue-600">
+                      FAREDOWN
+                    </h2>
+                    <p className="text-gray-600">Travel Booking Platform</p>
+                  </div>
+                  <div className="text-right">
+                    <h3 className="text-lg font-semibold">INVOICE</h3>
+                    <p className="text-gray-600">
+                      #{selectedBooking.bookingRef}
+                    </p>
+                    <p className="text-gray-600">
+                      Date: {selectedBooking.bookingDate}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="border-t border-b py-4 mb-4">
+                  <h4 className="font-semibold mb-2">Booking Details</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Service:</span>
+                      <p className="font-medium">
+                        {selectedBooking.type === "flight"
+                          ? `Flight - ${selectedBooking.airline}`
+                          : `Hotel - ${selectedBooking.name}`}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Reference:</span>
+                      <p className="font-medium">
+                        {selectedBooking.bookingRef}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2 mb-6">
+                  <div className="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span>{selectedBooking.totalAmount}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Taxes & Fees:</span>
+                    <span>Included</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-lg border-t pt-2">
+                    <span>Total:</span>
+                    <span>{selectedBooking.totalAmount}</span>
+                  </div>
+                </div>
+
+                <div className="text-center text-sm text-gray-600">
+                  <p>Thank you for booking with Faredown!</p>
+                  <p>For support, contact us at support@faredown.com</p>
+                </div>
+              </div>
+
+              <div className="flex space-x-3">
+                <Button className="flex-1">📧 Email Invoice</Button>
+                <Button variant="outline" className="flex-1">
+                  📄 Download PDF
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Cancel Booking Modal */}
+      <Dialog open={cancelBookingModal} onOpenChange={setCancelBookingModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Cancel Booking</DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-4">
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center space-x-2 text-red-800">
+                  <span>⚠️</span>
+                  <span className="font-medium">Cancellation Policy</span>
+                </div>
+                <p className="text-sm text-red-700 mt-2">
+                  You can cancel this booking and receive a refund of{" "}
+                  <span className="font-bold">
+                    {selectedBooking.refundAmount}
+                  </span>
+                  . Cancellation fees have been deducted.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="text-sm">
+                  <span className="text-gray-600">Booking:</span>
+                  <p className="font-medium">
+                    {selectedBooking.type === "flight"
+                      ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                      : selectedBooking.name}
+                  </p>
+                </div>
+                <div className="text-sm">
+                  <span className="text-gray-600">Reference:</span>
+                  <p className="font-medium">{selectedBooking.bookingRef}</p>
+                </div>
+                <div className="text-sm">
+                  <span className="text-gray-600">Refund Amount:</span>
+                  <p className="font-medium text-green-600">
+                    {selectedBooking.refundAmount}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex space-x-3 pt-4">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setCancelBookingModal(false)}
+                >
+                  Keep Booking
+                </Button>
+                <Button
+                  className="flex-1 bg-red-600 hover:bg-red-700"
+                  onClick={() => {
+                    // Handle cancellation logic here
+                    setCancelBookingModal(false);
+                    alert(
+                      "Booking cancelled successfully. Refund will be processed in 3-5 business days.",
+                    );
+                  }}
+                >
+                  Cancel Booking
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Refund Status Modal */}
+      <Dialog open={refundModal} onOpenChange={setRefundModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Refund Status</DialogTitle>
+          </DialogHeader>
+          {selectedBooking && (
+            <div className="space-y-4">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="text-2xl mb-2">💰</div>
+                <h4 className="font-medium">{selectedBooking.bookingRef}</h4>
+              </div>
+
+              {selectedBooking.refundStatus ? (
+                <div className="space-y-3">
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center space-x-2 text-green-800">
+                      <span>✅</span>
+                      <span className="font-medium">Refund Processed</span>
+                    </div>
+                    <p className="text-sm text-green-700 mt-1">
+                      Refund of {selectedBooking.refundAmount} has been
+                      processed to your original payment method.
+                    </p>
+                  </div>
+                  <div className="text-sm">
+                    <div className="flex justify-between mb-1">
+                      <span>Amount:</span>
+                      <span className="font-medium">
+                        {selectedBooking.refundAmount}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Date:</span>
+                      <span className="font-medium">2024-01-10</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center space-x-2 text-blue-800">
+                      <span>ℹ️</span>
+                      <span className="font-medium">No Refunds</span>
+                    </div>
+                    <p className="text-sm text-blue-700 mt-1">
+                      This booking has no pending or processed refunds.
+                    </p>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600 mb-3">
+                      Need to cancel this booking?
+                    </p>
+                    <Button
+                      onClick={() => {
+                        setRefundModal(false);
+                        setCancelBookingModal(true);
+                      }}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Cancel Booking
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
