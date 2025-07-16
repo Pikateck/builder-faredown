@@ -913,8 +913,469 @@ export default function HotelDetails() {
                   </div>
                 </div>
 
-                                {/* Facilities Grid */}
+                {/* Facilities Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {/* Great for your stay */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🏨</span>
+                      <h3 className="font-semibold text-base">
+                        Great for your stay
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> 17
+                        restaurants
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Parking
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Air
+                        conditioning
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Private
+                        bathroom
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Free WiFi
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Spa and
+                        wellness centre
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Family
+                        rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Non-smoking rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Fitness
+                        centre
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Live
+                        music/performance
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Parking */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🚗</span>
+                      <h3 className="font-semibold text-base">Parking</h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Free
+                        private parking is possible on site (reservation is not
+                        needed)
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Valet
+                        parking
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Parking
+                        garage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Accessible parking
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* 2 swimming pools */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🏊</span>
+                      <h3 className="font-semibold text-base">
+                        2 swimming pools
+                      </h3>
+                    </div>
+                    <div className="mb-3">
+                      <h4 className="font-medium text-sm mb-1">
+                        Pool 1 - Indoor Pool
+                      </h4>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2">✓</span> Opening
+                          times
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2">✓</span> Open
+                          all year
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2">✓</span> All
+                          ages welcome
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-sm mb-1">
+                        Pool 2 - outdoor Pool
+                      </h4>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2">✓</span> Opening
+                          times
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2">✓</span> Open
+                          all year
+                        </li>
+                        <li className="flex items-center">
+                          <span className="text-green-600 mr-2">✓</span> All
+                          ages welcome
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Reception services */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🏨</span>
+                      <h3 className="font-semibold text-base">
+                        Reception services
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Invoice
+                        provided
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Private
+                        check-in/out
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Concierge
+                        service
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> ATM/cash
+                        machine on site
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Currency
+                        exchange
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Tour desk
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Luggage
+                        storage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Express
+                        check-in/out
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> 24-hour
+                        front desk
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Wellness */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">💆</span>
+                      <h3 className="font-semibold text-base">Wellness</h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Fitness/spa locker rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Personal
+                        trainer
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Yoga
+                        classes
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Full body
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Hand
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Head
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Couples
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Foot
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Neck
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Back
+                        massage
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Beauty
+                        Services
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Spa
+                        lounge/relaxation area
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Steam
+                        room
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Spa
+                        facilities
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Sauna
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Entertainment and family services */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🎪</span>
+                      <h3 className="font-semibold text-base">
+                        Entertainment and family services
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Babysitting/child services
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Cleaning services */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🧹</span>
+                      <h3 className="font-semibold text-base">
+                        Cleaning services
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Daily
+                        housekeeping
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Trouser
+                        press
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Ironing
+                        service
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Dry
+                        cleaning
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Laundry
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Business facilities */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">💼</span>
+                      <h3 className="font-semibold text-base">
+                        Business facilities
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Fax/photocopying
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Business
+                        centre
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Meeting/banquet facilities
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Safety & security */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🔒</span>
+                      <h3 className="font-semibold text-base">
+                        Safety & security
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Fire
+                        extinguishers
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> CCTV
+                        outside property
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> CCTV in
+                        common areas
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Smoke
+                        alarms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Security
+                        alarm
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Key card
+                        access
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> 24-hour
+                        security
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Safety
+                        deposit box
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* General */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">ℹ️</span>
+                      <h3 className="font-semibold text-base">General</h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Grocery
+                        deliveries
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Designated smoking area
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Air
+                        conditioning
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Wake-up
+                        service
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Car hire
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Lift
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Family
+                        rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Barber/beauty shop
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Ironing
+                        facilities
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Facilities for disabled guests
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Non-smoking rooms
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Room
+                        service
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Languages Spoken */}
+                  <div>
+                    <div className="flex items-center mb-3">
+                      <span className="text-lg mr-2">🗣️</span>
+                      <h3 className="font-semibold text-base">
+                        Languages Spoken
+                      </h3>
+                    </div>
+                    <ul className="space-y-1 text-sm text-gray-700">
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Arabic
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> German
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> English
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Spanish
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> French
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Hindi
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        Indonesian
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Italian
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Japanese
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Korean
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Russian
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-600 mr-2">✓</span> Chinese
+                      </li>
+                    </ul>
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
