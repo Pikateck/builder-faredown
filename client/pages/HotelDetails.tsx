@@ -850,7 +850,14 @@ export default function HotelDetails() {
 
             {activeTab === "amenities" && (
               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <h2 className="text-xl font-bold mb-4">Property Amenities</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    Facilities of Grand Hyatt Dubai
+                  </h2>
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">
+                    See availability
+                  </button>
+                </div>
                 <p className="text-blue-600 mb-6 font-medium">
                   Great facilities! Review score: 9
                 </p>
