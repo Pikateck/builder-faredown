@@ -591,10 +591,10 @@ export default function HotelDetails() {
                         className="border-b border-gray-200 last:border-b-0"
                       >
                         <div
-                          className={`flex items-center justify-between cursor-pointer p-4 transition-colors ${
+                          className={`flex items-center justify-between cursor-pointer p-5 transition-all duration-200 ${
                             expandedRoom === room.id
-                              ? "bg-blue-50 border-l-4 border-blue-500"
-                              : "hover:bg-gray-50"
+                              ? "bg-blue-50 border-l-4 border-blue-500 shadow-sm"
+                              : "hover:bg-gray-50 hover:shadow-sm"
                           }`}
                           onClick={() => toggleRoomExpansion(room.id)}
                         >
