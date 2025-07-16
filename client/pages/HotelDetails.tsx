@@ -549,16 +549,16 @@ export default function HotelDetails() {
                           <div className="mt-3 border-t border-gray-100 pt-3">
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
                               {/* Room Image */}
-                              <div className="col-span-3">
+                              <div className="lg:col-span-3">
                                 <img
                                   src={room.image}
                                   alt={room.name}
-                                  className="w-full h-24 object-cover rounded"
+                                  className="w-full h-32 lg:h-24 object-cover rounded"
                                 />
                               </div>
 
                               {/* Room Details */}
-                              <div className="col-span-6">
+                              <div className="lg:col-span-6">
                                 <h4 className="font-semibold text-sm mb-1">
                                   {room.type}
                                 </h4>
@@ -570,7 +570,7 @@ export default function HotelDetails() {
                                     Non Refundable Rate
                                   </Badge>
                                 )}
-                                <div className="space-y-1 text-xs">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 text-xs">
                                   {room.features.map((feature, idx) => (
                                     <div key={idx} className="flex items-start">
                                       <span className="text-green-600 mr-1">
@@ -585,7 +585,7 @@ export default function HotelDetails() {
                               </div>
 
                               {/* Pricing and Actions */}
-                              <div className="col-span-3">
+                              <div className="lg:col-span-3 mt-3 lg:mt-0">
                                 <div className="bg-gray-50 p-2 rounded mb-2 text-center">
                                   <div className="text-lg font-bold text-gray-900">
                                     ₹
