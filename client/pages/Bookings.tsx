@@ -172,7 +172,24 @@ const Bookings: React.FC = () => {
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
-                ✈️ Flights ({flightBookings.length})
+                <div className="flex items-center space-x-2">
+                  <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-3 h-3 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      />
+                    </svg>
+                  </div>
+                  <span>Flights ({flightBookings.length})</span>
+                </div>
               </button>
               <button
                 onClick={() => setActiveTab("hotels")}
@@ -182,7 +199,24 @@ const Bookings: React.FC = () => {
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
               >
-                🏨 Hotels ({hotelBookings.length})
+                <div className="flex items-center space-x-2">
+                  <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-3 h-3 text-amber-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
+                    </svg>
+                  </div>
+                  <span>Hotels ({hotelBookings.length})</span>
+                </div>
               </button>
             </nav>
           </div>
@@ -198,8 +232,42 @@ const Bookings: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
-                    <div className="text-2xl">
-                      {booking.type === "flight" ? "✈️" : "🏨"}
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        booking.type === "flight"
+                          ? "bg-blue-100"
+                          : "bg-amber-100"
+                      }`}
+                    >
+                      {booking.type === "flight" ? (
+                        <svg
+                          className="w-6 h-6 text-blue-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-6 h-6 text-amber-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                          />
+                        </svg>
+                      )}
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">
@@ -462,8 +530,42 @@ const Bookings: React.FC = () => {
           {selectedBooking && (
             <div className="space-y-4">
               <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-2xl mb-2">
-                  {selectedBooking.type === "flight" ? "✈️" : "🏨"}
+                <div
+                  className={`w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center ${
+                    selectedBooking.type === "flight"
+                      ? "bg-blue-100"
+                      : "bg-amber-100"
+                  }`}
+                >
+                  {selectedBooking.type === "flight" ? (
+                    <svg
+                      className="w-8 h-8 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="w-8 h-8 text-amber-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                      />
+                    </svg>
+                  )}
                 </div>
                 <h4 className="font-medium">
                   {selectedBooking.type === "flight"
@@ -484,10 +586,29 @@ const Bookings: React.FC = () => {
                   variant="outline"
                   className="w-full justify-start"
                 >
-                  🎫 View{" "}
-                  {selectedBooking.type === "flight"
-                    ? "Boarding Pass"
-                    : "Voucher"}
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-3 h-3 text-green-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+                        />
+                      </svg>
+                    </div>
+                    <span>
+                      View{" "}
+                      {selectedBooking.type === "flight"
+                        ? "Boarding Pass"
+                        : "Voucher"}
+                    </span>
+                  </div>
                 </Button>
 
                 <Button
@@ -498,7 +619,24 @@ const Bookings: React.FC = () => {
                   variant="outline"
                   className="w-full justify-start"
                 >
-                  📄 Download Invoice
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-3 h-3 text-gray-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                    </div>
+                    <span>Download Invoice</span>
+                  </div>
                 </Button>
 
                 {selectedBooking.cancellable && (
@@ -510,7 +648,24 @@ const Bookings: React.FC = () => {
                     variant="outline"
                     className="w-full justify-start text-red-600 border-red-600 hover:bg-red-50"
                   >
-                    ❌ Cancel Booking
+                    <div className="flex items-center space-x-2">
+                      <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg
+                          className="w-3 h-3 text-red-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </div>
+                      <span>Cancel Booking</span>
+                    </div>
                   </Button>
                 )}
 
@@ -522,7 +677,24 @@ const Bookings: React.FC = () => {
                   variant="outline"
                   className="w-full justify-start"
                 >
-                  💰 Check Refund Status
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-3 h-3 text-emerald-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                        />
+                      </svg>
+                    </div>
+                    <span>Check Refund Status</span>
+                  </div>
                 </Button>
               </div>
             </div>
