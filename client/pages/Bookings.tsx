@@ -269,10 +269,22 @@ const Bookings: React.FC = () => {
                       : `Airline: ${booking.airline}`}
                   </div>
                   <div className="flex space-x-3">
-                    <button className="px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50">
+                    <button
+                      onClick={() => {
+                        setSelectedBooking(booking);
+                        setViewDetailsModal(true);
+                      }}
+                      className="px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50"
+                    >
                       View Details
                     </button>
-                    <button className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    <button
+                      onClick={() => {
+                        setSelectedBooking(booking);
+                        setManageBookingModal(true);
+                      }}
+                      className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    >
                       Manage Booking
                     </button>
                   </div>
