@@ -504,11 +504,11 @@ export default function HotelDetails() {
 
                   <div className="divide-y divide-gray-200">
                     {roomTypes.map((room, index) => (
-                      <div key={room.id} className="p-6">
+                      <div key={room.id} className="p-3 sm:p-4">
                         <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <h3 className="font-medium text-lg">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                              <h3 className="font-medium text-sm sm:text-base truncate pr-2">
                                 {room.name}
                               </h3>
                               {room.status && (
@@ -517,21 +517,36 @@ export default function HotelDetails() {
                                     room.statusColor === "green"
                                       ? "bg-green-100 text-green-800"
                                       : "bg-yellow-100 text-yellow-800"
-                                  } text-xs`}
+                                  } text-xs flex-shrink-0 self-start sm:self-center`}
                                 >
                                   {room.status}
                                 </Badge>
                               )}
                             </div>
+                            {/* Mobile upgrade price */}
+                            {room.upgradePrice &&
+                              room.statusColor !== "green" && (
+                                <div className="mt-1 sm:hidden">
+                                  <Badge className="bg-yellow-100 text-yellow-800 text-xs">
+                                    Upgrade for +₹
+                                    {(
+                                      room.upgradePrice - hotel.perNightPrice
+                                    ).toLocaleString()}
+                                  </Badge>
+                                </div>
+                              )}
                           </div>
-                          <div className="text-right">
-                            {room.upgradePrice && (
-                              <div className="text-sm text-blue-600 font-medium">
-                                {room.statusColor === "green"
-                                  ? ""
-                                  : `Upgrade for +${formatPriceWithSymbol(room.upgradePrice - hotel.perNightPrice, selectedCurrency.code)}`}
-                              </div>
-                            )}
+                          <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+                            {/* Desktop upgrade price */}
+                            {room.upgradePrice &&
+                              room.statusColor !== "green" && (
+                                <Badge className="bg-yellow-100 text-yellow-800 text-xs hidden sm:inline-flex">
+                                  Upgrade for +₹
+                                  {(
+                                    room.upgradePrice - hotel.perNightPrice
+                                  ).toLocaleString()}
+                                </Badge>
+                              )}
                           </div>
                           <button
                             onClick={() => toggleRoomExpansion(room.id)}
