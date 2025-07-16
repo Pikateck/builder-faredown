@@ -578,8 +578,9 @@ export default function HotelDetails() {
                     {roomTypes.map((room, index) => (
                       <div key={room.id} className="p-1.5 sm:p-2">
                         <div
-                          className="flex items-center justify-between cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
+                          className="flex items-center justify-between cursor-pointer hover:bg-blue-50 rounded-lg p-2 transition-all duration-200 group"
                           onClick={() => toggleRoomExpansion(room.id)}
+                          title="Click to expand room details"
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-1">
