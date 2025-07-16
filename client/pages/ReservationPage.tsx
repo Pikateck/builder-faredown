@@ -57,7 +57,7 @@ export default function ReservationPage() {
     specialRequests: "",
   });
 
-  const [paymentDetails, setPaymentDetails] = useState({
+    const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: "",
     expiryMonth: "",
     expiryYear: "",
@@ -66,6 +66,7 @@ export default function ReservationPage() {
     billingAddress: "",
     billingCity: "",
     billingZip: "",
+    paymentMethod: "card", // "card" or "pay_at_hotel"
   });
 
   const [preferences, setPreferences] = useState({
@@ -79,17 +80,18 @@ export default function ReservationPage() {
     dailyHousekeeping: true,
   });
 
-  // Hotel data (would be fetched from API)
+    // Hotel data (would be fetched from API)
   const hotelData = {
     id: searchParams.get("hotelId") || "1",
-    name: "Grand Plaza Hotel",
+    name: searchParams.get("hotelName") || "Grand Hyatt Dubai",
     location: "Dubai, United Arab Emirates",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+    image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6",
     rating: 4.8,
     reviews: 1234,
-    roomType: searchParams.get("roomType") || "Standard Room",
-    price: parseInt(searchParams.get("price") || "179"),
+    roomType: searchParams.get("roomType") || "King Room with Skyline View",
+    price: parseInt(searchParams.get("price") || "8200"),
     amenities: ["Free WiFi", "Pool", "Gym", "Spa", "Restaurant", "Parking"],
+    isBargained: searchParams.get("bargained") === "true",
   };
 
   // Booking details
@@ -101,13 +103,23 @@ export default function ReservationPage() {
   const guests = parseInt(searchParams.get("guests") || "2");
   const rooms = parseInt(searchParams.get("rooms") || "1");
 
-  // Calculate pricing
+    // Calculate pricing
   const checkInDate = new Date(checkIn);
   const checkOutDate = new Date(checkOut);
   const nights = Math.ceil(
     (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
   );
-  const pricing = calculateTotalPrice(hotelData.price, nights, rooms);
+
+  // If price came from bargain, use it directly as total price, otherwise calculate
+  const pricing = hotelData.isBargained
+    ? {
+        basePrice: hotelData.price - Math.round(hotelData.price * 0.18), // Remove taxes to show breakdown
+        taxes: Math.round(hotelData.price * 0.12),
+        fees: Math.round(hotelData.price * 0.06),
+        total: hotelData.price,
+        perNightPrice: Math.round(hotelData.price / nights),
+      }
+    : calculateTotalPrice(hotelData.price, nights, rooms);
 
   // Add-on services pricing
   const addOnPricing = {
@@ -163,7 +175,7 @@ export default function ReservationPage() {
     );
   };
 
-  const isStepValid = () => {
+    const isStepValid = () => {
     switch (currentStep) {
       case 1:
         return (
@@ -175,6 +187,9 @@ export default function ReservationPage() {
       case 2:
         return true; // Preferences are optional
       case 3:
+        if (paymentDetails.paymentMethod === "pay_at_hotel") {
+          return true; // No card details required for pay at hotel
+        }
         return (
           paymentDetails.cardNumber &&
           paymentDetails.expiryMonth &&
@@ -565,7 +580,7 @@ export default function ReservationPage() {
                   </div>
                 )}
 
-                {/* Step 3: Payment */}
+                                {/* Step 3: Payment */}
                 {currentStep === 3 && (
                   <div className="space-y-6">
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -579,6 +594,56 @@ export default function ReservationPage() {
                         Your payment information is protected with 256-bit SSL
                         encryption
                       </p>
+                    </div>
+
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">
+                        Payment Method
+                      </Label>
+                      <div className="space-y-3">
+                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300">
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="card"
+                            checked={paymentDetails.paymentMethod === "card"}
+                            onChange={(e) =>
+                              setPaymentDetails((prev) => ({
+                                ...prev,
+                                paymentMethod: e.target.value,
+                              }))
+                            }
+                            className="mr-3"
+                          />
+                          <div className="flex items-center">
+                            <CreditCard className="w-5 h-5 mr-2 text-gray-600" />
+                            <span>Pay Now with Card</span>
+                          </div>
+                        </label>
+
+                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300">
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="pay_at_hotel"
+                            checked={paymentDetails.paymentMethod === "pay_at_hotel"}
+                            onChange={(e) =>
+                              setPaymentDetails((prev) => ({
+                                ...prev,
+                                paymentMethod: e.target.value,
+                              }))
+                            }
+                            className="mr-3"
+                          />
+                          <div className="flex items-center">
+                            <MapPin className="w-5 h-5 mr-2 text-gray-600" />
+                            <div>
+                              <div>Pay at Hotel</div>
+                              <div className="text-xs text-gray-500">Pay during check-in</div>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
                     </div>
 
                     <div>
@@ -667,7 +732,7 @@ export default function ReservationPage() {
                       </div>
                     </div>
 
-                    <div>
+                                        <div>
                       <Label htmlFor="cardholderName">Cardholder Name *</Label>
                       <Input
                         id="cardholderName"
@@ -681,6 +746,7 @@ export default function ReservationPage() {
                         placeholder="Name as it appears on card"
                       />
                     </div>
+                    )}
                   </div>
                 )}
 
@@ -818,13 +884,20 @@ export default function ReservationPage() {
                   )}
                 </div>
 
-                <div className="border-t border-gray-200 pt-4">
+                                <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">Total</span>
                     <span className="text-xl font-bold text-blue-600">
                       {formatPriceWithSymbol(finalTotal, selectedCurrency.code)}
                     </span>
                   </div>
+                  {hotelData.isBargained && (
+                    <div className="bg-green-50 p-2 rounded mt-2">
+                      <div className="text-xs text-green-700 font-medium">
+                        ✅ Bargained Price Applied!
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="bg-green-50 p-3 rounded-lg border border-green-200">
