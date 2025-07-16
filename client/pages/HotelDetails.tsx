@@ -303,12 +303,12 @@ export default function HotelDetails() {
         <div className="flex-1">
           {/* Tab Navigation */}
           <div className="bg-white border-b border-gray-200">
-            <div className="flex">
+            <div className="flex overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-6 py-3 text-sm font-medium border-b-2 ${
+                  className={`px-4 lg:px-6 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${
                     activeTab === tab.id
                       ? "border-blue-700 text-blue-700"
                       : "border-transparent text-gray-500 hover:text-gray-700"
