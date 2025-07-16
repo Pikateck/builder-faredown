@@ -709,14 +709,9 @@ export default function HotelDetails() {
                                   </Button>
                                 </div>
 
-                                <div className="mt-1 space-y-1">
-                                  <div className="flex items-center text-xs text-gray-600">
-                                    <span>
-                                      🏨 Pay at hotel • No prepayment needed
-                                    </span>
-                                  </div>
+                                <div className="mt-1">
                                   <div className="text-xs text-gray-600">
-                                    Free cancellation
+                                    🏨 Pay at hotel • Free cancellation
                                   </div>
                                 </div>
                               </div>
