@@ -506,21 +506,24 @@ export default function HotelDetails() {
                           onClick={() => toggleRoomExpansion(room.id)}
                         >
                           <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-base">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="font-semibold text-base text-gray-900">
                                 {room.name}
                               </h3>
                               {room.status && (
                                 <Badge
                                   className={`${
                                     room.statusColor === "green"
-                                      ? "bg-green-100 text-green-800"
-                                      : "bg-yellow-500 text-yellow-900"
-                                  } text-xs font-semibold`}
+                                      ? "bg-green-100 text-green-800 border border-green-200"
+                                      : "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                                  } text-xs font-medium px-2 py-1`}
                                 >
                                   {room.status}
                                 </Badge>
                               )}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              {room.type} • {room.details}
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
