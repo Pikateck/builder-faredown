@@ -34,7 +34,8 @@ export default function HotelDetails() {
     id: parseInt(hotelId || "3"),
     name: "Grand Hyatt Dubai",
     location: "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6?format=webp&width=800",
     rating: 4.5,
     reviews: 1247,
     checkIn: "01-Aug-2025",
@@ -1314,7 +1315,7 @@ export default function HotelDetails() {
                       Street View
                     </Button>
                     <p className="text-sm text-gray-600 mt-2">
-                      <span className="text-green-600">●●���●</span> Live Street
+                      <span className="text-green-600">●●●●</span> Live Street
                       View
                     </p>
                   </div>
