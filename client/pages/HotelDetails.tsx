@@ -255,6 +255,99 @@ export default function HotelDetails() {
               </div>
             </div>
 
+            {/* Property Type */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Property Type
+              </label>
+              <div className="space-y-2">
+                {[
+                  { name: "Hotels", count: 2156 },
+                  { name: "Apartments", count: 5176 },
+                  { name: "Resorts", count: 89 },
+                  { name: "Villas", count: 234 },
+                  { name: "Guest Houses", count: 145 },
+                ].map((filter, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <label className="flex items-center flex-1">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Facilities */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Facilities
+              </label>
+              <div className="space-y-2">
+                {[
+                  { name: "Swimming Pool", count: 892 },
+                  { name: "Free WiFi", count: 3421 },
+                  { name: "Gym/Fitness Center", count: 567 },
+                  { name: "Spa", count: 234 },
+                  { name: "Business Center", count: 445 },
+                  { name: "Pet Friendly", count: 123 },
+                ].map((filter, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <label className="flex items-center flex-1">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Meal Options */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meal Options
+              </label>
+              <div className="space-y-2">
+                {[
+                  { name: "Breakfast included", count: 624 },
+                  { name: "Half Board", count: 156 },
+                  { name: "Full Board", count: 89 },
+                  { name: "All Inclusive", count: 234 },
+                ].map((filter, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <label className="flex items-center flex-1">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">
+                        {filter.name}
+                      </span>
+                    </label>
+                    <span className="text-sm text-gray-500">
+                      {filter.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Star Rating */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
