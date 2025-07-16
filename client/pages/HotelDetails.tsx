@@ -558,7 +558,19 @@ export default function HotelDetails() {
                                 </div>
                               )}
                           </div>
-                                                    <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+                                                                              <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+                            <button
+                              onClick={() => toggleRoomExpansion(room.id)}
+                              className="p-1 hover:bg-gray-100 rounded flex-shrink-0"
+                            >
+                              <ChevronDown
+                                className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+                                  expandedRoom === room.id ? "rotate-180" : ""
+                                }`}
+                              />
+                            </button>
+                          </div>
+                        </div>
                           <button
                             onClick={() => toggleRoomExpansion(room.id)}
                             className="ml-4 p-1"
