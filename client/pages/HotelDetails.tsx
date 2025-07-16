@@ -858,9 +858,60 @@ export default function HotelDetails() {
                     See availability
                   </button>
                 </div>
-                <p className="text-blue-600 mb-6 font-medium">
-                  Great facilities! Review score: 9
-                </p>
+                {/* Most popular facilities */}
+                <div className="mb-8">
+                  <h3 className="font-semibold text-base mb-4">
+                    Most popular facilities
+                  </h3>
+                  <div className="flex flex-wrap gap-6">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-lg">🏊</span>
+                      <span className="text-gray-700">2 swimming pools</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-lg">💪</span>
+                      <span className="text-gray-700">Fitness centre</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-lg">🚭</span>
+                      <span className="text-gray-700">Non-smoking rooms</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-lg">🍽️</span>
+                      <span className="text-gray-700">17 restaurants</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-lg">💆</span>
+                      <span className="text-gray-700">
+                        Spa and wellness centre
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-lg">🏨</span>
+                      <span className="text-gray-700">Room service</span>
+                    </div>
+                  </div>
+                  <div className="mt-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 flex-wrap">
+                      <span className="flex items-center gap-1">
+                        <span>🍽️</span>
+                        <span>Tea/Coffee Maker on All Rooms</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span>🚗</span>
+                        <span>Car</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span>🍳</span>
+                        <span>Excellent Breakfast</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span>📶</span>
+                        <span>Free WiFi available on request</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
                 {/* Most Popular Facilities */}
                 <div className="mb-8">
