@@ -886,12 +886,25 @@ export default function HotelDetails() {
                 <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl mb-2">🌍</div>
-                    <div className="text-gray-600">Google Street View</div>
-                    <div className="text-sm text-gray-500 mt-1">
+                    <div className="text-gray-600 font-semibold">
+                      Google Street View
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1 mb-3">
                       Interactive street view of the hotel location
                     </div>
-                    <Button className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
-                      Launch Street View
+                    <div className="text-xs text-gray-400 bg-gray-200 px-3 py-1 rounded mb-3">
+                      Click below to open Street View in Google Maps
+                    </div>
+                    <Button
+                      onClick={() => {
+                        window.open(
+                          `https://www.google.com/maps/@25.2048,55.2708,3a,75y,210h,90t/data=!3m6!1e1!3m4!1sAF1QipO8EibS-hL-yfA-v8sVtSxBJBn2J8bv1U_7UW-9!2e10!7i5760!8i2880`,
+                          "_blank",
+                        );
+                      }}
+                      className="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+                    >
+                      🌐 Open Street View in Google Maps
                     </Button>
                   </div>
                 </div>
