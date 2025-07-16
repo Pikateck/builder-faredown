@@ -750,16 +750,24 @@ export default function HotelDetails() {
                                   </Button>
                                 </div>
 
-                                <div className="mt-4 space-y-1">
-                                  <div className="flex items-center text-xs text-gray-600">
-                                    <span className="mr-1">🏨</span>
-                                    <span>
-                                      Pay at hotel • No prepayment needed
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center text-xs text-gray-600">
-                                    <span className="mr-1">✅</span>
-                                    <span>Free cancellation</span>
+                                <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3">
+                                  <div className="space-y-2">
+                                    <div className="flex items-center text-xs text-green-700">
+                                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                        <span className="text-xs">🏨</span>
+                                      </div>
+                                      <span className="font-medium">
+                                        Pay at hotel • No prepayment needed
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center text-xs text-green-700">
+                                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                        <span className="text-xs">✅</span>
+                                      </div>
+                                      <span className="font-medium">
+                                        Free cancellation
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -816,7 +824,7 @@ export default function HotelDetails() {
                       <h3 className="font-semibold text-lg">Entertainment</h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-600">
-                      <li>• TV Lounge</li>
+                      <li>�� TV Lounge</li>
                       <li>• Outdoor Freshwater pool</li>
                       <li>• Hotel</li>
                       <li>• American Express</li>
