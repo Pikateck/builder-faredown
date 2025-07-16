@@ -321,7 +321,7 @@ export default function HotelDetails() {
           </div>
 
           {/* Main Content */}
-          <div className="p-4">
+          <div className="p-2 lg:p-4">
             {activeTab === "overview" && (
               <>
                 {/* Hotel Header with Large Image */}
