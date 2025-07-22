@@ -100,9 +100,7 @@ export default function AdminTestButton({
     window.open('/admin/dashboard', '_blank');
   };
 
-  const openBargainTest = () => {
-    window.open('/test-bargain-system', '_blank');
-  };
+
 
   const openApiDocs = () => {
     const isLocalhost = window.location.hostname === 'localhost' ||
@@ -195,16 +193,6 @@ export default function AdminTestButton({
           <ExternalLink className="w-3 h-3" />
         </button>
         
-        <button
-          className="flex items-center justify-between w-full text-white py-3 px-2 rounded bg-purple-500 hover:bg-purple-600 border-b border-purple-600"
-          onClick={openBargainTest}
-        >
-          <div className="flex items-center space-x-2">
-            <TestTube className="w-4 h-4" />
-            <span>Bargain Test System</span>
-          </div>
-          <ExternalLink className="w-3 h-3" />
-        </button>
         
         <div className="flex items-center justify-between w-full text-white py-2 px-2">
           <div className="flex items-center space-x-2">
@@ -271,16 +259,7 @@ export default function AdminTestButton({
           <ExternalLink className="w-3 h-3" />
         </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={openBargainTest}>
-          <TestTube className="w-4 h-4 mr-2" />
-          <div className="flex-1">
-            <div className="font-medium">Bargain Test System</div>
-            <div className="text-xs text-gray-500">Test flights & hotels scenarios</div>
-          </div>
-          <ExternalLink className="w-3 h-3" />
-        </DropdownMenuItem>
 
-        <DropdownMenuSeparator />
 
         <div className="px-3 py-2">
           <div className="text-xs font-medium text-gray-600 mb-2">Quick API Tests</div>
@@ -331,36 +310,7 @@ export default function AdminTestButton({
           </div>
         </div>
 
-        <DropdownMenuSeparator />
 
-        <div className="px-3 py-2">
-          <div className="text-xs font-medium text-gray-600 mb-2">Test Scenarios</div>
-          <div className="space-y-1">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full justify-start h-8 text-xs"
-              onClick={() => {
-                window.open('/test-bargain-system?tab=flights&scenario=flight_1', '_blank');
-              }}
-            >
-              <Plane className="w-3 h-3 mr-2" />
-              Mumbai → Dubai Flight
-            </Button>
-            
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full justify-start h-8 text-xs"
-              onClick={() => {
-                window.open('/test-bargain-system?tab=hotels&scenario=hotel_1', '_blank');
-              }}
-            >
-              <Building className="w-3 h-3 mr-2" />
-              Atlantis Hotel Dubai
-            </Button>
-          </div>
-        </div>
 
         {apiStatus === 'offline' && (
           <div className="px-3 py-2 bg-yellow-50 border-t">
