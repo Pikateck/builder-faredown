@@ -183,53 +183,53 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
+        <Card className="admin-card">
+          <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                <p className="text-2xl font-bold text-gray-900">{mockStats.totalBookings.toLocaleString()}</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">{mockStats.totalBookings.toLocaleString()}</p>
               </div>
-              <BookOpen className="w-8 h-8 text-blue-600" />
+              <BookOpen className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
             </div>
             <p className="text-xs text-green-600 mt-2">↗ +{mockStats.monthlyGrowth}% from last month</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="admin-card">
+          <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">₹{mockStats.totalRevenue.toLocaleString()}</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">₹{mockStats.totalRevenue.toLocaleString()}</p>
               </div>
-              <DollarSign className="w-8 h-8 text-green-600" />
+              <DollarSign className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
             </div>
             <p className="text-xs text-green-600 mt-2">↗ +15.3% from last month</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="admin-card">
+          <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Success Rate</p>
-                <p className="text-2xl font-bold text-gray-900">{mockStats.successRate}%</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">{mockStats.successRate}%</p>
               </div>
-              <Target className="w-8 h-8 text-purple-600" />
+              <Target className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
             </div>
             <p className="text-xs text-green-600 mt-2">↗ +2.1% improvement</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-6">
+        <Card className="admin-card">
+          <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Rewards Issued</p>
-                <p className="text-2xl font-bold text-gray-900">₹{mockStats.rewardsIssued.toLocaleString()}</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">₹{mockStats.rewardsIssued.toLocaleString()}</p>
               </div>
-              <Award className="w-8 h-8 text-yellow-600" />
+              <Award className="w-6 h-6 lg:w-8 lg:h-8 text-yellow-600" />
             </div>
             <p className="text-xs text-blue-600 mt-2">Weekly total</p>
           </CardContent>
