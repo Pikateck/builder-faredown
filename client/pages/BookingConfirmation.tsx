@@ -53,17 +53,36 @@ export default function BookingConfirmation() {
   };
 
   useEffect(() => {
-    // Load booking data from localStorage - check for flight bookings first
+    // Load booking data from localStorage
     const savedFlightBooking = localStorage.getItem("latestBooking");
     const savedHotelBooking = localStorage.getItem("latestHotelBooking");
 
-    // Check URL params for booking type hints
+    // Check URL params for booking type hints - prioritize hotel booking from URL
+    const hotelId = searchParams.get("hotelId");
+    const bookingId = searchParams.get("bookingId");
+    const isHotelFlow = hotelId || (bookingId && bookingId.startsWith("HTL"));
     const isFlightFlow =
       window.location.pathname.includes("flight") ||
       searchParams.get("type") === "flight" ||
       localStorage.getItem("currentBookingType") === "flight";
 
-    if (savedFlightBooking) {
+    console.log("Booking confirmation - URL params:", {
+      hotelId,
+      bookingId,
+      isHotelFlow,
+      isFlightFlow
+    });
+
+    // If URL indicates hotel booking, prioritize hotel data
+    if (isHotelFlow && savedHotelBooking) {
+      console.log("Loading hotel booking from localStorage");
+      setBooking(JSON.parse(savedHotelBooking));
+      setBookingType("hotel");
+      return;
+    }
+
+    // If URL indicates flight booking or no hotel indicators, check flight data
+    if (savedFlightBooking && !isHotelFlow) {
       const flightData = JSON.parse(savedFlightBooking);
       // Check if this is actually flight data by looking for flight-specific fields
       if (
@@ -72,17 +91,20 @@ export default function BookingConfirmation() {
         flightData.baseFareTotal ||
         isFlightFlow
       ) {
+        console.log("Loading flight booking from localStorage");
         setBooking(flightData);
         setBookingType("flight");
         return;
       }
     }
 
+    // Fallback: check saved bookings without URL priority
     if (savedHotelBooking) {
+      console.log("Fallback: Loading hotel booking");
       setBooking(JSON.parse(savedHotelBooking));
       setBookingType("hotel");
     } else if (savedFlightBooking) {
-      // Fallback to flight booking even if detection failed
+      console.log("Fallback: Loading flight booking");
       setBooking(JSON.parse(savedFlightBooking));
       setBookingType("flight");
     } else {
