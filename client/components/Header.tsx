@@ -140,7 +140,7 @@ export function Header({ className }: HeaderProps) {
             </nav>
 
             {/* Currency Selector */}
-            <div className="relative hidden md:block">
+            <div className="relative hidden md:block currency-dropdown-container">
               <button
                 onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
                 className="flex items-center space-x-1 text-white hover:text-blue-200 text-sm px-2 py-1"
@@ -244,7 +244,7 @@ export function Header({ className }: HeaderProps) {
               </Link>
 
               {/* Mobile Currency Selector */}
-              <div className="py-2">
+              <div className="py-2 currency-dropdown-container">
                 <button
                   onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
                   className="flex items-center justify-between w-full text-white hover:text-blue-200 py-2"
