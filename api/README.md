@@ -5,11 +5,13 @@
 The Faredown Node.js API provides a comprehensive backend service for the Faredown travel booking platform, connecting the frontend to admin panel operations.
 
 ### ⚡ One-Command Start
+
 ```bash
 node start.js
 ```
 
 ### 📍 Server URLs
+
 - **Main API**: http://localhost:3001
 - **Health Check**: http://localhost:3001/health
 - **API Documentation**: http://localhost:3001/api/docs
@@ -17,6 +19,7 @@ node start.js
 ## 🎯 Features
 
 ### ✅ Complete Admin Integration
+
 - **Authentication & Authorization** - JWT-based with role permissions
 - **Admin Dashboard APIs** - Real-time statistics and analytics
 - **User Management** - CRUD operations with audit logging
@@ -28,12 +31,14 @@ node start.js
 - **Security Features** - Rate limiting, CORS, input validation
 
 ### 🔐 Authentication System
+
 - **JWT Tokens** - Secure authentication
 - **Role-Based Access** - Multiple user roles and permissions
 - **Session Management** - Secure session handling
 - **Password Security** - Bcrypt hashing
 
 ### 📊 Admin Features
+
 - **Real-time Dashboard** - Live statistics and KPIs
 - **Booking Analytics** - Revenue, trends, performance metrics
 - **User Analytics** - User behavior and engagement data
@@ -44,23 +49,27 @@ node start.js
 ## 🛠️ Installation
 
 ### Prerequisites
-- Node.js 16+ 
+
+- Node.js 16+
 - npm or yarn
 - Git
 
 ### Setup Steps
 
 1. **Clone or navigate to API directory**
+
    ```bash
    cd api
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Configure environment**
+
    ```bash
    # Environment file is already created with defaults
    # Edit .env file if needed
@@ -76,9 +85,10 @@ node start.js
 ## 📡 API Endpoints
 
 ### 🔑 Authentication
+
 ```
 POST   /api/auth/login              # User login
-POST   /api/auth/register           # User registration  
+POST   /api/auth/register           # User registration
 POST   /api/auth/logout             # User logout
 GET    /api/auth/me                 # Get current user
 POST   /api/auth/refresh            # Refresh token
@@ -87,6 +97,7 @@ GET    /api/auth/permissions        # Get user permissions
 ```
 
 ### 👨‍💼 Admin Dashboard
+
 ```
 GET    /api/admin/dashboard         # Dashboard overview
 GET    /api/admin/stats             # Real-time statistics
@@ -98,6 +109,7 @@ POST   /api/admin/backup            # Create backup
 ```
 
 ### 📚 Booking Management
+
 ```
 GET    /api/bookings               # List all bookings
 GET    /api/bookings/:id           # Get booking details
@@ -109,6 +121,7 @@ POST   /api/bookings/:id/resend-confirmation  # Resend confirmation
 ```
 
 ### 👥 User Management
+
 ```
 GET    /api/users                  # List users
 GET    /api/users/:id              # Get user details
@@ -120,6 +133,7 @@ POST   /api/users/:id/deactivate   # Deactivate user
 ```
 
 ### ✈️ Flight Services
+
 ```
 GET    /api/flights/search         # Search flights
 GET    /api/flights/details/:id    # Flight details
@@ -128,6 +142,7 @@ GET    /api/flights/routes         # Available routes
 ```
 
 ### 🏨 Hotel Services
+
 ```
 GET    /api/hotels/search          # Search hotels
 GET    /api/hotels/:id             # Hotel details
@@ -136,6 +151,7 @@ GET    /api/hotels/availability    # Check availability
 ```
 
 ### 💰 Bargain Engine
+
 ```
 POST   /api/bargain/initiate       # Start bargain session
 POST   /api/bargain/counter        # Submit counter offer
@@ -145,6 +161,7 @@ POST   /api/bargain/reject         # Reject offer
 ```
 
 ### 💳 Payment Processing
+
 ```
 POST   /api/payments/process       # Process payment
 GET    /api/payments/:id           # Payment details
@@ -153,6 +170,7 @@ GET    /api/payments/history       # Payment history
 ```
 
 ### 🎟️ Promo Codes
+
 ```
 GET    /api/promo/codes            # List promo codes
 POST   /api/promo/validate         # Validate promo code
@@ -161,6 +179,7 @@ POST   /api/promo/create           # Create promo code
 ```
 
 ### 💱 Currency Services
+
 ```
 GET    /api/currency/rates         # Get exchange rates
 POST   /api/currency/convert       # Convert currency
@@ -168,6 +187,7 @@ GET    /api/currency/supported     # Supported currencies
 ```
 
 ### 📝 Content Management
+
 ```
 GET    /api/cms/content            # List content
 POST   /api/cms/content            # Create content
@@ -179,6 +199,7 @@ POST   /api/cms/publish/:id        # Publish content
 ## 🔐 Authentication & Authorization
 
 ### Test Credentials
+
 ```javascript
 // Super Admin
 {
@@ -189,7 +210,7 @@ POST   /api/cms/publish/:id        # Publish content
 
 // Sales Manager
 {
-  username: "sales", 
+  username: "sales",
   password: "sales123",
   role: "sales_manager"
 }
@@ -197,31 +218,33 @@ POST   /api/cms/publish/:id        # Publish content
 // Support Agent
 {
   username: "support",
-  password: "support123", 
+  password: "support123",
   role: "support"
 }
 ```
 
 ### Using JWT Tokens
+
 ```javascript
 // Login to get token
-const response = await fetch('/api/auth/login', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ username: 'admin', password: 'admin123' })
+const response = await fetch("/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ username: "admin", password: "admin123" }),
 });
 
 const { token } = await response.json();
 
 // Use token in subsequent requests
-const authResponse = await fetch('/api/admin/dashboard', {
-  headers: { 'Authorization': `Bearer ${token}` }
+const authResponse = await fetch("/api/admin/dashboard", {
+  headers: { Authorization: `Bearer ${token}` },
 });
 ```
 
 ## 🎛️ Configuration
 
 ### Environment Variables
+
 Key configuration options in `.env`:
 
 ```env
@@ -249,6 +272,7 @@ ENABLE_REAL_TIME_UPDATES=true
 ## 📊 Admin Dashboard Integration
 
 ### Real-time Statistics
+
 The API provides real-time data for the admin dashboard:
 
 ```javascript
@@ -270,6 +294,7 @@ GET /api/admin/dashboard
 ```
 
 ### Analytics & Reporting
+
 ```javascript
 // Get analytics data
 GET /api/admin/analytics?startDate=2025-01-01&endDate=2025-01-31
@@ -281,6 +306,7 @@ GET /api/admin/reports?type=financial&format=json
 ## 🔍 Monitoring & Logging
 
 ### Health Checks
+
 ```bash
 curl http://localhost:3001/health
 
@@ -298,6 +324,7 @@ curl http://localhost:3001/health
 ```
 
 ### Audit Logging
+
 All admin actions are automatically logged:
 
 ```javascript
@@ -311,6 +338,7 @@ GET /api/admin/audit?userId=admin&actionType=USER_CREATE
 ## 🚨 Error Handling
 
 ### Standard Error Response
+
 ```javascript
 {
   "success": false,
@@ -321,6 +349,7 @@ GET /api/admin/audit?userId=admin&actionType=USER_CREATE
 ```
 
 ### HTTP Status Codes
+
 - `200` - Success
 - `201` - Created
 - `400` - Bad Request / Validation Error
@@ -333,15 +362,18 @@ GET /api/admin/audit?userId=admin&actionType=USER_CREATE
 ## 🔒 Security Features
 
 ### Rate Limiting
+
 - **General API**: 100 requests/15 minutes per IP
 - **Auth endpoints**: 5 requests/15 minutes per IP
 
 ### Input Validation
+
 - **Joi schemas** for request validation
 - **XSS protection** via input sanitization
 - **SQL injection prevention** via parameterized queries
 
 ### Security Headers
+
 - **Helmet.js** for security headers
 - **CORS** protection
 - **JWT** secure token handling
@@ -349,6 +381,7 @@ GET /api/admin/audit?userId=admin&actionType=USER_CREATE
 ## 🧪 Testing
 
 ### Manual Testing
+
 ```bash
 # Test health endpoint
 curl http://localhost:3001/health
@@ -364,7 +397,9 @@ curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
 ```
 
 ### Frontend Integration Testing
+
 Use the frontend's backend test dashboard:
+
 ```
 https://your-frontend-domain.com/backend-test
 ```
@@ -372,6 +407,7 @@ https://your-frontend-domain.com/backend-test
 ## 📦 Dependencies
 
 ### Core Dependencies
+
 - **express** - Web framework
 - **jsonwebtoken** - JWT authentication
 - **bcryptjs** - Password hashing
@@ -382,7 +418,8 @@ https://your-frontend-domain.com/backend-test
 - **winston** - Logging
 - **dotenv** - Environment management
 
-### Development Dependencies  
+### Development Dependencies
+
 - **nodemon** - Auto-reload during development
 - **jest** - Testing framework
 - **eslint** - Code linting
@@ -390,16 +427,19 @@ https://your-frontend-domain.com/backend-test
 ## 🚀 Deployment
 
 ### Development
+
 ```bash
 npm run dev
 ```
 
 ### Production
+
 ```bash
 npm start
 ```
 
 ### Docker
+
 ```bash
 # Build image
 docker build -t faredown-api .
@@ -409,6 +449,7 @@ docker run -p 3001:3001 faredown-api
 ```
 
 ### Environment Setup
+
 1. Copy `.env.example` to `.env`
 2. Update configuration values
 3. Set production secrets
@@ -418,16 +459,19 @@ docker run -p 3001:3001 faredown-api
 ## 📞 Support & Documentation
 
 ### API Documentation
+
 - Interactive docs available at `/api/docs` (when running)
 - Postman collection available
 - OpenAPI/Swagger specification included
 
 ### Logging
+
 - Application logs in `./logs/` directory
 - Audit logs for security and compliance
 - Error tracking and monitoring
 
 ### Monitoring
+
 - Health check endpoint for monitoring
 - Performance metrics available
 - System status dashboard
@@ -437,6 +481,7 @@ docker run -p 3001:3001 faredown-api
 This API is designed to work seamlessly with the Faredown React frontend:
 
 ### Update Frontend API URL
+
 ```javascript
 // In frontend .env
 VITE_API_BASE_URL=http://localhost:3001
@@ -445,6 +490,7 @@ VITE_API_BASE_URL=http://localhost:3001
 ```
 
 ### Test Integration
+
 Use the frontend backend test panel at `/backend-test` to verify all endpoints.
 
 ---
@@ -454,6 +500,7 @@ Use the frontend backend test panel at `/backend-test` to verify all endpoints.
 Your Faredown Node.js API is now ready to power the admin panel and frontend operations!
 
 ### 📞 Quick Support
+
 - Check logs in `./logs/` for errors
 - Use health check endpoint for status
 - Test with provided credentials

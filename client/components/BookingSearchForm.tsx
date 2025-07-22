@@ -40,7 +40,9 @@ export function BookingSearchForm() {
   const [destination, setDestination] = useState("Dubai");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(new Date());
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(addDays(new Date(), 3));
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
+    addDays(new Date(), 3),
+  );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
@@ -80,10 +82,18 @@ export function BookingSearchForm() {
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
   const handleSearch = () => {
-    console.log("Search button clicked", { destination, checkInDate, checkOutDate });
+    console.log("Search button clicked", {
+      destination,
+      checkInDate,
+      checkOutDate,
+    });
 
     if (!destination || !checkInDate || !checkOutDate) {
-      console.log("Missing required fields:", { destination, checkInDate, checkOutDate });
+      console.log("Missing required fields:", {
+        destination,
+        checkInDate,
+        checkOutDate,
+      });
       return;
     }
 
@@ -481,7 +491,11 @@ export function BookingSearchForm() {
             onClick={handleSearch}
             className="h-10 sm:h-12 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
             disabled={!destination || !checkInDate || !checkOutDate}
-            title={(!destination || !checkInDate || !checkOutDate) ? "Please fill in all required fields" : "Search hotels"}
+            title={
+              !destination || !checkInDate || !checkOutDate
+                ? "Please fill in all required fields"
+                : "Search hotels"
+            }
           >
             <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             <span className="text-sm sm:text-base">Search</span>

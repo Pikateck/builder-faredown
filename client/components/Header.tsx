@@ -78,15 +78,15 @@ export function Header({ className }: HeaderProps) {
     const handleClickOutside = (event: MouseEvent) => {
       if (showCurrencyDropdown) {
         const target = event.target as HTMLElement;
-        if (!target.closest('.currency-dropdown-container')) {
+        if (!target.closest(".currency-dropdown-container")) {
           setShowCurrencyDropdown(false);
         }
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showCurrencyDropdown]);
 

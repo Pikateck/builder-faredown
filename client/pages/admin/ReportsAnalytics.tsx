@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -27,15 +27,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   BarChart3,
   PieChart,
@@ -71,21 +71,21 @@ import {
   CreditCard,
   Percent,
   Hash,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface BookingReport {
   id: string;
   bookingReference: string;
   customerName: string;
   customerEmail: string;
-  serviceType: 'flight' | 'hotel';
+  serviceType: "flight" | "hotel";
   bookingDate: string;
   travelDate: string;
   amount: number;
   commission: number;
   tax: number;
   netAmount: number;
-  status: 'confirmed' | 'cancelled' | 'pending' | 'refunded';
+  status: "confirmed" | "cancelled" | "pending" | "refunded";
   paymentMethod: string;
   currency: string;
   origin?: string;
@@ -98,10 +98,10 @@ interface TransactionLog {
   id: string;
   transactionDate: string;
   referenceNumber: string;
-  transactionType: 'booking' | 'refund' | 'cancellation' | 'modification';
+  transactionType: "booking" | "refund" | "cancellation" | "modification";
   amount: number;
   description: string;
-  status: 'success' | 'failed' | 'pending';
+  status: "success" | "failed" | "pending";
 }
 
 interface Analytics {
@@ -119,167 +119,174 @@ interface Analytics {
 // Mock data
 const mockBookingReports: BookingReport[] = [
   {
-    id: '1',
-    bookingReference: 'FD001234',
-    customerName: 'John Doe',
-    customerEmail: 'john.doe@example.com',
-    serviceType: 'flight',
-    bookingDate: '2024-01-20T10:30:00Z',
-    travelDate: '2024-02-15T08:00:00Z',
+    id: "1",
+    bookingReference: "FD001234",
+    customerName: "John Doe",
+    customerEmail: "john.doe@example.com",
+    serviceType: "flight",
+    bookingDate: "2024-01-20T10:30:00Z",
+    travelDate: "2024-02-15T08:00:00Z",
     amount: 25890,
-    commission: 1294.50,
-    tax: 4660.20,
-    netAmount: 19935.30,
-    status: 'confirmed',
-    paymentMethod: 'Credit Card',
-    currency: 'INR',
-    origin: 'BOM',
-    destination: 'DXB'
+    commission: 1294.5,
+    tax: 4660.2,
+    netAmount: 19935.3,
+    status: "confirmed",
+    paymentMethod: "Credit Card",
+    currency: "INR",
+    origin: "BOM",
+    destination: "DXB",
   },
   {
-    id: '2',
-    bookingReference: 'HD002567',
-    customerName: 'Jane Smith',
-    customerEmail: 'jane.smith@example.com',
-    serviceType: 'hotel',
-    bookingDate: '2024-01-19T14:45:00Z',
-    travelDate: '2024-02-10T15:00:00Z',
+    id: "2",
+    bookingReference: "HD002567",
+    customerName: "Jane Smith",
+    customerEmail: "jane.smith@example.com",
+    serviceType: "hotel",
+    bookingDate: "2024-01-19T14:45:00Z",
+    travelDate: "2024-02-10T15:00:00Z",
     amount: 18500,
-    commission: 925.00,
-    tax: 3330.00,
-    netAmount: 14245.00,
-    status: 'confirmed',
-    paymentMethod: 'Debit Card',
-    currency: 'INR',
-    hotelName: 'Taj Hotel',
-    city: 'Mumbai'
+    commission: 925.0,
+    tax: 3330.0,
+    netAmount: 14245.0,
+    status: "confirmed",
+    paymentMethod: "Debit Card",
+    currency: "INR",
+    hotelName: "Taj Hotel",
+    city: "Mumbai",
   },
   {
-    id: '3',
-    bookingReference: 'FD003891',
-    customerName: 'Mike Johnson',
-    customerEmail: 'mike.johnson@example.com',
-    serviceType: 'flight',
-    bookingDate: '2024-01-18T09:15:00Z',
-    travelDate: '2024-03-05T12:30:00Z',
+    id: "3",
+    bookingReference: "FD003891",
+    customerName: "Mike Johnson",
+    customerEmail: "mike.johnson@example.com",
+    serviceType: "flight",
+    bookingDate: "2024-01-18T09:15:00Z",
+    travelDate: "2024-03-05T12:30:00Z",
     amount: 45200,
-    commission: 2260.00,
-    tax: 8136.00,
-    netAmount: 34804.00,
-    status: 'confirmed',
-    paymentMethod: 'Credit Card',
-    currency: 'INR',
-    origin: 'DEL',
-    destination: 'LHR'
-  }
+    commission: 2260.0,
+    tax: 8136.0,
+    netAmount: 34804.0,
+    status: "confirmed",
+    paymentMethod: "Credit Card",
+    currency: "INR",
+    origin: "DEL",
+    destination: "LHR",
+  },
 ];
 
 const mockTransactionLogs: TransactionLog[] = [
   {
-    id: '1',
-    transactionDate: '2024-01-20T10:30:00Z',
-    referenceNumber: 'TXN-001234',
-    transactionType: 'booking',
+    id: "1",
+    transactionDate: "2024-01-20T10:30:00Z",
+    referenceNumber: "TXN-001234",
+    transactionType: "booking",
     amount: 25890,
-    description: 'Flight booking - Mumbai to Dubai',
-    status: 'success'
+    description: "Flight booking - Mumbai to Dubai",
+    status: "success",
   },
   {
-    id: '2',
-    transactionDate: '2024-01-19T14:45:00Z',
-    referenceNumber: 'TXN-002567',
-    transactionType: 'booking',
+    id: "2",
+    transactionDate: "2024-01-19T14:45:00Z",
+    referenceNumber: "TXN-002567",
+    transactionType: "booking",
     amount: 18500,
-    description: 'Hotel booking - Taj Hotel Mumbai',
-    status: 'success'
+    description: "Hotel booking - Taj Hotel Mumbai",
+    status: "success",
   },
   {
-    id: '3',
-    transactionDate: '2024-01-18T16:20:00Z',
-    referenceNumber: 'TXN-003891',
-    transactionType: 'refund',
+    id: "3",
+    transactionDate: "2024-01-18T16:20:00Z",
+    referenceNumber: "TXN-003891",
+    transactionType: "refund",
     amount: -5200,
-    description: 'Refund processed for cancelled booking',
-    status: 'success'
-  }
+    description: "Refund processed for cancelled booking",
+    status: "success",
+  },
 ];
 
 const mockAnalytics: Analytics = {
   totalBookings: 1247,
   totalRevenue: 2847392,
-  totalCommission: 142369.60,
+  totalCommission: 142369.6,
   flightBookings: 728,
   hotelBookings: 519,
   averageBookingValue: 22845,
   conversionRate: 3.2,
   repeatCustomers: 156,
-  monthlyGrowth: 12.5
+  monthlyGrowth: 12.5,
 };
 
 // Chart data for analytics
 const monthlySearchHits = [
-  { month: 'Jan', hits: 850 },
-  { month: 'Feb', hits: 920 },
-  { month: 'Mar', hits: 1100 },
-  { month: 'Apr', hits: 980 },
-  { month: 'May', hits: 1250 },
-  { month: 'Jun', hits: 1180 },
-  { month: 'Jul', hits: 1350 },
-  { month: 'Aug', hits: 1200 },
-  { month: 'Sep', hits: 1400 },
-  { month: 'Oct', hits: 1320 },
-  { month: 'Nov', hits: 1450 },
-  { month: 'Dec', hits: 1380 }
+  { month: "Jan", hits: 850 },
+  { month: "Feb", hits: 920 },
+  { month: "Mar", hits: 1100 },
+  { month: "Apr", hits: 980 },
+  { month: "May", hits: 1250 },
+  { month: "Jun", hits: 1180 },
+  { month: "Jul", hits: 1350 },
+  { month: "Aug", hits: 1200 },
+  { month: "Sep", hits: 1400 },
+  { month: "Oct", hits: 1320 },
+  { month: "Nov", hits: 1450 },
+  { month: "Dec", hits: 1380 },
 ];
 
 const topFlightDestinations = [
-  { destination: 'Dubai', bookings: 450 },
-  { destination: 'Singapore', bookings: 380 },
-  { destination: 'London', bookings: 320 },
-  { destination: 'Bangkok', bookings: 280 },
-  { destination: 'New York', bookings: 250 },
-  { destination: 'Paris', bookings: 220 },
+  { destination: "Dubai", bookings: 450 },
+  { destination: "Singapore", bookings: 380 },
+  { destination: "London", bookings: 320 },
+  { destination: "Bangkok", bookings: 280 },
+  { destination: "New York", bookings: 250 },
+  { destination: "Paris", bookings: 220 },
 ];
 
 const topHotelDestinations = [
-  { destination: 'Mumbai', bookings: 280 },
-  { destination: 'Delhi', bookings: 240 },
-  { destination: 'Goa', bookings: 180 },
-  { destination: 'Bangalore', bookings: 160 },
-  { destination: 'Dubai', bookings: 140 },
-  { destination: 'Singapore', bookings: 120 },
+  { destination: "Mumbai", bookings: 280 },
+  { destination: "Delhi", bookings: 240 },
+  { destination: "Goa", bookings: 180 },
+  { destination: "Bangalore", bookings: 160 },
+  { destination: "Dubai", bookings: 140 },
+  { destination: "Singapore", bookings: 120 },
 ];
 
 export default function ReportsAnalytics() {
-  const [bookingReports, setBookingReports] = useState<BookingReport[]>(mockBookingReports);
-  const [transactionLogs, setTransactionLogs] = useState<TransactionLog[]>(mockTransactionLogs);
+  const [bookingReports, setBookingReports] =
+    useState<BookingReport[]>(mockBookingReports);
+  const [transactionLogs, setTransactionLogs] =
+    useState<TransactionLog[]>(mockTransactionLogs);
   const [analytics, setAnalytics] = useState<Analytics>(mockAnalytics);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedServiceType, setSelectedServiceType] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [selectedDateRange, setSelectedDateRange] = useState<string>('all');
-  const [activeTab, setActiveTab] = useState('audit');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedServiceType, setSelectedServiceType] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedDateRange, setSelectedDateRange] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState("audit");
   const [isLoading, setIsLoading] = useState(false);
 
   // Filter booking reports
-  const filteredBookingReports = bookingReports.filter(report => {
-    const matchesSearch = 
-      report.bookingReference.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredBookingReports = bookingReports.filter((report) => {
+    const matchesSearch =
+      report.bookingReference
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       report.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       report.customerEmail.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesServiceType = selectedServiceType === 'all' || report.serviceType === selectedServiceType;
-    const matchesStatus = selectedStatus === 'all' || report.status === selectedStatus;
-    
+
+    const matchesServiceType =
+      selectedServiceType === "all" ||
+      report.serviceType === selectedServiceType;
+    const matchesStatus =
+      selectedStatus === "all" || report.status === selectedStatus;
+
     return matchesSearch && matchesServiceType && matchesStatus;
   });
 
   // Filter transaction logs
-  const filteredTransactionLogs = transactionLogs.filter(log => {
-    const matchesSearch = 
+  const filteredTransactionLogs = transactionLogs.filter((log) => {
+    const matchesSearch =
       log.referenceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesSearch;
   });
 
@@ -298,19 +305,19 @@ export default function ReportsAnalytics() {
 
   const StatusBadge = ({ status }: { status: string }) => {
     const statusConfig: Record<string, { color: string; icon: any }> = {
-      confirmed: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock },
-      cancelled: { color: 'bg-red-100 text-red-800', icon: AlertCircle },
-      refunded: { color: 'bg-blue-100 text-blue-800', icon: RefreshCw },
-      success: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
-      failed: { color: 'bg-red-100 text-red-800', icon: AlertCircle },
+      confirmed: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+      pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
+      cancelled: { color: "bg-red-100 text-red-800", icon: AlertCircle },
+      refunded: { color: "bg-blue-100 text-blue-800", icon: RefreshCw },
+      success: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+      failed: { color: "bg-red-100 text-red-800", icon: AlertCircle },
     };
-    
+
     const config = statusConfig[status];
     if (!config) return null;
-    
+
     const Icon = config.icon;
-    
+
     return (
       <Badge className={`${config.color} flex items-center gap-1`}>
         <Icon className="w-3 h-3" />
@@ -319,7 +326,13 @@ export default function ReportsAnalytics() {
     );
   };
 
-  const AnalyticsCard = ({ title, value, icon: Icon, trend, color }: {
+  const AnalyticsCard = ({
+    title,
+    value,
+    icon: Icon,
+    trend,
+    color,
+  }: {
     title: string;
     value: string | number;
     icon: any;
@@ -333,9 +346,16 @@ export default function ReportsAnalytics() {
             <p className="text-sm font-medium text-gray-600">{title}</p>
             <p className="text-2xl font-bold text-gray-900">{value}</p>
             {trend !== undefined && (
-              <p className={`text-xs mt-2 flex items-center gap-1 ${trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {trend >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                {trend >= 0 ? '+' : ''}{trend}% from last month
+              <p
+                className={`text-xs mt-2 flex items-center gap-1 ${trend >= 0 ? "text-green-600" : "text-red-600"}`}
+              >
+                {trend >= 0 ? (
+                  <TrendingUp className="w-3 h-3" />
+                ) : (
+                  <TrendingDown className="w-3 h-3" />
+                )}
+                {trend >= 0 ? "+" : ""}
+                {trend}% from last month
               </p>
             )}
           </div>
@@ -345,30 +365,40 @@ export default function ReportsAnalytics() {
     </Card>
   );
 
-  const SimpleChart = ({ data, title, type = 'bar' }: {
+  const SimpleChart = ({
+    data,
+    title,
+    type = "bar",
+  }: {
     data: any[];
     title: string;
-    type?: 'bar' | 'line';
+    type?: "bar" | "line";
   }) => (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          {type === 'bar' ? <BarChart3 className="w-5 h-5" /> : <LineChart className="w-5 h-5" />}
+          {type === "bar" ? (
+            <BarChart3 className="w-5 h-5" />
+          ) : (
+            <LineChart className="w-5 h-5" />
+          )}
           {title}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {data.map((item, index) => {
-            const maxValue = Math.max(...data.map(d => d.bookings || d.hits));
+            const maxValue = Math.max(...data.map((d) => d.bookings || d.hits));
             const percentage = ((item.bookings || item.hits) / maxValue) * 100;
-            
+
             return (
               <div key={index} className="flex items-center justify-between">
-                <span className="text-sm font-medium w-20">{item.month || item.destination}</span>
+                <span className="text-sm font-medium w-20">
+                  {item.month || item.destination}
+                </span>
                 <div className="flex-1 mx-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
+                    <div
                       className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${percentage}%` }}
                     />
@@ -417,16 +447,22 @@ export default function ReportsAnalytics() {
                   B2C Audit Report
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     onClick={refreshData}
                     disabled={isLoading}
                   >
-                    <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                    <RefreshCw
+                      className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+                    />
                     Refresh
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => exportData('audit')}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => exportData("audit")}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Export
                   </Button>
@@ -436,14 +472,26 @@ export default function ReportsAnalytics() {
             <CardContent>
               {/* Advanced Search Panel */}
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h3 className="text-sm font-medium mb-4">Make your search easy</h3>
+                <h3 className="text-sm font-medium mb-4">
+                  Make your search easy
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <Button variant="outline" size="sm">Today Searches</Button>
-                  <Button variant="outline" size="sm">Last Five Search</Button>
-                  <Button variant="outline" size="sm">One Week Search</Button>
-                  <Button variant="outline" size="sm">One Month Search</Button>
+                  <Button variant="outline" size="sm">
+                    Today Searches
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    Last Five Search
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    One Week Search
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    One Month Search
+                  </Button>
                 </div>
-                <Button className="mt-4" size="sm">Clear Filter</Button>
+                <Button className="mt-4" size="sm">
+                  Clear Filter
+                </Button>
               </div>
 
               <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -458,8 +506,11 @@ export default function ReportsAnalytics() {
                     />
                   </div>
                 </div>
-                
-                <Select value={selectedServiceType} onValueChange={setSelectedServiceType}>
+
+                <Select
+                  value={selectedServiceType}
+                  onValueChange={setSelectedServiceType}
+                >
                   <SelectTrigger className="w-full md:w-48">
                     <SelectValue placeholder="Service type" />
                   </SelectTrigger>
@@ -470,7 +521,10 @@ export default function ReportsAnalytics() {
                   </SelectContent>
                 </Select>
 
-                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                <Select
+                  value={selectedStatus}
+                  onValueChange={setSelectedStatus}
+                >
                   <SelectTrigger className="w-full md:w-48">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
@@ -504,26 +558,32 @@ export default function ReportsAnalytics() {
                     {filteredBookingReports.map((report, index) => (
                       <TableRow key={report.id}>
                         <TableCell>{index + 1}</TableCell>
-                        <TableCell className="font-medium">{report.bookingReference}</TableCell>
+                        <TableCell className="font-medium">
+                          {report.bookingReference}
+                        </TableCell>
                         <TableCell>
                           <div>
                             <p className="font-medium">{report.customerName}</p>
-                            <p className="text-sm text-gray-600">{report.customerEmail}</p>
+                            <p className="text-sm text-gray-600">
+                              {report.customerEmail}
+                            </p>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            {report.serviceType === 'flight' ? (
+                            {report.serviceType === "flight" ? (
                               <Plane className="w-4 h-4 text-blue-600" />
                             ) : (
                               <Hotel className="w-4 h-4 text-green-600" />
                             )}
-                            <span className="capitalize">{report.serviceType}</span>
+                            <span className="capitalize">
+                              {report.serviceType}
+                            </span>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            {report.serviceType === 'flight' ? (
+                            {report.serviceType === "flight" ? (
                               <div className="flex items-center text-sm">
                                 <MapPin className="w-3 h-3 mr-1" />
                                 {report.origin} → {report.destination}
@@ -542,7 +602,9 @@ export default function ReportsAnalytics() {
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <div className="font-medium">₹{report.amount.toLocaleString()}</div>
+                            <div className="font-medium">
+                              ₹{report.amount.toLocaleString()}
+                            </div>
                             <div className="text-xs text-gray-600">
                               Tax: ₹{report.tax.toLocaleString()}
                             </div>
@@ -597,7 +659,11 @@ export default function ReportsAnalytics() {
                   <Activity className="w-5 h-5" />
                   Transaction Logs
                 </div>
-                <Button variant="outline" size="sm" onClick={() => exportData('transactions')}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => exportData("transactions")}
+                >
                   <Download className="w-4 h-4 mr-2" />
                   Export
                 </Button>
@@ -617,7 +683,9 @@ export default function ReportsAnalytics() {
                         <SelectItem value="all">All Types</SelectItem>
                         <SelectItem value="booking">Booking</SelectItem>
                         <SelectItem value="refund">Refund</SelectItem>
-                        <SelectItem value="cancellation">Cancellation</SelectItem>
+                        <SelectItem value="cancellation">
+                          Cancellation
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -633,8 +701,12 @@ export default function ReportsAnalytics() {
                 <div className="flex justify-between items-center mt-4">
                   <div className="flex gap-2">
                     <Button size="sm">Search</Button>
-                    <Button variant="outline" size="sm">Reset</Button>
-                    <Button variant="outline" size="sm">Clear Filter</Button>
+                    <Button variant="outline" size="sm">
+                      Reset
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      Clear Filter
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -663,18 +735,26 @@ export default function ReportsAnalytics() {
                             {new Date(log.transactionDate).toLocaleDateString()}
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">{log.referenceNumber}</TableCell>
+                        <TableCell className="font-medium">
+                          {log.referenceNumber}
+                        </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="capitalize">
                             {log.transactionType}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <span className={log.amount < 0 ? 'text-red-600' : 'text-green-600'}>
+                          <span
+                            className={
+                              log.amount < 0 ? "text-red-600" : "text-green-600"
+                            }
+                          >
                             ₹{Math.abs(log.amount).toLocaleString()}
                           </span>
                         </TableCell>
-                        <TableCell className="max-w-xs truncate">{log.description}</TableCell>
+                        <TableCell className="max-w-xs truncate">
+                          {log.description}
+                        </TableCell>
                         <TableCell>
                           <StatusBadge status={log.status} />
                         </TableCell>
@@ -736,7 +816,9 @@ export default function ReportsAnalytics() {
                       <span>Flights</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{analytics.flightBookings}</span>
+                      <span className="font-medium">
+                        {analytics.flightBookings}
+                      </span>
                       <div className="w-20 h-2 bg-gray-200 rounded">
                         <div className="w-3/5 h-2 bg-blue-600 rounded"></div>
                       </div>
@@ -748,7 +830,9 @@ export default function ReportsAnalytics() {
                       <span>Hotels</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{analytics.hotelBookings}</span>
+                      <span className="font-medium">
+                        {analytics.hotelBookings}
+                      </span>
                       <div className="w-20 h-2 bg-gray-200 rounded">
                         <div className="w-2/5 h-2 bg-green-600 rounded"></div>
                       </div>
@@ -758,20 +842,20 @@ export default function ReportsAnalytics() {
               </CardContent>
             </Card>
 
-            <SimpleChart 
-              data={monthlySearchHits} 
-              title="Monthly Search Hits (2023-2024)" 
+            <SimpleChart
+              data={monthlySearchHits}
+              title="Monthly Search Hits (2023-2024)"
               type="line"
             />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SimpleChart 
-              data={topFlightDestinations} 
+            <SimpleChart
+              data={topFlightDestinations}
               title="Top Flight Destinations"
             />
-            <SimpleChart 
-              data={topHotelDestinations} 
+            <SimpleChart
+              data={topHotelDestinations}
               title="Top Hotel Destinations"
             />
           </div>
@@ -795,11 +879,15 @@ export default function ReportsAnalytics() {
                   </div>
                   <div className="flex justify-between">
                     <span>Repeat Customers</span>
-                    <span className="font-medium">{analytics.repeatCustomers}</span>
+                    <span className="font-medium">
+                      {analytics.repeatCustomers}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Average Booking Value</span>
-                    <span className="font-medium">₹{analytics.averageBookingValue.toLocaleString()}</span>
+                    <span className="font-medium">
+                      ₹{analytics.averageBookingValue.toLocaleString()}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Customer Retention</span>
@@ -887,11 +975,15 @@ export default function ReportsAnalytics() {
                   <div className="text-sm text-gray-600">Avg Response Time</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600">99.8%</div>
+                  <div className="text-3xl font-bold text-purple-600">
+                    99.8%
+                  </div>
                   <div className="text-sm text-gray-600">Uptime</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-600">4.8/5</div>
+                  <div className="text-3xl font-bold text-orange-600">
+                    4.8/5
+                  </div>
                   <div className="text-sm text-gray-600">Customer Rating</div>
                 </div>
               </div>

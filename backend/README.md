@@ -5,11 +5,13 @@
 The fastest way to start the backend server:
 
 ### Option 1: Using the startup script
+
 ```bash
 python start.py
 ```
 
 ### Option 2: Manual start
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -19,6 +21,7 @@ python main.py
 ```
 
 ### Option 3: Using uvicorn directly
+
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -35,22 +38,26 @@ Once started, the backend will be available at:
 ## 🗂️ API Endpoints
 
 ### Core Endpoints
+
 - `GET /` - API information and status
 - `GET /health` - Health check endpoint
 
 ### Authentication
+
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/logout` - User logout
 - `GET /api/auth/me` - Get current user
 
 ### Admin Dashboard
+
 - `GET /api/admin/dashboard` - Admin dashboard stats
 - `GET /api/admin/users` - Manage users
 - `GET /api/admin/bookings` - Manage bookings
 - `GET /api/admin/analytics` - Analytics data
 
 ### Booking Management
+
 - `GET /api/bookings` - List bookings
 - `POST /api/bookings` - Create new booking
 - `GET /api/bookings/{id}` - Get booking details
@@ -58,25 +65,30 @@ Once started, the backend will be available at:
 - `DELETE /api/bookings/{id}` - Cancel booking
 
 ### Flights & Airlines
+
 - `GET /api/airlines/search` - Search flights
 - `POST /api/airlines/book` - Book flight
 - `GET /api/airlines/routes` - Get available routes
 
 ### Hotels
+
 - `GET /api/hotels/search` - Search hotels
 - `GET /api/hotels/{id}` - Get hotel details
 - `POST /api/hotels/book` - Book hotel room
 
 ### Bargain Engine
+
 - `POST /api/bargain/initiate` - Start bargain session
 - `POST /api/bargain/counter` - Submit counter offer
 - `GET /api/bargain/session/{id}` - Get bargain session
 
 ### Currency Management
+
 - `GET /api/currency/rates` - Get exchange rates
 - `POST /api/currency/convert` - Convert currency
 
 ### Promo Codes
+
 - `GET /api/promo/codes` - List promo codes
 - `POST /api/promo/validate` - Validate promo code
 - `POST /api/promo/apply` - Apply promo code
@@ -197,14 +209,17 @@ The database will be automatically created when you start the server for the fir
 ## 🧪 Testing
 
 ### Health Check
+
 ```bash
 curl http://localhost:8000/health
 ```
 
 ### API Documentation
+
 Visit http://localhost:8000/docs for interactive API testing
 
 ### Frontend Testing
+
 Use the frontend's Backend Test Dashboard at:
 `/backend-test`
 
@@ -213,6 +228,7 @@ Use the frontend's Backend Test Dashboard at:
 ### Common Issues
 
 1. **Port 8000 already in use**
+
    ```bash
    # Kill process using port 8000
    lsof -ti:8000 | xargs kill -9
@@ -224,6 +240,7 @@ Use the frontend's Backend Test Dashboard at:
    - Check permissions
 
 3. **Module import errors**
+
    ```bash
    # Reinstall dependencies
    pip install -r requirements.txt --force-reinstall
@@ -236,6 +253,7 @@ Use the frontend's Backend Test Dashboard at:
 ### Logs
 
 Server logs will show:
+
 - ✅ Successful operations
 - ❌ Errors and exceptions
 - 🔍 Debug information (if DEBUG=True)
@@ -244,6 +262,7 @@ Server logs will show:
 ## 📞 Support
 
 For technical support:
+
 - Check the logs for error details
 - Visit API documentation at `/docs`
 - Use the health check endpoint at `/health`

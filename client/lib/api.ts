@@ -11,10 +11,10 @@ const getBackendUrl = () => {
   }
 
   // In production, try common backend URLs
-  if (window.location.hostname !== 'localhost') {
+  if (window.location.hostname !== "localhost") {
     const currentDomain = window.location.origin;
     // Try backend subdomain
-    const backendUrl = currentDomain.replace('https://', 'https://api-');
+    const backendUrl = currentDomain.replace("https://", "https://api-");
     return backendUrl;
   }
 

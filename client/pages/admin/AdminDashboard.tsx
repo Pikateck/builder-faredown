@@ -101,32 +101,105 @@ const mockStats = {
   hotelBookings: 519,
   topCities: ["Mumbai", "Dubai", "Delhi", "Singapore", "London"],
   recentBookings: [
-    { id: "FD001", type: "Flight", amount: 25890, status: "Confirmed", customer: "John Doe" },
-    { id: "HD002", type: "Hotel", amount: 12500, status: "Pending", customer: "Jane Smith" },
-    { id: "FD003", type: "Flight", amount: 35200, status: "Confirmed", customer: "Mike Johnson" },
-  ]
+    {
+      id: "FD001",
+      type: "Flight",
+      amount: 25890,
+      status: "Confirmed",
+      customer: "John Doe",
+    },
+    {
+      id: "HD002",
+      type: "Hotel",
+      amount: 12500,
+      status: "Pending",
+      customer: "Jane Smith",
+    },
+    {
+      id: "FD003",
+      type: "Flight",
+      amount: 35200,
+      status: "Confirmed",
+      customer: "Mike Johnson",
+    },
+  ],
 };
 
 const adminModules = [
   { id: "dashboard", name: "Dashboard", icon: BarChart3, color: "bg-blue-500" },
   { id: "users", name: "User Management", icon: Users, color: "bg-green-500" },
-  { id: "markup-air", name: "Markup Management (Air)", icon: Plane, color: "bg-blue-600" },
-  { id: "markup-hotel", name: "Markup Management (Hotels)", icon: Hotel, color: "bg-green-600" },
+  {
+    id: "markup-air",
+    name: "Markup Management (Air)",
+    icon: Plane,
+    color: "bg-blue-600",
+  },
+  {
+    id: "markup-hotel",
+    name: "Markup Management (Hotels)",
+    icon: Hotel,
+    color: "bg-green-600",
+  },
   { id: "vat", name: "VAT Management", icon: FileText, color: "bg-purple-600" },
   { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
-  { id: "currency", name: "Currency Conversion", icon: DollarSign, color: "bg-yellow-600" },
-  { id: "reports", name: "Reports & Analytics", icon: TrendingUp, color: "bg-emerald-500" },
-  { id: "bookings", name: "Booking Management", icon: BookOpen, color: "bg-purple-500" },
-  { id: "payments", name: "Payments & Accounting", icon: CreditCard, color: "bg-yellow-500" },
+  {
+    id: "currency",
+    name: "Currency Conversion",
+    icon: DollarSign,
+    color: "bg-yellow-600",
+  },
+  {
+    id: "reports",
+    name: "Reports & Analytics",
+    icon: TrendingUp,
+    color: "bg-emerald-500",
+  },
+  {
+    id: "bookings",
+    name: "Booking Management",
+    icon: BookOpen,
+    color: "bg-purple-500",
+  },
+  {
+    id: "payments",
+    name: "Payments & Accounting",
+    icon: CreditCard,
+    color: "bg-yellow-500",
+  },
   { id: "bargains", name: "Bargain Engine", icon: Brain, color: "bg-red-500" },
-  { id: "suppliers", name: "Supplier Management", icon: Briefcase, color: "bg-indigo-500" },
-  { id: "inventory", name: "Inventory/Extranet", icon: Package, color: "bg-orange-500" },
-  { id: "rewards", name: "Rewards Management", icon: Award, color: "bg-pink-500" },
-  { id: "vouchers", name: "Voucher Templates", icon: FileText, color: "bg-slate-500" },
+  {
+    id: "suppliers",
+    name: "Supplier Management",
+    icon: Briefcase,
+    color: "bg-indigo-500",
+  },
+  {
+    id: "inventory",
+    name: "Inventory/Extranet",
+    icon: Package,
+    color: "bg-orange-500",
+  },
+  {
+    id: "rewards",
+    name: "Rewards Management",
+    icon: Award,
+    color: "bg-pink-500",
+  },
+  {
+    id: "vouchers",
+    name: "Voucher Templates",
+    icon: FileText,
+    color: "bg-slate-500",
+  },
   { id: "audit", name: "Audit Logs", icon: Shield, color: "bg-amber-500" },
   { id: "cms", name: "CMS & Content", icon: Globe, color: "bg-violet-500" },
   { id: "ai", name: "AI Tools", icon: Zap, color: "bg-rose-500" },
-  { id: "settings", name: "System Settings", icon: Settings, color: "bg-gray-500" },
+  {
+    id: "settings",
+    name: "System Settings",
+    icon: Settings,
+    color: "bg-gray-500",
+  },
 ];
 
 export default function AdminDashboard() {
@@ -164,8 +237,8 @@ export default function AdminDashboard() {
     return adminAuthService.hasPermission(permission);
   };
 
-  const filteredModules = adminModules.filter(module =>
-    module.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredModules = adminModules.filter((module) =>
+    module.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   if (loading) {
@@ -187,12 +260,18 @@ export default function AdminDashboard() {
           <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                <p className="text-xl lg:text-2xl font-bold text-gray-900">{mockStats.totalBookings.toLocaleString()}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Bookings
+                </p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  {mockStats.totalBookings.toLocaleString()}
+                </p>
               </div>
               <BookOpen className="w-6 h-6 lg:w-8 lg:h-8 text-blue-600" />
             </div>
-            <p className="text-xs text-green-600 mt-2">↗ +{mockStats.monthlyGrowth}% from last month</p>
+            <p className="text-xs text-green-600 mt-2">
+              ↗ +{mockStats.monthlyGrowth}% from last month
+            </p>
           </CardContent>
         </Card>
 
@@ -201,11 +280,15 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Revenue</p>
-                <p className="text-xl lg:text-2xl font-bold text-gray-900">₹{mockStats.totalRevenue.toLocaleString()}</p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  ₹{mockStats.totalRevenue.toLocaleString()}
+                </p>
               </div>
               <DollarSign className="w-6 h-6 lg:w-8 lg:h-8 text-green-600" />
             </div>
-            <p className="text-xs text-green-600 mt-2">↗ +15.3% from last month</p>
+            <p className="text-xs text-green-600 mt-2">
+              ↗ +15.3% from last month
+            </p>
           </CardContent>
         </Card>
 
@@ -213,8 +296,12 @@ export default function AdminDashboard() {
           <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Success Rate</p>
-                <p className="text-xl lg:text-2xl font-bold text-gray-900">{mockStats.successRate}%</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Success Rate
+                </p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  {mockStats.successRate}%
+                </p>
               </div>
               <Target className="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" />
             </div>
@@ -226,8 +313,12 @@ export default function AdminDashboard() {
           <CardContent className="p-4 lg:p-6 admin-card-content">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Rewards Issued</p>
-                <p className="text-xl lg:text-2xl font-bold text-gray-900">₹{mockStats.rewardsIssued.toLocaleString()}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Rewards Issued
+                </p>
+                <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                  ₹{mockStats.rewardsIssued.toLocaleString()}
+                </p>
               </div>
               <Award className="w-6 h-6 lg:w-8 lg:h-8 text-yellow-600" />
             </div>
@@ -253,7 +344,9 @@ export default function AdminDashboard() {
                   <span className="text-sm">Flights</span>
                 </div>
                 <div className="flex items-center">
-                  <span className="text-sm font-medium">{mockStats.flightBookings}</span>
+                  <span className="text-sm font-medium">
+                    {mockStats.flightBookings}
+                  </span>
                   <div className="w-20 h-2 bg-gray-200 rounded ml-2">
                     <div className="w-3/5 h-2 bg-blue-600 rounded"></div>
                   </div>
@@ -265,7 +358,9 @@ export default function AdminDashboard() {
                   <span className="text-sm">Hotels</span>
                 </div>
                 <div className="flex items-center">
-                  <span className="text-sm font-medium">{mockStats.hotelBookings}</span>
+                  <span className="text-sm font-medium">
+                    {mockStats.hotelBookings}
+                  </span>
                   <div className="w-20 h-2 bg-gray-200 rounded ml-2">
                     <div className="w-2/5 h-2 bg-green-600 rounded"></div>
                   </div>
@@ -287,10 +382,14 @@ export default function AdminDashboard() {
               {mockStats.topCities.map((city, index) => (
                 <div key={city} className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="text-sm font-medium text-gray-700">{index + 1}.</span>
+                    <span className="text-sm font-medium text-gray-700">
+                      {index + 1}.
+                    </span>
                     <span className="text-sm ml-2">{city}</span>
                   </div>
-                  <Badge variant="secondary">{Math.floor(Math.random() * 200) + 50} bookings</Badge>
+                  <Badge variant="secondary">
+                    {Math.floor(Math.random() * 200) + 50} bookings
+                  </Badge>
                 </div>
               ))}
             </div>
@@ -341,7 +440,11 @@ export default function AdminDashboard() {
                   <TableCell>{booking.customer}</TableCell>
                   <TableCell>₹{booking.amount.toLocaleString()}</TableCell>
                   <TableCell>
-                    <Badge variant={booking.status === "Confirmed" ? "default" : "secondary"}>
+                    <Badge
+                      variant={
+                        booking.status === "Confirmed" ? "default" : "secondary"
+                      }
+                    >
                       {booking.status}
                     </Badge>
                   </TableCell>
@@ -381,25 +484,29 @@ export default function AdminDashboard() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center">
-          {adminModules.find(m => m.id === moduleId)?.icon && 
-            React.createElement(adminModules.find(m => m.id === moduleId).icon, { 
-              className: "w-5 h-5 mr-2" 
-            })
-          }
-          {adminModules.find(m => m.id === moduleId)?.name}
+          {adminModules.find((m) => m.id === moduleId)?.icon &&
+            React.createElement(
+              adminModules.find((m) => m.id === moduleId).icon,
+              {
+                className: "w-5 h-5 mr-2",
+              },
+            )}
+          {adminModules.find((m) => m.id === moduleId)?.name}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            {adminModules.find(m => m.id === moduleId)?.icon && 
-              React.createElement(adminModules.find(m => m.id === moduleId).icon, { 
-                className: "w-8 h-8 text-gray-400" 
-              })
-            }
+            {adminModules.find((m) => m.id === moduleId)?.icon &&
+              React.createElement(
+                adminModules.find((m) => m.id === moduleId).icon,
+                {
+                  className: "w-8 h-8 text-gray-400",
+                },
+              )}
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {adminModules.find(m => m.id === moduleId)?.name}
+            {adminModules.find((m) => m.id === moduleId)?.name}
           </h3>
           <p className="text-gray-600 mb-4">
             This module is under development and will be available soon.
@@ -418,7 +525,9 @@ export default function AdminDashboard() {
       {/* Mobile Header */}
       <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold text-gray-900">Faredown Admin</h1>
+          <h1 className="text-lg font-semibold text-gray-900">
+            Faredown Admin
+          </h1>
           <Button
             variant="ghost"
             size="sm"
@@ -435,9 +544,11 @@ export default function AdminDashboard() {
 
       <div className="flex">
         {/* Sidebar */}
-        <div className={`${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:transition-none flex flex-col`}>
+        <div
+          className={`${
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:transition-none flex flex-col`}
+        >
           {/* Sidebar Header */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center">
@@ -445,7 +556,9 @@ export default function AdminDashboard() {
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div className="ml-3">
-                <h2 className="text-lg font-semibold text-gray-900">Faredown</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Faredown
+                </h2>
                 <p className="text-sm text-gray-600">Admin CMS</p>
               </div>
             </div>
@@ -458,7 +571,9 @@ export default function AdminDashboard() {
                 <Users className="w-5 h-5 text-blue-600" />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900">{user?.username}</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {user?.username}
+                </p>
                 <p className="text-xs text-gray-600">{user?.role}</p>
               </div>
             </div>
@@ -517,13 +632,13 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {adminModules.find(m => m.id === activeModule)?.name || "Dashboard"}
+                  {adminModules.find((m) => m.id === activeModule)?.name ||
+                    "Dashboard"}
                 </h1>
                 <p className="text-sm text-gray-600 mt-1">
-                  {activeModule === "dashboard" 
-                    ? "Overview of your Faredown platform" 
-                    : `Manage ${adminModules.find(m => m.id === activeModule)?.name.toLowerCase()}`
-                  }
+                  {activeModule === "dashboard"
+                    ? "Overview of your Faredown platform"
+                    : `Manage ${adminModules.find((m) => m.id === activeModule)?.name.toLowerCase()}`}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
@@ -541,22 +656,32 @@ export default function AdminDashboard() {
 
           {/* Content */}
           <div className="p-6">
-            {activeModule === "dashboard" ? renderDashboardOverview() :
-             activeModule === "users" ? <UserManagement /> :
-             activeModule === "markup-air" ? <MarkupManagementAir /> :
-             activeModule === "markup-hotel" ? <MarkupManagementHotel /> :
-             activeModule === "vat" ? <VATManagement /> :
-             activeModule === "promos" ? <PromoCodeManager /> :
-             activeModule === "currency" ? <CurrencyManagement /> :
-             activeModule === "reports" ? <ReportsAnalytics /> :
-             renderModulePlaceholder(activeModule)}
+            {activeModule === "dashboard" ? (
+              renderDashboardOverview()
+            ) : activeModule === "users" ? (
+              <UserManagement />
+            ) : activeModule === "markup-air" ? (
+              <MarkupManagementAir />
+            ) : activeModule === "markup-hotel" ? (
+              <MarkupManagementHotel />
+            ) : activeModule === "vat" ? (
+              <VATManagement />
+            ) : activeModule === "promos" ? (
+              <PromoCodeManager />
+            ) : activeModule === "currency" ? (
+              <CurrencyManagement />
+            ) : activeModule === "reports" ? (
+              <ReportsAnalytics />
+            ) : (
+              renderModulePlaceholder(activeModule)
+            )}
           </div>
         </div>
       </div>
 
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -27,15 +27,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Ticket,
   Plus,
@@ -64,189 +64,216 @@ import {
   MapPin,
   Building,
   Star,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface PromoCode {
   id: string;
   code: string;
   description: string;
-  category: 'flight' | 'hotel' | 'both';
+  category: "flight" | "hotel" | "both";
   image?: string;
-  discountType: 'percentage' | 'fixed';
+  discountType: "percentage" | "fixed";
   discountMinValue: number;
   discountMaxValue: number;
   minimumFareAmount: number;
   marketingBudget: number;
   expiryDate: string;
   promoCodeImage: string;
-  displayOnHomePage: 'yes' | 'no';
-  status: 'pending' | 'active';
-  
+  displayOnHomePage: "yes" | "no";
+  status: "pending" | "active";
+
   // Flight-specific fields
   origin?: string;
   destination?: string;
   carrierCode?: string;
   cabinClass?: string;
   flightBy?: string;
-  
+
   // Hotel-specific fields
   hotelCity?: string;
   hotelName?: string;
-  
+
   createdOn: string;
   updatedOn: string;
-  module: 'flight' | 'hotel';
-  validityType: 'unlimited' | 'limited';
+  module: "flight" | "hotel";
+  validityType: "unlimited" | "limited";
   usageCount?: number;
   maxUsage?: number;
 }
 
 const AIRLINES = [
-  { code: 'ALL', name: 'All Airlines' },
-  { code: 'AI', name: 'Air India' },
-  { code: 'UK', name: 'Vistara' },
-  { code: '6E', name: 'IndiGo' },
-  { code: 'SG', name: 'SpiceJet' },
-  { code: 'EK', name: 'Emirates' },
-  { code: 'EY', name: 'Etihad' },
-  { code: 'QR', name: 'Qatar Airways' },
+  { code: "ALL", name: "All Airlines" },
+  { code: "AI", name: "Air India" },
+  { code: "UK", name: "Vistara" },
+  { code: "6E", name: "IndiGo" },
+  { code: "SG", name: "SpiceJet" },
+  { code: "EK", name: "Emirates" },
+  { code: "EY", name: "Etihad" },
+  { code: "QR", name: "Qatar Airways" },
 ];
 
 const CABIN_CLASSES = [
-  { value: 'ALL', label: 'All Classes' },
-  { value: 'Economy', label: 'Economy' },
-  { value: 'Business', label: 'Business' },
-  { value: 'First', label: 'First Class' },
+  { value: "ALL", label: "All Classes" },
+  { value: "Economy", label: "Economy" },
+  { value: "Business", label: "Business" },
+  { value: "First", label: "First Class" },
 ];
 
 const CITIES = [
-  'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad',
-  'Dubai', 'Singapore', 'Bangkok', 'Kuala Lumpur', 'London', 'Paris', 'New York', 'Los Angeles'
+  "Mumbai",
+  "Delhi",
+  "Bangalore",
+  "Chennai",
+  "Kolkata",
+  "Hyderabad",
+  "Pune",
+  "Ahmedabad",
+  "Dubai",
+  "Singapore",
+  "Bangkok",
+  "Kuala Lumpur",
+  "London",
+  "Paris",
+  "New York",
+  "Los Angeles",
 ];
 
 // Mock data based on the screenshots
 const mockPromoCodes: PromoCode[] = [
   {
-    id: '1',
-    code: 'FAREDOWNHOTEL',
-    description: 'test',
-    category: 'hotel',
-    image: 'https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800',
-    discountType: 'percentage',
+    id: "1",
+    code: "FAREDOWNHOTEL",
+    description: "test",
+    category: "hotel",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
+    discountType: "percentage",
     discountMinValue: 2000,
     discountMaxValue: 5000,
     minimumFareAmount: 10000,
     marketingBudget: 100000,
-    expiryDate: '2024-12-31',
-    promoCodeImage: '',
-    displayOnHomePage: 'yes',
-    status: 'active',
-    hotelCity: '',
-    hotelName: '',
-    createdOn: '2024-01-14 13:31',
-    updatedOn: '2024-01-16 13:58',
-    module: 'hotel',
-    validityType: 'unlimited'
+    expiryDate: "2024-12-31",
+    promoCodeImage: "",
+    displayOnHomePage: "yes",
+    status: "active",
+    hotelCity: "",
+    hotelName: "",
+    createdOn: "2024-01-14 13:31",
+    updatedOn: "2024-01-16 13:58",
+    module: "hotel",
+    validityType: "unlimited",
   },
   {
-    id: '2',
-    code: 'FAREDOWNFLIGHT',
-    description: 'Flight discount promo',
-    category: 'flight',
-    image: 'https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800',
-    discountType: 'fixed',
+    id: "2",
+    code: "FAREDOWNFLIGHT",
+    description: "Flight discount promo",
+    category: "flight",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
+    discountType: "fixed",
     discountMinValue: 1500,
     discountMaxValue: 3000,
     minimumFareAmount: 8000,
     marketingBudget: 150000,
-    expiryDate: '2024-11-30',
-    promoCodeImage: '',
-    displayOnHomePage: 'no',
-    status: 'active',
-    origin: 'ALL',
-    destination: 'ALL',
-    carrierCode: 'ALL',
-    cabinClass: 'ALL',
-    flightBy: '',
-    createdOn: '2024-01-10 09:15',
-    updatedOn: '2024-01-15 16:45',
-    module: 'flight',
-    validityType: 'limited',
+    expiryDate: "2024-11-30",
+    promoCodeImage: "",
+    displayOnHomePage: "no",
+    status: "active",
+    origin: "ALL",
+    destination: "ALL",
+    carrierCode: "ALL",
+    cabinClass: "ALL",
+    flightBy: "",
+    createdOn: "2024-01-10 09:15",
+    updatedOn: "2024-01-15 16:45",
+    module: "flight",
+    validityType: "limited",
     usageCount: 45,
-    maxUsage: 100
-  }
+    maxUsage: 100,
+  },
 ];
 
 export default function PromoCodeManager() {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>(mockPromoCodes);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedModule, setSelectedModule] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedModule, setSelectedModule] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
+  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(
+    null,
+  );
   const [formData, setFormData] = useState<Partial<PromoCode>>({});
-  const [activeTab, setActiveTab] = useState('list');
+  const [activeTab, setActiveTab] = useState("list");
 
   // Filter promo codes
-  const filteredPromoCodes = promoCodes.filter(promo => {
-    const matchesSearch = 
+  const filteredPromoCodes = promoCodes.filter((promo) => {
+    const matchesSearch =
       promo.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
       promo.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesModule = selectedModule === 'all' || promo.module === selectedModule;
-    const matchesStatus = selectedStatus === 'all' || promo.status === selectedStatus;
-    
+
+    const matchesModule =
+      selectedModule === "all" || promo.module === selectedModule;
+    const matchesStatus =
+      selectedStatus === "all" || promo.status === selectedStatus;
+
     return matchesSearch && matchesModule && matchesStatus;
   });
 
   const handleCreatePromoCode = () => {
     setFormData({
-      code: '',
-      description: '',
-      category: 'flight',
-      discountType: 'percentage',
+      code: "",
+      description: "",
+      category: "flight",
+      discountType: "percentage",
       discountMinValue: 0,
       discountMaxValue: 0,
       minimumFareAmount: 0,
       marketingBudget: 0,
-      expiryDate: '',
-      promoCodeImage: '',
-      displayOnHomePage: 'yes',
-      status: 'pending',
-      origin: 'ALL',
-      destination: 'ALL',
-      carrierCode: 'ALL',
-      cabinClass: 'ALL',
-      flightBy: '',
-      validityType: 'unlimited'
+      expiryDate: "",
+      promoCodeImage: "",
+      displayOnHomePage: "yes",
+      status: "pending",
+      origin: "ALL",
+      destination: "ALL",
+      carrierCode: "ALL",
+      cabinClass: "ALL",
+      flightBy: "",
+      validityType: "unlimited",
     });
     setIsCreateDialogOpen(true);
   };
 
   const handleEditPromoCode = (promo: PromoCode) => {
     setSelectedPromoCode(promo);
-    setFormData({...promo});
+    setFormData({ ...promo });
     setIsEditDialogOpen(true);
   };
 
   const handleSavePromoCode = () => {
     if (selectedPromoCode) {
       // Update existing promo code
-      setPromoCodes(promoCodes.map(p => 
-        p.id === selectedPromoCode.id 
-          ? {...p, ...formData, updatedOn: new Date().toLocaleString(), module: formData.category as 'flight' | 'hotel'}
-          : p
-      ));
+      setPromoCodes(
+        promoCodes.map((p) =>
+          p.id === selectedPromoCode.id
+            ? {
+                ...p,
+                ...formData,
+                updatedOn: new Date().toLocaleString(),
+                module: formData.category as "flight" | "hotel",
+              }
+            : p,
+        ),
+      );
       setIsEditDialogOpen(false);
     } else {
       // Create new promo code
       const newPromoCode: PromoCode = {
-        ...formData as PromoCode,
+        ...(formData as PromoCode),
         id: Date.now().toString(),
         createdOn: new Date().toLocaleString(),
         updatedOn: new Date().toLocaleString(),
-        module: formData.category as 'flight' | 'hotel'
+        module: formData.category as "flight" | "hotel",
       };
       setPromoCodes([...promoCodes, newPromoCode]);
       setIsCreateDialogOpen(false);
@@ -256,28 +283,34 @@ export default function PromoCodeManager() {
   };
 
   const handleDeletePromoCode = (promoId: string) => {
-    if (confirm('Are you sure you want to delete this promo code?')) {
-      setPromoCodes(promoCodes.filter(p => p.id !== promoId));
+    if (confirm("Are you sure you want to delete this promo code?")) {
+      setPromoCodes(promoCodes.filter((p) => p.id !== promoId));
     }
   };
 
   const togglePromoCodeStatus = (promoId: string) => {
-    setPromoCodes(promoCodes.map(p => 
-      p.id === promoId 
-        ? {...p, status: p.status === 'active' ? 'pending' : 'active', updatedOn: new Date().toLocaleString()}
-        : p
-    ));
+    setPromoCodes(
+      promoCodes.map((p) =>
+        p.id === promoId
+          ? {
+              ...p,
+              status: p.status === "active" ? "pending" : "active",
+              updatedOn: new Date().toLocaleString(),
+            }
+          : p,
+      ),
+    );
   };
 
-  const StatusBadge = ({ status }: { status: PromoCode['status'] }) => {
+  const StatusBadge = ({ status }: { status: PromoCode["status"] }) => {
     const statusConfig = {
-      active: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock }
+      active: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+      pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
     };
-    
+
     const config = statusConfig[status];
     const Icon = config.icon;
-    
+
     return (
       <Badge className={`${config.color} flex items-center gap-1`}>
         <Icon className="w-3 h-3" />
@@ -294,8 +327,10 @@ export default function PromoCodeManager() {
           <Label htmlFor="code">Promo Code*</Label>
           <Input
             id="code"
-            value={formData.code || ''}
-            onChange={(e) => setFormData({...formData, code: e.target.value.toUpperCase()})}
+            value={formData.code || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, code: e.target.value.toUpperCase() })
+            }
             placeholder="Enter promo code"
           />
         </div>
@@ -304,8 +339,10 @@ export default function PromoCodeManager() {
           <Label htmlFor="description">Description*</Label>
           <Textarea
             id="description"
-            value={formData.description || ''}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            value={formData.description || ""}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
             placeholder="Enter description"
             rows={3}
           />
@@ -313,9 +350,14 @@ export default function PromoCodeManager() {
 
         <div>
           <Label htmlFor="category">Category*</Label>
-          <Select 
-            value={formData.category} 
-            onValueChange={(value) => setFormData({...formData, category: value as PromoCode['category']})}
+          <Select
+            value={formData.category}
+            onValueChange={(value) =>
+              setFormData({
+                ...formData,
+                category: value as PromoCode["category"],
+              })
+            }
           >
             <SelectTrigger>
               <SelectValue placeholder="Please Select" />
@@ -329,24 +371,28 @@ export default function PromoCodeManager() {
         </div>
 
         {/* Flight-specific fields */}
-        {(formData.category === 'flight' || formData.category === 'both') && (
+        {(formData.category === "flight" || formData.category === "both") && (
           <div className="space-y-4 border-l-4 border-blue-500 pl-4">
             <h4 className="font-medium text-blue-700">Flight Details</h4>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="origin">Origin</Label>
-                <Select 
-                  value={formData.origin} 
-                  onValueChange={(value) => setFormData({...formData, origin: value})}
+                <Select
+                  value={formData.origin}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, origin: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ALL">All</SelectItem>
-                    {CITIES.map(city => (
-                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    {CITIES.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -354,17 +400,21 @@ export default function PromoCodeManager() {
 
               <div>
                 <Label htmlFor="destination">Destination</Label>
-                <Select 
-                  value={formData.destination} 
-                  onValueChange={(value) => setFormData({...formData, destination: value})}
+                <Select
+                  value={formData.destination}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, destination: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ALL">All</SelectItem>
-                    {CITIES.map(city => (
-                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    {CITIES.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -374,15 +424,17 @@ export default function PromoCodeManager() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="carrierCode">Carrier Code</Label>
-                <Select 
-                  value={formData.carrierCode} 
-                  onValueChange={(value) => setFormData({...formData, carrierCode: value})}
+                <Select
+                  value={formData.carrierCode}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, carrierCode: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
-                    {AIRLINES.map(airline => (
+                    {AIRLINES.map((airline) => (
                       <SelectItem key={airline.code} value={airline.code}>
                         {airline.name}
                       </SelectItem>
@@ -393,15 +445,17 @@ export default function PromoCodeManager() {
 
               <div>
                 <Label htmlFor="cabinClass">Cabin Class</Label>
-                <Select 
-                  value={formData.cabinClass} 
-                  onValueChange={(value) => setFormData({...formData, cabinClass: value})}
+                <Select
+                  value={formData.cabinClass}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, cabinClass: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CABIN_CLASSES.map(cabin => (
+                    {CABIN_CLASSES.map((cabin) => (
                       <SelectItem key={cabin.value} value={cabin.value}>
                         {cabin.label}
                       </SelectItem>
@@ -415,8 +469,10 @@ export default function PromoCodeManager() {
               <Label htmlFor="flightBy">Flight By</Label>
               <Input
                 id="flightBy"
-                value={formData.flightBy || ''}
-                onChange={(e) => setFormData({...formData, flightBy: e.target.value})}
+                value={formData.flightBy || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, flightBy: e.target.value })
+                }
                 placeholder="Enter flight details"
               />
             </div>
@@ -424,24 +480,28 @@ export default function PromoCodeManager() {
         )}
 
         {/* Hotel-specific fields */}
-        {(formData.category === 'hotel' || formData.category === 'both') && (
+        {(formData.category === "hotel" || formData.category === "both") && (
           <div className="space-y-4 border-l-4 border-green-500 pl-4">
             <h4 className="font-medium text-green-700">Hotel Details</h4>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="hotelCity">Hotel City</Label>
-                <Select 
-                  value={formData.hotelCity} 
-                  onValueChange={(value) => setFormData({...formData, hotelCity: value})}
+                <Select
+                  value={formData.hotelCity}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, hotelCity: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select city" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ALL">All Cities</SelectItem>
-                    {CITIES.map(city => (
-                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    {CITIES.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -451,8 +511,10 @@ export default function PromoCodeManager() {
                 <Label htmlFor="hotelName">Hotel Name</Label>
                 <Input
                   id="hotelName"
-                  value={formData.hotelName || ''}
-                  onChange={(e) => setFormData({...formData, hotelName: e.target.value})}
+                  value={formData.hotelName || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, hotelName: e.target.value })
+                  }
                   placeholder="Enter hotel name or 'ALL' for all hotels"
                 />
               </div>
@@ -463,13 +525,18 @@ export default function PromoCodeManager() {
         {/* Discount Configuration */}
         <div className="space-y-4">
           <h4 className="font-medium">Discount Configuration</h4>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="discountType">Discount Type*</Label>
-              <Select 
-                value={formData.discountType} 
-                onValueChange={(value) => setFormData({...formData, discountType: value as PromoCode['discountType']})}
+              <Select
+                value={formData.discountType}
+                onValueChange={(value) =>
+                  setFormData({
+                    ...formData,
+                    discountType: value as PromoCode["discountType"],
+                  })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -483,13 +550,19 @@ export default function PromoCodeManager() {
 
             <div>
               <Label htmlFor="discountMinValue">
-                Discount Min Value* {formData.discountType === 'percentage' ? '(%)' : '(₹)'}
+                Discount Min Value*{" "}
+                {formData.discountType === "percentage" ? "(%)" : "(₹)"}
               </Label>
               <Input
                 id="discountMinValue"
                 type="number"
-                value={formData.discountMinValue || ''}
-                onChange={(e) => setFormData({...formData, discountMinValue: parseFloat(e.target.value) || 0})}
+                value={formData.discountMinValue || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    discountMinValue: parseFloat(e.target.value) || 0,
+                  })
+                }
                 placeholder="Enter minimum discount value"
               />
             </div>
@@ -498,13 +571,19 @@ export default function PromoCodeManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="discountMaxValue">
-                Discount Max Value* {formData.discountType === 'percentage' ? '(₹)' : '(₹)'}
+                Discount Max Value*{" "}
+                {formData.discountType === "percentage" ? "(₹)" : "(₹)"}
               </Label>
               <Input
                 id="discountMaxValue"
                 type="number"
-                value={formData.discountMaxValue || ''}
-                onChange={(e) => setFormData({...formData, discountMaxValue: parseFloat(e.target.value) || 0})}
+                value={formData.discountMaxValue || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    discountMaxValue: parseFloat(e.target.value) || 0,
+                  })
+                }
                 placeholder="Enter maximum discount value"
               />
             </div>
@@ -514,8 +593,13 @@ export default function PromoCodeManager() {
               <Input
                 id="minimumFareAmount"
                 type="number"
-                value={formData.minimumFareAmount || ''}
-                onChange={(e) => setFormData({...formData, minimumFareAmount: parseFloat(e.target.value) || 0})}
+                value={formData.minimumFareAmount || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    minimumFareAmount: parseFloat(e.target.value) || 0,
+                  })
+                }
                 placeholder="Enter minimum fare amount"
               />
             </div>
@@ -526,8 +610,13 @@ export default function PromoCodeManager() {
             <Input
               id="marketingBudget"
               type="number"
-              value={formData.marketingBudget || ''}
-              onChange={(e) => setFormData({...formData, marketingBudget: parseFloat(e.target.value) || 0})}
+              value={formData.marketingBudget || ""}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  marketingBudget: parseFloat(e.target.value) || 0,
+                })
+              }
               placeholder="Enter marketing budget"
             />
           </div>
@@ -537,8 +626,10 @@ export default function PromoCodeManager() {
             <Input
               id="expiryDate"
               type="date"
-              value={formData.expiryDate || ''}
-              onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
+              value={formData.expiryDate || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, expiryDate: e.target.value })
+              }
             />
           </div>
 
@@ -556,9 +647,14 @@ export default function PromoCodeManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="displayOnHomePage">Display on Home Page*</Label>
-              <Select 
-                value={formData.displayOnHomePage} 
-                onValueChange={(value) => setFormData({...formData, displayOnHomePage: value as 'yes' | 'no'})}
+              <Select
+                value={formData.displayOnHomePage}
+                onValueChange={(value) =>
+                  setFormData({
+                    ...formData,
+                    displayOnHomePage: value as "yes" | "no",
+                  })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -572,9 +668,14 @@ export default function PromoCodeManager() {
 
             <div>
               <Label htmlFor="status">Status*</Label>
-              <Select 
-                value={formData.status} 
-                onValueChange={(value) => setFormData({...formData, status: value as PromoCode['status']})}
+              <Select
+                value={formData.status}
+                onValueChange={(value) =>
+                  setFormData({
+                    ...formData,
+                    status: value as PromoCode["status"],
+                  })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -614,7 +715,10 @@ export default function PromoCodeManager() {
                   <Ticket className="w-5 h-5" />
                   Promo Code List
                 </div>
-                <Button onClick={handleCreatePromoCode} className="flex items-center gap-2">
+                <Button
+                  onClick={handleCreatePromoCode}
+                  className="flex items-center gap-2"
+                >
                   <Plus className="w-4 h-4" />
                   Add/Update Promo Code
                 </Button>
@@ -627,7 +731,7 @@ export default function PromoCodeManager() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <Label>Promo Code</Label>
-                    <Input 
+                    <Input
                       placeholder="Enter promo code"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
@@ -635,7 +739,10 @@ export default function PromoCodeManager() {
                   </div>
                   <div>
                     <Label>Module</Label>
-                    <Select value={selectedModule} onValueChange={setSelectedModule}>
+                    <Select
+                      value={selectedModule}
+                      onValueChange={setSelectedModule}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Please select" />
                       </SelectTrigger>
@@ -684,11 +791,13 @@ export default function PromoCodeManager() {
                     {filteredPromoCodes.map((promo, index) => (
                       <TableRow key={promo.id}>
                         <TableCell>{index + 1}</TableCell>
-                        <TableCell className="font-medium">{promo.code}</TableCell>
+                        <TableCell className="font-medium">
+                          {promo.code}
+                        </TableCell>
                         <TableCell>
                           {promo.image ? (
-                            <img 
-                              src={promo.image} 
+                            <img
+                              src={promo.image}
                               alt={promo.code}
                               className="w-12 h-8 object-cover rounded"
                             />
@@ -699,17 +808,25 @@ export default function PromoCodeManager() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {promo.discountType === 'percentage' ? `${promo.discountMinValue}%` : `₹${promo.discountMinValue}`}
+                          {promo.discountType === "percentage"
+                            ? `${promo.discountMinValue}%`
+                            : `₹${promo.discountMinValue}`}
                         </TableCell>
-                        <TableCell>₹{promo.discountMaxValue.toLocaleString()}</TableCell>
+                        <TableCell>
+                          ₹{promo.discountMaxValue.toLocaleString()}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center text-sm">
                             <Calendar className="w-3 h-3 mr-1" />
                             {new Date(promo.expiryDate).toLocaleDateString()}
                           </div>
                         </TableCell>
-                        <TableCell>₹{promo.minimumFareAmount.toLocaleString()}</TableCell>
-                        <TableCell>₹{promo.marketingBudget.toLocaleString()}</TableCell>
+                        <TableCell>
+                          ₹{promo.minimumFareAmount.toLocaleString()}
+                        </TableCell>
+                        <TableCell>
+                          ₹{promo.marketingBudget.toLocaleString()}
+                        </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="capitalize">
                             {promo.module}
@@ -728,12 +845,16 @@ export default function PromoCodeManager() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleEditPromoCode(promo)}>
+                              <DropdownMenuItem
+                                onClick={() => handleEditPromoCode(promo)}
+                              >
                                 <Edit className="w-4 h-4 mr-2" />
                                 Edit Promo
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => togglePromoCodeStatus(promo.id)}>
-                                {promo.status === 'active' ? (
+                              <DropdownMenuItem
+                                onClick={() => togglePromoCodeStatus(promo.id)}
+                              >
+                                {promo.status === "active" ? (
                                   <>
                                     <AlertCircle className="w-4 h-4 mr-2" />
                                     Deactivate
@@ -749,7 +870,7 @@ export default function PromoCodeManager() {
                                 <Activity className="w-4 h-4 mr-2" />
                                 View Usage
                               </DropdownMenuItem>
-                              <DropdownMenuItem 
+                              <DropdownMenuItem
                                 onClick={() => handleDeletePromoCode(promo.id)}
                                 className="text-red-600"
                               >
@@ -782,9 +903,7 @@ export default function PromoCodeManager() {
                 <Button variant="outline" onClick={() => setFormData({})}>
                   Reset
                 </Button>
-                <Button onClick={handleSavePromoCode}>
-                  Save
-                </Button>
+                <Button onClick={handleSavePromoCode}>Save</Button>
               </div>
             </CardContent>
           </Card>
@@ -802,12 +921,13 @@ export default function PromoCodeManager() {
           </DialogHeader>
           <PromoCodeForm isEdit={true} />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleSavePromoCode}>
-              Update Promo Code
-            </Button>
+            <Button onClick={handleSavePromoCode}>Update Promo Code</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
