@@ -1009,7 +1009,7 @@ export default function BookingConfirmation() {
                         ₹{(booking.total * 0.2).toLocaleString()}
                       </td>
                     </tr>
-                    {booking.extrasTotal > 0 && (
+                    {(booking.extrasTotal || 0) > 0 && (
                       <tr className="border-t">
                         <td className="p-3">
                           <p className="font-medium">Meals & Extras</p>
@@ -1019,14 +1019,14 @@ export default function BookingConfirmation() {
                         </td>
                         <td className="text-center p-3">1</td>
                         <td className="text-right p-3">
-                          ₹{booking.extrasTotal.toLocaleString()}
+                          ₹{(booking.extrasTotal || 0).toLocaleString()}
                         </td>
                         <td className="text-right p-3">
-                          ₹{booking.extrasTotal.toLocaleString()}
+                          ₹{(booking.extrasTotal || 0).toLocaleString()}
                         </td>
                       </tr>
                     )}
-                    {booking.seatFeesTotal > 0 && (
+                    {(booking.seatFeesTotal || 0) > 0 && (
                       <tr className="border-t">
                         <td className="p-3">
                           <p className="font-medium">Seat Selection</p>
@@ -1036,10 +1036,10 @@ export default function BookingConfirmation() {
                         </td>
                         <td className="text-center p-3">1</td>
                         <td className="text-right p-3">
-                          ₹{booking.seatFeesTotal.toLocaleString()}
+                          ₹{(booking.seatFeesTotal || 0).toLocaleString()}
                         </td>
                         <td className="text-right p-3">
-                          ₹{booking.seatFeesTotal.toLocaleString()}
+                          ₹{(booking.seatFeesTotal || 0).toLocaleString()}
                         </td>
                       </tr>
                     )}
