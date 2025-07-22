@@ -1,17 +1,17 @@
-/**
- * Promo Code & Bargain Engine Admin Management
- * Comprehensive interface for managing promo codes, discounts, and bargain settings
- */
-
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -19,1009 +19,745 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
+} from '@/components/ui/table';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 import {
+  Ticket,
   Plus,
   Edit,
   Trash2,
-  Eye,
-  Copy,
-  BarChart3,
-  Settings,
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-  Calendar,
-  Target,
-  DollarSign,
-  Users,
-  TrendingUp,
-  TrendingDown,
+  MoreVertical,
+  Search,
   Filter,
   Download,
-  RefreshCw,
-  Play,
-  Pause,
-  Stop,
-  Zap,
-  Globe,
-  MapPin,
-  Plane,
-  Building,
+  Upload,
+  Calendar,
+  DollarSign,
   Percent,
-  Tag,
+  Settings,
+  Activity,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle,
   Clock,
-  Award,
-  Briefcase,
+  Globe,
+  Plane,
+  Hotel,
+  Users,
+  Target,
+  Image as ImageIcon,
+  MapPin,
+  Building,
   Star,
-  CreditCard,
-} from "lucide-react";
+} from 'lucide-react';
 
-// Types for promo codes
 interface PromoCode {
   id: string;
   code: string;
-  name: string;
-  type: 'percent' | 'fixed';
-  discountFrom: number;
-  discountTo: number;
-  applicableTo: 'flights' | 'hotels' | 'both';
-  filters?: {
-    fromCity?: string;
-    toCity?: string;
-    airlines?: string[];
-    cabinClass?: string[];
-    cities?: string[];
-    hotels?: string[];
-    roomCategories?: string[];
-  };
-  travelPeriod?: {
-    from: string;
-    to: string;
-  };
-  validity: {
-    startDate: string;
-    endDate: string;
-  };
+  description: string;
+  category: 'flight' | 'hotel' | 'both';
+  image?: string;
+  discountType: 'percentage' | 'fixed';
+  discountMinValue: number;
+  discountMaxValue: number;
+  minimumFareAmount: number;
   marketingBudget: number;
-  budgetUsed: number;
-  status: 'active' | 'paused' | 'exhausted' | 'expired';
-  usageCount: number;
-  createdAt: string;
-  createdBy: string;
+  expiryDate: string;
+  promoCodeImage: string;
+  displayOnHomePage: 'yes' | 'no';
+  status: 'pending' | 'active';
+  
+  // Flight-specific fields
+  origin?: string;
+  destination?: string;
+  carrierCode?: string;
+  cabinClass?: string;
+  flightBy?: string;
+  
+  // Hotel-specific fields
+  hotelCity?: string;
+  hotelName?: string;
+  
+  createdOn: string;
+  updatedOn: string;
+  module: 'flight' | 'hotel';
+  validityType: 'unlimited' | 'limited';
+  usageCount?: number;
+  maxUsage?: number;
 }
 
-interface BargainSession {
-  id: string;
-  userId: string;
-  type: 'flight' | 'hotel';
-  originalPrice: number;
-  targetPrice: number;
-  finalPrice?: number;
-  status: 'active' | 'accepted' | 'rejected' | 'expired';
-  promoCode?: string;
-  timestamp: string;
-}
+const AIRLINES = [
+  { code: 'ALL', name: 'All Airlines' },
+  { code: 'AI', name: 'Air India' },
+  { code: 'UK', name: 'Vistara' },
+  { code: '6E', name: 'IndiGo' },
+  { code: 'SG', name: 'SpiceJet' },
+  { code: 'EK', name: 'Emirates' },
+  { code: 'EY', name: 'Etihad' },
+  { code: 'QR', name: 'Qatar Airways' },
+];
+
+const CABIN_CLASSES = [
+  { value: 'ALL', label: 'All Classes' },
+  { value: 'Economy', label: 'Economy' },
+  { value: 'Business', label: 'Business' },
+  { value: 'First', label: 'First Class' },
+];
+
+const CITIES = [
+  'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad',
+  'Dubai', 'Singapore', 'Bangkok', 'Kuala Lumpur', 'London', 'Paris', 'New York', 'Los Angeles'
+];
+
+// Mock data based on the screenshots
+const mockPromoCodes: PromoCode[] = [
+  {
+    id: '1',
+    code: 'FAREDOWNHOTEL',
+    description: 'test',
+    category: 'hotel',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800',
+    discountType: 'percentage',
+    discountMinValue: 2000,
+    discountMaxValue: 5000,
+    minimumFareAmount: 10000,
+    marketingBudget: 100000,
+    expiryDate: '2024-12-31',
+    promoCodeImage: '',
+    displayOnHomePage: 'yes',
+    status: 'active',
+    hotelCity: '',
+    hotelName: '',
+    createdOn: '2024-01-14 13:31',
+    updatedOn: '2024-01-16 13:58',
+    module: 'hotel',
+    validityType: 'unlimited'
+  },
+  {
+    id: '2',
+    code: 'FAREDOWNFLIGHT',
+    description: 'Flight discount promo',
+    category: 'flight',
+    image: 'https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800',
+    discountType: 'fixed',
+    discountMinValue: 1500,
+    discountMaxValue: 3000,
+    minimumFareAmount: 8000,
+    marketingBudget: 150000,
+    expiryDate: '2024-11-30',
+    promoCodeImage: '',
+    displayOnHomePage: 'no',
+    status: 'active',
+    origin: 'ALL',
+    destination: 'ALL',
+    carrierCode: 'ALL',
+    cabinClass: 'ALL',
+    flightBy: '',
+    createdOn: '2024-01-10 09:15',
+    updatedOn: '2024-01-15 16:45',
+    module: 'flight',
+    validityType: 'limited',
+    usageCount: 45,
+    maxUsage: 100
+  }
+];
 
 export default function PromoCodeManager() {
-  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
-  const [bargainSessions, setBargainSessions] = useState<BargainSession[]>([]);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>(mockPromoCodes);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedModule, setSelectedModule] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedPromo, setSelectedPromo] = useState<PromoCode | null>(null);
-  const [activeTab, setActiveTab] = useState('promo-codes');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
+  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
+  const [formData, setFormData] = useState<Partial<PromoCode>>({});
+  const [activeTab, setActiveTab] = useState('list');
 
-  // Form state for creating/editing promo codes
-  const [formData, setFormData] = useState({
-    code: '',
-    name: '',
-    type: 'percent' as 'percent' | 'fixed',
-    discountFrom: 0,
-    discountTo: 0,
-    applicableTo: 'both' as 'flights' | 'hotels' | 'both',
-    filters: {
-      fromCity: '',
-      toCity: '',
-      airlines: [] as string[],
-      cabinClass: [] as string[],
-      cities: [] as string[],
-      hotels: [] as string[],
-      roomCategories: [] as string[],
-    },
-    travelPeriod: {
-      from: '',
-      to: '',
-    },
-    validity: {
-      startDate: '',
-      endDate: '',
-    },
-    marketingBudget: 0,
+  // Filter promo codes
+  const filteredPromoCodes = promoCodes.filter(promo => {
+    const matchesSearch = 
+      promo.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      promo.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesModule = selectedModule === 'all' || promo.module === selectedModule;
+    const matchesStatus = selectedStatus === 'all' || promo.status === selectedStatus;
+    
+    return matchesSearch && matchesModule && matchesStatus;
   });
 
-  // Mock data
-  useEffect(() => {
-    setPromoCodes([
-      {
-        id: 'promo_001',
-        code: 'FLYHIGH100',
-        name: 'Fly High Discount',
-        type: 'percent',
-        discountFrom: 5,
-        discountTo: 15,
-        applicableTo: 'flights',
-        filters: {
-          fromCity: 'Mumbai',
-          toCity: 'Dubai',
-          airlines: ['Emirates', 'Air India'],
-          cabinClass: ['Economy', 'Business']
-        },
-        travelPeriod: {
-          from: '2025-02-01',
-          to: '2025-12-31'
-        },
-        validity: {
-          startDate: '2025-01-15',
-          endDate: '2025-12-31'
-        },
-        marketingBudget: 100000,
-        budgetUsed: 15750,
-        status: 'active',
-        usageCount: 157,
-        createdAt: '2025-01-15T00:00:00Z',
-        createdBy: 'admin'
-      },
-      {
-        id: 'promo_002',
-        code: 'HOTELFEST',
-        name: 'Hotel Festival Offer',
-        type: 'fixed',
-        discountFrom: 2000,
-        discountTo: 5000,
-        applicableTo: 'hotels',
-        filters: {
-          cities: ['Dubai', 'Singapore'],
-          hotels: ['Atlantis The Palm', 'Marina Bay Sands'],
-          roomCategories: ['Deluxe', 'Suite', 'Presidential']
-        },
-        travelPeriod: {
-          from: '2025-03-01',
-          to: '2025-06-30'
-        },
-        validity: {
-          startDate: '2025-01-20',
-          endDate: '2025-06-30'
-        },
-        marketingBudget: 250000,
-        budgetUsed: 87500,
-        status: 'active',
-        usageCount: 203,
-        createdAt: '2025-01-20T00:00:00Z',
-        createdBy: 'admin'
-      },
-      {
-        id: 'promo_003',
-        code: 'TRAVEL25',
-        name: 'Universal Travel Discount',
-        type: 'percent',
-        discountFrom: 8,
-        discountTo: 25,
-        applicableTo: 'both',
-        travelPeriod: {
-          from: '2025-01-01',
-          to: '2025-12-31'
-        },
-        validity: {
-          startDate: '2025-01-01',
-          endDate: '2025-12-31'
-        },
-        marketingBudget: 500000,
-        budgetUsed: 125000,
-        status: 'active',
-        usageCount: 892,
-        createdAt: '2025-01-01T00:00:00Z',
-        createdBy: 'admin'
-      }
-    ]);
-
-    setBargainSessions([
-      {
-        id: 'bargain_001',
-        userId: 'user_123',
-        type: 'flight',
-        originalPrice: 45000,
-        targetPrice: 38000,
-        finalPrice: 41000,
-        status: 'accepted',
-        promoCode: 'FLYHIGH100',
-        timestamp: '2025-01-21T14:30:00Z'
-      },
-      {
-        id: 'bargain_002',
-        userId: 'user_456',
-        type: 'hotel',
-        originalPrice: 12000,
-        targetPrice: 9500,
-        status: 'active',
-        promoCode: 'HOTELFEST',
-        timestamp: '2025-01-21T15:45:00Z'
-      }
-    ]);
-  }, []);
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'active':
-        return (
-          <Badge className="bg-green-100 text-green-800">
-            <CheckCircle className="w-3 h-3 mr-1" />
-            Active
-          </Badge>
-        );
-      case 'paused':
-        return (
-          <Badge className="bg-yellow-100 text-yellow-800">
-            <Pause className="w-3 h-3 mr-1" />
-            Paused
-          </Badge>
-        );
-      case 'exhausted':
-        return (
-          <Badge className="bg-red-100 text-red-800">
-            <XCircle className="w-3 h-3 mr-1" />
-            Exhausted
-          </Badge>
-        );
-      case 'expired':
-        return (
-          <Badge className="bg-gray-100 text-gray-800">
-            <Clock className="w-3 h-3 mr-1" />
-            Expired
-          </Badge>
-        );
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
-    }
-  };
-
-  const getTypeBadge = (type: string) => {
-    return type === 'percent' ? (
-      <Badge variant="outline">
-        <Percent className="w-3 h-3 mr-1" />
-        Percentage
-      </Badge>
-    ) : (
-      <Badge variant="outline">
-        <DollarSign className="w-3 h-3 mr-1" />
-        Fixed Amount
-      </Badge>
-    );
-  };
-
-  const getApplicableToBadge = (applicableTo: string) => {
-    switch (applicableTo) {
-      case 'flights':
-        return (
-          <Badge className="bg-blue-100 text-blue-800">
-            <Plane className="w-3 h-3 mr-1" />
-            Flights
-          </Badge>
-        );
-      case 'hotels':
-        return (
-          <Badge className="bg-purple-100 text-purple-800">
-            <Building className="w-3 h-3 mr-1" />
-            Hotels
-          </Badge>
-        );
-      case 'both':
-        return (
-          <Badge className="bg-indigo-100 text-indigo-800">
-            <Globe className="w-3 h-3 mr-1" />
-            Both
-          </Badge>
-        );
-      default:
-        return <Badge variant="outline">{applicableTo}</Badge>;
-    }
-  };
-
-  const resetForm = () => {
+  const handleCreatePromoCode = () => {
     setFormData({
       code: '',
-      name: '',
-      type: 'percent',
-      discountFrom: 0,
-      discountTo: 0,
-      applicableTo: 'both',
-      filters: {
-        fromCity: '',
-        toCity: '',
-        airlines: [],
-        cabinClass: [],
-        cities: [],
-        hotels: [],
-        roomCategories: [],
-      },
-      travelPeriod: {
-        from: '',
-        to: '',
-      },
-      validity: {
-        startDate: '',
-        endDate: '',
-      },
+      description: '',
+      category: 'flight',
+      discountType: 'percentage',
+      discountMinValue: 0,
+      discountMaxValue: 0,
+      minimumFareAmount: 0,
       marketingBudget: 0,
+      expiryDate: '',
+      promoCodeImage: '',
+      displayOnHomePage: 'yes',
+      status: 'pending',
+      origin: 'ALL',
+      destination: 'ALL',
+      carrierCode: 'ALL',
+      cabinClass: 'ALL',
+      flightBy: '',
+      validityType: 'unlimited'
     });
+    setIsCreateDialogOpen(true);
   };
 
-  const handleCreatePromo = () => {
-    // Create new promo code logic here
-    console.log('Creating promo:', formData);
-    setIsCreateDialogOpen(false);
-    resetForm();
+  const handleEditPromoCode = (promo: PromoCode) => {
+    setSelectedPromoCode(promo);
+    setFormData({...promo});
+    setIsEditDialogOpen(true);
   };
 
-  const handleEditPromo = () => {
-    // Edit promo code logic here
-    console.log('Editing promo:', formData);
-    setIsEditDialogOpen(false);
-    resetForm();
-    setSelectedPromo(null);
+  const handleSavePromoCode = () => {
+    if (selectedPromoCode) {
+      // Update existing promo code
+      setPromoCodes(promoCodes.map(p => 
+        p.id === selectedPromoCode.id 
+          ? {...p, ...formData, updatedOn: new Date().toLocaleString(), module: formData.category as 'flight' | 'hotel'}
+          : p
+      ));
+      setIsEditDialogOpen(false);
+    } else {
+      // Create new promo code
+      const newPromoCode: PromoCode = {
+        ...formData as PromoCode,
+        id: Date.now().toString(),
+        createdOn: new Date().toLocaleString(),
+        updatedOn: new Date().toLocaleString(),
+        module: formData.category as 'flight' | 'hotel'
+      };
+      setPromoCodes([...promoCodes, newPromoCode]);
+      setIsCreateDialogOpen(false);
+    }
+    setFormData({});
+    setSelectedPromoCode(null);
   };
 
-  const handleDeletePromo = (promoId: string) => {
-    // Delete promo code logic here
-    console.log('Deleting promo:', promoId);
-    setPromoCodes(prev => prev.filter(p => p.id !== promoId));
+  const handleDeletePromoCode = (promoId: string) => {
+    if (confirm('Are you sure you want to delete this promo code?')) {
+      setPromoCodes(promoCodes.filter(p => p.id !== promoId));
+    }
   };
 
-  const handleToggleStatus = (promoId: string) => {
-    // Toggle promo status logic here
-    setPromoCodes(prev => prev.map(p => 
+  const togglePromoCodeStatus = (promoId: string) => {
+    setPromoCodes(promoCodes.map(p => 
       p.id === promoId 
-        ? { ...p, status: p.status === 'active' ? 'paused' : 'active' }
+        ? {...p, status: p.status === 'active' ? 'pending' : 'active', updatedOn: new Date().toLocaleString()}
         : p
     ));
   };
 
-  const filteredPromoCodes = promoCodes.filter(promo => {
-    const matchesSearch = promo.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         promo.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || promo.status === statusFilter;
-    const matchesType = typeFilter === 'all' || promo.applicableTo === typeFilter;
+  const StatusBadge = ({ status }: { status: PromoCode['status'] }) => {
+    const statusConfig = {
+      active: { color: 'bg-green-100 text-green-800', icon: CheckCircle },
+      pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock }
+    };
     
-    return matchesSearch && matchesStatus && matchesType;
-  });
+    const config = statusConfig[status];
+    const Icon = config.icon;
+    
+    return (
+      <Badge className={`${config.color} flex items-center gap-1`}>
+        <Icon className="w-3 h-3" />
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </Badge>
+    );
+  };
 
-  const totalBudget = promoCodes.reduce((sum, p) => sum + p.marketingBudget, 0);
-  const totalUsed = promoCodes.reduce((sum, p) => sum + p.budgetUsed, 0);
-  const totalUsage = promoCodes.reduce((sum, p) => sum + p.usageCount, 0);
-  const activePromos = promoCodes.filter(p => p.status === 'active').length;
+  const PromoCodeForm = ({ isEdit = false }) => (
+    <div className="space-y-6 max-h-[70vh] overflow-y-auto">
+      {/* Basic Information */}
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="code">Promo Code*</Label>
+          <Input
+            id="code"
+            value={formData.code || ''}
+            onChange={(e) => setFormData({...formData, code: e.target.value.toUpperCase()})}
+            placeholder="Enter promo code"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="description">Description*</Label>
+          <Textarea
+            id="description"
+            value={formData.description || ''}
+            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            placeholder="Enter description"
+            rows={3}
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="category">Category*</Label>
+          <Select 
+            value={formData.category} 
+            onValueChange={(value) => setFormData({...formData, category: value as PromoCode['category']})}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Please Select" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="flight">Flight</SelectItem>
+              <SelectItem value="hotel">Hotel</SelectItem>
+              <SelectItem value="both">Both</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Flight-specific fields */}
+        {(formData.category === 'flight' || formData.category === 'both') && (
+          <div className="space-y-4 border-l-4 border-blue-500 pl-4">
+            <h4 className="font-medium text-blue-700">Flight Details</h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="origin">Origin</Label>
+                <Select 
+                  value={formData.origin} 
+                  onValueChange={(value) => setFormData({...formData, origin: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All</SelectItem>
+                    {CITIES.map(city => (
+                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="destination">Destination</Label>
+                <Select 
+                  value={formData.destination} 
+                  onValueChange={(value) => setFormData({...formData, destination: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All</SelectItem>
+                    {CITIES.map(city => (
+                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="carrierCode">Carrier Code</Label>
+                <Select 
+                  value={formData.carrierCode} 
+                  onValueChange={(value) => setFormData({...formData, carrierCode: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {AIRLINES.map(airline => (
+                      <SelectItem key={airline.code} value={airline.code}>
+                        {airline.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="cabinClass">Cabin Class</Label>
+                <Select 
+                  value={formData.cabinClass} 
+                  onValueChange={(value) => setFormData({...formData, cabinClass: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="All" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CABIN_CLASSES.map(cabin => (
+                      <SelectItem key={cabin.value} value={cabin.value}>
+                        {cabin.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="flightBy">Flight By</Label>
+              <Input
+                id="flightBy"
+                value={formData.flightBy || ''}
+                onChange={(e) => setFormData({...formData, flightBy: e.target.value})}
+                placeholder="Enter flight details"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Hotel-specific fields */}
+        {(formData.category === 'hotel' || formData.category === 'both') && (
+          <div className="space-y-4 border-l-4 border-green-500 pl-4">
+            <h4 className="font-medium text-green-700">Hotel Details</h4>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="hotelCity">Hotel City</Label>
+                <Select 
+                  value={formData.hotelCity} 
+                  onValueChange={(value) => setFormData({...formData, hotelCity: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select city" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All Cities</SelectItem>
+                    {CITIES.map(city => (
+                      <SelectItem key={city} value={city}>{city}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="hotelName">Hotel Name</Label>
+                <Input
+                  id="hotelName"
+                  value={formData.hotelName || ''}
+                  onChange={(e) => setFormData({...formData, hotelName: e.target.value})}
+                  placeholder="Enter hotel name or 'ALL' for all hotels"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Discount Configuration */}
+        <div className="space-y-4">
+          <h4 className="font-medium">Discount Configuration</h4>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="discountType">Discount Type*</Label>
+              <Select 
+                value={formData.discountType} 
+                onValueChange={(value) => setFormData({...formData, discountType: value as PromoCode['discountType']})}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="percentage">Percentage (%)</SelectItem>
+                  <SelectItem value="fixed">Fixed Amount (₹)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="discountMinValue">
+                Discount Min Value* {formData.discountType === 'percentage' ? '(%)' : '(₹)'}
+              </Label>
+              <Input
+                id="discountMinValue"
+                type="number"
+                value={formData.discountMinValue || ''}
+                onChange={(e) => setFormData({...formData, discountMinValue: parseFloat(e.target.value) || 0})}
+                placeholder="Enter minimum discount value"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="discountMaxValue">
+                Discount Max Value* {formData.discountType === 'percentage' ? '(₹)' : '(₹)'}
+              </Label>
+              <Input
+                id="discountMaxValue"
+                type="number"
+                value={formData.discountMaxValue || ''}
+                onChange={(e) => setFormData({...formData, discountMaxValue: parseFloat(e.target.value) || 0})}
+                placeholder="Enter maximum discount value"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="minimumFareAmount">Minimum Fare Amount*</Label>
+              <Input
+                id="minimumFareAmount"
+                type="number"
+                value={formData.minimumFareAmount || ''}
+                onChange={(e) => setFormData({...formData, minimumFareAmount: parseFloat(e.target.value) || 0})}
+                placeholder="Enter minimum fare amount"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="marketingBudget">Marketing Budget*</Label>
+            <Input
+              id="marketingBudget"
+              type="number"
+              value={formData.marketingBudget || ''}
+              onChange={(e) => setFormData({...formData, marketingBudget: parseFloat(e.target.value) || 0})}
+              placeholder="Enter marketing budget"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="expiryDate">Expiry Date*</Label>
+            <Input
+              id="expiryDate"
+              type="date"
+              value={formData.expiryDate || ''}
+              onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="promoCodeImage">PromoCode Image</Label>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" type="button">
+                <Upload className="w-4 h-4 mr-2" />
+                Choose File
+              </Button>
+              <span className="text-sm text-gray-500">No file chosen</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="displayOnHomePage">Display on Home Page*</Label>
+              <Select 
+                value={formData.displayOnHomePage} 
+                onValueChange={(value) => setFormData({...formData, displayOnHomePage: value as 'yes' | 'no'})}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="yes">Yes</SelectItem>
+                  <SelectItem value="no">No</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="status">Status*</Label>
+              <Select 
+                value={formData.status} 
+                onValueChange={(value) => setFormData({...formData, status: value as PromoCode['status']})}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Promo Code & Bargain Engine</h1>
-          <p className="text-gray-600">
-            Manage promotional codes, discounts, and bargain settings for flights and hotels
-          </p>
-        </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="list" className="flex items-center gap-2">
+            <Ticket className="w-4 h-4" />
+            Promo Code List
+          </TabsTrigger>
+          <TabsTrigger value="create" className="flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Manage Promo Code
+          </TabsTrigger>
+        </TabsList>
 
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Export Report
-          </Button>
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Create Promo Code
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Create New Promo Code</DialogTitle>
-              </DialogHeader>
-              
-              <div className="space-y-6">
-                {/* Basic Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="code">Promo Code</Label>
-                    <Input
-                      id="code"
-                      value={formData.code}
-                      onChange={(e) => setFormData(prev => ({ ...prev, code: e.target.value.toUpperCase() }))}
-                      placeholder="e.g., FLYHIGH100"
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="name">Display Name</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                      placeholder="e.g., Fly High Discount"
-                      className="mt-1"
-                    />
-                  </div>
+        <TabsContent value="list" className="space-y-4">
+          {/* Promo Code List */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Ticket className="w-5 h-5" />
+                  Promo Code List
                 </div>
-
-                {/* Discount Configuration */}
+                <Button onClick={handleCreatePromoCode} className="flex items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  Add/Update Promo Code
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {/* Search Panel */}
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-medium mb-4">Search Panel</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="type">Discount Type</Label>
-                    <Select value={formData.type} onValueChange={(value: 'percent' | 'fixed') => setFormData(prev => ({ ...prev, type: value }))}>
-                      <SelectTrigger className="mt-1">
-                        <SelectValue />
+                    <Label>Promo Code</Label>
+                    <Input 
+                      placeholder="Enter promo code"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label>Module</Label>
+                    <Select value={selectedModule} onValueChange={setSelectedModule}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Please select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="percent">Percentage (%)</SelectItem>
-                        <SelectItem value="fixed">Fixed Amount (₹)</SelectItem>
+                        <SelectItem value="all">All Modules</SelectItem>
+                        <SelectItem value="flight">Flight</SelectItem>
+                        <SelectItem value="hotel">Hotel</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label htmlFor="discountFrom">Discount From</Label>
-                    <Input
-                      id="discountFrom"
-                      type="number"
-                      value={formData.discountFrom}
-                      onChange={(e) => setFormData(prev => ({ ...prev, discountFrom: Number(e.target.value) }))}
-                      placeholder={formData.type === 'percent' ? '5' : '1000'}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="discountTo">Discount To</Label>
-                    <Input
-                      id="discountTo"
-                      type="number"
-                      value={formData.discountTo}
-                      onChange={(e) => setFormData(prev => ({ ...prev, discountTo: Number(e.target.value) }))}
-                      placeholder={formData.type === 'percent' ? '15' : '5000'}
-                      className="mt-1"
-                    />
+                  <div className="flex items-end gap-2">
+                    <Button className="flex-1">
+                      <Search className="w-4 h-4 mr-2" />
+                      Search
+                    </Button>
+                    <Button variant="outline">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download
+                    </Button>
+                    <Button variant="outline">Clear Filter</Button>
                   </div>
                 </div>
-
-                {/* Applicable Services */}
-                <div>
-                  <Label htmlFor="applicableTo">Applicable To</Label>
-                  <Select value={formData.applicableTo} onValueChange={(value: 'flights' | 'hotels' | 'both') => setFormData(prev => ({ ...prev, applicableTo: value }))}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="flights">Flights Only</SelectItem>
-                      <SelectItem value="hotels">Hotels Only</SelectItem>
-                      <SelectItem value="both">Both Flights & Hotels</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Filters Section */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Filters & Restrictions</h3>
-                  
-                  {(formData.applicableTo === 'flights' || formData.applicableTo === 'both') && (
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <h4 className="font-medium text-blue-600 mb-3">Flight Filters</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>From City</Label>
-                          <Input
-                            value={formData.filters.fromCity}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              filters: { ...prev.filters, fromCity: e.target.value }
-                            }))}
-                            placeholder="e.g., Mumbai"
-                            className="mt-1"
-                          />
-                        </div>
-                        <div>
-                          <Label>To City</Label>
-                          <Input
-                            value={formData.filters.toCity}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              filters: { ...prev.filters, toCity: e.target.value }
-                            }))}
-                            placeholder="e.g., Dubai"
-                            className="mt-1"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {(formData.applicableTo === 'hotels' || formData.applicableTo === 'both') && (
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <h4 className="font-medium text-purple-600 mb-3">Hotel Filters</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>Cities</Label>
-                          <Input
-                            value={formData.filters.cities?.join(', ')}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              filters: { ...prev.filters, cities: e.target.value.split(',').map(s => s.trim()) }
-                            }))}
-                            placeholder="e.g., Dubai, Singapore"
-                            className="mt-1"
-                          />
-                        </div>
-                        <div>
-                          <Label>Room Categories</Label>
-                          <Input
-                            value={formData.filters.roomCategories?.join(', ')}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              filters: { ...prev.filters, roomCategories: e.target.value.split(',').map(s => s.trim()) }
-                            }))}
-                            placeholder="e.g., Deluxe, Suite"
-                            className="mt-1"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Date Configuration */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Date Configuration</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <h4 className="font-medium mb-3">Validity Period</h4>
-                      <div className="space-y-3">
-                        <div>
-                          <Label>Start Date</Label>
-                          <Input
-                            type="date"
-                            value={formData.validity.startDate}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              validity: { ...prev.validity, startDate: e.target.value }
-                            }))}
-                            className="mt-1"
-                          />
-                        </div>
-                        <div>
-                          <Label>End Date</Label>
-                          <Input
-                            type="date"
-                            value={formData.validity.endDate}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              validity: { ...prev.validity, endDate: e.target.value }
-                            }))}
-                            className="mt-1"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <h4 className="font-medium mb-3">Travel Period</h4>
-                      <div className="space-y-3">
-                        <div>
-                          <Label>Travel From</Label>
-                          <Input
-                            type="date"
-                            value={formData.travelPeriod.from}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              travelPeriod: { ...prev.travelPeriod, from: e.target.value }
-                            }))}
-                            className="mt-1"
-                          />
-                        </div>
-                        <div>
-                          <Label>Travel To</Label>
-                          <Input
-                            type="date"
-                            value={formData.travelPeriod.to}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              travelPeriod: { ...prev.travelPeriod, to: e.target.value }
-                            }))}
-                            className="mt-1"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Budget Configuration */}
-                <div>
-                  <Label htmlFor="marketingBudget">Marketing Budget (₹)</Label>
-                  <Input
-                    id="marketingBudget"
-                    type="number"
-                    value={formData.marketingBudget}
-                    onChange={(e) => setFormData(prev => ({ ...prev, marketingBudget: Number(e.target.value) }))}
-                    placeholder="100000"
-                    className="mt-1"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Promo code will be automatically disabled when budget is exhausted
-                  </p>
-                </div>
               </div>
 
-              <DialogFooter>
-                <Button variant="outline" onClick={() => {
-                  setIsCreateDialogOpen(false);
-                  resetForm();
-                }}>
-                  Cancel
-                </Button>
-                <Button onClick={handleCreatePromo}>
-                  Create Promo Code
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Active Promo Codes</p>
-                <p className="text-2xl font-bold text-green-600">{activePromos}</p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Tag className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-            <div className="flex items-center mt-2">
-              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+2 this week</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Budget</p>
-                <p className="text-2xl font-bold text-blue-600">₹{totalBudget.toLocaleString()}</p>
-              </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <CreditCard className="w-6 h-6 text-blue-600" />
-              </div>
-            </div>
-            <div className="flex items-center mt-2">
-              <Progress value={(totalUsed / totalBudget) * 100} className="w-16 mr-2" />
-              <span className="text-sm text-blue-600">{((totalUsed / totalBudget) * 100).toFixed(1)}% used</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Usage</p>
-                <p className="text-2xl font-bold text-purple-600">{totalUsage}</p>
-              </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Users className="w-6 h-6 text-purple-600" />
-              </div>
-            </div>
-            <div className="flex items-center mt-2">
-              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+45 today</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
-                <p className="text-2xl font-bold text-orange-600">15.2%</p>
-              </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Target className="w-6 h-6 text-orange-600" />
-              </div>
-            </div>
-            <div className="flex items-center mt-2">
-              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+2.3% this month</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="promo-codes">Promo Codes</TabsTrigger>
-          <TabsTrigger value="bargain-sessions">Bargain Sessions</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
-
-        {/* Promo Codes Tab */}
-        <TabsContent value="promo-codes" className="space-y-4">
-          {/* Filters */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex-1 min-w-[200px]">
-                  <Input
-                    placeholder="Search promo codes..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="paused">Paused</SelectItem>
-                    <SelectItem value="exhausted">Exhausted</SelectItem>
-                    <SelectItem value="expired">Expired</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="flights">Flights</SelectItem>
-                    <SelectItem value="hotels">Hotels</SelectItem>
-                    <SelectItem value="both">Both</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button variant="outline" size="sm">
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Promo Codes Table */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Promo Codes ({filteredPromoCodes.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
+              {/* Promo Codes Table */}
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Code & Name</TableHead>
-                      <TableHead>Type & Discount</TableHead>
-                      <TableHead>Applicable To</TableHead>
-                      <TableHead>Budget & Usage</TableHead>
-                      <TableHead>Validity</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredPromoCodes.map((promo) => (
-                      <TableRow key={promo.id}>
-                        <TableCell>
-                          <div>
-                            <p className="font-medium">{promo.code}</p>
-                            <p className="text-sm text-gray-500">{promo.name}</p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-1">
-                            {getTypeBadge(promo.type)}
-                            <p className="text-sm">
-                              {promo.discountFrom}{promo.type === 'percent' ? '%' : '₹'} - {promo.discountTo}{promo.type === 'percent' ? '%' : '₹'}
-                            </p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {getApplicableToBadge(promo.applicableTo)}
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-2">
-                            <div>
-                              <div className="flex justify-between text-sm">
-                                <span>Budget:</span>
-                                <span>₹{promo.marketingBudget.toLocaleString()}</span>
-                              </div>
-                              <Progress value={(promo.budgetUsed / promo.marketingBudget) * 100} className="mt-1" />
-                              <div className="flex justify-between text-xs text-gray-500">
-                                <span>Used: ₹{promo.budgetUsed.toLocaleString()}</span>
-                                <span>{((promo.budgetUsed / promo.marketingBudget) * 100).toFixed(1)}%</span>
-                              </div>
-                            </div>
-                            <p className="text-sm">
-                              <Users className="w-3 h-3 inline mr-1" />
-                              {promo.usageCount} uses
-                            </p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">
-                            <p>Start: {new Date(promo.validity.startDate).toLocaleDateString()}</p>
-                            <p>End: {new Date(promo.validity.endDate).toLocaleDateString()}</p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {getStatusBadge(promo.status)}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-1">
-                            <Button variant="ghost" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => {
-                              setSelectedPromo(promo);
-                              setIsEditDialogOpen(true);
-                            }}>
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm" onClick={() => handleToggleStatus(promo.id)}>
-                              {promo.status === 'active' ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <Copy className="w-4 h-4" />
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Promo Code</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete "{promo.code}"? This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => handleDeletePromo(promo.id)}>
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Bargain Sessions Tab */}
-        <TabsContent value="bargain-sessions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Bargain Sessions ({bargainSessions.length})</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Session ID</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Pricing</TableHead>
+                      <TableHead>Serial</TableHead>
                       <TableHead>Promo Code</TableHead>
+                      <TableHead>Image</TableHead>
+                      <TableHead>Min Discount</TableHead>
+                      <TableHead>Max Discount</TableHead>
+                      <TableHead>Valid Upto</TableHead>
+                      <TableHead>Minimum fare amount</TableHead>
+                      <TableHead>Marketing Budget</TableHead>
+                      <TableHead>Module</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Timestamp</TableHead>
+                      <TableHead>Created On</TableHead>
+                      <TableHead>Updated On</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {bargainSessions.map((session) => (
-                      <TableRow key={session.id}>
-                        <TableCell className="font-mono text-sm">{session.id}</TableCell>
+                    {filteredPromoCodes.map((promo, index) => (
+                      <TableRow key={promo.id}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell className="font-medium">{promo.code}</TableCell>
                         <TableCell>
-                          {session.type === 'flight' ? (
-                            <Badge className="bg-blue-100 text-blue-800">
-                              <Plane className="w-3 h-3 mr-1" />
-                              Flight
-                            </Badge>
+                          {promo.image ? (
+                            <img 
+                              src={promo.image} 
+                              alt={promo.code}
+                              className="w-12 h-8 object-cover rounded"
+                            />
                           ) : (
-                            <Badge className="bg-purple-100 text-purple-800">
-                              <Building className="w-3 h-3 mr-1" />
-                              Hotel
-                            </Badge>
+                            <div className="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+                              <ImageIcon className="w-4 h-4 text-gray-400" />
+                            </div>
                           )}
                         </TableCell>
                         <TableCell>
-                          <div className="space-y-1">
-                            <div className="text-sm">
-                              <span className="text-gray-500">Original:</span> ₹{session.originalPrice.toLocaleString()}
-                            </div>
-                            <div className="text-sm">
-                              <span className="text-gray-500">Target:</span> ₹{session.targetPrice.toLocaleString()}
-                            </div>
-                            {session.finalPrice && (
-                              <div className="text-sm font-semibold text-green-600">
-                                <span className="text-gray-500">Final:</span> ₹{session.finalPrice.toLocaleString()}
-                              </div>
-                            )}
+                          {promo.discountType === 'percentage' ? `${promo.discountMinValue}%` : `₹${promo.discountMinValue}`}
+                        </TableCell>
+                        <TableCell>₹{promo.discountMaxValue.toLocaleString()}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center text-sm">
+                            <Calendar className="w-3 h-3 mr-1" />
+                            {new Date(promo.expiryDate).toLocaleDateString()}
                           </div>
                         </TableCell>
+                        <TableCell>₹{promo.minimumFareAmount.toLocaleString()}</TableCell>
+                        <TableCell>₹{promo.marketingBudget.toLocaleString()}</TableCell>
                         <TableCell>
-                          {session.promoCode ? (
-                            <Badge variant="outline">{session.promoCode}</Badge>
-                          ) : (
-                            <span className="text-gray-400">None</span>
-                          )}
+                          <Badge variant="outline" className="capitalize">
+                            {promo.module}
+                          </Badge>
                         </TableCell>
                         <TableCell>
-                          {getStatusBadge(session.status)}
+                          <StatusBadge status={promo.status} />
                         </TableCell>
+                        <TableCell>{promo.createdOn}</TableCell>
+                        <TableCell>{promo.updatedOn}</TableCell>
                         <TableCell>
-                          <div className="text-sm">
-                            {new Date(session.timestamp).toLocaleString()}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-1">
-                            <Button variant="ghost" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="sm">
-                              <Settings className="w-4 h-4" />
-                            </Button>
-                          </div>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <MoreVertical className="w-4 h-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => handleEditPromoCode(promo)}>
+                                <Edit className="w-4 h-4 mr-2" />
+                                Edit Promo
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => togglePromoCodeStatus(promo.id)}>
+                                {promo.status === 'active' ? (
+                                  <>
+                                    <AlertCircle className="w-4 h-4 mr-2" />
+                                    Deactivate
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle className="w-4 h-4 mr-2" />
+                                    Activate
+                                  </>
+                                )}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Activity className="w-4 h-4 mr-2" />
+                                View Usage
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleDeletePromoCode(promo.id)}
+                                className="text-red-600"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Delete Promo
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -1032,95 +768,49 @@ export default function PromoCodeManager() {
           </Card>
         </TabsContent>
 
-        {/* Analytics Tab */}
-        <TabsContent value="analytics" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Top Performing Promo Codes</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {promoCodes
-                    .sort((a, b) => b.usageCount - a.usageCount)
-                    .slice(0, 5)
-                    .map((promo, index) => (
-                      <div key={promo.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{promo.code}</p>
-                          <p className="text-sm text-gray-500">{promo.usageCount} uses</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-medium">₹{promo.budgetUsed.toLocaleString()}</p>
-                          <p className="text-xs text-gray-500">
-                            {((promo.budgetUsed / promo.marketingBudget) * 100).toFixed(1)}% of budget
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Usage Distribution</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm">
-                      <span>Flight Promos</span>
-                      <span>67%</span>
-                    </div>
-                    <Progress value={67} className="mt-1" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm">
-                      <span>Hotel Promos</span>
-                      <span>45%</span>
-                    </div>
-                    <Progress value={45} className="mt-1" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm">
-                      <span>Universal Promos</span>
-                      <span>89%</span>
-                    </div>
-                    <Progress value={89} className="mt-1" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
+        <TabsContent value="create" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Performance Metrics</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                Add/Update Promo Code
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-green-600">₹2.8M</p>
-                  <p className="text-sm text-gray-600">Total Savings</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-blue-600">15.2%</p>
-                  <p className="text-sm text-gray-600">Conversion Rate</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-purple-600">₹4,580</p>
-                  <p className="text-sm text-gray-600">Avg Discount</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-orange-600">94.2%</p>
-                  <p className="text-sm text-gray-600">User Satisfaction</p>
-                </div>
+              <PromoCodeForm />
+              <div className="flex justify-end space-x-2 mt-6">
+                <Button variant="outline" onClick={() => setFormData({})}>
+                  Reset
+                </Button>
+                <Button onClick={handleSavePromoCode}>
+                  Save
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Edit Promo Code Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Promo Code</DialogTitle>
+            <DialogDescription>
+              Update promo code configuration and settings.
+            </DialogDescription>
+          </DialogHeader>
+          <PromoCodeForm isEdit={true} />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSavePromoCode}>
+              Update Promo Code
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
