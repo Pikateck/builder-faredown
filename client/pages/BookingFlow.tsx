@@ -197,17 +197,19 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
     const seatId = getTravellerSeat(travellerId, flightLeg);
     if (!seatId) return 0;
 
-    const seat = seatLayout
-      .find((r) => r.seats.find((s) => s.id === seatId))
-      ?.seats.find((s) => s.id === seatId);
+    const row = seatLayout.find(
+      (r) => r.seats && r.seats.some((s) => s.id === seatId),
+    );
+    const seat = row?.seats?.find((s) => s.id === seatId);
     return seat?.price || 0;
   };
 
   const getFlightTotalPrice = (flightLeg) => {
     return Object.keys(selectedSeats[flightLeg]).reduce((total, seatId) => {
-      const seat = seatLayout
-        .find((r) => r.seats.find((s) => s.id === seatId))
-        ?.seats.find((s) => s.id === seatId);
+      const row = seatLayout.find(
+        (r) => r.seats && r.seats.some((s) => s.id === seatId),
+      );
+      const seat = row?.seats?.find((s) => s.id === seatId);
       return total + (seat?.price || 0);
     }, 0);
   };
@@ -536,7 +538,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
                                   title={`Seat ${seat.id} - ₹${seat.price} ${seat.available ? "(Click to select)" : "(Unavailable)"}`}
                                 >
                                   {selectedSeats[flightLeg][seat.id]
-                                    ? "���"
+                                    ? "✓"
                                     : seat.available
                                       ? ""
                                       : "×"}
@@ -644,7 +646,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
         {/* Mumbai-Dubai Summary */}
         <div className="mb-4">
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Mumbai �� Dubai
+            Mumbai → Dubai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -892,19 +894,23 @@ export default function BookingFlow() {
   // Payment details state
   const [paymentDetails, setPaymentDetails] = useState({
     method: "card",
-    cardNumber: "",
-    expiryDate: "",
-    cvv: "",
-    cardholderName: "",
-    billingAddress: "",
-    postalCode: "",
+    cardNumber: "4111 1111 1111 1111",
+    expiryDate: "12/30",
+    cvv: "123",
+    cardholderName: "Test User",
+    billingAddress: "123 Test Street, Test City",
+    postalCode: "400001",
     country: "india",
     termsAccepted: false,
   });
 
   // Save travellers to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("booking_travellers", JSON.stringify(travellers));
+    try {
+      localStorage.setItem("booking_travellers", JSON.stringify(travellers));
+    } catch (error) {
+      console.warn("Failed to save travellers to localStorage:", error);
+    }
   }, [travellers]);
 
   // Utility functions for seat pricing
@@ -932,18 +938,18 @@ export default function BookingFlow() {
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
     { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
-    { name: "Honduras", code: "+504", flag: "🇭��" },
+    { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
-    { name: "Hungary", code: "+36", flag: "🇭��" },
+    { name: "Hungary", code: "+36", flag: "🇭🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
     { name: "Indonesia", code: "+62", flag: "🇮🇩" },
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
-    { name: "Isle of Man", code: "+44", flag: "🇮���" },
+    { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
-    { name: "Italy", code: "+39", flag: "🇮����" },
+    { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
@@ -955,22 +961,40 @@ export default function BookingFlow() {
 
   // Price calculation functions
   const calculateAdultPrice = () => {
-    return negotiatedPrice; // Per adult price
+    // If coming from bargain, negotiatedPrice is already all-inclusive
+    // Split it to show base fare vs taxes for display purposes only
+    const isBargainPrice = location.state?.negotiatedPrice;
+    if (isBargainPrice) {
+      return Math.round(negotiatedPrice * 0.85); // ~85% base fare, 15% taxes/fees
+    }
+    return negotiatedPrice; // Regular fare, taxes calculated separately
   };
 
   const calculateChildPrice = () => {
-    return Math.round(negotiatedPrice * 0.75); // 75% of adult price for children
+    return Math.round(calculateAdultPrice() * 0.75); // 75% of adult price for children
   };
 
   const calculateAdultTaxes = () => {
-    return Math.round(calculateAdultPrice() * 0.18); // 18% taxes
+    const isBargainPrice = location.state?.negotiatedPrice;
+    if (isBargainPrice) {
+      return negotiatedPrice - calculateAdultPrice(); // Remaining amount as taxes/fees
+    }
+    return Math.round(calculateAdultPrice() * 0.18); // 18% taxes for regular bookings
   };
 
   const calculateChildTaxes = () => {
+    const isBargainPrice = location.state?.negotiatedPrice;
+    if (isBargainPrice) {
+      return Math.round((negotiatedPrice - calculateAdultPrice()) * 0.75); // Proportional taxes for children
+    }
     return Math.round(calculateChildPrice() * 0.15); // 15% taxes for children
   };
 
   const calculateAdultTotal = () => {
+    const isBargainPrice = location.state?.negotiatedPrice;
+    if (isBargainPrice) {
+      return negotiatedPrice; // All-inclusive bargain price
+    }
     return calculateAdultPrice() + calculateAdultTaxes();
   };
 
@@ -1179,8 +1203,84 @@ export default function BookingFlow() {
       const bookingId = `FD${Date.now().toString().slice(-8)}`;
 
       // Prepare booking data
+      const isBargainPrice = location.state?.negotiatedPrice;
+      const originalPrice = selectedFareType?.price || 32168;
+
+      // Prepare meals data
+      const mealPrices = {
+        "fruit-cake": 200,
+        "vegan-special": 400,
+        "east-choice": 400,
+        "veg-biryani": 400,
+        "paneer-tikka": 400,
+        "chicken-curry": 500,
+        "mutton-biryani": 600,
+        "fish-curry": 550,
+        "dal-chawal": 350,
+        "sandwich-combo": 300,
+      };
+
+      const mealNames = {
+        "fruit-cake": "Fresh Cake Slice + Beverage",
+        "vegan-special": "Vegan Special + Beverage",
+        "east-choice": "All Less Choice Of The Day (Veg) + Beverage",
+        "veg-biryani": "Veg Biryani + Beverage",
+        "paneer-tikka": "Paneer Tikka Sandwich + Beverage",
+        "chicken-curry": "Chicken Curry + Rice + Beverage",
+        "mutton-biryani": "Mutton Biryani + Beverage",
+        "fish-curry": "Fish Curry + Rice + Beverage",
+        "dal-chawal": "Dal Chawal + Beverage",
+        "sandwich-combo": "Sandwich Combo + Beverage",
+      };
+
+      const selectedMealsData = selectedMealIds.map((id) => ({
+        id,
+        name: mealNames[id] || id,
+        price: mealPrices[id] || 0,
+      }));
+
+      // Prepare baggage data
+      const baggageData = [];
+      if (selectedBaggage.outbound.weight) {
+        const baggagePrices = {
+          "5kg": 1500,
+          "10kg": 2800,
+          "15kg": 4200,
+          "20kg": 5500,
+          "25kg": 6800,
+        };
+        baggageData.push({
+          type: "Extra Baggage",
+          weight: selectedBaggage.outbound.weight,
+          price: baggagePrices[selectedBaggage.outbound.weight] || 0,
+          flight: "Outbound",
+        });
+      }
+      if (selectedBaggage.return.weight) {
+        const baggagePrices = {
+          "5kg": 1500,
+          "10kg": 2800,
+          "15kg": 4200,
+          "20kg": 5500,
+          "25kg": 6800,
+        };
+        baggageData.push({
+          type: "Extra Baggage",
+          weight: selectedBaggage.return.weight,
+          price: baggagePrices[selectedBaggage.return.weight] || 0,
+          flight: "Return",
+        });
+      }
+
       const bookingData = {
         id: bookingId,
+        bargained: !!isBargainPrice,
+        originalPrice: isBargainPrice
+          ? originalPrice * travellers.length
+          : null,
+        baseFareTotal: calculateBaseFareTotal(),
+        extrasTotal: calculateExtrasTotal(),
+        seatFeesTotal: getTotalSeatFees(),
         passengers: travellers.map((t) => ({
           firstName: t.firstName,
           lastName: t.lastName,
@@ -1214,20 +1314,31 @@ export default function BookingFlow() {
               passenger: `${traveller?.firstName} ${traveller?.lastName}`,
               seat: seatId,
               price: seatPrice,
+              flight: flight,
             };
           }),
         ),
-        total: 92328 + calculateExtrasTotal(),
+        meals: selectedMealsData,
+        baggage: baggageData,
+        total:
+          calculateBaseFareTotal() +
+          calculateExtrasTotal() +
+          getTotalSeatFees(),
       };
 
       // Save booking data to localStorage for confirmation page
-      localStorage.setItem("latestBooking", JSON.stringify(bookingData));
+      try {
+        localStorage.setItem("latestBooking", JSON.stringify(bookingData));
+        localStorage.setItem("currentBookingType", "flight");
+      } catch (error) {
+        console.warn("Failed to save booking data to localStorage:", error);
+      }
 
       // Simulate payment processing
       console.log("Processing payment...", paymentDetails);
 
-      // Navigate to confirmation
-      navigate("/booking-confirmation", { replace: true });
+      // Navigate to confirmation with flight type indicator
+      navigate("/booking-confirmation?type=flight", { replace: true });
     } catch (error) {
       console.error("Booking failed:", error);
       // Handle error - could show error message
@@ -1274,24 +1385,6 @@ export default function BookingFlow() {
                   className="text-white hover:text-blue-100 cursor-pointer flex items-center py-4"
                 >
                   <span>Hotels</span>
-                </Link>
-                <Link
-                  to="/transfers"
-                  className="text-white hover:text-blue-100 cursor-pointer flex items-center py-4"
-                >
-                  <span>Transfers</span>
-                </Link>
-                <Link
-                  to="/sightseeing"
-                  className="text-white hover:text-blue-100 cursor-pointer flex items-center py-4"
-                >
-                  <span>Sightseeing</span>
-                </Link>
-                <Link
-                  to="/sports"
-                  className="text-white hover:text-blue-100 cursor-pointer py-4 flex items-center"
-                >
-                  <span>Sports & Events</span>
                 </Link>
               </nav>
 
@@ -1575,7 +1668,7 @@ export default function BookingFlow() {
                                 1 carry-on bag
                               </p>
                               <p className="text-xs text-[#666]">
-                                22 x 55 x 40 cm ��� 7 kg
+                                22 x 55 x 40 cm • 7 kg
                               </p>
                             </div>
                           </div>
@@ -1686,7 +1779,7 @@ export default function BookingFlow() {
                                   20kg - ₹ 5,500
                                 </SelectItem>
                                 <SelectItem value="25kg">
-                                  25kg - ₹ 6,800
+                                  25kg - ��� 6,800
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -1869,7 +1962,7 @@ export default function BookingFlow() {
                                 Bronze Service (1000₹ if Bag Coverage)
                               </span>
                             </div>
-                            <span className="font-semibold">��49</span>
+                            <span className="font-semibold">₹49</span>
                           </div>
                         </label>
 
@@ -2488,6 +2581,33 @@ export default function BookingFlow() {
                       </div>
                     </div>
 
+                    {/* Final Payment Summary */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-semibold text-gray-900">
+                          Final Amount
+                        </span>
+                        <span className="text-xl font-bold text-blue-700">
+                          {formatCurrency(
+                            calculateBaseFareTotal() +
+                              calculateExtrasTotal() +
+                              getTotalSeatFees(),
+                          )}
+                        </span>
+                      </div>
+                      {location.state?.negotiatedPrice && (
+                        <div className="text-sm text-blue-700">
+                          <CheckCircle className="w-4 h-4 inline mr-1" />
+                          Bargained all-inclusive price - no hidden fees
+                        </div>
+                      )}
+                      {!location.state?.negotiatedPrice && (
+                        <div className="text-sm text-gray-600">
+                          Includes all taxes, fees & payment gateway charges
+                        </div>
+                      )}
+                    </div>
+
                     {/* Payment Security Notice */}
                     <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                       <div className="flex items-center space-x-2">
@@ -2529,7 +2649,9 @@ export default function BookingFlow() {
                     onClick={handleNextStep}
                     className="bg-[#003580] hover:bg-[#009fe3] text-white px-8 w-full sm:w-auto"
                   >
-                    {currentStep === 4 ? "Complete Booking" : "Next"}
+                    {currentStep === 4
+                      ? `Pay ${formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}`
+                      : "Next"}
                   </Button>
                 </div>
               </div>
@@ -2542,6 +2664,22 @@ export default function BookingFlow() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Price details
               </h3>
+
+              {/* Bargain Price Indicator */}
+              {location.state?.negotiatedPrice && (
+                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-800">
+                      Bargained Price - All Inclusive
+                    </span>
+                  </div>
+                  <p className="text-xs text-green-700 mt-1">
+                    This price includes all airline taxes, fees & payment
+                    gateway charges
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-4">
                 <div>

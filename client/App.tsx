@@ -30,6 +30,16 @@ import MobileBargain from "./pages/MobileBargain";
 import MobileBooking from "./pages/MobileBooking";
 import MobileConfirmation from "./pages/MobileConfirmation";
 import MobileTrips from "./pages/MobileTrips";
+import MyTrips from "./pages/MyTrips";
+import ApiTestPanel from "./components/ApiTestPanel";
+import BackendTestDashboard from "./components/BackendTestDashboard";
+
+// Admin Pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLogin from "./pages/admin/AdminLogin";
+import UserManagement from "./pages/admin/UserManagement";
+import BargainEngine from "./pages/admin/BargainEngine";
+import PaymentDashboard from "./pages/admin/PaymentDashboard";
 
 function App() {
   return (
@@ -48,8 +58,7 @@ function App() {
             />
             <Route path="/account" element={<Account />} />
             <Route path="/my-account" element={<Account />} />
-            <Route path="/account/trips" element={<Account />} />
-            <Route path="/account/payment" element={<Account />} />
+            <Route path="/account/trips" element={<MyTrips />} />
             <Route path="/hotels" element={<Hotels />} />
             <Route path="/hotels/results" element={<HotelResults />} />
             <Route path="/hotels/:hotelId" element={<HotelDetails />} />
@@ -66,6 +75,19 @@ function App() {
             <Route path="/sports" element={<SportsEvents />} />
             <Route path="/sports-events" element={<SportsEvents />} />
             <Route path="/transfers" element={<Transfers />} />
+            <Route path="/my-trips" element={<MyTrips />} />
+
+            {/* Development/Testing Routes */}
+            <Route path="/api-test" element={<ApiTestPanel />} />
+            <Route path="/backend-test" element={<BackendTestDashboard />} />
+
+            {/* Admin CMS Routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/bargain" element={<BargainEngine />} />
+            <Route path="/admin/payments" element={<PaymentDashboard />} />
 
             {/* Mobile App Routes */}
             <Route path="/mobile" element={<MobileHome />} />

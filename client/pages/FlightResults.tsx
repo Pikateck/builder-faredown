@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -57,7 +57,8 @@ const flightData = [
     returnArrivalTime: "17:40",
     returnDuration: "4h 40m",
     airline: "Emirates",
-    logo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI0VDMTEyNiIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FSzwvdGV4dD4KPC9zdmc+",
+    flightNumber: "EK 500",
+    logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
     aircraft: "Boeing 777",
     flightType: "Direct",
     stops: 0,
@@ -93,7 +94,8 @@ const flightData = [
     returnArrivalTime: "17:40",
     returnDuration: "4h 40m",
     airline: "Emirates",
-    logo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI0VDMTEyNiIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5FSzwvdGV4dD4KPC9zdmc+",
+    flightNumber: "EK 502",
+    logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
     aircraft: "Boeing 777",
     flightType: "Direct",
     stops: 0,
@@ -129,7 +131,8 @@ const flightData = [
     returnArrivalTime: "23:15",
     returnDuration: "4h 45m",
     airline: "Air India",
-    logo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iI0ZGNjkwMCIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BSTwvdGV4dD4KPC9zdmc+",
+    flightNumber: "AI 131",
+    logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
     aircraft: "Airbus A320",
     flightType: "Direct",
     stops: 0,
@@ -159,7 +162,8 @@ const flightData = [
     returnArrivalTime: "19:30",
     returnDuration: "5h 30m",
     airline: "Indigo",
-    logo: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzJEMzc0OCIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JRzwvdGV4dD4KPC9zdmc+",
+    flightNumber: "6E 1406",
+    logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Airbus A321",
     flightType: "1 Stop",
     stops: 1,
@@ -216,6 +220,51 @@ export default function FlightResults() {
     useState("09-Dec-2024");
   const [selectedReturnDate, setSelectedReturnDate] = useState("16-Dec-2024");
   const [selectingDeparture, setSelectingDeparture] = useState(true);
+  const [currentCalendarMonth, setCurrentCalendarMonth] = useState(0); // 0 = Dec 2024, 1 = Jan 2025, etc.
+
+  // Calendar month data
+  const getCalendarMonths = () => {
+    const baseDate = new Date(2024, 11, 1); // December 2024
+    const months = [];
+    for (let i = 0; i < 12; i++) {
+      const date = new Date(baseDate.getFullYear(), baseDate.getMonth() + i, 1);
+      months.push({
+        name: date.toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric",
+        }),
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        daysInMonth: new Date(
+          date.getFullYear(),
+          date.getMonth() + 1,
+          0,
+        ).getDate(),
+        firstDayOfWeek: date.getDay(),
+      });
+    }
+    return months;
+  };
+
+  const calendarMonths = getCalendarMonths();
+
+  // Close calendar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (showCalendar && !target.closest(".calendar-container")) {
+        setShowCalendar(false);
+      }
+    };
+
+    if (showCalendar) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showCalendar]);
 
   // City data mapping
   const cityData = {
@@ -297,6 +346,111 @@ export default function FlightResults() {
   const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
   const [isOfferValid, setIsOfferValid] = useState(false);
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
+
+  // Format number with commas
+  const formatNumberWithCommas = (num: string) => {
+    if (!num) return "";
+    return parseInt(num).toLocaleString("en-IN");
+  };
+
+  // Convert number to words (Indian numbering system)
+  const numberToWords = (num: string): string => {
+    if (!num || parseInt(num) <= 0) return "";
+
+    const n = parseInt(num);
+    const ones = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+    ];
+    const teens = [
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ];
+    const tens = [
+      "",
+      "",
+      "Twenty",
+      "Thirty",
+      "Forty",
+      "Fifty",
+      "Sixty",
+      "Seventy",
+      "Eighty",
+      "Ninety",
+    ];
+
+    const convertHundreds = (num: number): string => {
+      let result = "";
+
+      if (num >= 100) {
+        result += ones[Math.floor(num / 100)] + " Hundred ";
+        num %= 100;
+      }
+
+      if (num >= 20) {
+        result += tens[Math.floor(num / 10)] + " ";
+        num %= 10;
+      } else if (num >= 10) {
+        result += teens[num - 10] + " ";
+        return result;
+      }
+
+      if (num > 0) {
+        result += ones[num] + " ";
+      }
+
+      return result;
+    };
+
+    if (n === 0) return "Zero";
+
+    let result = "";
+
+    // Handle crores (10,000,000s)
+    if (n >= 10000000) {
+      result += convertHundreds(Math.floor(n / 10000000)) + "Crore ";
+    }
+
+    // Handle lakhs (100,000s)
+    if (n >= 100000) {
+      const lakhs = Math.floor((n % 10000000) / 100000);
+      if (lakhs > 0) {
+        result += convertHundreds(lakhs) + "Lakh ";
+      }
+    }
+
+    // Handle thousands
+    if (n >= 1000) {
+      const thousands = Math.floor((n % 100000) / 1000);
+      if (thousands > 0) {
+        result += convertHundreds(thousands) + "Thousand ";
+      }
+    }
+
+    // Handle hundreds
+    const remainder = n % 1000;
+    if (remainder > 0) {
+      result += convertHundreds(remainder);
+    }
+
+    return result.trim() + " Rupees Only";
+  };
 
   // Airlines filter state - Initialize with all airlines selected to show all flights by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
@@ -517,7 +671,7 @@ export default function FlightResults() {
       return `${selectedCurrency.symbol}0`;
     }
     const convertedPrice = convertPrice(priceInINR);
-    return `${selectedCurrency.symbol}${convertedPrice.toLocaleString()}`;
+    return `${selectedCurrency.symbol}${Math.round(convertedPrice).toLocaleString()}`;
   };
 
   // Handle airline filter selection
@@ -832,30 +986,11 @@ export default function FlightResults() {
                 >
                   <span>Hotels</span>
                 </Link>
-                <Link
-                  to="/transfers"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4"
-                >
-                  <span>Transfers</span>
-                </Link>
-                <Link
-                  to="/sightseeing"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4"
-                >
-                  <span>Sightseeing</span>
-                </Link>
-                <Link
-                  to="/sports"
-                  className="text-white hover:text-blue-200 cursor-pointer py-4 flex items-center"
-                >
-                  <span>Sports & Events</span>
-                </Link>
               </nav>
 
               {/* Language and Currency */}
               <div className="hidden md:flex items-center space-x-4 text-sm">
                 <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                  <span>🌐</span>
                   <span>English (UK)</span>
                 </button>
                 <div className="relative">
@@ -877,7 +1012,7 @@ export default function FlightResults() {
                         { code: "EUR", symbol: "€", name: "Euro" },
                         { code: "GBP", symbol: "£", name: "British Pound" },
                         { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                        { code: "AED", symbol: "��.إ", name: "UAE Dirham" },
+                        { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
                         { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
                         { code: "JPY", symbol: "¥", name: "Japanese Yen" },
                         { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
@@ -1265,30 +1400,50 @@ export default function FlightResults() {
                 </button>
 
                 {showCalendar && (
-                  <div className="absolute top-14 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-[650px] overflow-hidden">
+                  <div className="calendar-container absolute top-14 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-[650px] overflow-hidden">
                     <div className="flex justify-between items-center p-4 bg-white border-b border-gray-200">
-                      <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <ChevronLeft className="w-4 h-4 text-gray-600" />
+                      <button
+                        onClick={() =>
+                          setCurrentCalendarMonth(
+                            Math.max(0, currentCalendarMonth - 1),
+                          )
+                        }
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        disabled={currentCalendarMonth === 0}
+                      >
+                        <ChevronLeft
+                          className={`w-4 h-4 ${currentCalendarMonth === 0 ? "text-gray-300" : "text-gray-600"}`}
+                        />
                       </button>
                       <div className="flex space-x-16">
                         <div className="text-center">
                           <div className="font-medium text-gray-900">
-                            December 2024
+                            {calendarMonths[currentCalendarMonth]?.name}
                           </div>
                         </div>
                         <div className="text-center">
                           <div className="font-medium text-gray-900">
-                            January 2025
+                            {calendarMonths[currentCalendarMonth + 1]?.name}
                           </div>
                         </div>
                       </div>
-                      <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <ChevronRight className="w-4 h-4 text-gray-600" />
+                      <button
+                        onClick={() =>
+                          setCurrentCalendarMonth(
+                            Math.min(10, currentCalendarMonth + 1),
+                          )
+                        }
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        disabled={currentCalendarMonth >= 10}
+                      >
+                        <ChevronRight
+                          className={`w-4 h-4 ${currentCalendarMonth >= 10 ? "text-gray-300" : "text-gray-600"}`}
+                        />
                       </button>
                     </div>
 
                     <div className="grid grid-cols-2 divide-x divide-gray-200">
-                      {/* December Calendar */}
+                      {/* First Month Calendar */}
                       <div className="p-4">
                         <div className="grid grid-cols-7 gap-1 mb-3">
                           <div className="text-center py-2 text-xs font-medium text-gray-500">
@@ -1315,49 +1470,46 @@ export default function FlightResults() {
                         </div>
                         <div className="grid grid-cols-7 gap-1">
                           {Array.from({ length: 42 }, (_, i) => {
-                            const day = i - 6; // December 2024 starts on Sunday
-                            const isValidDay = day >= 1 && day <= 31;
-                            const isDeparture = isValidDay && day === 9;
-                            const isReturn = isValidDay && day === 16;
-                            const isInRange = isValidDay && day > 9 && day < 16;
+                            const currentMonth =
+                              calendarMonths[currentCalendarMonth];
+                            if (!currentMonth)
+                              return <div key={i} className="h-10"></div>;
+
+                            const day = i - currentMonth.firstDayOfWeek + 1;
+                            const isValidDay =
+                              day >= 1 && day <= currentMonth.daysInMonth;
 
                             if (!isValidDay) {
                               return <div key={i} className="h-10"></div>;
                             }
+
+                            const dateStr = `${day.toString().padStart(2, "0")}-${currentMonth.name.split(" ")[0].slice(0, 3)}-${currentMonth.year}`;
+                            const isDeparture =
+                              selectedDepartureDate === dateStr;
+                            const isReturn = selectedReturnDate === dateStr;
 
                             return (
                               <button
                                 key={i}
                                 onClick={() => {
                                   if (tripType === "one-way") {
-                                    setSelectedDepartureDate(
-                                      `${day.toString().padStart(2, "0")}-Dec-2024`,
-                                    );
+                                    setSelectedDepartureDate(dateStr);
+                                    setShowCalendar(false);
                                   } else {
                                     if (selectingDeparture) {
-                                      setSelectedDepartureDate(
-                                        `${day.toString().padStart(2, "0")}-Dec-2024`,
-                                      );
+                                      setSelectedDepartureDate(dateStr);
                                       setSelectingDeparture(false);
                                     } else {
-                                      setSelectedReturnDate(
-                                        `${day.toString().padStart(2, "0")}-Dec-2024`,
-                                      );
+                                      setSelectedReturnDate(dateStr);
                                       setSelectingDeparture(true);
+                                      setShowCalendar(false);
                                     }
                                   }
                                 }}
                                 className={cn(
                                   "h-10 w-10 text-sm font-medium flex items-center justify-center hover:bg-blue-50 transition-colors rounded text-gray-900",
-                                  tripType === "one-way"
-                                    ? isDeparture &&
-                                        "bg-blue-600 text-white hover:bg-blue-700"
-                                    : (isDeparture &&
-                                        "bg-blue-600 text-white hover:bg-blue-700") ||
-                                        (isReturn &&
-                                          "bg-blue-600 text-white hover:bg-blue-700") ||
-                                        (isInRange &&
-                                          "bg-blue-100 text-blue-900"),
+                                  (isDeparture || isReturn) &&
+                                    "bg-blue-600 text-white hover:bg-blue-700",
                                 )}
                               >
                                 {day}
@@ -1367,7 +1519,7 @@ export default function FlightResults() {
                         </div>
                       </div>
 
-                      {/* January Calendar */}
+                      {/* Second Month Calendar */}
                       <div className="p-4">
                         <div className="grid grid-cols-7 gap-1 mb-3">
                           <div className="text-center py-2 text-xs font-medium text-gray-500">
@@ -1394,36 +1546,47 @@ export default function FlightResults() {
                         </div>
                         <div className="grid grid-cols-7 gap-1">
                           {Array.from({ length: 42 }, (_, i) => {
-                            const day = i - 2; // January 2025 starts on Wednesday
-                            const isValidDay = day >= 1 && day <= 31;
+                            const currentMonth =
+                              calendarMonths[currentCalendarMonth + 1];
+                            if (!currentMonth)
+                              return <div key={i} className="h-10"></div>;
+
+                            const day = i - currentMonth.firstDayOfWeek + 1;
+                            const isValidDay =
+                              day >= 1 && day <= currentMonth.daysInMonth;
 
                             if (!isValidDay) {
                               return <div key={i} className="h-10"></div>;
                             }
+
+                            const dateStr = `${day.toString().padStart(2, "0")}-${currentMonth.name.split(" ")[0].slice(0, 3)}-${currentMonth.year}`;
+                            const isDeparture =
+                              selectedDepartureDate === dateStr;
+                            const isReturn = selectedReturnDate === dateStr;
 
                             return (
                               <button
                                 key={i}
                                 onClick={() => {
                                   if (tripType === "one-way") {
-                                    setSelectedDepartureDate(
-                                      `${day.toString().padStart(2, "0")}-Jan-2025`,
-                                    );
+                                    setSelectedDepartureDate(dateStr);
+                                    setShowCalendar(false);
                                   } else {
                                     if (selectingDeparture) {
-                                      setSelectedDepartureDate(
-                                        `${day.toString().padStart(2, "0")}-Jan-2025`,
-                                      );
+                                      setSelectedDepartureDate(dateStr);
                                       setSelectingDeparture(false);
                                     } else {
-                                      setSelectedReturnDate(
-                                        `${day.toString().padStart(2, "0")}-Jan-2025`,
-                                      );
+                                      setSelectedReturnDate(dateStr);
                                       setSelectingDeparture(true);
+                                      setShowCalendar(false);
                                     }
                                   }
                                 }}
-                                className="h-10 w-10 text-sm font-medium flex items-center justify-center hover:bg-blue-50 transition-colors rounded text-gray-900"
+                                className={cn(
+                                  "h-10 w-10 text-sm font-medium flex items-center justify-center hover:bg-blue-50 transition-colors rounded text-gray-900",
+                                  (isDeparture || isReturn) &&
+                                    "bg-blue-600 text-white hover:bg-blue-700",
+                                )}
                               >
                                 {day}
                               </button>
@@ -1575,7 +1738,7 @@ export default function FlightResults() {
                 <div className="text-sm text-gray-600">BOM → DXB</div>
                 <div className="text-sm text-gray-600">•</div>
                 <div className="text-sm text-gray-600">Dec 9-16</div>
-                <div className="text-sm text-gray-600">•</div>
+                <div className="text-sm text-gray-600">1 adult</div>
                 <div className="text-sm text-gray-600">
                   {travelers.adults + travelers.children} travelers
                 </div>
@@ -1610,7 +1773,7 @@ export default function FlightResults() {
           </div>
 
           {/* Desktop Sidebar - Filters */}
-          <div className="hidden lg:block w-64 flex-shrink-0 space-y-4 lg:space-y-6">
+          <div className="hidden lg:block w-64 flex-shrink-0 space-y-4">
             {/* Filter by Results */}
             <div className="bg-white rounded-lg border p-4">
               <div className="flex items-center justify-between mb-4">
@@ -1623,9 +1786,11 @@ export default function FlightResults() {
               </div>
 
               {/* Stops */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Stops</h4>
-                <div className="space-y-2">
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium text-gray-900">Stops</h4>
+                </div>
+                <div>
                   <label className="flex items-center justify-between cursor-pointer">
                     <div className="flex items-center">
                       <input
@@ -1653,9 +1818,30 @@ export default function FlightResults() {
               </div>
 
               {/* Airlines */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Airlines</h4>
-                <div className="space-y-2 max-h-80 overflow-y-auto">
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium text-gray-900">Airlines</h4>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() =>
+                        setSelectedAirlines(
+                          new Set(airlinesData.map((a) => a.name)),
+                        )
+                      }
+                      className="text-blue-600 text-xs hover:underline"
+                    >
+                      Select all
+                    </button>
+                    <span className="text-gray-400 text-xs">•</span>
+                    <button
+                      onClick={() => setSelectedAirlines(new Set())}
+                      className="text-blue-600 text-xs hover:underline"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                </div>
+                <div className="max-h-80 overflow-y-auto">
                   {airlinesData.map((airline) => (
                     <label
                       key={airline.id}
@@ -1685,25 +1871,6 @@ export default function FlightResults() {
                     </label>
                   ))}
                 </div>
-                <div className="mt-3 flex space-x-2">
-                  <button
-                    onClick={() =>
-                      setSelectedAirlines(
-                        new Set(airlinesData.map((a) => a.name)),
-                      )
-                    }
-                    className="text-blue-600 text-sm hover:underline"
-                  >
-                    Select all
-                  </button>
-                  <span className="text-gray-400">•</span>
-                  <button
-                    onClick={() => setSelectedAirlines(new Set())}
-                    className="text-blue-600 text-sm hover:underline"
-                  >
-                    Clear all
-                  </button>
-                </div>
                 {selectedAirlines.size > 0 && (
                   <div className="mt-2 text-xs text-gray-600">
                     {selectedAirlines.size} airline
@@ -1713,40 +1880,49 @@ export default function FlightResults() {
               </div>
 
               {/* Flight times */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">Flight times</h4>
-                <div className="space-y-3">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium text-gray-900">Flight times</h4>
+                  <div className="flex space-x-2">
+                    <button className="text-blue-600 text-xs hover:underline">
+                      Select all
+                    </button>
+                    <span className="text-gray-400 text-xs">•</span>
+                    <button className="text-blue-600 text-xs hover:underline">
+                      Clear all
+                    </button>
+                  </div>
+                </div>
+                <div>
                   <div>
-                    <div className="text-sm font-medium mb-1">
-                      Departing flight
-                    </div>
+                    <div className="text-sm font-medium">Departing flight</div>
                     {tripType === "round-trip" && (
                       <div className="text-sm text-gray-600">Return flight</div>
                     )}
                   </div>
-                  <div className="space-y-2">
-                    <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <label className="flex items-center justify-between cursor-pointer py-1.5">
                       <div className="flex items-center">
                         <input type="checkbox" className="mr-3 text-blue-600" />
                         <span className="text-sm">00:00-05:59</span>
                       </div>
                       <span className="text-sm text-gray-500">5</span>
                     </label>
-                    <label className="flex items-center justify-between cursor-pointer">
+                    <label className="flex items-center justify-between cursor-pointer py-1.5">
                       <div className="flex items-center">
                         <input type="checkbox" className="mr-3 text-blue-600" />
                         <span className="text-sm">06:00-11:59</span>
                       </div>
                       <span className="text-sm text-gray-500">9</span>
                     </label>
-                    <label className="flex items-center justify-between cursor-pointer">
+                    <label className="flex items-center justify-between cursor-pointer py-1.5">
                       <div className="flex items-center">
                         <input type="checkbox" className="mr-3 text-blue-600" />
                         <span className="text-sm">12:00-17:59</span>
                       </div>
                       <span className="text-sm text-gray-500">18</span>
                     </label>
-                    <label className="flex items-center justify-between cursor-pointer">
+                    <label className="flex items-center justify-between cursor-pointer py-1.5">
                       <div className="flex items-center">
                         <input type="checkbox" className="mr-3 text-blue-600" />
                         <span className="text-sm">18:00-23:59</span>
@@ -1758,33 +1934,33 @@ export default function FlightResults() {
               </div>
 
               {/* Arrival times */}
-              <div className="mb-6">
-                <h4 className="font-medium text-gray-900 mb-3">
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900">
                   Arrival to Dubai
-                </h4>
-                <div className="space-y-2">
-                  <label className="flex items-center justify-between cursor-pointer">
+                </h3>
+                <div>
+                  <label className="flex items-center justify-between cursor-pointer py-1.5">
                     <div className="flex items-center">
                       <input type="checkbox" className="mr-3 text-blue-600" />
                       <span className="text-sm">00:00-05:59</span>
                     </div>
                     <span className="text-sm text-gray-500">5</span>
                   </label>
-                  <label className="flex items-center justify-between cursor-pointer">
+                  <label className="flex items-center justify-between cursor-pointer py-1.5">
                     <div className="flex items-center">
                       <input type="checkbox" className="mr-3 text-blue-600" />
                       <span className="text-sm">06:00-11:59</span>
                     </div>
                     <span className="text-sm text-gray-500">9</span>
                   </label>
-                  <label className="flex items-center justify-between cursor-pointer">
+                  <label className="flex items-center justify-between cursor-pointer py-1.5">
                     <div className="flex items-center">
                       <input type="checkbox" className="mr-3 text-blue-600" />
                       <span className="text-sm">12:00-17:59</span>
                     </div>
                     <span className="text-sm text-gray-500">1</span>
                   </label>
-                  <label className="flex items-center justify-between cursor-pointer">
+                  <label className="flex items-center justify-between cursor-pointer py-1.5">
                     <div className="flex items-center">
                       <input type="checkbox" className="mr-3 text-blue-600" />
                       <span className="text-sm">18:00-23:59</span>
@@ -1796,8 +1972,10 @@ export default function FlightResults() {
 
               {/* Refundable */}
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Refundable</h4>
-                <div className="space-y-2">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium text-gray-900">Refundable</h4>
+                </div>
+                <div>
                   <label className="flex items-center justify-between cursor-pointer">
                     <div className="flex items-center">
                       <input
@@ -1961,9 +2139,9 @@ export default function FlightResults() {
                               handleBargain(flight, flight.fareTypes[0])
                             }
                             variant="outline"
-                            className="bg-white border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-medium py-3 touch-manipulation"
+                            className="bg-white border-2 border-orange-500 text-orange-600 hover:bg-orange-500 hover:text-white hover:border-orange-500 font-medium py-3 touch-manipulation transition-all duration-200 shadow-sm hover:shadow-md"
                           >
-                            🏷️ Bargain
+                            Bargain
                           </Button>
                           <Button
                             onClick={() =>
@@ -1971,7 +2149,7 @@ export default function FlightResults() {
                             }
                             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 touch-manipulation"
                           >
-                            Select Flight
+                            Book This Flight
                           </Button>
                         </div>
                       </div>
@@ -2122,8 +2300,11 @@ export default function FlightResults() {
                             <Luggage className="w-4 h-4 text-green-600" />
                             <Shield className="w-4 h-4 text-green-600" />
                           </div>
-                          <div className="text-xl font-bold text-gray-900 mb-4">
+                          <div className="text-xl font-bold text-gray-900 mb-1">
                             {formatPrice(flight.fareTypes[0].price)}
+                          </div>
+                          <div className="text-xs text-gray-600 mb-4">
+                            All-inclusive price
                           </div>
                           <div className="space-y-2 w-32">
                             <Button
@@ -2131,14 +2312,14 @@ export default function FlightResults() {
                                 handleBargain(flight, flight.fareTypes[0])
                               }
                               variant="outline"
-                              className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 text-sm py-2 font-medium transition-colors duration-200"
+                              className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-sm py-2 font-medium transition-all duration-200 shadow-sm hover:shadow-md"
                             >
                               Bargain
                             </Button>
                             <Button
                               onClick={() => showFlightDetailsModal(flight)}
                               variant="outline"
-                              className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 text-sm py-2 font-medium transition-colors duration-200"
+                              className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-sm py-2 font-medium transition-all duration-200 shadow-sm hover:shadow-md"
                             >
                               View details
                             </Button>
@@ -2239,8 +2420,11 @@ export default function FlightResults() {
                                 <Shield className="w-4 h-4 text-green-600" />
                                 <Users className="w-4 h-4 text-green-600" />
                               </div>
-                              <div className="text-lg font-bold text-gray-900 mb-3">
+                              <div className="text-lg font-bold text-gray-900 mb-1">
                                 {formatPrice(fareType.price)}
+                              </div>
+                              <div className="text-xs text-gray-600 mb-3">
+                                All-inclusive
                               </div>
                               <div className="space-y-2">
                                 <Button
@@ -2248,14 +2432,14 @@ export default function FlightResults() {
                                     handleBargain(flight, fareType)
                                   }
                                   variant="outline"
-                                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 text-xs py-1.5 transition-colors duration-200"
+                                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-xs py-1.5 transition-all duration-200 shadow-sm hover:shadow-md"
                                 >
                                   Bargain
                                 </Button>
                                 <Button
                                   onClick={() => showFlightDetailsModal(flight)}
                                   variant="outline"
-                                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:border-blue-700 text-xs py-1.5 transition-colors duration-200"
+                                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-xs py-1.5 transition-all duration-200 shadow-sm hover:shadow-md"
                                 >
                                   View details
                                 </Button>
@@ -2328,13 +2512,18 @@ export default function FlightResults() {
                           {bargainFlight.airline}
                         </h3>
                         <p className="text-sm text-gray-600">
-                          {bargainFareType.name} • Emirates
+                          {bargainFareType.name} • {bargainFlight.airline}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">Current Price</p>
+                        <p className="text-sm text-gray-600">
+                          Current All-Inclusive Price
+                        </p>
                         <p className="text-2xl font-bold text-gray-900">
                           {formatPrice(bargainFareType.price)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Taxes, fees & gateway charges included
                         </p>
                       </div>
                     </div>
@@ -2371,9 +2560,20 @@ export default function FlightResults() {
                       </label>
                       <div className="relative">
                         <Input
-                          type="number"
-                          value={bargainPrice}
-                          onChange={(e) => setBargainPrice(e.target.value)}
+                          type="text"
+                          value={
+                            bargainPrice
+                              ? formatNumberWithCommas(bargainPrice)
+                              : ""
+                          }
+                          onChange={(e) => {
+                            // Remove commas and non-numeric characters
+                            const numericValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            setBargainPrice(numericValue);
+                          }}
                           placeholder="Input your bargain price here"
                           className="text-xl font-bold text-center py-6 border-2 border-purple-200 focus:border-purple-500 placeholder:text-gray-400 placeholder:font-normal"
                         />
@@ -2383,6 +2583,52 @@ export default function FlightResults() {
                           </span>
                         </div>
                       </div>
+                      {bargainPrice && parseInt(bargainPrice) > 0 && (
+                        <div className="mt-3">
+                          {/* Price in words */}
+                          <div className="text-xs text-gray-600 text-center mb-3">
+                            {numberToWords(bargainPrice)}
+                          </div>
+
+                          {/* Validation popup */}
+                          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 shadow-sm">
+                            <div className="flex items-center justify-center space-x-2 mb-2">
+                              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <span className="text-white text-sm font-bold">
+                                  ✓
+                                </span>
+                              </div>
+                              <span className="text-green-700 font-semibold">
+                                Price Ready!
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-700 text-center">
+                              Your offer of{" "}
+                              <span className="font-bold text-green-600">
+                                {selectedCurrency.symbol}
+                                {formatNumberWithCommas(bargainPrice)}
+                              </span>{" "}
+                              is ready for AI negotiation.
+                            </p>
+                            {parseInt(bargainPrice) <
+                              bargainFareType.price * 0.7 && (
+                              <p className="text-xs text-amber-600 text-center mt-2">
+                                Very aggressive pricing - success rate may be
+                                lower
+                              </p>
+                            )}
+                            {parseInt(bargainPrice) >=
+                              bargainFareType.price * 0.7 &&
+                              parseInt(bargainPrice) <=
+                                bargainFareType.price * 0.9 && (
+                                <p className="text-xs text-green-600 text-center mt-2">
+                                  Good negotiation range - higher success
+                                  probability
+                                </p>
+                              )}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Used Prices Warning */}
@@ -2407,7 +2653,7 @@ export default function FlightResults() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <div className="flex items-start space-x-3">
                         <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-white text-xs">💡</span>
+                          <span className="text-white text-xs">i</span>
                         </div>
                         <div>
                           <p className="text-sm font-medium text-blue-900 mb-1">
@@ -2415,8 +2661,9 @@ export default function FlightResults() {
                           </p>
                           <p className="text-xs text-blue-700">
                             Prices 20-30% below original have higher success
-                            rates. The AI will try to match your price or offer
-                            something closer!
+                            rates. All prices are completely inclusive (taxes,
+                            fees & payment charges). The AI will try to match
+                            your price or offer something closer!
                           </p>
                         </div>
                       </div>
@@ -2433,7 +2680,7 @@ export default function FlightResults() {
                       disabled={!bargainPrice || parseInt(bargainPrice) <= 0}
                       className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg font-semibold rounded-xl disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
-                      🤖 Start AI Negotiation
+                      Start AI Negotiation
                     </Button>
                   </div>
                 </>
@@ -2446,7 +2693,7 @@ export default function FlightResults() {
                       <RefreshCw className="w-10 h-10 text-white animate-spin" />
                     </div>
                     <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">✈️</span>
+                      <span className="text-white text-xs">✓</span>
                     </div>
                   </div>
                   <div>
@@ -2475,15 +2722,18 @@ export default function FlightResults() {
                           <CheckCircle className="w-12 h-12 text-green-600" />
                         </div>
                         <h3 className="text-2xl font-bold text-green-600 mb-2">
-                          Perfect Match! 🎉
+                          Perfect Match!
                         </h3>
                         <p className="text-gray-600 mb-1">
                           The airline accepted your exact price!
                         </p>
                         <p className="text-sm text-green-700 font-medium">
-                          ✨ This is your{" "}
-                          <span className="font-bold">final flight price</span>{" "}
-                          - any extras will be additional
+                          This is your{" "}
+                          <span className="font-bold">
+                            final all-inclusive price
+                          </span>{" "}
+                          - includes all taxes, fees & payment gateway charges.
+                          Only extras will be additional.
                         </p>
                       </div>
 
@@ -2533,9 +2783,12 @@ export default function FlightResults() {
                           their best offer!
                         </p>
                         <p className="text-sm text-blue-700 font-medium">
-                          ✨ This is the{" "}
-                          <span className="font-bold">final flight price</span>{" "}
-                          - any extras will be additional
+                          This is the{" "}
+                          <span className="font-bold">
+                            final all-inclusive price
+                          </span>{" "}
+                          - includes all taxes, fees & payment gateway charges.
+                          Only extras will be additional.
                         </p>
                       </div>
 
@@ -2603,8 +2856,8 @@ export default function FlightResults() {
                       <div className="space-y-3">
                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
                           <p className="text-xs text-blue-700 text-center">
-                            📋 <strong>Next:</strong> Choose your seat, meals &
-                            extras before final payment
+                            ���� <strong>Next:</strong> Choose your seat, meals
+                            & extras before final payment
                           </p>
                         </div>
                         <Button
@@ -2618,7 +2871,7 @@ export default function FlightResults() {
                           disabled={!isOfferValid}
                           className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 text-lg font-bold rounded-xl"
                         >
-                          🚀 Book This Deal - {selectedCurrency.symbol}
+                          Book This Deal - {selectedCurrency.symbol}
                           {bargainResult === "accepted"
                             ? parseInt(bargainPrice).toLocaleString()
                             : aiOfferPrice
@@ -2701,38 +2954,98 @@ export default function FlightResults() {
                         selectedFlightForDetails.fareTypes[0]?.price || 0
                       ).toLocaleString()}
                     </div>
-                    <p className="text-sm text-gray-500">per person</p>
+                    <p className="text-sm text-gray-500">
+                      per person (all-inclusive)
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Flight Route */}
               <div className="bg-white border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold mb-3">Flight Route</h4>
-                <div className="flex items-center justify-between">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">BOM</div>
-                    <div className="text-sm text-gray-600">Mumbai</div>
-                    <div className="text-lg font-semibold mt-2">10:15</div>
-                    <div className="text-sm text-gray-500">Sat, Aug 16</div>
-                  </div>
-                  <div className="flex-1 px-4">
-                    <div className="flex items-center justify-center relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                <h4 className="font-semibold mb-4">Flight Route</h4>
+
+                {/* Outbound Flight */}
+                <div className="mb-6">
+                  <h5 className="text-sm font-medium text-gray-700 mb-3">
+                    Outbound Flight - Aug 9
+                  </h5>
+                  <div className="flex items-center justify-between">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">
+                        {selectedFlightForDetails.departureCode}
                       </div>
-                      <div className="relative bg-blue-600 text-white px-3 py-1 rounded-full">
-                        <span className="text-xs font-medium">
-                          2h 25m Direct
-                        </span>
+                      <div className="text-sm text-gray-600">Mumbai</div>
+                      <div className="text-lg font-semibold mt-2">
+                        {selectedFlightForDetails.departureTime}
+                      </div>
+                      <div className="text-sm text-gray-500">Sat, Aug 9</div>
+                    </div>
+                    <div className="flex-1 px-4">
+                      <div className="flex items-center justify-center relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                        </div>
+                        <div className="relative bg-green-600 text-white px-3 py-1 rounded-full">
+                          <span className="text-xs font-medium">
+                            {selectedFlightForDetails.duration}{" "}
+                            {selectedFlightForDetails.flightType}
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">
+                        {selectedFlightForDetails.arrivalCode}
+                      </div>
+                      <div className="text-sm text-gray-600">Dubai</div>
+                      <div className="text-lg font-semibold mt-2">
+                        {selectedFlightForDetails.arrivalTime}
+                      </div>
+                      <div className="text-sm text-gray-500">Sat, Aug 9</div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">DXB</div>
-                    <div className="text-sm text-gray-600">Dubai</div>
-                    <div className="text-lg font-semibold mt-2">11:45</div>
-                    <div className="text-sm text-gray-500">Sat, Aug 16</div>
+                </div>
+
+                {/* Return Flight */}
+                <div className="border-t border-gray-200 pt-4">
+                  <h5 className="text-sm font-medium text-gray-700 mb-3">
+                    Return Flight - Aug 16
+                  </h5>
+                  <div className="flex items-center justify-between">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">
+                        {selectedFlightForDetails.arrivalCode}
+                      </div>
+                      <div className="text-sm text-gray-600">Dubai</div>
+                      <div className="text-lg font-semibold mt-2">
+                        {selectedFlightForDetails.returnDepartureTime}
+                      </div>
+                      <div className="text-sm text-gray-500">Fri, Aug 16</div>
+                    </div>
+                    <div className="flex-1 px-4">
+                      <div className="flex items-center justify-center relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                        </div>
+                        <div className="relative bg-green-600 text-white px-3 py-1 rounded-full">
+                          <span className="text-xs font-medium">
+                            {selectedFlightForDetails.returnDuration}{" "}
+                            {selectedFlightForDetails.flightType}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">
+                        {selectedFlightForDetails.departureCode}
+                      </div>
+                      <div className="text-sm text-gray-600">Mumbai</div>
+                      <div className="text-lg font-semibold mt-2">
+                        {selectedFlightForDetails.returnArrivalTime}
+                      </div>
+                      <div className="text-sm text-gray-500">Fri, Aug 16</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2861,7 +3174,7 @@ export default function FlightResults() {
                     );
                   }}
                   variant="outline"
-                  className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-50"
+                  className="flex-1 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white hover:border-orange-600 transition-all duration-200 shadow-sm hover:shadow-md"
                 >
                   Bargain This Flight
                 </Button>

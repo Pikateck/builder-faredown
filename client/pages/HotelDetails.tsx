@@ -1,5 +1,46 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+
+// Custom slider styles
+const sliderStyles = `
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-track {
+    background: #e5e7eb;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #2563eb;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .slider::-moz-range-track {
+    background: #e5e7eb;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .slider::-moz-range-thumb {
+    background: #2563eb;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+`;
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +50,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { EnhancedBargainModal } from "@/components/EnhancedBargainModal";
+import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
+import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
   Star,
   MapPin,
@@ -18,11 +61,39 @@ import {
   Bookmark,
   Search,
   Filter,
+  Car,
+  Utensils,
+  Waves,
+  Dumbbell,
+  Building2,
+  Sparkles,
+  Baby,
+  Shirt,
+  Briefcase,
+  Shield,
+  Info,
+  MessageSquare,
+  Cigarette,
+  Coffee,
+  ChefHat,
+  Wifi,
+  Home,
+  Accessibility,
+  CreditCard,
+  Key,
+  Camera,
+  Bell,
+  Languages,
+  Flame,
+  Lock,
+  ArrowUpDown,
+  CheckCircle,
 } from "lucide-react";
 
 export default function HotelDetails() {
   const { hotelId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
@@ -33,6 +104,39 @@ export default function HotelDetails() {
   const [isSaved, setIsSaved] = useState(false);
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [showSaveDropdown, setShowSaveDropdown] = useState(false);
+  const saveDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        saveDropdownRef.current &&
+        !saveDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowSaveDropdown(false);
+      }
+    };
+
+    if (showSaveDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSaveDropdown]);
+  const [bargainingRoomId, setBargainingRoomId] = useState<string | null>(null);
+  const [bargainedRooms, setBargainedRooms] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priceRange, setPriceRange] = useState(100);
+  const [selectedFilters, setSelectedFilters] = useState({
+    popularFilters: new Set<string>(),
+    propertyTypes: new Set<string>(),
+    facilities: new Set<string>(),
+    mealOptions: new Set<string>(),
+    starRatings: new Set<string>(),
+  });
 
   // Format date to DD-MMM-YYYY
   const formatDate = (dateStr: string) => {
@@ -54,7 +158,26 @@ export default function HotelDetails() {
     return `${date.getDate().toString().padStart(2, "0")}-${months[date.getMonth()]}-${date.getFullYear()}`;
   };
 
-  // Mock hotel data
+  // Get booking parameters from URL or use defaults
+  const checkInParam = searchParams.get("checkIn");
+  const checkOutParam = searchParams.get("checkOut");
+  const roomsParam = searchParams.get("rooms");
+  const adultsParam = searchParams.get("adults");
+
+  // Calculate dates and nights dynamically
+  const checkInDate = checkInParam
+    ? new Date(checkInParam)
+    : new Date("2025-07-16");
+  const checkOutDate = checkOutParam
+    ? new Date(checkOutParam)
+    : new Date("2025-07-19");
+  const totalNights = Math.ceil(
+    (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  // Note: pricing utility will be imported at top of file
+
+  // Mock hotel data with dynamic dates
   const hotel = {
     id: parseInt(hotelId || "3"),
     name: "Grand Hyatt Dubai",
@@ -63,15 +186,21 @@ export default function HotelDetails() {
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6?format=webp&width=800",
     rating: 4.5,
     reviews: 1247,
-    checkIn: "2025-07-16",
-    checkOut: "2025-07-19",
-    totalNights: 4,
-    rooms: 1,
-    adults: 2,
+    checkIn: checkInDate.toISOString().split("T")[0],
+    checkOut: checkOutDate.toISOString().split("T")[0],
+    totalNights: totalNights,
+    rooms: parseInt(roomsParam || "1"),
+    adults: parseInt(adultsParam || "2"),
   };
 
   const calculateTotalPrice = (roomPricePerNight: number) => {
-    return roomPricePerNight * hotel.totalNights;
+    const rooms = parseInt(roomsParam || "1");
+    const breakdown = calculatePriceBreakdown(
+      roomPricePerNight,
+      hotel.totalNights,
+      rooms,
+    );
+    return breakdown.total;
   };
 
   const roomTypes = [
@@ -92,7 +221,7 @@ export default function HotelDetails() {
         "2 twin beds",
         "Free stay for your child",
         "Free cancellation",
-        "No prepayment needed - pay at the property",
+        "No prepayment needed",
       ],
     },
     {
@@ -110,7 +239,7 @@ export default function HotelDetails() {
         "Max 2 guests",
         "1 king bed",
         "Free cancellation",
-        "No prepayment needed - pay at the property",
+        "No prepayment needed",
       ],
     },
     {
@@ -149,8 +278,75 @@ export default function HotelDetails() {
   ];
 
   const handleBargainClick = (roomType: any) => {
+    console.log("Bargain clicked for room:", roomType.id);
     setSelectedRoomType(roomType);
+    setBargainingRoomId(roomType.id);
     setIsBargainModalOpen(true);
+  };
+
+  const handleFilterChange = (category: string, filterName: string) => {
+    setSelectedFilters((prev) => {
+      const newFilters = { ...prev };
+      const categoryFilters = new Set(
+        newFilters[category as keyof typeof newFilters],
+      );
+
+      if (categoryFilters.has(filterName)) {
+        categoryFilters.delete(filterName);
+      } else {
+        categoryFilters.add(filterName);
+      }
+
+      newFilters[category as keyof typeof newFilters] = categoryFilters;
+      return newFilters;
+    });
+  };
+
+  const clearAllFilters = () => {
+    setSearchTerm("");
+    setPriceRange(100);
+    setSelectedFilters({
+      popularFilters: new Set(),
+      propertyTypes: new Set(),
+      facilities: new Set(),
+      mealOptions: new Set(),
+      starRatings: new Set(),
+    });
+  };
+
+  const filterRooms = (rooms: any[]) => {
+    return rooms.filter((room) => {
+      // Search by name
+      if (
+        searchTerm &&
+        !room.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        return false;
+      }
+
+      // Price range filter (only apply if price range is not at maximum)
+      if (priceRange < 90) {
+        const maxPrice = (priceRange / 100) * 15000; // Assuming max price of 15000
+        if (room.pricePerNight > maxPrice) {
+          return false;
+        }
+      }
+
+      // Popular filters (only apply if filters are selected)
+      if (selectedFilters.popularFilters.size > 0) {
+        const roomFeatures = room.features || [];
+        const hasSelectedFeature = Array.from(
+          selectedFilters.popularFilters,
+        ).some((filter) =>
+          roomFeatures.some((feature: string) =>
+            feature.toLowerCase().includes(filter.toLowerCase()),
+          ),
+        );
+        if (!hasSelectedFeature) return false;
+      }
+
+      return true;
+    });
   };
 
   const toggleRoomExpansion = (roomId: string) => {
@@ -166,14 +362,50 @@ export default function HotelDetails() {
   };
 
   const handleBooking = (roomType: any, bargainPrice?: number) => {
-    const finalPrice = bargainPrice || roomType.pricePerNight;
-    navigate(
-      `/reserve?hotelId=${hotel.id}&roomType=${roomType.id}&price=${finalPrice}&nights=${hotel.totalNights}&bargained=${!!bargainPrice}`,
-    );
+    let perNightPrice: number;
+    let totalPrice: number;
+
+    if (bargainPrice) {
+      // bargainPrice from the modal is the total bargained price
+      totalPrice = bargainPrice;
+      perNightPrice = Math.round(bargainPrice / hotel.totalNights);
+    } else {
+      // Regular booking - calculate from per-night price
+      perNightPrice = roomType.pricePerNight;
+      totalPrice = calculateTotalPrice(perNightPrice);
+    }
+    // Preserve original search parameters and add booking specific ones
+    const existingParams = searchParams.toString();
+    const bookingParams = new URLSearchParams({
+      hotelId: hotel.id.toString(),
+      roomType: roomType.type,
+      pricePerNight: perNightPrice.toString(),
+      totalPrice: totalPrice.toString(),
+      nights: hotel.totalNights.toString(),
+      bargained: (!!bargainPrice).toString(),
+      roomName: roomType.name,
+      checkIn: hotel.checkIn,
+      checkOut: hotel.checkOut,
+      rooms: hotel.rooms.toString(),
+      guests: hotel.adults.toString(),
+      hotelName: hotel.name,
+      location: hotel.location,
+      rating: hotel.rating.toString(),
+      reviews: hotel.reviews.toString(),
+    });
+
+    // Merge existing search params with booking params
+    const mergedParams = new URLSearchParams(existingParams);
+    bookingParams.forEach((value, key) => {
+      mergedParams.set(key, value);
+    });
+
+    navigate(`/reserve?${mergedParams.toString()}`);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <style>{sliderStyles}</style>
       <Header />
 
       {/* Mobile Filter Button */}
@@ -194,9 +426,9 @@ export default function HotelDetails() {
         <div
           className={`${
             isMobileFilterOpen ? "fixed inset-0 z-50 bg-white" : "hidden"
-          } lg:block lg:relative lg:w-64 bg-white border-r border-gray-200 min-h-screen`}
+          } lg:block lg:relative lg:w-80 bg-white border-r border-gray-200 min-h-screen`}
         >
-          <div className="p-4 overflow-y-auto">
+          <div className="overflow-y-auto h-full">
             {/* Filters Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
@@ -222,6 +454,8 @@ export default function HotelDetails() {
                 <input
                   type="text"
                   placeholder="Enter hotel name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <Search className="w-4 h-4 text-gray-400 absolute left-2.5 top-2.5" />
@@ -233,19 +467,18 @@ export default function HotelDetails() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Price Range
               </label>
-              <div className="text-sm text-gray-600 mb-2">₹1,00,000+</div>
+              <div className="text-sm text-gray-600 mb-2">
+                ₹{Math.round((priceRange / 100) * 15000).toLocaleString()}+
+              </div>
               <div className="px-2">
-                <div className="w-full h-2 bg-gray-200 rounded-full relative">
-                  <div
-                    className="h-2 bg-blue-600 rounded-full"
-                    style={{ width: "60%" }}
-                  ></div>
-                  <div className="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full -mt-1 cursor-pointer"></div>
-                  <div
-                    className="absolute top-0 w-4 h-4 bg-blue-600 rounded-full -mt-1 cursor-pointer"
-                    style={{ left: "60%" }}
-                  ></div>
-                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(Number(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                />
               </div>
             </div>
 
@@ -269,6 +502,12 @@ export default function HotelDetails() {
                     <label className="flex items-center flex-1">
                       <input
                         type="checkbox"
+                        checked={selectedFilters.popularFilters.has(
+                          filter.name,
+                        )}
+                        onChange={() =>
+                          handleFilterChange("popularFilters", filter.name)
+                        }
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <div className="ml-2 flex-1">
@@ -307,6 +546,10 @@ export default function HotelDetails() {
                     <label className="flex items-center flex-1">
                       <input
                         type="checkbox"
+                        checked={selectedFilters.propertyTypes.has(filter.name)}
+                        onChange={() =>
+                          handleFilterChange("propertyTypes", filter.name)
+                        }
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">
@@ -339,6 +582,10 @@ export default function HotelDetails() {
                     <label className="flex items-center flex-1">
                       <input
                         type="checkbox"
+                        checked={selectedFilters.facilities.has(filter.name)}
+                        onChange={() =>
+                          handleFilterChange("facilities", filter.name)
+                        }
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">
@@ -369,6 +616,10 @@ export default function HotelDetails() {
                     <label className="flex items-center flex-1">
                       <input
                         type="checkbox"
+                        checked={selectedFilters.mealOptions.has(filter.name)}
+                        onChange={() =>
+                          handleFilterChange("mealOptions", filter.name)
+                        }
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">
@@ -398,6 +649,10 @@ export default function HotelDetails() {
                     <label className="flex items-center flex-1">
                       <input
                         type="checkbox"
+                        checked={selectedFilters.starRatings.has(rating.stars)}
+                        onChange={() =>
+                          handleFilterChange("starRatings", rating.stars)
+                        }
                         className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">
@@ -414,11 +669,15 @@ export default function HotelDetails() {
 
             {/* Filter Actions */}
             <div className="space-y-2">
-              <Button variant="outline" className="w-full text-sm">
+              <Button
+                variant="outline"
+                className="w-full text-sm"
+                onClick={clearAllFilters}
+              >
                 Clear All Filters
               </Button>
               <Button
-                className="w-full text-sm lg:hidden bg-blue-600 hover:bg-blue-700 text-white"
+                className="w-full text-sm lg:hidden bg-gray-900 hover:bg-gray-800 text-white"
                 onClick={() => setIsMobileFilterOpen(false)}
               >
                 Apply Filters
@@ -449,7 +708,7 @@ export default function HotelDetails() {
           </div>
 
           {/* Main Content */}
-          <div className="p-2 lg:p-4">
+          <div className="p-2 sm:p-3 lg:p-4">
             {activeTab === "overview" && (
               <>
                 {/* Hotel Header with Large Image */}
@@ -459,27 +718,70 @@ export default function HotelDetails() {
                     <img
                       src={hotel.image}
                       alt={hotel.name}
-                      className="w-full h-64 lg:h-80 object-cover rounded-t-lg"
+                      className="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover rounded-t-lg"
                     />
                     <div className="absolute top-4 right-4 flex items-center gap-2">
-                      <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">
-                        ✅ Available
-                      </Badge>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className={`text-xs px-3 py-1 bg-white/90 backdrop-blur ${
-                          isSaved
-                            ? "bg-blue-100 text-blue-700 border-blue-300"
-                            : ""
-                        }`}
-                        onClick={() => setIsSaved(!isSaved)}
-                      >
-                        <Bookmark
-                          className={`w-3 h-3 mr-1 ${isSaved ? "fill-current" : ""}`}
-                        />
-                        Save
-                      </Button>
+                      <div className="relative" ref={saveDropdownRef}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className={`text-xs px-3 py-1 bg-white/90 backdrop-blur ${
+                            isSaved
+                              ? "bg-blue-100 text-blue-700 border-blue-300"
+                              : ""
+                          }`}
+                          onClick={() => setShowSaveDropdown(!showSaveDropdown)}
+                        >
+                          <Bookmark
+                            className={`w-3 h-3 mr-1 ${isSaved ? "fill-current" : ""}`}
+                          />
+                          Save
+                        </Button>
+
+                        {/* Save Dropdown Menu */}
+                        {showSaveDropdown && (
+                          <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                            <div className="p-3">
+                              <h4 className="font-semibold text-sm text-gray-900 mb-3">
+                                Save to list
+                              </h4>
+                              <div className="space-y-2">
+                                <button
+                                  onClick={() => {
+                                    setIsSaved(true);
+                                    setShowSaveDropdown(false);
+                                  }}
+                                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center"
+                                >
+                                  <Bookmark className="w-4 h-4 mr-2 text-blue-600" />
+                                  <span>My Saved Properties</span>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setShowSaveDropdown(false);
+                                  }}
+                                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center"
+                                >
+                                  <div className="w-4 h-4 mr-2 text-green-600">
+                                    +
+                                  </div>
+                                  <span>Create new list</span>
+                                </button>
+                                <hr className="my-2" />
+                                <button
+                                  onClick={() => {
+                                    setShowSaveDropdown(false);
+                                  }}
+                                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded flex items-center"
+                                >
+                                  <Share2 className="w-4 h-4 mr-2 text-gray-600" />
+                                  <span>Share this property</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       <Button
                         variant="outline"
                         size="sm"
@@ -566,23 +868,40 @@ export default function HotelDetails() {
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
                           <div className="text-2xl font-bold text-gray-900 mb-1">
                             ₹
-                            {calculateTotalPrice(
-                              roomTypes[0].pricePerNight,
-                            ).toLocaleString()}
+                            {roomTypes.length > 0
+                              ? calculateTotalPrice(
+                                  roomTypes[0].pricePerNight,
+                                ).toLocaleString()
+                              : "0"}
                           </div>
                           <div className="text-sm font-semibold text-gray-900 mb-1">
                             Total Price
                           </div>
                           <div className="text-xs text-gray-600 mb-1">
-                            Includes all taxes & charges
+                            Includes all taxes, fees & charges
                           </div>
                           <div className="text-xs text-gray-600 mb-3">
-                            ₹{roomTypes[0].pricePerNight.toLocaleString()} per
-                            night (all-inclusive)
+                            ₹
+                            {roomTypes.length > 0
+                              ? Math.round(
+                                  roomTypes[0].pricePerNight,
+                                ).toLocaleString()
+                              : "0"}{" "}
+                            per night × {hotel.totalNights} nights + taxes &
+                            fees = ₹
+                            {roomTypes.length > 0
+                              ? calculateTotalPrice(
+                                  roomTypes[0].pricePerNight,
+                                ).toLocaleString()
+                              : "0"}
                           </div>
                           <Button
                             className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-md text-sm"
-                            onClick={() => handleBargainClick(roomTypes[0])}
+                            onClick={() =>
+                              roomTypes.length > 0 &&
+                              handleBargainClick(roomTypes[0])
+                            }
+                            disabled={roomTypes.length === 0}
                           >
                             ⚡ Upgrade & Save with Bargaining for All Rooms
                           </Button>
@@ -606,9 +925,9 @@ export default function HotelDetails() {
                         </div>
                         <span className="text-gray-500">•</span>
                         <span className="text-gray-600">
-                          All prices shown include taxes, service charges &
-                          fees. Displayed prices are final with no additional
-                          charges.
+                          All prices include taxes, service charges, government
+                          fees & hotel charges. Final price - no hidden costs or
+                          additional charges.
                         </span>
                       </div>
                     </div>
@@ -628,7 +947,7 @@ export default function HotelDetails() {
                   </div>
 
                   <div className="divide-y divide-gray-200">
-                    {roomTypes.map((room, index) => (
+                    {filterRooms(roomTypes).map((room, index) => (
                       <div
                         key={room.id}
                         className="border-b border-gray-200 last:border-b-0"
@@ -687,7 +1006,7 @@ export default function HotelDetails() {
                         </div>
 
                         {/* Expanded Room Details */}
-                        {expandedRooms.has(room.id) && room.features && (
+                        {expandedRooms.has(room.id) && (
                           <div className="bg-white border-t border-gray-200 p-6 mt-2">
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                               {/* Room Image */}
@@ -712,24 +1031,42 @@ export default function HotelDetails() {
                                     Non Refundable Rate
                                   </Badge>
                                 )}
+                                {bargainingRoomId === room.id && (
+                                  <Badge className="bg-blue-100 text-blue-800 text-xs mb-3 px-2 py-1 animate-pulse">
+                                    💰 Bargaining in Progress
+                                  </Badge>
+                                )}
                                 <div className="space-y-2">
                                   <h5 className="font-medium text-sm text-gray-900 mb-2">
                                     Room features:
                                   </h5>
                                   <div className="grid grid-cols-1 gap-2 text-sm">
-                                    {room.features.map((feature, idx) => (
-                                      <div
-                                        key={idx}
-                                        className="flex items-start"
-                                      >
+                                    {room.features &&
+                                    room.features.length > 0 ? (
+                                      room.features.map((feature, idx) => (
+                                        <div
+                                          key={idx}
+                                          className="flex items-start"
+                                        >
+                                          <span className="text-green-600 mr-2 mt-0.5">
+                                            ✓
+                                          </span>
+                                          <span className="text-gray-700">
+                                            {feature}
+                                          </span>
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <div className="flex items-start">
                                         <span className="text-green-600 mr-2 mt-0.5">
                                           ✓
                                         </span>
                                         <span className="text-gray-700">
-                                          {feature}
+                                          Comfortable room with standard
+                                          amenities
                                         </span>
                                       </div>
-                                    ))}
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -747,8 +1084,12 @@ export default function HotelDetails() {
                                     Total Price
                                   </div>
                                   <div className="text-xs text-gray-600">
-                                    ₹{room.pricePerNight.toLocaleString()} per
-                                    night (all-inclusive)
+                                    ₹
+                                    {Math.round(
+                                      room.pricePerNight,
+                                    ).toLocaleString()}{" "}
+                                    per night × {hotel.totalNights} nights +
+                                    taxes & fees
                                   </div>
                                 </div>
 
@@ -776,10 +1117,11 @@ export default function HotelDetails() {
                                 <div className="space-y-3">
                                   <Button
                                     onClick={() => handleBooking(room)}
-                                    className={`w-full font-semibold py-3 text-sm ${
+                                    variant="outline"
+                                    className={`w-full font-semibold py-3 text-sm transition-all duration-200 ${
                                       room.statusColor === "green"
-                                        ? "bg-green-600 hover:bg-green-700 text-white"
-                                        : "bg-blue-600 hover:bg-blue-700 text-white"
+                                        ? "border-green-600 text-green-600 hover:bg-green-600 hover:text-white hover:shadow-md"
+                                        : "border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
                                     }`}
                                   >
                                     Reserve Room
@@ -787,26 +1129,36 @@ export default function HotelDetails() {
                                   <Button
                                     onClick={() => handleBargainClick(room)}
                                     variant="outline"
-                                    className="w-full font-semibold py-3 text-sm border-blue-600 text-blue-600 hover:bg-blue-50"
+                                    className={`w-full font-semibold py-3 text-sm transition-all duration-200 ${
+                                      bargainedRooms.has(room.id)
+                                        ? "bg-green-500 border-green-600 text-white shadow-lg"
+                                        : bargainingRoomId === room.id
+                                          ? "bg-blue-500 border-blue-600 text-white shadow-lg animate-pulse"
+                                          : "border-blue-600 text-blue-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md"
+                                    }`}
+                                    style={{ display: "block" }}
                                   >
-                                    💰 Bargain This Room
+                                    {bargainedRooms.has(room.id) ? (
+                                      <span className="flex items-center justify-center">
+                                        Bargained
+                                        <CheckCircle className="w-4 h-4 ml-2" />
+                                      </span>
+                                    ) : bargainingRoomId === room.id ? (
+                                      "Bargaining..."
+                                    ) : (
+                                      "Bargain This Room"
+                                    )}
                                   </Button>
                                 </div>
 
                                 <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3">
                                   <div className="space-y-2">
                                     <div className="flex items-center text-xs text-green-700">
-                                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                                        <span className="text-xs">🏨</span>
-                                      </div>
                                       <span className="font-medium">
-                                        Pay at hotel • No prepayment needed
+                                        No prepayment needed
                                       </span>
                                     </div>
                                     <div className="flex items-center text-xs text-green-700">
-                                      <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center mr-2">
-                                        <span className="text-xs">✅</span>
-                                      </div>
                                       <span className="font-medium">
                                         Free cancellation
                                       </span>
@@ -901,40 +1253,56 @@ export default function HotelDetails() {
                       <span className="text-gray-700">Fitness centre</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-lg">🚭</span>
+                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <Cigarette className="w-4 h-4 text-gray-600" />
+                      </div>
                       <span className="text-gray-700">Non-smoking rooms</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-lg">🍽️</span>
+                      <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+                        <Utensils className="w-4 h-4 text-amber-600" />
+                      </div>
                       <span className="text-gray-700">17 restaurants</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-lg">💆</span>
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <Sparkles className="w-4 h-4 text-green-600" />
+                      </div>
                       <span className="text-gray-700">
                         Spa and wellness centre
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="text-lg">🏨</span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Building2 className="w-4 h-4 text-blue-600" />
+                      </div>
                       <span className="text-gray-700">Room service</span>
                     </div>
                   </div>
                   <div className="mt-4 text-sm text-gray-600">
                     <div className="flex items-center gap-4 flex-wrap">
                       <span className="flex items-center gap-1">
-                        <span>🍽️</span>
+                        <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center">
+                          <Coffee className="w-3 h-3 text-amber-600" />
+                        </div>
                         <span>Tea/Coffee Maker on All Rooms</span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <span>🚗</span>
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Car className="w-3 h-3 text-blue-600" />
+                        </div>
                         <span>Car</span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <span>🍳</span>
+                        <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                          <ChefHat className="w-3 h-3 text-orange-600" />
+                        </div>
                         <span>Excellent Breakfast</span>
                       </span>
                       <span className="flex items-center gap-1">
-                        <span>📶</span>
+                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
+                          <Wifi className="w-3 h-3 text-green-600" />
+                        </div>
                         <span>Free WiFi available on request</span>
                       </span>
                     </div>
@@ -946,49 +1314,53 @@ export default function HotelDetails() {
                   {/* Great for your stay */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🏨</span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <Home className="w-4 h-4 text-blue-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Great for your stay
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> 17
-                        restaurants
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        17 restaurants
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Parking
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Parking
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Air
+                        <span className="text-green-600 mr-2">₹</span> Air
                         conditioning
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Private
+                        <span className="text-green-600 mr-2">₹</span> Private
                         bathroom
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Free WiFi
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Free WiFi
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Spa and
-                        wellness centre
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Spa and wellness centre
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Family
-                        rooms
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Family rooms
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Non-smoking rooms
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Fitness
-                        centre
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Fitness centre
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Live
-                        music/performance
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Live music/performance
                       </li>
                     </ul>
                   </div>
@@ -996,25 +1368,27 @@ export default function HotelDetails() {
                   {/* Parking */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🚗</span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <Car className="w-4 h-4 text-blue-600" />
+                      </div>
                       <h3 className="font-semibold text-base">Parking</h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Free
-                        private parking is possible on site (reservation is not
-                        needed)
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Free private parking is possible on site (reservation is
+                        not needed)
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Valet
-                        parking
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Valet parking
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Parking
-                        garage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Parking garage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
                         Accessible parking
                       </li>
                     </ul>
@@ -1023,7 +1397,9 @@ export default function HotelDetails() {
                   {/* 2 swimming pools */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🏊</span>
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                        <Waves className="w-4 h-4 text-blue-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         2 swimming pools
                       </h3>
@@ -1034,16 +1410,16 @@ export default function HotelDetails() {
                       </h4>
                       <ul className="space-y-1 text-sm text-gray-700">
                         <li className="flex items-center">
-                          <span className="text-green-600 mr-2">✓</span> Opening
-                          times
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                          Opening times
                         </li>
                         <li className="flex items-center">
-                          <span className="text-green-600 mr-2">✓</span> Open
-                          all year
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                          Open all year
                         </li>
                         <li className="flex items-center">
-                          <span className="text-green-600 mr-2">✓</span> All
-                          ages welcome
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                          All ages welcome
                         </li>
                       </ul>
                     </div>
@@ -1053,16 +1429,16 @@ export default function HotelDetails() {
                       </h4>
                       <ul className="space-y-1 text-sm text-gray-700">
                         <li className="flex items-center">
-                          <span className="text-green-600 mr-2">✓</span> Opening
-                          times
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                          Opening times
                         </li>
                         <li className="flex items-center">
-                          <span className="text-green-600 mr-2">✓</span> Open
-                          all year
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                          Open all year
                         </li>
                         <li className="flex items-center">
-                          <span className="text-green-600 mr-2">✓</span> All
-                          ages welcome
+                          <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                          All ages welcome
                         </li>
                       </ul>
                     </div>
@@ -1071,46 +1447,49 @@ export default function HotelDetails() {
                   {/* Reception services */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🏨</span>
+                      <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                        <Building2 className="w-4 h-4 text-indigo-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Reception services
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Invoice
-                        provided
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Invoice provided
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Private
-                        check-in/out
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Private check-in/out
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Concierge
-                        service
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Concierge service
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> ATM/cash
-                        machine on site
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        ATM/cash machine on site
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Currency
-                        exchange
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Currency exchange
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Tour desk
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Tour desk
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Luggage
-                        storage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Luggage storage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Express
-                        check-in/out
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Express check-in/out
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> 24-hour
-                        front desk
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        24-hour front desk
                       </li>
                     </ul>
                   </div>
@@ -1118,68 +1497,71 @@ export default function HotelDetails() {
                   {/* Wellness */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">💆</span>
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                        <Sparkles className="w-4 h-4 text-green-600" />
+                      </div>
                       <h3 className="font-semibold text-base">Wellness</h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Fitness/spa locker rooms
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Personal
-                        trainer
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Personal trainer
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Yoga
-                        classes
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Yoga classes
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Full body
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Full body massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Hand
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Hand massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Head
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Head massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Couples
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Couples massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Foot
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Foot massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Neck
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Neck massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Back
-                        massage
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Back massage
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Beauty
-                        Services
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Beauty Services
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Spa
-                        lounge/relaxation area
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Spa lounge/relaxation area
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Steam
-                        room
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Steam room
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Spa
-                        facilities
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Spa facilities
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Sauna
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Sauna
                       </li>
                     </ul>
                   </div>
@@ -1187,14 +1569,16 @@ export default function HotelDetails() {
                   {/* Entertainment and family services */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🎪</span>
+                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                        <Baby className="w-4 h-4 text-purple-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Entertainment and family services
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Babysitting/child services
                       </li>
                     </ul>
@@ -1203,30 +1587,33 @@ export default function HotelDetails() {
                   {/* Cleaning services */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🧹</span>
+                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mr-3">
+                        <Shirt className="w-4 h-4 text-teal-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Cleaning services
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Daily
-                        housekeeping
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Daily housekeeping
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Trouser
-                        press
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Trouser press
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Ironing
-                        service
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Ironing service
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Dry
-                        cleaning
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Dry cleaning
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Laundry
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Laundry
                       </li>
                     </ul>
                   </div>
@@ -1234,22 +1621,24 @@ export default function HotelDetails() {
                   {/* Business facilities */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">💼</span>
+                      <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center mr-3">
+                        <Briefcase className="w-4 h-4 text-slate-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Business facilities
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Fax/photocopying
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Business
-                        centre
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Business centre
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Meeting/banquet facilities
                       </li>
                     </ul>
@@ -1258,43 +1647,45 @@ export default function HotelDetails() {
                   {/* Safety & security */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🔒</span>
+                      <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                        <Shield className="w-4 h-4 text-red-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Safety & security
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Fire
-                        extinguishers
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Fire extinguishers
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> CCTV
-                        outside property
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        CCTV outside property
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> CCTV in
-                        common areas
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        CCTV in common areas
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Smoke
-                        alarms
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Smoke alarms
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Security
-                        alarm
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Security alarm
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Key card
-                        access
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Key card access
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> 24-hour
-                        security
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        24-hour security
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Safety
-                        deposit box
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Safety deposit box
                       </li>
                     </ul>
                   </div>
@@ -1302,55 +1693,59 @@ export default function HotelDetails() {
                   {/* General */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">ℹ️</span>
+                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                        <Info className="w-4 h-4 text-gray-600" />
+                      </div>
                       <h3 className="font-semibold text-base">General</h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Grocery
-                        deliveries
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Grocery deliveries
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Designated smoking area
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Air
-                        conditioning
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Air conditioning
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Wake-up
-                        service
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Wake-up service
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Car hire
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Car hire
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Lift
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Lift
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Family
-                        rooms
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Family rooms
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Barber/beauty shop
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Ironing
-                        facilities
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Ironing facilities
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Facilities for disabled guests
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Non-smoking rooms
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Room
-                        service
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Room service
                       </li>
                     </ul>
                   </div>
@@ -1358,48 +1753,61 @@ export default function HotelDetails() {
                   {/* Languages Spoken */}
                   <div>
                     <div className="flex items-center mb-3">
-                      <span className="text-lg mr-2">🗣️</span>
+                      <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                        <Languages className="w-4 h-4 text-indigo-600" />
+                      </div>
                       <h3 className="font-semibold text-base">
                         Languages Spoken
                       </h3>
                     </div>
                     <ul className="space-y-1 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Arabic
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Arabic
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> German
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        German
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> English
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        English
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Spanish
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Spanish
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> French
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        French
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Hindi
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Hindi
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span>{" "}
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
                         Indonesian
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">��</span> Italian
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Italian
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Japanese
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Japanese
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Korean
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Korean
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Russian
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Russian
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">✓</span> Chinese
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Chinese
                       </li>
                     </ul>
                   </div>
@@ -1494,7 +1902,10 @@ export default function HotelDetails() {
                         <span className="mr-2">🏙️</span> City centre location
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🛍️</span> Near shopping malls
+                        <div className="w-5 h-5 bg-purple-100 rounded-full flex items-center justify-center mr-2">
+                          <MapPin className="w-3 h-3 text-purple-600" />
+                        </div>{" "}
+                        Near shopping malls
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🚇</span> Metro station nearby
@@ -1534,7 +1945,7 @@ export default function HotelDetails() {
                         <span className="mr-2">☕</span> Tea & coffee facilities
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🟤</span> Carpeted floors
+                        <span className="mr-2">��</span> Carpeted floors
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">❄️</span> Air conditioning
@@ -1545,7 +1956,7 @@ export default function HotelDetails() {
                     </ul>
                     <ul className="space-y-2 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="mr-2">��</span> Balcony
+                        <span className="mr-2">🏡</span> Balcony
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🚿</span> Shower
@@ -1582,7 +1993,7 @@ export default function HotelDetails() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-white rounded-lg p-5 shadow-sm border border-blue-200">
                       <h4 className="font-bold mb-3 text-blue-800 text-lg">
-                        🏊 Pool 1 - Indoor
+                        ₹ Pool 1 - Indoor
                       </h4>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-center">
@@ -1648,7 +2059,7 @@ export default function HotelDetails() {
                 {/* Wellness & Spa Section */}
                 <div className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-300 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">💆‍♀️</span>
+                    <span className="text-4xl mr-4">��‍♀️</span>
                     <div>
                       <h3 className="font-bold text-2xl text-green-900">
                         Wellness & Spa
@@ -1662,14 +2073,14 @@ export default function HotelDetails() {
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {[
                       { icon: "🏋️", text: "Fitness centre" },
-                      { icon: "👨‍🏫", text: "Personal trainer" },
+                      { icon: "🏋️", text: "Personal trainer" },
                       { icon: "🧘", text: "Yoga classes" },
                       { icon: "💆", text: "Full body massage" },
                       { icon: "💆‍♀️", text: "Head massage" },
                       { icon: "👐", text: "Hand massage" },
                       { icon: "💑", text: "Couples massage" },
                       { icon: "🦶", text: "Foot massage" },
-                      { icon: "🔙", text: "Back massage" },
+                      { icon: "₹", text: "Back massage" },
                       { icon: "✨", text: "Beauty services" },
                       { icon: "🏖️", text: "Sun loungers" },
                       { icon: "🧖‍♀️", text: "Spa facilities" },
@@ -1708,7 +2119,7 @@ export default function HotelDetails() {
                         { icon: "🍷", text: "Wine/champagne" },
                         { icon: "🥃", text: "Bar" },
                         { icon: "🏨", text: "Room service" },
-                        { icon: "🍎", text: "Fresh fruits" },
+                        { icon: '₹ text: "Fresh fruits' },
                         { icon: "🧒", text: "Kid-friendly buffet" },
                         { icon: "🥗", text: "Special diet menus" },
                       ].map((item, idx) => (
@@ -1736,7 +2147,7 @@ export default function HotelDetails() {
                         { icon: "🔥", text: "Fire extinguishers" },
                         { icon: "📹", text: "CCTV surveillance" },
                         { icon: "🚨", text: "Smoke alarms" },
-                        { icon: "🔒", text: "Security alarm" },
+                        { icon: "����", text: "Security alarm" },
                         { icon: "🔑", text: "Key card access" },
                         { icon: "🔐", text: "In-room safe" },
                         { icon: "👮", text: "24-hour security" },
@@ -1971,7 +2382,7 @@ export default function HotelDetails() {
 
                 <div className="mt-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>🗺️</span>
+                    <span>��️</span>
                     <span>
                       <strong>Interactive View</strong>
                     </span>
@@ -2085,16 +2496,52 @@ export default function HotelDetails() {
               </p>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert("Link copied to clipboard!");
+                }}
+              >
                 🔗 Copy Link
               </Button>
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const text = `Check out ${hotel.name} in ${hotel.location}! ${window.location.href}`;
+                  window.open(
+                    `https://wa.me/?text=${encodeURIComponent(text)}`,
+                    "_blank",
+                  );
+                }}
+              >
                 💬 WhatsApp
               </Button>
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const text = `Check out ${hotel.name} in ${hotel.location}!`;
+                  window.open(
+                    `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`,
+                    "_blank",
+                  );
+                }}
+              >
                 🐦 Twitter
               </Button>
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  window.open(
+                    `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+                    "_blank",
+                  );
+                }}
+              >
                 📘 Facebook
               </Button>
             </div>
@@ -2104,7 +2551,7 @@ export default function HotelDetails() {
 
       {/* Enhanced Bargain Modal */}
       {selectedRoomType && (
-        <EnhancedBargainModal
+        <FlightStyleBargainModal
           roomType={{
             id: selectedRoomType.id,
             name: selectedRoomType.name,
@@ -2130,14 +2577,22 @@ export default function HotelDetails() {
           onClose={() => {
             setIsBargainModalOpen(false);
             setSelectedRoomType(null);
+            setBargainingRoomId(null);
           }}
-          checkInDate={new Date(2025, 6, 16)}
-          checkOutDate={new Date(2025, 6, 19)}
-          roomsCount={1}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+          roomsCount={parseInt(roomsParam || "1")}
           onBookingSuccess={(finalPrice) => {
             setIsBargainModalOpen(false);
             handleBooking(selectedRoomType, finalPrice);
+            // Mark room as successfully bargained
+            if (selectedRoomType) {
+              setBargainedRooms(
+                (prev) => new Set([...prev, selectedRoomType.id]),
+              );
+            }
             setSelectedRoomType(null);
+            setBargainingRoomId(null);
           }}
         />
       )}

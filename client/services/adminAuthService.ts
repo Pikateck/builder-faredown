@@ -135,16 +135,97 @@ export class AdminAuthService {
   private currentUser: AdminUser | null = null;
 
   /**
-   * Admin login with mock authentication
+   * Admin login
    */
   async login(credentials: AdminLoginRequest): Promise<AdminLoginResponse> {
     // For demo purposes, always use mock authentication
+    // This avoids any fetch/network issues during development
     console.log("Using mock authentication for admin login");
     return this.mockLogin(credentials);
+
+    // Original backend implementation (commented out for demo):
+    /*
+    // Check if backend is available by trying a simple health check first
+    const backendAvailable = await this.checkBackendHealth();
+
+    if (!backendAvailable) {
+      console.log("Backend not available, using mock authentication");
+      return this.mockLogin(credentials);
+    }
+
+    try {
+      const response = await apiClient.post<ApiResponse<AdminLoginResponse>>(
+        `${this.baseUrl}/login`,
+        credentials,
+      );
+
+      if (response.data) {
+        // Store admin auth token
+        apiClient.setAuthToken(response.data.accessToken);
+
+        // Store admin user data
+        this.currentUser = response.data.user;
+        localStorage.setItem("admin_user", JSON.stringify(response.data.user));
+        localStorage.setItem(
+          "admin_permissions",
+          JSON.stringify(response.data.permissions),
+        );
+        localStorage.setItem("admin_refresh_token", response.data.refreshToken);
+
+        return response.data;
+      }
+
+      throw new Error("Admin login failed: No data received");
+    } catch (error) {
+      console.error("Admin login error:", error);
+
+      // Fallback to mock authentication when backend call fails
+      console.log("Backend API failed, falling back to mock authentication");
+      return this.mockLogin(credentials);
+    }
+    */
   }
 
   /**
-   * Mock login for demo purposes
+   * Check if backend is available
+   */
+  private async checkBackendHealth(): Promise<boolean> {
+    try {
+      // Try a simple fetch with a short timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 2000); // 2 second timeout
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"}/health`,
+          {
+            method: "GET",
+            signal: controller.signal,
+          },
+        );
+
+        clearTimeout(timeoutId);
+        return response.ok;
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+
+        // Don't log AbortError as it's expected when timing out
+        if (fetchError instanceof Error && fetchError.name !== "AbortError") {
+          console.log("Backend health check failed:", fetchError);
+        }
+
+        return false;
+      }
+    } catch (error) {
+      console.log("Backend health check setup failed:", error);
+      return false;
+    }
+  }
+
+  /**
+   * Mock login for demo purposes when backend is not available
    */
   private async mockLogin(
     credentials: AdminLoginRequest,
@@ -301,7 +382,7 @@ export class AdminAuthService {
     }
 
     // Simulate API response
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate network delay
 
     const mockResponse: AdminLoginResponse = {
       user: mockUser.user,
@@ -312,6 +393,7 @@ export class AdminAuthService {
     };
 
     // Store auth data
+    apiClient.setAuthToken(mockResponse.accessToken);
     this.currentUser = mockResponse.user;
     localStorage.setItem("admin_user", JSON.stringify(mockResponse.user));
     localStorage.setItem(
@@ -319,7 +401,6 @@ export class AdminAuthService {
       JSON.stringify(mockResponse.permissions),
     );
     localStorage.setItem("admin_refresh_token", mockResponse.refreshToken);
-    localStorage.setItem("admin_auth_token", mockResponse.accessToken);
 
     return mockResponse;
   }
@@ -328,7 +409,17 @@ export class AdminAuthService {
    * Admin logout
    */
   async logout(): Promise<void> {
-    this.clearAdminAuth();
+    try {
+      // Only attempt backend logout if we have a real token (not mock)
+      const token = localStorage.getItem("auth_token");
+      if (token && !token.startsWith("mock-token-")) {
+        await apiClient.post(`${this.baseUrl}/logout`);
+      }
+    } catch (error) {
+      console.log("Admin logout error (ignoring for mock auth):", error);
+    } finally {
+      this.clearAdminAuth();
+    }
   }
 
   /**
@@ -339,10 +430,26 @@ export class AdminAuthService {
       return this.currentUser;
     }
 
+    // Try to get user from localStorage first (for mock auth)
     const storedUser = this.getStoredUser();
     if (storedUser) {
       this.currentUser = storedUser;
       return storedUser;
+    }
+
+    // If no stored user and not using mock auth, try backend
+    try {
+      const response = await apiClient.get<ApiResponse<AdminUser>>(
+        `${this.baseUrl}/me`,
+      );
+
+      if (response.data) {
+        this.currentUser = response.data;
+        localStorage.setItem("admin_user", JSON.stringify(response.data));
+        return response.data;
+      }
+    } catch (error) {
+      console.log("Failed to get user from backend, user needs to login again");
     }
 
     throw new Error("No authenticated admin user found");
@@ -352,7 +459,7 @@ export class AdminAuthService {
    * Check if admin is authenticated
    */
   isAuthenticated(): boolean {
-    const token = localStorage.getItem("admin_auth_token");
+    const token = localStorage.getItem("auth_token");
     const user = localStorage.getItem("admin_user");
     return !!(token && user);
   }
@@ -409,6 +516,141 @@ export class AdminAuthService {
   }
 
   /**
+   * Create new admin user (Super Admin only)
+   */
+  async createAdminUser(userData: {
+    username: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+    role: string;
+    department: string;
+    permissions?: string[];
+  }): Promise<AdminUser> {
+    if (!this.hasPermission(PERMISSIONS.SYSTEM_USERS)) {
+      throw new Error("Insufficient permissions to create admin users");
+    }
+
+    const response = await apiClient.post<ApiResponse<AdminUser>>(
+      `${this.baseUrl}/users`,
+      userData,
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+
+    throw new Error("Failed to create admin user");
+  }
+
+  /**
+   * Update admin user
+   */
+  async updateAdminUser(
+    userId: string,
+    updates: Partial<AdminUser>,
+  ): Promise<AdminUser> {
+    if (!this.hasPermission(PERMISSIONS.SYSTEM_USERS)) {
+      throw new Error("Insufficient permissions to update admin users");
+    }
+
+    const response = await apiClient.put<ApiResponse<AdminUser>>(
+      `${this.baseUrl}/users/${userId}`,
+      updates,
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+
+    throw new Error("Failed to update admin user");
+  }
+
+  /**
+   * Get all admin users
+   */
+  async getAdminUsers(): Promise<AdminUser[]> {
+    if (!this.hasPermission(PERMISSIONS.SYSTEM_USERS)) {
+      throw new Error("Insufficient permissions to view admin users");
+    }
+
+    const response = await apiClient.get<ApiResponse<AdminUser[]>>(
+      `${this.baseUrl}/users`,
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+
+    throw new Error("Failed to get admin users");
+  }
+
+  /**
+   * Update user permissions
+   */
+  async updateUserPermissions(
+    userId: string,
+    permissions: string[],
+  ): Promise<void> {
+    if (!this.isSuperAdmin()) {
+      throw new Error("Only Super Admin can update permissions");
+    }
+
+    await apiClient.put(`${this.baseUrl}/users/${userId}/permissions`, {
+      permissions,
+    });
+  }
+
+  /**
+   * Disable admin user
+   */
+  async disableUser(userId: string): Promise<void> {
+    if (!this.hasPermission(PERMISSIONS.SYSTEM_USERS)) {
+      throw new Error("Insufficient permissions to disable users");
+    }
+
+    await apiClient.put(`${this.baseUrl}/users/${userId}/disable`);
+  }
+
+  /**
+   * Enable admin user
+   */
+  async enableUser(userId: string): Promise<void> {
+    if (!this.hasPermission(PERMISSIONS.SYSTEM_USERS)) {
+      throw new Error("Insufficient permissions to enable users");
+    }
+
+    await apiClient.put(`${this.baseUrl}/users/${userId}/enable`);
+  }
+
+  /**
+   * Get activity logs
+   */
+  async getActivityLogs(filters?: {
+    userId?: string;
+    department?: string;
+    action?: string;
+    startDate?: string;
+    endDate?: string;
+  }): Promise<any[]> {
+    if (!this.hasPermission(PERMISSIONS.SYSTEM_SETTINGS)) {
+      throw new Error("Insufficient permissions to view activity logs");
+    }
+
+    const response = await apiClient.get<ApiResponse<any[]>>(
+      `${this.baseUrl}/activity-logs`,
+      filters,
+    );
+
+    if (response.data) {
+      return response.data;
+    }
+
+    return [];
+  }
+
+  /**
    * Get stored user data
    */
   private getStoredUser(): AdminUser | null {
@@ -437,10 +679,37 @@ export class AdminAuthService {
    */
   private clearAdminAuth(): void {
     this.currentUser = null;
+    apiClient.clearAuthToken();
     localStorage.removeItem("admin_user");
     localStorage.removeItem("admin_permissions");
     localStorage.removeItem("admin_refresh_token");
-    localStorage.removeItem("admin_auth_token");
+  }
+
+  /**
+   * Refresh admin token
+   */
+  async refreshToken(): Promise<{ accessToken: string; expiresIn: number }> {
+    const refreshToken = localStorage.getItem("admin_refresh_token");
+
+    if (!refreshToken) {
+      throw new Error("No admin refresh token available");
+    }
+
+    const response = await apiClient.post<
+      ApiResponse<{
+        accessToken: string;
+        expiresIn: number;
+      }>
+    >(`${this.baseUrl}/refresh`, {
+      refreshToken,
+    });
+
+    if (response.data) {
+      apiClient.setAuthToken(response.data.accessToken);
+      return response.data;
+    }
+
+    throw new Error("Failed to refresh admin token");
   }
 }
 

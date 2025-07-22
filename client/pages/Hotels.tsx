@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,10 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, Heart } from "lucide-react";
 
 export default function Hotels() {
+  const navigate = useNavigate();
+
   const recentSearches = [
     {
       destination: "Dubai",
-      dates: "Aug 1 - Aug 5 people",
+      dates: "Aug 1 - Aug 5, 2 people",
       image:
         "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100",
     },
@@ -85,7 +88,7 @@ export default function Hotels() {
 
               <Card
                 className="overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow touch-manipulation cursor-pointer"
-                onClick={() => (window.location.href = "/hotels/3")}
+                onClick={() => navigate("/hotels/3")}
               >
                 <div className="relative">
                   <img
@@ -130,7 +133,7 @@ export default function Hotels() {
                       className="bg-[#003580] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#002a66] transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.location.href = "/hotels/3";
+                        navigate("/hotels/3");
                       }}
                     >
                       View Rooms
