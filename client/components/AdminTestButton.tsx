@@ -1,0 +1,318 @@
+/**
+ * Admin Test Button Component
+ * Provides quick access to admin dashboard, API testing, and bargain system
+ */
+
+import React, { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
+import {
+  Settings,
+  Database,
+  TestTube,
+  Target,
+  BarChart3,
+  Zap,
+  CheckCircle,
+  XCircle,
+  RefreshCw,
+  ExternalLink,
+  Code,
+  Play,
+  Tag,
+  Building,
+  Plane,
+  AlertCircle,
+} from 'lucide-react';
+
+interface AdminTestButtonProps {
+  className?: string;
+  variant?: 'desktop' | 'mobile';
+}
+
+export default function AdminTestButton({ 
+  className = '', 
+  variant = 'desktop' 
+}: AdminTestButtonProps) {
+  const [apiStatus, setApiStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+  const [apiPort, setApiPort] = useState<number | null>(null);
+
+  useEffect(() => {
+    checkApiStatus();
+  }, []);
+
+  const checkApiStatus = async () => {
+    setApiStatus('checking');
+    
+    // Try different common ports for the API
+    const ports = [3001, 8000, 5000, 3000];
+    
+    for (const port of ports) {
+      try {
+        const response = await fetch(`http://localhost:${port}/health`, {
+          method: 'GET',
+          mode: 'cors',
+        });
+        
+        if (response.ok) {
+          setApiStatus('online');
+          setApiPort(port);
+          return;
+        }
+      } catch (error) {
+        // Continue to next port
+        console.log(`API not found on port ${port}`);
+      }
+    }
+    
+    setApiStatus('offline');
+    setApiPort(null);
+  };
+
+  const openAdminDashboard = () => {
+    window.open('/admin/dashboard', '_blank');
+  };
+
+  const openBargainTest = () => {
+    window.open('/test-bargain-system', '_blank');
+  };
+
+  const openApiDocs = () => {
+    if (apiPort) {
+      window.open(`http://localhost:${apiPort}/api/docs`, '_blank');
+    } else {
+      alert('API server is not running. Please start the API server first.');
+    }
+  };
+
+  const testApiEndpoint = async (endpoint: string) => {
+    if (!apiPort) {
+      alert('API server is not running. Please start the API server first.');
+      return;
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:${apiPort}${endpoint}`);
+      const data = await response.json();
+      console.log(`API Test Result for ${endpoint}:`, data);
+      alert(`API Test ${response.ok ? 'Success' : 'Failed'}: ${JSON.stringify(data, null, 2)}`);
+    } catch (error) {
+      console.error(`API Test Error for ${endpoint}:`, error);
+      alert(`API Test Failed: ${error.message}`);
+    }
+  };
+
+  const getStatusIcon = () => {
+    switch (apiStatus) {
+      case 'checking':
+        return <RefreshCw className="w-3 h-3 animate-spin" />;
+      case 'online':
+        return <CheckCircle className="w-3 h-3 text-green-500" />;
+      case 'offline':
+        return <XCircle className="w-3 h-3 text-red-500" />;
+    }
+  };
+
+  const getStatusBadge = () => {
+    switch (apiStatus) {
+      case 'checking':
+        return <Badge variant="secondary" className="text-xs">Checking...</Badge>;
+      case 'online':
+        return <Badge className="bg-green-100 text-green-800 text-xs">API Online :{apiPort}</Badge>;
+      case 'offline':
+        return <Badge variant="destructive" className="text-xs">API Offline</Badge>;
+    }
+  };
+
+  if (variant === 'mobile') {
+    return (
+      <div className="space-y-2">
+        <button
+          className="flex items-center justify-between w-full text-white py-3 px-2 rounded bg-red-500 hover:bg-red-600 border-b border-red-600"
+          onClick={openAdminDashboard}
+        >
+          <div className="flex items-center space-x-2">
+            <Settings className="w-4 h-4" />
+            <span>Admin Dashboard</span>
+          </div>
+          <ExternalLink className="w-3 h-3" />
+        </button>
+        
+        <button
+          className="flex items-center justify-between w-full text-white py-3 px-2 rounded bg-purple-500 hover:bg-purple-600 border-b border-purple-600"
+          onClick={openBargainTest}
+        >
+          <div className="flex items-center space-x-2">
+            <TestTube className="w-4 h-4" />
+            <span>Bargain Test System</span>
+          </div>
+          <ExternalLink className="w-3 h-3" />
+        </button>
+        
+        <div className="flex items-center justify-between w-full text-white py-2 px-2">
+          <div className="flex items-center space-x-2">
+            <Database className="w-4 h-4" />
+            <span className="text-sm">API Status:</span>
+          </div>
+          {getStatusBadge()}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          size="sm"
+          variant="outline"
+          className={`bg-red-500 text-white border-red-500 hover:bg-red-600 rounded text-xs font-medium px-2 py-1.5 shadow-lg ${className}`}
+          title="Admin & Testing Tools"
+        >
+          <div className="flex items-center space-x-2">
+            <Settings className="w-3 h-3" />
+            {getStatusIcon()}
+            <span className="hidden sm:inline">Admin</span>
+          </div>
+        </Button>
+      </DropdownMenuTrigger>
+      
+      <DropdownMenuContent align="end" className="w-64">
+        <div className="px-3 py-2 border-b">
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-sm">Admin & Testing Tools</h4>
+            <Button size="sm" variant="ghost" onClick={checkApiStatus}>
+              <RefreshCw className="w-3 h-3" />
+            </Button>
+          </div>
+          <div className="flex items-center space-x-2 mt-1">
+            <span className="text-xs text-gray-600">API Status:</span>
+            {getStatusBadge()}
+          </div>
+        </div>
+
+        <DropdownMenuItem onClick={openAdminDashboard}>
+          <Settings className="w-4 h-4 mr-2" />
+          <div className="flex-1">
+            <div className="font-medium">Admin Dashboard</div>
+            <div className="text-xs text-gray-500">Promo codes, users, analytics</div>
+          </div>
+          <ExternalLink className="w-3 h-3" />
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={openBargainTest}>
+          <TestTube className="w-4 h-4 mr-2" />
+          <div className="flex-1">
+            <div className="font-medium">Bargain Test System</div>
+            <div className="text-xs text-gray-500">Test flights & hotels scenarios</div>
+          </div>
+          <ExternalLink className="w-3 h-3" />
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <div className="px-3 py-2">
+          <div className="text-xs font-medium text-gray-600 mb-2">Quick API Tests</div>
+          <div className="grid grid-cols-2 gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 text-xs"
+              onClick={() => testApiEndpoint('/health')}
+              disabled={apiStatus !== 'online'}
+            >
+              <CheckCircle className="w-3 h-3 mr-1" />
+              Health
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 text-xs"
+              onClick={() => testApiEndpoint('/api/admin/dashboard')}
+              disabled={apiStatus !== 'online'}
+            >
+              <BarChart3 className="w-3 h-3 mr-1" />
+              Stats
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 text-xs"
+              onClick={() => testApiEndpoint('/api/promo/admin/all')}
+              disabled={apiStatus !== 'online'}
+            >
+              <Tag className="w-3 h-3 mr-1" />
+              Promos
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-8 text-xs"
+              onClick={openApiDocs}
+              disabled={apiStatus !== 'online'}
+            >
+              <Code className="w-3 h-3 mr-1" />
+              Docs
+            </Button>
+          </div>
+        </div>
+
+        <DropdownMenuSeparator />
+
+        <div className="px-3 py-2">
+          <div className="text-xs font-medium text-gray-600 mb-2">Test Scenarios</div>
+          <div className="space-y-1">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="w-full justify-start h-8 text-xs"
+              onClick={() => {
+                window.open('/test-bargain-system?tab=flights&scenario=flight_1', '_blank');
+              }}
+            >
+              <Plane className="w-3 h-3 mr-2" />
+              Mumbai → Dubai Flight
+            </Button>
+            
+            <Button
+              size="sm"
+              variant="ghost"
+              className="w-full justify-start h-8 text-xs"
+              onClick={() => {
+                window.open('/test-bargain-system?tab=hotels&scenario=hotel_1', '_blank');
+              }}
+            >
+              <Building className="w-3 h-3 mr-2" />
+              Atlantis Hotel Dubai
+            </Button>
+          </div>
+        </div>
+
+        {apiStatus === 'offline' && (
+          <div className="px-3 py-2 bg-yellow-50 border-t">
+            <div className="flex items-start space-x-2">
+              <AlertCircle className="w-4 h-4 text-yellow-600 mt-0.5" />
+              <div className="text-xs text-yellow-700">
+                <div className="font-medium">API Server Not Running</div>
+                <div className="mt-1">
+                  Start the API server with:<br />
+                  <code className="bg-gray-100 px-1 rounded">cd api && npm start</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
