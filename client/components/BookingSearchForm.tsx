@@ -39,8 +39,8 @@ export function BookingSearchForm() {
   const navigate = useNavigate();
   const [destination, setDestination] = useState("Dubai");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(new Date());
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(addDays(new Date(), 3));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
