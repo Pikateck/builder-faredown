@@ -213,6 +213,20 @@ export default function AdminTestButton({
           </div>
           {getStatusBadge()}
         </div>
+
+        {apiStatus === 'offline' && (
+          <div className="w-full px-2 py-2">
+            <div className="bg-yellow-600 text-white text-xs p-2 rounded">
+              {window.location.hostname === 'localhost' ||
+               window.location.hostname === '127.0.0.1' ||
+               window.location.hostname.includes('localhost') ? (
+                'Start API: cd api && npm start'
+              ) : (
+                'API testing available in dev only'
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
