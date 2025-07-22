@@ -143,142 +143,54 @@ const markupConfig = {
 router.post('/apply', authenticateToken, validate.applyPromo, checkBudgetLimits, async (req, res) => {
   try {
     const { promoCode, type, ...filters } = req.body;
-    
+
     // Log promo code application attempt
     await audit.userAction(req, 'promo_apply', { promoCode, type, ...filters });
-    
-    // Find promo code
-    const promo = promoCodes.find(p => p.code.toLowerCase() === promoCode.toLowerCase());
-    
-    if (!promo) {
+
+    // Create booking details object for validation
+    const bookingDetails = {
+      type,
+      amount: filters.amount || 10000, // Default amount for validation
+      fromCity: filters.fromCity,
+      toCity: filters.toCity,
+      airline: filters.airline,
+      cabin: filters.cabin,
+      travelDate: filters.travelDate,
+      city: filters.city,
+      hotel: filters.hotel,
+      roomCategory: filters.roomCategory,
+      checkIn: filters.checkIn,
+      checkOut: filters.checkOut
+    };
+
+    // Use PromoCodeValidator for comprehensive validation
+    const validation = PromoCodeValidator.validatePromoCode(promoCode, bookingDetails, req.user?.id);
+
+    if (!validation.isValid) {
       return res.json({
         success: false,
         status: 'invalid',
-        message: 'Promo code not found'
+        message: validation.message,
+        errors: validation.errors
       });
     }
-    
-    // Check if promo is active
-    if (promo.status !== 'active') {
-      return res.json({
-        success: false,
-        status: 'invalid',
-        message: `Promo code is ${promo.status}`
-      });
-    }
-    
-    // Check validity period
-    const now = new Date();
-    const startDate = new Date(promo.validity.startDate);
-    const endDate = new Date(promo.validity.endDate);
-    
-    if (now < startDate || now > endDate) {
-      return res.json({
-        success: false,
-        status: 'invalid',
-        message: 'Promo code has expired or not yet valid'
-      });
-    }
-    
-    // Check if applicable to booking type
-    if (promo.applicableTo !== 'both' && promo.applicableTo !== type) {
-      return res.json({
-        success: false,
-        status: 'invalid',
-        message: `Promo code not applicable to ${type} bookings`
-      });
-    }
-    
-    // Check budget availability
-    const remainingBudget = promo.marketingBudget - promo.budgetUsed;
-    if (remainingBudget <= 0) {
-      // Auto-update status to exhausted
-      promo.status = 'exhausted';
-      return res.json({
-        success: false,
-        status: 'invalid',
-        message: 'Promo code budget exhausted'
-      });
-    }
-    
-    // Validate filters based on booking type
-    let filtersMatch = true;
-    let filterErrors = [];
-    
-    if (type === 'flight' && promo.filters) {
-      if (promo.filters.fromCity && filters.fromCity !== promo.filters.fromCity) {
-        filtersMatch = false;
-        filterErrors.push(`Must depart from ${promo.filters.fromCity}`);
-      }
-      if (promo.filters.toCity && filters.toCity !== promo.filters.toCity) {
-        filtersMatch = false;
-        filterErrors.push(`Must arrive at ${promo.filters.toCity}`);
-      }
-      if (promo.filters.airlines && filters.airline && !promo.filters.airlines.includes(filters.airline)) {
-        filtersMatch = false;
-        filterErrors.push(`Valid only for ${promo.filters.airlines.join(', ')}`);
-      }
-      if (promo.filters.cabinClass && filters.cabin && !promo.filters.cabinClass.includes(filters.cabin)) {
-        filtersMatch = false;
-        filterErrors.push(`Valid only for ${promo.filters.cabinClass.join(', ')} class`);
-      }
-    }
-    
-    if (type === 'hotel' && promo.filters) {
-      if (promo.filters.cities && filters.city && !promo.filters.cities.includes(filters.city)) {
-        filtersMatch = false;
-        filterErrors.push(`Valid only for ${promo.filters.cities.join(', ')}`);
-      }
-      if (promo.filters.hotels && filters.hotel && !promo.filters.hotels.includes(filters.hotel)) {
-        filtersMatch = false;
-        filterErrors.push(`Valid only for ${promo.filters.hotels.join(', ')}`);
-      }
-      if (promo.filters.roomCategories && filters.roomCategory && !promo.filters.roomCategories.includes(filters.roomCategory)) {
-        filtersMatch = false;
-        filterErrors.push(`Valid only for ${promo.filters.roomCategories.join(', ')} rooms`);
-      }
-    }
-    
-    // Check travel period
-    if (promo.travelPeriod) {
-      const travelDate = filters.travelDate || filters.checkIn;
-      if (travelDate) {
-        const travel = new Date(travelDate);
-        const periodStart = new Date(promo.travelPeriod.from);
-        const periodEnd = new Date(promo.travelPeriod.to);
-        
-        if (travel < periodStart || travel > periodEnd) {
-          filtersMatch = false;
-          filterErrors.push(`Valid for travel between ${promo.travelPeriod.from} and ${promo.travelPeriod.to}`);
-        }
-      }
-    }
-    
-    if (!filtersMatch) {
-      return res.json({
-        success: false,
-        status: 'invalid',
-        message: 'Promo code not applicable for this booking',
-        errors: filterErrors
-      });
-    }
-    
+
     // Valid promo code
     res.json({
       success: true,
       status: 'valid',
-      discountFrom: promo.discountFrom,
-      discountTo: promo.discountTo,
-      type: promo.type,
-      remainingBudget,
-      message: `${promo.name} applied successfully`,
+      discountFrom: validation.promo.discountFrom,
+      discountTo: validation.promo.discountTo,
+      type: validation.promo.type,
+      remainingBudget: validation.remainingBudget,
+      message: `${validation.promo.name} applied successfully`,
       promoDetails: {
-        id: promo.id,
-        name: promo.name,
-        description: `Save ${promo.discountFrom}${promo.type === 'percent' ? '%' : '₹'} to ${promo.discountTo}${promo.type === 'percent' ? '%' : '₹'}`
+        id: validation.promo.id,
+        name: validation.promo.name,
+        description: `Save ${validation.promo.discountFrom}${validation.promo.type === 'percent' ? '%' : '₹'} to ${validation.promo.discountTo}${validation.promo.type === 'percent' ? '%' : '₹'}`
       }
     });
-    
+
   } catch (error) {
     console.error('Promo apply error:', error);
     res.status(500).json({
