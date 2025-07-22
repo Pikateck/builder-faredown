@@ -45,7 +45,7 @@ import {
   Search,
   Filter,
   Download,
-  Refresh,
+  RefreshCw,
   Settings,
   Activity,
   TrendingUp,
@@ -687,7 +687,7 @@ export default function CurrencyManagement() {
                     onClick={fetchExchangeRates}
                     disabled={isUpdatingRates}
                   >
-                    <Refresh className={`w-4 h-4 mr-2 ${isUpdatingRates ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-4 h-4 mr-2 ${isUpdatingRates ? 'animate-spin' : ''}`} />
                     Update Rates
                   </Button>
                   <Button onClick={handleCreateCurrency} className="flex items-center gap-2">
