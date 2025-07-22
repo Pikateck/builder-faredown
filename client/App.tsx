@@ -40,6 +40,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import UserManagement from "./pages/admin/UserManagement";
 import BargainEngine from "./pages/admin/BargainEngine";
 import PaymentDashboard from "./pages/admin/PaymentDashboard";
+import TestBargainSystem from "./pages/TestBargainSystem";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
             {/* Development/Testing Routes */}
             <Route path="/api-test" element={<ApiTestPanel />} />
             <Route path="/backend-test" element={<BackendTestDashboard />} />
+            <Route path="/test-bargain-system" element={<TestBargainSystem />} />
 
             {/* Admin CMS Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
