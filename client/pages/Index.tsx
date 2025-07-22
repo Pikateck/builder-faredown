@@ -1306,7 +1306,7 @@ export default function Index() {
               </div>
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className="grid grid-cols-3 gap-2 mb-3">
             <button
               onClick={() => {
                 if (!showCalendar) {
@@ -1336,6 +1336,48 @@ export default function Index() {
                 </div>
               </div>
             </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowClassDropdown(!showClassDropdown)}
+                className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation w-full"
+              >
+                <div className="flex items-center space-x-2">
+                  <Settings className="w-4 h-4 text-gray-500" />
+                  <div className="text-left">
+                    <div className="text-xs text-gray-500">Class</div>
+                    <div className="text-sm font-medium text-gray-900 truncate">
+                      {selectedClass}
+                    </div>
+                  </div>
+                </div>
+                <ChevronDown className="w-3 h-3 text-gray-500" />
+              </button>
+              {showClassDropdown && (
+                <div className="absolute bottom-full mb-2 left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999]">
+                  {[
+                    "Economy",
+                    "Premium Economy",
+                    "Business",
+                    "First Class",
+                  ].map((classType) => (
+                    <button
+                      key={classType}
+                      onClick={() => {
+                        setSelectedClass(classType);
+                        setShowClassDropdown(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors ${
+                        selectedClass === classType
+                          ? "bg-blue-100 text-blue-700 font-medium"
+                          : "text-gray-900"
+                      }`}
+                    >
+                      {classType}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               onClick={() => setShowTravelers(!showTravelers)}
               className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
