@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { adminAuthService, PERMISSIONS } from "@/services/adminAuthService";
 import { currencyService } from "@/services/currencyService";
+import PromoCodeManager from "./PromoCodeManager";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -529,7 +530,9 @@ export default function AdminDashboard() {
 
           {/* Content */}
           <div className="p-6">
-            {activeModule === "dashboard" ? renderDashboardOverview() : renderModulePlaceholder(activeModule)}
+            {activeModule === "dashboard" ? renderDashboardOverview() :
+             activeModule === "promos" ? <PromoCodeManager /> :
+             renderModulePlaceholder(activeModule)}
           </div>
         </div>
       </div>
