@@ -10,6 +10,12 @@ import { Button } from "@/components/ui/button";
 import { adminAuthService, PERMISSIONS } from "@/services/adminAuthService";
 import { currencyService } from "@/services/currencyService";
 import PromoCodeManager from "./PromoCodeManager";
+import UserManagement from "./UserManagement";
+import MarkupManagementAir from "./MarkupManagementAir";
+import MarkupManagementHotel from "./MarkupManagementHotel";
+import VATManagement from "./VATManagement";
+import CurrencyManagement from "./CurrencyManagement";
+import ReportsAnalytics from "./ReportsAnalytics";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -536,7 +542,13 @@ export default function AdminDashboard() {
           {/* Content */}
           <div className="p-6">
             {activeModule === "dashboard" ? renderDashboardOverview() :
+             activeModule === "users" ? <UserManagement /> :
+             activeModule === "markup-air" ? <MarkupManagementAir /> :
+             activeModule === "markup-hotel" ? <MarkupManagementHotel /> :
+             activeModule === "vat" ? <VATManagement /> :
              activeModule === "promos" ? <PromoCodeManager /> :
+             activeModule === "currency" ? <CurrencyManagement /> :
+             activeModule === "reports" ? <ReportsAnalytics /> :
              renderModulePlaceholder(activeModule)}
           </div>
         </div>
