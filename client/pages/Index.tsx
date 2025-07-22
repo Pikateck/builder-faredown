@@ -423,6 +423,22 @@ export default function Index() {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
+                {/* Admin Test Button */}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="bg-red-500 text-white border-red-500 hover:bg-red-600 rounded text-xs font-medium px-2 py-1.5 shadow-lg"
+                  onClick={() => window.open('/admin/dashboard', '_blank')}
+                  title="Open Admin Dashboard (Test)"
+                >
+                  <span className="flex items-center space-x-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 2L3 7v11h4v-6h6v6h4V7l-7-5z" />
+                    </svg>
+                    <span className="hidden sm:inline">Admin</span>
+                  </span>
+                </Button>
+
                 {isLoggedIn ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
@@ -505,6 +521,19 @@ export default function Index() {
         {showMobileMenu && (
           <div className="md:hidden bg-blue-800 border-t border-blue-600 absolute w-full z-50">
             <div className="px-4 py-4 space-y-2">
+              {/* Mobile Admin Test Button */}
+              <button
+                className="flex items-center space-x-2 text-white py-3 px-2 rounded bg-red-500 hover:bg-red-600 border-b border-red-600 w-full"
+                onClick={() => {
+                  window.open('/admin/dashboard', '_blank');
+                  setShowMobileMenu(false);
+                }}
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 2L3 7v11h4v-6h6v6h4V7l-7-5z" />
+                </svg>
+                <span>Admin Dashboard (Test)</span>
+              </button>
               <Link
                 to="/flights"
                 className="flex items-center space-x-2 text-white py-3 px-2 rounded hover:bg-blue-700 border-b border-blue-600"
