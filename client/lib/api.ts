@@ -3,9 +3,28 @@
  * Centralized API client for Faredown backend integration
  */
 
+// Auto-detect backend URL based on environment
+const getBackendUrl = () => {
+  // Try environment variable first
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  // In production, try common backend URLs
+  if (window.location.hostname !== 'localhost') {
+    const currentDomain = window.location.origin;
+    // Try backend subdomain
+    const backendUrl = currentDomain.replace('https://', 'https://api-');
+    return backendUrl;
+  }
+
+  // Default to localhost for development
+  return "http://localhost:8000";
+};
+
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
+  BASE_URL: getBackendUrl(),
   TIMEOUT: 10000,
   HEADERS: {
     "Content-Type": "application/json",
