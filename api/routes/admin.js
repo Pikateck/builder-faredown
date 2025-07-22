@@ -8,6 +8,7 @@ const router = express.Router();
 const { requirePermission, PERMISSIONS } = require('../middleware/auth');
 const { validate, validatePagination, validateDateRange } = require('../middleware/validation');
 const { audit, getAuditTrail, getAuditStats } = require('../middleware/audit');
+const { budgetMonitorService } = require('../services/budgetMonitorService');
 
 // Mock data for demonstration
 const mockStats = {
@@ -564,5 +565,213 @@ router.post('/backup', requirePermission(PERMISSIONS.BACKUP_MANAGE), async (req,
     });
   }
 });
+
+/**
+ * @api {get} /api/admin/budget/status Budget Monitor Status
+ * @apiName GetBudgetMonitorStatus
+ * @apiGroup AdminBudget
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiSuccess {Object} status Budget monitoring status
+ */
+router.get('/budget/status',
+  requirePermission(PERMISSIONS.ADMIN_DASHBOARD),
+  async (req, res) => {
+    try {
+      const status = budgetMonitorService.getStatus();
+
+      res.json({
+        success: true,
+        data: status
+      });
+
+    } catch (error) {
+      console.error('Budget status error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get budget monitor status'
+      });
+    }
+  }
+);
+
+/**
+ * @api {get} /api/admin/budget/alerts Budget Alert History
+ * @apiName GetBudgetAlerts
+ * @apiGroup AdminBudget
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiQuery {String} [promoId] Filter by promo ID
+ * @apiQuery {String} [level] Filter by alert level
+ * @apiQuery {String} [startDate] Start date filter
+ * @apiQuery {String} [endDate] End date filter
+ *
+ * @apiSuccess {Array} alerts Alert history
+ */
+router.get('/budget/alerts',
+  requirePermission(PERMISSIONS.PROMO_VIEW),
+  async (req, res) => {
+    try {
+      const alerts = budgetMonitorService.getAlertHistory(req.query);
+
+      res.json({
+        success: true,
+        data: alerts
+      });
+
+    } catch (error) {
+      console.error('Budget alerts error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to get budget alerts'
+      });
+    }
+  }
+);
+
+/**
+ * @api {post} /api/admin/budget/check/:promoId Manual Budget Check
+ * @apiName ManualBudgetCheck
+ * @apiGroup AdminBudget
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} promoId Promo code ID
+ *
+ * @apiSuccess {Object} result Budget check result
+ */
+router.post('/budget/check/:promoId',
+  requirePermission(PERMISSIONS.PROMO_MANAGE),
+  async (req, res) => {
+    try {
+      const { promoId } = req.params;
+      const result = await budgetMonitorService.checkPromocodeBudget(promoId);
+
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          message: 'Promo code not found'
+        });
+      }
+
+      await audit.adminAction(req, 'manual_budget_check', { promoId });
+
+      res.json({
+        success: true,
+        data: result
+      });
+
+    } catch (error) {
+      console.error('Manual budget check error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to check budget'
+      });
+    }
+  }
+);
+
+/**
+ * @api {put} /api/admin/budget/config Update Budget Config
+ * @apiName UpdateBudgetConfig
+ * @apiGroup AdminBudget
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {Number} [warningThreshold] Warning threshold percentage
+ * @apiParam {Number} [criticalThreshold] Critical threshold percentage
+ * @apiParam {Number} [monitoringInterval] Monitoring interval in milliseconds
+ * @apiParam {Boolean} [enableAutoRecovery] Enable auto-recovery
+ *
+ * @apiSuccess {Object} config Updated configuration
+ */
+router.put('/budget/config',
+  requirePermission(PERMISSIONS.SYSTEM_CONFIG),
+  async (req, res) => {
+    try {
+      const allowedFields = [
+        'WARNING_THRESHOLD',
+        'CRITICAL_THRESHOLD',
+        'MONITORING_INTERVAL',
+        'ENABLE_AUTO_RECOVERY'
+      ];
+
+      const updateConfig = {};
+
+      for (const [key, value] of Object.entries(req.body)) {
+        const configKey = key.toUpperCase();
+        if (allowedFields.includes(configKey)) {
+          updateConfig[configKey] = value;
+        }
+      }
+
+      if (Object.keys(updateConfig).length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'No valid configuration fields provided'
+        });
+      }
+
+      budgetMonitorService.updateConfig(updateConfig);
+
+      await audit.adminAction(req, 'budget_config_update', updateConfig);
+
+      res.json({
+        success: true,
+        message: 'Budget configuration updated',
+        data: budgetMonitorService.getStatus().config
+      });
+
+    } catch (error) {
+      console.error('Budget config update error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to update budget configuration'
+      });
+    }
+  }
+);
+
+/**
+ * @api {get} /api/admin/budget/report Daily Budget Report
+ * @apiName GetDailyBudgetReport
+ * @apiGroup AdminBudget
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiSuccess {Object} report Daily budget report
+ */
+router.get('/budget/report',
+  requirePermission(PERMISSIONS.REPORTS_GENERATE),
+  async (req, res) => {
+    try {
+      const report = await budgetMonitorService.generateDailyReport();
+
+      res.json({
+        success: true,
+        data: report
+      });
+
+    } catch (error) {
+      console.error('Budget report error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to generate budget report'
+      });
+    }
+  }
+);
 
 module.exports = router;
