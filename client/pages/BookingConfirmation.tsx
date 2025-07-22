@@ -1003,10 +1003,10 @@ export default function BookingConfirmation() {
                       </td>
                       <td className="text-center p-3">1</td>
                       <td className="text-right p-3">
-                        ₹{(booking.total * 0.2).toLocaleString()}
+                        ₹{((booking.total || 0) * 0.2).toLocaleString()}
                       </td>
                       <td className="text-right p-3">
-                        ₹{(booking.total * 0.2).toLocaleString()}
+                        ₹{((booking.total || 0) * 0.2).toLocaleString()}
                       </td>
                     </tr>
                     {(booking.extrasTotal || 0) > 0 && (
