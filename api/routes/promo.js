@@ -802,4 +802,265 @@ router.get('/price-range', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * @api {post} /api/promo/admin/create Create Promo Code
+ * @apiName CreatePromoCode
+ * @apiGroup PromoCodeAdmin
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} code Promo code
+ * @apiParam {String} name Display name
+ * @apiParam {String} type Discount type (percent/fixed)
+ * @apiParam {Number} discountFrom Minimum discount
+ * @apiParam {Number} discountTo Maximum discount
+ * @apiParam {String} applicableTo Applicable to (flights/hotels/both)
+ * @apiParam {Object} [filters] Filters object
+ * @apiParam {Object} [travelPeriod] Travel period
+ * @apiParam {Object} validity Validity period
+ * @apiParam {Number} marketingBudget Marketing budget
+ *
+ * @apiSuccess {Object} promo Created promo code
+ */
+router.post('/admin/create',
+  requirePermission(PERMISSIONS.PROMO_MANAGE),
+  validate.createPromo,
+  async (req, res) => {
+    try {
+      const promoData = {
+        ...req.body,
+        createdBy: req.user.username
+      };
+
+      // Check if code already exists
+      const existingPromo = PromoCodeValidator.findPromoCode(req.body.code);
+      if (existingPromo) {
+        return res.status(400).json({
+          success: false,
+          message: 'Promo code already exists'
+        });
+      }
+
+      const newPromo = PromoCodeValidator.createPromoCode(promoData);
+
+      await audit.adminAction(req, 'promo_create', { promoId: newPromo.id, code: newPromo.code });
+
+      res.json({
+        success: true,
+        message: 'Promo code created successfully',
+        data: newPromo
+      });
+
+    } catch (error) {
+      console.error('Create promo error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to create promo code'
+      });
+    }
+  }
+);
+
+/**
+ * @api {put} /api/promo/admin/:id Update Promo Code
+ * @apiName UpdatePromoCode
+ * @apiGroup PromoCodeAdmin
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} id Promo code ID
+ *
+ * @apiSuccess {Object} promo Updated promo code
+ */
+router.put('/admin/:id',
+  requirePermission(PERMISSIONS.PROMO_MANAGE),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updateData = {
+        ...req.body,
+        updatedBy: req.user.username
+      };
+
+      const updatedPromo = PromoCodeValidator.updatePromoCode(id, updateData);
+
+      if (!updatedPromo) {
+        return res.status(404).json({
+          success: false,
+          message: 'Promo code not found'
+        });
+      }
+
+      await audit.adminAction(req, 'promo_update', { promoId: id, changes: Object.keys(updateData) });
+
+      res.json({
+        success: true,
+        message: 'Promo code updated successfully',
+        data: updatedPromo
+      });
+
+    } catch (error) {
+      console.error('Update promo error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to update promo code'
+      });
+    }
+  }
+);
+
+/**
+ * @api {delete} /api/promo/admin/:id Delete Promo Code
+ * @apiName DeletePromoCode
+ * @apiGroup PromoCodeAdmin
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} id Promo code ID
+ *
+ * @apiSuccess {String} message Success message
+ */
+router.delete('/admin/:id',
+  requirePermission(PERMISSIONS.PROMO_MANAGE),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const deleted = PromoCodeValidator.deletePromoCode(id);
+
+      if (!deleted) {
+        return res.status(404).json({
+          success: false,
+          message: 'Promo code not found'
+        });
+      }
+
+      await audit.adminAction(req, 'promo_delete', { promoId: id });
+
+      res.json({
+        success: true,
+        message: 'Promo code deleted successfully'
+      });
+
+    } catch (error) {
+      console.error('Delete promo error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to delete promo code'
+      });
+    }
+  }
+);
+
+/**
+ * @api {get} /api/promo/admin/all Get All Promo Codes
+ * @apiName GetAllPromoCodes
+ * @apiGroup PromoCodeAdmin
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiSuccess {Array} promoCodes All promo codes
+ */
+router.get('/admin/all',
+  requirePermission(PERMISSIONS.PROMO_VIEW),
+  async (req, res) => {
+    try {
+      const promoCodes = PromoCodeValidator.getAllPromoCodes();
+
+      res.json({
+        success: true,
+        data: promoCodes
+      });
+
+    } catch (error) {
+      console.error('Get all promos error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to fetch promo codes'
+      });
+    }
+  }
+);
+
+/**
+ * @api {get} /api/promo/admin/statistics Get Promo Statistics
+ * @apiName GetPromoStatistics
+ * @apiGroup PromoCodeAdmin
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiQuery {String} [code] Specific promo code
+ *
+ * @apiSuccess {Object} statistics Promo code statistics
+ */
+router.get('/admin/statistics',
+  requirePermission(PERMISSIONS.ANALYTICS_VIEW),
+  async (req, res) => {
+    try {
+      const { code } = req.query;
+      const statistics = PromoCodeValidator.getPromoStatistics(code);
+
+      res.json({
+        success: true,
+        data: statistics
+      });
+
+    } catch (error) {
+      console.error('Get promo statistics error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to fetch promo statistics'
+      });
+    }
+  }
+);
+
+/**
+ * @api {get} /api/promo/admin/usage-logs Get Usage Logs
+ * @apiName GetUsageLogs
+ * @apiGroup PromoCodeAdmin
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiQuery {String} [promoCode] Filter by promo code
+ * @apiQuery {String} [userId] Filter by user ID
+ * @apiQuery {String} [startDate] Start date filter
+ * @apiQuery {String} [endDate] End date filter
+ * @apiQuery {String} [bookingType] Filter by booking type
+ *
+ * @apiSuccess {Array} logs Usage logs
+ */
+router.get('/admin/usage-logs',
+  requirePermission(PERMISSIONS.AUDIT_VIEW),
+  async (req, res) => {
+    try {
+      const logs = PromoCodeValidator.getUsageLogs(req.query);
+
+      res.json({
+        success: true,
+        data: logs
+      });
+
+    } catch (error) {
+      console.error('Get usage logs error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to fetch usage logs'
+      });
+    }
+  }
+);
+
 module.exports = router;
