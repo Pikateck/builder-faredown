@@ -112,15 +112,68 @@ const schemas = {
   // Promo code schemas
   createPromo: Joi.object({
     code: Joi.string().alphanum().min(3).max(20).uppercase().required(),
-    type: Joi.string().valid('percentage', 'fixed_amount').required(),
-    value: Joi.number().positive().required(),
-    minAmount: Joi.number().positive().optional(),
-    maxDiscount: Joi.number().positive().optional(),
-    validFrom: Joi.date().iso().required(),
-    validUntil: Joi.date().iso().min(Joi.ref('validFrom')).required(),
-    usageLimit: Joi.number().integer().positive().optional(),
-    applicableServices: Joi.array().items(Joi.string().valid('flight', 'hotel', 'all')).default(['all']),
-    isActive: Joi.boolean().default(true)
+    name: Joi.string().min(3).max(100).required(),
+    type: Joi.string().valid('percent', 'fixed').required(),
+    discountFrom: Joi.number().positive().required(),
+    discountTo: Joi.number().positive().min(Joi.ref('discountFrom')).required(),
+    applicableTo: Joi.string().valid('flights', 'hotels', 'both').required(),
+    filters: Joi.object({
+      fromCity: Joi.string().optional(),
+      toCity: Joi.string().optional(),
+      airlines: Joi.array().items(Joi.string()).optional(),
+      cabinClass: Joi.array().items(Joi.string()).optional(),
+      cities: Joi.array().items(Joi.string()).optional(),
+      hotels: Joi.array().items(Joi.string()).optional(),
+      roomCategories: Joi.array().items(Joi.string()).optional()
+    }).optional(),
+    travelPeriod: Joi.object({
+      from: Joi.date().iso().required(),
+      to: Joi.date().iso().min(Joi.ref('from')).required()
+    }).optional(),
+    validity: Joi.object({
+      startDate: Joi.date().iso().required(),
+      endDate: Joi.date().iso().min(Joi.ref('startDate')).required()
+    }).required(),
+    marketingBudget: Joi.number().positive().required(),
+    status: Joi.string().valid('active', 'paused', 'exhausted', 'expired').default('active')
+  }),
+
+  applyPromo: Joi.object({
+    promoCode: Joi.string().required(),
+    type: Joi.string().valid('flight', 'hotel').required(),
+    fromCity: Joi.string().optional(),
+    toCity: Joi.string().optional(),
+    airline: Joi.string().optional(),
+    cabin: Joi.string().optional(),
+    travelDate: Joi.date().iso().optional(),
+    city: Joi.string().optional(),
+    hotel: Joi.string().optional(),
+    roomCategory: Joi.string().optional(),
+    checkIn: Joi.date().iso().optional(),
+    checkOut: Joi.date().iso().optional()
+  }),
+
+  checkBargain: Joi.object({
+    userInputPrice: Joi.number().positive().required(),
+    baseNetPrice: Joi.number().positive().required(),
+    discountRange: Joi.object({
+      from: Joi.number().positive().required(),
+      to: Joi.number().positive().min(Joi.ref('from')).required(),
+      type: Joi.string().valid('percent', 'fixed').required()
+    }).required(),
+    promoCode: Joi.string().optional(),
+    type: Joi.string().valid('flight', 'hotel').required(),
+    markup: Joi.object({
+      from: Joi.number().positive().optional(),
+      to: Joi.number().positive().optional(),
+      type: Joi.string().valid('percent', 'fixed').optional()
+    }).optional()
+  }),
+
+  counterOffer: Joi.object({
+    sessionId: Joi.string().required(),
+    newPrice: Joi.number().positive().optional(),
+    action: Joi.string().valid('accept', 'reject', 'counter').required()
   }),
 
   validatePromo: Joi.object({
@@ -217,6 +270,9 @@ const validate = {
   initiateBargain: validateRequest(schemas.initiateBargain),
   counterOffer: validateRequest(schemas.counterOffer),
   createPromo: validateRequest(schemas.createPromo),
+  applyPromo: validateRequest(schemas.applyPromo),
+  checkBargain: validateRequest(schemas.checkBargain),
+  counterOffer: validateRequest(schemas.counterOffer),
   validatePromo: validateRequest(schemas.validatePromo),
   processPayment: validateRequest(schemas.processPayment),
   analyticsQuery: validateRequest(schemas.analyticsQuery, 'query'),
