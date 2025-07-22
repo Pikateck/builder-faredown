@@ -1319,8 +1319,10 @@ export default function Index() {
               </div>
             )}
             <div className="bg-blue-50 p-3 rounded text-sm">
-              <strong>Test Account:</strong><br />
-              Email: test@faredown.com<br />
+              <strong>Test Account:</strong>
+              <br />
+              Email: test@faredown.com
+              <br />
               Password: password123
             </div>
             <div>
@@ -1373,7 +1375,9 @@ export default function Index() {
             )}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">First Name</label>
+                <label className="block text-sm font-medium mb-1">
+                  First Name
+                </label>
                 <Input
                   value={registerFirstName}
                   onChange={(e) => setRegisterFirstName(e.target.value)}
@@ -1381,7 +1385,9 @@ export default function Index() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Last Name</label>
+                <label className="block text-sm font-medium mb-1">
+                  Last Name
+                </label>
                 <Input
                   value={registerLastName}
                   onChange={(e) => setRegisterLastName(e.target.value)}
