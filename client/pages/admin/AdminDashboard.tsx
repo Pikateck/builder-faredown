@@ -104,15 +104,18 @@ const mockStats = {
 const adminModules = [
   { id: "dashboard", name: "Dashboard", icon: BarChart3, color: "bg-blue-500" },
   { id: "users", name: "User Management", icon: Users, color: "bg-green-500" },
+  { id: "markup-air", name: "Markup Management (Air)", icon: Plane, color: "bg-blue-600" },
+  { id: "markup-hotel", name: "Markup Management (Hotels)", icon: Hotel, color: "bg-green-600" },
+  { id: "vat", name: "VAT Management", icon: FileText, color: "bg-purple-600" },
+  { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
+  { id: "currency", name: "Currency Conversion", icon: DollarSign, color: "bg-yellow-600" },
+  { id: "reports", name: "Reports & Analytics", icon: TrendingUp, color: "bg-emerald-500" },
   { id: "bookings", name: "Booking Management", icon: BookOpen, color: "bg-purple-500" },
   { id: "payments", name: "Payments & Accounting", icon: CreditCard, color: "bg-yellow-500" },
   { id: "bargains", name: "Bargain Engine", icon: Brain, color: "bg-red-500" },
   { id: "suppliers", name: "Supplier Management", icon: Briefcase, color: "bg-indigo-500" },
   { id: "inventory", name: "Inventory/Extranet", icon: Package, color: "bg-orange-500" },
-  { id: "pricing", name: "Pricing & Markups", icon: DollarSign, color: "bg-teal-500" },
   { id: "rewards", name: "Rewards Management", icon: Award, color: "bg-pink-500" },
-  { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
-  { id: "analytics", name: "Analytics & Reports", icon: TrendingUp, color: "bg-emerald-500" },
   { id: "vouchers", name: "Voucher Templates", icon: FileText, color: "bg-slate-500" },
   { id: "audit", name: "Audit Logs", icon: Shield, color: "bg-amber-500" },
   { id: "cms", name: "CMS & Content", icon: Globe, color: "bg-violet-500" },
@@ -428,7 +431,7 @@ export default function AdminDashboard() {
         {/* Sidebar */}
         <div className={`${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:transition-none`}>
+        } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out lg:transition-none flex flex-col`}>
           {/* Sidebar Header */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center">
@@ -469,7 +472,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 pb-4 space-y-1 max-h-96 overflow-y-auto">
+          <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
             {filteredModules.map((module) => (
               <button
                 key={module.id}
@@ -481,21 +484,23 @@ export default function AdminDashboard() {
                 }`}
               >
                 <module.icon className="w-4 h-4 mr-3" />
-                {module.name}
+                <span className="truncate">{module.name}</span>
               </button>
             ))}
           </nav>
 
-          {/* Logout */}
-          <div className="p-4 border-t border-gray-200">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={handleLogout}
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </Button>
+          {/* Bottom section with logout */}
+          <div className="mt-auto">
+            <div className="p-4 border-t border-gray-200">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={handleLogout}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
 
