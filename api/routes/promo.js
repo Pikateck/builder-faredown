@@ -8,6 +8,7 @@ const router = express.Router();
 const { requirePermission, PERMISSIONS, authenticateToken } = require('../middleware/auth');
 const { validate } = require('../middleware/validation');
 const { audit } = require('../middleware/audit');
+const { PromoCodeValidator, validatePromoCode, trackPromoUsage, checkBudgetLimits } = require('../middleware/promoValidation');
 
 // In-memory storage for promo codes and bargain sessions (in production, use database)
 let promoCodes = [
@@ -139,7 +140,7 @@ const markupConfig = {
  * @apiSuccess {Number} [remainingBudget] Remaining marketing budget
  * @apiSuccess {String} [message] Status message
  */
-router.post('/apply', authenticateToken, async (req, res) => {
+router.post('/apply', authenticateToken, validate.applyPromo, checkBudgetLimits, async (req, res) => {
   try {
     const { promoCode, type, ...filters } = req.body;
     
@@ -311,7 +312,7 @@ router.post('/apply', authenticateToken, async (req, res) => {
  * @apiSuccess {String} message Status message
  * @apiSuccess {Object} [priceBreakdown] Detailed price breakdown
  */
-router.post('/check', authenticateToken, async (req, res) => {
+router.post('/check', authenticateToken, validate.checkBargain, trackPromoUsage, async (req, res) => {
   try {
     const { 
       userInputPrice, 
@@ -503,7 +504,7 @@ router.post('/check', authenticateToken, async (req, res) => {
  * @apiSuccess {Number} [counterOffer] New counter offer
  * @apiSuccess {String} message Response message
  */
-router.post('/counter', authenticateToken, async (req, res) => {
+router.post('/counter', authenticateToken, validate.counterOffer, async (req, res) => {
   try {
     const { sessionId, newPrice, action } = req.body;
     
