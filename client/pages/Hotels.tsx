@@ -9,6 +9,9 @@ import { Star, MapPin, Heart } from "lucide-react";
 export default function Hotels() {
   const navigate = useNavigate();
 
+  // Debug log to verify component is loading
+  console.log("Hotels component loaded");
+
   const recentSearches = [
     {
       destination: "Dubai",
