@@ -990,7 +990,7 @@ export default function BookingConfirmation() {
                       <td className="text-right p-3">
                         ₹
                         {(
-                          booking.baseFareTotal || booking.total * 0.75
+                          booking.baseFareTotal || (booking.total || 0) * 0.75
                         ).toLocaleString()}
                       </td>
                     </tr>
