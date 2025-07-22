@@ -80,20 +80,29 @@ export function BookingSearchForm() {
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
   const handleSearch = () => {
+    console.log("Search button clicked", { destination, checkInDate, checkOutDate });
+
     if (!destination || !checkInDate || !checkOutDate) {
+      console.log("Missing required fields:", { destination, checkInDate, checkOutDate });
       return;
     }
 
-    const searchParams = new URLSearchParams({
-      destination,
-      checkIn: checkInDate.toISOString(),
-      checkOut: checkOutDate.toISOString(),
-      adults: guests.adults.toString(),
-      children: guests.children.toString(),
-      rooms: guests.rooms.toString(),
-    });
+    try {
+      const searchParams = new URLSearchParams({
+        destination,
+        checkIn: checkInDate.toISOString(),
+        checkOut: checkOutDate.toISOString(),
+        adults: guests.adults.toString(),
+        children: guests.children.toString(),
+        rooms: guests.rooms.toString(),
+      });
 
-    navigate(`/hotels/results?${searchParams.toString()}`);
+      const url = `/hotels/results?${searchParams.toString()}`;
+      console.log("Navigating to:", url);
+      navigate(url);
+    } catch (error) {
+      console.error("Error in handleSearch:", error);
+    }
   };
 
   const updateGuestCount = (
