@@ -29,6 +29,13 @@ const analyticsRoutes = require('./routes/analytics');
 const paymentRoutes = require('./routes/payments');
 const cmsRoutes = require('./routes/cms');
 
+// New admin module routes
+const usersAdminRoutes = require('./routes/users');
+const markupRoutes = require('./routes/markup');
+const vatRoutes = require('./routes/vat');
+const currencyAdminRoutes = require('./routes/currency');
+const reportsRoutes = require('./routes/reports');
+
 // Import middleware
 const { authenticateToken, requireAdmin } = require('./middleware/auth');
 const { validateRequest } = require('./middleware/validation');
@@ -128,7 +135,10 @@ app.get('/', (req, res) => {
       promo: '/api/promo',
       analytics: '/api/analytics',
       payments: '/api/payments',
-      cms: '/api/cms'
+      cms: '/api/cms',
+      markup: '/api/markup',
+      vat: '/api/vat',
+      reports: '/api/reports'
     },
     documentation: '/api/docs',
     health: '/health'
@@ -142,15 +152,20 @@ app.use('/api/auth', authLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', authenticateToken, requireAdmin, auditLogger, adminRoutes);
 app.use('/api/bookings', authenticateToken, bookingRoutes);
-app.use('/api/users', authenticateToken, userRoutes);
+app.use('/api/users', authenticateToken, usersAdminRoutes);
 app.use('/api/flights', flightRoutes);
 app.use('/api/hotels', hotelRoutes);
 app.use('/api/bargain', bargainRoutes);
-app.use('/api/currency', currencyRoutes);
+app.use('/api/currency', currencyAdminRoutes);
 app.use('/api/promo', promoRoutes);
 app.use('/api/analytics', authenticateToken, analyticsRoutes);
 app.use('/api/payments', authenticateToken, paymentRoutes);
 app.use('/api/cms', cmsRoutes);
+
+// New admin module routes
+app.use('/api/markup', authenticateToken, markupRoutes);
+app.use('/api/vat', authenticateToken, vatRoutes);
+app.use('/api/reports', authenticateToken, reportsRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
