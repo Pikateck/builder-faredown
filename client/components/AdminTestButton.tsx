@@ -50,28 +50,48 @@ export default function AdminTestButton({
 
   const checkApiStatus = async () => {
     setApiStatus('checking');
-    
-    // Try different common ports for the API
+
+    // Check if we're in development environment
+    const isLocalhost = window.location.hostname === 'localhost' ||
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('localhost');
+
+    if (!isLocalhost) {
+      // In production, skip localhost API checks
+      setApiStatus('offline');
+      setApiPort(null);
+      return;
+    }
+
+    // Try different common ports for the API (only in development)
     const ports = [3001, 8000, 5000, 3000];
-    
+
     for (const port of ports) {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+
         const response = await fetch(`http://localhost:${port}/health`, {
           method: 'GET',
           mode: 'cors',
+          signal: controller.signal,
         });
-        
+
+        clearTimeout(timeoutId);
+
         if (response.ok) {
           setApiStatus('online');
           setApiPort(port);
           return;
         }
       } catch (error) {
-        // Continue to next port
-        console.log(`API not found on port ${port}`);
+        // Continue to next port - suppress console logs for cleaner output
+        if (error.name !== 'AbortError') {
+          // Only log non-timeout errors in development
+        }
       }
     }
-    
+
     setApiStatus('offline');
     setApiPort(null);
   };
@@ -85,6 +105,15 @@ export default function AdminTestButton({
   };
 
   const openApiDocs = () => {
+    const isLocalhost = window.location.hostname === 'localhost' ||
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('localhost');
+
+    if (!isLocalhost) {
+      alert('API documentation is only available in development environment.');
+      return;
+    }
+
     if (apiPort) {
       window.open(`http://localhost:${apiPort}/api/docs`, '_blank');
     } else {
@@ -93,19 +122,40 @@ export default function AdminTestButton({
   };
 
   const testApiEndpoint = async (endpoint: string) => {
+    const isLocalhost = window.location.hostname === 'localhost' ||
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('localhost');
+
+    if (!isLocalhost) {
+      alert('API testing is only available in development environment.');
+      return;
+    }
+
     if (!apiPort) {
       alert('API server is not running. Please start the API server first.');
       return;
     }
-    
+
     try {
-      const response = await fetch(`http://localhost:${apiPort}${endpoint}`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const response = await fetch(`http://localhost:${apiPort}${endpoint}`, {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
       const data = await response.json();
       console.log(`API Test Result for ${endpoint}:`, data);
       alert(`API Test ${response.ok ? 'Success' : 'Failed'}: ${JSON.stringify(data, null, 2)}`);
     } catch (error) {
       console.error(`API Test Error for ${endpoint}:`, error);
-      alert(`API Test Failed: ${error.message}`);
+      if (error.name === 'AbortError') {
+        alert('API Test Failed: Request timeout');
+      } else {
+        alert(`API Test Failed: ${error.message}`);
+      }
     }
   };
 
@@ -303,11 +353,24 @@ export default function AdminTestButton({
             <div className="flex items-start space-x-2">
               <AlertCircle className="w-4 h-4 text-yellow-600 mt-0.5" />
               <div className="text-xs text-yellow-700">
-                <div className="font-medium">API Server Not Running</div>
-                <div className="mt-1">
-                  Start the API server with:<br />
-                  <code className="bg-gray-100 px-1 rounded">cd api && npm start</code>
-                </div>
+                {window.location.hostname === 'localhost' ||
+                 window.location.hostname === '127.0.0.1' ||
+                 window.location.hostname.includes('localhost') ? (
+                  <>
+                    <div className="font-medium">API Server Not Running</div>
+                    <div className="mt-1">
+                      Start the API server with:<br />
+                      <code className="bg-gray-100 px-1 rounded">cd api && npm start</code>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="font-medium">Production Environment</div>
+                    <div className="mt-1">
+                      API testing is only available in development.
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
