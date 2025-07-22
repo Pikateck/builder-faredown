@@ -24,8 +24,20 @@ import {
 import { cn } from "@/lib/utils";
 
 export default function Account() {
+  const location = useLocation();
   const [bookings, setBookings] = useState([]);
   const [activeTab, setActiveTab] = useState("bookings");
+
+  useEffect(() => {
+    // Set active tab based on URL
+    if (location.pathname.includes('/trips') || location.pathname.includes('/bookings')) {
+      setActiveTab("bookings");
+    } else if (location.pathname.includes('/payment')) {
+      setActiveTab("payment");
+    } else {
+      setActiveTab("profile");
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     // Load bookings from localStorage
