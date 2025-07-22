@@ -16,19 +16,13 @@ import { Badge } from '@/components/ui/badge';
 import {
   Settings,
   Database,
-  TestTube,
-  Target,
   BarChart3,
-  Zap,
   CheckCircle,
   XCircle,
   RefreshCw,
   ExternalLink,
   Code,
-  Play,
   Tag,
-  Building,
-  Plane,
   AlertCircle,
 } from 'lucide-react';
 
