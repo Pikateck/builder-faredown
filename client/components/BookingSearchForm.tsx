@@ -127,28 +127,17 @@ export function BookingSearchForm() {
     []
   );
 
-  // Show popular destinations when dropdown opens without query
+  // Handle destination search when user types
   useEffect(() => {
-    if (isDestinationOpen && (!destination || destination.length < 2)) {
-      setDestinationSuggestions([
-        { id: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
-        { id: "LON", name: "London", country: "United Kingdom", type: "city" },
-        { id: "NYC", name: "New York", country: "United States", type: "city" },
-        { id: "PAR", name: "Paris", country: "France", type: "city" },
-        { id: "BOM", name: "Mumbai", country: "India", type: "city" }
-      ]);
-    }
-  }, [isDestinationOpen, destination]);
-
-  // Debounce destination search
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (destination && destination.length >= 2 && isDestinationOpen) {
+    if (isDestinationOpen) {
+      if (destination && destination.length >= 2) {
+        // Search as user types (debounced in searchDestinations function)
         searchDestinations(destination);
+      } else {
+        // Show popular destinations when no search query
+        setDestinationSuggestions([]);
       }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
+    }
   }, [destination, isDestinationOpen, searchDestinations]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
