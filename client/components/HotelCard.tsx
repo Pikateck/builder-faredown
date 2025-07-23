@@ -123,7 +123,7 @@ export function HotelCard({
 
   // Calculate total pricing
   const priceCalculation = calculateTotalPrice(
-    hotel.currentPrice,
+    currentPrice,
     totalNights,
     roomsCount,
   );
