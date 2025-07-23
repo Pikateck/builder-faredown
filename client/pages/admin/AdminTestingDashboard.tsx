@@ -5,6 +5,7 @@ import { BookingFlowTest } from '@/components/BookingFlowTest';
 import { EmailDeliveryTest } from '@/components/EmailDeliveryTest';
 import { SystemStatus } from '@/components/SystemStatus';
 import { LiveHotelbedsTest } from '@/components/LiveHotelbedsTest';
+import { ApiHealthCheck } from '@/components/ApiHealthCheck';
 
 export default function AdminTestingDashboard() {
   return (
