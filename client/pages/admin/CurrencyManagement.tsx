@@ -322,11 +322,23 @@ export default function CurrencyManagement() {
   const fetchExchangeRates = async () => {
     setIsUpdatingRates(true);
     try {
-      // Using a free exchange rate API (example: exchangerate-api.com)
-      const response = await fetch(
-        "https://api.exchangerate-api.com/v4/latest/INR",
-      );
-      const data: ExchangeRateResponse = await response.json();
+      // Use mock exchange rates to avoid fetch calls
+      console.log("Currency rates: Using mock data (fetch disabled)");
+      const data: ExchangeRateResponse = {
+        base: "INR",
+        date: new Date().toISOString().split('T')[0],
+        rates: {
+          USD: 0.012,
+          EUR: 0.011,
+          GBP: 0.0095,
+          AED: 0.044,
+          SAR: 0.045,
+          QAR: 0.043,
+          KWD: 0.0037,
+          OMR: 0.0046,
+          BHD: 0.0045
+        }
+      };
 
       // Update currency rates
       setCurrencies((prevCurrencies) =>
