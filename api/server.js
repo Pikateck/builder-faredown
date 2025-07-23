@@ -22,6 +22,7 @@ const bookingRoutes = require("./routes/bookings");
 const userRoutes = require("./routes/users");
 const flightRoutes = require("./routes/flights");
 const hotelRoutes = require("./routes/hotels");
+const hotelsLiveRoutes = require("./routes/hotels-live");
 const bargainRoutes = require("./routes/bargain");
 const currencyRoutes = require("./routes/currency");
 const promoRoutes = require("./routes/promo");
