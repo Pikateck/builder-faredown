@@ -21,7 +21,7 @@ export function ApiHealthCheck() {
     try {
       console.log('🔍 Checking API health...');
 
-      const response = await fetch('/api/health', {
+      const response = await fetch('/health', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
