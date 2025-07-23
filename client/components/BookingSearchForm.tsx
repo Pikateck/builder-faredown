@@ -537,13 +537,19 @@ export function BookingSearchForm() {
                           setIsDestinationOpen(false);
                         }}
                       >
-                        {/* Clean location icon */}
+                        {/* Clean location icon with country flag */}
                         <div className="flex items-center justify-center w-7 h-7 mr-3 flex-shrink-0">
-                          <div className="flex items-center justify-center w-5 h-5 bg-orange-500 rounded-full">
-                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                            </svg>
-                          </div>
+                          {(dest as any).flag ? (
+                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-50 border border-gray-200">
+                              <span className="text-sm">{(dest as any).flag}</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-center w-5 h-5 bg-orange-500 rounded-full">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
                         </div>
 
                         {/* Main content area */}
