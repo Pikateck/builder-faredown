@@ -99,30 +99,34 @@ const mockStats = {
   monthlyGrowth: 12.5,
   flightBookings: 728,
   hotelBookings: 519,
-  topCities: ["Mumbai", "Dubai", "Delhi", "Singapore", "London"],
-  recentBookings: [
-    {
-      id: "FD001",
-      type: "Flight",
-      amount: 25890,
-      status: "Confirmed",
-      customer: "John Doe",
-    },
-    {
-      id: "HD002",
-      type: "Hotel",
-      amount: 12500,
-      status: "Pending",
-      customer: "Jane Smith",
-    },
-    {
-      id: "FD003",
-      type: "Flight",
-      amount: 35200,
-      status: "Confirmed",
-      customer: "Mike Johnson",
-    },
+  monthlyBookingData: [
+    { month: "Jan", bookings: 185, revenue: 425000 },
+    { month: "Feb", bookings: 220, revenue: 512000 },
+    { month: "Mar", bookings: 195, revenue: 458000 },
+    { month: "Apr", bookings: 168, revenue: 398000 },
+    { month: "May", bookings: 201, revenue: 475000 },
+    { month: "Jun", bookings: 278, revenue: 579000 }
   ],
+  topDestinationsMonthly: [
+    { city: "Mumbai", bookings: 245, revenue: 580000, growth: "+12%" },
+    { city: "Dubai", bookings: 198, revenue: 450000, growth: "+8%" },
+    { city: "Delhi", bookings: 176, revenue: 420000, growth: "+15%" },
+    { city: "Singapore", bookings: 142, revenue: 385000, growth: "+6%" },
+    { city: "London", bookings: 118, revenue: 295000, growth: "+10%" }
+  ],
+  flightCabinBookings: [
+    { cabin: "Economy", bookings: 485, revenue: 1250000, percentage: 66 },
+    { cabin: "Business", bookings: 198, revenue: 890000, percentage: 27 },
+    { cabin: "First Class", bookings: 45, revenue: 420000, percentage: 7 }
+  ],
+  hotelCityBookings: [
+    { city: "Mumbai", bookings: 125, revenue: 285000, avgRate: 2280 },
+    { city: "Dubai", bookings: 98, revenue: 245000, avgRate: 2500 },
+    { city: "Delhi", bookings: 89, revenue: 198000, avgRate: 2225 },
+    { city: "Goa", bookings: 76, revenue: 165000, avgRate: 2170 },
+    { city: "Bangalore", bookings: 68, revenue: 148000, avgRate: 2176 },
+    { city: "Singapore", bookings: 63, revenue: 189000, avgRate: 3000 }
+  ]
 };
 
 const adminModules = [
@@ -327,45 +331,34 @@ export default function AdminDashboard() {
         </Card>
       </div>
 
-      {/* Charts and Analytics */}
+      {/* Monthly Booking Distribution and Top Destinations */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <PieChart className="w-5 h-5 mr-2" />
-              Booking Distribution
+              <BarChart className="w-5 h-5 mr-2" />
+              Monthly Booking Distribution
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Plane className="w-4 h-4 mr-2 text-blue-600" />
-                  <span className="text-sm">Flights</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-sm font-medium">
-                    {mockStats.flightBookings}
-                  </span>
-                  <div className="w-20 h-2 bg-gray-200 rounded ml-2">
-                    <div className="w-3/5 h-2 bg-blue-600 rounded"></div>
+              {mockStats.monthlyBookingData.map((data, index) => (
+                <div key={data.month} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{data.month}</span>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold">{data.bookings} bookings</div>
+                      <div className="text-xs text-gray-600">₹{data.revenue.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <div className="w-full h-2 bg-gray-200 rounded">
+                    <div
+                      className="h-2 bg-blue-600 rounded"
+                      style={{ width: `${(data.bookings / 300) * 100}%` }}
+                    ></div>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Hotel className="w-4 h-4 mr-2 text-green-600" />
-                  <span className="text-sm">Hotels</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-sm font-medium">
-                    {mockStats.hotelBookings}
-                  </span>
-                  <div className="w-20 h-2 bg-gray-200 rounded ml-2">
-                    <div className="w-2/5 h-2 bg-green-600 rounded"></div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
@@ -374,22 +367,32 @@ export default function AdminDashboard() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <MapPin className="w-5 h-5 mr-2" />
-              Top Destinations
+              Top Destinations (Monthly)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {mockStats.topCities.map((city, index) => (
-                <div key={city} className="flex items-center justify-between">
+              {mockStats.topDestinationsMonthly.map((destination, index) => (
+                <div key={destination.city} className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-gray-700 w-4">
                       {index + 1}.
                     </span>
-                    <span className="text-sm ml-2">{city}</span>
+                    <span className="text-sm ml-2">{destination.city}</span>
                   </div>
-                  <Badge variant="secondary">
-                    {Math.floor(Math.random() * 200) + 50} bookings
-                  </Badge>
+                  <div className="text-right">
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">
+                        {destination.bookings} bookings
+                      </Badge>
+                      <Badge variant="outline" className="text-green-600">
+                        {destination.growth}
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      ₹{destination.revenue.toLocaleString()}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -397,86 +400,82 @@ export default function AdminDashboard() {
         </Card>
       </div>
 
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Activity className="w-5 h-5 mr-2" />
-              Recent Bookings
-            </div>
-            <Button variant="outline" size="sm">
-              <Eye className="w-4 h-4 mr-1" />
-              View All
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Booking ID</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockStats.recentBookings.map((booking) => (
-                <TableRow key={booking.id}>
-                  <TableCell className="font-medium">{booking.id}</TableCell>
-                  <TableCell>
+      {/* Flight Cabin Class Bookings and Hotel City-wise Analysis */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Plane className="w-5 h-5 mr-2" />
+              Flight Bookings by Cabin Class
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {mockStats.flightCabinBookings.map((cabin, index) => (
+                <div key={cabin.cabin} className="space-y-2">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      {booking.type === "Flight" ? (
-                        <Plane className="w-4 h-4 mr-1 text-blue-600" />
-                      ) : (
-                        <Hotel className="w-4 h-4 mr-1 text-green-600" />
-                      )}
-                      {booking.type}
+                      <span className="text-sm font-medium">{cabin.cabin}</span>
+                      <Badge variant="outline" className="ml-2">
+                        {cabin.percentage}%
+                      </Badge>
                     </div>
-                  </TableCell>
-                  <TableCell>{booking.customer}</TableCell>
-                  <TableCell>₹{booking.amount.toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        booking.status === "Confirmed" ? "default" : "secondary"
-                      }
-                    >
-                      {booking.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreVertical className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem>
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Download className="w-4 h-4 mr-2" />
-                          Download Voucher
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Mail className="w-4 h-4 mr-2" />
-                          Send Email
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold">{cabin.bookings} bookings</div>
+                      <div className="text-xs text-gray-600">₹{cabin.revenue.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <div className="w-full h-3 bg-gray-200 rounded">
+                    <div
+                      className={`h-3 rounded ${
+                        cabin.cabin === 'Economy' ? 'bg-blue-600' :
+                        cabin.cabin === 'Business' ? 'bg-green-600' : 'bg-purple-600'
+                      }`}
+                      style={{ width: `${cabin.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Hotel className="w-5 h-5 mr-2" />
+              Hotel Bookings by City
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {mockStats.hotelCityBookings.map((hotel, index) => (
+                <div key={hotel.city} className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <span className="text-sm font-medium text-gray-700 w-4">
+                      {index + 1}.
+                    </span>
+                    <span className="text-sm ml-2">{hotel.city}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">
+                        {hotel.bookings} bookings
+                      </Badge>
+                      <Badge variant="outline" className="text-blue-600">
+                        ₹{hotel.avgRate}
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      Revenue: ₹{hotel.revenue.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 
@@ -643,12 +642,8 @@ export default function AdminDashboard() {
               </div>
               <div className="flex items-center space-x-4">
                 <Button variant="outline" size="sm">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Data
-                </Button>
-                <Button size="sm">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add New
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh Data
                 </Button>
               </div>
             </div>
