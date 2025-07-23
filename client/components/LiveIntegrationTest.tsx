@@ -180,6 +180,7 @@ export function LiveIntegrationTest() {
       <div className={`border-2 rounded-lg p-4 shadow-lg ${getStatusColor(overallStatus)}`}>
         <div className="font-bold mb-3 text-center">
           {getOverallStatusIcon()} Live API Integration Test
+          {isProduction && <div className="text-xs font-normal mt-1">🏭 PRODUCTION (Mock Data)</div>}
         </div>
         
         {results.length > 0 && (
