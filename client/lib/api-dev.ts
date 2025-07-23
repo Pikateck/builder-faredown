@@ -7,9 +7,6 @@ import type { ApiResponse } from './api';
 
 export class DevApiClient {
   private baseUrl: string;
-  private serverAvailable: boolean | null = null;
-  private lastCheck: number = 0;
-  private checkInterval: number = 30000; // Check every 30 seconds
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
