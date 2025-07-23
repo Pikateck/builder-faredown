@@ -1083,11 +1083,9 @@ export default function HotelDetails() {
                                   </div>
                                   <div className="text-xs text-gray-600">
                                     ₹
-                                    {Math.round(
+                                    {calculateTotalPrice(
                                       room.pricePerNight,
-                                    ).toLocaleString()}{" "}
-                                    per night × {hotel.totalNights} nights +
-                                    taxes & fees
+                                    ).toLocaleString()} Total Price
                                   </div>
                                 </div>
 
