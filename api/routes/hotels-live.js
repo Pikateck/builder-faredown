@@ -64,7 +64,7 @@ router.get('/search', async (req, res) => {
     };
 
     console.log('🏨 Searching hotels with params:', searchParams);
-    const hotelResults = await hotelbedsService.searchHotelAvailability(searchParams);
+    const hotelResults = await hotelbedsService.searchAvailability(searchParams);
     console.log(`📊 Found ${hotelResults.length} hotels from Hotelbeds API`);
 
     if (hotelResults.length === 0) {
