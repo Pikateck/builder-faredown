@@ -17,6 +17,8 @@ import {
   TrendingDown,
   Calendar,
   Users,
+  CreditCard,
+  ArrowRight,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import {
@@ -74,6 +76,7 @@ export function HotelCard({
   const { selectedCurrency, formatPrice } = useCurrency();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [isBooking, setIsBooking] = useState(false);
 
   // Helper functions to extract data from the hotel object
   const getHotelImages = (): string[] => {
@@ -140,6 +143,53 @@ export function HotelCard({
     setCurrentImageIndex((prev) =>
       prev === 0 ? images.length - 1 : prev - 1,
     );
+  };
+
+  // Handle quick booking action
+  const handleQuickBooking = async () => {
+    try {
+      setIsBooking(true);
+      console.log('🚀 Starting quick booking for hotel:', hotel.name);
+
+      // Extract destination code from URL params
+      const destinationCode = searchParams.get("destination") || "DXB";
+      const destinationName = searchParams.get("destinationName") || hotelLocation || "Unknown";
+
+      // Navigate to booking page with hotel and search details
+      const bookingParams = new URLSearchParams({
+        hotelId: String(hotel.id),
+        destinationCode,
+        destinationName,
+        checkIn: checkInDate.toISOString(),
+        checkOut: checkOutDate.toISOString(),
+        rooms: roomsCount.toString(),
+        adults: searchParams.get("adults") || "2",
+        children: searchParams.get("children") || "0",
+        currency: selectedCurrency?.code || 'INR',
+        totalPrice: priceCalculation.total.toString(),
+        hotelName: hotel.name,
+        hotelLocation: hotelLocation,
+        hotelRating: hotel.rating.toString()
+      });
+
+      navigate(`/booking/hotel?${bookingParams.toString()}`);
+
+    } catch (error) {
+      console.error('Quick booking error:', error);
+    } finally {
+      setIsBooking(false);
+    }
+  };
+
+  // Handle view details action
+  const handleViewDetails = () => {
+    // Navigate to hotel details page with search context
+    const detailParams = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      detailParams.set(key, value);
+    });
+
+    navigate(`/hotels/${hotel.id}?${detailParams.toString()}`);
   };
 
   if (viewMode === "grid") {
@@ -278,16 +328,28 @@ export function HotelCard({
 
               <div className="flex space-x-2">
                 <Button
+                  className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium touch-manipulation text-sm flex items-center justify-center gap-1"
+                  onClick={handleQuickBooking}
+                  disabled={isBooking}
+                >
+                  {isBooking ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                      <span>Booking...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-3 h-3" />
+                      <span>Book</span>
+                    </>
+                  )}
+                </Button>
+                <Button
                   variant="outline"
                   className="flex-1 touch-manipulation text-sm"
-                  onClick={() => {
-                    const searchParamsString = searchParams.toString();
-                    navigate(
-                      `/hotels/${hotel.id}${searchParamsString ? `?${searchParamsString}` : ""}`,
-                    );
-                  }}
+                  onClick={handleViewDetails}
                 >
-                  View Details
+                  Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
@@ -444,35 +506,44 @@ export function HotelCard({
 
             <div className="flex space-x-2 flex-shrink-0">
               <Button
+                className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium touch-manipulation text-sm flex items-center gap-1 flex-1 sm:flex-none"
+                onClick={handleQuickBooking}
+                disabled={isBooking}
+              >
+                {isBooking ? (
+                  <>
+                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                    <span className="hidden sm:inline">Booking...</span>
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>Book Now</span>
+                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 hidden sm:inline" />
+                  </>
+                )}
+              </Button>
+
+              <Button
                 variant="outline"
                 className="hidden md:flex touch-manipulation"
-                onClick={() => {
-                  const searchParamsString = searchParams.toString();
-                  navigate(
-                    `/hotels/${hotel.id}${searchParamsString ? `?${searchParamsString}` : ""}`,
-                  );
-                }}
+                onClick={handleViewDetails}
               >
                 View Details
               </Button>
 
               <Button
                 onClick={() => onBargainClick(hotel, searchParams)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold flex-1 sm:flex-none touch-manipulation text-sm sm:text-base"
+                className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold touch-manipulation text-sm sm:text-base"
               >
                 <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                Bargain
+                <span className="hidden sm:inline">Bargain</span>
               </Button>
 
               <Button
                 variant="outline"
                 className="md:hidden touch-manipulation text-sm"
-                onClick={() => {
-                  const searchParamsString = searchParams.toString();
-                  navigate(
-                    `/hotels/${hotel.id}${searchParamsString ? `?${searchParamsString}` : ""}`,
-                  );
-                }}
+                onClick={handleViewDetails}
               >
                 Details
               </Button>
