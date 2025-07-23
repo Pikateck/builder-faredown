@@ -35,6 +35,7 @@ const markupRoutes = require("./routes/markup");
 const vatRoutes = require("./routes/vat");
 const currencyAdminRoutes = require("./routes/currency");
 const reportsRoutes = require("./routes/reports");
+const suppliersRoutes = require("./routes/suppliers");
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
