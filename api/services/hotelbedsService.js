@@ -111,19 +111,36 @@ class HotelbedsService {
    */
   async searchDestinations(query, language = 'ENG') {
     try {
-      const params = {
-        language,
-        fields: 'all'
-      };
+      console.log(`🔍 Searching destinations for: ${query}`);
 
-      const response = await this.makeRequest('locations/destinations', 'GET', params, true);
-      const destinations = response.destinations || [];
-      
-      // Filter destinations by query
-      return destinations.filter(dest => 
-        dest.name?.toLowerCase().includes(query.toLowerCase()) ||
-        dest.countryName?.toLowerCase().includes(query.toLowerCase())
+      const response = await this.makeRequest(
+        `locations/destinations?fields=all&language=${language}&from=1&to=1000&useSecondaryLanguage=true`,
+        'GET',
+        null,
+        true
       );
+
+      console.log('🔍 Destinations response status:', response ? 'success' : 'failed');
+
+      const destinations = response.destinations || [];
+
+      // Filter destinations by query
+      const filtered = destinations.filter(dest => {
+        const name = dest.name?.content || dest.name || '';
+        const countryName = dest.countryName?.content || dest.countryName || '';
+        return name.toLowerCase().includes(query.toLowerCase()) ||
+               countryName.toLowerCase().includes(query.toLowerCase());
+      });
+
+      console.log(`✅ Found ${filtered.length} destinations matching "${query}"`);
+
+      return filtered.map(dest => ({
+        code: dest.code,
+        name: dest.name?.content || dest.name,
+        countryName: dest.countryName?.content || dest.countryName,
+        isoCode: dest.isoCode,
+        type: 'destination'
+      }));
     } catch (error) {
       console.error('Error searching destinations:', error);
       return [];
