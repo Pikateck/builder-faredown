@@ -67,14 +67,16 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
-  // Popular destinations to show when search is empty
+  // Popular destinations with Hotelbeds destination codes
   const popularDestinations: DestinationOption[] = [
     { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
     { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
     { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
     { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
     { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
-    { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" }
+    { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" },
+    { id: "MAD", code: "MAD", name: "Madrid", country: "Spain", type: "city" },
+    { id: "ROM", code: "ROM", name: "Rome", country: "Italy", type: "city" }
   ];
 
   // Debounced search function
@@ -143,39 +145,58 @@ export function BookingSearchForm() {
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
   const handleSearch = () => {
-    console.log("Search button clicked", {
+    console.log("🔍 Starting Hotelbeds search with:", {
       destination,
       destinationCode,
       checkInDate,
       checkOutDate,
+      guests
     });
 
     if (!destination || !destinationCode || !checkInDate || !checkOutDate) {
-      console.log("Missing required fields:", {
+      console.log("⚠️ Missing required fields:", {
         destination,
         destinationCode,
         checkInDate,
         checkOutDate,
       });
+
+      // Show user-friendly error
+      alert("Please complete all search fields:\n- Destination\n- Check-in date\n- Check-out date");
+      return;
+    }
+
+    // Validate date range
+    const daysBetween = Math.ceil((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysBetween < 1) {
+      alert("Check-out date must be after check-in date");
+      return;
+    }
+    if (daysBetween > 30) {
+      alert("Maximum stay duration is 30 days");
       return;
     }
 
     try {
       const searchParams = new URLSearchParams({
-        destination: destinationCode, // Use destination code for API
+        destination: destinationCode, // Use destination code for Hotelbeds API
         destinationName: destination, // Keep display name for UI
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
         adults: guests.adults.toString(),
         children: guests.children.toString(),
         rooms: guests.rooms.toString(),
+        // Additional metadata for improved search
+        searchType: "live", // Flag to indicate live API search preference
+        searchId: Date.now().toString() // Unique search identifier
       });
 
       const url = `/hotels/results?${searchParams.toString()}`;
-      console.log("Navigating to:", url);
+      console.log("✅ Navigating to live Hotelbeds search:", url);
       navigate(url);
     } catch (error) {
-      console.error("Error in handleSearch:", error);
+      console.error("🚨 Error in handleSearch:", error);
+      alert("Search failed. Please try again.");
     }
   };
 
@@ -285,7 +306,13 @@ export function BookingSearchForm() {
                       key={dest.id || index}
                       className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors"
                       onClick={() => {
-                        setDestination(`${dest.name}, ${dest.country}`);
+                        const fullName = `${dest.name}, ${dest.country}`;
+                        console.log("🎯 Selected destination:", {
+                          name: fullName,
+                          code: dest.code || dest.id,
+                          type: dest.type
+                        });
+                        setDestination(fullName);
                         setDestinationCode(dest.code || dest.id);
                         setIsDestinationOpen(false);
                       }}
@@ -315,14 +342,22 @@ export function BookingSearchForm() {
                 ) : (
                   <div>
                     <div className="px-4 py-2 border-b bg-gray-50">
-                      <h4 className="font-medium text-sm text-gray-700">Popular Destinations</h4>
+                      <h4 className="font-medium text-sm text-gray-700">
+                        ⭐ Popular Destinations (Hotelbeds)
+                      </h4>
                     </div>
                     {popularDestinations.map((dest, index) => (
                       <div
                         key={dest.id}
                         className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors"
                         onClick={() => {
-                          setDestination(`${dest.name}, ${dest.country}`);
+                          const fullName = `${dest.name}, ${dest.country}`;
+                          console.log("⭐ Selected popular destination:", {
+                            name: fullName,
+                            code: dest.code,
+                            type: dest.type
+                          });
+                          setDestination(fullName);
                           setDestinationCode(dest.code);
                           setIsDestinationOpen(false);
                         }}
@@ -345,7 +380,7 @@ export function BookingSearchForm() {
                     ))}
                     <div className="px-4 py-2 border-t bg-gray-50">
                       <p className="text-xs text-gray-500">
-                        Type to search for more destinations
+                        🔍 Type to search 1000+ Hotelbeds destinations
                       </p>
                     </div>
                   </div>
