@@ -668,6 +668,8 @@ export default function AdminDashboard() {
               <CurrencyManagement />
             ) : activeModule === "reports" ? (
               <ReportsAnalytics />
+            ) : activeModule === "suppliers" ? (
+              <SupplierManagement />
             ) : (
               renderModulePlaceholder(activeModule)
             )}
