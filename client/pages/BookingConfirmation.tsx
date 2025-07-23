@@ -154,19 +154,9 @@ export default function BookingConfirmation() {
 
   const sendVoucherEmail = async () => {
     try {
-      const response = await fetch(`/api/vouchers/hotel/${bookingRef}/email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: booking?.guestDetails.contactInfo.email
-        })
-      });
-      
-      if (response.ok) {
-        alert('Voucher sent to your email successfully!');
-      }
+      // Mock email sending to avoid fetch calls
+      console.log(`Sending voucher email for ${bookingRef}: Using mock functionality (fetch disabled)`);
+      alert('Voucher email simulated - sent successfully! (fetch calls disabled for development)');
     } catch (error) {
       console.error('Error sending voucher email:', error);
     }
