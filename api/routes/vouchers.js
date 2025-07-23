@@ -270,9 +270,10 @@ router.post('/hotel/:bookingRef/email', async (req, res) => {
     res.json({
       success: allSuccess,
       data: {
-        message: 'Voucher email sent successfully',
-        recipients: [email, ...additionalEmails],
-        filename: voucherResult.filename
+        message: allSuccess ? 'All voucher emails sent successfully' : `${successCount}/${emailResults.length} emails sent successfully`,
+        emailResults: emailResults,
+        filename: voucherResult.filename,
+        provider: emailService.provider
       }
     });
 
