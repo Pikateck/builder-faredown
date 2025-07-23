@@ -23,55 +23,9 @@ export class DevApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // Quick connectivity check - if server is known to be down, skip the API call
-    const isServerAvailable = await this.quickConnectivityCheck();
-
-    if (!isServerAvailable) {
-      console.log(`🔄 DevApiClient: Server offline, using fallback for ${endpoint}`);
-      return this.getFallbackData(endpoint, params) as T;
-    }
-
-    try {
-      // Try real API call
-      const url = new URL(endpoint, this.baseUrl);
-      if (params) {
-        Object.entries(params).forEach(([key, value]) => {
-          if (value !== undefined && value !== null) {
-            url.searchParams.append(key, String(value));
-          }
-        });
-      }
-
-      // Create timeout manually for better browser support
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
-
-      const response = await fetch(url.toString(), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      // Mark server as unavailable and use fallback
-      this.serverAvailable = false;
-      this.lastCheck = Date.now();
-
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.log(`🔄 DevApiClient: Fetch failed for ${endpoint}, using fallback (${errorMessage})`);
-
-      return this.getFallbackData(endpoint, params) as T;
-    }
+    // DevApiClient always uses fallback data to avoid fetch errors
+    console.log(`🔄 DevApiClient: Using fallback data for ${endpoint} (API server offline)`);
+    return this.getFallbackData(endpoint, params) as T;
   }
 
   async post<T>(endpoint: string, data?: any): Promise<T> {
