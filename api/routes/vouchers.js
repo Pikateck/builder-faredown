@@ -302,9 +302,68 @@ router.get('/status', (req, res) => {
         gstInvoice: true,
         emailDelivery: true,
         preview: true
-      }
+      },
+      emailProvider: emailService.provider
     }
   });
+});
+
+/**
+ * Get email delivery status
+ * GET /api/vouchers/email/status/:emailId
+ */
+router.get('/email/status/:emailId', (req, res) => {
+  try {
+    const { emailId } = req.params;
+    const deliveryStatus = emailService.getDeliveryStatus(emailId);
+
+    if (!deliveryStatus) {
+      return res.status(404).json({
+        success: false,
+        error: 'Email tracking data not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: deliveryStatus
+    });
+
+  } catch (error) {
+    console.error('Email status check error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to check email status'
+    });
+  }
+});
+
+/**
+ * Get all email delivery tracking data
+ * GET /api/vouchers/email/tracking
+ */
+router.get('/email/tracking', authenticateToken, (req, res) => {
+  try {
+    const trackingData = emailService.getAllDeliveryData();
+
+    res.json({
+      success: true,
+      data: {
+        totalEmails: trackingData.length,
+        successful: trackingData.filter(email => email.status === 'sent').length,
+        failed: trackingData.filter(email => email.status === 'failed').length,
+        provider: emailService.provider,
+        emails: trackingData
+      }
+    });
+
+  } catch (error) {
+    console.error('Email tracking data error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to retrieve email tracking data'
+    });
+  }
 });
 
 module.exports = router;
