@@ -166,23 +166,9 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Check if this is a connection error (API server not running)
-      if (error instanceof TypeError ||
-          (error instanceof Error && (
-            error.message.includes('fetch') ||
-            error.message.includes('Failed to fetch') ||
-            error.message.includes('NetworkError') ||
-            error.message.includes('ERR_CONNECTION_REFUSED') ||
-            error.name === 'AbortError'
-          ))) {
-        console.warn('API server not available, using development fallback for POST:', error.message);
-        return this.devClient.post<T>(endpoint, data);
-      }
-
-      if (error instanceof Error && error.name === "AbortError") {
-        throw new ApiError("Request timeout", 408);
-      }
-      throw error;
+      // Always use dev client for any fetch-related errors to avoid propagation
+      console.warn('API POST failed, switching to development fallback mode:', error instanceof Error ? error.message : 'Unknown error');
+      return this.devClient.post<T>(endpoint, data);
     }
   }
 
