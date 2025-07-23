@@ -177,7 +177,7 @@ export function HotelCard({
 
                 {/* Image Dots */}
                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
-                  {hotel.images.map((_, index) => (
+                  {images.map((_, index) => (
                     <button
                       key={index}
                       className={`w-2 h-2 rounded-full transition-colors touch-manipulation ${
