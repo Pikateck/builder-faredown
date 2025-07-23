@@ -281,23 +281,28 @@ export function BookingSearchForm() {
                   destinationSuggestions.map((dest, index) => (
                     <div
                       key={dest.id || index}
-                      className="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
+                      className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors"
                       onClick={() => {
-                        setDestination(dest.name);
+                        setDestination(`${dest.name}, ${dest.country}`);
+                        setDestinationCode(dest.code || dest.id);
                         setIsDestinationOpen(false);
                       }}
                     >
                       <MapPin className="w-4 h-4 mr-3 text-gray-500" />
-                      <div>
-                        <div className="font-medium">{dest.name}</div>
-                        <div className="text-sm text-gray-600">
-                          {dest.country}
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">
+                          {dest.name}, {dest.country}
                         </div>
-                        {dest.type && (
-                          <div className="text-xs text-blue-600 capitalize">
-                            {dest.type}
-                          </div>
-                        )}
+                        <div className="text-sm text-gray-500 flex items-center gap-2">
+                          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-mono">
+                            {dest.code || dest.id}
+                          </span>
+                          {dest.type && (
+                            <span className="text-xs text-gray-400 capitalize">
+                              {dest.type}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))
