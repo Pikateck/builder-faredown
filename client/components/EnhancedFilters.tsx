@@ -313,7 +313,7 @@ export function EnhancedFilters({
       {/* Price Range */}
       <div className="border-b border-gray-200 pb-2 mb-2">
         <h3 className="text-sm font-semibold text-gray-900 mb-1">
-          Your budget (per night)
+          Your budget (total stay)
         </h3>
         <div className="px-2">
           <Slider
