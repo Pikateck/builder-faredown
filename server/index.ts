@@ -127,7 +127,13 @@ export function createServer() {
         status: 'operational',
         lastTest: new Date().toISOString(),
         totalSent: 42,
-        deliveryRate: 98.5
+        deliveryRate: 98.5,
+        emailProvider: 'SendGrid',
+        features: {
+          emailDelivery: true,
+          tracking: true,
+          templates: true
+        }
       }
     });
   });
