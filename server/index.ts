@@ -146,6 +146,61 @@ export function createServer() {
     });
   });
 
+  app.get("/api/hotels-live/search", (_req, res) => {
+    const destination = _req.query.destination as string || 'Unknown';
+    res.json({
+      success: true,
+      data: [
+        {
+          id: 'mock-hotel-001',
+          name: `Mock Hotel ${destination}`,
+          currentPrice: 125,
+          currency: 'EUR',
+          rating: 4,
+          address: { city: destination, country: 'Mock Country' },
+          isLiveData: false,
+          supplier: 'mock-hotelbeds',
+          images: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'],
+          amenities: ['WiFi', 'Pool', 'Restaurant', 'Spa']
+        },
+        {
+          id: 'mock-hotel-002',
+          name: `Premium Hotel ${destination}`,
+          currentPrice: 185,
+          currency: 'EUR',
+          rating: 5,
+          address: { city: destination, country: 'Mock Country' },
+          isLiveData: false,
+          supplier: 'mock-hotelbeds',
+          images: ['https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400'],
+          amenities: ['WiFi', 'Pool', 'Restaurant', 'Spa', 'Gym', 'Concierge']
+        }
+      ],
+      totalResults: 2,
+      isLiveData: false,
+      source: 'Production Mock Data (Hotelbeds Simulation)',
+      searchParams: _req.query
+    });
+  });
+
+  app.get("/api/hotels-live/destinations/search", (_req, res) => {
+    const query = _req.query.q as string || '';
+    const mockDestinations = [
+      { code: 'BCN', name: 'Barcelona', countryName: 'Spain', type: 'destination' },
+      { code: 'MAD', name: 'Madrid', countryName: 'Spain', type: 'destination' },
+      { code: 'PMI', name: 'Palma', countryName: 'Spain', type: 'destination' },
+      { code: 'DXB', name: 'Dubai', countryName: 'UAE', type: 'destination' },
+      { code: 'NYC', name: 'New York', countryName: 'USA', type: 'destination' }
+    ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
+
+    res.json({
+      success: true,
+      data: mockDestinations,
+      isLiveData: false,
+      source: 'Production Mock Data'
+    });
+  });
+
   // Proxy health check to main API server or provide fallback
   app.get("/health", async (_req, res) => {
     try {
