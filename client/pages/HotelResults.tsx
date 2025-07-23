@@ -388,9 +388,23 @@ export default function HotelResults() {
             <div className="mb-4 sm:mb-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3 sm:gap-0">
                 <div className="min-w-0 flex-1">
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                    {destination || "Dubai"}: {filteredAndSortedHotels.length} properties found
-                  </h1>
+                  <div className="flex items-center gap-3">
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                      {destination || "Dubai"}: {filteredAndSortedHotels.length} properties found
+                    </h1>
+                    {isLiveData && (
+                      <div className="flex items-center gap-1 bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                        LIVE DATA
+                      </div>
+                    )}
+                    {!isLiveData && filteredAndSortedHotels.length > 0 && (
+                      <div className="flex items-center gap-1 bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        DEMO DATA
+                      </div>
+                    )}
+                  </div>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
                     Search for great hotels, homes and much more...
                   </p>
