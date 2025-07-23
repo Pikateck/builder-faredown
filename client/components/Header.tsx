@@ -206,6 +206,10 @@ export function Header({ className }: HeaderProps) {
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/admin/testing")}>
+                      <div className="w-4 h-4 mr-2 text-red-500">🔴</div>
+                      Live API Test
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleSignOut}>
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out
