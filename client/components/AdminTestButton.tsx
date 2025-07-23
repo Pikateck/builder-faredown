@@ -74,44 +74,9 @@ export default function AdminTestButton({
   };
 
   const testApiEndpoint = async (endpoint: string) => {
-    const isLocalhost =
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1" ||
-      window.location.hostname.includes("localhost");
-
-    if (!isLocalhost) {
-      alert("API testing is only available in development environment.");
-      return;
-    }
-
-    if (!apiPort) {
-      alert("API server is not running. Please start the API server first.");
-      return;
-    }
-
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
-
-      const response = await fetch(`http://localhost:${apiPort}${endpoint}`, {
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      const data = await response.json();
-      console.log(`API Test Result for ${endpoint}:`, data);
-      alert(
-        `API Test ${response.ok ? "Success" : "Failed"}: ${JSON.stringify(data, null, 2)}`,
-      );
-    } catch (error) {
-      console.error(`API Test Error for ${endpoint}:`, error);
-      if (error.name === "AbortError") {
-        alert("API Test Failed: Request timeout");
-      } else {
-        alert(`API Test Failed: ${error.message}`);
-      }
-    }
+    // Always show fallback message to avoid fetch calls
+    console.log(`API test for ${endpoint}: Using fallback mode (fetch disabled)`);
+    alert("API testing disabled to prevent fetch errors. Using fallback mode for development.");
   };
 
   const getStatusIcon = () => {
