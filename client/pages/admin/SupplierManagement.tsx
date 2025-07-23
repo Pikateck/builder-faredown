@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { supplierService, Supplier, SyncLog } from "@/services/supplierService";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
@@ -178,13 +179,40 @@ const mockSyncLogs: SyncLog[] = [
 ];
 
 export default function SupplierManagement() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>(mockSuppliers);
-  const [syncLogs, setSyncLogs] = useState<SyncLog[]>(mockSyncLogs);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [syncLogs, setSyncLogs] = useState<SyncLog[]>([]);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [syncingSupplier, setSyncingSupplier] = useState<string | null>(null);
+
+  // Load suppliers and sync logs on component mount
+  useEffect(() => {
+    loadSuppliers();
+    loadSyncLogs();
+  }, []);
+
+  const loadSuppliers = async () => {
+    try {
+      setLoading(true);
+      const suppliersData = await supplierService.getSuppliers();
+      setSuppliers(suppliersData);
+    } catch (error) {
+      console.error('Failed to load suppliers:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadSyncLogs = async () => {
+    try {
+      const logsData = await supplierService.getSyncLogs();
+      setSyncLogs(logsData);
+    } catch (error) {
+      console.error('Failed to load sync logs:', error);
+    }
+  };
 
   const handleAddSupplier = (newSupplier: Partial<Supplier>) => {
     const supplier: Supplier = {
@@ -229,41 +257,46 @@ export default function SupplierManagement() {
     setSuppliers(suppliers.filter(s => s.id !== supplierId));
   };
 
-  const handleToggleStatus = (supplierId: string) => {
-    setSuppliers(suppliers.map(s => 
-      s.id === supplierId 
-        ? { ...s, status: s.status === 'active' ? 'inactive' : 'active' as const }
-        : s
-    ));
+  const handleToggleStatus = async (supplierId: string) => {
+    try {
+      const supplier = suppliers.find(s => s.id === supplierId);
+      if (!supplier) return;
+
+      const newStatus = supplier.status === 'active' ? 'inactive' : 'active';
+      await supplierService.toggleSupplierStatus(supplierId, newStatus);
+
+      // Update local state
+      setSuppliers(suppliers.map(s =>
+        s.id === supplierId
+          ? { ...s, status: newStatus }
+          : s
+      ));
+    } catch (error) {
+      console.error('Failed to toggle supplier status:', error);
+    }
   };
 
   const handleSyncSupplier = async (supplierId: string) => {
-    setSyncingSupplier(supplierId);
-    setLoading(true);
+    try {
+      setSyncingSupplier(supplierId);
+      setLoading(true);
 
-    // Simulate sync process
-    await new Promise(resolve => setTimeout(resolve, 3000));
+      // Get default destination codes for sync - you can make this configurable
+      const destinationCodes = ['DXB', 'BOM', 'DEL']; // Dubai, Mumbai, Delhi
 
-    const newLog: SyncLog = {
-      id: Date.now().toString(),
-      supplierId,
-      timestamp: new Date().toISOString(),
-      status: "success",
-      recordsProcessed: Math.floor(Math.random() * 1000) + 500,
-      duration: Math.floor(Math.random() * 30000) + 15000,
-      errors: [],
-      details: "Manual sync completed successfully"
-    };
+      const syncResult = await supplierService.syncSupplier(supplierId, destinationCodes, false);
 
-    setSyncLogs([newLog, ...syncLogs]);
-    setSuppliers(suppliers.map(s => 
-      s.id === supplierId 
-        ? { ...s, lastSync: new Date().toISOString() }
-        : s
-    ));
+      // Reload suppliers and sync logs to get updated data
+      await loadSuppliers();
+      await loadSyncLogs();
 
-    setSyncingSupplier(null);
-    setLoading(false);
+      console.log('Sync completed:', syncResult);
+    } catch (error) {
+      console.error('Sync failed:', error);
+    } finally {
+      setSyncingSupplier(null);
+      setLoading(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
