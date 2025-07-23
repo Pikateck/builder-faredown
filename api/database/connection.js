@@ -30,14 +30,20 @@ class DatabaseConnection {
         // Use DATABASE_URL for production (Render, Heroku, etc.)
         config = {
           connectionString: process.env.DATABASE_URL,
-          // Connection pool settings
-          max: 20, // Maximum connections in pool
-          min: 2,  // Minimum connections in pool
-          idleTimeoutMillis: 30000,
-          connectionTimeoutMillis: 10000, // Increased for external DB
-          // SSL configuration for production
+          // Connection pool settings optimized for Render
+          max: 10, // Reduced max connections for stability
+          min: 1,  // Reduced minimum connections
+          idleTimeoutMillis: 60000, // Increased idle timeout
+          connectionTimeoutMillis: 30000, // Increased connection timeout for Render
+          acquireTimeoutMillis: 60000, // Time to wait for connection from pool
+          createTimeoutMillis: 30000, // Time to wait for new connection creation
+          destroyTimeoutMillis: 5000, // Time to wait for connection to close
+          reapIntervalMillis: 1000, // How often to check for idle connections
+          createRetryIntervalMillis: 200, // Time between connection creation attempts
+          // SSL configuration for Render PostgreSQL
           ssl: {
-            rejectUnauthorized: false // Required for Render PostgreSQL
+            rejectUnauthorized: false, // Required for Render PostgreSQL
+            sslmode: 'require'
           }
         };
       } else {
