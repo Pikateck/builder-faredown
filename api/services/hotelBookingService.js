@@ -207,6 +207,29 @@ class HotelBookingService {
 
       const confirmedBooking = dbResult.data;
 
+      // Store payment details in database
+      const paymentDbData = {
+        booking_id: confirmedBooking.id,
+        gateway: 'razorpay',
+        gateway_payment_id: paymentDetails.razorpay_payment_id,
+        gateway_order_id: paymentDetails.razorpay_order_id,
+        amount: paymentDetails.amount,
+        currency: paymentDetails.currency,
+        payment_method: paymentDetails.method,
+        payment_details: {
+          signature: paymentDetails.razorpay_signature,
+          paidAt: new Date().toISOString()
+        },
+        status: 'completed',
+        gateway_response: paymentDetails
+      };
+
+      const paymentResult = await Payment.create(paymentDbData);
+
+      if (!paymentResult.success) {
+        console.error('Failed to store payment in database:', paymentResult.error);
+      }
+
       // Remove from pending
       this.pendingBookings.delete(tempBookingRef);
 
