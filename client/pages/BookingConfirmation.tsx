@@ -134,18 +134,9 @@ export default function BookingConfirmation() {
 
   const downloadVoucher = async () => {
     try {
-      const response = await fetch(`/api/vouchers/hotel/${bookingRef}`);
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `voucher_${bookingRef}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      }
+      // Mock voucher download to avoid fetch calls
+      console.log(`Downloading voucher for ${bookingRef}: Using mock functionality (fetch disabled)`);
+      alert('Voucher download simulated - fetch calls disabled for development');
     } catch (error) {
       console.error('Error downloading voucher:', error);
     }
