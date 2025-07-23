@@ -453,22 +453,7 @@ export default function HotelDetails() {
               Close Filters
             </Button>
 
-            {/* Search by Hotel Name */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search by Hotel Name
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Enter hotel name..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                <Search className="w-4 h-4 text-gray-400 absolute left-2.5 top-2.5" />
-              </div>
-            </div>
+
 
             {/* Price Range */}
             <div className="mb-4">
@@ -1943,7 +1928,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛁</span> Private bathroom
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">📶</span> Free WiFi
+                        <span className="mr-2">����</span> Free WiFi
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">☕</span> Tea & coffee facilities
