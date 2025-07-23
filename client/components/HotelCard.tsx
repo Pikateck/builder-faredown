@@ -229,18 +229,20 @@ export function HotelCard({
               </p>
 
               {/* Features */}
-              <div className="flex flex-wrap gap-1 mb-3">
-                {hotel.features.slice(0, 2).map((feature) => (
-                  <Badge key={feature} variant="secondary" className="text-xs">
-                    {feature}
-                  </Badge>
-                ))}
-                {hotel.features.length > 2 && (
-                  <Badge variant="secondary" className="text-xs">
-                    +{hotel.features.length - 2} more
-                  </Badge>
-                )}
-              </div>
+              {hotel.features && hotel.features.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {hotel.features.slice(0, 2).map((feature) => (
+                    <Badge key={feature} variant="secondary" className="text-xs">
+                      {feature}
+                    </Badge>
+                  ))}
+                  {hotel.features.length > 2 && (
+                    <Badge variant="secondary" className="text-xs">
+                      +{hotel.features.length - 2} more
+                    </Badge>
+                  )}
+                </div>
+              )}
 
               {/* Amenities */}
               <div className="flex items-center space-x-3 mb-4 overflow-x-auto">
