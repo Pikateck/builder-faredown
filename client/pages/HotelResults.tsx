@@ -378,7 +378,7 @@ export default function HotelResults() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3 sm:gap-0">
                 <div className="min-w-0 flex-1">
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                    Dubai: {sortedHotels.length} properties found
+                    {destination || "Dubai"}: {filteredAndSortedHotels.length} properties found
                   </h1>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
                     Search for great hotels, homes and much more...
