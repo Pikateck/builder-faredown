@@ -561,28 +561,32 @@ export class HotelsService {
     }[]
   > {
     try {
-      // Direct fetch to bypass API client fallback mode
-      const response = await fetch(`/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      // Direct fetch to bypass API client fallback mode - wrapped in try-catch
+      try {
+        const response = await fetch(`/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      if (response.ok) {
-        // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          if (data.success && data.data && data.isLiveData) {
-            console.log('🔴 Live destination data received:', data.data.length, 'destinations');
-            return data.data;
+        if (response.ok) {
+          // Check if response is JSON
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            if (data.success && data.data && data.isLiveData) {
+              console.log('🔴 Live destination data received:', data.data.length, 'destinations');
+              return data.data;
+            }
+          } else {
+            console.warn('Live destination API returned non-JSON response');
           }
         } else {
-          console.warn('Live destination API returned non-JSON response');
+          console.warn(`Live destination API returned status ${response.status}`);
         }
-      } else {
-        console.warn(`Live destination API returned status ${response.status}`);
+      } catch (fetchError) {
+        console.warn('Live destination API fetch failed (likely API server not running):', fetchError instanceof Error ? fetchError.message : 'Unknown error');
       }
 
       return [];
