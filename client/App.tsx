@@ -121,6 +121,7 @@ function App() {
         <ApiErrorTest />
         <LiveIntegrationTest />
         <BookingFlowTest />
+        <EmailDeliveryTest />
         <SystemStatus />
       </CurrencyProvider>
     </div>
