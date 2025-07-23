@@ -52,6 +52,17 @@ export default function AdminTestingDashboard() {
             </div>
           </div>
 
+          {/* Live Hotelbeds Data Test */}
+          <div className="lg:col-span-2 mb-8">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">🔴 Live Hotelbeds API Data</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Test real Hotelbeds API responses (bypasses production fallback mode)
+              </p>
+              <LiveHotelbedsTest />
+            </div>
+          </div>
+
           {/* Test Components */}
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow p-6">
