@@ -78,16 +78,20 @@ export function ApiErrorTest() {
         <div className="font-bold mb-3 text-center">🔧 Fetch Error Fix Test</div>
         
         <div className="space-y-2 text-sm">
+          <div className="text-center mb-2">
+            <div className="font-bold text-lg">{testResults.mode}</div>
+          </div>
+
           <div>
             <span className="font-medium">Destinations:</span>
             <div className="text-xs">{testResults.destinations}</div>
           </div>
-          
+
           <div>
             <span className="font-medium">Health Check:</span>
             <div className="text-xs">{testResults.healthCheck}</div>
           </div>
-          
+
           <div className="border-t pt-2 mt-2">
             <span className="font-medium">Overall:</span>
             <div className="text-xs font-medium">{testResults.overall}</div>
