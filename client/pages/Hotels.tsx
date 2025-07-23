@@ -34,6 +34,7 @@ export default function Hotels() {
   return (
     <div className="min-h-screen bg-[#003580]">
       <Header />
+      <ApiConnectionTest />
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
