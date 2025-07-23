@@ -1,12 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
-import { ApiErrorTest } from "./components/ApiErrorTest";
-import { LiveApiTest } from "./components/LiveApiTest";
-import { LiveIntegrationTest } from "./components/LiveIntegrationTest";
-import { SystemStatus } from "./components/SystemStatus";
-import { BookingFlowTest } from "./components/BookingFlowTest";
-import { EmailDeliveryTest } from "./components/EmailDeliveryTest";
 
 // Original pages
 import Index from "./pages/Index";
