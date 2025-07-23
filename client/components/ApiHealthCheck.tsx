@@ -42,7 +42,7 @@ export function ApiHealthCheck() {
         setStatus({
           isOnline: false,
           message: 'API server returned non-JSON response',
-          endpoint: '/api/health'
+          endpoint: '/health'
         });
         console.warn('⚠️ API returned non-JSON response');
       }
