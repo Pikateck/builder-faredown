@@ -209,6 +209,134 @@ export function createServer() {
     });
   });
 
+  // Currency exchange rates endpoints
+  app.get("/api/currency/rates", async (_req, res) => {
+    try {
+      // Try to fetch live rates from ExchangeRate-API (free tier)
+      try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/INR');
+        if (response.ok) {
+          const data = await response.json();
+
+          // Transform to our format with INR as base
+          const rates = Object.entries(data.rates).map(([code, rate]) => ({
+            from: 'INR',
+            to: code,
+            rate: rate as number,
+            inverseRate: 1 / (rate as number),
+            lastUpdated: new Date().toISOString(),
+            source: 'ExchangeRate-API',
+            reliability: 95
+          }));
+
+          res.json({
+            success: true,
+            data: rates,
+            source: 'Live ExchangeRate-API',
+            lastUpdated: new Date().toISOString()
+          });
+          return;
+        }
+      } catch (apiError) {
+        console.warn('Live exchange rate API failed, using fallback rates');
+      }
+
+      // Fallback to static rates if API fails
+      const fallbackRates = [
+        { from: 'INR', to: 'USD', rate: 0.012, inverseRate: 83.33, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+        { from: 'INR', to: 'EUR', rate: 0.011, inverseRate: 91.67, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+        { from: 'INR', to: 'GBP', rate: 0.0095, inverseRate: 105.26, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+        { from: 'INR', to: 'AED', rate: 0.044, inverseRate: 22.73, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+        { from: 'INR', to: 'SGD', rate: 0.016, inverseRate: 62.50, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+        { from: 'INR', to: 'JPY', rate: 1.83, inverseRate: 0.55, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+        { from: 'INR', to: 'CNY', rate: 0.087, inverseRate: 11.49, lastUpdated: new Date().toISOString(), source: 'Fallback', reliability: 80 },
+      ];
+
+      res.json({
+        success: true,
+        data: fallbackRates,
+        source: 'Fallback Rates',
+        lastUpdated: new Date().toISOString()
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: 'Failed to fetch exchange rates',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
+  app.post("/api/currency/convert", async (_req, res) => {
+    try {
+      const { amount, fromCurrency, toCurrency } = _req.body;
+
+      if (!amount || !fromCurrency || !toCurrency) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required parameters: amount, fromCurrency, toCurrency'
+        });
+      }
+
+      // Get current rates
+      const ratesResponse = await fetch('http://localhost:8080/api/currency/rates');
+      const ratesData = await ratesResponse.json();
+
+      if (!ratesData.success) {
+        throw new Error('Failed to get exchange rates');
+      }
+
+      let convertedAmount = amount;
+      let rate = 1;
+
+      if (fromCurrency !== toCurrency) {
+        if (fromCurrency === 'INR') {
+          // Convert from INR to target currency
+          const targetRate = ratesData.data.find((r: any) => r.to === toCurrency);
+          if (targetRate) {
+            rate = targetRate.rate;
+            convertedAmount = amount * rate;
+          }
+        } else if (toCurrency === 'INR') {
+          // Convert from source currency to INR
+          const sourceRate = ratesData.data.find((r: any) => r.to === fromCurrency);
+          if (sourceRate) {
+            rate = sourceRate.inverseRate;
+            convertedAmount = amount * rate;
+          }
+        } else {
+          // Convert via INR (source -> INR -> target)
+          const sourceRate = ratesData.data.find((r: any) => r.to === fromCurrency);
+          const targetRate = ratesData.data.find((r: any) => r.to === toCurrency);
+
+          if (sourceRate && targetRate) {
+            const inrAmount = amount * sourceRate.inverseRate;
+            rate = sourceRate.inverseRate * targetRate.rate;
+            convertedAmount = inrAmount * targetRate.rate;
+          }
+        }
+      }
+
+      res.json({
+        success: true,
+        data: {
+          originalAmount: amount,
+          convertedAmount: Math.round(convertedAmount * 100) / 100,
+          fromCurrency,
+          toCurrency,
+          rate,
+          timestamp: new Date().toISOString()
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: 'Currency conversion failed',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   app.get("/api/hotels-live/search", (_req, res) => {
     const destination = _req.query.destination as string || 'Unknown';
     res.json({
