@@ -20,6 +20,7 @@ export function LiveHotelbedsTest() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchInfo, setSearchInfo] = useState<any>(null);
+  const isProduction = window.location.hostname !== "localhost";
 
   const testDestinations = [
     'Madrid',
