@@ -208,38 +208,66 @@ export class HotelsService {
   private readonly baseUrl = "/api/hotels";
 
   /**
-   * Search for hotels
+   * Search for hotels using Hotelbeds integration
    */
   async searchHotels(searchParams: HotelSearchRequest): Promise<Hotel[]> {
-    const response = await apiClient.get<ApiResponse<Hotel[]>>(
-      `${this.baseUrl}/search`,
-      searchParams,
-    );
+    try {
+      const queryParams = {
+        destination: searchParams.destination,
+        checkIn: searchParams.checkIn,
+        checkOut: searchParams.checkOut,
+        rooms: searchParams.rooms || 1,
+        adults: searchParams.adults || 2,
+        children: searchParams.children || 0,
+        currency: searchParams.currencyCode || 'INR'
+      };
 
-    if (response.data) {
-      return response.data;
+      const response = await apiClient.get<ApiResponse<Hotel[]>>(
+        `${this.baseUrl}/search`,
+        queryParams,
+      );
+
+      if (response.success && response.data) {
+        return response.data;
+      }
+
+      return [];
+    } catch (error) {
+      console.error('Hotel search error:', error);
+      throw new Error("Failed to search hotels");
     }
-
-    throw new Error("Failed to search hotels");
   }
 
   /**
-   * Get hotel details by ID
+   * Get hotel details by ID with Hotelbeds integration
    */
-  async getHotelDetails(hotelId: string): Promise<Hotel> {
-    const response = await apiClient.get<ApiResponse<Hotel>>(
-      `${this.baseUrl}/${hotelId}`,
-    );
+  async getHotelDetails(hotelId: string, searchParams?: {
+    checkIn?: string;
+    checkOut?: string;
+    rooms?: number;
+    adults?: number;
+    children?: number;
+  }): Promise<Hotel> {
+    try {
+      const queryParams = searchParams || {};
+      const response = await apiClient.get<ApiResponse<Hotel>>(
+        `${this.baseUrl}/${hotelId}`,
+        queryParams
+      );
 
-    if (response.data) {
-      return response.data;
+      if (response.success && response.data) {
+        return response.data;
+      }
+
+      throw new Error("Hotel not found");
+    } catch (error) {
+      console.error('Hotel details error:', error);
+      throw new Error("Failed to get hotel details");
     }
-
-    throw new Error("Failed to get hotel details");
   }
 
   /**
-   * Get room availability and pricing
+   * Get room availability and pricing with Hotelbeds integration
    */
   async getRoomAvailability(
     hotelId: string,
@@ -249,22 +277,27 @@ export class HotelsService {
     adults: number,
     children: number,
   ): Promise<RoomType[]> {
-    const response = await apiClient.get<ApiResponse<RoomType[]>>(
-      `${this.baseUrl}/${hotelId}/availability`,
-      {
-        checkIn,
-        checkOut,
-        rooms,
-        adults,
-        children,
-      },
-    );
+    try {
+      const response = await apiClient.get<ApiResponse<RoomType[]>>(
+        `${this.baseUrl}/${hotelId}/availability`,
+        {
+          checkIn,
+          checkOut,
+          rooms,
+          adults,
+          children,
+        },
+      );
 
-    if (response.data) {
-      return response.data;
+      if (response.success && response.data) {
+        return response.data;
+      }
+
+      return [];
+    } catch (error) {
+      console.error('Room availability error:', error);
+      throw new Error("Failed to get room availability");
     }
-
-    throw new Error("Failed to get room availability");
   }
 
   /**
@@ -390,7 +423,7 @@ export class HotelsService {
   }
 
   /**
-   * Search destinations
+   * Search destinations with Hotelbeds integration
    */
   async searchDestinations(query: string): Promise<
     {
@@ -400,22 +433,27 @@ export class HotelsService {
       country: string;
     }[]
   > {
-    const response = await apiClient.get<
-      ApiResponse<
-        {
-          id: string;
-          name: string;
-          type: "city" | "region" | "country" | "landmark";
-          country: string;
-        }[]
-      >
-    >(`${this.baseUrl}/destinations/search`, { q: query });
+    try {
+      const response = await apiClient.get<
+        ApiResponse<
+          {
+            id: string;
+            name: string;
+            type: "city" | "region" | "country" | "landmark";
+            country: string;
+          }[]
+        >
+      >(`${this.baseUrl}/destinations/search`, { q: query });
 
-    if (response.data) {
-      return response.data;
+      if (response.success && response.data) {
+        return response.data;
+      }
+
+      return [];
+    } catch (error) {
+      console.error('Destination search error:', error);
+      throw new Error("Failed to search destinations");
     }
-
-    throw new Error("Failed to search destinations");
   }
 
   /**
