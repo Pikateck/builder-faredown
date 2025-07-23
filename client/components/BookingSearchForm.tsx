@@ -98,10 +98,23 @@ export function BookingSearchForm() {
     []
   );
 
+  // Show popular destinations when dropdown opens without query
+  useEffect(() => {
+    if (isDestinationOpen && (!destination || destination.length < 2)) {
+      setDestinationSuggestions([
+        { id: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
+        { id: "LON", name: "London", country: "United Kingdom", type: "city" },
+        { id: "NYC", name: "New York", country: "United States", type: "city" },
+        { id: "PAR", name: "Paris", country: "France", type: "city" },
+        { id: "BOM", name: "Mumbai", country: "India", type: "city" }
+      ]);
+    }
+  }, [isDestinationOpen, destination]);
+
   // Debounce destination search
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (destination && isDestinationOpen) {
+      if (destination && destination.length >= 2 && isDestinationOpen) {
         searchDestinations(destination);
       }
     }, 300);
