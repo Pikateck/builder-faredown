@@ -6,6 +6,7 @@ import { LiveApiTest } from "./components/LiveApiTest";
 import { LiveIntegrationTest } from "./components/LiveIntegrationTest";
 import { SystemStatus } from "./components/SystemStatus";
 import { BookingFlowTest } from "./components/BookingFlowTest";
+import { EmailDeliveryTest } from "./components/EmailDeliveryTest";
 
 // Original pages
 import Index from "./pages/Index";
