@@ -179,9 +179,18 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Smart fallback - use dev client only if fetch fails
-      console.warn(`⚠️ API POST failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      return this.devClient.post<T>(endpoint, data);
+      // Comprehensive error handling - catch ALL fetch-related errors
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.warn(`⚠️ POST fetch failed, using fallback: ${errorMessage}`);
+
+      // Always return fallback data to prevent error propagation
+      try {
+        return this.devClient.post<T>(endpoint, data);
+      } catch (fallbackError) {
+        // If even fallback fails, return safe default
+        console.error('POST fallback also failed:', fallbackError);
+        return { success: false, error: 'Service unavailable', data: null } as T;
+      }
     }
   }
 
