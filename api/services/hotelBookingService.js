@@ -6,6 +6,11 @@
 const hotelbedsService = require('./hotelbedsService');
 const markupService = require('./markupService');
 const emailService = require('./emailService');
+const voucherService = require('./voucherService');
+const HotelBooking = require('../models/HotelBooking');
+const Payment = require('../models/Payment');
+const Voucher = require('../models/Voucher');
+const db = require('../database/connection');
 const { v4: uuidv4 } = require('uuid');
 
 class HotelBookingService {
