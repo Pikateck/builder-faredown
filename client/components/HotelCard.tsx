@@ -75,6 +75,42 @@ export function HotelCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
+  // Helper functions to extract data from the hotel object
+  const getHotelImages = (): string[] => {
+    if (hotel.images && hotel.images.length > 0) {
+      return hotel.images.map(img => typeof img === 'string' ? img : img.url || img);
+    }
+    return ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600"];
+  };
+
+  const getHotelLocation = (): string => {
+    if (hotel.location) return hotel.location;
+    if (hotel.address?.city) return hotel.address.city;
+    if (hotel.location?.city) return hotel.location.city;
+    return "Location not specified";
+  };
+
+  const getHotelPrice = (): number => {
+    if (hotel.currentPrice) return hotel.currentPrice;
+    if (hotel.roomTypes && hotel.roomTypes.length > 0) {
+      return hotel.roomTypes[0].pricePerNight || hotel.roomTypes[0].price || 0;
+    }
+    if (hotel.priceRange?.min) return hotel.priceRange.min;
+    return 0;
+  };
+
+  const getHotelAmenities = (): string[] => {
+    if (!hotel.amenities) return [];
+    return hotel.amenities.map(amenity =>
+      typeof amenity === 'string' ? amenity : amenity.name || amenity
+    ).slice(0, 6);
+  };
+
+  const images = getHotelImages();
+  const hotelLocation = getHotelLocation();
+  const currentPrice = getHotelPrice();
+  const hotelAmenities = getHotelAmenities();
+
   // Get search parameters for price calculation
   const checkInDate = searchParams.get("checkIn")
     ? new Date(searchParams.get("checkIn")!)
