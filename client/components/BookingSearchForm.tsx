@@ -389,7 +389,7 @@ export function BookingSearchForm() {
                     }, 150);
                   }}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-orange-400 focus:border-blue-500 rounded font-medium text-sm touch-manipulation"
-                  placeholder="Where are you going?"
+                  placeholder="Where are you going? (e.g., Madrid, Business Hotel Dubai)"
                   autoComplete="off"
                 />
                 {destination && (
@@ -405,8 +405,8 @@ export function BookingSearchForm() {
                 )}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-80 sm:w-96 p-0" align="start">
-              <div className="max-h-60 overflow-y-auto">
+            <PopoverContent className="w-80 sm:w-[420px] p-0 border-2 border-blue-200 shadow-xl" align="start">
+              <div className="max-h-80 overflow-y-auto">
                 {!popularDestinationsLoaded ? (
                   <div className="flex items-center justify-center p-4">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
@@ -415,26 +415,21 @@ export function BookingSearchForm() {
                     </span>
                   </div>
                 ) : loadingDestinations ? (
-                  <div className="flex items-center justify-center p-4">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    <span className="text-sm text-gray-600">
-                      🔍 Searching database...
+                  <div className="flex items-center justify-center p-3">
+                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
+                    <span className="text-xs text-gray-600">
+                      🔍 Searching...
                     </span>
                   </div>
                 ) : destinationSuggestions.length > 0 ? (
                   <div>
-                    <div className="px-4 py-2 border-b bg-green-50">
-                      <h4 className="font-medium text-sm text-green-700">
-                        🔍 Search Results ({destinationSuggestions.length})
-                      </h4>
-                    </div>
                     {destinationSuggestions.map((dest, index) => (
                       <div
                         key={dest.id || index}
-                        className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors border-l-2 border-transparent hover:border-blue-500"
+                        className="flex items-center p-3 hover:bg-blue-50 cursor-pointer transition-all duration-150 border-l-3 border-transparent hover:border-blue-400 hover:shadow-sm"
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("🎯 Database destination selected:", {
+                          console.log("🎯 Destination selected:", {
                             name: fullName,
                             code: dest.code || dest.id,
                             type: dest.type,
@@ -445,40 +440,40 @@ export function BookingSearchForm() {
                           setIsDestinationOpen(false);
                         }}
                       >
-                        <div className="text-lg mr-3">
-                          {(dest as any).flag || "🌍"}
+                        <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                          <span className="text-sm">{(dest as any).flag || "🌍"}</span>
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-gray-900">
-                              {dest.name}, {dest.country}
+                            <span className="font-semibold text-gray-900 truncate">
+                              {dest.name}
                             </span>
                             {(dest as any).popular && (
-                              <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded-full">
-                                ⭐ Popular
+                              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
+                                Popular
                               </span>
                             )}
                           </div>
-                          <div className="text-sm text-gray-500 flex items-center gap-2">
-                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-mono">
-                              {dest.code || dest.id}
-                            </span>
-                            <span className="text-xs text-gray-400 capitalize">
-                              {dest.type}
-                            </span>
+                          <div className="text-sm text-gray-600 truncate">
+                            {dest.country}
+                          </div>
+                          <div className="text-xs text-gray-400 mt-0.5 flex items-center gap-2">
+                            <span className="capitalize">{dest.type}</span>
+                            <span>•</span>
+                            <span className="font-mono">{dest.code || dest.id}</span>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                ) : destination.length >= 2 ? (
+                ) : destination.length >= 1 && !loadingDestinations ? (
                   <div className="p-4 text-center">
                     <div className="text-gray-400 mb-2">🔍</div>
                     <div className="text-sm text-gray-500 mb-2">
                       No destinations found for "{destination}"
                     </div>
                     <div className="text-xs text-gray-400">
-                      Try searching for a city or country name
+                      Try a different city or country name
                     </div>
                   </div>
                 ) : (
