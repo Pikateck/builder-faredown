@@ -40,7 +40,6 @@ export function Header({ className }: HeaderProps) {
     return stored === "true";
   });
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [userName, setUserName] = useState(() => {
     return localStorage.getItem("userName") || "Zubin Aibara";
   });
