@@ -282,6 +282,7 @@ export function BookingFlowTest() {
       <div className={`border-2 rounded-lg p-4 shadow-lg ${getOverallStatusColor()}`}>
         <div className="font-bold mb-3 text-center">
           🔄 Complete Booking Flow Test
+          {isProduction && <div className="text-xs font-normal mt-1">🏭 PRODUCTION (Mock Data)</div>}
         </div>
         
         <div className="space-y-1 mb-3 max-h-64 overflow-y-auto">
