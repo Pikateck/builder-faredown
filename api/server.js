@@ -142,6 +142,7 @@ app.get("/", (req, res) => {
       markup: "/api/markup",
       vat: "/api/vat",
       reports: "/api/reports",
+      suppliers: "/api/suppliers",
     },
     documentation: "/api/docs",
     health: "/health",
