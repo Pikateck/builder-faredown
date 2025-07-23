@@ -5,6 +5,7 @@ import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, Heart } from "lucide-react";
+import { ApiConnectionTest } from "@/components/ApiConnectionTest";
 
 export default function Hotels() {
   const navigate = useNavigate();
