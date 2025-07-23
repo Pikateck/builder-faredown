@@ -452,7 +452,17 @@ export class HotelsService {
       return [];
     } catch (error) {
       console.error('Destination search error:', error);
-      throw new Error("Failed to search destinations");
+      // Return popular destinations as fallback instead of throwing
+      return [
+        { id: "DXB", name: "Dubai", type: "city", country: "United Arab Emirates" },
+        { id: "LON", name: "London", type: "city", country: "United Kingdom" },
+        { id: "NYC", name: "New York", type: "city", country: "United States" },
+        { id: "PAR", name: "Paris", type: "city", country: "France" },
+        { id: "TOK", name: "Tokyo", type: "city", country: "Japan" },
+        { id: "BOM", name: "Mumbai", type: "city", country: "India" },
+        { id: "DEL", name: "Delhi", type: "city", country: "India" },
+        { id: "BLR", name: "Bangalore", type: "city", country: "India" }
+      ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
     }
   }
 
