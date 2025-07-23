@@ -110,19 +110,39 @@ app.use(cors(corsOptions));
 app.use(limiter);
 
 // Health check endpoint
-app.get("/health", (req, res) => {
-  res.json({
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    version: "1.0.0",
-    environment: process.env.NODE_ENV || "development",
-    uptime: process.uptime(),
-    services: {
-      database: "connected",
-      cache: "connected",
-      external_apis: "operational",
-    },
-  });
+app.get("/health", async (req, res) => {
+  try {
+    // Check database health
+    const dbHealth = await db.healthCheck();
+
+    res.json({
+      status: dbHealth.healthy ? "healthy" : "degraded",
+      timestamp: new Date().toISOString(),
+      version: "1.0.0",
+      environment: process.env.NODE_ENV || "development",
+      uptime: process.uptime(),
+      services: {
+        database: dbHealth.healthy ? "connected" : "offline",
+        cache: "connected",
+        external_apis: "operational",
+      },
+      database: dbHealth
+    });
+  } catch (error) {
+    res.json({
+      status: "degraded",
+      timestamp: new Date().toISOString(),
+      version: "1.0.0",
+      environment: process.env.NODE_ENV || "development",
+      uptime: process.uptime(),
+      services: {
+        database: "offline",
+        cache: "connected",
+        external_apis: "operational",
+      },
+      error: error.message
+    });
+  }
 });
 
 // API information endpoint
