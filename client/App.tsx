@@ -40,6 +40,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import UserManagement from "./pages/admin/UserManagement";
 import BargainEngine from "./pages/admin/BargainEngine";
 import PaymentDashboard from "./pages/admin/PaymentDashboard";
+import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
 
 function App() {
   return (
