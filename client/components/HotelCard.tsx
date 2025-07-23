@@ -245,18 +245,20 @@ export function HotelCard({
               )}
 
               {/* Amenities */}
-              <div className="flex items-center space-x-3 mb-4 overflow-x-auto">
-                {hotel.amenities.slice(0, 3).map((amenity) => (
-                  <div
-                    key={amenity}
-                    className="flex items-center space-x-1 text-gray-600 flex-shrink-0"
-                    title={amenity}
-                  >
-                    {getAmenityIcon(amenity)}
-                    <span className="text-xs whitespace-nowrap">{amenity}</span>
-                  </div>
-                ))}
-              </div>
+              {hotelAmenities.length > 0 && (
+                <div className="flex items-center space-x-3 mb-4 overflow-x-auto">
+                  {hotelAmenities.slice(0, 3).map((amenity) => (
+                    <div
+                      key={amenity}
+                      className="flex items-center space-x-1 text-gray-600 flex-shrink-0"
+                      title={amenity}
+                    >
+                      {getAmenityIcon(amenity)}
+                      <span className="text-xs whitespace-nowrap">{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Pricing and Actions */}
