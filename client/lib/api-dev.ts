@@ -32,6 +32,15 @@ export class DevApiClient {
   }
 
   private getFallbackData(endpoint: string, params?: any): any {
+    // Health check
+    if (endpoint.includes('/health')) {
+      return {
+        status: 'development',
+        database: 'offline (fallback mode)',
+        timestamp: new Date().toISOString()
+      };
+    }
+
     // Destinations search
     if (endpoint.includes('/destinations/search')) {
       const query = params?.q?.toLowerCase() || '';
