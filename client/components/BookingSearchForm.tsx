@@ -36,11 +36,20 @@ interface GuestConfig {
   rooms: number;
 }
 
+interface DestinationOption {
+  id: string;
+  code: string;
+  name: string;
+  country: string;
+  type: string;
+}
+
 export function BookingSearchForm() {
   const navigate = useNavigate();
   const [destination, setDestination] = useState("Dubai");
+  const [destinationCode, setDestinationCode] = useState("DXB"); // Store destination code
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [destinationSuggestions, setDestinationSuggestions] = useState<any[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<DestinationOption[]>([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(new Date());
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
