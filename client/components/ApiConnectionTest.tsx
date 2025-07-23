@@ -14,27 +14,33 @@ export function ApiConnectionTest() {
     try {
       setStatus('testing');
       setMessage('Testing destination search...');
-      
+
       const results = await hotelsService.searchDestinations('Dubai');
-      
+
       if (results && results.length > 0) {
         setDestinations(results);
-        
-        // Check if message indicates fallback mode
-        if (JSON.stringify(results).includes('Fallback') || JSON.stringify(results).includes('offline')) {
+
+        // Check if we're getting fallback data by examining the result structure
+        // Fallback data has predictable IDs like "DXB", "LON", etc.
+        const hasFallbackPattern = results.some(dest =>
+          dest.id && ['DXB', 'LON', 'NYC', 'PAR', 'BOM', 'DEL'].includes(dest.id)
+        );
+
+        if (hasFallbackPattern) {
           setStatus('fallback');
-          setMessage('✅ Using fallback data (API server offline)');
+          setMessage('⚠️ Using fallback data (API server offline)');
         } else {
           setStatus('connected');
           setMessage('✅ API server connected successfully');
         }
       } else {
         setStatus('fallback');
-        setMessage('✅ Using fallback data (empty response)');
+        setMessage('⚠️ No destinations found - check API connection');
       }
     } catch (error) {
       setStatus('error');
-      setMessage(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setMessage(`❌ Connection test failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error('API connection test error:', error);
     }
   };
 
