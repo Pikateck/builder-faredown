@@ -565,9 +565,14 @@ export class HotelsService {
     }[]
   > {
     try {
-      // Direct fetch to bypass API client fallback mode - wrapped in try-catch
+      // Try production-safe endpoint first, then live endpoint
+      const isProduction = typeof window !== 'undefined' && window.location.hostname !== "localhost";
+      const apiUrl = isProduction
+        ? `/api/hotels/destinations/search?q=${encodeURIComponent(query)}`
+        : `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`;
+
       try {
-        const response = await fetch(`/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`, {
+        const response = await fetch(apiUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
