@@ -172,6 +172,13 @@ class ApiClient {
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
+
+      // Check if this is a connection error (API server not running)
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        console.warn('API server not available, using development fallback for POST');
+        return this.devClient.post<T>(endpoint, data);
+      }
+
       if (error instanceof Error && error.name === "AbortError") {
         throw new ApiError("Request timeout", 408);
       }
