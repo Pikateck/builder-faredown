@@ -8,8 +8,32 @@ import { LiveHotelbedsTest } from '@/components/LiveHotelbedsTest';
 import { ApiHealthCheck } from '@/components/ApiHealthCheck';
 
 export default function AdminTestingDashboard() {
+  const isProduction = typeof window !== 'undefined' && window.location.hostname !== "localhost";
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Production Environment Banner */}
+      {isProduction && (
+        <div className="bg-blue-600 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div className="flex items-center justify-between flex-wrap">
+              <div className="flex items-center">
+                <span className="text-lg mr-3">🏭</span>
+                <div>
+                  <div className="font-semibold">Production Environment Detected</div>
+                  <div className="text-sm text-blue-100">
+                    Tests use intelligent fallback data. API server routing optimized for production.
+                  </div>
+                </div>
+              </div>
+              <div className="text-sm bg-blue-500 px-3 py-1 rounded-full">
+                Host: {window.location.hostname}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
