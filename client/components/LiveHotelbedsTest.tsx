@@ -146,14 +146,16 @@ export function LiveHotelbedsTest() {
         
         <button
           onClick={searchLiveHotels}
-          disabled={loading || isProduction}
+          disabled={loading}
           className={`px-6 py-2 rounded-md font-medium ${
-            loading || isProduction
+            loading
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-red-500 text-white hover:bg-red-600'
+              : isProduction
+                ? 'bg-orange-500 text-white hover:bg-orange-600'
+                : 'bg-red-500 text-white hover:bg-red-600'
           }`}
         >
-          {loading ? '🔄 Searching...' : isProduction ? '🚫 Production Mode' : '🔴 Search Live Data'}
+          {loading ? '🔄 Searching...' : isProduction ? '🏭 Test Production API' : '🔴 Search Live Data'}
         </button>
       </div>
 
