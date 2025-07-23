@@ -43,6 +43,9 @@ const { authenticateToken, requireAdmin } = require("./middleware/auth");
 const { validateRequest } = require("./middleware/validation");
 const { auditLogger } = require("./middleware/audit");
 
+// Import database connection
+const db = require("./database/connection");
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3001;
