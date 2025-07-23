@@ -5,6 +5,7 @@ import { ApiErrorTest } from "./components/ApiErrorTest";
 import { LiveApiTest } from "./components/LiveApiTest";
 import { LiveIntegrationTest } from "./components/LiveIntegrationTest";
 import { SystemStatus } from "./components/SystemStatus";
+import { BookingFlowTest } from "./components/BookingFlowTest";
 
 // Original pages
 import Index from "./pages/Index";
