@@ -240,38 +240,9 @@ export function Header({ className }: HeaderProps) {
               </Link>
 
               {/* Mobile Currency Selector */}
-              <div className="py-2 currency-dropdown-container">
-                <button
-                  onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-                  className="flex items-center justify-between w-full text-white hover:text-blue-200 py-2"
-                >
-                  <span>Currency</span>
-                  <div className="flex items-center space-x-1">
-                    <span className="text-sm">
-                      {selectedCurrency.symbol} {selectedCurrency.code}
-                    </span>
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </button>
-                {showCurrencyDropdown && (
-                  <div className="mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-2 max-h-60 overflow-y-auto">
-                    {currencies.map((currency) => (
-                      <button
-                        key={currency.code}
-                        onClick={() => {
-                          setCurrency(currency);
-                          setShowCurrencyDropdown(false);
-                        }}
-                        className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
-                      >
-                        <span>{currency.name}</span>
-                        <span className="font-medium">
-                          {currency.symbol} {currency.code}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
+              <div className="py-2">
+                <div className="mb-2 text-white text-sm">Currency</div>
+                <CurrencySelector variant="compact" />
               </div>
 
               <div className="border-t border-blue-600 pt-3 mt-3">
