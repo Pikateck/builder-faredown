@@ -54,7 +54,8 @@ export function EmailDeliveryTest() {
       const configStart = Date.now();
       
       // Check if SendGrid is properly configured by testing provider
-      if (statusData.data.emailProvider === 'sendgrid') {
+      const emailProvider = statusData.data?.emailProvider?.toLowerCase() || '';
+      if (emailProvider === 'sendgrid') {
         updateTest(1, {
           status: 'success',
           duration: Date.now() - configStart,
