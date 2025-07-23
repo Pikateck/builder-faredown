@@ -63,7 +63,14 @@ class HotelbedsService {
       const response = await axios(config);
       return response.data;
     } catch (error) {
-      console.error('Hotelbeds API Error:', error.response?.data || error.message);
+      console.error('Hotelbeds API Error Details:');
+      console.error('- URL:', `${baseURL}${endpoint}`);
+      console.error('- Method:', method);
+      console.error('- Headers:', headers);
+      console.error('- Status:', error.response?.status);
+      console.error('- Status Text:', error.response?.statusText);
+      console.error('- Response Data:', JSON.stringify(error.response?.data, null, 2));
+      console.error('- Error Message:', error.message);
       throw new Error(`Hotelbeds API Error: ${error.response?.status} - ${error.response?.statusText || error.message}`);
     }
   }
