@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { ApiErrorTest } from "./components/ApiErrorTest";
 import { LiveApiTest } from "./components/LiveApiTest";
+import { LiveIntegrationTest } from "./components/LiveIntegrationTest";
 
 // Original pages
 import Index from "./pages/Index";
