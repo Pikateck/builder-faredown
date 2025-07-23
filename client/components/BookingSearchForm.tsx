@@ -67,7 +67,9 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
-  // Search destinations with debounce
+  // Debounced search function
+  const debouncedSearchRef = useRef<NodeJS.Timeout>();
+
   const searchDestinations = useCallback(
     async (query: string) => {
       if (query.length < 2) {
@@ -75,34 +77,42 @@ export function BookingSearchForm() {
         return;
       }
 
-      try {
-        setLoadingDestinations(true);
-        const results = await hotelsService.searchDestinations(query);
-        setDestinationSuggestions(results.slice(0, 10)); // Limit to 10 results
-      } catch (error) {
-        console.error('Failed to search destinations:', error);
-        // Fallback to popular destinations based on query
-        const popularDestinations = [
-          { id: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
-          { id: "DXB-DT", name: "Downtown Dubai", country: "Dubai, United Arab Emirates", type: "district" },
-          { id: "DXB-MAR", name: "Dubai Marina", country: "Dubai, United Arab Emirates", type: "district" },
-          { id: "LON", name: "London", country: "United Kingdom", type: "city" },
-          { id: "NYC", name: "New York", country: "United States", type: "city" },
-          { id: "PAR", name: "Paris", country: "France", type: "city" },
-          { id: "BOM", name: "Mumbai", country: "India", type: "city" },
-          { id: "DEL", name: "Delhi", country: "India", type: "city" }
-        ];
-
-        // Filter destinations based on query
-        const filtered = popularDestinations.filter(dest =>
-          dest.name.toLowerCase().includes(query.toLowerCase()) ||
-          dest.country.toLowerCase().includes(query.toLowerCase())
-        );
-
-        setDestinationSuggestions(filtered.slice(0, 5));
-      } finally {
-        setLoadingDestinations(false);
+      // Clear previous timeout
+      if (debouncedSearchRef.current) {
+        clearTimeout(debouncedSearchRef.current);
       }
+
+      // Set new timeout for debounced search
+      debouncedSearchRef.current = setTimeout(async () => {
+        try {
+          setLoadingDestinations(true);
+          const results = await hotelsService.searchDestinations(query);
+          setDestinationSuggestions(results.slice(0, 8)); // Limit to 8 results for better UX
+        } catch (error) {
+          console.error('Failed to search destinations:', error);
+          // Fallback to popular destinations based on query
+          const popularDestinations: DestinationOption[] = [
+            { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
+            { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
+            { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
+            { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
+            { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
+            { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" },
+            { id: "MAD", code: "MAD", name: "Madrid", country: "Spain", type: "city" },
+            { id: "ROM", code: "ROM", name: "Rome", country: "Italy", type: "city" }
+          ];
+
+          // Filter destinations based on query
+          const filtered = popularDestinations.filter(dest =>
+            dest.name.toLowerCase().includes(query.toLowerCase()) ||
+            dest.country.toLowerCase().includes(query.toLowerCase())
+          );
+
+          setDestinationSuggestions(filtered.slice(0, 5));
+        } finally {
+          setLoadingDestinations(false);
+        }
+      }, 300); // 300ms debounce
     },
     []
   );
