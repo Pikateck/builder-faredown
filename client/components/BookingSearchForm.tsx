@@ -101,7 +101,7 @@ export function BookingSearchForm() {
         );
       } catch (error) {
         console.error(
-          "���️ Failed to load popular destinations, using fallback:",
+          "�����️ Failed to load popular destinations, using fallback:",
           error,
         );
         // Static fallback if database fails
@@ -508,15 +508,15 @@ export function BookingSearchForm() {
                   </div>
                 ) : (
                   <div>
-                    <div className="px-4 py-2 border-b bg-blue-50">
-                      <h4 className="font-medium text-sm text-blue-700">
-                        ⭐ Popular Destinations
-                      </h4>
+                    <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                      <span className="text-sm font-semibold text-gray-800">
+                        Popular destinations
+                      </span>
                     </div>
                     {popularDestinations.map((dest, index) => (
                       <div
                         key={dest.id}
-                        className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors border-l-2 border-transparent hover:border-blue-500"
+                        className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
                           console.log("⭐ Popular destination selected:", {
@@ -529,26 +529,44 @@ export function BookingSearchForm() {
                           setIsDestinationOpen(false);
                         }}
                       >
-                        <div className="text-lg mr-3">
-                          {index === 0
-                            ? "🏆"
-                            : index === 1
-                              ? "🎆"
-                              : index === 2
-                                ? "✨"
-                                : "🌍"}
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-medium text-gray-900">
-                            {dest.name}, {dest.country}
+                        {/* Clean location icon */}
+                        <div className="flex items-center justify-center w-7 h-7 mr-3 flex-shrink-0">
+                          <div className="flex items-center justify-center w-5 h-5 bg-orange-500 rounded-full">
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
                           </div>
-                          <div className="text-sm text-gray-500 flex items-center gap-2">
-                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-mono">
-                              {dest.code}
-                            </span>
-                            <span className="text-xs text-gray-400 capitalize">
-                              {dest.type}
-                            </span>
+                        </div>
+
+                        {/* Main content area */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              {/* City name and neutral popular badge */}
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium text-gray-900 text-sm truncate">
+                                  {dest.name}
+                                </span>
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
+                                  Popular
+                                </span>
+                              </div>
+
+                              {/* Country info */}
+                              <div className="text-xs text-gray-500">
+                                <span className="capitalize">{dest.type}</span>
+                                {dest.country && (
+                                  <span> in {dest.country}</span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* City code aligned right */}
+                            <div className="flex-shrink-0 ml-3">
+                              <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
+                                {dest.code}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
