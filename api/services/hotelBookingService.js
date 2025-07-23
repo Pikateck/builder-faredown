@@ -472,6 +472,133 @@ class HotelBookingService {
       }
     }
   }
+
+  /**
+   * Calculate number of nights between check-in and check-out
+   */
+  calculateNights(checkIn, checkOut) {
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  }
+
+  /**
+   * Process booking confirmation - generate voucher and send email
+   */
+  async processBookingConfirmation(booking) {
+    try {
+      console.log(`Processing booking confirmation for ${booking.booking_ref}`);
+
+      // Generate voucher
+      const voucherResult = await voucherService.generateHotelVoucher({
+        bookingRef: booking.booking_ref,
+        hotelName: booking.hotel_name,
+        hotelAddress: booking.hotel_address,
+        checkIn: booking.check_in_date,
+        checkOut: booking.check_out_date,
+        nights: booking.nights,
+        roomType: booking.room_type,
+        guestName: `${booking.guest_details.primaryGuest.firstName} ${booking.guest_details.primaryGuest.lastName}`,
+        totalAmount: booking.total_amount,
+        currency: booking.currency
+      });
+
+      if (voucherResult.success) {
+        // Store voucher in database
+        const voucherNumber = Voucher.generateVoucherNumber(booking.booking_ref);
+        const voucherDbData = {
+          booking_id: booking.id,
+          voucher_type: 'hotel',
+          voucher_number: voucherNumber,
+          pdf_path: `/vouchers/${booking.booking_ref}.pdf`,
+          pdf_size_bytes: voucherResult.pdf ? voucherResult.pdf.length : 0,
+          email_address: booking.guest_details.contactInfo.email
+        };
+
+        const voucherDbResult = await Voucher.create(voucherDbData);
+
+        if (voucherDbResult.success) {
+          // Send confirmation email with voucher
+          const emailResult = await emailService.sendBookingConfirmation({
+            to: booking.guest_details.contactInfo.email,
+            guestName: `${booking.guest_details.primaryGuest.firstName} ${booking.guest_details.primaryGuest.lastName}`,
+            bookingRef: booking.booking_ref,
+            hotelName: booking.hotel_name,
+            checkIn: booking.check_in_date,
+            checkOut: booking.check_out_date,
+            voucherAttachment: voucherResult.pdf
+          });
+
+          if (emailResult.success) {
+            // Update voucher email status
+            await Voucher.updateEmailStatus(voucherDbResult.data.id, 'sent');
+            console.log(`✅ Booking confirmation processed successfully for ${booking.booking_ref}`);
+          } else {
+            console.error(`❌ Failed to send email for booking ${booking.booking_ref}:`, emailResult.error);
+            await Voucher.updateEmailStatus(voucherDbResult.data.id, 'failed', emailResult.error);
+          }
+        } else {
+          console.error(`❌ Failed to store voucher in database for booking ${booking.booking_ref}:`, voucherDbResult.error);
+        }
+      } else {
+        console.error(`❌ Failed to generate voucher for booking ${booking.booking_ref}:`, voucherResult.error);
+      }
+
+    } catch (error) {
+      console.error(`❌ Error processing booking confirmation for ${booking.booking_ref}:`, error);
+    }
+  }
+
+  /**
+   * Get booking by reference from database
+   */
+  async getBooking(bookingRef) {
+    try {
+      const result = await HotelBooking.findByReference(bookingRef);
+      return result;
+    } catch (error) {
+      console.error('Error getting booking:', error);
+      return {
+        success: false,
+        error: error.message,
+        data: null
+      };
+    }
+  }
+
+  /**
+   * Get all bookings with filters (database version)
+   */
+  async getAllBookingsFromDb(filters = {}, page = 1, limit = 20) {
+    try {
+      const result = await HotelBooking.getAll(filters, page, limit);
+      return result;
+    } catch (error) {
+      console.error('Error getting all bookings:', error);
+      return {
+        success: false,
+        error: error.message,
+        data: []
+      };
+    }
+  }
+
+  /**
+   * Get booking analytics from database
+   */
+  async getBookingAnalyticsFromDb(dateFrom, dateTo) {
+    try {
+      const result = await HotelBooking.getAnalytics(dateFrom, dateTo);
+      return result;
+    } catch (error) {
+      console.error('Error getting booking analytics:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
 }
 
 module.exports = new HotelBookingService();
