@@ -133,8 +133,8 @@ class HotelbedsService {
 
       // Filter destinations by query
       const filtered = destinations.filter(dest => {
-        const name = dest.name?.content || dest.name || '';
-        const countryName = dest.countryName?.content || dest.countryName || '';
+        const name = (dest.name?.content || dest.name || '').toString();
+        const countryName = (dest.countryName?.content || dest.countryName || '').toString();
         return name.toLowerCase().includes(query.toLowerCase()) ||
                countryName.toLowerCase().includes(query.toLowerCase());
       });
