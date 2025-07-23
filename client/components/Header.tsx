@@ -27,7 +27,7 @@ interface HeaderProps {
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedCurrency, currencies, setCurrency } = useCurrency();
+  // Currency context is now used by CurrencySelector component
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     // Initialize login state from localStorage
     const stored = localStorage.getItem("isLoggedIn");
