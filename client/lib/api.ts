@@ -119,6 +119,12 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    // In production, always use fallback mode to avoid fetch errors
+    if (this.isProduction) {
+      console.log(`🔄 Production mode: Using fallback for ${endpoint}`);
+      return this.devClient.get<T>(endpoint, params);
+    }
+
     const url = new URL(`${this.baseURL}${endpoint}`);
 
     if (params) {
