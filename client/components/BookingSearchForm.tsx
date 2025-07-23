@@ -101,7 +101,7 @@ export function BookingSearchForm() {
         );
       } catch (error) {
         console.error(
-          "⚠️ Failed to load popular destinations, using fallback:",
+          "���️ Failed to load popular destinations, using fallback:",
           error,
         );
         // Static fallback if database fails
@@ -440,15 +440,24 @@ export function BookingSearchForm() {
                           setIsDestinationOpen(false);
                         }}
                       >
-                        <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full mr-3 flex-shrink-0">
-                          <span className="text-sm">{(dest as any).flag || "🌍"}</span>
+                        <div className={`flex items-center justify-center w-8 h-8 rounded-full mr-3 flex-shrink-0 ${
+                          dest.type === 'hotel' ? 'bg-green-100' : 'bg-blue-100'
+                        }`}>
+                          <span className="text-sm">
+                            {dest.type === 'hotel' ? '🏨' : ((dest as any).flag || "🌍")}
+                          </span>
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-gray-900 truncate">
-                              {dest.name}
+                              {dest.type === 'hotel' ? dest.name : dest.name}
                             </span>
-                            {(dest as any).popular && (
+                            {dest.type === 'hotel' && (
+                              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                                Hotel
+                              </span>
+                            )}
+                            {(dest as any).popular && dest.type !== 'hotel' && (
                               <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
                                 Popular
                               </span>
@@ -458,7 +467,7 @@ export function BookingSearchForm() {
                             {dest.country}
                           </div>
                           <div className="text-xs text-gray-400 mt-0.5 flex items-center gap-2">
-                            <span className="capitalize">{dest.type}</span>
+                            <span className="capitalize">{dest.type === 'hotel' ? 'Hotel' : dest.type}</span>
                             <span>•</span>
                             <span className="font-mono">{dest.code || dest.id}</span>
                           </div>
