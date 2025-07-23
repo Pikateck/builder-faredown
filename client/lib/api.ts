@@ -3,6 +3,8 @@
  * Centralized API client for Faredown backend integration
  */
 
+import { DevApiClient } from './api-dev';
+
 // Auto-detect backend URL based on environment
 const getBackendUrl = () => {
   // Try environment variable first
