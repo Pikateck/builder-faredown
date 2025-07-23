@@ -88,7 +88,7 @@ export default function BookingInvoice() {
       items: [
         {
           description: "Hotel Accommodation - Deluxe Suite",
-          details: "3 nights × 1 room × $259.00 per night",
+          details: "Total stay accommodation for 3 nights, 1 room",
           quantity: 3,
           unitPrice: 259.0,
           total: 777.0,
