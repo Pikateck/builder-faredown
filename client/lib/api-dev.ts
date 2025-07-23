@@ -90,7 +90,7 @@ export class DevApiClient {
       this.lastCheck = Date.now();
 
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.warn(`API call failed, using fallback data for ${endpoint}: ${errorMessage}`);
+      console.log(`🔄 DevApiClient: Fetch failed for ${endpoint}, using fallback (${errorMessage})`);
 
       return this.getFallbackData(endpoint, params) as T;
     }
