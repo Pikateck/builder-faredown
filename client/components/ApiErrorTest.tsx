@@ -7,10 +7,12 @@ export function ApiErrorTest() {
     destinations: string;
     healthCheck: string;
     overall: string;
+    mode: string;
   }>({
     destinations: 'Not tested',
-    healthCheck: 'Not tested', 
-    overall: 'Not tested'
+    healthCheck: 'Not tested',
+    overall: 'Not tested',
+    mode: 'Unknown'
   });
 
   const runAllTests = async () => {
