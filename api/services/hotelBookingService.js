@@ -3,15 +3,15 @@
  * Handles hotel booking operations with Hotelbeds API
  */
 
-const hotelbedsService = require('./hotelbedsService');
-const markupService = require('./markupService');
-const emailService = require('./emailService');
-const voucherService = require('./voucherService');
-const HotelBooking = require('../models/HotelBooking');
-const Payment = require('../models/Payment');
-const Voucher = require('../models/Voucher');
-const db = require('../database/connection');
-const { v4: uuidv4 } = require('uuid');
+const hotelbedsService = require("./hotelbedsService");
+const markupService = require("./markupService");
+const emailService = require("./emailService");
+const voucherService = require("./voucherService");
+const HotelBooking = require("../models/HotelBooking");
+const Payment = require("../models/Payment");
+const Voucher = require("../models/Voucher");
+const db = require("../database/connection");
+const { v4: uuidv4 } = require("uuid");
 
 class HotelBookingService {
   constructor() {
@@ -30,7 +30,10 @@ class HotelBookingService {
         await db.initializeSchema();
       }
     } catch (error) {
-      console.error('Failed to initialize database for booking service:', error);
+      console.error(
+        "Failed to initialize database for booking service:",
+        error,
+      );
     }
   }
 
@@ -50,7 +53,7 @@ class HotelBookingService {
         contactInfo,
         specialRequests,
         totalAmount,
-        currency = 'INR'
+        currency = "INR",
       } = bookingData;
 
       // Generate temporary booking reference
@@ -59,7 +62,9 @@ class HotelBookingService {
       // Validate guest details
       const validationResult = this.validateGuestDetails(guestDetails);
       if (!validationResult.isValid) {
-        throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
+        throw new Error(
+          `Validation failed: ${validationResult.errors.join(", ")}`,
+        );
       }
 
       // Create pre-booking record
@@ -76,30 +81,32 @@ class HotelBookingService {
         specialRequests,
         totalAmount,
         currency,
-        status: 'pending_payment',
+        status: "pending_payment",
         createdAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes
-        paymentStatus: 'pending'
+        paymentStatus: "pending",
       };
 
       // Store temporarily
       this.pendingBookings.set(tempBookingRef, preBooking);
 
       // Set auto-cleanup
-      setTimeout(() => {
-        this.pendingBookings.delete(tempBookingRef);
-      }, 15 * 60 * 1000); // 15 minutes
+      setTimeout(
+        () => {
+          this.pendingBookings.delete(tempBookingRef);
+        },
+        15 * 60 * 1000,
+      ); // 15 minutes
 
       return {
         success: true,
         tempBookingRef,
         expiresAt: preBooking.expiresAt,
         totalAmount,
-        currency
+        currency,
       };
-
     } catch (error) {
-      console.error('Pre-booking error:', error);
+      console.error("Pre-booking error:", error);
       throw new Error(`Pre-booking failed: ${error.message}`);
     }
   }
@@ -110,14 +117,14 @@ class HotelBookingService {
   async confirmBooking(tempBookingRef, paymentDetails) {
     try {
       const preBooking = this.pendingBookings.get(tempBookingRef);
-      
+
       if (!preBooking) {
-        throw new Error('Pre-booking not found or expired');
+        throw new Error("Pre-booking not found or expired");
       }
 
       if (new Date() > new Date(preBooking.expiresAt)) {
         this.pendingBookings.delete(tempBookingRef);
-        throw new Error('Pre-booking has expired');
+        throw new Error("Pre-booking has expired");
       }
 
       // Prepare Hotelbeds booking request
@@ -127,31 +134,35 @@ class HotelBookingService {
           name: preBooking.guestDetails.primaryGuest.firstName,
           surname: preBooking.guestDetails.primaryGuest.lastName,
           email: preBooking.contactInfo.email,
-          phoneNumber: preBooking.contactInfo.phone
+          phoneNumber: preBooking.contactInfo.phone,
         },
         stay: {
           checkIn: preBooking.checkIn,
-          checkOut: preBooking.checkOut
+          checkOut: preBooking.checkOut,
         },
-        occupancies: preBooking.rooms.map(room => ({
+        occupancies: preBooking.rooms.map((room) => ({
           rooms: 1,
           adults: room.adults,
           children: room.children,
-          childrenAges: room.childrenAges || []
+          childrenAges: room.childrenAges || [],
         })),
         hotel: {
-          code: preBooking.hotelCode
+          code: preBooking.hotelCode,
         },
-        rooms: [{
-          rateKey: preBooking.rateKey,
-          roomCode: preBooking.roomCode
-        }],
-        remark: preBooking.specialRequests || 'Booking via Faredown'
+        rooms: [
+          {
+            rateKey: preBooking.rateKey,
+            roomCode: preBooking.roomCode,
+          },
+        ],
+        remark: preBooking.specialRequests || "Booking via Faredown",
       };
 
       // Make booking with Hotelbeds
-      const hotelbedsResponse = await this.makeHotelbedsBooking(hotelbedsBookingRequest);
-      
+      const hotelbedsResponse = await this.makeHotelbedsBooking(
+        hotelbedsBookingRequest,
+      );
+
       if (!hotelbedsResponse.success) {
         throw new Error(`Hotelbeds booking failed: ${hotelbedsResponse.error}`);
       }
@@ -167,42 +178,52 @@ class HotelBookingService {
         booking_ref: finalBookingRef,
         supplier_id: 1, // Hotelbeds supplier ID from database
         hotel_code: preBooking.hotelCode,
-        hotel_name: hotelDetails.name || 'Hotel Name',
-        hotel_address: hotelDetails.address || '',
-        hotel_city: hotelDetails.city || '',
-        hotel_country: hotelDetails.country || '',
+        hotel_name: hotelDetails.name || "Hotel Name",
+        hotel_address: hotelDetails.address || "",
+        hotel_city: hotelDetails.city || "",
+        hotel_country: hotelDetails.country || "",
         hotel_rating: hotelDetails.rating || null,
-        room_type: hotelDetails.roomType || 'Standard Room',
-        room_name: hotelDetails.roomName || 'Standard Room',
+        room_type: hotelDetails.roomType || "Standard Room",
+        room_name: hotelDetails.roomName || "Standard Room",
         room_code: preBooking.roomCode,
         guest_details: {
           primaryGuest: preBooking.guestDetails.primaryGuest,
           additionalGuests: preBooking.guestDetails.additionalGuests || [],
-          contactInfo: preBooking.contactInfo
+          contactInfo: preBooking.contactInfo,
         },
         check_in_date: preBooking.checkIn,
         check_out_date: preBooking.checkOut,
         nights: this.calculateNights(preBooking.checkIn, preBooking.checkOut),
         rooms_count: preBooking.rooms.length,
-        adults_count: preBooking.rooms.reduce((sum, room) => sum + room.adults, 0),
-        children_count: preBooking.rooms.reduce((sum, room) => sum + (room.children || 0), 0),
-        children_ages: preBooking.rooms.flatMap(room => room.childrenAges || []),
+        adults_count: preBooking.rooms.reduce(
+          (sum, room) => sum + room.adults,
+          0,
+        ),
+        children_count: preBooking.rooms.reduce(
+          (sum, room) => sum + (room.children || 0),
+          0,
+        ),
+        children_ages: preBooking.rooms.flatMap(
+          (room) => room.childrenAges || [],
+        ),
         base_price: preBooking.totalAmount * 0.85, // Approximate base price
         markup_amount: preBooking.totalAmount * 0.15, // Approximate markup
-        markup_percentage: 15.00,
+        markup_percentage: 15.0,
         total_amount: preBooking.totalAmount,
         currency: preBooking.currency,
-        status: 'confirmed',
+        status: "confirmed",
         supplier_booking_ref: hotelbedsResponse.bookingReference,
         supplier_response: hotelbedsResponse,
-        special_requests: preBooking.specialRequests
+        special_requests: preBooking.specialRequests,
       };
 
       // Store confirmed booking in database
       const dbResult = await HotelBooking.create(bookingDbData);
 
       if (!dbResult.success) {
-        throw new Error(`Failed to store booking in database: ${dbResult.error}`);
+        throw new Error(
+          `Failed to store booking in database: ${dbResult.error}`,
+        );
       }
 
       const confirmedBooking = dbResult.data;
@@ -210,7 +231,7 @@ class HotelBookingService {
       // Store payment details in database
       const paymentDbData = {
         booking_id: confirmedBooking.id,
-        gateway: 'razorpay',
+        gateway: "razorpay",
         gateway_payment_id: paymentDetails.razorpay_payment_id,
         gateway_order_id: paymentDetails.razorpay_order_id,
         amount: paymentDetails.amount,
@@ -218,35 +239,37 @@ class HotelBookingService {
         payment_method: paymentDetails.method,
         payment_details: {
           signature: paymentDetails.razorpay_signature,
-          paidAt: new Date().toISOString()
+          paidAt: new Date().toISOString(),
         },
-        status: 'completed',
-        gateway_response: paymentDetails
+        status: "completed",
+        gateway_response: paymentDetails,
       };
 
       const paymentResult = await Payment.create(paymentDbData);
 
       if (!paymentResult.success) {
-        console.error('Failed to store payment in database:', paymentResult.error);
+        console.error(
+          "Failed to store payment in database:",
+          paymentResult.error,
+        );
       }
 
       // Remove from pending
       this.pendingBookings.delete(tempBookingRef);
 
       // Generate voucher and send confirmation email (don't wait for it)
-      this.processBookingConfirmation(confirmedBooking).catch(error => {
-        console.error('Failed to process booking confirmation:', error);
+      this.processBookingConfirmation(confirmedBooking).catch((error) => {
+        console.error("Failed to process booking confirmation:", error);
       });
 
       return {
         success: true,
         bookingRef: finalBookingRef,
         confirmationNumber: hotelbedsResponse.confirmationNumber,
-        booking: confirmedBooking
+        booking: confirmedBooking,
       };
-
     } catch (error) {
-      console.error('Booking confirmation error:', error);
+      console.error("Booking confirmation error:", error);
       throw new Error(`Booking confirmation failed: ${error.message}`);
     }
   }
@@ -258,12 +281,12 @@ class HotelBookingService {
     try {
       // Mock Hotelbeds booking API call
       // In production, this would make actual API call to Hotelbeds
-      
+
       const response = await hotelbedsService.makeRequest(
-        'bookings',
-        'POST',
+        "bookings",
+        "POST",
         bookingRequest,
-        false
+        false,
       );
 
       // Simulate successful booking response
@@ -271,26 +294,25 @@ class HotelBookingService {
         success: true,
         bookingReference: `HB${Date.now()}`,
         confirmationNumber: `CNF${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
-        status: 'CONFIRMED',
+        status: "CONFIRMED",
         bookingDetails: {
           hotel: {
             code: bookingRequest.hotel.code,
-            name: 'Sample Hotel Name'
+            name: "Sample Hotel Name",
           },
           rooms: bookingRequest.rooms,
           stay: bookingRequest.stay,
           totalAmount: bookingRequest.totalAmount || 5000,
-          currency: 'EUR'
-        }
+          currency: "EUR",
+        },
       };
 
       return mockResponse;
-
     } catch (error) {
-      console.error('Hotelbeds booking API error:', error);
+      console.error("Hotelbeds booking API error:", error);
       return {
         success: false,
-        error: error.message || 'Unknown booking error'
+        error: error.message || "Unknown booking error",
       };
     }
   }
@@ -298,26 +320,28 @@ class HotelBookingService {
   /**
    * Cancel booking
    */
-  async cancelBooking(bookingRef, reason = 'Customer request') {
+  async cancelBooking(bookingRef, reason = "Customer request") {
     try {
       const booking = this.bookings.get(bookingRef);
-      
+
       if (!booking) {
-        throw new Error('Booking not found');
+        throw new Error("Booking not found");
       }
 
-      if (booking.status === 'cancelled') {
-        throw new Error('Booking is already cancelled');
+      if (booking.status === "cancelled") {
+        throw new Error("Booking is already cancelled");
       }
 
       // Check cancellation policy
       const cancellationAllowed = this.checkCancellationPolicy(booking);
       if (!cancellationAllowed.allowed) {
-        throw new Error(`Cancellation not allowed: ${cancellationAllowed.reason}`);
+        throw new Error(
+          `Cancellation not allowed: ${cancellationAllowed.reason}`,
+        );
       }
 
       // Update booking status
-      booking.status = 'cancelled';
+      booking.status = "cancelled";
       booking.cancelledAt = new Date().toISOString();
       booking.cancellationReason = reason;
       booking.refundAmount = cancellationAllowed.refundAmount;
@@ -325,11 +349,10 @@ class HotelBookingService {
       return {
         success: true,
         booking,
-        refundAmount: cancellationAllowed.refundAmount
+        refundAmount: cancellationAllowed.refundAmount,
       };
-
     } catch (error) {
-      console.error('Booking cancellation error:', error);
+      console.error("Booking cancellation error:", error);
       throw new Error(`Cancellation failed: ${error.message}`);
     }
   }
@@ -353,14 +376,16 @@ class HotelBookingService {
    */
   getUserBookings(userId, limit = 10, offset = 0) {
     const userBookings = Array.from(this.bookings.values())
-      .filter(booking => booking.guestDetails?.primaryGuest?.email?.includes(userId))
+      .filter((booking) =>
+        booking.guestDetails?.primaryGuest?.email?.includes(userId),
+      )
       .sort((a, b) => new Date(b.confirmedAt) - new Date(a.confirmedAt))
       .slice(offset, offset + limit);
 
     return {
       bookings: userBookings,
       total: userBookings.length,
-      hasMore: userBookings.length === limit
+      hasMore: userBookings.length === limit,
     };
   }
 
@@ -371,30 +396,31 @@ class HotelBookingService {
     const errors = [];
 
     if (!guestDetails.primaryGuest) {
-      errors.push('Primary guest details are required');
+      errors.push("Primary guest details are required");
     } else {
       const primary = guestDetails.primaryGuest;
-      if (!primary.firstName) errors.push('Primary guest first name is required');
-      if (!primary.lastName) errors.push('Primary guest last name is required');
+      if (!primary.firstName)
+        errors.push("Primary guest first name is required");
+      if (!primary.lastName) errors.push("Primary guest last name is required");
     }
 
     if (!guestDetails.contactInfo) {
-      errors.push('Contact information is required');
+      errors.push("Contact information is required");
     } else {
       const contact = guestDetails.contactInfo;
-      if (!contact.email) errors.push('Email is required');
-      if (!contact.phone) errors.push('Phone number is required');
-      
+      if (!contact.email) errors.push("Email is required");
+      if (!contact.phone) errors.push("Phone number is required");
+
       // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (contact.email && !emailRegex.test(contact.email)) {
-        errors.push('Valid email address is required');
+        errors.push("Valid email address is required");
       }
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -404,26 +430,28 @@ class HotelBookingService {
   checkCancellationPolicy(booking) {
     const checkInDate = new Date(booking.checkIn);
     const now = new Date();
-    const daysUntilCheckIn = Math.ceil((checkInDate - now) / (1000 * 60 * 60 * 24));
+    const daysUntilCheckIn = Math.ceil(
+      (checkInDate - now) / (1000 * 60 * 60 * 24),
+    );
 
     // Sample cancellation policy
     if (daysUntilCheckIn >= 7) {
       return {
         allowed: true,
         refundAmount: booking.totalAmount * 0.9, // 90% refund
-        reason: 'Free cancellation'
+        reason: "Free cancellation",
       };
     } else if (daysUntilCheckIn >= 3) {
       return {
         allowed: true,
         refundAmount: booking.totalAmount * 0.5, // 50% refund
-        reason: 'Partial refund'
+        reason: "Partial refund",
       };
     } else {
       return {
         allowed: false,
         refundAmount: 0,
-        reason: 'No refund within 3 days of check-in'
+        reason: "No refund within 3 days of check-in",
       };
     }
   }
@@ -437,15 +465,19 @@ class HotelBookingService {
 
     return {
       totalBookings: allBookings.length,
-      confirmedBookings: allBookings.filter(b => b.status === 'confirmed').length,
-      cancelledBookings: allBookings.filter(b => b.status === 'cancelled').length,
+      confirmedBookings: allBookings.filter((b) => b.status === "confirmed")
+        .length,
+      cancelledBookings: allBookings.filter((b) => b.status === "cancelled")
+        .length,
       pendingPayment: pendingBookings.length,
       totalRevenue: allBookings
-        .filter(b => b.status === 'confirmed')
+        .filter((b) => b.status === "confirmed")
         .reduce((sum, b) => sum + (b.totalAmount || 0), 0),
-      averageBookingValue: allBookings.length > 0 
-        ? allBookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0) / allBookings.length 
-        : 0
+      averageBookingValue:
+        allBookings.length > 0
+          ? allBookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0) /
+            allBookings.length
+          : 0,
     };
   }
 
@@ -457,7 +489,10 @@ class HotelBookingService {
       await emailService.sendBookingConfirmation(booking);
       console.log(`Booking confirmation email sent for ${booking.bookingRef}`);
     } catch (error) {
-      console.error(`Failed to send booking confirmation email for ${booking.bookingRef}:`, error);
+      console.error(
+        `Failed to send booking confirmation email for ${booking.bookingRef}:`,
+        error,
+      );
     }
   }
 
@@ -501,19 +536,21 @@ class HotelBookingService {
         roomType: booking.room_type,
         guestName: `${booking.guest_details.primaryGuest.firstName} ${booking.guest_details.primaryGuest.lastName}`,
         totalAmount: booking.total_amount,
-        currency: booking.currency
+        currency: booking.currency,
       });
 
       if (voucherResult.success) {
         // Store voucher in database
-        const voucherNumber = Voucher.generateVoucherNumber(booking.booking_ref);
+        const voucherNumber = Voucher.generateVoucherNumber(
+          booking.booking_ref,
+        );
         const voucherDbData = {
           booking_id: booking.id,
-          voucher_type: 'hotel',
+          voucher_type: "hotel",
           voucher_number: voucherNumber,
           pdf_path: `/vouchers/${booking.booking_ref}.pdf`,
           pdf_size_bytes: voucherResult.pdf ? voucherResult.pdf.length : 0,
-          email_address: booking.guest_details.contactInfo.email
+          email_address: booking.guest_details.contactInfo.email,
         };
 
         const voucherDbResult = await Voucher.create(voucherDbData);
@@ -527,26 +564,43 @@ class HotelBookingService {
             hotelName: booking.hotel_name,
             checkIn: booking.check_in_date,
             checkOut: booking.check_out_date,
-            voucherAttachment: voucherResult.pdf
+            voucherAttachment: voucherResult.pdf,
           });
 
           if (emailResult.success) {
             // Update voucher email status
-            await Voucher.updateEmailStatus(voucherDbResult.data.id, 'sent');
-            console.log(`✅ Booking confirmation processed successfully for ${booking.booking_ref}`);
+            await Voucher.updateEmailStatus(voucherDbResult.data.id, "sent");
+            console.log(
+              `✅ Booking confirmation processed successfully for ${booking.booking_ref}`,
+            );
           } else {
-            console.error(`❌ Failed to send email for booking ${booking.booking_ref}:`, emailResult.error);
-            await Voucher.updateEmailStatus(voucherDbResult.data.id, 'failed', emailResult.error);
+            console.error(
+              `❌ Failed to send email for booking ${booking.booking_ref}:`,
+              emailResult.error,
+            );
+            await Voucher.updateEmailStatus(
+              voucherDbResult.data.id,
+              "failed",
+              emailResult.error,
+            );
           }
         } else {
-          console.error(`❌ Failed to store voucher in database for booking ${booking.booking_ref}:`, voucherDbResult.error);
+          console.error(
+            `❌ Failed to store voucher in database for booking ${booking.booking_ref}:`,
+            voucherDbResult.error,
+          );
         }
       } else {
-        console.error(`❌ Failed to generate voucher for booking ${booking.booking_ref}:`, voucherResult.error);
+        console.error(
+          `❌ Failed to generate voucher for booking ${booking.booking_ref}:`,
+          voucherResult.error,
+        );
       }
-
     } catch (error) {
-      console.error(`❌ Error processing booking confirmation for ${booking.booking_ref}:`, error);
+      console.error(
+        `❌ Error processing booking confirmation for ${booking.booking_ref}:`,
+        error,
+      );
     }
   }
 
@@ -558,11 +612,11 @@ class HotelBookingService {
       const result = await HotelBooking.findByReference(bookingRef);
       return result;
     } catch (error) {
-      console.error('Error getting booking:', error);
+      console.error("Error getting booking:", error);
       return {
         success: false,
         error: error.message,
-        data: null
+        data: null,
       };
     }
   }
@@ -575,11 +629,11 @@ class HotelBookingService {
       const result = await HotelBooking.getAll(filters, page, limit);
       return result;
     } catch (error) {
-      console.error('Error getting all bookings:', error);
+      console.error("Error getting all bookings:", error);
       return {
         success: false,
         error: error.message,
-        data: []
+        data: [],
       };
     }
   }
@@ -592,10 +646,10 @@ class HotelBookingService {
       const result = await HotelBooking.getAnalytics(dateFrom, dateTo);
       return result;
     } catch (error) {
-      console.error('Error getting booking analytics:', error);
+      console.error("Error getting booking analytics:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }

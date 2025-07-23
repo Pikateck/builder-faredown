@@ -10,6 +10,7 @@
 ## 💳 **Test Payment Credentials**
 
 ### Test Credit/Debit Cards:
+
 ```
 ✅ SUCCESS CARD:
    Number: 4111 1111 1111 1111 (Visa)
@@ -24,12 +25,14 @@
 ```
 
 ### Test UPI IDs:
+
 ```
 ✅ SUCCESS: success@razorpay
 ❌ FAILURE: failure@razorpay
 ```
 
 ### Test Wallets:
+
 ```
 ✅ SUCCESS: Use any wallet option
 ❌ FAILURE: Available for testing error scenarios
@@ -40,6 +43,7 @@
 ## 🧪 **End-to-End Testing Flow**
 
 ### Step 1: Navigate to Hotels Page
+
 1. Go to https://your-faredown-url.com/hotels
 2. Enter search criteria:
    - **Destination**: Any city (e.g., "Mumbai", "Delhi")
@@ -48,17 +52,20 @@
    - **Guests**: 2 adults, 1 room
 
 ### Step 2: Hotel Selection
+
 1. Browse hotel results from Hotelbeds API
 2. Verify pricing includes markup calculations
 3. Check room types are standardized via GIATA
 4. Select a hotel and room type
 
 ### Step 3: Guest Details
+
 1. Fill guest information form
 2. Verify all required fields are validated
 3. Proceed to payment page
 
 ### Step 4: Payment Testing
+
 1. **Test Successful Payment**:
    - Use card: 4111 1111 1111 1111
    - Complete payment flow
@@ -70,6 +77,7 @@
    - Check graceful fallback
 
 ### Step 5: Post-Booking Verification
+
 1. **Booking Confirmation Email**:
    - Check inbox for confirmation email
    - Verify PDF voucher attachment
@@ -86,6 +94,7 @@
 ## 📋 **Expected Results**
 
 ### ✅ Successful Booking Should Show:
+
 - Booking confirmation page with green success indicator
 - Unique booking reference (e.g., FD12345678)
 - Hotel details and guest information
@@ -94,6 +103,7 @@
 - Confirmation email sent automatically
 
 ### 📧 Email Should Contain:
+
 - Professional HTML template
 - Booking details and hotel information
 - Check-in instructions and contact details
@@ -101,6 +111,7 @@
 - GST invoice if applicable
 
 ### 🏨 Voucher Should Include:
+
 - Faredown branding and logo
 - Booking reference and confirmation
 - Hotel details (name, address, contact)
@@ -114,6 +125,7 @@
 ## 🔧 **Admin CMS Features**
 
 ### Transaction Management:
+
 - Real-time booking status updates
 - Payment gateway response tracking
 - Customer details and preferences
@@ -121,6 +133,7 @@
 - Refund processing (if needed)
 
 ### Analytics Dashboard:
+
 - Daily/monthly booking trends
 - Revenue tracking with markup analysis
 - Hotel supplier performance metrics
@@ -132,18 +145,21 @@
 ## 🚨 **Troubleshooting**
 
 ### If Payment Fails:
+
 1. Check Razorpay dashboard for error details
 2. Verify webhook configuration
 3. Review server logs for integration issues
 4. Test with different payment methods
 
 ### If Email Not Received:
+
 1. Check spam/junk folder
 2. Verify SMTP configuration
 3. Test email service independently
 4. Review email service logs
 
 ### If Voucher Generation Fails:
+
 1. Check PDF service logs
 2. Verify booking data completeness
 3. Test voucher endpoint directly

@@ -4,14 +4,18 @@
  * Integrates with Hotelbeds API for live hotel data
  */
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 class DestinationsService {
   constructor() {
     // Database connection pool
     this.pool = new Pool({
-      connectionString: process.env.DATABASE_URL || 'postgresql://localhost:5432/faredown_db',
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      connectionString:
+        process.env.DATABASE_URL || "postgresql://localhost:5432/faredown_db",
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
@@ -34,14 +38,19 @@ class DestinationsService {
       `);
 
       if (tableCheck.rows.length === 0) {
-        console.log('🔧 Destinations database not found, using in-memory fallback');
+        console.log(
+          "🔧 Destinations database not found, using in-memory fallback",
+        );
         // In production, you would run the schema file here
         // For now, we'll use the existing MASTER_DESTINATIONS as fallback
       } else {
-        console.log('✅ Destinations database connected successfully');
+        console.log("✅ Destinations database connected successfully");
       }
     } catch (error) {
-      console.warn('⚠️ Database connection failed, using fallback mode:', error.message);
+      console.warn(
+        "⚠️ Database connection failed, using fallback mode:",
+        error.message,
+      );
       this.fallbackMode = true;
     }
   }
@@ -49,18 +58,18 @@ class DestinationsService {
   /**
    * Search destinations with autocomplete support
    */
-  async searchDestinations(query = '', limit = 20, popularOnly = false) {
+  async searchDestinations(query = "", limit = 20, popularOnly = false) {
     try {
       if (this.fallbackMode) {
         return this.searchDestinationsFallback(query, limit, popularOnly);
       }
 
       const result = await this.pool.query(
-        'SELECT * FROM search_destinations($1, $2, $3)',
-        [query, limit, popularOnly]
+        "SELECT * FROM search_destinations($1, $2, $3)",
+        [query, limit, popularOnly],
       );
 
-      return result.rows.map(row => ({
+      return result.rows.map((row) => ({
         id: row.hotelbeds_code,
         code: row.hotelbeds_code,
         name: row.name,
@@ -68,10 +77,10 @@ class DestinationsService {
         country: row.country_name,
         countryCode: row.country_code,
         flag: row.flag_emoji,
-        popular: row.popular
+        popular: row.popular,
       }));
     } catch (error) {
-      console.error('Database search failed, using fallback:', error);
+      console.error("Database search failed, using fallback:", error);
       return this.searchDestinationsFallback(query, limit, popularOnly);
     }
   }
@@ -79,43 +88,44 @@ class DestinationsService {
   /**
    * Fallback search using in-memory MASTER_DESTINATIONS
    */
-  searchDestinationsFallback(query = '', limit = 20, popularOnly = false) {
+  searchDestinationsFallback(query = "", limit = 20, popularOnly = false) {
     // Import MASTER_DESTINATIONS from shared file
-    const { MASTER_DESTINATIONS } = require('../../shared/destinations');
-    
+    const { MASTER_DESTINATIONS } = require("../../shared/destinations");
+
     let destinations = MASTER_DESTINATIONS;
-    
+
     // Filter by popularity if requested
     if (popularOnly) {
-      destinations = destinations.filter(dest => dest.popular);
+      destinations = destinations.filter((dest) => dest.popular);
     }
-    
+
     // Filter by search query
     if (query) {
       const searchTerm = query.toLowerCase();
-      destinations = destinations.filter(dest =>
-        dest.name.toLowerCase().includes(searchTerm) ||
-        dest.country.toLowerCase().includes(searchTerm) ||
-        dest.code.toLowerCase().includes(searchTerm)
+      destinations = destinations.filter(
+        (dest) =>
+          dest.name.toLowerCase().includes(searchTerm) ||
+          dest.country.toLowerCase().includes(searchTerm) ||
+          dest.code.toLowerCase().includes(searchTerm),
       );
     }
-    
+
     // Sort by popularity and name
     destinations.sort((a, b) => {
       if (a.popular && !b.popular) return -1;
       if (!a.popular && b.popular) return 1;
       return a.name.localeCompare(b.name);
     });
-    
+
     // Limit results
-    return destinations.slice(0, limit).map(dest => ({
+    return destinations.slice(0, limit).map((dest) => ({
       id: dest.code,
       code: dest.code,
       name: dest.name,
       type: dest.type,
       country: dest.country,
       countryCode: dest.countryCode,
-      popular: dest.popular
+      popular: dest.popular,
     }));
   }
 
@@ -125,13 +135,13 @@ class DestinationsService {
   async getDestinationByCode(code) {
     try {
       if (this.fallbackMode) {
-        const { MASTER_DESTINATIONS } = require('../../shared/destinations');
-        return MASTER_DESTINATIONS.find(dest => dest.code === code);
+        const { MASTER_DESTINATIONS } = require("../../shared/destinations");
+        return MASTER_DESTINATIONS.find((dest) => dest.code === code);
       }
 
       const result = await this.pool.query(
-        'SELECT * FROM destinations_search_view WHERE hotelbeds_code = $1',
-        [code]
+        "SELECT * FROM destinations_search_view WHERE hotelbeds_code = $1",
+        [code],
       );
 
       if (result.rows.length === 0) {
@@ -149,11 +159,11 @@ class DestinationsService {
         popular: row.popular,
         coordinates: {
           latitude: row.latitude,
-          longitude: row.longitude
-        }
+          longitude: row.longitude,
+        },
       };
     } catch (error) {
-      console.error('Failed to get destination by code:', error);
+      console.error("Failed to get destination by code:", error);
       return null;
     }
   }
@@ -162,7 +172,7 @@ class DestinationsService {
    * Get popular destinations
    */
   async getPopularDestinations(limit = 10) {
-    return this.searchDestinations('', limit, true);
+    return this.searchDestinations("", limit, true);
   }
 
   /**
@@ -171,18 +181,18 @@ class DestinationsService {
   async cacheHotelData(destinationCode, hotels) {
     try {
       if (this.fallbackMode) {
-        console.log('📦 Cache skipped (fallback mode)');
+        console.log("📦 Cache skipped (fallback mode)");
         return false;
       }
 
       // Get destination ID
       const destResult = await this.pool.query(
-        'SELECT id FROM destinations WHERE hotelbeds_code = $1',
-        [destinationCode]
+        "SELECT id FROM destinations WHERE hotelbeds_code = $1",
+        [destinationCode],
       );
 
       if (destResult.rows.length === 0) {
-        console.warn('⚠️ Destination not found for caching:', destinationCode);
+        console.warn("⚠️ Destination not found for caching:", destinationCode);
         return false;
       }
 
@@ -190,19 +200,20 @@ class DestinationsService {
 
       // Begin transaction
       const client = await this.pool.connect();
-      
+
       try {
-        await client.query('BEGIN');
+        await client.query("BEGIN");
 
         // Clear old cache for this destination
         await client.query(
-          'DELETE FROM hotels_cache WHERE destination_code = $1',
-          [destinationCode]
+          "DELETE FROM hotels_cache WHERE destination_code = $1",
+          [destinationCode],
         );
 
         // Insert new hotel data
         for (const hotel of hotels) {
-          const insertResult = await client.query(`
+          const insertResult = await client.query(
+            `
             INSERT INTO hotels_cache (
               hotelbeds_hotel_id, destination_id, destination_code, name, description,
               star_rating, review_score, review_count, address_street, address_city,
@@ -211,79 +222,84 @@ class DestinationsService {
               check_in_time, check_out_time, distance_to_center
             ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
             RETURNING id
-          `, [
-            hotel.id || hotel.code,
-            destinationId,
-            destinationCode,
-            hotel.name,
-            hotel.description,
-            hotel.rating || hotel.starRating,
-            hotel.reviewScore,
-            hotel.reviewCount,
-            hotel.address?.street,
-            hotel.address?.city,
-            hotel.address?.country,
-            hotel.location?.latitude,
-            hotel.location?.longitude,
-            hotel.amenities || [],
-            JSON.stringify(hotel.facilities || {}),
-            hotel.images || [],
-            hotel.priceRange?.min || hotel.currentPrice,
-            hotel.priceRange?.max || hotel.originalPrice,
-            hotel.currency || 'EUR',
-            hotel.cancellationPolicy,
-            hotel.checkInTime || '15:00',
-            hotel.checkOutTime || '11:00',
-            hotel.distanceToCenter ? parseFloat(hotel.distanceToCenter) : null
-          ]);
+          `,
+            [
+              hotel.id || hotel.code,
+              destinationId,
+              destinationCode,
+              hotel.name,
+              hotel.description,
+              hotel.rating || hotel.starRating,
+              hotel.reviewScore,
+              hotel.reviewCount,
+              hotel.address?.street,
+              hotel.address?.city,
+              hotel.address?.country,
+              hotel.location?.latitude,
+              hotel.location?.longitude,
+              hotel.amenities || [],
+              JSON.stringify(hotel.facilities || {}),
+              hotel.images || [],
+              hotel.priceRange?.min || hotel.currentPrice,
+              hotel.priceRange?.max || hotel.originalPrice,
+              hotel.currency || "EUR",
+              hotel.cancellationPolicy,
+              hotel.checkInTime || "15:00",
+              hotel.checkOutTime || "11:00",
+              hotel.distanceToCenter
+                ? parseFloat(hotel.distanceToCenter)
+                : null,
+            ],
+          );
 
           // Cache room data if available
           if (hotel.rooms && Array.isArray(hotel.rooms)) {
             const hotelCacheId = insertResult.rows[0].id;
-            
+
             for (const room of hotel.rooms) {
-              await client.query(`
+              await client.query(
+                `
                 INSERT INTO hotel_rooms_cache (
                   hotel_cache_id, hotelbeds_room_id, name, description, size_sqm,
                   bed_type, max_occupancy, price_per_night, currency_code, amenities, features, images
                 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-              `, [
-                hotelCacheId,
-                room.id || `room-${Math.random()}`,
-                room.name,
-                room.description,
-                room.size ? parseInt(room.size) : null,
-                room.bedType,
-                room.maxOccupancy,
-                room.price || room.pricePerNight,
-                room.currency,
-                room.amenities || [],
-                room.features || [],
-                room.images || []
-              ]);
+              `,
+                [
+                  hotelCacheId,
+                  room.id || `room-${Math.random()}`,
+                  room.name,
+                  room.description,
+                  room.size ? parseInt(room.size) : null,
+                  room.bedType,
+                  room.maxOccupancy,
+                  room.price || room.pricePerNight,
+                  room.currency,
+                  room.amenities || [],
+                  room.features || [],
+                  room.images || [],
+                ],
+              );
             }
           }
         }
 
         // Update hotel count for destination
         await client.query(
-          'UPDATE destinations SET hotel_count = $1 WHERE hotelbeds_code = $2',
-          [hotels.length, destinationCode]
+          "UPDATE destinations SET hotel_count = $1 WHERE hotelbeds_code = $2",
+          [hotels.length, destinationCode],
         );
 
-        await client.query('COMMIT');
+        await client.query("COMMIT");
         console.log(`✅ Cached ${hotels.length} hotels for ${destinationCode}`);
         return true;
-
       } catch (error) {
-        await client.query('ROLLBACK');
+        await client.query("ROLLBACK");
         throw error;
       } finally {
         client.release();
       }
-
     } catch (error) {
-      console.error('Failed to cache hotel data:', error);
+      console.error("Failed to cache hotel data:", error);
       return false;
     }
   }
@@ -297,7 +313,8 @@ class DestinationsService {
         return [];
       }
 
-      const result = await this.pool.query(`
+      const result = await this.pool.query(
+        `
         SELECT h.*, 
                array_agg(
                  json_build_object(
@@ -321,9 +338,11 @@ class DestinationsService {
           AND h.last_updated > CURRENT_TIMESTAMP - INTERVAL '${maxAge} hours'
         GROUP BY h.id
         ORDER BY h.star_rating DESC, h.review_score DESC
-      `, [destinationCode]);
+      `,
+        [destinationCode],
+      );
 
-      return result.rows.map(row => ({
+      return result.rows.map((row) => ({
         id: row.hotelbeds_hotel_id,
         name: row.name,
         description: row.description,
@@ -333,11 +352,11 @@ class DestinationsService {
         address: {
           street: row.address_street,
           city: row.address_city,
-          country: row.address_country
+          country: row.address_country,
         },
         location: {
           latitude: row.latitude,
-          longitude: row.longitude
+          longitude: row.longitude,
         },
         amenities: row.amenities,
         facilities: row.facilities,
@@ -345,18 +364,17 @@ class DestinationsService {
         priceRange: {
           min: row.price_range_min,
           max: row.price_range_max,
-          currency: row.currency_code
+          currency: row.currency_code,
         },
         rooms: row.rooms || [],
         cancellationPolicy: row.cancellation_policy,
         checkInTime: row.check_in_time,
         checkOutTime: row.check_out_time,
         distanceToCenter: row.distance_to_center,
-        lastUpdated: row.last_updated
+        lastUpdated: row.last_updated,
       }));
-
     } catch (error) {
-      console.error('Failed to get cached hotels:', error);
+      console.error("Failed to get cached hotels:", error);
       return [];
     }
   }
@@ -370,17 +388,19 @@ class DestinationsService {
         return;
       }
 
-      await this.pool.query(`
+      await this.pool.query(
+        `
         INSERT INTO destination_searches (destination_id, destination_code, search_date, search_count)
         SELECT d.id, $1, CURRENT_DATE, 1
         FROM destinations d 
         WHERE d.hotelbeds_code = $1
         ON CONFLICT (destination_id, search_date) 
         DO UPDATE SET search_count = destination_searches.search_count + 1
-      `, [destinationCode]);
-
+      `,
+        [destinationCode],
+      );
     } catch (error) {
-      console.error('Failed to track search:', error);
+      console.error("Failed to track search:", error);
     }
   }
 
@@ -411,7 +431,7 @@ class DestinationsService {
 
       return result.rows;
     } catch (error) {
-      console.error('Failed to get analytics:', error);
+      console.error("Failed to get analytics:", error);
       return [];
     }
   }
@@ -426,13 +446,13 @@ class DestinationsService {
       }
 
       const result = await this.pool.query(
-        'DELETE FROM hotels_cache WHERE cache_expires_at < CURRENT_TIMESTAMP'
+        "DELETE FROM hotels_cache WHERE cache_expires_at < CURRENT_TIMESTAMP",
       );
 
       console.log(`🧹 Cleaned up ${result.rowCount} expired cache entries`);
       return result.rowCount;
     } catch (error) {
-      console.error('Failed to cleanup cache:', error);
+      console.error("Failed to cleanup cache:", error);
       return 0;
     }
   }

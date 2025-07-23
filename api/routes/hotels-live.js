@@ -2,17 +2,17 @@
  * Live Hotel Search Routes (bypasses fallback for testing)
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const hotelbedsService = require('../services/hotelbedsService');
-const giataService = require('../services/giataService');
-const markupService = require('../services/markupService');
+const hotelbedsService = require("../services/hotelbedsService");
+const giataService = require("../services/giataService");
+const markupService = require("../services/markupService");
 
 /**
  * LIVE hotel search with real Hotelbeds data
  * GET /api/hotels-live/search
  */
-router.get('/search', async (req, res) => {
+router.get("/search", async (req, res) => {
   try {
     const {
       destination,
@@ -21,17 +21,17 @@ router.get('/search', async (req, res) => {
       rooms = 1,
       adults = 2,
       children = 0,
-      currency = 'INR',
-      destinationCode
+      currency = "INR",
+      destinationCode,
     } = req.query;
 
-    console.log('🔴 LIVE API CALL - Bypassing fallback mode');
+    console.log("🔴 LIVE API CALL - Bypassing fallback mode");
 
     // Validate required parameters
     if (!checkIn || !checkOut) {
       return res.status(400).json({
         success: false,
-        error: 'Check-in and check-out dates are required'
+        error: "Check-in and check-out dates are required",
       });
     }
 
@@ -39,17 +39,20 @@ router.get('/search', async (req, res) => {
     let destCode = destinationCode;
     if (!destCode && destination) {
       console.log(`🔍 Searching destinations for: ${destination}`);
-      const destinations = await hotelbedsService.searchDestinations(destination);
+      const destinations =
+        await hotelbedsService.searchDestinations(destination);
       if (destinations.length > 0) {
         destCode = destinations[0].code;
-        console.log(`✅ Found destination code: ${destCode} for ${destinations[0].name}`);
+        console.log(
+          `✅ Found destination code: ${destCode} for ${destinations[0].name}`,
+        );
       }
     }
 
     if (!destCode) {
       return res.status(400).json({
         success: false,
-        error: 'Valid destination required'
+        error: "Valid destination required",
       });
     }
 
@@ -60,20 +63,21 @@ router.get('/search', async (req, res) => {
       checkOut,
       rooms: parseInt(rooms),
       adults: parseInt(adults),
-      children: parseInt(children)
+      children: parseInt(children),
     };
 
-    console.log('🏨 Searching hotels with params:', searchParams);
-    const hotelResults = await hotelbedsService.searchAvailability(searchParams);
+    console.log("🏨 Searching hotels with params:", searchParams);
+    const hotelResults =
+      await hotelbedsService.searchAvailability(searchParams);
     console.log(`📊 Found ${hotelResults.length} hotels from Hotelbeds API`);
 
     if (hotelResults.length === 0) {
       return res.json({
         success: true,
         data: [],
-        message: 'No hotels found for the specified criteria',
+        message: "No hotels found for the specified criteria",
         searchParams,
-        isLiveData: true
+        isLiveData: true,
       });
     }
 
@@ -84,31 +88,33 @@ router.get('/search', async (req, res) => {
           // Apply GIATA room mapping
           const giataMapping = await giataService.mapRoomTypes({
             hotelCode: hotel.code,
-            roomTypes: hotel.rooms || []
+            roomTypes: hotel.rooms || [],
           });
 
           // Apply markup
           const markup = await markupService.applyHotelMarkup({
             price: hotel.minRate || hotel.price || 0,
-            supplier: 'hotelbeds',
+            supplier: "hotelbeds",
             destination: destCode,
-            currency
+            currency,
           });
 
           return {
             id: hotel.code,
             code: hotel.code,
             name: hotel.name,
-            description: hotel.description || `${hotel.name} offers comfortable accommodation with modern amenities.`,
+            description:
+              hotel.description ||
+              `${hotel.name} offers comfortable accommodation with modern amenities.`,
             address: {
-              street: hotel.address || '',
-              city: hotel.city || '',
-              country: hotel.countryCode || '',
-              zipCode: hotel.postalCode || ''
+              street: hotel.address || "",
+              city: hotel.city || "",
+              country: hotel.countryCode || "",
+              zipCode: hotel.postalCode || "",
             },
             location: {
               latitude: hotel.latitude || 0,
-              longitude: hotel.longitude || 0
+              longitude: hotel.longitude || 0,
             },
             rating: hotel.categoryCode ? parseInt(hotel.categoryCode) : 4,
             reviewScore: 8.5,
@@ -116,32 +122,42 @@ router.get('/search', async (req, res) => {
             currentPrice: markup.finalPrice,
             originalPrice: hotel.minRate || hotel.price || markup.finalPrice,
             currency: currency,
-            images: hotel.images || [`https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400`],
-            amenities: hotel.facilities || ['WiFi', 'Parking', 'Restaurant', 'Pool'],
-            rooms: hotel.rooms || [{
-              name: 'Standard Room',
-              size: '25 sqm',
-              bedType: 'Double',
-              maxOccupancy: 2,
-              price: markup.finalPrice,
-              currency: currency
-            }],
-            cancellationPolicy: 'Free cancellation until 24 hours before check-in',
-            supplier: 'hotelbeds',
+            images: hotel.images || [
+              `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400`,
+            ],
+            amenities: hotel.facilities || [
+              "WiFi",
+              "Parking",
+              "Restaurant",
+              "Pool",
+            ],
+            rooms: hotel.rooms || [
+              {
+                name: "Standard Room",
+                size: "25 sqm",
+                bedType: "Double",
+                maxOccupancy: 2,
+                price: markup.finalPrice,
+                currency: currency,
+              },
+            ],
+            cancellationPolicy:
+              "Free cancellation until 24 hours before check-in",
+            supplier: "hotelbeds",
             supplierHotelId: hotel.code,
             isLiveData: true,
             giataMapping: giataMapping || null,
-            markup: markup
+            markup: markup,
           };
         } catch (processingError) {
-          console.error('Error processing hotel:', processingError);
+          console.error("Error processing hotel:", processingError);
           return null;
         }
-      })
+      }),
     );
 
     // Filter out failed hotels
-    const validHotels = processedHotels.filter(hotel => hotel !== null);
+    const validHotels = processedHotels.filter((hotel) => hotel !== null);
 
     res.json({
       success: true,
@@ -149,16 +165,15 @@ router.get('/search', async (req, res) => {
       totalResults: validHotels.length,
       searchParams,
       isLiveData: true,
-      source: 'Hotelbeds API',
-      timestamp: new Date().toISOString()
+      source: "Hotelbeds API",
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Live hotel search error:', error);
+    console.error("Live hotel search error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to search hotels',
-      isLiveData: true
+      error: error.message || "Failed to search hotels",
+      isLiveData: true,
     });
   }
 });
@@ -167,42 +182,43 @@ router.get('/search', async (req, res) => {
  * Live destinations search
  * GET /api/hotels-live/destinations/search
  */
-router.get('/destinations/search', async (req, res) => {
+router.get("/destinations/search", async (req, res) => {
   try {
     const { q: query } = req.query;
 
     if (!query || query.length < 2) {
       return res.status(400).json({
         success: false,
-        error: 'Query must be at least 2 characters long'
+        error: "Query must be at least 2 characters long",
       });
     }
 
     console.log(`🔴 LIVE DESTINATIONS SEARCH: ${query}`);
     const destinations = await hotelbedsService.searchDestinations(query);
-    console.log(`📍 Found ${destinations.length} destinations from Hotelbeds API`);
+    console.log(
+      `📍 Found ${destinations.length} destinations from Hotelbeds API`,
+    );
 
-    const formattedDestinations = destinations.map(dest => ({
+    const formattedDestinations = destinations.map((dest) => ({
       id: dest.code,
       name: dest.name?.content || dest.name,
-      type: dest.type || 'city',
+      type: dest.type || "city",
       country: dest.countryName?.content || dest.country,
-      code: dest.code
+      code: dest.code,
     }));
 
     res.json({
       success: true,
       data: formattedDestinations,
       isLiveData: true,
-      source: 'Hotelbeds API'
+      source: "Hotelbeds API",
     });
-
   } catch (error) {
-    console.error('Live destination search error:', error);
+    console.error("Live destination search error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to search destinations',
-      isLiveData: true
+      error: "Failed to search destinations",
+      isLiveData: true,
     });
   }
 });

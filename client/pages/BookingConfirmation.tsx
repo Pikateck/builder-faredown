@@ -4,18 +4,18 @@ import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  CheckCircle, 
-  Download, 
-  Mail, 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Phone, 
+import {
+  CheckCircle,
+  Download,
+  Mail,
+  Calendar,
+  MapPin,
+  Users,
+  Phone,
   CreditCard,
   Printer,
   Share2,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 
 interface BookingData {
@@ -68,7 +68,7 @@ export default function BookingConfirmation() {
     if (bookingRef) {
       loadBookingDetails();
     } else {
-      const tempRef = searchParams.get('ref');
+      const tempRef = searchParams.get("ref");
       if (tempRef) {
         // Redirect from payment success with temp reference
         checkPaymentStatus(tempRef);
@@ -80,28 +80,30 @@ export default function BookingConfirmation() {
     try {
       setLoading(true);
       // Use mock booking data to avoid fetch calls
-      console.log(`Loading booking ${bookingRef}: Using mock data (fetch disabled)`);
+      console.log(
+        `Loading booking ${bookingRef}: Using mock data (fetch disabled)`,
+      );
       const result = {
         success: true,
         data: {
           bookingRef,
-          status: 'confirmed',
-          hotel: 'Mock Hotel for Development',
-          guest: 'Test Guest',
-          checkIn: '2025-01-25',
-          checkOut: '2025-01-27',
-          totalAmount: 5000
-        }
+          status: "confirmed",
+          hotel: "Mock Hotel for Development",
+          guest: "Test Guest",
+          checkIn: "2025-01-25",
+          checkOut: "2025-01-27",
+          totalAmount: 5000,
+        },
       };
 
       if (result.success) {
         setBooking(result.data);
       } else {
-        setError('Booking not found');
+        setError("Booking not found");
       }
     } catch (error) {
-      console.error('Error loading booking:', error);
-      setError('Failed to load booking details');
+      console.error("Error loading booking:", error);
+      setError("Failed to load booking details");
     } finally {
       setLoading(false);
     }
@@ -111,22 +113,26 @@ export default function BookingConfirmation() {
     try {
       setLoading(true);
       // This would be called after payment success to get final booking details
-      console.log(`Checking payment for ${tempRef}: Using mock data (fetch disabled)`);
+      console.log(
+        `Checking payment for ${tempRef}: Using mock data (fetch disabled)`,
+      );
       const result = {
         success: true,
-        data: { bookingRef: `FD${Date.now()}`, status: 'confirmed' }
+        data: { bookingRef: `FD${Date.now()}`, status: "confirmed" },
       };
-      
+
       if (result.success) {
         // If payment was successful, redirect to final booking confirmation
         // For now, show a message to check email
-        setError('Payment processing. Please check your email for confirmation.');
+        setError(
+          "Payment processing. Please check your email for confirmation.",
+        );
       } else {
-        setError('Booking reference not found');
+        setError("Booking reference not found");
       }
     } catch (error) {
-      console.error('Error checking payment status:', error);
-      setError('Failed to verify payment status');
+      console.error("Error checking payment status:", error);
+      setError("Failed to verify payment status");
     } finally {
       setLoading(false);
     }
@@ -135,30 +141,42 @@ export default function BookingConfirmation() {
   const downloadVoucher = async () => {
     try {
       // Mock voucher download to avoid fetch calls
-      console.log(`Downloading voucher for ${bookingRef}: Using mock functionality (fetch disabled)`);
-      alert('Voucher download simulated - fetch calls disabled for development');
+      console.log(
+        `Downloading voucher for ${bookingRef}: Using mock functionality (fetch disabled)`,
+      );
+      alert(
+        "Voucher download simulated - fetch calls disabled for development",
+      );
     } catch (error) {
-      console.error('Error downloading voucher:', error);
+      console.error("Error downloading voucher:", error);
     }
   };
 
   const downloadInvoice = async () => {
     try {
       // Mock invoice download to avoid fetch calls
-      console.log(`Downloading invoice for ${bookingRef}: Using mock functionality (fetch disabled)`);
-      alert('Invoice download simulated - fetch calls disabled for development');
+      console.log(
+        `Downloading invoice for ${bookingRef}: Using mock functionality (fetch disabled)`,
+      );
+      alert(
+        "Invoice download simulated - fetch calls disabled for development",
+      );
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      console.error("Error downloading invoice:", error);
     }
   };
 
   const sendVoucherEmail = async () => {
     try {
       // Mock email sending to avoid fetch calls
-      console.log(`Sending voucher email for ${bookingRef}: Using mock functionality (fetch disabled)`);
-      alert('Voucher email simulated - sent successfully! (fetch calls disabled for development)');
+      console.log(
+        `Sending voucher email for ${bookingRef}: Using mock functionality (fetch disabled)`,
+      );
+      alert(
+        "Voucher email simulated - sent successfully! (fetch calls disabled for development)",
+      );
     } catch (error) {
-      console.error('Error sending voucher email:', error);
+      console.error("Error sending voucher email:", error);
     }
   };
 
@@ -171,7 +189,13 @@ export default function BookingConfirmation() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
+      <div
+        className="min-h-screen bg-white"
+        style={{
+          fontFamily:
+            'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+        }}
+      >
         <Header />
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-8">
           <div className="text-center">
@@ -185,16 +209,27 @@ export default function BookingConfirmation() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
+      <div
+        className="min-h-screen bg-white"
+        style={{
+          fontFamily:
+            'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+        }}
+      >
         <Header />
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-8">
           <div className="text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-red-600" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Booking Error</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Booking Error
+            </h1>
             <p className="text-gray-600 mb-6">{error}</p>
-            <Button onClick={() => navigate('/hotels')} className="bg-[#003580] hover:bg-[#002a66]">
+            <Button
+              onClick={() => navigate("/hotels")}
+              className="bg-[#003580] hover:bg-[#002a66]"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Hotels
             </Button>
@@ -209,9 +244,15 @@ export default function BookingConfirmation() {
   }
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif' }}>
+    <div
+      className="min-h-screen bg-white"
+      style={{
+        fontFamily:
+          'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+      }}
+    >
       <Header />
-      
+
       {/* Success Header */}
       <div className="bg-green-50 border-b border-green-200">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-6">
@@ -239,7 +280,9 @@ export default function BookingConfirmation() {
               <h2 className="text-lg font-semibold text-blue-900 mb-1">
                 Booking Reference
               </h2>
-              <p className="text-2xl font-bold text-blue-600">{booking.bookingRef}</p>
+              <p className="text-2xl font-bold text-blue-600">
+                {booking.bookingRef}
+              </p>
             </div>
             <div className="mt-3 sm:mt-0 flex flex-wrap gap-2">
               <Button
@@ -279,15 +322,23 @@ export default function BookingConfirmation() {
             {/* Hotel Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Hotel Details</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Hotel Details
+                </h3>
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-xl font-bold text-gray-900">{booking.hotelDetails.name}</h4>
+                      <h4 className="text-xl font-bold text-gray-900">
+                        {booking.hotelDetails.name}
+                      </h4>
                       {booking.hotelDetails.starRating && (
                         <div className="flex">
-                          {Array.from({ length: booking.hotelDetails.starRating }).map((_, i) => (
-                            <span key={i} className="text-yellow-400 text-sm">★</span>
+                          {Array.from({
+                            length: booking.hotelDetails.starRating,
+                          }).map((_, i) => (
+                            <span key={i} className="text-yellow-400 text-sm">
+                              ★
+                            </span>
                           ))}
                         </div>
                       )}
@@ -297,7 +348,7 @@ export default function BookingConfirmation() {
                       <span>{booking.hotelDetails.address}</span>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
                     <div className="flex items-center text-sm text-gray-600">
                       <Phone className="w-4 h-4 mr-2" />
@@ -315,7 +366,9 @@ export default function BookingConfirmation() {
             {/* Stay Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Stay Details</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Stay Details
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -323,37 +376,40 @@ export default function BookingConfirmation() {
                       Check-in
                     </div>
                     <p className="text-lg font-semibold text-gray-900">
-                      {new Date(booking.checkIn).toLocaleDateString('en-GB', {
-                        weekday: 'short',
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric'
+                      {new Date(booking.checkIn).toLocaleDateString("en-GB", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
                       })}
                     </p>
                     <p className="text-sm text-gray-600">From 3:00 PM</p>
                   </div>
-                  
+
                   <div>
                     <div className="flex items-center text-sm text-gray-600 mb-2">
                       <Calendar className="w-4 h-4 mr-2" />
                       Check-out
                     </div>
                     <p className="text-lg font-semibold text-gray-900">
-                      {new Date(booking.checkOut).toLocaleDateString('en-GB', {
-                        weekday: 'short',
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric'
+                      {new Date(booking.checkOut).toLocaleDateString("en-GB", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
                       })}
                     </p>
                     <p className="text-sm text-gray-600">Until 11:00 AM</p>
                   </div>
                 </div>
-                
+
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <p className="text-sm text-gray-600 mb-2">Total duration</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    {calculateNights(booking.checkIn, booking.checkOut)} night{calculateNights(booking.checkIn, booking.checkOut) !== 1 ? 's' : ''}
+                    {calculateNights(booking.checkIn, booking.checkOut)} night
+                    {calculateNights(booking.checkIn, booking.checkOut) !== 1
+                      ? "s"
+                      : ""}
                   </p>
                 </div>
               </CardContent>
@@ -362,12 +418,20 @@ export default function BookingConfirmation() {
             {/* Room Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Room Details</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Room Details
+                </h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="font-semibold text-gray-900">{booking.roomDetails.name}</p>
-                    <p className="text-sm text-gray-600">Category: {booking.roomDetails.category}</p>
-                    <p className="text-sm text-gray-600">Bed Type: {booking.roomDetails.bedType}</p>
+                    <p className="font-semibold text-gray-900">
+                      {booking.roomDetails.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Category: {booking.roomDetails.category}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Bed Type: {booking.roomDetails.bedType}
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -379,7 +443,9 @@ export default function BookingConfirmation() {
             {/* Guest Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Guest Details</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Guest Details
+                </h3>
                 <div className="space-y-4">
                   <div>
                     <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -387,10 +453,12 @@ export default function BookingConfirmation() {
                       Primary Guest
                     </div>
                     <p className="font-semibold text-gray-900">
-                      {booking.guestDetails.primaryGuest.title} {booking.guestDetails.primaryGuest.firstName} {booking.guestDetails.primaryGuest.lastName}
+                      {booking.guestDetails.primaryGuest.title}{" "}
+                      {booking.guestDetails.primaryGuest.firstName}{" "}
+                      {booking.guestDetails.primaryGuest.lastName}
                     </p>
                   </div>
-                  
+
                   <div className="pt-4 border-t border-gray-200 space-y-2">
                     <div className="flex items-center text-sm text-gray-600">
                       <Mail className="w-4 h-4 mr-2" />
@@ -408,15 +476,18 @@ export default function BookingConfirmation() {
             {/* Payment Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Payment Details
+                </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">Total Amount</span>
                     <span className="text-xl font-bold text-gray-900">
-                      {booking.currency === 'INR' ? '₹' : booking.currency} {booking.totalAmount.toLocaleString()}
+                      {booking.currency === "INR" ? "₹" : booking.currency}{" "}
+                      {booking.totalAmount.toLocaleString()}
                     </span>
                   </div>
-                  
+
                   <div className="pt-4 border-t border-gray-200 space-y-2">
                     <div className="flex items-center text-sm text-gray-600">
                       <CreditCard className="w-4 h-4 mr-2" />
@@ -426,10 +497,13 @@ export default function BookingConfirmation() {
                       Payment ID: {booking.paymentDetails.razorpay_payment_id}
                     </div>
                     <div className="text-sm text-gray-600">
-                      Paid on: {new Date(booking.paymentDetails.paidAt).toLocaleDateString('en-GB')}
+                      Paid on:{" "}
+                      {new Date(
+                        booking.paymentDetails.paidAt,
+                      ).toLocaleDateString("en-GB")}
                     </div>
                   </div>
-                  
+
                   <Badge className="bg-green-100 text-green-800 border-green-200">
                     Payment Confirmed
                   </Badge>
@@ -440,12 +514,21 @@ export default function BookingConfirmation() {
             {/* Important Notes */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Important Notes</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Important Notes
+                </h3>
                 <div className="space-y-3 text-sm text-gray-600">
                   <p>• Please carry a valid photo ID proof for check-in</p>
-                  <p>• Present this booking confirmation at the hotel reception</p>
-                  <p>��� Check-in time is usually 3:00 PM and check-out time is 11:00 AM</p>
-                  <p>• Contact Faredown support for any booking modifications</p>
+                  <p>
+                    • Present this booking confirmation at the hotel reception
+                  </p>
+                  <p>
+                    ��� Check-in time is usually 3:00 PM and check-out time is
+                    11:00 AM
+                  </p>
+                  <p>
+                    • Contact Faredown support for any booking modifications
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -454,16 +537,16 @@ export default function BookingConfirmation() {
 
         {/* Action Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
-            onClick={() => navigate('/hotels')}
+          <Button
+            onClick={() => navigate("/hotels")}
             variant="outline"
             className="border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Book Another Hotel
           </Button>
-          <Button 
-            onClick={() => navigate('/account/bookings')}
+          <Button
+            onClick={() => navigate("/account/bookings")}
             className="bg-[#003580] hover:bg-[#002a66]"
           >
             View All Bookings

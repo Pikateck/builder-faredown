@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export interface Currency {
   code: string;
@@ -10,14 +16,70 @@ export interface Currency {
 }
 
 export const CURRENCIES: Currency[] = [
-  { code: "INR", symbol: "₹", name: "Indian Rupee", rate: 1, flag: "🇮🇳", decimalPlaces: 0 },
-  { code: "USD", symbol: "$", name: "US Dollar", rate: 0.012, flag: "🇺🇸", decimalPlaces: 2 },
-  { code: "EUR", symbol: "€", name: "Euro", rate: 0.011, flag: "🇪🇺", decimalPlaces: 2 },
-  { code: "GBP", symbol: "£", name: "British Pound", rate: 0.0095, flag: "🇬🇧", decimalPlaces: 2 },
-  { code: "AED", symbol: "د.إ", name: "UAE Dirham", rate: 0.044, flag: "🇦🇪", decimalPlaces: 2 },
-  { code: "SGD", symbol: "S$", name: "Singapore Dollar", rate: 0.016, flag: "🇸🇬", decimalPlaces: 2 },
-  { code: "JPY", symbol: "¥", name: "Japanese Yen", rate: 1.83, flag: "🇯🇵", decimalPlaces: 0 },
-  { code: "CNY", symbol: "¥", name: "Chinese Yuan", rate: 0.087, flag: "🇨🇳", decimalPlaces: 2 },
+  {
+    code: "INR",
+    symbol: "₹",
+    name: "Indian Rupee",
+    rate: 1,
+    flag: "🇮🇳",
+    decimalPlaces: 0,
+  },
+  {
+    code: "USD",
+    symbol: "$",
+    name: "US Dollar",
+    rate: 0.012,
+    flag: "🇺🇸",
+    decimalPlaces: 2,
+  },
+  {
+    code: "EUR",
+    symbol: "€",
+    name: "Euro",
+    rate: 0.011,
+    flag: "🇪🇺",
+    decimalPlaces: 2,
+  },
+  {
+    code: "GBP",
+    symbol: "£",
+    name: "British Pound",
+    rate: 0.0095,
+    flag: "🇬🇧",
+    decimalPlaces: 2,
+  },
+  {
+    code: "AED",
+    symbol: "د.إ",
+    name: "UAE Dirham",
+    rate: 0.044,
+    flag: "🇦🇪",
+    decimalPlaces: 2,
+  },
+  {
+    code: "SGD",
+    symbol: "S$",
+    name: "Singapore Dollar",
+    rate: 0.016,
+    flag: "🇸🇬",
+    decimalPlaces: 2,
+  },
+  {
+    code: "JPY",
+    symbol: "¥",
+    name: "Japanese Yen",
+    rate: 1.83,
+    flag: "🇯🇵",
+    decimalPlaces: 0,
+  },
+  {
+    code: "CNY",
+    symbol: "¥",
+    name: "Chinese Yuan",
+    rate: 0.087,
+    flag: "🇨🇳",
+    decimalPlaces: 2,
+  },
 ];
 
 interface CurrencyContextType {
@@ -58,9 +120,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   }, []);
 
   const loadUserPreference = () => {
-    const savedCurrency = localStorage.getItem('preferred_currency');
+    const savedCurrency = localStorage.getItem("preferred_currency");
     if (savedCurrency) {
-      const currency = currencies.find(c => c.code === savedCurrency);
+      const currency = currencies.find((c) => c.code === savedCurrency);
       if (currency) {
         setSelectedCurrency(currency);
       }
@@ -69,18 +131,18 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
   const setCurrency = (currency: Currency) => {
     setSelectedCurrency(currency);
-    localStorage.setItem('preferred_currency', currency.code);
+    localStorage.setItem("preferred_currency", currency.code);
   };
 
   const refreshRates = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('/api/currency/rates');
+      const response = await fetch("/api/currency/rates");
       const data = await response.json();
 
       if (data.success && data.data) {
-        const updatedCurrencies = currencies.map(currency => {
-          if (currency.code === 'INR') return currency; // INR is base currency
+        const updatedCurrencies = currencies.map((currency) => {
+          if (currency.code === "INR") return currency; // INR is base currency
 
           const rateData = data.data.find((r: any) => r.to === currency.code);
           if (rateData) {
@@ -93,7 +155,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         setLastUpdated(data.lastUpdated);
 
         // Update selected currency if it was updated
-        const updatedSelected = updatedCurrencies.find(c => c.code === selectedCurrency.code);
+        const updatedSelected = updatedCurrencies.find(
+          (c) => c.code === selectedCurrency.code,
+        );
         if (updatedSelected) {
           setSelectedCurrency(updatedSelected);
         }
@@ -101,21 +165,21 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         console.log(`💱 Exchange rates updated from ${data.source}`);
       }
     } catch (error) {
-      console.error('Failed to refresh exchange rates:', error);
+      console.error("Failed to refresh exchange rates:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const convertPrice = (priceInINR: number): number => {
-    if (selectedCurrency.code === 'INR') return priceInINR;
+    if (selectedCurrency.code === "INR") return priceInINR;
     return priceInINR * selectedCurrency.rate;
   };
 
   const formatPrice = (priceInINR: number): string => {
     const convertedPrice = convertPrice(priceInINR);
 
-    if (selectedCurrency.code === 'INR') {
+    if (selectedCurrency.code === "INR") {
       return formatINR(convertedPrice);
     }
 
@@ -133,7 +197,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       const lakhs = roundedAmount / 100000;
       return `₹${lakhs.toFixed(2)} L`;
     } else {
-      return `₹${roundedAmount.toLocaleString('en-IN')}`;
+      return `₹${roundedAmount.toLocaleString("en-IN")}`;
     }
   };
 

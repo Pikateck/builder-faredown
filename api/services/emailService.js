@@ -3,28 +3,28 @@
  * Handles automated email notifications for booking confirmations
  */
 
-const nodemailer = require('nodemailer');
-const voucherService = require('./voucherService');
+const nodemailer = require("nodemailer");
+const voucherService = require("./voucherService");
 
 class EmailService {
   constructor() {
     // Email configuration - using SMTP
     this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
       port: process.env.SMTP_PORT || 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: process.env.SMTP_USER || 'support@faredown.com',
-        pass: process.env.SMTP_PASS || 'app_password_here'
-      }
+        user: process.env.SMTP_USER || "support@faredown.com",
+        pass: process.env.SMTP_PASS || "app_password_here",
+      },
     });
 
     this.companyDetails = {
-      name: 'Faredown Travel',
-      email: 'support@faredown.com',
-      phone: '+91-9876543210',
-      website: 'www.faredown.com',
-      address: 'Mumbai, Maharashtra, India'
+      name: "Faredown Travel",
+      email: "support@faredown.com",
+      phone: "+91-9876543210",
+      website: "www.faredown.com",
+      address: "Mumbai, Maharashtra, India",
     };
   }
 
@@ -40,14 +40,15 @@ class EmailService {
         checkIn,
         checkOut,
         totalAmount,
-        currency
+        currency,
       } = bookingData;
 
       const customerEmail = guestDetails.contactInfo.email;
       const customerName = `${guestDetails.primaryGuest.firstName} ${guestDetails.primaryGuest.lastName}`;
 
       // Generate voucher PDF
-      const voucherResult = await voucherService.generateHotelVoucher(bookingData);
+      const voucherResult =
+        await voucherService.generateHotelVoucher(bookingData);
 
       // Email content
       const subject = `Booking Confirmation - ${bookingRef} | Faredown Travel`;
@@ -58,7 +59,7 @@ class EmailService {
       const mailOptions = {
         from: {
           name: this.companyDetails.name,
-          address: this.companyDetails.email
+          address: this.companyDetails.email,
         },
         to: customerEmail,
         cc: this.companyDetails.email, // Send copy to support
@@ -69,25 +70,26 @@ class EmailService {
           {
             filename: voucherResult.filename,
             content: voucherResult.pdf,
-            contentType: 'application/pdf'
-          }
-        ]
+            contentType: "application/pdf",
+          },
+        ],
       };
 
       // Send email
       const result = await this.transporter.sendMail(mailOptions);
-      
-      console.log('Booking confirmation email sent:', result.messageId);
-      
+
+      console.log("Booking confirmation email sent:", result.messageId);
+
       return {
         success: true,
         messageId: result.messageId,
-        recipient: customerEmail
+        recipient: customerEmail,
       };
-
     } catch (error) {
-      console.error('Email sending error:', error);
-      throw new Error(`Failed to send booking confirmation email: ${error.message}`);
+      console.error("Email sending error:", error);
+      throw new Error(
+        `Failed to send booking confirmation email: ${error.message}`,
+      );
     }
   }
 
@@ -98,32 +100,39 @@ class EmailService {
     try {
       const customerEmail = bookingData.guestDetails.contactInfo.email;
       const subject = `Payment Confirmation - ${bookingData.bookingRef} | Faredown Travel`;
-      
-      const htmlContent = this.generatePaymentConfirmationHTML(bookingData, paymentDetails);
-      const textContent = this.generatePaymentConfirmationText(bookingData, paymentDetails);
+
+      const htmlContent = this.generatePaymentConfirmationHTML(
+        bookingData,
+        paymentDetails,
+      );
+      const textContent = this.generatePaymentConfirmationText(
+        bookingData,
+        paymentDetails,
+      );
 
       const mailOptions = {
         from: {
           name: this.companyDetails.name,
-          address: this.companyDetails.email
+          address: this.companyDetails.email,
         },
         to: customerEmail,
         subject,
         html: htmlContent,
-        text: textContent
+        text: textContent,
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      
+
       return {
         success: true,
         messageId: result.messageId,
-        recipient: customerEmail
+        recipient: customerEmail,
       };
-
     } catch (error) {
-      console.error('Payment confirmation email error:', error);
-      throw new Error(`Failed to send payment confirmation email: ${error.message}`);
+      console.error("Payment confirmation email error:", error);
+      throw new Error(
+        `Failed to send payment confirmation email: ${error.message}`,
+      );
     }
   }
 
@@ -134,31 +143,36 @@ class EmailService {
     try {
       const customerEmail = bookingData.guestDetails.contactInfo.email;
       const subject = `Booking Cancellation - ${bookingData.bookingRef} | Faredown Travel`;
-      
-      const htmlContent = this.generateCancellationHTML(bookingData, cancellationDetails);
-      const textContent = this.generateCancellationText(bookingData, cancellationDetails);
+
+      const htmlContent = this.generateCancellationHTML(
+        bookingData,
+        cancellationDetails,
+      );
+      const textContent = this.generateCancellationText(
+        bookingData,
+        cancellationDetails,
+      );
 
       const mailOptions = {
         from: {
           name: this.companyDetails.name,
-          address: this.companyDetails.email
+          address: this.companyDetails.email,
         },
         to: customerEmail,
         subject,
         html: htmlContent,
-        text: textContent
+        text: textContent,
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      
+
       return {
         success: true,
         messageId: result.messageId,
-        recipient: customerEmail
+        recipient: customerEmail,
       };
-
     } catch (error) {
-      console.error('Cancellation email error:', error);
+      console.error("Cancellation email error:", error);
       throw new Error(`Failed to send cancellation email: ${error.message}`);
     }
   }
@@ -175,13 +189,15 @@ class EmailService {
       checkIn,
       checkOut,
       totalAmount,
-      currency
+      currency,
     } = bookingData;
 
     const customerName = `${guestDetails.primaryGuest.firstName} ${guestDetails.primaryGuest.lastName}`;
-    const checkInDate = new Date(checkIn).toLocaleDateString('en-GB');
-    const checkOutDate = new Date(checkOut).toLocaleDateString('en-GB');
-    const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+    const checkInDate = new Date(checkIn).toLocaleDateString("en-GB");
+    const checkOutDate = new Date(checkOut).toLocaleDateString("en-GB");
+    const nights = Math.ceil(
+      (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24),
+    );
 
     return `
 <!DOCTYPE html>
@@ -223,13 +239,13 @@ class EmailService {
         <h3 style="color: #003580; margin-top: 0;">Booking Details</h3>
         <table class="details-table">
           <tr><td>Booking Reference:</td><td><strong>${bookingRef}</strong></td></tr>
-          <tr><td>Hotel:</td><td>${hotelDetails?.name || 'Hotel Name'}</td></tr>
-          <tr><td>Address:</td><td>${hotelDetails?.address || 'Hotel Address'}</td></tr>
-          <tr><td>Room Type:</td><td>${roomDetails?.name || 'Standard Room'}</td></tr>
+          <tr><td>Hotel:</td><td>${hotelDetails?.name || "Hotel Name"}</td></tr>
+          <tr><td>Address:</td><td>${hotelDetails?.address || "Hotel Address"}</td></tr>
+          <tr><td>Room Type:</td><td>${roomDetails?.name || "Standard Room"}</td></tr>
           <tr><td>Check-in:</td><td>${checkInDate}</td></tr>
           <tr><td>Check-out:</td><td>${checkOutDate}</td></tr>
-          <tr><td>Duration:</td><td>${nights} night${nights !== 1 ? 's' : ''}</td></tr>
-          <tr><td>Total Amount:</td><td><strong>${currency === 'INR' ? '₹' : currency} ${totalAmount.toLocaleString()}</strong></td></tr>
+          <tr><td>Duration:</td><td>${nights} night${nights !== 1 ? "s" : ""}</td></tr>
+          <tr><td>Total Amount:</td><td><strong>${currency === "INR" ? "₹" : currency} ${totalAmount.toLocaleString()}</strong></td></tr>
         </table>
       </div>
       
@@ -272,13 +288,15 @@ class EmailService {
       checkIn,
       checkOut,
       totalAmount,
-      currency
+      currency,
     } = bookingData;
 
     const customerName = `${guestDetails.primaryGuest.firstName} ${guestDetails.primaryGuest.lastName}`;
-    const checkInDate = new Date(checkIn).toLocaleDateString('en-GB');
-    const checkOutDate = new Date(checkOut).toLocaleDateString('en-GB');
-    const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+    const checkInDate = new Date(checkIn).toLocaleDateString("en-GB");
+    const checkOutDate = new Date(checkOut).toLocaleDateString("en-GB");
+    const nights = Math.ceil(
+      (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24),
+    );
 
     return `
 BOOKING CONFIRMED - Faredown Travel
@@ -290,13 +308,13 @@ Thank you for choosing Faredown Travel! Your hotel booking has been confirmed.
 BOOKING DETAILS
 ===============
 Booking Reference: ${bookingRef}
-Hotel: ${hotelDetails?.name || 'Hotel Name'}
-Address: ${hotelDetails?.address || 'Hotel Address'}
-Room Type: ${roomDetails?.name || 'Standard Room'}
+Hotel: ${hotelDetails?.name || "Hotel Name"}
+Address: ${hotelDetails?.address || "Hotel Address"}
+Room Type: ${roomDetails?.name || "Standard Room"}
 Check-in: ${checkInDate}
 Check-out: ${checkOutDate}
-Duration: ${nights} night${nights !== 1 ? 's' : ''}
-Total Amount: ${currency === 'INR' ? '₹' : currency} ${totalAmount.toLocaleString()}
+Duration: ${nights} night${nights !== 1 ? "s" : ""}
+Total Amount: ${currency === "INR" ? "₹" : currency} ${totalAmount.toLocaleString()}
 
 IMPORTANT INFORMATION
 ====================
@@ -359,9 +377,9 @@ This is an automated email. Please do not reply to this message.
   async testEmailConnection() {
     try {
       await this.transporter.verify();
-      return { success: true, message: 'Email service is ready' };
+      return { success: true, message: "Email service is ready" };
     } catch (error) {
-      console.error('Email service test failed:', error);
+      console.error("Email service test failed:", error);
       return { success: false, error: error.message };
     }
   }

@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const hotelBookingService = require('../services/hotelBookingService');
-const hotelbedsService = require('../services/hotelbedsService');
-const markupService = require('../services/markupService');
-const { authenticateToken } = require('../middleware/auth');
+const hotelBookingService = require("../services/hotelBookingService");
+const hotelbedsService = require("../services/hotelbedsService");
+const markupService = require("../services/markupService");
+const { authenticateToken } = require("../middleware/auth");
 
 /**
  * Pre-book hotel (create temporary booking for payment)
  * POST /api/bookings/hotels/pre-book
  */
-router.post('/hotels/pre-book', async (req, res) => {
+router.post("/hotels/pre-book", async (req, res) => {
   try {
     const {
       hotelCode,
@@ -22,14 +22,21 @@ router.post('/hotels/pre-book', async (req, res) => {
       contactInfo,
       specialRequests,
       totalAmount,
-      currency = 'INR'
+      currency = "INR",
     } = req.body;
 
     // Validate required fields
-    if (!hotelCode || !roomCode || !checkIn || !checkOut || !guestDetails || !contactInfo) {
+    if (
+      !hotelCode ||
+      !roomCode ||
+      !checkIn ||
+      !checkOut ||
+      !guestDetails ||
+      !contactInfo
+    ) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required booking details'
+        error: "Missing required booking details",
       });
     }
 
@@ -42,14 +49,14 @@ router.post('/hotels/pre-book', async (req, res) => {
     if (checkInDate < today) {
       return res.status(400).json({
         success: false,
-        error: 'Check-in date cannot be in the past'
+        error: "Check-in date cannot be in the past",
       });
     }
 
     if (checkOutDate <= checkInDate) {
       return res.status(400).json({
         success: false,
-        error: 'Check-out date must be after check-in date'
+        error: "Check-out date must be after check-in date",
       });
     }
 
@@ -64,20 +71,19 @@ router.post('/hotels/pre-book', async (req, res) => {
       contactInfo,
       specialRequests,
       totalAmount,
-      currency
+      currency,
     });
 
     res.json({
       success: true,
       data: preBookingResult,
-      message: 'Pre-booking created successfully'
+      message: "Pre-booking created successfully",
     });
-
   } catch (error) {
-    console.error('Pre-booking error:', error);
+    console.error("Pre-booking error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to create pre-booking'
+      error: error.message || "Failed to create pre-booking",
     });
   }
 });
@@ -86,44 +92,43 @@ router.post('/hotels/pre-book', async (req, res) => {
  * Confirm booking after successful payment
  * POST /api/bookings/hotels/confirm
  */
-router.post('/hotels/confirm', async (req, res) => {
+router.post("/hotels/confirm", async (req, res) => {
   try {
-    const {
-      tempBookingRef,
-      paymentDetails
-    } = req.body;
+    const { tempBookingRef, paymentDetails } = req.body;
 
     if (!tempBookingRef || !paymentDetails) {
       return res.status(400).json({
         success: false,
-        error: 'Booking reference and payment details are required'
+        error: "Booking reference and payment details are required",
       });
     }
 
     // Validate payment details
-    if (!paymentDetails.razorpay_payment_id || !paymentDetails.razorpay_order_id) {
+    if (
+      !paymentDetails.razorpay_payment_id ||
+      !paymentDetails.razorpay_order_id
+    ) {
       return res.status(400).json({
         success: false,
-        error: 'Valid payment details are required'
+        error: "Valid payment details are required",
       });
     }
 
     const confirmationResult = await hotelBookingService.confirmBooking(
-      tempBookingRef, 
-      paymentDetails
+      tempBookingRef,
+      paymentDetails,
     );
 
     res.json({
       success: true,
       data: confirmationResult,
-      message: 'Booking confirmed successfully'
+      message: "Booking confirmed successfully",
     });
-
   } catch (error) {
-    console.error('Booking confirmation error:', error);
+    console.error("Booking confirmation error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to confirm booking'
+      error: error.message || "Failed to confirm booking",
     });
   }
 });
@@ -132,29 +137,28 @@ router.post('/hotels/confirm', async (req, res) => {
  * Get booking details
  * GET /api/bookings/hotels/:bookingRef
  */
-router.get('/hotels/:bookingRef', (req, res) => {
+router.get("/hotels/:bookingRef", (req, res) => {
   try {
     const { bookingRef } = req.params;
-    
+
     const booking = hotelBookingService.getBooking(bookingRef);
-    
+
     if (!booking) {
       return res.status(404).json({
         success: false,
-        error: 'Booking not found'
+        error: "Booking not found",
       });
     }
 
     res.json({
       success: true,
-      data: booking
+      data: booking,
     });
-
   } catch (error) {
-    console.error('Get booking error:', error);
+    console.error("Get booking error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get booking details'
+      error: "Failed to get booking details",
     });
   }
 });
@@ -163,29 +167,28 @@ router.get('/hotels/:bookingRef', (req, res) => {
  * Get pre-booking details
  * GET /api/bookings/hotels/pre-book/:tempRef
  */
-router.get('/hotels/pre-book/:tempRef', (req, res) => {
+router.get("/hotels/pre-book/:tempRef", (req, res) => {
   try {
     const { tempRef } = req.params;
-    
+
     const preBooking = hotelBookingService.getPreBooking(tempRef);
-    
+
     if (!preBooking) {
       return res.status(404).json({
         success: false,
-        error: 'Pre-booking not found or expired'
+        error: "Pre-booking not found or expired",
       });
     }
 
     res.json({
       success: true,
-      data: preBooking
+      data: preBooking,
     });
-
   } catch (error) {
-    console.error('Get pre-booking error:', error);
+    console.error("Get pre-booking error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get pre-booking details'
+      error: "Failed to get pre-booking details",
     });
   }
 });
@@ -194,53 +197,58 @@ router.get('/hotels/pre-book/:tempRef', (req, res) => {
  * Cancel booking
  * POST /api/bookings/hotels/:bookingRef/cancel
  */
-router.post('/hotels/:bookingRef/cancel', authenticateToken, async (req, res) => {
-  try {
-    const { bookingRef } = req.params;
-    const { reason = 'Customer request' } = req.body;
+router.post(
+  "/hotels/:bookingRef/cancel",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const { bookingRef } = req.params;
+      const { reason = "Customer request" } = req.body;
 
-    const cancellationResult = await hotelBookingService.cancelBooking(bookingRef, reason);
+      const cancellationResult = await hotelBookingService.cancelBooking(
+        bookingRef,
+        reason,
+      );
 
-    res.json({
-      success: true,
-      data: cancellationResult,
-      message: 'Booking cancelled successfully'
-    });
-
-  } catch (error) {
-    console.error('Booking cancellation error:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message || 'Failed to cancel booking'
-    });
-  }
-});
+      res.json({
+        success: true,
+        data: cancellationResult,
+        message: "Booking cancelled successfully",
+      });
+    } catch (error) {
+      console.error("Booking cancellation error:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message || "Failed to cancel booking",
+      });
+    }
+  },
+);
 
 /**
  * Get user bookings
  * GET /api/bookings/hotels/user/:userId
  */
-router.get('/hotels/user/:userId', authenticateToken, (req, res) => {
+router.get("/hotels/user/:userId", authenticateToken, (req, res) => {
   try {
     const { userId } = req.params;
     const { limit = 10, offset = 0 } = req.query;
 
     const userBookings = hotelBookingService.getUserBookings(
-      userId, 
-      parseInt(limit), 
-      parseInt(offset)
+      userId,
+      parseInt(limit),
+      parseInt(offset),
     );
 
     res.json({
       success: true,
-      data: userBookings
+      data: userBookings,
     });
-
   } catch (error) {
-    console.error('Get user bookings error:', error);
+    console.error("Get user bookings error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get user bookings'
+      error: "Failed to get user bookings",
     });
   }
 });
@@ -249,20 +257,19 @@ router.get('/hotels/user/:userId', authenticateToken, (req, res) => {
  * Get booking statistics (Admin only)
  * GET /api/bookings/hotels/stats
  */
-router.get('/hotels/stats', authenticateToken, (req, res) => {
+router.get("/hotels/stats", authenticateToken, (req, res) => {
   try {
     const stats = hotelBookingService.getBookingStats();
 
     res.json({
       success: true,
-      data: stats
+      data: stats,
     });
-
   } catch (error) {
-    console.error('Get booking stats error:', error);
+    console.error("Get booking stats error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get booking statistics'
+      error: "Failed to get booking statistics",
     });
   }
 });
@@ -271,7 +278,7 @@ router.get('/hotels/stats', authenticateToken, (req, res) => {
  * Calculate booking price with markup
  * POST /api/bookings/hotels/calculate-price
  */
-router.post('/hotels/calculate-price', async (req, res) => {
+router.post("/hotels/calculate-price", async (req, res) => {
   try {
     const {
       hotelCode,
@@ -281,13 +288,13 @@ router.post('/hotels/calculate-price', async (req, res) => {
       checkOut,
       rooms = 1,
       adults = 2,
-      children = 0
+      children = 0,
     } = req.body;
 
     if (!hotelCode || !checkIn || !checkOut) {
       return res.status(400).json({
         success: false,
-        error: 'Hotel code, check-in and check-out dates are required'
+        error: "Hotel code, check-in and check-out dates are required",
       });
     }
 
@@ -298,49 +305,57 @@ router.post('/hotels/calculate-price', async (req, res) => {
       checkOut,
       rooms,
       adults,
-      children
+      children,
     );
 
     if (!availability || !availability.rooms) {
       return res.status(404).json({
         success: false,
-        error: 'No availability found for the specified dates'
+        error: "No availability found for the specified dates",
       });
     }
 
     // Find the specific room
-    const selectedRoom = availability.rooms.find(room => 
-      room.code === roomCode || room.rates?.some(rate => rate.rateKey === rateKey)
+    const selectedRoom = availability.rooms.find(
+      (room) =>
+        room.code === roomCode ||
+        room.rates?.some((rate) => rate.rateKey === rateKey),
     );
 
     if (!selectedRoom) {
       return res.status(404).json({
         success: false,
-        error: 'Selected room not available'
+        error: "Selected room not available",
       });
     }
 
     // Get hotel content for markup calculation
-    const hotelContent = hotelbedsService.getCachedHotel(hotelCode) || { 
+    const hotelContent = hotelbedsService.getCachedHotel(hotelCode) || {
       code: hotelCode,
-      supplierId: 'hotelbeds'
+      supplierId: "hotelbeds",
     };
 
     // Apply markup
-    const markupResult = markupService.applyMarkup(hotelContent, [selectedRoom]);
+    const markupResult = markupService.applyMarkup(hotelContent, [
+      selectedRoom,
+    ]);
     const markedUpRoom = markupResult.markedUpRates[0];
 
     // Calculate total price
-    const selectedRate = markedUpRoom.rates?.find(rate => rate.rateKey === rateKey) || markedUpRoom.rates?.[0];
-    
+    const selectedRate =
+      markedUpRoom.rates?.find((rate) => rate.rateKey === rateKey) ||
+      markedUpRoom.rates?.[0];
+
     if (!selectedRate) {
       return res.status(404).json({
         success: false,
-        error: 'Rate not found'
+        error: "Rate not found",
       });
     }
 
-    const nights = Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+    const nights = Math.ceil(
+      (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24),
+    );
     const totalPrice = selectedRate.total * nights * rooms;
 
     res.json({
@@ -355,17 +370,16 @@ router.post('/hotels/calculate-price', async (req, res) => {
           nights,
           rooms,
           totalPrice,
-          currency: selectedRate.currency || 'EUR'
+          currency: selectedRate.currency || "EUR",
         },
-        markupSummary: markupResult.markupSummary
-      }
+        markupSummary: markupResult.markupSummary,
+      },
     });
-
   } catch (error) {
-    console.error('Price calculation error:', error);
+    console.error("Price calculation error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to calculate booking price'
+      error: "Failed to calculate booking price",
     });
   }
 });
@@ -374,20 +388,19 @@ router.post('/hotels/calculate-price', async (req, res) => {
  * Cleanup expired pre-bookings
  * POST /api/bookings/hotels/cleanup
  */
-router.post('/hotels/cleanup', (req, res) => {
+router.post("/hotels/cleanup", (req, res) => {
   try {
     hotelBookingService.cleanupExpiredBookings();
-    
+
     res.json({
       success: true,
-      message: 'Expired pre-bookings cleaned up'
+      message: "Expired pre-bookings cleaned up",
     });
-
   } catch (error) {
-    console.error('Cleanup error:', error);
+    console.error("Cleanup error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to cleanup expired bookings'
+      error: "Failed to cleanup expired bookings",
     });
   }
 });

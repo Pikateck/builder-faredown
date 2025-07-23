@@ -3,21 +3,21 @@
  * Supports SendGrid, Postmark, and SMTP with delivery tracking
  */
 
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 class EnhancedEmailService {
   constructor() {
-    this.provider = process.env.EMAIL_PROVIDER || 'smtp'; // sendgrid, postmark, smtp
+    this.provider = process.env.EMAIL_PROVIDER || "smtp"; // sendgrid, postmark, smtp
     this.deliveryTracking = new Map(); // Track email delivery status
-    
+
     this.setupEmailProvider();
 
     this.companyDetails = {
-      name: 'Faredown Travel',
-      email: process.env.EMAIL_FROM || 'noreply@faredown.com',
-      phone: '+91-9876543210',
-      website: 'www.faredown.com',
-      address: 'Mumbai, Maharashtra, India'
+      name: "Faredown Travel",
+      email: process.env.EMAIL_FROM || "noreply@faredown.com",
+      phone: "+91-9876543210",
+      website: "www.faredown.com",
+      address: "Mumbai, Maharashtra, India",
     };
   }
 
@@ -26,14 +26,14 @@ class EnhancedEmailService {
    */
   setupEmailProvider() {
     switch (this.provider) {
-      case 'sendgrid':
+      case "sendgrid":
         this.setupSendGrid();
         break;
-        
-      case 'postmark':
+
+      case "postmark":
         this.setupPostmark();
         break;
-        
+
       default:
         this.setupSMTP();
     }
@@ -45,18 +45,18 @@ class EnhancedEmailService {
   setupSendGrid() {
     if (process.env.SENDGRID_API_KEY) {
       try {
-        const sgMail = require('@sendgrid/mail');
+        const sgMail = require("@sendgrid/mail");
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         this.sgMail = sgMail;
-        console.log('📧 Email service initialized with SendGrid');
+        console.log("📧 Email service initialized with SendGrid");
       } catch (error) {
-        console.warn('⚠️ SendGrid package not found, falling back to SMTP');
-        this.provider = 'smtp';
+        console.warn("⚠️ SendGrid package not found, falling back to SMTP");
+        this.provider = "smtp";
         this.setupSMTP();
       }
     } else {
-      console.warn('⚠️ SendGrid API key not found, falling back to SMTP');
-      this.provider = 'smtp';
+      console.warn("⚠️ SendGrid API key not found, falling back to SMTP");
+      this.provider = "smtp";
       this.setupSMTP();
     }
   }
@@ -67,17 +67,19 @@ class EnhancedEmailService {
   setupPostmark() {
     if (process.env.POSTMARK_API_KEY) {
       try {
-        const postmark = require('postmark');
-        this.postmarkClient = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
-        console.log('📧 Email service initialized with Postmark');
+        const postmark = require("postmark");
+        this.postmarkClient = new postmark.ServerClient(
+          process.env.POSTMARK_API_KEY,
+        );
+        console.log("📧 Email service initialized with Postmark");
       } catch (error) {
-        console.warn('⚠️ Postmark package not found, falling back to SMTP');
-        this.provider = 'smtp';
+        console.warn("⚠️ Postmark package not found, falling back to SMTP");
+        this.provider = "smtp";
         this.setupSMTP();
       }
     } else {
-      console.warn('⚠️ Postmark API key not found, falling back to SMTP');
-      this.provider = 'smtp';
+      console.warn("⚠️ Postmark API key not found, falling back to SMTP");
+      this.provider = "smtp";
       this.setupSMTP();
     }
   }
@@ -87,16 +89,16 @@ class EnhancedEmailService {
    */
   setupSMTP() {
     this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
       port: process.env.SMTP_PORT || 587,
       secure: false,
       auth: {
-        user: process.env.SMTP_USER || 'support@faredown.com',
-        pass: process.env.SMTP_PASS || 'app_password_here'
-      }
+        user: process.env.SMTP_USER || "support@faredown.com",
+        pass: process.env.SMTP_PASS || "app_password_here",
+      },
     });
-    this.provider = 'smtp';
-    console.log('📧 Email service initialized with SMTP');
+    this.provider = "smtp";
+    console.log("📧 Email service initialized with SMTP");
   }
 
   /**
@@ -104,46 +106,54 @@ class EnhancedEmailService {
    */
   async sendEmail(emailData) {
     const emailId = this.generateEmailId();
-    
+
     try {
       let result;
-      
+
       switch (this.provider) {
-        case 'sendgrid':
+        case "sendgrid":
           result = await this.sendWithSendGrid(emailData);
           break;
-          
-        case 'postmark':
+
+        case "postmark":
           result = await this.sendWithPostmark(emailData);
           break;
-          
+
         default:
           result = await this.sendWithSMTP(emailData);
       }
-      
+
       // Track delivery
       this.deliveryTracking.set(emailId, {
-        status: 'sent',
+        status: "sent",
         provider: this.provider,
         timestamp: new Date().toISOString(),
         messageId: result.messageId || result.id,
-        recipient: emailData.to
+        recipient: emailData.to,
       });
-      
-      console.log(`📧 Email sent successfully via ${this.provider}: ${emailId}`);
-      return { success: true, emailId, messageId: result.messageId || result.id };
-      
+
+      console.log(
+        `📧 Email sent successfully via ${this.provider}: ${emailId}`,
+      );
+      return {
+        success: true,
+        emailId,
+        messageId: result.messageId || result.id,
+      };
     } catch (error) {
-      console.error(`❌ Email sending failed via ${this.provider}:`, error.message);
-      
+      console.error(
+        `❌ Email sending failed via ${this.provider}:`,
+        error.message,
+      );
+
       this.deliveryTracking.set(emailId, {
-        status: 'failed',
+        status: "failed",
         provider: this.provider,
         timestamp: new Date().toISOString(),
         error: error.message,
-        recipient: emailData.to
+        recipient: emailData.to,
       });
-      
+
       return { success: false, emailId, error: error.message };
     }
   }
@@ -158,11 +168,11 @@ class EnhancedEmailService {
       subject: emailData.subject,
       text: emailData.text,
       html: emailData.html,
-      attachments: emailData.attachments
+      attachments: emailData.attachments,
     };
-    
+
     const response = await this.sgMail.send(msg);
-    return { messageId: response[0].headers['x-message-id'] };
+    return { messageId: response[0].headers["x-message-id"] };
   }
 
   /**
@@ -175,13 +185,13 @@ class EnhancedEmailService {
       Subject: emailData.subject,
       TextBody: emailData.text,
       HtmlBody: emailData.html,
-      Attachments: emailData.attachments?.map(att => ({
+      Attachments: emailData.attachments?.map((att) => ({
         Name: att.filename,
         Content: att.content,
-        ContentType: att.contentType
-      }))
+        ContentType: att.contentType,
+      })),
     };
-    
+
     const response = await this.postmarkClient.sendEmail(message);
     return { messageId: response.MessageID, id: response.MessageID };
   }
@@ -196,9 +206,9 @@ class EnhancedEmailService {
       subject: emailData.subject,
       text: emailData.text,
       html: emailData.html,
-      attachments: emailData.attachments
+      attachments: emailData.attachments,
     };
-    
+
     const info = await this.transporter.sendMail(mailOptions);
     return { messageId: info.messageId };
   }
@@ -216,11 +226,11 @@ class EnhancedEmailService {
         {
           filename: `voucher_${bookingData.bookingRef}.pdf`,
           content: voucherPdfBuffer,
-          contentType: 'application/pdf'
-        }
-      ]
+          contentType: "application/pdf",
+        },
+      ],
     };
-    
+
     return await this.sendEmail(emailData);
   }
 
@@ -232,9 +242,9 @@ class EnhancedEmailService {
       to: bookingData.guestDetails.primaryGuest.email,
       subject: `✅ Booking Confirmed - ${bookingData.bookingRef}`,
       html: this.generateConfirmationEmailHTML(bookingData),
-      text: this.generateConfirmationEmailText(bookingData)
+      text: this.generateConfirmationEmailText(bookingData),
     };
-    
+
     return await this.sendEmail(emailData);
   }
 
@@ -416,7 +426,7 @@ Thank you for choosing ${this.companyDetails.name}!
   getAllDeliveryData() {
     return Array.from(this.deliveryTracking.entries()).map(([id, data]) => ({
       emailId: id,
-      ...data
+      ...data,
     }));
   }
 }

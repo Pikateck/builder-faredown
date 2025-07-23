@@ -357,7 +357,7 @@ export class ApiTester {
         const headers = {
           "content-type": "application/json",
           "content-encoding": "gzip",
-          "cache-control": "no-cache"
+          "cache-control": "no-cache",
         };
 
         return {

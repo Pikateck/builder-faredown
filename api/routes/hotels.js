@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const hotelbedsService = require('../services/hotelbedsService');
-const giataService = require('../services/giataService');
-const markupService = require('../services/markupService');
+const hotelbedsService = require("../services/hotelbedsService");
+const giataService = require("../services/giataService");
+const markupService = require("../services/markupService");
 
 /**
  * Search hotels with Hotelbeds integration
  * GET /api/hotels/search
  */
-router.get('/search', async (req, res) => {
+router.get("/search", async (req, res) => {
   try {
     const {
       destination,
@@ -17,22 +17,23 @@ router.get('/search', async (req, res) => {
       rooms = 1,
       adults = 2,
       children = 0,
-      currency = 'INR',
-      destinationCode
+      currency = "INR",
+      destinationCode,
     } = req.query;
 
     // Validate required parameters
     if (!checkIn || !checkOut) {
       return res.status(400).json({
         success: false,
-        error: 'Check-in and check-out dates are required'
+        error: "Check-in and check-out dates are required",
       });
     }
 
     // Search for destinations if destinationCode not provided
     let destCode = destinationCode;
     if (!destCode && destination) {
-      const destinations = await hotelbedsService.searchDestinations(destination);
+      const destinations =
+        await hotelbedsService.searchDestinations(destination);
       if (destinations.length > 0) {
         destCode = destinations[0].code;
       }
@@ -41,7 +42,7 @@ router.get('/search', async (req, res) => {
     if (!destCode) {
       return res.status(400).json({
         success: false,
-        error: 'Valid destination required'
+        error: "Valid destination required",
       });
     }
 
@@ -52,16 +53,17 @@ router.get('/search', async (req, res) => {
       checkOut,
       rooms: parseInt(rooms),
       adults: parseInt(adults),
-      children: parseInt(children)
+      children: parseInt(children),
     };
 
-    const hotelResults = await hotelbedsService.searchAvailability(searchParams);
+    const hotelResults =
+      await hotelbedsService.searchAvailability(searchParams);
 
     if (hotelResults.length === 0) {
       return res.json({
         success: true,
         data: [],
-        message: 'No hotels found for the specified criteria'
+        message: "No hotels found for the specified criteria",
       });
     }
 
@@ -70,19 +72,23 @@ router.get('/search', async (req, res) => {
       hotelResults.map(async (hotel) => {
         try {
           // Get cached hotel content
-          const hotelContent = hotelbedsService.getCachedHotel(hotel.code) || hotel;
+          const hotelContent =
+            hotelbedsService.getCachedHotel(hotel.code) || hotel;
 
           // Transform to our format
-          const transformedHotel = hotelbedsService.transformHotelData(hotelContent, hotel);
+          const transformedHotel = hotelbedsService.transformHotelData(
+            hotelContent,
+            hotel,
+          );
 
           // Apply GIATA room mapping if rooms available
           if (hotel.rooms && hotel.rooms.length > 0) {
-            const roomsData = hotel.rooms.map(room => ({
-              name: room.name || 'Standard Room',
-              description: room.description || '',
-              code: room.code || '',
+            const roomsData = hotel.rooms.map((room) => ({
+              name: room.name || "Standard Room",
+              description: room.description || "",
+              code: room.code || "",
               maxOccupancy: room.maxOccupancy || parseInt(adults),
-              amenities: room.amenities || []
+              amenities: room.amenities || [],
             }));
 
             const mappedRooms = await giataService.batchMapRooms(roomsData);
@@ -90,11 +96,18 @@ router.get('/search', async (req, res) => {
             // Transform rooms with mapped data
             transformedHotel.roomTypes = hotel.rooms.map((room, index) => {
               const mappedRoom = mappedRooms[index] || mappedRooms[0];
-              return giataService.transformMappedRoom(room, mappedRoom, room.rates);
+              return giataService.transformMappedRoom(
+                room,
+                mappedRoom,
+                room.rates,
+              );
             });
 
             // Apply markup to rates
-            const markupResult = markupService.applyMarkup(transformedHotel, transformedHotel.roomTypes);
+            const markupResult = markupService.applyMarkup(
+              transformedHotel,
+              transformedHotel.roomTypes,
+            );
             transformedHotel.roomTypes = markupResult.markedUpRates;
             transformedHotel.markupSummary = markupResult.markupSummary;
           }
@@ -104,7 +117,7 @@ router.get('/search', async (req, res) => {
           console.error(`Error processing hotel ${hotel.code}:`, error);
           return hotelbedsService.transformHotelData(hotel);
         }
-      })
+      }),
     );
 
     res.json({
@@ -117,16 +130,15 @@ router.get('/search', async (req, res) => {
         checkOut,
         rooms: parseInt(rooms),
         adults: parseInt(adults),
-        children: parseInt(children)
-      }
+        children: parseInt(children),
+      },
     });
-
   } catch (error) {
-    console.error('Hotel search error:', error);
+    console.error("Hotel search error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to search hotels',
-      details: error.message
+      error: "Failed to search hotels",
+      details: error.message,
     });
   }
 });
@@ -135,7 +147,7 @@ router.get('/search', async (req, res) => {
  * Get hotel details with availability
  * GET /api/hotels/:hotelCode
  */
-router.get('/:hotelCode', async (req, res) => {
+router.get("/:hotelCode", async (req, res) => {
   try {
     const { hotelCode } = req.params;
     const {
@@ -143,7 +155,7 @@ router.get('/:hotelCode', async (req, res) => {
       checkOut,
       rooms = 1,
       adults = 2,
-      children = 0
+      children = 0,
     } = req.query;
 
     // Get hotel content from cache or API
@@ -157,7 +169,7 @@ router.get('/:hotelCode', async (req, res) => {
     if (!hotelContent) {
       return res.status(404).json({
         success: false,
-        error: 'Hotel not found'
+        error: "Hotel not found",
       });
     }
 
@@ -170,21 +182,24 @@ router.get('/:hotelCode', async (req, res) => {
         checkOut,
         parseInt(rooms),
         parseInt(adults),
-        parseInt(children)
+        parseInt(children),
       );
     }
 
     // Transform hotel data
-    const transformedHotel = hotelbedsService.transformHotelData(hotelContent, availability);
+    const transformedHotel = hotelbedsService.transformHotelData(
+      hotelContent,
+      availability,
+    );
 
     // Apply GIATA mapping and markup if availability exists
     if (availability && availability.rooms) {
-      const roomsData = availability.rooms.map(room => ({
-        name: room.name || 'Standard Room',
-        description: room.description || '',
-        code: room.code || '',
+      const roomsData = availability.rooms.map((room) => ({
+        name: room.name || "Standard Room",
+        description: room.description || "",
+        code: room.code || "",
         maxOccupancy: room.maxOccupancy || parseInt(adults),
-        amenities: room.amenities || []
+        amenities: room.amenities || [],
       }));
 
       const mappedRooms = await giataService.batchMapRooms(roomsData);
@@ -195,22 +210,24 @@ router.get('/:hotelCode', async (req, res) => {
       });
 
       // Apply markup
-      const markupResult = markupService.applyMarkup(transformedHotel, transformedHotel.roomTypes);
+      const markupResult = markupService.applyMarkup(
+        transformedHotel,
+        transformedHotel.roomTypes,
+      );
       transformedHotel.roomTypes = markupResult.markedUpRates;
       transformedHotel.markupSummary = markupResult.markupSummary;
     }
 
     res.json({
       success: true,
-      data: transformedHotel
+      data: transformedHotel,
     });
-
   } catch (error) {
-    console.error('Hotel details error:', error);
+    console.error("Hotel details error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get hotel details',
-      details: error.message
+      error: "Failed to get hotel details",
+      details: error.message,
     });
   }
 });
@@ -219,7 +236,7 @@ router.get('/:hotelCode', async (req, res) => {
  * Get room availability for specific hotel
  * GET /api/hotels/:hotelCode/availability
  */
-router.get('/:hotelCode/availability', async (req, res) => {
+router.get("/:hotelCode/availability", async (req, res) => {
   try {
     const { hotelCode } = req.params;
     const {
@@ -227,13 +244,13 @@ router.get('/:hotelCode/availability', async (req, res) => {
       checkOut,
       rooms = 1,
       adults = 2,
-      children = 0
+      children = 0,
     } = req.query;
 
     if (!checkIn || !checkOut) {
       return res.status(400).json({
         success: false,
-        error: 'Check-in and check-out dates are required'
+        error: "Check-in and check-out dates are required",
       });
     }
 
@@ -243,30 +260,30 @@ router.get('/:hotelCode/availability', async (req, res) => {
       checkOut,
       parseInt(rooms),
       parseInt(adults),
-      parseInt(children)
+      parseInt(children),
     );
 
     if (!availability || !availability.rooms) {
       return res.json({
         success: true,
         data: [],
-        message: 'No rooms available for the specified dates'
+        message: "No rooms available for the specified dates",
       });
     }
 
     // Get hotel content for markup calculation
     const hotelContent = hotelbedsService.getCachedHotel(hotelCode) || {
       code: hotelCode,
-      supplierId: 'hotelbeds'
+      supplierId: "hotelbeds",
     };
 
     // Apply GIATA mapping
-    const roomsData = availability.rooms.map(room => ({
-      name: room.name || 'Standard Room',
-      description: room.description || '',
-      code: room.code || '',
+    const roomsData = availability.rooms.map((room) => ({
+      name: room.name || "Standard Room",
+      description: room.description || "",
+      code: room.code || "",
       maxOccupancy: room.maxOccupancy || parseInt(adults),
-      amenities: room.amenities || []
+      amenities: room.amenities || [],
     }));
 
     const mappedRooms = await giataService.batchMapRooms(roomsData);
@@ -277,7 +294,10 @@ router.get('/:hotelCode/availability', async (req, res) => {
     });
 
     // Apply markup
-    const markupResult = markupService.applyMarkup(hotelContent, transformedRooms);
+    const markupResult = markupService.applyMarkup(
+      hotelContent,
+      transformedRooms,
+    );
 
     res.json({
       success: true,
@@ -289,16 +309,15 @@ router.get('/:hotelCode/availability', async (req, res) => {
         checkOut,
         rooms: parseInt(rooms),
         adults: parseInt(adults),
-        children: parseInt(children)
-      }
+        children: parseInt(children),
+      },
     });
-
   } catch (error) {
-    console.error('Room availability error:', error);
+    console.error("Room availability error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get room availability',
-      details: error.message
+      error: "Failed to get room availability",
+      details: error.message,
     });
   }
 });
@@ -307,38 +326,37 @@ router.get('/:hotelCode/availability', async (req, res) => {
  * Search destinations
  * GET /api/hotels/destinations/search
  */
-router.get('/destinations/search', async (req, res) => {
+router.get("/destinations/search", async (req, res) => {
   try {
     const { q: query } = req.query;
 
     if (!query || query.length < 2) {
       return res.status(400).json({
         success: false,
-        error: 'Query must be at least 2 characters long'
+        error: "Query must be at least 2 characters long",
       });
     }
 
     const destinations = await hotelbedsService.searchDestinations(query);
 
-    const formattedDestinations = destinations.map(dest => ({
+    const formattedDestinations = destinations.map((dest) => ({
       id: dest.code,
       name: dest.name?.content || dest.name,
-      type: dest.type || 'city',
+      type: dest.type || "city",
       country: dest.countryName?.content || dest.country,
-      code: dest.code
+      code: dest.code,
     }));
 
     res.json({
       success: true,
-      data: formattedDestinations
+      data: formattedDestinations,
     });
-
   } catch (error) {
-    console.error('Destination search error:', error);
+    console.error("Destination search error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to search destinations',
-      details: error.message
+      error: "Failed to search destinations",
+      details: error.message,
     });
   }
 });
@@ -347,31 +365,33 @@ router.get('/destinations/search', async (req, res) => {
  * Sync hotel content for destinations
  * POST /api/hotels/sync
  */
-router.post('/sync', async (req, res) => {
+router.post("/sync", async (req, res) => {
   try {
     const { destinationCodes = [], forceSync = false } = req.body;
 
     if (destinationCodes.length === 0) {
       return res.status(400).json({
         success: false,
-        error: 'At least one destination code is required'
+        error: "At least one destination code is required",
       });
     }
 
-    const syncResult = await hotelbedsService.syncHotelContent(destinationCodes, forceSync);
+    const syncResult = await hotelbedsService.syncHotelContent(
+      destinationCodes,
+      forceSync,
+    );
 
     res.json({
       success: syncResult.success,
       data: syncResult,
-      message: syncResult.message || 'Sync completed'
+      message: syncResult.message || "Sync completed",
     });
-
   } catch (error) {
-    console.error('Hotel sync error:', error);
+    console.error("Hotel sync error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to sync hotel content',
-      details: error.message
+      error: "Failed to sync hotel content",
+      details: error.message,
     });
   }
 });
@@ -380,7 +400,7 @@ router.post('/sync', async (req, res) => {
  * Get cache statistics
  * GET /api/hotels/cache/stats
  */
-router.get('/cache/stats', (req, res) => {
+router.get("/cache/stats", (req, res) => {
   try {
     const hotelbedsStats = hotelbedsService.getCacheStats();
     const giataStats = giataService.getCacheStats();
@@ -391,16 +411,15 @@ router.get('/cache/stats', (req, res) => {
       data: {
         hotelbeds: hotelbedsStats,
         giata: giataStats,
-        markup: markupStats
-      }
+        markup: markupStats,
+      },
     });
-
   } catch (error) {
-    console.error('Cache stats error:', error);
+    console.error("Cache stats error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to get cache statistics',
-      details: error.message
+      error: "Failed to get cache statistics",
+      details: error.message,
     });
   }
 });
@@ -409,22 +428,21 @@ router.get('/cache/stats', (req, res) => {
  * Clear cache
  * DELETE /api/hotels/cache
  */
-router.delete('/cache', (req, res) => {
+router.delete("/cache", (req, res) => {
   try {
     hotelbedsService.clearCache();
     giataService.clearCache();
 
     res.json({
       success: true,
-      message: 'Cache cleared successfully'
+      message: "Cache cleared successfully",
     });
-
   } catch (error) {
-    console.error('Clear cache error:', error);
+    console.error("Clear cache error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to clear cache',
-      details: error.message
+      error: "Failed to clear cache",
+      details: error.message,
     });
   }
 });

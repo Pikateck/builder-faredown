@@ -215,15 +215,19 @@ export class HotelsService {
       // First try live API
       const liveResults = await this.searchHotelsLive(searchParams);
       if (liveResults.length > 0) {
-        console.log('✅ Using live Hotelbeds data:', liveResults.length, 'hotels');
+        console.log(
+          "✅ Using live Hotelbeds data:",
+          liveResults.length,
+          "hotels",
+        );
         return liveResults;
       }
 
       // If no live results, fall back to regular API (which may use mock data)
-      console.log('⚠️ No live data available, using fallback');
+      console.log("⚠️ No live data available, using fallback");
       return await this.searchHotelsFallback(searchParams);
     } catch (error) {
-      console.error('Hotel search error:', error);
+      console.error("Hotel search error:", error);
       return [];
     }
   }
@@ -240,10 +244,13 @@ export class HotelsService {
         rooms: searchParams.rooms || 1,
         adults: searchParams.adults || 2,
         children: searchParams.children || 0,
-        currency: searchParams.currencyCode || 'INR'
+        currency: searchParams.currencyCode || "INR",
       };
 
-      console.log('🔴 Searching live Hotelbeds API with database caching:', queryParams);
+      console.log(
+        "🔴 Searching live Hotelbeds API with database caching:",
+        queryParams,
+      );
 
       // Direct fetch with enhanced error handling
       try {
@@ -255,40 +262,53 @@ export class HotelsService {
         });
 
         const response = await fetch(`/api/hotels-live/search?${params}`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
         if (response.ok) {
           // Check if response is JSON
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
             const data = await response.json();
             if (data.success && data.data) {
-              const cacheStatus = data.isCached ? 'Cached' : 'Fresh';
-              const dbStatus = data.searchMeta?.databaseConnected ? 'Database' : 'Fallback';
+              const cacheStatus = data.isCached ? "Cached" : "Fresh";
+              const dbStatus = data.searchMeta?.databaseConnected
+                ? "Database"
+                : "Fallback";
 
-              console.log(`✅ ${cacheStatus} Hotelbeds data received (${dbStatus}):`, data.data.length, 'hotels');
+              console.log(
+                `✅ ${cacheStatus} Hotelbeds data received (${dbStatus}):`,
+                data.data.length,
+                "hotels",
+              );
               console.log(`   Source: ${data.source}`);
-              console.log(`   Processing time: ${data.searchMeta?.processingTime}`);
+              console.log(
+                `   Processing time: ${data.searchMeta?.processingTime}`,
+              );
 
               return data.data;
             }
           } else {
-            console.warn('⚠️ Live API returned non-JSON response (likely HTML error page)');
+            console.warn(
+              "⚠️ Live API returned non-JSON response (likely HTML error page)",
+            );
           }
         } else {
           console.warn(`⚠️ Live API returned status ${response.status}`);
         }
       } catch (fetchError) {
-        console.warn('⚠️ Live hotel API fetch failed:', fetchError instanceof Error ? fetchError.message : 'Unknown error');
+        console.warn(
+          "⚠️ Live hotel API fetch failed:",
+          fetchError instanceof Error ? fetchError.message : "Unknown error",
+        );
       }
 
       return [];
     } catch (error) {
-      console.warn('Live hotel search failed:', error);
+      console.warn("Live hotel search failed:", error);
       return [];
     }
   }
@@ -296,7 +316,9 @@ export class HotelsService {
   /**
    * Fallback hotel search using regular API
    */
-  async searchHotelsFallback(searchParams: HotelSearchRequest): Promise<Hotel[]> {
+  async searchHotelsFallback(
+    searchParams: HotelSearchRequest,
+  ): Promise<Hotel[]> {
     try {
       const queryParams = {
         destination: searchParams.destination,
@@ -305,7 +327,7 @@ export class HotelsService {
         rooms: searchParams.rooms || 1,
         adults: searchParams.adults || 2,
         children: searchParams.children || 0,
-        currency: searchParams.currencyCode || 'INR'
+        currency: searchParams.currencyCode || "INR",
       };
 
       const response = await apiClient.get<ApiResponse<Hotel[]>>(
@@ -319,7 +341,7 @@ export class HotelsService {
 
       return [];
     } catch (error) {
-      console.error('Fallback hotel search error:', error);
+      console.error("Fallback hotel search error:", error);
       return [];
     }
   }
@@ -327,18 +349,21 @@ export class HotelsService {
   /**
    * Get hotel details by ID with Hotelbeds integration
    */
-  async getHotelDetails(hotelId: string, searchParams?: {
-    checkIn?: string;
-    checkOut?: string;
-    rooms?: number;
-    adults?: number;
-    children?: number;
-  }): Promise<Hotel> {
+  async getHotelDetails(
+    hotelId: string,
+    searchParams?: {
+      checkIn?: string;
+      checkOut?: string;
+      rooms?: number;
+      adults?: number;
+      children?: number;
+    },
+  ): Promise<Hotel> {
     try {
       const queryParams = searchParams || {};
       const response = await apiClient.get<ApiResponse<Hotel>>(
         `${this.baseUrl}/${hotelId}`,
-        queryParams
+        queryParams,
       );
 
       if (response.success && response.data) {
@@ -347,7 +372,7 @@ export class HotelsService {
 
       throw new Error("Hotel not found");
     } catch (error) {
-      console.error('Hotel details error:', error);
+      console.error("Hotel details error:", error);
       throw new Error("Failed to get hotel details");
     }
   }
@@ -381,7 +406,7 @@ export class HotelsService {
 
       return [];
     } catch (error) {
-      console.error('Room availability error:', error);
+      console.error("Room availability error:", error);
       throw new Error("Failed to get room availability");
     }
   }
@@ -523,12 +548,16 @@ export class HotelsService {
       // First try live API
       const liveResults = await this.searchDestinationsLive(query);
       if (liveResults.length > 0) {
-        console.log('✅ Using live destination data:', liveResults.length, 'destinations');
+        console.log(
+          "✅ Using live destination data:",
+          liveResults.length,
+          "destinations",
+        );
         return liveResults;
       }
 
       // Fall back to regular API
-      console.log('⚠️ No live destination data, using fallback');
+      console.log("⚠️ No live destination data, using fallback");
       const response = await apiClient.get<
         ApiResponse<
           {
@@ -546,20 +575,90 @@ export class HotelsService {
 
       return [];
     } catch (error) {
-      console.error('Destination search error:', error);
+      console.error("Destination search error:", error);
       // Enhanced fallback with database-style format
       return [
-        { id: "DXB", name: "Dubai", type: "city", country: "United Arab Emirates", code: "DXB", popular: true },
-        { id: "LON", name: "London", type: "city", country: "United Kingdom", code: "LON", popular: true },
-        { id: "NYC", name: "New York", type: "city", country: "United States", code: "NYC", popular: true },
-        { id: "PAR", name: "Paris", type: "city", country: "France", code: "PAR", popular: true },
-        { id: "TYO", name: "Tokyo", type: "city", country: "Japan", code: "TYO", popular: true },
-        { id: "BOM", name: "Mumbai", type: "city", country: "India", code: "BOM", popular: true },
-        { id: "DEL", name: "Delhi", type: "city", country: "India", code: "DEL", popular: true },
-        { id: "BLR", name: "Bangalore", type: "city", country: "India", code: "BLR", popular: true },
-        { id: "BCN", name: "Barcelona", type: "city", country: "Spain", code: "BCN", popular: true },
-        { id: "MAD", name: "Madrid", type: "city", country: "Spain", code: "MAD", popular: true }
-      ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
+        {
+          id: "DXB",
+          name: "Dubai",
+          type: "city",
+          country: "United Arab Emirates",
+          code: "DXB",
+          popular: true,
+        },
+        {
+          id: "LON",
+          name: "London",
+          type: "city",
+          country: "United Kingdom",
+          code: "LON",
+          popular: true,
+        },
+        {
+          id: "NYC",
+          name: "New York",
+          type: "city",
+          country: "United States",
+          code: "NYC",
+          popular: true,
+        },
+        {
+          id: "PAR",
+          name: "Paris",
+          type: "city",
+          country: "France",
+          code: "PAR",
+          popular: true,
+        },
+        {
+          id: "TYO",
+          name: "Tokyo",
+          type: "city",
+          country: "Japan",
+          code: "TYO",
+          popular: true,
+        },
+        {
+          id: "BOM",
+          name: "Mumbai",
+          type: "city",
+          country: "India",
+          code: "BOM",
+          popular: true,
+        },
+        {
+          id: "DEL",
+          name: "Delhi",
+          type: "city",
+          country: "India",
+          code: "DEL",
+          popular: true,
+        },
+        {
+          id: "BLR",
+          name: "Bangalore",
+          type: "city",
+          country: "India",
+          code: "BLR",
+          popular: true,
+        },
+        {
+          id: "BCN",
+          name: "Barcelona",
+          type: "city",
+          country: "Spain",
+          code: "BCN",
+          popular: true,
+        },
+        {
+          id: "MAD",
+          name: "Madrid",
+          type: "city",
+          country: "Spain",
+          code: "MAD",
+          popular: true,
+        },
+      ].filter((dest) => dest.name.toLowerCase().includes(query.toLowerCase()));
     }
   }
 
@@ -576,54 +675,69 @@ export class HotelsService {
   > {
     try {
       // Use database-backed endpoint for both production and development
-      const isProduction = typeof window !== 'undefined' && window.location.hostname !== "localhost";
+      const isProduction =
+        typeof window !== "undefined" &&
+        window.location.hostname !== "localhost";
       const apiUrl = `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}&limit=15`;
 
       console.log(`🔍 Searching destinations via database API: "${query}"`);
 
       try {
         const response = await fetch(apiUrl, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
         if (response.ok) {
           // Check if response is JSON
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
             const data = await response.json();
             if (data.success && data.data) {
-              const dataSource = data.isLiveData ? 'Database' : 'Fallback';
-              console.log(`✅ ${dataSource} destination data received:`, data.data.length, 'destinations');
+              const dataSource = data.isLiveData ? "Database" : "Fallback";
+              console.log(
+                `✅ ${dataSource} destination data received:`,
+                data.data.length,
+                "destinations",
+              );
               console.log(`   Source: ${data.source}`);
-              console.log(`   Database connected: ${data.searchMeta?.databaseConnected}`);
+              console.log(
+                `   Database connected: ${data.searchMeta?.databaseConnected}`,
+              );
 
               // Transform the data to match expected format
               return data.data.map((dest: any) => ({
                 id: dest.code || dest.id,
                 name: dest.name,
-                type: (dest.type || 'city') as "city" | "region" | "country" | "landmark",
-                country: dest.countryName || dest.country || '',
+                type: (dest.type || "city") as
+                  | "city"
+                  | "region"
+                  | "country"
+                  | "landmark",
+                country: dest.countryName || dest.country || "",
                 code: dest.code,
                 flag: dest.flag,
-                popular: dest.popular
+                popular: dest.popular,
               }));
             }
           } else {
-            console.warn('⚠️ Destination API returned non-JSON response');
+            console.warn("⚠️ Destination API returned non-JSON response");
           }
         } else {
           console.warn(`⚠️ Destination API returned status ${response.status}`);
         }
       } catch (fetchError) {
-        console.warn('⚠️ Destination API fetch failed:', fetchError instanceof Error ? fetchError.message : 'Unknown error');
+        console.warn(
+          "⚠️ Destination API fetch failed:",
+          fetchError instanceof Error ? fetchError.message : "Unknown error",
+        );
       }
 
       return [];
     } catch (error) {
-      console.warn('Destination search failed:', error);
+      console.warn("Destination search failed:", error);
       return [];
     }
   }
@@ -646,11 +760,14 @@ export class HotelsService {
   /**
    * Sync hotel content for destinations (Admin only)
    */
-  async syncHotelContent(destinationCodes: string[], forceSync = false): Promise<any> {
+  async syncHotelContent(
+    destinationCodes: string[],
+    forceSync = false,
+  ): Promise<any> {
     try {
       const response = await apiClient.post<ApiResponse<any>>(
         `${this.baseUrl}/sync`,
-        { destinationCodes, forceSync }
+        { destinationCodes, forceSync },
       );
 
       if (response.success) {
@@ -659,7 +776,7 @@ export class HotelsService {
 
       throw new Error("Sync failed");
     } catch (error) {
-      console.error('Hotel sync error:', error);
+      console.error("Hotel sync error:", error);
       throw new Error("Failed to sync hotel content");
     }
   }
@@ -670,7 +787,7 @@ export class HotelsService {
   async getCacheStats(): Promise<any> {
     try {
       const response = await apiClient.get<ApiResponse<any>>(
-        `${this.baseUrl}/cache/stats`
+        `${this.baseUrl}/cache/stats`,
       );
 
       if (response.success && response.data) {
@@ -679,7 +796,7 @@ export class HotelsService {
 
       return {};
     } catch (error) {
-      console.error('Cache stats error:', error);
+      console.error("Cache stats error:", error);
       throw new Error("Failed to get cache statistics");
     }
   }
@@ -691,7 +808,7 @@ export class HotelsService {
     try {
       await apiClient.delete(`${this.baseUrl}/cache`);
     } catch (error) {
-      console.error('Clear cache error:', error);
+      console.error("Clear cache error:", error);
       throw new Error("Failed to clear cache");
     }
   }

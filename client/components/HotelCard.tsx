@@ -81,9 +81,13 @@ export function HotelCard({
   // Helper functions to extract data from the hotel object
   const getHotelImages = (): string[] => {
     if (hotel.images && hotel.images.length > 0) {
-      return hotel.images.map(img => typeof img === 'string' ? img : img.url || img);
+      return hotel.images.map((img) =>
+        typeof img === "string" ? img : img.url || img,
+      );
     }
-    return ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600"];
+    return [
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+    ];
   };
 
   const getHotelLocation = (): string => {
@@ -104,9 +108,11 @@ export function HotelCard({
 
   const getHotelAmenities = (): string[] => {
     if (!hotel.amenities) return [];
-    return hotel.amenities.map(amenity =>
-      typeof amenity === 'string' ? amenity : amenity.name || amenity
-    ).slice(0, 6);
+    return hotel.amenities
+      .map((amenity) =>
+        typeof amenity === "string" ? amenity : amenity.name || amenity,
+      )
+      .slice(0, 6);
   };
 
   const images = getHotelImages();
@@ -134,26 +140,23 @@ export function HotelCard({
   // Removed discount calculation since we're not showing original prices
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1,
-    );
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1,
-    );
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   // Handle quick booking action
   const handleQuickBooking = async () => {
     try {
       setIsBooking(true);
-      console.log('🚀 Starting quick booking for hotel:', hotel.name);
+      console.log("🚀 Starting quick booking for hotel:", hotel.name);
 
       // Extract destination code from URL params
       const destinationCode = searchParams.get("destination") || "DXB";
-      const destinationName = searchParams.get("destinationName") || hotelLocation || "Unknown";
+      const destinationName =
+        searchParams.get("destinationName") || hotelLocation || "Unknown";
 
       // Navigate to booking page with hotel and search details
       const bookingParams = new URLSearchParams({
@@ -165,17 +168,16 @@ export function HotelCard({
         rooms: roomsCount.toString(),
         adults: searchParams.get("adults") || "2",
         children: searchParams.get("children") || "0",
-        currency: selectedCurrency?.code || 'INR',
+        currency: selectedCurrency?.code || "INR",
         totalPrice: priceCalculation.total.toString(),
         hotelName: hotel.name,
         hotelLocation: hotelLocation,
-        hotelRating: hotel.rating.toString()
+        hotelRating: hotel.rating.toString(),
       });
 
       navigate(`/booking/hotel?${bookingParams.toString()}`);
-
     } catch (error) {
-      console.error('Quick booking error:', error);
+      console.error("Quick booking error:", error);
     } finally {
       setIsBooking(false);
     }
@@ -258,7 +260,9 @@ export function HotelCard({
             <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
               <span className="text-sm font-medium">{hotel.rating}</span>
-              <span className="text-xs text-gray-600">({hotel.reviewCount || hotel.reviews || 0})</span>
+              <span className="text-xs text-gray-600">
+                ({hotel.reviewCount || hotel.reviews || 0})
+              </span>
             </div>
           </div>
 
@@ -282,7 +286,11 @@ export function HotelCard({
               {hotel.features && hotel.features.length > 0 && (
                 <div className="flex flex-wrap gap-1 mb-3">
                   {hotel.features.slice(0, 2).map((feature) => (
-                    <Badge key={feature} variant="secondary" className="text-xs">
+                    <Badge
+                      key={feature}
+                      variant="secondary"
+                      className="text-xs"
+                    >
                       {feature}
                     </Badge>
                   ))}
@@ -304,7 +312,9 @@ export function HotelCard({
                       title={amenity}
                     >
                       {getAmenityIcon(amenity)}
-                      <span className="text-xs whitespace-nowrap">{amenity}</span>
+                      <span className="text-xs whitespace-nowrap">
+                        {amenity}
+                      </span>
                     </div>
                   ))}
                 </div>

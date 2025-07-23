@@ -40,16 +40,18 @@ export function DestinationAutocomplete({
   disabled = false,
   showClearButton = true,
   maxResults = 10,
-  popularLimit = 8
+  popularLimit = 8,
 }: DestinationAutocompleteProps) {
   const [inputValue, setInputValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<DestinationData[]>([]);
-  const [popularDestinations, setPopularDestinations] = useState<DestinationData[]>([]);
+  const [popularDestinations, setPopularDestinations] = useState<
+    DestinationData[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [popularLoaded, setPopularLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
   const searchCache = useRef<Map<string, DestinationData[]>>(new Map());
 
@@ -57,25 +59,33 @@ export function DestinationAutocomplete({
   useEffect(() => {
     const loadPopularDestinations = async () => {
       try {
-        console.log('🌟 Loading popular destinations for autocomplete...');
-        const popular = await hotelsService.searchDestinations('', popularLimit, true);
-        
-        const formattedPopular: DestinationData[] = popular.map(dest => ({
+        console.log("🌟 Loading popular destinations for autocomplete...");
+        const popular = await hotelsService.searchDestinations(
+          "",
+          popularLimit,
+          true,
+        );
+
+        const formattedPopular: DestinationData[] = popular.map((dest) => ({
           id: dest.id,
           code: dest.id,
           name: dest.name,
           country: dest.country,
           type: dest.type as "city" | "region" | "country" | "landmark",
           popular: true,
-          flag: (dest as any).flag || '🌍'
+          flag: (dest as any).flag || "🌍",
         }));
-        
+
         setPopularDestinations(formattedPopular);
         setPopularLoaded(true);
-        console.log('✅ Loaded', formattedPopular.length, 'popular destinations');
+        console.log(
+          "✅ Loaded",
+          formattedPopular.length,
+          "popular destinations",
+        );
       } catch (error) {
-        console.error('⚠️ Failed to load popular destinations:', error);
-        setError('Failed to load destinations');
+        console.error("⚠️ Failed to load popular destinations:", error);
+        setError("Failed to load destinations");
         setPopularLoaded(true);
       }
     };
@@ -99,7 +109,7 @@ export function DestinationAutocomplete({
       // Check cache first
       const cacheKey = query.toLowerCase();
       if (searchCache.current.has(cacheKey)) {
-        console.log('📦 Using cached results for:', query);
+        console.log("📦 Using cached results for:", query);
         setSuggestions(searchCache.current.get(cacheKey) || []);
         return;
       }
@@ -115,50 +125,54 @@ export function DestinationAutocomplete({
           setLoading(true);
           setError(null);
           console.log(`🔍 Searching destinations: "${query}"`);
-          
-          const results = await hotelsService.searchDestinations(query, maxResults);
-          
-          const formattedResults: DestinationData[] = results.map(dest => ({
+
+          const results = await hotelsService.searchDestinations(
+            query,
+            maxResults,
+          );
+
+          const formattedResults: DestinationData[] = results.map((dest) => ({
             id: dest.id,
             code: dest.id,
             name: dest.name,
             country: dest.country,
             type: dest.type as "city" | "region" | "country" | "landmark",
             popular: (dest as any).popular || false,
-            flag: (dest as any).flag || '🌍'
+            flag: (dest as any).flag || "🌍",
           }));
-          
+
           // Cache the results
           searchCache.current.set(cacheKey, formattedResults);
-          
+
           setSuggestions(formattedResults);
-          console.log(`✅ Found ${formattedResults.length} destinations for "${query}"`);
-          
+          console.log(
+            `✅ Found ${formattedResults.length} destinations for "${query}"`,
+          );
         } catch (error) {
-          console.error('⚠️ Destination search failed:', error);
-          setError('Search failed. Please try again.');
-          
+          console.error("⚠️ Destination search failed:", error);
+          setError("Search failed. Please try again.");
+
           // Fallback to filtered popular destinations
-          const fallback = popularDestinations.filter(dest =>
-            dest.name.toLowerCase().includes(query.toLowerCase()) ||
-            dest.country.toLowerCase().includes(query.toLowerCase()) ||
-            dest.code.toLowerCase().includes(query.toLowerCase())
+          const fallback = popularDestinations.filter(
+            (dest) =>
+              dest.name.toLowerCase().includes(query.toLowerCase()) ||
+              dest.country.toLowerCase().includes(query.toLowerCase()) ||
+              dest.code.toLowerCase().includes(query.toLowerCase()),
           );
           setSuggestions(fallback);
-          
         } finally {
           setLoading(false);
         }
       }, 300); // 300ms debounce
     },
-    [maxResults, popularDestinations]
+    [maxResults, popularDestinations],
   );
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
-    
+
     if (isOpen && popularLoaded) {
       if (newValue.length >= 2) {
         searchDestinations(newValue);
@@ -174,28 +188,28 @@ export function DestinationAutocomplete({
     setInputValue(fullName);
     setIsOpen(false);
     setSuggestions([]);
-    
-    console.log('🎯 Destination selected:', {
+
+    console.log("🎯 Destination selected:", {
       name: fullName,
       code: destination.code,
       type: destination.type,
-      popular: destination.popular
+      popular: destination.popular,
     });
-    
+
     onSelect(destination);
   };
 
   // Handle clear button
   const handleClear = () => {
-    setInputValue('');
+    setInputValue("");
     setSuggestions([]);
     setError(null);
     onSelect({
-      id: '',
-      code: '',
-      name: '',
-      country: '',
-      type: 'city'
+      id: "",
+      code: "",
+      name: "",
+      country: "",
+      type: "city",
     });
   };
 
@@ -235,13 +249,15 @@ export function DestinationAutocomplete({
             )}
           </div>
         </PopoverTrigger>
-        
+
         <PopoverContent className="w-80 sm:w-96 p-0" align="start">
           <div className="max-h-80 overflow-y-auto">
             {!popularLoaded ? (
               <div className="flex items-center justify-center p-4">
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                <span className="text-sm text-gray-600">Loading destinations...</span>
+                <span className="text-sm text-gray-600">
+                  Loading destinations...
+                </span>
               </div>
             ) : error ? (
               <div className="p-4 text-center">
@@ -261,7 +277,9 @@ export function DestinationAutocomplete({
             ) : loading ? (
               <div className="flex items-center justify-center p-4">
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                <span className="text-sm text-gray-600">🔍 Searching database...</span>
+                <span className="text-sm text-gray-600">
+                  🔍 Searching database...
+                </span>
               </div>
             ) : suggestions.length > 0 ? (
               <div>
@@ -277,9 +295,7 @@ export function DestinationAutocomplete({
                     className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors border-l-2 border-transparent hover:border-blue-500"
                     onClick={() => handleDestinationSelect(dest)}
                   >
-                    <div className="text-lg mr-3">
-                      {dest.flag || '🌍'}
-                    </div>
+                    <div className="text-lg mr-3">{dest.flag || "🌍"}</div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-gray-900">
@@ -327,7 +343,13 @@ export function DestinationAutocomplete({
                     onClick={() => handleDestinationSelect(dest)}
                   >
                     <div className="text-lg mr-3">
-                      {index === 0 ? '🏆' : index === 1 ? '🎆' : index === 2 ? '✨' : dest.flag || '🌍'}
+                      {index === 0
+                        ? "🏆"
+                        : index === 1
+                          ? "🎆"
+                          : index === 2
+                            ? "✨"
+                            : dest.flag || "🌍"}
                     </div>
                     <div className="flex-1">
                       <div className="font-medium text-gray-900">

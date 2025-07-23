@@ -75,8 +75,12 @@ export default function AdminTestButton({
 
   const testApiEndpoint = async (endpoint: string) => {
     // Always show fallback message to avoid fetch calls
-    console.log(`API test for ${endpoint}: Using fallback mode (fetch disabled)`);
-    alert("API testing disabled to prevent fetch errors. Using fallback mode for development.");
+    console.log(
+      `API test for ${endpoint}: Using fallback mode (fetch disabled)`,
+    );
+    alert(
+      "API testing disabled to prevent fetch errors. Using fallback mode for development.",
+    );
   };
 
   const getStatusIcon = () => {

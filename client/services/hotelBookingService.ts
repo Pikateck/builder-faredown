@@ -162,10 +162,10 @@ class HotelBookingService {
    */
   async createPreBooking(request: BookingRequest): Promise<PreBookingResponse> {
     try {
-      console.log('🏨 Creating pre-booking with live integration:', {
+      console.log("🏨 Creating pre-booking with live integration:", {
         hotelId: request.hotelId,
         destinationCode: request.destinationCode,
-        currency: request.currency
+        currency: request.currency,
       });
 
       const response = await apiClient.post<ApiResponse<PreBookingResponse>>(
@@ -184,19 +184,21 @@ class HotelBookingService {
           currency: request.currency,
           customerDetails: request.customerDetails,
           specialRequests: request.specialRequests,
-          totalPrice: request.totalPrice
-        }
+          totalPrice: request.totalPrice,
+        },
       );
 
       if (response.success && response.data) {
-        console.log('✅ Pre-booking created:', response.data.bookingRef);
+        console.log("✅ Pre-booking created:", response.data.bookingRef);
         return response.data;
       }
 
-      throw new Error(response.error || 'Pre-booking failed');
+      throw new Error(response.error || "Pre-booking failed");
     } catch (error) {
-      console.error('Pre-booking error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Pre-booking failed');
+      console.error("Pre-booking error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Pre-booking failed",
+      );
     }
   }
 
@@ -212,14 +214,14 @@ class HotelBookingService {
       email: string;
     },
     hotelId?: string,
-    destinationCode?: string
+    destinationCode?: string,
   ): Promise<PaymentOrderResponse> {
     try {
-      console.log('💳 Creating payment order:', {
+      console.log("💳 Creating payment order:", {
         bookingRef,
         amount,
         currency,
-        destinationCode
+        destinationCode,
       });
 
       const response = await apiClient.post<ApiResponse<PaymentOrderResponse>>(
@@ -230,19 +232,23 @@ class HotelBookingService {
           currency,
           customerDetails,
           hotelId,
-          destinationCode
-        }
+          destinationCode,
+        },
       );
 
       if (response.success && response.data) {
-        console.log('✅ Payment order created:', response.data.orderId);
+        console.log("✅ Payment order created:", response.data.orderId);
         return response.data;
       }
 
-      throw new Error(response.error || 'Payment order creation failed');
+      throw new Error(response.error || "Payment order creation failed");
     } catch (error) {
-      console.error('Payment order error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Payment order creation failed');
+      console.error("Payment order error:", error);
+      throw new Error(
+        error instanceof Error
+          ? error.message
+          : "Payment order creation failed",
+      );
     }
   }
 
@@ -258,13 +264,13 @@ class HotelBookingService {
       name: string;
       email: string;
       phone?: string;
-    }
+    },
   ): Promise<BookingConfirmation> {
     try {
-      console.log('✅ Confirming booking:', {
+      console.log("✅ Confirming booking:", {
         bookingRef,
         paymentId,
-        destinationCode
+        destinationCode,
       });
 
       const response = await apiClient.post<ApiResponse<BookingConfirmation>>(
@@ -274,19 +280,21 @@ class HotelBookingService {
           paymentId,
           orderId,
           destinationCode,
-          customerDetails
-        }
+          customerDetails,
+        },
       );
 
       if (response.success && response.data) {
-        console.log('✅ Booking confirmed:', response.data.confirmationNumber);
+        console.log("✅ Booking confirmed:", response.data.confirmationNumber);
         return response.data;
       }
 
-      throw new Error(response.error || 'Booking confirmation failed');
+      throw new Error(response.error || "Booking confirmation failed");
     } catch (error) {
-      console.error('Booking confirmation error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Booking confirmation failed');
+      console.error("Booking confirmation error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Booking confirmation failed",
+      );
     }
   }
 
@@ -295,25 +303,27 @@ class HotelBookingService {
    */
   async generateVoucher(
     bookingRef: string,
-    currency?: string
+    currency?: string,
   ): Promise<VoucherInfo> {
     try {
-      console.log('🎟️ Generating voucher for booking:', bookingRef);
+      console.log("🎟️ Generating voucher for booking:", bookingRef);
 
-      const queryParams = currency ? `?currency=${currency}` : '';
+      const queryParams = currency ? `?currency=${currency}` : "";
       const response = await apiClient.get<ApiResponse<VoucherInfo>>(
-        `${this.voucherUrl}/hotel/${bookingRef}${queryParams}`
+        `${this.voucherUrl}/hotel/${bookingRef}${queryParams}`,
       );
 
       if (response.success && response.data) {
-        console.log('✅ Voucher generated:', response.data.voucherUrl);
+        console.log("✅ Voucher generated:", response.data.voucherUrl);
         return response.data;
       }
 
-      throw new Error(response.error || 'Voucher generation failed');
+      throw new Error(response.error || "Voucher generation failed");
     } catch (error) {
-      console.error('Voucher generation error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Voucher generation failed');
+      console.error("Voucher generation error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Voucher generation failed",
+      );
     }
   }
 
@@ -327,13 +337,13 @@ class HotelBookingService {
     options: {
       language?: string;
       includeAttachments?: boolean;
-    } = {}
+    } = {},
   ): Promise<EmailDeliveryInfo> {
     try {
-      console.log('📧 Sending voucher email:', {
+      console.log("📧 Sending voucher email:", {
         bookingRef,
         recipientEmail,
-        customerName
+        customerName,
       });
 
       const response = await apiClient.post<ApiResponse<EmailDeliveryInfo>>(
@@ -341,20 +351,22 @@ class HotelBookingService {
         {
           recipientEmail,
           customerName,
-          language: options.language || 'en',
-          includeAttachments: options.includeAttachments ?? true
-        }
+          language: options.language || "en",
+          includeAttachments: options.includeAttachments ?? true,
+        },
       );
 
       if (response.success && response.data) {
-        console.log('✅ Email sent:', response.data.messageId);
+        console.log("✅ Email sent:", response.data.messageId);
         return response.data;
       }
 
-      throw new Error(response.error || 'Email sending failed');
+      throw new Error(response.error || "Email sending failed");
     } catch (error) {
-      console.error('Email sending error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Email sending failed');
+      console.error("Email sending error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Email sending failed",
+      );
     }
   }
 
@@ -364,17 +376,21 @@ class HotelBookingService {
   async getBookingDetails(bookingRef: string): Promise<any> {
     try {
       const response = await apiClient.get<ApiResponse<any>>(
-        `${this.baseUrl}/details/${bookingRef}`
+        `${this.baseUrl}/details/${bookingRef}`,
       );
 
       if (response.success && response.data) {
         return response.data;
       }
 
-      throw new Error(response.error || 'Booking details not found');
+      throw new Error(response.error || "Booking details not found");
     } catch (error) {
-      console.error('Get booking details error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Failed to get booking details');
+      console.error("Get booking details error:", error);
+      throw new Error(
+        error instanceof Error
+          ? error.message
+          : "Failed to get booking details",
+      );
     }
   }
 
@@ -383,28 +399,30 @@ class HotelBookingService {
    */
   async cancelBooking(
     bookingRef: string,
-    reason?: string
+    reason?: string,
   ): Promise<{ cancelled: boolean; refundAmount?: number; currency?: string }> {
     try {
-      console.log('❌ Cancelling booking:', bookingRef);
+      console.log("❌ Cancelling booking:", bookingRef);
 
       const response = await apiClient.post<ApiResponse<any>>(
         `${this.baseUrl}/cancel`,
         {
           bookingRef,
-          reason
-        }
+          reason,
+        },
       );
 
       if (response.success && response.data) {
-        console.log('✅ Booking cancelled:', response.data);
+        console.log("✅ Booking cancelled:", response.data);
         return response.data;
       }
 
-      throw new Error(response.error || 'Booking cancellation failed');
+      throw new Error(response.error || "Booking cancellation failed");
     } catch (error) {
-      console.error('Booking cancellation error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Booking cancellation failed');
+      console.error("Booking cancellation error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Booking cancellation failed",
+      );
     }
   }
 
@@ -416,18 +434,18 @@ class HotelBookingService {
     paymentDetails: {
       paymentMethod: string;
       paymentId: string;
-    }
+    },
   ): Promise<{
     booking: BookingConfirmation;
     voucher: VoucherInfo;
     email: EmailDeliveryInfo;
   }> {
     try {
-      console.log('🔄 Starting complete booking flow...');
+      console.log("🔄 Starting complete booking flow...");
 
       // Step 1: Create pre-booking
       const preBooking = await this.createPreBooking(request);
-      console.log('📝 Pre-booking created:', preBooking.bookingRef);
+      console.log("📝 Pre-booking created:", preBooking.bookingRef);
 
       // Step 2: Create payment order
       const paymentOrder = await this.createPaymentOrder(
@@ -435,15 +453,17 @@ class HotelBookingService {
         preBooking.pricing.total,
         preBooking.pricing.currency,
         {
-          name: request.customerDetails?.firstName && request.customerDetails?.lastName
-            ? `${request.customerDetails.firstName} ${request.customerDetails.lastName}`
-            : 'Guest',
-          email: request.customerDetails?.email || 'guest@example.com'
+          name:
+            request.customerDetails?.firstName &&
+            request.customerDetails?.lastName
+              ? `${request.customerDetails.firstName} ${request.customerDetails.lastName}`
+              : "Guest",
+          email: request.customerDetails?.email || "guest@example.com",
         },
         request.hotelId,
-        request.destinationCode
+        request.destinationCode,
       );
-      console.log('💳 Payment order created:', paymentOrder.orderId);
+      console.log("💳 Payment order created:", paymentOrder.orderId);
 
       // Step 3: Confirm booking (simulating successful payment)
       const confirmation = await this.confirmBooking(
@@ -452,41 +472,44 @@ class HotelBookingService {
         paymentOrder.orderId,
         request.destinationCode,
         {
-          name: request.customerDetails?.firstName && request.customerDetails?.lastName
-            ? `${request.customerDetails.firstName} ${request.customerDetails.lastName}`
-            : 'Guest',
-          email: request.customerDetails?.email || 'guest@example.com',
-          phone: request.customerDetails?.phone
-        }
+          name:
+            request.customerDetails?.firstName &&
+            request.customerDetails?.lastName
+              ? `${request.customerDetails.firstName} ${request.customerDetails.lastName}`
+              : "Guest",
+          email: request.customerDetails?.email || "guest@example.com",
+          phone: request.customerDetails?.phone,
+        },
       );
-      console.log('✅ Booking confirmed:', confirmation.confirmationNumber);
+      console.log("✅ Booking confirmed:", confirmation.confirmationNumber);
 
       // Step 4: Generate voucher
       const voucher = await this.generateVoucher(
         confirmation.bookingRef,
-        preBooking.pricing.currency
+        preBooking.pricing.currency,
       );
-      console.log('🎟️ Voucher generated');
+      console.log("🎟️ Voucher generated");
 
       // Step 5: Send email
       const email = await this.sendVoucherEmail(
         confirmation.bookingRef,
-        request.customerDetails?.email || 'guest@example.com',
-        request.customerDetails?.firstName || 'Guest'
+        request.customerDetails?.email || "guest@example.com",
+        request.customerDetails?.firstName || "Guest",
       );
-      console.log('📧 Email sent');
+      console.log("📧 Email sent");
 
-      console.log('🎉 Complete booking flow finished successfully!');
+      console.log("🎉 Complete booking flow finished successfully!");
 
       return {
         booking: confirmation,
         voucher,
-        email
+        email,
       };
-
     } catch (error) {
-      console.error('Complete booking flow error:', error);
-      throw new Error(error instanceof Error ? error.message : 'Booking flow failed');
+      console.error("Complete booking flow error:", error);
+      throw new Error(
+        error instanceof Error ? error.message : "Booking flow failed",
+      );
     }
   }
 }

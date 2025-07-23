@@ -3,11 +3,11 @@
  * Handles all database operations for vouchers
  */
 
-const db = require('../database/connection');
+const db = require("../database/connection");
 
 class Voucher {
   constructor() {
-    this.tableName = 'vouchers';
+    this.tableName = "vouchers";
   }
 
   /**
@@ -20,7 +20,7 @@ class Voucher {
       voucher_number,
       pdf_path,
       pdf_size_bytes,
-      email_address
+      email_address,
     } = voucherData;
 
     // Mark any existing vouchers for this booking as not latest
@@ -36,8 +36,12 @@ class Voucher {
     `;
 
     const values = [
-      booking_id, voucher_type, voucher_number, pdf_path,
-      pdf_size_bytes, email_address
+      booking_id,
+      voucher_type,
+      voucher_number,
+      pdf_path,
+      pdf_size_bytes,
+      email_address,
     ];
 
     try {
@@ -45,14 +49,14 @@ class Voucher {
       return {
         success: true,
         data: result.rows[0],
-        message: 'Voucher created successfully'
+        message: "Voucher created successfully",
       };
     } catch (error) {
-      console.error('Error creating voucher:', error);
+      console.error("Error creating voucher:", error);
       return {
         success: false,
         error: error.message,
-        message: 'Failed to create voucher'
+        message: "Failed to create voucher",
       };
     }
   }
@@ -71,7 +75,7 @@ class Voucher {
       await db.query(query, [booking_id]);
       return { success: true };
     } catch (error) {
-      console.error('Error marking old vouchers:', error);
+      console.error("Error marking old vouchers:", error);
       return { success: false, error: error.message };
     }
   }
@@ -89,25 +93,25 @@ class Voucher {
 
     try {
       const result = await db.query(query, [voucher_number]);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Voucher not found',
-          data: null
+          error: "Voucher not found",
+          data: null,
         };
       }
 
       return {
         success: true,
-        data: result.rows[0]
+        data: result.rows[0],
       };
     } catch (error) {
-      console.error('Error finding voucher:', error);
+      console.error("Error finding voucher:", error);
       return {
         success: false,
         error: error.message,
-        data: null
+        data: null,
       };
     }
   }
@@ -125,25 +129,25 @@ class Voucher {
 
     try {
       const result = await db.query(query, [booking_id]);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'No voucher found for this booking',
-          data: null
+          error: "No voucher found for this booking",
+          data: null,
         };
       }
 
       return {
         success: true,
-        data: result.rows[0]
+        data: result.rows[0],
       };
     } catch (error) {
-      console.error('Error finding voucher by booking:', error);
+      console.error("Error finding voucher by booking:", error);
       return {
         success: false,
         error: error.message,
-        data: null
+        data: null,
       };
     }
   }
@@ -152,12 +156,15 @@ class Voucher {
    * Update email delivery status
    */
   async updateEmailStatus(voucher_id, status, failure_reason = null) {
-    let updateFields = ['email_delivery_status = $2'];
+    let updateFields = ["email_delivery_status = $2"];
     let values = [voucher_id, status];
     let paramIndex = 3;
 
-    if (status === 'sent') {
-      updateFields.push('email_sent = true', 'email_sent_at = CURRENT_TIMESTAMP');
+    if (status === "sent") {
+      updateFields.push(
+        "email_sent = true",
+        "email_sent_at = CURRENT_TIMESTAMP",
+      );
     }
 
     if (failure_reason) {
@@ -168,31 +175,31 @@ class Voucher {
 
     const query = `
       UPDATE ${this.tableName}
-      SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+      SET ${updateFields.join(", ")}, updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
       RETURNING *
     `;
 
     try {
       const result = await db.query(query, values);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Voucher not found'
+          error: "Voucher not found",
         };
       }
 
       return {
         success: true,
         data: result.rows[0],
-        message: `Email status updated to ${status}`
+        message: `Email status updated to ${status}`,
       };
     } catch (error) {
-      console.error('Error updating email status:', error);
+      console.error("Error updating email status:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -213,24 +220,24 @@ class Voucher {
 
     try {
       const result = await db.query(query, [voucher_id]);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Voucher not found'
+          error: "Voucher not found",
         };
       }
 
       return {
         success: true,
         data: result.rows[0],
-        message: 'Download recorded successfully'
+        message: "Download recorded successfully",
       };
     } catch (error) {
-      console.error('Error recording download:', error);
+      console.error("Error recording download:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -276,12 +283,13 @@ class Voucher {
 
     // Only show latest vouchers by default
     if (filters.latest_only !== false) {
-      whereConditions.push('v.is_latest = true');
+      whereConditions.push("v.is_latest = true");
     }
 
-    const whereClause = whereConditions.length > 0 
-      ? `WHERE ${whereConditions.join(' AND ')}`
-      : '';
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(" AND ")}`
+        : "";
 
     // Calculate offset
     const offset = (page - 1) * limit;
@@ -318,7 +326,7 @@ class Voucher {
     try {
       const [countResult, dataResult] = await Promise.all([
         db.query(countQuery, values.slice(0, -2)),
-        db.query(dataQuery, values)
+        db.query(dataQuery, values),
       ]);
 
       const total = parseInt(countResult.rows[0].total);
@@ -333,15 +341,15 @@ class Voucher {
           total,
           totalPages,
           hasNext: page < totalPages,
-          hasPrev: page > 1
-        }
+          hasPrev: page > 1,
+        },
       };
     } catch (error) {
-      console.error('Error getting vouchers:', error);
+      console.error("Error getting vouchers:", error);
       return {
         success: false,
         error: error.message,
-        data: []
+        data: [],
       };
     }
   }
@@ -377,21 +385,21 @@ class Voucher {
     try {
       const [analyticsResult, deliveryResult] = await Promise.all([
         db.query(query, [dateFrom, dateTo]),
-        db.query(deliveryQuery, [dateFrom, dateTo])
+        db.query(deliveryQuery, [dateFrom, dateTo]),
       ]);
 
       return {
         success: true,
         data: {
           overview: analyticsResult.rows[0],
-          deliveryStatus: deliveryResult.rows
-        }
+          deliveryStatus: deliveryResult.rows,
+        },
       };
     } catch (error) {
-      console.error('Error getting voucher analytics:', error);
+      console.error("Error getting voucher analytics:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -399,9 +407,9 @@ class Voucher {
   /**
    * Generate unique voucher number
    */
-  generateVoucherNumber(booking_ref, type = 'hotel') {
+  generateVoucherNumber(booking_ref, type = "hotel") {
     const timestamp = Date.now().toString().slice(-6);
-    const typePrefix = type === 'gst_invoice' ? 'GST' : 'V';
+    const typePrefix = type === "gst_invoice" ? "GST" : "V";
     return `${typePrefix}-${booking_ref}-${timestamp}`;
   }
 
@@ -409,8 +417,8 @@ class Voucher {
    * Resend voucher email
    */
   async resendEmail(voucher_id, new_email_address = null) {
-    let updateFields = ['email_sent = false', 'email_delivery_status = $2'];
-    let values = [voucher_id, 'pending'];
+    let updateFields = ["email_sent = false", "email_delivery_status = $2"];
+    let values = [voucher_id, "pending"];
     let paramIndex = 3;
 
     if (new_email_address) {
@@ -421,31 +429,31 @@ class Voucher {
 
     const query = `
       UPDATE ${this.tableName}
-      SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+      SET ${updateFields.join(", ")}, updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
       RETURNING *
     `;
 
     try {
       const result = await db.query(query, values);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Voucher not found'
+          error: "Voucher not found",
         };
       }
 
       return {
         success: true,
         data: result.rows[0],
-        message: 'Voucher queued for resending'
+        message: "Voucher queued for resending",
       };
     } catch (error) {
-      console.error('Error queuing voucher for resend:', error);
+      console.error("Error queuing voucher for resend:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }

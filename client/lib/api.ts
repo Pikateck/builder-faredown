@@ -3,7 +3,7 @@
  * Centralized API client for Faredown backend integration
  */
 
-import { DevApiClient } from './api-dev';
+import { DevApiClient } from "./api-dev";
 
 // Auto-detect backend URL based on environment
 const getBackendUrl = () => {
@@ -14,7 +14,9 @@ const getBackendUrl = () => {
 
   // In production, we can't access localhost - use fallback mode
   if (window.location.hostname !== "localhost") {
-    console.warn('⚠️ Production environment detected - API will use fallback mode');
+    console.warn(
+      "⚠️ Production environment detected - API will use fallback mode",
+    );
     // Return a non-existent URL to force fallback mode
     return "https://api-unavailable-fallback-mode";
   }
@@ -79,7 +81,9 @@ class ApiClient {
     this.loadAuthToken();
 
     if (this.isProduction) {
-      console.log('🌐 Production mode detected - using fallback for all API calls');
+      console.log(
+        "🌐 Production mode detected - using fallback for all API calls",
+      );
     }
   }
 
@@ -153,7 +157,8 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       // Comprehensive error handling - catch ALL fetch-related errors
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       console.warn(`⚠️ Fetch failed, using fallback: ${errorMessage}`);
 
       // Always return fallback data to prevent error propagation
@@ -161,8 +166,12 @@ class ApiClient {
         return this.devClient.get<T>(endpoint, params);
       } catch (fallbackError) {
         // If even fallback fails, return safe default
-        console.error('Fallback also failed:', fallbackError);
-        return { success: false, error: 'Service unavailable', data: null } as T;
+        console.error("Fallback also failed:", fallbackError);
+        return {
+          success: false,
+          error: "Service unavailable",
+          data: null,
+        } as T;
       }
     }
   }
@@ -197,7 +206,8 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       // Comprehensive error handling - catch ALL fetch-related errors
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       console.warn(`⚠️ POST fetch failed, using fallback: ${errorMessage}`);
 
       // Always return fallback data to prevent error propagation
@@ -205,21 +215,27 @@ class ApiClient {
         return this.devClient.post<T>(endpoint, data);
       } catch (fallbackError) {
         // If even fallback fails, return safe default
-        console.error('POST fallback also failed:', fallbackError);
-        return { success: false, error: 'Service unavailable', data: null } as T;
+        console.error("POST fallback also failed:", fallbackError);
+        return {
+          success: false,
+          error: "Service unavailable",
+          data: null,
+        } as T;
       }
     }
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
     // Always use dev client to completely avoid fetch errors
-    console.log('🔄 Using development fallback mode for PUT (fetch disabled)');
+    console.log("🔄 Using development fallback mode for PUT (fetch disabled)");
     return this.devClient.post<T>(endpoint, data); // DevClient doesn't have PUT, use post
   }
 
   async delete<T>(endpoint: string): Promise<T> {
     // Always use dev client to completely avoid fetch errors
-    console.log('🔄 Using development fallback mode for DELETE (fetch disabled)');
+    console.log(
+      "🔄 Using development fallback mode for DELETE (fetch disabled)",
+    );
     return this.devClient.get<T>(endpoint); // DevClient doesn't have DELETE, use get
   }
 
@@ -240,10 +256,10 @@ class ApiClient {
     timestamp: string;
   }> {
     try {
-      console.log('🌐 Health check: Trying live API');
+      console.log("🌐 Health check: Trying live API");
       return await this.get("/health");
     } catch (error) {
-      console.warn('⚠️ Health check failed, using fallback');
+      console.warn("⚠️ Health check failed, using fallback");
 
       // Ensure fallback always works
       try {
@@ -251,9 +267,9 @@ class ApiClient {
       } catch (fallbackError) {
         // Ultimate fallback - return mock health data
         return {
-          status: 'fallback',
-          database: 'mock (API unavailable)',
-          timestamp: new Date().toISOString()
+          status: "fallback",
+          database: "mock (API unavailable)",
+          timestamp: new Date().toISOString(),
         };
       }
     }

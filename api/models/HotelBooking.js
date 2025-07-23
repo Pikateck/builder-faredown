@@ -3,11 +3,11 @@
  * Handles all database operations for hotel bookings
  */
 
-const db = require('../database/connection');
+const db = require("../database/connection");
 
 class HotelBooking {
   constructor() {
-    this.tableName = 'hotel_bookings';
+    this.tableName = "hotel_bookings";
   }
 
   /**
@@ -48,7 +48,7 @@ class HotelBooking {
       supplier_booking_ref,
       supplier_response,
       special_requests,
-      internal_notes
+      internal_notes,
     } = bookingData;
 
     const query = `
@@ -69,13 +69,40 @@ class HotelBooking {
     `;
 
     const values = [
-      booking_ref, supplier_id, user_id, hotel_code, hotel_name, hotel_address,
-      hotel_city, hotel_country, hotel_rating, room_type, room_name, room_code,
-      giata_room_type, max_occupancy, JSON.stringify(guest_details), check_in_date, check_out_date,
-      nights, rooms_count, adults_count, children_count, children_ages,
-      base_price, markup_amount, markup_percentage, taxes, fees, total_amount,
-      currency, status, supplier_booking_ref, JSON.stringify(supplier_response),
-      special_requests, internal_notes
+      booking_ref,
+      supplier_id,
+      user_id,
+      hotel_code,
+      hotel_name,
+      hotel_address,
+      hotel_city,
+      hotel_country,
+      hotel_rating,
+      room_type,
+      room_name,
+      room_code,
+      giata_room_type,
+      max_occupancy,
+      JSON.stringify(guest_details),
+      check_in_date,
+      check_out_date,
+      nights,
+      rooms_count,
+      adults_count,
+      children_count,
+      children_ages,
+      base_price,
+      markup_amount,
+      markup_percentage,
+      taxes,
+      fees,
+      total_amount,
+      currency,
+      status,
+      supplier_booking_ref,
+      JSON.stringify(supplier_response),
+      special_requests,
+      internal_notes,
     ];
 
     try {
@@ -83,14 +110,14 @@ class HotelBooking {
       return {
         success: true,
         data: result.rows[0],
-        message: 'Booking created successfully'
+        message: "Booking created successfully",
       };
     } catch (error) {
-      console.error('Error creating booking:', error);
+      console.error("Error creating booking:", error);
       return {
         success: false,
         error: error.message,
-        message: 'Failed to create booking'
+        message: "Failed to create booking",
       };
     }
   }
@@ -108,25 +135,25 @@ class HotelBooking {
 
     try {
       const result = await db.query(query, [booking_ref]);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Booking not found',
-          data: null
+          error: "Booking not found",
+          data: null,
         };
       }
 
       return {
         success: true,
-        data: result.rows[0]
+        data: result.rows[0],
       };
     } catch (error) {
-      console.error('Error finding booking:', error);
+      console.error("Error finding booking:", error);
       return {
         success: false,
         error: error.message,
-        data: null
+        data: null,
       };
     }
   }
@@ -135,7 +162,7 @@ class HotelBooking {
    * Update booking status
    */
   async updateStatus(booking_ref, status, additional_data = {}) {
-    let updateFields = ['status = $2'];
+    let updateFields = ["status = $2"];
     let values = [booking_ref, status];
     let paramIndex = 3;
 
@@ -152,39 +179,39 @@ class HotelBooking {
       paramIndex++;
     }
 
-    if (status === 'confirmed') {
+    if (status === "confirmed") {
       updateFields.push(`confirmation_date = CURRENT_TIMESTAMP`);
-    } else if (status === 'cancelled') {
+    } else if (status === "cancelled") {
       updateFields.push(`cancellation_date = CURRENT_TIMESTAMP`);
     }
 
     const query = `
       UPDATE ${this.tableName}
-      SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+      SET ${updateFields.join(", ")}, updated_at = CURRENT_TIMESTAMP
       WHERE booking_ref = $1
       RETURNING *
     `;
 
     try {
       const result = await db.query(query, values);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Booking not found'
+          error: "Booking not found",
         };
       }
 
       return {
         success: true,
         data: result.rows[0],
-        message: `Booking status updated to ${status}`
+        message: `Booking status updated to ${status}`,
       };
     } catch (error) {
-      console.error('Error updating booking status:', error);
+      console.error("Error updating booking status:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -228,9 +255,10 @@ class HotelBooking {
       paramIndex++;
     }
 
-    const whereClause = whereConditions.length > 0 
-      ? `WHERE ${whereConditions.join(' AND ')}`
-      : '';
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(" AND ")}`
+        : "";
 
     // Calculate offset
     const offset = (page - 1) * limit;
@@ -264,7 +292,7 @@ class HotelBooking {
     try {
       const [countResult, dataResult] = await Promise.all([
         db.query(countQuery, values.slice(0, -2)), // Remove limit and offset for count
-        db.query(dataQuery, values)
+        db.query(dataQuery, values),
       ]);
 
       const total = parseInt(countResult.rows[0].total);
@@ -279,15 +307,15 @@ class HotelBooking {
           total,
           totalPages,
           hasNext: page < totalPages,
-          hasPrev: page > 1
-        }
+          hasPrev: page > 1,
+        },
       };
     } catch (error) {
-      console.error('Error getting bookings:', error);
+      console.error("Error getting bookings:", error);
       return {
         success: false,
         error: error.message,
-        data: []
+        data: [],
       };
     }
   }
@@ -338,7 +366,7 @@ class HotelBooking {
       const [analyticsResult, cityResult, monthlyResult] = await Promise.all([
         db.query(query, [dateFrom, dateTo]),
         db.query(cityQuery, [dateFrom, dateTo]),
-        db.query(monthlyQuery, [dateFrom, dateTo])
+        db.query(monthlyQuery, [dateFrom, dateTo]),
       ]);
 
       return {
@@ -346,14 +374,14 @@ class HotelBooking {
         data: {
           overview: analyticsResult.rows[0],
           topCities: cityResult.rows,
-          monthlyTrend: monthlyResult.rows
-        }
+          monthlyTrend: monthlyResult.rows,
+        },
       };
     } catch (error) {
-      console.error('Error getting analytics:', error);
+      console.error("Error getting analytics:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }

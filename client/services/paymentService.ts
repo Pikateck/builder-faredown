@@ -49,8 +49,8 @@ class PaymentService {
    */
   loadRazorpayScript(): Promise<boolean> {
     return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.onload = () => resolve(true);
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
@@ -78,7 +78,7 @@ class PaymentService {
     try {
       const response = await apiClient.post<ApiResponse<PaymentOrder>>(
         `${this.baseUrl}/create-order`,
-        orderData
+        orderData,
       );
 
       if (response.success && response.data) {
@@ -107,7 +107,7 @@ class PaymentService {
       hotelName: string;
     },
     onSuccess: (response: any) => void,
-    onError: (error: any) => void
+    onError: (error: any) => void,
   ): Promise<void> {
     try {
       const isLoaded = await this.loadRazorpayScript();
@@ -161,7 +161,7 @@ class PaymentService {
     try {
       const response = await apiClient.post<ApiResponse<any>>(
         `${this.baseUrl}/verify`,
-        verificationData
+        verificationData,
       );
 
       if (response.success && response.data) {
@@ -181,7 +181,7 @@ class PaymentService {
   async getPaymentMethods(): Promise<PaymentMethods> {
     try {
       const response = await apiClient.get<ApiResponse<PaymentMethods>>(
-        `${this.baseUrl}/methods`
+        `${this.baseUrl}/methods`,
       );
 
       if (response.success && response.data) {
@@ -210,22 +210,24 @@ class PaymentService {
   /**
    * Calculate payment fees
    */
-  async calculatePaymentFees(amount: number, method = "card"): Promise<{
+  async calculatePaymentFees(
+    amount: number,
+    method = "card",
+  ): Promise<{
     gatewayFee: number;
     gst: number;
     totalFee: number;
   }> {
     try {
-      const response = await apiClient.post<ApiResponse<{
-        fees: {
-          gatewayFee: number;
-          gst: number;
-          totalFee: number;
-        };
-      }>>(
-        `${this.baseUrl}/calculate-fees`,
-        { amount, method }
-      );
+      const response = await apiClient.post<
+        ApiResponse<{
+          fees: {
+            gatewayFee: number;
+            gst: number;
+            totalFee: number;
+          };
+        }>
+      >(`${this.baseUrl}/calculate-fees`, { amount, method });
 
       if (response.success && response.data) {
         return response.data.fees;
@@ -259,7 +261,7 @@ class PaymentService {
     },
     onSuccess: (bookingRef: string) => void,
     onError: (error: string) => void,
-    onLoading?: (isLoading: boolean) => void
+    onLoading?: (isLoading: boolean) => void,
   ): Promise<void> {
     try {
       if (onLoading) onLoading(true);
@@ -298,7 +300,7 @@ class PaymentService {
           console.error("Payment error:", error);
           onError(error.message || "Payment failed");
           if (onLoading) onLoading(false);
-        }
+        },
       );
     } catch (error) {
       console.error("Payment process error:", error);
@@ -328,7 +330,7 @@ class PaymentService {
     try {
       const response = await apiClient.post<ApiResponse<any>>(
         `${this.baseUrl}/generate-link`,
-        linkData
+        linkData,
       );
 
       if (response.success && response.data) {

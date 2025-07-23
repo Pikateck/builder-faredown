@@ -8,8 +8,8 @@ import { apiClient, ApiResponse } from "@/lib/api";
 export interface Supplier {
   id: string;
   name: string;
-  type: 'flight' | 'hotel' | 'car' | 'package';
-  status: 'active' | 'inactive' | 'testing';
+  type: "flight" | "hotel" | "car" | "package";
+  status: "active" | "inactive" | "testing";
   apiEndpoint: string;
   lastSync: string;
   totalBookings: number;
@@ -42,7 +42,7 @@ export interface SyncLog {
   id: string;
   supplierId: string;
   timestamp: string;
-  status: 'success' | 'failed' | 'partial';
+  status: "success" | "failed" | "partial";
   recordsProcessed: number;
   duration: number;
   errors: string[];
@@ -74,15 +74,17 @@ class SupplierService {
    */
   async getSuppliers(): Promise<Supplier[]> {
     try {
-      const response = await apiClient.get<ApiResponse<Supplier[]>>(this.baseUrl);
-      
+      const response = await apiClient.get<ApiResponse<Supplier[]>>(
+        this.baseUrl,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       return [];
     } catch (error) {
-      console.error('Get suppliers error:', error);
+      console.error("Get suppliers error:", error);
       throw new Error("Failed to get suppliers");
     }
   }
@@ -92,15 +94,17 @@ class SupplierService {
    */
   async getSupplier(id: string): Promise<Supplier> {
     try {
-      const response = await apiClient.get<ApiResponse<Supplier>>(`${this.baseUrl}/${id}`);
-      
+      const response = await apiClient.get<ApiResponse<Supplier>>(
+        `${this.baseUrl}/${id}`,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("Supplier not found");
     } catch (error) {
-      console.error('Get supplier error:', error);
+      console.error("Get supplier error:", error);
       throw new Error("Failed to get supplier");
     }
   }
@@ -110,15 +114,18 @@ class SupplierService {
    */
   async createSupplier(supplierData: Partial<Supplier>): Promise<Supplier> {
     try {
-      const response = await apiClient.post<ApiResponse<Supplier>>(this.baseUrl, supplierData);
-      
+      const response = await apiClient.post<ApiResponse<Supplier>>(
+        this.baseUrl,
+        supplierData,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("Failed to create supplier");
     } catch (error) {
-      console.error('Create supplier error:', error);
+      console.error("Create supplier error:", error);
       throw new Error("Failed to create supplier");
     }
   }
@@ -126,17 +133,23 @@ class SupplierService {
   /**
    * Update supplier
    */
-  async updateSupplier(id: string, updates: Partial<Supplier>): Promise<Supplier> {
+  async updateSupplier(
+    id: string,
+    updates: Partial<Supplier>,
+  ): Promise<Supplier> {
     try {
-      const response = await apiClient.put<ApiResponse<Supplier>>(`${this.baseUrl}/${id}`, updates);
-      
+      const response = await apiClient.put<ApiResponse<Supplier>>(
+        `${this.baseUrl}/${id}`,
+        updates,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("Failed to update supplier");
     } catch (error) {
-      console.error('Update supplier error:', error);
+      console.error("Update supplier error:", error);
       throw new Error("Failed to update supplier");
     }
   }
@@ -148,7 +161,7 @@ class SupplierService {
     try {
       await apiClient.delete(`${this.baseUrl}/${id}`);
     } catch (error) {
-      console.error('Delete supplier error:', error);
+      console.error("Delete supplier error:", error);
       throw new Error("Failed to delete supplier");
     }
   }
@@ -156,17 +169,23 @@ class SupplierService {
   /**
    * Toggle supplier status
    */
-  async toggleSupplierStatus(id: string, status: 'active' | 'inactive' | 'testing'): Promise<Supplier> {
+  async toggleSupplierStatus(
+    id: string,
+    status: "active" | "inactive" | "testing",
+  ): Promise<Supplier> {
     try {
-      const response = await apiClient.patch<ApiResponse<Supplier>>(`${this.baseUrl}/${id}/status`, { status });
-      
+      const response = await apiClient.patch<ApiResponse<Supplier>>(
+        `${this.baseUrl}/${id}/status`,
+        { status },
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("Failed to update supplier status");
     } catch (error) {
-      console.error('Toggle supplier status error:', error);
+      console.error("Toggle supplier status error:", error);
       throw new Error("Failed to update supplier status");
     }
   }
@@ -174,20 +193,27 @@ class SupplierService {
   /**
    * Sync supplier data
    */
-  async syncSupplier(id: string, destinationCodes: string[] = [], forceSync = false): Promise<any> {
+  async syncSupplier(
+    id: string,
+    destinationCodes: string[] = [],
+    forceSync = false,
+  ): Promise<any> {
     try {
-      const response = await apiClient.post<ApiResponse<any>>(`${this.baseUrl}/${id}/sync`, {
-        destinationCodes,
-        forceSync
-      });
-      
+      const response = await apiClient.post<ApiResponse<any>>(
+        `${this.baseUrl}/${id}/sync`,
+        {
+          destinationCodes,
+          forceSync,
+        },
+      );
+
       if (response.success) {
         return response.data;
       }
-      
+
       throw new Error("Sync failed");
     } catch (error) {
-      console.error('Sync supplier error:', error);
+      console.error("Sync supplier error:", error);
       throw new Error("Failed to sync supplier");
     }
   }
@@ -197,15 +223,17 @@ class SupplierService {
    */
   async testSupplierConnection(id: string): Promise<any> {
     try {
-      const response = await apiClient.post<ApiResponse<any>>(`${this.baseUrl}/${id}/test`);
-      
+      const response = await apiClient.post<ApiResponse<any>>(
+        `${this.baseUrl}/${id}/test`,
+      );
+
       if (response.success) {
         return response.data;
       }
-      
+
       throw new Error("Connection test failed");
     } catch (error) {
-      console.error('Test supplier error:', error);
+      console.error("Test supplier error:", error);
       throw new Error("Failed to test supplier connection");
     }
   }
@@ -217,16 +245,19 @@ class SupplierService {
     try {
       const params: any = { limit };
       if (supplierId) params.supplierId = supplierId;
-      
-      const response = await apiClient.get<ApiResponse<SyncLog[]>>(`${this.baseUrl}/sync-logs`, params);
-      
+
+      const response = await apiClient.get<ApiResponse<SyncLog[]>>(
+        `${this.baseUrl}/sync-logs`,
+        params,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       return [];
     } catch (error) {
-      console.error('Get sync logs error:', error);
+      console.error("Get sync logs error:", error);
       throw new Error("Failed to get sync logs");
     }
   }
@@ -236,15 +267,17 @@ class SupplierService {
    */
   async getAnalytics(): Promise<SupplierAnalytics> {
     try {
-      const response = await apiClient.get<ApiResponse<SupplierAnalytics>>(`${this.baseUrl}/analytics`);
-      
+      const response = await apiClient.get<ApiResponse<SupplierAnalytics>>(
+        `${this.baseUrl}/analytics`,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("No analytics data available");
     } catch (error) {
-      console.error('Get analytics error:', error);
+      console.error("Get analytics error:", error);
       throw new Error("Failed to get supplier analytics");
     }
   }
@@ -254,15 +287,17 @@ class SupplierService {
    */
   async getMarkupRules(): Promise<any> {
     try {
-      const response = await apiClient.get<ApiResponse<any>>(`${this.baseUrl}/markup-rules`);
-      
+      const response = await apiClient.get<ApiResponse<any>>(
+        `${this.baseUrl}/markup-rules`,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       return { rules: [], stats: {} };
     } catch (error) {
-      console.error('Get markup rules error:', error);
+      console.error("Get markup rules error:", error);
       throw new Error("Failed to get markup rules");
     }
   }
@@ -272,15 +307,18 @@ class SupplierService {
    */
   async createMarkupRule(ruleData: any): Promise<any> {
     try {
-      const response = await apiClient.post<ApiResponse<any>>(`${this.baseUrl}/markup-rules`, ruleData);
-      
+      const response = await apiClient.post<ApiResponse<any>>(
+        `${this.baseUrl}/markup-rules`,
+        ruleData,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("Failed to create markup rule");
     } catch (error) {
-      console.error('Create markup rule error:', error);
+      console.error("Create markup rule error:", error);
       throw new Error("Failed to create markup rule");
     }
   }
@@ -290,15 +328,18 @@ class SupplierService {
    */
   async updateMarkupRule(ruleId: string, updates: any): Promise<any> {
     try {
-      const response = await apiClient.put<ApiResponse<any>>(`${this.baseUrl}/markup-rules/${ruleId}`, updates);
-      
+      const response = await apiClient.put<ApiResponse<any>>(
+        `${this.baseUrl}/markup-rules/${ruleId}`,
+        updates,
+      );
+
       if (response.success && response.data) {
         return response.data;
       }
-      
+
       throw new Error("Failed to update markup rule");
     } catch (error) {
-      console.error('Update markup rule error:', error);
+      console.error("Update markup rule error:", error);
       throw new Error("Failed to update markup rule");
     }
   }
@@ -310,7 +351,7 @@ class SupplierService {
     try {
       await apiClient.delete(`${this.baseUrl}/markup-rules/${ruleId}`);
     } catch (error) {
-      console.error('Delete markup rule error:', error);
+      console.error("Delete markup rule error:", error);
       throw new Error("Failed to delete markup rule");
     }
   }

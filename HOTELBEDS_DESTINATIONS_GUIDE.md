@@ -5,34 +5,41 @@
 Based on Hotelbeds API availability, these destinations typically have the most hotel inventory:
 
 ### 🇪🇸 **Spain (Best Results)**
+
 - **Madrid** - Capital city, excellent availability
-- **Barcelona** - Major tourist destination  
+- **Barcelona** - Major tourist destination
 - **Palma** (Mallorca) - Popular island destination
 - **Valencia** - Coastal city with good inventory
 - **Seville** - Historic city
 
 ### 🇮🇹 **Italy**
+
 - **Rome** - Capital, extensive hotel options
 - **Milan** - Business hub
 - **Florence** - Tourist hotspot
 - **Venice** - Unique destination
 
 ### 🇫🇷 **France**
+
 - **Paris** - Major global destination
 - **Nice** - French Riviera
 - **Lyon** - Secondary city
 
 ### 🇬🇧 **United Kingdom**
+
 - **London** - Major inventory
 - **Edinburgh** - Good availability
 
 ### 🇳🇱 **Netherlands**
+
 - **Amsterdam** - Consistent results
 
 ### 🇦🇹 **Austria**
+
 - **Vienna** - Central European hub
 
 ### 🇵🇹 **Portugal**
+
 - **Lisbon** - Growing inventory
 
 ---
@@ -40,12 +47,14 @@ Based on Hotelbeds API availability, these destinations typically have the most 
 ## 🔧 **How to Test Live Data**
 
 ### Method 1: Admin Testing Dashboard
+
 1. Go to `/admin/testing`
 2. Use the "Live Hotelbeds API Data" section
 3. Select a destination from the dropdown
 4. Click "Search Live Data"
 
 ### Method 2: Direct API Calls
+
 ```bash
 # Test destinations
 GET /api/hotels-live/destinations/search?q=Madrid
@@ -59,6 +68,7 @@ GET /api/hotels-live/search?destination=Madrid&checkIn=2025-02-01&checkOut=2025-
 ## 📊 **Expected Results**
 
 ### Working Destinations Should Return:
+
 - ✅ **Destination Code** (e.g., MAD for Madrid)
 - ✅ **Hotel List** (10-100+ hotels)
 - ✅ **Live Pricing** in EUR/USD/INR
@@ -66,6 +76,7 @@ GET /api/hotels-live/search?destination=Madrid&checkIn=2025-02-01&checkOut=2025-
 - ✅ **Real Images** and amenities
 
 ### Example Response:
+
 ```json
 {
   "success": true,
@@ -74,7 +85,7 @@ GET /api/hotels-live/search?destination=Madrid&checkIn=2025-02-01&checkOut=2025-
       "id": "123456",
       "name": "Hotel Real Madrid",
       "currentPrice": 4500,
-      "currency": "INR", 
+      "currency": "INR",
       "rating": 4,
       "isLiveData": true,
       "supplier": "hotelbeds"
@@ -90,6 +101,7 @@ GET /api/hotels-live/search?destination=Madrid&checkIn=2025-02-01&checkOut=2025-
 ## ⚠️ **Troubleshooting**
 
 ### No Results for a Destination?
+
 1. **Try Spanish cities first** (Madrid, Barcelona, Palma)
 2. **Check date range** (avoid past dates, weekends, holidays)
 3. **Use flexible dates** (7+ days in future)
@@ -99,6 +111,7 @@ GET /api/hotels-live/search?destination=Madrid&checkIn=2025-02-01&checkOut=2025-
    - "MAD" (airport code) ⚠️
 
 ### API Errors?
+
 1. **Check Hotelbeds credentials** in `.env`
 2. **Verify API limits** (test account restrictions)
 3. **Check dates format** (YYYY-MM-DD)

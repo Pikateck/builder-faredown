@@ -49,7 +49,9 @@ export function BookingSearchForm() {
   const [destination, setDestination] = useState("Dubai");
   const [destinationCode, setDestinationCode] = useState("DXB"); // Store destination code
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [destinationSuggestions, setDestinationSuggestions] = useState<DestinationOption[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<
+    DestinationOption[]
+  >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(new Date());
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
@@ -68,8 +70,11 @@ export function BookingSearchForm() {
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
   // Popular destinations will be loaded from database
-  const [popularDestinations, setPopularDestinations] = useState<DestinationOption[]>([]);
-  const [popularDestinationsLoaded, setPopularDestinationsLoaded] = useState(false);
+  const [popularDestinations, setPopularDestinations] = useState<
+    DestinationOption[]
+  >([]);
+  const [popularDestinationsLoaded, setPopularDestinationsLoaded] =
+    useState(false);
 
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
@@ -78,28 +83,71 @@ export function BookingSearchForm() {
   useEffect(() => {
     const loadPopularDestinations = async () => {
       try {
-        console.log('🎆 Loading popular destinations from database...');
-        const popular = await hotelsService.searchDestinations('', 8, true); // Get 8 popular destinations
-        const formattedPopular = popular.map(dest => ({
+        console.log("🎆 Loading popular destinations from database...");
+        const popular = await hotelsService.searchDestinations("", 8, true); // Get 8 popular destinations
+        const formattedPopular = popular.map((dest) => ({
           id: dest.id,
           code: dest.id, // dest.id is the destination code
           name: dest.name,
           country: dest.country,
-          type: dest.type as "city" | "region" | "country" | "landmark"
+          type: dest.type as "city" | "region" | "country" | "landmark",
         }));
         setPopularDestinations(formattedPopular);
         setPopularDestinationsLoaded(true);
-        console.log('✅ Loaded', formattedPopular.length, 'popular destinations from database');
+        console.log(
+          "✅ Loaded",
+          formattedPopular.length,
+          "popular destinations from database",
+        );
       } catch (error) {
-        console.error('⚠️ Failed to load popular destinations, using fallback:', error);
+        console.error(
+          "⚠️ Failed to load popular destinations, using fallback:",
+          error,
+        );
         // Static fallback if database fails
         setPopularDestinations([
-          { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
-          { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
-          { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
-          { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
-          { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
-          { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" }
+          {
+            id: "DXB",
+            code: "DXB",
+            name: "Dubai",
+            country: "United Arab Emirates",
+            type: "city",
+          },
+          {
+            id: "LON",
+            code: "LON",
+            name: "London",
+            country: "United Kingdom",
+            type: "city",
+          },
+          {
+            id: "BCN",
+            code: "BCN",
+            name: "Barcelona",
+            country: "Spain",
+            type: "city",
+          },
+          {
+            id: "NYC",
+            code: "NYC",
+            name: "New York",
+            country: "United States",
+            type: "city",
+          },
+          {
+            id: "PAR",
+            code: "PAR",
+            name: "Paris",
+            country: "France",
+            type: "city",
+          },
+          {
+            id: "BOM",
+            code: "BOM",
+            name: "Mumbai",
+            country: "India",
+            type: "city",
+          },
         ]);
         setPopularDestinationsLoaded(true);
       }
@@ -129,37 +177,41 @@ export function BookingSearchForm() {
           // Use database-backed search
           const results = await hotelsService.searchDestinations(query, 10); // Get up to 10 results
 
-          const formattedResults = results.map(dest => ({
+          const formattedResults = results.map((dest) => ({
             id: dest.id,
             code: dest.id, // dest.id is the destination code
             name: dest.name,
             country: dest.country,
             type: dest.type as "city" | "region" | "country" | "landmark",
             popular: (dest as any).popular || false,
-            flag: (dest as any).flag || '🌍'
+            flag: (dest as any).flag || "🌍",
           }));
 
           setDestinationSuggestions(formattedResults);
-          console.log(`✅ Found ${formattedResults.length} destinations matching "${query}"`);
-
+          console.log(
+            `✅ Found ${formattedResults.length} destinations matching "${query}"`,
+          );
         } catch (error) {
-          console.error('⚠️ Database destination search failed:', error);
+          console.error("⚠️ Database destination search failed:", error);
 
           // Enhanced fallback with popular destinations filter
-          const fallbackDestinations = popularDestinations.filter(dest =>
-            dest.name.toLowerCase().includes(query.toLowerCase()) ||
-            dest.country.toLowerCase().includes(query.toLowerCase()) ||
-            dest.code.toLowerCase().includes(query.toLowerCase())
+          const fallbackDestinations = popularDestinations.filter(
+            (dest) =>
+              dest.name.toLowerCase().includes(query.toLowerCase()) ||
+              dest.country.toLowerCase().includes(query.toLowerCase()) ||
+              dest.code.toLowerCase().includes(query.toLowerCase()),
           );
 
           setDestinationSuggestions(fallbackDestinations.slice(0, 5));
-          console.log(`🔄 Using fallback: ${fallbackDestinations.length} destinations`);
+          console.log(
+            `🔄 Using fallback: ${fallbackDestinations.length} destinations`,
+          );
         } finally {
           setLoadingDestinations(false);
         }
       }, 300); // 300ms debounce for optimal UX
     },
-    [popularDestinations]
+    [popularDestinations],
   );
 
   // Handle destination search when user types
@@ -173,7 +225,12 @@ export function BookingSearchForm() {
         setDestinationSuggestions([]);
       }
     }
-  }, [destination, isDestinationOpen, searchDestinations, popularDestinationsLoaded]);
+  }, [
+    destination,
+    isDestinationOpen,
+    searchDestinations,
+    popularDestinationsLoaded,
+  ]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
@@ -183,7 +240,7 @@ export function BookingSearchForm() {
       destinationCode,
       checkInDate,
       checkOutDate,
-      guests
+      guests,
     });
 
     if (!destination || !destinationCode || !checkInDate || !checkOutDate) {
@@ -195,12 +252,16 @@ export function BookingSearchForm() {
       });
 
       // Show user-friendly error
-      alert("Please complete all search fields:\n- Destination\n- Check-in date\n- Check-out date");
+      alert(
+        "Please complete all search fields:\n- Destination\n- Check-in date\n- Check-out date",
+      );
       return;
     }
 
     // Validate date range
-    const daysBetween = Math.ceil((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24));
+    const daysBetween = Math.ceil(
+      (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
     if (daysBetween < 1) {
       alert("Check-out date must be after check-in date");
       return;
@@ -221,7 +282,7 @@ export function BookingSearchForm() {
         rooms: guests.rooms.toString(),
         // Additional metadata for improved search
         searchType: "live", // Flag to indicate live API search preference
-        searchId: Date.now().toString() // Unique search identifier
+        searchId: Date.now().toString(), // Unique search identifier
       });
 
       const url = `/hotels/results?${searchParams.toString()}`;
@@ -332,12 +393,16 @@ export function BookingSearchForm() {
                 {!popularDestinationsLoaded ? (
                   <div className="flex items-center justify-center p-4">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    <span className="text-sm text-gray-600">Loading destinations...</span>
+                    <span className="text-sm text-gray-600">
+                      Loading destinations...
+                    </span>
                   </div>
                 ) : loadingDestinations ? (
                   <div className="flex items-center justify-center p-4">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    <span className="text-sm text-gray-600">🔍 Searching database...</span>
+                    <span className="text-sm text-gray-600">
+                      🔍 Searching database...
+                    </span>
                   </div>
                 ) : destinationSuggestions.length > 0 ? (
                   <div>
@@ -356,7 +421,7 @@ export function BookingSearchForm() {
                             name: fullName,
                             code: dest.code || dest.id,
                             type: dest.type,
-                            popular: (dest as any).popular
+                            popular: (dest as any).popular,
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code || dest.id);
@@ -364,7 +429,7 @@ export function BookingSearchForm() {
                         }}
                       >
                         <div className="text-lg mr-3">
-                          {(dest as any).flag || '🌍'}
+                          {(dest as any).flag || "🌍"}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
@@ -391,9 +456,7 @@ export function BookingSearchForm() {
                   </div>
                 ) : destination.length >= 2 ? (
                   <div className="p-4 text-center">
-                    <div className="text-gray-400 mb-2">
-                      🔍
-                    </div>
+                    <div className="text-gray-400 mb-2">🔍</div>
                     <div className="text-sm text-gray-500 mb-2">
                       No destinations found for "{destination}"
                     </div>
@@ -417,7 +480,7 @@ export function BookingSearchForm() {
                           console.log("⭐ Popular destination selected:", {
                             name: fullName,
                             code: dest.code,
-                            type: dest.type
+                            type: dest.type,
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code);
@@ -425,7 +488,13 @@ export function BookingSearchForm() {
                         }}
                       >
                         <div className="text-lg mr-3">
-                          {index === 0 ? '🏆' : index === 1 ? '🎆' : index === 2 ? '✨' : '🌍'}
+                          {index === 0
+                            ? "🏆"
+                            : index === 1
+                              ? "🎆"
+                              : index === 2
+                                ? "✨"
+                                : "🌍"}
                         </div>
                         <div className="flex-1">
                           <div className="font-medium text-gray-900">
@@ -445,7 +514,9 @@ export function BookingSearchForm() {
                     <div className="px-4 py-2 border-t bg-gray-50">
                       <p className="text-xs text-gray-500 flex items-center gap-1">
                         <span>🔍</span>
-                        <span>Type to search 1000+ destinations from database</span>
+                        <span>
+                          Type to search 1000+ destinations from database
+                        </span>
                       </p>
                     </div>
                   </div>

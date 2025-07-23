@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const voucherService = require('../services/voucherService');
-const hotelBookingService = require('../services/hotelBookingService');
-const EnhancedEmailService = require('../services/enhancedEmailService');
-const { authenticateToken } = require('../middleware/auth');
+const voucherService = require("../services/voucherService");
+const hotelBookingService = require("../services/hotelBookingService");
+const EnhancedEmailService = require("../services/enhancedEmailService");
+const { authenticateToken } = require("../middleware/auth");
 
 // Initialize enhanced email service
 const emailService = new EnhancedEmailService();
@@ -12,16 +12,16 @@ const emailService = new EnhancedEmailService();
  * Generate hotel booking voucher
  * GET /api/vouchers/hotel/:bookingRef
  */
-router.get('/hotel/:bookingRef', async (req, res) => {
+router.get("/hotel/:bookingRef", async (req, res) => {
   try {
     const { bookingRef } = req.params;
-    
+
     // Get booking details
     const booking = hotelBookingService.getBooking(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
-        error: 'Booking not found'
+        error: "Booking not found",
       });
     }
 
@@ -29,38 +29,40 @@ router.get('/hotel/:bookingRef', async (req, res) => {
     const voucherResult = await voucherService.generateHotelVoucher({
       bookingRef: booking.bookingRef,
       hotelDetails: booking.hotelbedsDetails?.hotel || {
-        name: 'Hotel Name',
-        address: 'Hotel Address',
-        phone: 'N/A',
-        email: 'N/A'
+        name: "Hotel Name",
+        address: "Hotel Address",
+        phone: "N/A",
+        email: "N/A",
       },
       guestDetails: booking.guestDetails,
       roomDetails: booking.roomDetails || {
-        name: 'Standard Room',
-        category: 'Standard',
-        bedType: 'Double'
+        name: "Standard Room",
+        category: "Standard",
+        bedType: "Double",
       },
       checkIn: booking.checkIn,
       checkOut: booking.checkOut,
       totalAmount: booking.totalAmount,
       currency: booking.currency,
       paymentDetails: booking.paymentDetails,
-      specialRequests: booking.specialRequests
+      specialRequests: booking.specialRequests,
     });
 
     // Set headers for PDF download
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${voucherResult.filename}"`);
-    res.setHeader('Content-Length', voucherResult.pdf.length);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${voucherResult.filename}"`,
+    );
+    res.setHeader("Content-Length", voucherResult.pdf.length);
 
     // Send PDF
     res.send(voucherResult.pdf);
-
   } catch (error) {
-    console.error('Voucher generation error:', error);
+    console.error("Voucher generation error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to generate voucher'
+      error: error.message || "Failed to generate voucher",
     });
   }
 });
@@ -69,16 +71,16 @@ router.get('/hotel/:bookingRef', async (req, res) => {
  * Generate GST invoice
  * GET /api/vouchers/invoice/:bookingRef
  */
-router.get('/invoice/:bookingRef', async (req, res) => {
+router.get("/invoice/:bookingRef", async (req, res) => {
   try {
     const { bookingRef } = req.params;
-    
+
     // Get booking details
     const booking = hotelBookingService.getBooking(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
-        error: 'Booking not found'
+        error: "Booking not found",
       });
     }
 
@@ -86,13 +88,13 @@ router.get('/invoice/:bookingRef', async (req, res) => {
     const invoiceResult = await voucherService.generateGSTInvoice({
       bookingRef: booking.bookingRef,
       hotelDetails: booking.hotelbedsDetails?.hotel || {
-        name: 'Hotel Name',
-        address: 'Hotel Address'
+        name: "Hotel Name",
+        address: "Hotel Address",
       },
       guestDetails: booking.guestDetails,
       roomDetails: booking.roomDetails || {
-        name: 'Standard Room',
-        category: 'Standard'
+        name: "Standard Room",
+        category: "Standard",
       },
       checkIn: booking.checkIn,
       checkOut: booking.checkOut,
@@ -103,23 +105,25 @@ router.get('/invoice/:bookingRef', async (req, res) => {
       taxDetails: {
         gst: booking.totalAmount * 0.18,
         cgst: booking.totalAmount * 0.09,
-        sgst: booking.totalAmount * 0.09
-      }
+        sgst: booking.totalAmount * 0.09,
+      },
     });
 
     // Set headers for PDF download
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${invoiceResult.filename}"`);
-    res.setHeader('Content-Length', invoiceResult.pdf.length);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${invoiceResult.filename}"`,
+    );
+    res.setHeader("Content-Length", invoiceResult.pdf.length);
 
     // Send PDF
     res.send(invoiceResult.pdf);
-
   } catch (error) {
-    console.error('Invoice generation error:', error);
+    console.error("Invoice generation error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to generate invoice'
+      error: error.message || "Failed to generate invoice",
     });
   }
 });
@@ -128,16 +132,16 @@ router.get('/invoice/:bookingRef', async (req, res) => {
  * Preview voucher (returns base64 encoded PDF)
  * GET /api/vouchers/hotel/:bookingRef/preview
  */
-router.get('/hotel/:bookingRef/preview', async (req, res) => {
+router.get("/hotel/:bookingRef/preview", async (req, res) => {
   try {
     const { bookingRef } = req.params;
-    
+
     // Get booking details
     const booking = hotelBookingService.getBooking(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
-        error: 'Booking not found'
+        error: "Booking not found",
       });
     }
 
@@ -145,23 +149,23 @@ router.get('/hotel/:bookingRef/preview', async (req, res) => {
     const voucherResult = await voucherService.generateHotelVoucher({
       bookingRef: booking.bookingRef,
       hotelDetails: booking.hotelbedsDetails?.hotel || {
-        name: 'Hotel Name',
-        address: 'Hotel Address',
-        phone: 'N/A',
-        email: 'N/A'
+        name: "Hotel Name",
+        address: "Hotel Address",
+        phone: "N/A",
+        email: "N/A",
       },
       guestDetails: booking.guestDetails,
       roomDetails: booking.roomDetails || {
-        name: 'Standard Room',
-        category: 'Standard',
-        bedType: 'Double'
+        name: "Standard Room",
+        category: "Standard",
+        bedType: "Double",
       },
       checkIn: booking.checkIn,
       checkOut: booking.checkOut,
       totalAmount: booking.totalAmount,
       currency: booking.currency,
       paymentDetails: booking.paymentDetails,
-      specialRequests: booking.specialRequests
+      specialRequests: booking.specialRequests,
     });
 
     // Return base64 encoded PDF for preview
@@ -169,16 +173,15 @@ router.get('/hotel/:bookingRef/preview', async (req, res) => {
       success: true,
       data: {
         filename: voucherResult.filename,
-        pdf: voucherResult.pdf.toString('base64'),
-        contentType: 'application/pdf'
-      }
+        pdf: voucherResult.pdf.toString("base64"),
+        contentType: "application/pdf",
+      },
     });
-
   } catch (error) {
-    console.error('Voucher preview error:', error);
+    console.error("Voucher preview error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to generate voucher preview'
+      error: error.message || "Failed to generate voucher preview",
     });
   }
 });
@@ -187,17 +190,17 @@ router.get('/hotel/:bookingRef/preview', async (req, res) => {
  * Send voucher via email
  * POST /api/vouchers/hotel/:bookingRef/email
  */
-router.post('/hotel/:bookingRef/email', async (req, res) => {
+router.post("/hotel/:bookingRef/email", async (req, res) => {
   try {
     const { bookingRef } = req.params;
     const { email, additionalEmails = [] } = req.body;
-    
+
     // Get booking details
     const booking = hotelBookingService.getBooking(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
-        error: 'Booking not found'
+        error: "Booking not found",
       });
     }
 
@@ -205,23 +208,23 @@ router.post('/hotel/:bookingRef/email', async (req, res) => {
     const voucherResult = await voucherService.generateHotelVoucher({
       bookingRef: booking.bookingRef,
       hotelDetails: booking.hotelbedsDetails?.hotel || {
-        name: 'Hotel Name',
-        address: 'Hotel Address',
-        phone: 'N/A',
-        email: 'N/A'
+        name: "Hotel Name",
+        address: "Hotel Address",
+        phone: "N/A",
+        email: "N/A",
       },
       guestDetails: booking.guestDetails,
       roomDetails: booking.roomDetails || {
-        name: 'Standard Room',
-        category: 'Standard',
-        bedType: 'Double'
+        name: "Standard Room",
+        category: "Standard",
+        bedType: "Double",
       },
       checkIn: booking.checkIn,
       checkOut: booking.checkOut,
       totalAmount: booking.totalAmount,
       currency: booking.currency,
       paymentDetails: booking.paymentDetails,
-      specialRequests: booking.specialRequests
+      specialRequests: booking.specialRequests,
     });
 
     // Send voucher email using enhanced email service
@@ -232,56 +235,64 @@ router.post('/hotel/:bookingRef/email', async (req, res) => {
 
     for (const recipientEmail of allEmails) {
       try {
-        const emailResult = await emailService.sendVoucherEmail({
-          bookingRef: booking.bookingRef,
-          hotelDetails: booking.hotelbedsDetails?.hotel || {
-            name: 'Hotel Name',
-            address: 'Hotel Address'
+        const emailResult = await emailService.sendVoucherEmail(
+          {
+            bookingRef: booking.bookingRef,
+            hotelDetails: booking.hotelbedsDetails?.hotel || {
+              name: "Hotel Name",
+              address: "Hotel Address",
+            },
+            guestDetails: booking.guestDetails,
+            checkIn: booking.checkIn,
+            checkOut: booking.checkOut,
+            totalAmount: booking.totalAmount,
           },
-          guestDetails: booking.guestDetails,
-          checkIn: booking.checkIn,
-          checkOut: booking.checkOut,
-          totalAmount: booking.totalAmount
-        }, voucherResult.pdf);
+          voucherResult.pdf,
+        );
 
         emailResults.push({
           email: recipientEmail,
           success: emailResult.success,
           emailId: emailResult.emailId,
           messageId: emailResult.messageId,
-          error: emailResult.error
+          error: emailResult.error,
         });
 
-        console.log(`📧 Voucher email sent to ${recipientEmail}: ${emailResult.success ? 'SUCCESS' : 'FAILED'}`);
-
+        console.log(
+          `📧 Voucher email sent to ${recipientEmail}: ${emailResult.success ? "SUCCESS" : "FAILED"}`,
+        );
       } catch (error) {
-        console.error(`❌ Failed to send voucher email to ${recipientEmail}:`, error);
+        console.error(
+          `❌ Failed to send voucher email to ${recipientEmail}:`,
+          error,
+        );
         emailResults.push({
           email: recipientEmail,
           success: false,
-          error: error.message
+          error: error.message,
         });
       }
     }
 
-    const successCount = emailResults.filter(r => r.success).length;
+    const successCount = emailResults.filter((r) => r.success).length;
     const allSuccess = successCount === emailResults.length;
 
     res.json({
       success: allSuccess,
       data: {
-        message: allSuccess ? 'All voucher emails sent successfully' : `${successCount}/${emailResults.length} emails sent successfully`,
+        message: allSuccess
+          ? "All voucher emails sent successfully"
+          : `${successCount}/${emailResults.length} emails sent successfully`,
         emailResults: emailResults,
         filename: voucherResult.filename,
-        provider: emailService.provider
-      }
+        provider: emailService.provider,
+      },
     });
-
   } catch (error) {
-    console.error('Email voucher error:', error);
+    console.error("Email voucher error:", error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to send voucher email'
+      error: error.message || "Failed to send voucher email",
     });
   }
 });
@@ -290,21 +301,21 @@ router.post('/hotel/:bookingRef/email', async (req, res) => {
  * Get voucher generation status
  * GET /api/vouchers/status
  */
-router.get('/status', (req, res) => {
+router.get("/status", (req, res) => {
   res.json({
     success: true,
     data: {
-      service: 'voucher-generation',
-      status: 'operational',
-      supportedFormats: ['pdf'],
+      service: "voucher-generation",
+      status: "operational",
+      supportedFormats: ["pdf"],
       features: {
         hotelVoucher: true,
         gstInvoice: true,
         emailDelivery: true,
-        preview: true
+        preview: true,
       },
-      emailProvider: emailService.provider
-    }
+      emailProvider: emailService.provider,
+    },
   });
 });
 
@@ -312,7 +323,7 @@ router.get('/status', (req, res) => {
  * Get email delivery status
  * GET /api/vouchers/email/status/:emailId
  */
-router.get('/email/status/:emailId', (req, res) => {
+router.get("/email/status/:emailId", (req, res) => {
   try {
     const { emailId } = req.params;
     const deliveryStatus = emailService.getDeliveryStatus(emailId);
@@ -320,20 +331,19 @@ router.get('/email/status/:emailId', (req, res) => {
     if (!deliveryStatus) {
       return res.status(404).json({
         success: false,
-        error: 'Email tracking data not found'
+        error: "Email tracking data not found",
       });
     }
 
     res.json({
       success: true,
-      data: deliveryStatus
+      data: deliveryStatus,
     });
-
   } catch (error) {
-    console.error('Email status check error:', error);
+    console.error("Email status check error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to check email status'
+      error: "Failed to check email status",
     });
   }
 });
@@ -342,7 +352,7 @@ router.get('/email/status/:emailId', (req, res) => {
  * Get all email delivery tracking data
  * GET /api/vouchers/email/tracking
  */
-router.get('/email/tracking', authenticateToken, (req, res) => {
+router.get("/email/tracking", authenticateToken, (req, res) => {
   try {
     const trackingData = emailService.getAllDeliveryData();
 
@@ -350,18 +360,19 @@ router.get('/email/tracking', authenticateToken, (req, res) => {
       success: true,
       data: {
         totalEmails: trackingData.length,
-        successful: trackingData.filter(email => email.status === 'sent').length,
-        failed: trackingData.filter(email => email.status === 'failed').length,
+        successful: trackingData.filter((email) => email.status === "sent")
+          .length,
+        failed: trackingData.filter((email) => email.status === "failed")
+          .length,
         provider: emailService.provider,
-        emails: trackingData
-      }
+        emails: trackingData,
+      },
     });
-
   } catch (error) {
-    console.error('Email tracking data error:', error);
+    console.error("Email tracking data error:", error);
     res.status(500).json({
       success: false,
-      error: 'Failed to retrieve email tracking data'
+      error: "Failed to retrieve email tracking data",
     });
   }
 });

@@ -326,7 +326,7 @@ export default function CurrencyManagement() {
       console.log("Currency rates: Using mock data (fetch disabled)");
       const data: ExchangeRateResponse = {
         base: "INR",
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split("T")[0],
         rates: {
           USD: 0.012,
           EUR: 0.011,
@@ -336,8 +336,8 @@ export default function CurrencyManagement() {
           QAR: 0.043,
           KWD: 0.0037,
           OMR: 0.0046,
-          BHD: 0.0045
-        }
+          BHD: 0.0045,
+        },
       };
 
       // Update currency rates

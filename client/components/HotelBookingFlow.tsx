@@ -4,20 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { 
-  CreditCard, 
-  Shield, 
-  Calendar, 
-  Users, 
-  MapPin, 
+import {
+  CreditCard,
+  Shield,
+  Calendar,
+  Users,
+  MapPin,
   Star,
   CheckCircle,
   Loader2,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 import { bookingService, PreBookingRequest } from "@/services/bookingService";
 import { paymentService } from "@/services/paymentService";
@@ -27,7 +33,7 @@ interface Hotel {
   name: string;
   address: string;
   starRating: number;
-  images: Array<{ url: string; caption: string; }>;
+  images: Array<{ url: string; caption: string }>;
 }
 
 interface Room {
@@ -62,7 +68,7 @@ export default function HotelBookingFlow({
   room,
   selectedRate,
   searchParams,
-  onClose
+  onClose,
 }: BookingFlowProps) {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -72,45 +78,48 @@ export default function HotelBookingFlow({
   // Form state
   const [guestDetails, setGuestDetails] = useState({
     primaryGuest: {
-      title: 'Mr',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: ''
+      title: "Mr",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
     },
-    additionalGuests: []
+    additionalGuests: [],
   });
 
   const [contactInfo, setContactInfo] = useState({
-    email: '',
-    phone: ''
+    email: "",
+    phone: "",
   });
 
-  const [specialRequests, setSpecialRequests] = useState('');
+  const [specialRequests, setSpecialRequests] = useState("");
   const [tempBookingRef, setTempBookingRef] = useState<string | null>(null);
 
   const calculateNights = () => {
     const checkIn = new Date(searchParams.checkIn);
     const checkOut = new Date(searchParams.checkOut);
-    return Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+    return Math.ceil(
+      (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24),
+    );
   };
 
-  const totalAmount = selectedRate.total * calculateNights() * searchParams.rooms;
+  const totalAmount =
+    selectedRate.total * calculateNights() * searchParams.rooms;
 
   const handleGuestDetailChange = (field: string, value: string) => {
-    setGuestDetails(prev => ({
+    setGuestDetails((prev) => ({
       ...prev,
       primaryGuest: {
         ...prev.primaryGuest,
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
   const handleContactChange = (field: string, value: string) => {
-    setContactInfo(prev => ({
+    setContactInfo((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -118,13 +127,13 @@ export default function HotelBookingFlow({
     const { primaryGuest } = guestDetails;
     const errors = [];
 
-    if (!primaryGuest.firstName) errors.push('First name is required');
-    if (!primaryGuest.lastName) errors.push('Last name is required');
-    if (!contactInfo.email) errors.push('Email is required');
-    if (!contactInfo.phone) errors.push('Phone number is required');
+    if (!primaryGuest.firstName) errors.push("First name is required");
+    if (!primaryGuest.lastName) errors.push("Last name is required");
+    if (!contactInfo.email) errors.push("Email is required");
+    if (!contactInfo.phone) errors.push("Phone number is required");
 
     if (errors.length > 0) {
-      setError(errors.join(', '));
+      setError(errors.join(", "));
       return false;
     }
 
@@ -146,27 +155,31 @@ export default function HotelBookingFlow({
         rateKey: selectedRate.rateKey,
         checkIn: searchParams.checkIn,
         checkOut: searchParams.checkOut,
-        rooms: [{ 
-          adults: searchParams.adults, 
-          children: searchParams.children 
-        }],
+        rooms: [
+          {
+            adults: searchParams.adults,
+            children: searchParams.children,
+          },
+        ],
         guestDetails: {
           primaryGuest: guestDetails.primaryGuest,
-          additionalGuests: guestDetails.additionalGuests
+          additionalGuests: guestDetails.additionalGuests,
         },
         contactInfo,
         specialRequests,
         totalAmount,
-        currency: selectedRate.currency || 'INR'
+        currency: selectedRate.currency || "INR",
       };
 
-      const preBookingResult = await bookingService.createPreBooking(bookingData);
+      const preBookingResult =
+        await bookingService.createPreBooking(bookingData);
       setTempBookingRef(preBookingResult.tempBookingRef);
       setCurrentStep(2);
-
     } catch (error) {
-      console.error('Pre-booking error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to create booking');
+      console.error("Pre-booking error:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to create booking",
+      );
     } finally {
       setLoading(false);
     }
@@ -183,17 +196,17 @@ export default function HotelBookingFlow({
         {
           tempBookingRef,
           amount: totalAmount,
-          currency: selectedRate.currency || 'INR',
+          currency: selectedRate.currency || "INR",
           customerDetails: {
             firstName: guestDetails.primaryGuest.firstName,
             lastName: guestDetails.primaryGuest.lastName,
             email: contactInfo.email,
-            phone: contactInfo.phone
+            phone: contactInfo.phone,
           },
           hotelDetails: {
             hotelCode: hotel.id,
-            hotelName: hotel.name
-          }
+            hotelName: hotel.name,
+          },
         },
         (bookingRef: string) => {
           // Payment successful - redirect to confirmation
@@ -205,12 +218,11 @@ export default function HotelBookingFlow({
         },
         (isLoading: boolean) => {
           setLoading(isLoading);
-        }
+        },
       );
-
     } catch (error) {
-      console.error('Payment error:', error);
-      setError(error instanceof Error ? error.message : 'Payment failed');
+      console.error("Payment error:", error);
+      setError(error instanceof Error ? error.message : "Payment failed");
       setLoading(false);
     }
   };
@@ -218,14 +230,16 @@ export default function HotelBookingFlow({
   const renderStep1 = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Guest Details</h3>
-        
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Guest Details
+        </h3>
+
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div>
             <Label htmlFor="title">Title</Label>
-            <Select 
-              value={guestDetails.primaryGuest.title} 
-              onValueChange={(value) => handleGuestDetailChange('title', value)}
+            <Select
+              value={guestDetails.primaryGuest.title}
+              onValueChange={(value) => handleGuestDetailChange("title", value)}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -238,24 +252,28 @@ export default function HotelBookingFlow({
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="firstName">First Name *</Label>
             <Input
               id="firstName"
               value={guestDetails.primaryGuest.firstName}
-              onChange={(e) => handleGuestDetailChange('firstName', e.target.value)}
+              onChange={(e) =>
+                handleGuestDetailChange("firstName", e.target.value)
+              }
               placeholder="Enter first name"
               required
             />
           </div>
-          
+
           <div>
             <Label htmlFor="lastName">Last Name *</Label>
             <Input
               id="lastName"
               value={guestDetails.primaryGuest.lastName}
-              onChange={(e) => handleGuestDetailChange('lastName', e.target.value)}
+              onChange={(e) =>
+                handleGuestDetailChange("lastName", e.target.value)
+              }
               placeholder="Enter last name"
               required
             />
@@ -264,8 +282,10 @@ export default function HotelBookingFlow({
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
-        
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Contact Information
+        </h3>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <Label htmlFor="email">Email Address *</Label>
@@ -273,19 +293,19 @@ export default function HotelBookingFlow({
               id="email"
               type="email"
               value={contactInfo.email}
-              onChange={(e) => handleContactChange('email', e.target.value)}
+              onChange={(e) => handleContactChange("email", e.target.value)}
               placeholder="Enter email address"
               required
             />
           </div>
-          
+
           <div>
             <Label htmlFor="phone">Phone Number *</Label>
             <Input
               id="phone"
               type="tel"
               value={contactInfo.phone}
-              onChange={(e) => handleContactChange('phone', e.target.value)}
+              onChange={(e) => handleContactChange("phone", e.target.value)}
               placeholder="Enter phone number"
               required
             />
@@ -311,13 +331,15 @@ export default function HotelBookingFlow({
         </div>
       )}
 
-      <Button 
+      <Button
         onClick={handleContinueToPayment}
         disabled={loading}
         className="w-full bg-[#003580] hover:bg-[#002a66]"
       >
         {loading ? (
-          <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...
+          </>
         ) : (
           <>Continue to Payment</>
         )}
@@ -333,7 +355,8 @@ export default function HotelBookingFlow({
           <span className="text-green-800 font-medium">Booking Reserved</span>
         </div>
         <p className="text-green-700 text-sm mt-1">
-          Your booking has been temporarily reserved. Complete payment to confirm.
+          Your booking has been temporarily reserved. Complete payment to
+          confirm.
         </p>
         {tempBookingRef && (
           <p className="text-green-700 text-sm mt-1">
@@ -343,17 +366,21 @@ export default function HotelBookingFlow({
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h3>
-        
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Payment Details
+        </h3>
+
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
             <span className="text-blue-900 font-medium">Total Amount</span>
             <span className="text-xl font-bold text-blue-900">
-              {selectedRate.currency === 'INR' ? '₹' : selectedRate.currency} {totalAmount.toLocaleString()}
+              {selectedRate.currency === "INR" ? "₹" : selectedRate.currency}{" "}
+              {totalAmount.toLocaleString()}
             </span>
           </div>
           <p className="text-blue-700 text-sm mt-1">
-            {calculateNights()} night{calculateNights() !== 1 ? 's' : ''} × {searchParams.rooms} room{searchParams.rooms !== 1 ? 's' : ''}
+            {calculateNights()} night{calculateNights() !== 1 ? "s" : ""} ×{" "}
+            {searchParams.rooms} room{searchParams.rooms !== 1 ? "s" : ""}
           </p>
         </div>
 
@@ -377,21 +404,23 @@ export default function HotelBookingFlow({
       )}
 
       <div className="flex space-x-4">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => setCurrentStep(1)}
           disabled={loading}
           className="flex-1"
         >
           Back
         </Button>
-        <Button 
+        <Button
           onClick={handlePayment}
           disabled={loading}
           className="flex-1 bg-[#003580] hover:bg-[#002a66]"
         >
           {loading ? (
-            <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...
+            </>
           ) : (
             <>Pay Now</>
           )}
@@ -417,7 +446,10 @@ export default function HotelBookingFlow({
                 <h4 className="font-semibold text-gray-900">{hotel.name}</h4>
                 <div className="flex">
                   {Array.from({ length: hotel.starRating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                    <Star
+                      key={i}
+                      className="w-4 h-4 text-yellow-400 fill-current"
+                    />
                   ))}
                 </div>
               </div>
@@ -430,13 +462,13 @@ export default function HotelBookingFlow({
               <div>
                 <span className="text-gray-600">Check-in:</span>
                 <p className="font-medium">
-                  {new Date(searchParams.checkIn).toLocaleDateString('en-GB')}
+                  {new Date(searchParams.checkIn).toLocaleDateString("en-GB")}
                 </p>
               </div>
               <div>
                 <span className="text-gray-600">Check-out:</span>
                 <p className="font-medium">
-                  {new Date(searchParams.checkOut).toLocaleDateString('en-GB')}
+                  {new Date(searchParams.checkOut).toLocaleDateString("en-GB")}
                 </p>
               </div>
               <div>
@@ -445,7 +477,9 @@ export default function HotelBookingFlow({
               </div>
               <div>
                 <span className="text-gray-600">Guests:</span>
-                <p className="font-medium">{searchParams.adults + searchParams.children} guests</p>
+                <p className="font-medium">
+                  {searchParams.adults + searchParams.children} guests
+                </p>
               </div>
             </div>
           </div>
@@ -456,7 +490,7 @@ export default function HotelBookingFlow({
       <Card>
         <CardHeader>
           <CardTitle>
-            {currentStep === 1 ? 'Guest Information' : 'Payment'}
+            {currentStep === 1 ? "Guest Information" : "Payment"}
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -80,38 +80,47 @@ export default function HotelResults() {
       const searchRequest = {
         destination: destination || "DXB", // Use destination code
         checkIn: checkIn || new Date().toISOString(),
-        checkOut: checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+        checkOut:
+          checkOut ||
+          new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
         rooms: parseInt(rooms) || 1,
         adults: parseInt(adults) || 2,
         children: parseInt(children) || 0,
-        currencyCode: selectedCurrency?.code || 'INR'
+        currencyCode: selectedCurrency?.code || "INR",
       };
 
-      console.log('🔴 Searching live Hotelbeds API with params:', searchRequest);
+      console.log(
+        "🔴 Searching live Hotelbeds API with params:",
+        searchRequest,
+      );
 
       // Try live Hotelbeds API first
       const liveResults = await hotelsService.searchHotelsLive(searchRequest);
 
       if (liveResults.length > 0) {
-        console.log('✅ Using LIVE Hotelbeds data:', liveResults.length, 'hotels');
+        console.log(
+          "✅ Using LIVE Hotelbeds data:",
+          liveResults.length,
+          "hotels",
+        );
         setHotels(transformHotelbedsData(liveResults));
         setTotalResults(liveResults.length);
         setIsLiveData(true);
       } else {
-        console.log('⚠️ No live data available, using enhanced mock data');
+        console.log("⚠️ No live data available, using enhanced mock data");
         // Use enhanced mock data that simulates Hotelbeds structure
-        const mockResults = await hotelsService.searchHotelsFallback(searchRequest);
+        const mockResults =
+          await hotelsService.searchHotelsFallback(searchRequest);
         setHotels(transformHotelbedsData(mockResults));
         setTotalResults(mockResults.length);
         setIsLiveData(false);
       }
-
     } catch (err) {
-      console.error('Live Hotelbeds search failed:', err);
-      setError('Failed to load hotels. Please try again.');
+      console.error("Live Hotelbeds search failed:", err);
+      setError("Failed to load hotels. Please try again.");
 
       // Emergency fallback to static mock data
-      console.log('🔄 Using emergency fallback data');
+      console.log("🔄 Using emergency fallback data");
       setHotels(getMockHotels());
       setTotalResults(getMockHotels().length);
       setIsLiveData(false);
@@ -125,44 +134,50 @@ export default function HotelResults() {
     return hotelbedsData.map((hotel, index) => ({
       id: hotel.id || hotel.code || `hotel-${index}`,
       name: hotel.name || `Hotel ${destination}`,
-      location: `${hotel.address?.city || destination}, ${hotel.address?.country || 'Unknown'}`,
+      location: `${hotel.address?.city || destination}, ${hotel.address?.country || "Unknown"}`,
       images: hotel.images || [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
       ],
       rating: hotel.rating || hotel.reviewScore || 4.0,
       reviews: hotel.reviewCount || 150,
-      originalPrice: hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.25),
+      originalPrice:
+        hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.25),
       currentPrice: hotel.currentPrice || 120,
       description: hotel.description || `Experience luxury at ${hotel.name}`,
       amenities: hotel.amenities || ["WiFi", "Pool", "Restaurant"],
       features: hotel.features || ["City View", "Business Center"],
-      roomTypes: hotel.rooms ? hotel.rooms.map((room: any) => ({
-        name: room.name || "Standard Room",
-        price: room.price || hotel.currentPrice || 120,
-        features: room.features || ["Double Bed", "City View"]
-      })) : [{
-        name: "Standard Room",
-        price: hotel.currentPrice || 120,
-        features: ["Double Bed", "City View"]
-      }],
+      roomTypes: hotel.rooms
+        ? hotel.rooms.map((room: any) => ({
+            name: room.name || "Standard Room",
+            price: room.price || hotel.currentPrice || 120,
+            features: room.features || ["Double Bed", "City View"],
+          }))
+        : [
+            {
+              name: "Standard Room",
+              price: hotel.currentPrice || 120,
+              features: ["Double Bed", "City View"],
+            },
+          ],
       // Additional fields for compatibility
       address: hotel.address || {
         street: "Hotel Street",
         city: destination,
         country: "Country",
-        postalCode: "12345"
+        postalCode: "12345",
       },
       starRating: hotel.rating || 4,
       reviewCount: hotel.reviewCount || 150,
       contact: {
         phone: "+1234567890",
-        email: "info@hotel.com"
+        email: "info@hotel.com",
       },
       priceRange: {
         min: hotel.currentPrice || 120,
-        max: hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.25),
-        currency: hotel.currency || selectedCurrency?.code || 'INR'
+        max:
+          hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.25),
+        currency: hotel.currency || selectedCurrency?.code || "INR",
       },
       policies: {
         checkIn: "15:00",
@@ -170,8 +185,8 @@ export default function HotelResults() {
         cancellation: "Free cancellation until 24 hours",
         children: "Children welcome",
         pets: "Pets not allowed",
-        smoking: "Non-smoking"
-      }
+        smoking: "Non-smoking",
+      },
     }));
   };
 
@@ -285,18 +300,26 @@ export default function HotelResults() {
 
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
-    let filtered = hotels.filter(hotel => {
+    let filtered = hotels.filter((hotel) => {
       // Price range filter
-      const price = hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
+      const price =
+        hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
       if (price < priceRange[0] || price > priceRange[1]) return false;
 
       // Rating filter
-      if (selectedRating.length > 0 && !selectedRating.includes(Math.floor(hotel.rating))) return false;
+      if (
+        selectedRating.length > 0 &&
+        !selectedRating.includes(Math.floor(hotel.rating))
+      )
+        return false;
 
       // Amenities filter
       if (selectedAmenities.length > 0) {
-        const hotelAmenities = hotel.amenities?.map(a => a.name) || [];
-        if (!selectedAmenities.some(amenity => hotelAmenities.includes(amenity))) return false;
+        const hotelAmenities = hotel.amenities?.map((a) => a.name) || [];
+        if (
+          !selectedAmenities.some((amenity) => hotelAmenities.includes(amenity))
+        )
+          return false;
       }
 
       return true;
@@ -304,18 +327,25 @@ export default function HotelResults() {
 
     // Sort hotels
     switch (sortBy) {
-      case 'price_low':
-        filtered.sort((a, b) => (a.priceRange?.min || 0) - (b.priceRange?.min || 0));
+      case "price_low":
+        filtered.sort(
+          (a, b) => (a.priceRange?.min || 0) - (b.priceRange?.min || 0),
+        );
         break;
-      case 'price_high':
-        filtered.sort((a, b) => (b.priceRange?.min || 0) - (a.priceRange?.min || 0));
+      case "price_high":
+        filtered.sort(
+          (a, b) => (b.priceRange?.min || 0) - (a.priceRange?.min || 0),
+        );
         break;
-      case 'rating':
+      case "rating":
         filtered.sort((a, b) => b.rating - a.rating);
         break;
-      case 'recommended':
+      case "recommended":
       default:
-        filtered.sort((a, b) => (b.rating * (b.reviewCount || 1)) - (a.rating * (a.reviewCount || 1)));
+        filtered.sort(
+          (a, b) =>
+            b.rating * (b.reviewCount || 1) - a.rating * (a.reviewCount || 1),
+        );
         break;
     }
 
@@ -385,7 +415,9 @@ export default function HotelResults() {
           <div className="flex items-center text-sm text-gray-600">
             <span>🌍 Global</span>
             <span className="mx-2">›</span>
-            <span>{searchParams.get("destinationName") || destination || "Dubai"}</span>
+            <span>
+              {searchParams.get("destinationName") || destination || "Dubai"}
+            </span>
             <span className="mx-2">›</span>
             <span className="text-gray-900 font-medium">
               {isLiveData ? "Live Results" : "Search Results"}
@@ -458,7 +490,10 @@ export default function HotelResults() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-3">
                     <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                      {searchParams.get("destinationName") || destination || "Dubai"}: {filteredAndSortedHotels.length} properties found
+                      {searchParams.get("destinationName") ||
+                        destination ||
+                        "Dubai"}
+                      : {filteredAndSortedHotels.length} properties found
                     </h1>
                     {isLiveData && (
                       <div className="flex items-center gap-1 bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
@@ -476,8 +511,7 @@ export default function HotelResults() {
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
                     {isLiveData
                       ? "Real-time hotel data from Hotelbeds API with live pricing"
-                      : "Enhanced mock data with realistic hotel information"
-                    }
+                      : "Enhanced mock data with realistic hotel information"}
                   </p>
                 </div>
 
@@ -567,15 +601,26 @@ export default function HotelResults() {
               ) : error ? (
                 <div className="text-center py-8 sm:py-12 px-4">
                   <div className="text-red-600 mb-4">
-                    <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    <svg
+                      className="w-12 h-12 mx-auto mb-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 15.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-base sm:text-lg font-medium text-red-600 mb-2">
                     {error}
                   </h3>
                   <p className="text-gray-600 text-sm mb-4">
-                    Unable to connect to Hotelbeds API. Please check your connection.
+                    Unable to connect to Hotelbeds API. Please check your
+                    connection.
                   </p>
                   <Button onClick={loadHotels} className="mt-4">
                     🔄 Retry Search
@@ -596,8 +641,18 @@ export default function HotelResults() {
             {!loading && !error && filteredAndSortedHotels.length === 0 && (
               <div className="text-center py-8 sm:py-12 px-4">
                 <div className="text-gray-400 mb-4">
-                  <svg className="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  <svg
+                    className="w-16 h-16 mx-auto mb-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1}
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
@@ -606,14 +661,16 @@ export default function HotelResults() {
                 <p className="text-gray-600 text-sm sm:text-base mb-4">
                   {isLiveData
                     ? "No hotels found in Hotelbeds API for this destination and dates"
-                    : "Try adjusting your filters or search different dates"
-                  }
+                    : "Try adjusting your filters or search different dates"}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
                   <Button onClick={loadHotels} variant="outline">
                     🔄 Search Again
                   </Button>
-                  <Button onClick={() => window.history.back()} variant="outline">
+                  <Button
+                    onClick={() => window.history.back()}
+                    variant="outline"
+                  >
                     ← Modify Search
                   </Button>
                 </div>

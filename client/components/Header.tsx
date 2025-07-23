@@ -73,8 +73,6 @@ export function Header({ className }: HeaderProps) {
     }
   }, []);
 
-
-
   return (
     <header
       className={cn(
@@ -175,7 +173,9 @@ export function Header({ className }: HeaderProps) {
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/admin/testing")}>
+                    <DropdownMenuItem
+                      onClick={() => navigate("/admin/testing")}
+                    >
                       <div className="w-4 h-4 mr-2 text-red-500">🔴</div>
                       Live API Test
                     </DropdownMenuItem>

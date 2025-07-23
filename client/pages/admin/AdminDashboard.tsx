@@ -107,19 +107,19 @@ const mockStats = {
     { month: "Mar", bookings: 195, revenue: 458000 },
     { month: "Apr", bookings: 168, revenue: 398000 },
     { month: "May", bookings: 201, revenue: 475000 },
-    { month: "Jun", bookings: 278, revenue: 579000 }
+    { month: "Jun", bookings: 278, revenue: 579000 },
   ],
   topDestinationsMonthly: [
     { city: "Mumbai", bookings: 245, revenue: 580000, growth: "+12%" },
     { city: "Dubai", bookings: 198, revenue: 450000, growth: "+8%" },
     { city: "Delhi", bookings: 176, revenue: 420000, growth: "+15%" },
     { city: "Singapore", bookings: 142, revenue: 385000, growth: "+6%" },
-    { city: "London", bookings: 118, revenue: 295000, growth: "+10%" }
+    { city: "London", bookings: 118, revenue: 295000, growth: "+10%" },
   ],
   flightCabinBookings: [
     { cabin: "Economy", bookings: 485, revenue: 1250000, percentage: 66 },
     { cabin: "Business", bookings: 198, revenue: 890000, percentage: 27 },
-    { cabin: "First Class", bookings: 45, revenue: 420000, percentage: 7 }
+    { cabin: "First Class", bookings: 45, revenue: 420000, percentage: 7 },
   ],
   hotelCityBookings: [
     { city: "Mumbai", bookings: 125, revenue: 285000, avgRate: 2280 },
@@ -127,8 +127,8 @@ const mockStats = {
     { city: "Delhi", bookings: 89, revenue: 198000, avgRate: 2225 },
     { city: "Goa", bookings: 76, revenue: 165000, avgRate: 2170 },
     { city: "Bangalore", bookings: 68, revenue: 148000, avgRate: 2176 },
-    { city: "Singapore", bookings: 63, revenue: 189000, avgRate: 3000 }
-  ]
+    { city: "Singapore", bookings: 63, revenue: 189000, avgRate: 3000 },
+  ],
 };
 
 const adminModules = [
@@ -355,8 +355,12 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">{data.month}</span>
                     <div className="text-right">
-                      <div className="text-sm font-semibold">{data.bookings} bookings</div>
-                      <div className="text-xs text-gray-600">₹{data.revenue.toLocaleString()}</div>
+                      <div className="text-sm font-semibold">
+                        {data.bookings} bookings
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        ₹{data.revenue.toLocaleString()}
+                      </div>
                     </div>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded">
@@ -381,7 +385,10 @@ export default function AdminDashboard() {
           <CardContent>
             <div className="space-y-3">
               {mockStats.topDestinationsMonthly.map((destination, index) => (
-                <div key={destination.city} className="flex items-center justify-between">
+                <div
+                  key={destination.city}
+                  className="flex items-center justify-between"
+                >
                   <div className="flex items-center">
                     <span className="text-sm font-medium text-gray-700 w-4">
                       {index + 1}.
@@ -429,15 +436,22 @@ export default function AdminDashboard() {
                       </Badge>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-semibold">{cabin.bookings} bookings</div>
-                      <div className="text-xs text-gray-600">₹{cabin.revenue.toLocaleString()}</div>
+                      <div className="text-sm font-semibold">
+                        {cabin.bookings} bookings
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        ₹{cabin.revenue.toLocaleString()}
+                      </div>
                     </div>
                   </div>
                   <div className="w-full h-3 bg-gray-200 rounded">
                     <div
                       className={`h-3 rounded ${
-                        cabin.cabin === 'Economy' ? 'bg-blue-600' :
-                        cabin.cabin === 'Business' ? 'bg-green-600' : 'bg-purple-600'
+                        cabin.cabin === "Economy"
+                          ? "bg-blue-600"
+                          : cabin.cabin === "Business"
+                            ? "bg-green-600"
+                            : "bg-purple-600"
                       }`}
                       style={{ width: `${cabin.percentage}%` }}
                     ></div>
@@ -458,7 +472,10 @@ export default function AdminDashboard() {
           <CardContent>
             <div className="space-y-3">
               {mockStats.hotelCityBookings.map((hotel, index) => (
-                <div key={hotel.city} className="flex items-center justify-between">
+                <div
+                  key={hotel.city}
+                  className="flex items-center justify-between"
+                >
                   <div className="flex items-center">
                     <span className="text-sm font-medium text-gray-700 w-4">
                       {index + 1}.
@@ -680,8 +697,12 @@ export default function AdminDashboard() {
             ) : activeModule === "testing" ? (
               <div className="text-center py-8">
                 <TestTube className="w-16 h-16 text-pink-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">API Testing Dashboard</h2>
-                <p className="text-gray-600 mb-6">Comprehensive testing tools for live API integrations</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  API Testing Dashboard
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Comprehensive testing tools for live API integrations
+                </p>
                 <Link to="/admin/testing">
                   <Button className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 text-lg">
                     Open Testing Dashboard

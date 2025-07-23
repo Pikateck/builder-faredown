@@ -115,7 +115,7 @@ class BookingService {
     try {
       const response = await apiClient.post<ApiResponse<PriceCalculation>>(
         `${this.baseUrl}/hotels/calculate-price`,
-        priceData
+        priceData,
       );
 
       if (response.success && response.data) {
@@ -132,11 +132,13 @@ class BookingService {
   /**
    * Create pre-booking (temporary reservation for payment)
    */
-  async createPreBooking(bookingData: PreBookingRequest): Promise<PreBookingResponse> {
+  async createPreBooking(
+    bookingData: PreBookingRequest,
+  ): Promise<PreBookingResponse> {
     try {
       const response = await apiClient.post<ApiResponse<PreBookingResponse>>(
         `${this.baseUrl}/hotels/pre-book`,
-        bookingData
+        bookingData,
       );
 
       if (response.success && response.data) {
@@ -156,7 +158,7 @@ class BookingService {
   async getPreBooking(tempBookingRef: string): Promise<any> {
     try {
       const response = await apiClient.get<ApiResponse<any>>(
-        `${this.baseUrl}/hotels/pre-book/${tempBookingRef}`
+        `${this.baseUrl}/hotels/pre-book/${tempBookingRef}`,
       );
 
       if (response.success && response.data) {
@@ -184,7 +186,7 @@ class BookingService {
     try {
       const response = await apiClient.post<ApiResponse<BookingConfirmation>>(
         `${this.baseUrl}/hotels/confirm`,
-        confirmationData
+        confirmationData,
       );
 
       if (response.success && response.data) {
@@ -204,7 +206,7 @@ class BookingService {
   async getBooking(bookingRef: string): Promise<HotelBooking> {
     try {
       const response = await apiClient.get<ApiResponse<HotelBooking>>(
-        `${this.baseUrl}/hotels/${bookingRef}`
+        `${this.baseUrl}/hotels/${bookingRef}`,
       );
 
       if (response.success && response.data) {
@@ -221,11 +223,14 @@ class BookingService {
   /**
    * Cancel booking
    */
-  async cancelBooking(bookingRef: string, reason = "Customer request"): Promise<any> {
+  async cancelBooking(
+    bookingRef: string,
+    reason = "Customer request",
+  ): Promise<any> {
     try {
       const response = await apiClient.post<ApiResponse<any>>(
         `${this.baseUrl}/hotels/${bookingRef}/cancel`,
-        { reason }
+        { reason },
       );
 
       if (response.success && response.data) {
@@ -242,20 +247,23 @@ class BookingService {
   /**
    * Get user bookings
    */
-  async getUserBookings(userId: string, limit = 10, offset = 0): Promise<{
+  async getUserBookings(
+    userId: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<{
     bookings: HotelBooking[];
     total: number;
     hasMore: boolean;
   }> {
     try {
-      const response = await apiClient.get<ApiResponse<{
-        bookings: HotelBooking[];
-        total: number;
-        hasMore: boolean;
-      }>>(
-        `${this.baseUrl}/hotels/user/${userId}`,
-        { limit, offset }
-      );
+      const response = await apiClient.get<
+        ApiResponse<{
+          bookings: HotelBooking[];
+          total: number;
+          hasMore: boolean;
+        }>
+      >(`${this.baseUrl}/hotels/user/${userId}`, { limit, offset });
 
       if (response.success && response.data) {
         return response.data;
@@ -305,7 +313,8 @@ class BookingService {
       errors.push("Primary guest details are required");
     } else {
       const primary = bookingData.guestDetails.primaryGuest;
-      if (!primary.firstName) errors.push("Primary guest first name is required");
+      if (!primary.firstName)
+        errors.push("Primary guest first name is required");
       if (!primary.lastName) errors.push("Primary guest last name is required");
     }
 
@@ -332,17 +341,24 @@ class BookingService {
           errors.push(`Room ${index + 1}: At least one adult is required`);
         }
         if (room.children < 0) {
-          errors.push(`Room ${index + 1}: Number of children cannot be negative`);
+          errors.push(
+            `Room ${index + 1}: Number of children cannot be negative`,
+          );
         }
-        if (room.children > 0 && (!room.childrenAges || room.childrenAges.length !== room.children)) {
-          errors.push(`Room ${index + 1}: Children ages are required for all children`);
+        if (
+          room.children > 0 &&
+          (!room.childrenAges || room.childrenAges.length !== room.children)
+        ) {
+          errors.push(
+            `Room ${index + 1}: Children ages are required for all children`,
+          );
         }
       });
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -361,9 +377,12 @@ class BookingService {
    */
   formatBookingSummary(booking: PreBookingRequest): string {
     const nights = this.calculateNights(booking.checkIn, booking.checkOut);
-    const totalGuests = booking.rooms.reduce((sum, room) => sum + room.adults + room.children, 0);
-    
-    return `${booking.rooms.length} room${booking.rooms.length > 1 ? 's' : ''}, ${totalGuests} guest${totalGuests > 1 ? 's' : ''}, ${nights} night${nights > 1 ? 's' : ''}`;
+    const totalGuests = booking.rooms.reduce(
+      (sum, room) => sum + room.adults + room.children,
+      0,
+    );
+
+    return `${booking.rooms.length} room${booking.rooms.length > 1 ? "s" : ""}, ${totalGuests} guest${totalGuests > 1 ? "s" : ""}, ${nights} night${nights > 1 ? "s" : ""}`;
   }
 
   /**
@@ -374,7 +393,7 @@ class BookingService {
     onPreBookingCreated: (tempRef: string) => void,
     onPaymentRequired: (tempRef: string, amount: number) => void,
     onBookingConfirmed: (bookingRef: string) => void,
-    onError: (error: string) => void
+    onError: (error: string) => void,
   ): Promise<void> {
     try {
       // Step 1: Validate booking data
@@ -388,8 +407,10 @@ class BookingService {
       onPreBookingCreated(preBookingResult.tempBookingRef);
 
       // Step 3: Trigger payment flow
-      onPaymentRequired(preBookingResult.tempBookingRef, preBookingResult.totalAmount);
-
+      onPaymentRequired(
+        preBookingResult.tempBookingRef,
+        preBookingResult.totalAmount,
+      );
     } catch (error) {
       console.error("Booking flow error:", error);
       onError(error instanceof Error ? error.message : "Booking failed");

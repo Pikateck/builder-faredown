@@ -8,57 +8,57 @@ class MarkupService {
     // Mock markup rules - in production, this would come from database
     this.markupRules = [
       {
-        id: '1',
-        type: 'supplier',
-        name: 'Hotelbeds Default',
-        supplierId: 'hotelbeds',
+        id: "1",
+        type: "supplier",
+        name: "Hotelbeds Default",
+        supplierId: "hotelbeds",
         percentage: 12,
         fixedAmount: 0,
         minPercentage: 8,
         maxPercentage: 25,
-        currency: 'INR',
+        currency: "INR",
         active: true,
-        priority: 1
+        priority: 1,
       },
       {
-        id: '2',
-        type: 'city',
-        name: 'Dubai Premium',
-        city: 'Dubai',
+        id: "2",
+        type: "city",
+        name: "Dubai Premium",
+        city: "Dubai",
         percentage: 15,
         fixedAmount: 0,
         minPercentage: 10,
         maxPercentage: 30,
-        currency: 'INR',
+        currency: "INR",
         active: true,
-        priority: 2
+        priority: 2,
       },
       {
-        id: '3',
-        type: 'star_rating',
-        name: '5 Star Hotels',
+        id: "3",
+        type: "star_rating",
+        name: "5 Star Hotels",
         starRating: 5,
         percentage: 18,
         fixedAmount: 0,
         minPercentage: 15,
         maxPercentage: 35,
-        currency: 'INR',
+        currency: "INR",
         active: true,
-        priority: 3
+        priority: 3,
       },
       {
-        id: '4',
-        type: 'room_category',
-        name: 'Luxury Suites',
-        roomCategory: 'Suite',
+        id: "4",
+        type: "room_category",
+        name: "Luxury Suites",
+        roomCategory: "Suite",
         percentage: 20,
         fixedAmount: 0,
         minPercentage: 15,
         maxPercentage: 40,
-        currency: 'INR',
+        currency: "INR",
         active: true,
-        priority: 4
-      }
+        priority: 4,
+      },
     ];
   }
 
@@ -68,14 +68,14 @@ class MarkupService {
   applyMarkup(hotelData, roomRates) {
     try {
       const applicableRules = this.getApplicableRules(hotelData);
-      const finalRates = roomRates.map(room => {
+      const finalRates = roomRates.map((room) => {
         const markedUpRoom = { ...room };
-        
+
         if (room.rates && room.rates.length > 0) {
-          markedUpRoom.rates = room.rates.map(rate => {
+          markedUpRoom.rates = room.rates.map((rate) => {
             const rule = this.selectBestRule(applicableRules, hotelData, room);
             const markedUpRate = this.calculateMarkup(rate, rule);
-            
+
             return {
               ...rate,
               originalNet: rate.net,
@@ -83,31 +83,33 @@ class MarkupService {
               net: markedUpRate.net,
               total: markedUpRate.total,
               markup: markedUpRate.markup,
-              markupRule: rule ? {
-                id: rule.id,
-                name: rule.name,
-                type: rule.type,
-                percentage: rule.percentage,
-                amount: markedUpRate.markupAmount
-              } : null
+              markupRule: rule
+                ? {
+                    id: rule.id,
+                    name: rule.name,
+                    type: rule.type,
+                    percentage: rule.percentage,
+                    amount: markedUpRate.markupAmount,
+                  }
+                : null,
             };
           });
         }
-        
+
         return markedUpRoom;
       });
 
       return {
         originalRates: roomRates,
         markedUpRates: finalRates,
-        markupSummary: this.generateMarkupSummary(finalRates)
+        markupSummary: this.generateMarkupSummary(finalRates),
       };
     } catch (error) {
-      console.error('Error applying markup:', error);
+      console.error("Error applying markup:", error);
       return {
         originalRates: roomRates,
         markedUpRates: roomRates,
-        markupSummary: { totalMarkup: 0, averageMarkup: 0 }
+        markupSummary: { totalMarkup: 0, averageMarkup: 0 },
       };
     }
   }
@@ -117,25 +119,25 @@ class MarkupService {
    */
   getApplicableRules(hotelData) {
     return this.markupRules
-      .filter(rule => {
+      .filter((rule) => {
         if (!rule.active) return false;
 
         switch (rule.type) {
-          case 'supplier':
+          case "supplier":
             return rule.supplierId === hotelData.supplierId;
-          
-          case 'city':
+
+          case "city":
             return rule.city === hotelData.location?.city;
-          
-          case 'star_rating':
+
+          case "star_rating":
             return rule.starRating === hotelData.starRating;
-          
-          case 'room_category':
+
+          case "room_category":
             return true; // Will be checked per room
-          
-          case 'global':
+
+          case "global":
             return true;
-          
+
           default:
             return false;
         }
@@ -148,18 +150,19 @@ class MarkupService {
    */
   selectBestRule(applicableRules, hotelData, roomData) {
     // First, try to find room-specific rules
-    const roomRule = applicableRules.find(rule => 
-      rule.type === 'room_category' && 
-      rule.roomCategory === roomData.category
+    const roomRule = applicableRules.find(
+      (rule) =>
+        rule.type === "room_category" &&
+        rule.roomCategory === roomData.category,
     );
-    
+
     if (roomRule) return roomRule;
 
     // Then try hotel-specific rules (star rating, city, etc.)
-    const hotelRule = applicableRules.find(rule => 
-      rule.type !== 'room_category'
+    const hotelRule = applicableRules.find(
+      (rule) => rule.type !== "room_category",
     );
-    
+
     if (hotelRule) return hotelRule;
 
     // Fallback to default rule if no specific rule found
@@ -175,7 +178,7 @@ class MarkupService {
         net: rate.net,
         total: rate.total || rate.net,
         markup: 0,
-        markupAmount: 0
+        markupAmount: 0,
       };
     }
 
@@ -186,15 +189,19 @@ class MarkupService {
     if (rule.percentage > 0) {
       markupAmount = (netRate * rule.percentage) / 100;
     }
-    
+
     if (rule.fixedAmount > 0) {
       markupAmount += rule.fixedAmount;
     }
 
     // Apply min/max constraints
-    const minMarkup = rule.minPercentage ? (netRate * rule.minPercentage) / 100 : 0;
-    const maxMarkup = rule.maxPercentage ? (netRate * rule.maxPercentage) / 100 : Infinity;
-    
+    const minMarkup = rule.minPercentage
+      ? (netRate * rule.minPercentage) / 100
+      : 0;
+    const maxMarkup = rule.maxPercentage
+      ? (netRate * rule.maxPercentage) / 100
+      : Infinity;
+
     markupAmount = Math.max(minMarkup, Math.min(maxMarkup, markupAmount));
 
     const finalNet = netRate + markupAmount;
@@ -204,7 +211,7 @@ class MarkupService {
       net: Math.round(finalNet * 100) / 100,
       total: Math.round(finalTotal * 100) / 100,
       markup: rule.percentage,
-      markupAmount: Math.round(markupAmount * 100) / 100
+      markupAmount: Math.round(markupAmount * 100) / 100,
     };
   }
 
@@ -213,16 +220,16 @@ class MarkupService {
    */
   getDefaultRule() {
     return {
-      id: 'default',
-      name: 'Default Markup',
-      type: 'global',
+      id: "default",
+      name: "Default Markup",
+      type: "global",
       percentage: 10,
       fixedAmount: 0,
       minPercentage: 5,
       maxPercentage: 25,
-      currency: 'INR',
+      currency: "INR",
       active: true,
-      priority: 0
+      priority: 0,
     };
   }
 
@@ -234,9 +241,9 @@ class MarkupService {
     let totalRates = 0;
     let roomCount = 0;
 
-    markedUpRates.forEach(room => {
+    markedUpRates.forEach((room) => {
       if (room.rates && room.rates.length > 0) {
-        room.rates.forEach(rate => {
+        room.rates.forEach((rate) => {
           if (rate.markupAmount) {
             totalMarkup += rate.markupAmount;
             totalRates++;
@@ -248,9 +255,10 @@ class MarkupService {
 
     return {
       totalMarkup: Math.round(totalMarkup * 100) / 100,
-      averageMarkup: totalRates > 0 ? Math.round((totalMarkup / totalRates) * 100) / 100 : 0,
+      averageMarkup:
+        totalRates > 0 ? Math.round((totalMarkup / totalRates) * 100) / 100 : 0,
       roomCount,
-      rateCount: totalRates
+      rateCount: totalRates,
     };
   }
 
@@ -262,9 +270,9 @@ class MarkupService {
       id: Date.now().toString(),
       active: true,
       priority: this.markupRules.length + 1,
-      ...rule
+      ...rule,
     };
-    
+
     this.markupRules.push(newRule);
     return newRule;
   }
@@ -273,7 +281,7 @@ class MarkupService {
    * Update existing markup rule
    */
   updateMarkupRule(ruleId, updates) {
-    const index = this.markupRules.findIndex(rule => rule.id === ruleId);
+    const index = this.markupRules.findIndex((rule) => rule.id === ruleId);
     if (index !== -1) {
       this.markupRules[index] = { ...this.markupRules[index], ...updates };
       return this.markupRules[index];
@@ -285,7 +293,7 @@ class MarkupService {
    * Delete markup rule
    */
   deleteMarkupRule(ruleId) {
-    const index = this.markupRules.findIndex(rule => rule.id === ruleId);
+    const index = this.markupRules.findIndex((rule) => rule.id === ruleId);
     if (index !== -1) {
       return this.markupRules.splice(index, 1)[0];
     }
@@ -303,7 +311,7 @@ class MarkupService {
    * Get markup rules by type
    */
   getRulesByType(type) {
-    return this.markupRules.filter(rule => rule.type === type);
+    return this.markupRules.filter((rule) => rule.type === type);
   }
 
   /**
@@ -312,25 +320,36 @@ class MarkupService {
   validateRule(rule) {
     const errors = [];
 
-    if (!rule.name || rule.name.trim() === '') {
-      errors.push('Rule name is required');
+    if (!rule.name || rule.name.trim() === "") {
+      errors.push("Rule name is required");
     }
 
-    if (!rule.type || !['supplier', 'city', 'star_rating', 'room_category', 'global'].includes(rule.type)) {
-      errors.push('Valid rule type is required');
+    if (
+      !rule.type ||
+      !["supplier", "city", "star_rating", "room_category", "global"].includes(
+        rule.type,
+      )
+    ) {
+      errors.push("Valid rule type is required");
     }
 
     if (rule.percentage < 0 || rule.percentage > 100) {
-      errors.push('Percentage must be between 0 and 100');
+      errors.push("Percentage must be between 0 and 100");
     }
 
-    if (rule.minPercentage && rule.maxPercentage && rule.minPercentage > rule.maxPercentage) {
-      errors.push('Minimum percentage cannot be greater than maximum percentage');
+    if (
+      rule.minPercentage &&
+      rule.maxPercentage &&
+      rule.minPercentage > rule.maxPercentage
+    ) {
+      errors.push(
+        "Minimum percentage cannot be greater than maximum percentage",
+      );
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -340,16 +359,16 @@ class MarkupService {
   simulateMarkup(hotelData, roomRates, ruleOverrides = {}) {
     // Temporarily override rules for simulation
     const originalRules = [...this.markupRules];
-    
+
     if (ruleOverrides.tempRule) {
       this.markupRules.unshift(ruleOverrides.tempRule);
     }
 
     const result = this.applyMarkup(hotelData, roomRates);
-    
+
     // Restore original rules
     this.markupRules = originalRules;
-    
+
     return result;
   }
 
@@ -357,15 +376,15 @@ class MarkupService {
    * Get markup statistics
    */
   getMarkupStats() {
-    const activeRules = this.markupRules.filter(rule => rule.active);
+    const activeRules = this.markupRules.filter((rule) => rule.active);
     const typeStats = {};
-    
-    activeRules.forEach(rule => {
+
+    activeRules.forEach((rule) => {
       if (!typeStats[rule.type]) {
         typeStats[rule.type] = {
           count: 0,
           avgPercentage: 0,
-          totalPercentage: 0
+          totalPercentage: 0,
         };
       }
       typeStats[rule.type].count++;
@@ -373,9 +392,11 @@ class MarkupService {
     });
 
     // Calculate averages
-    Object.keys(typeStats).forEach(type => {
-      typeStats[type].avgPercentage = 
-        Math.round((typeStats[type].totalPercentage / typeStats[type].count) * 100) / 100;
+    Object.keys(typeStats).forEach((type) => {
+      typeStats[type].avgPercentage =
+        Math.round(
+          (typeStats[type].totalPercentage / typeStats[type].count) * 100,
+        ) / 100;
     });
 
     return {
@@ -383,9 +404,14 @@ class MarkupService {
       activeRules: activeRules.length,
       inactiveRules: this.markupRules.length - activeRules.length,
       typeStats,
-      averageMarkup: activeRules.length > 0 
-        ? Math.round((activeRules.reduce((sum, rule) => sum + rule.percentage, 0) / activeRules.length) * 100) / 100
-        : 0
+      averageMarkup:
+        activeRules.length > 0
+          ? Math.round(
+              (activeRules.reduce((sum, rule) => sum + rule.percentage, 0) /
+                activeRules.length) *
+                100,
+            ) / 100
+          : 0,
     };
   }
 }

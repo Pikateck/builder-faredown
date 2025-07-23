@@ -129,7 +129,7 @@ app.get("/health", async (req, res) => {
         cache: "connected",
         external_apis: "operational",
       },
-      database: dbHealth
+      database: dbHealth,
     });
   } catch (error) {
     res.json({
@@ -143,7 +143,7 @@ app.get("/health", async (req, res) => {
         cache: "connected",
         external_apis: "operational",
       },
-      error: error.message
+      error: error.message,
     });
   }
 });

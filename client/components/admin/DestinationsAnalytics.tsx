@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,24 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import { 
-  BarChart3, 
-  MapPin, 
-  TrendingUp, 
-  Search, 
+  BarChart3,
+  MapPin,
+  TrendingUp,
+  Search,
   Database,
   Refresh,
   Download,
   Globe,
   Calendar,
-  Users
-} from 'lucide-react';
+  Users,
+} from "lucide-react";
 
 interface DestinationAnalytic {
   destination_code: string;
@@ -57,23 +52,25 @@ export function DestinationsAnalytics() {
       setError(null);
       console.log(`📊 Loading destination analytics for ${days} days...`);
 
-      const response = await fetch(`/api/admin/destinations/analytics?days=${days}`);
-      
+      const response = await fetch(
+        `/api/admin/destinations/analytics?days=${days}`,
+      );
+
       if (!response.ok) {
         throw new Error(`Analytics API returned ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       if (data.success) {
         setAnalytics(data.data || []);
-        console.log('✅ Analytics loaded:', data.data?.length, 'destinations');
+        console.log("✅ Analytics loaded:", data.data?.length, "destinations");
       } else {
-        throw new Error(data.error || 'Failed to load analytics');
+        throw new Error(data.error || "Failed to load analytics");
       }
     } catch (err) {
-      console.error('Analytics loading failed:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load analytics');
+      console.error("Analytics loading failed:", err);
+      setError(err instanceof Error ? err.message : "Failed to load analytics");
     } finally {
       setLoading(false);
     }
@@ -83,27 +80,31 @@ export function DestinationsAnalytics() {
   const cleanCache = async () => {
     try {
       setCleaningCache(true);
-      console.log('🧹 Cleaning expired cache entries...');
+      console.log("🧹 Cleaning expired cache entries...");
 
-      const response = await fetch('/api/admin/hotels/cache/cleanup', {
-        method: 'POST'
+      const response = await fetch("/api/admin/hotels/cache/cleanup", {
+        method: "POST",
       });
-      
+
       if (!response.ok) {
         throw new Error(`Cache cleanup API returned ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       if (data.success) {
         setCacheStats(data.data);
-        console.log('✅ Cache cleaned:', data.data?.cleanedEntries, 'entries removed');
+        console.log(
+          "✅ Cache cleaned:",
+          data.data?.cleanedEntries,
+          "entries removed",
+        );
       } else {
-        throw new Error(data.error || 'Failed to clean cache');
+        throw new Error(data.error || "Failed to clean cache");
       }
     } catch (err) {
-      console.error('Cache cleanup failed:', err);
-      setError(err instanceof Error ? err.message : 'Failed to clean cache');
+      console.error("Cache cleanup failed:", err);
+      setError(err instanceof Error ? err.message : "Failed to clean cache");
     } finally {
       setCleaningCache(false);
     }
@@ -115,31 +116,52 @@ export function DestinationsAnalytics() {
   }, [days]);
 
   // Calculate summary stats
-  const totalSearches = analytics.reduce((sum, item) => sum + item.total_searches, 0);
-  const totalBookings = analytics.reduce((sum, item) => sum + item.total_bookings, 0);
-  const conversionRate = totalSearches > 0 ? (totalBookings / totalSearches * 100).toFixed(1) : '0.0';
+  const totalSearches = analytics.reduce(
+    (sum, item) => sum + item.total_searches,
+    0,
+  );
+  const totalBookings = analytics.reduce(
+    (sum, item) => sum + item.total_bookings,
+    0,
+  );
+  const conversionRate =
+    totalSearches > 0
+      ? ((totalBookings / totalSearches) * 100).toFixed(1)
+      : "0.0";
   const uniqueDestinations = analytics.length;
 
   // Export data as CSV
   const exportAnalytics = () => {
     const csvContent = [
-      ['Destination Code', 'Name', 'Country', 'Searches', 'Bookings', 'Conversion Rate', 'Last Searched'],
-      ...analytics.map(item => [
+      [
+        "Destination Code",
+        "Name",
+        "Country",
+        "Searches",
+        "Bookings",
+        "Conversion Rate",
+        "Last Searched",
+      ],
+      ...analytics.map((item) => [
         item.destination_code,
         item.name,
         item.country_name,
         item.total_searches,
         item.total_bookings,
-        item.total_searches > 0 ? (item.total_bookings / item.total_searches * 100).toFixed(1) + '%' : '0%',
-        new Date(item.last_searched).toLocaleDateString()
-      ])
-    ].map(row => row.join(',')).join('\n');
+        item.total_searches > 0
+          ? ((item.total_bookings / item.total_searches) * 100).toFixed(1) + "%"
+          : "0%",
+        new Date(item.last_searched).toLocaleDateString(),
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `destinations-analytics-${days}days-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `destinations-analytics-${days}days-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -181,8 +203,13 @@ export function DestinationsAnalytics() {
 
       {/* Period Selector */}
       <div className="flex items-center gap-4">
-        <label className="text-sm font-medium text-gray-700">Analysis Period:</label>
-        <Select value={days.toString()} onValueChange={(value) => setDays(parseInt(value))}>
+        <label className="text-sm font-medium text-gray-700">
+          Analysis Period:
+        </label>
+        <Select
+          value={days.toString()}
+          onValueChange={(value) => setDays(parseInt(value))}
+        >
           <SelectTrigger className="w-32">
             <SelectValue />
           </SelectTrigger>
@@ -202,7 +229,9 @@ export function DestinationsAnalytics() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Searches</p>
-                <p className="text-2xl font-bold text-gray-900">{totalSearches.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {totalSearches.toLocaleString()}
+                </p>
               </div>
               <Search className="w-8 h-8 text-blue-500" />
             </div>
@@ -214,7 +243,9 @@ export function DestinationsAnalytics() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Bookings</p>
-                <p className="text-2xl font-bold text-gray-900">{totalBookings.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {totalBookings.toLocaleString()}
+                </p>
               </div>
               <Users className="w-8 h-8 text-green-500" />
             </div>
@@ -226,7 +257,9 @@ export function DestinationsAnalytics() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Conversion Rate</p>
-                <p className="text-2xl font-bold text-gray-900">{conversionRate}%</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {conversionRate}%
+                </p>
               </div>
               <TrendingUp className="w-8 h-8 text-purple-500" />
             </div>
@@ -238,7 +271,9 @@ export function DestinationsAnalytics() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Active Destinations</p>
-                <p className="text-2xl font-bold text-gray-900">{uniqueDestinations}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {uniqueDestinations}
+                </p>
               </div>
               <Globe className="w-8 h-8 text-orange-500" />
             </div>
@@ -276,7 +311,9 @@ export function DestinationsAnalytics() {
               {loading ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                  <span className="ml-2 text-gray-600">Loading analytics...</span>
+                  <span className="ml-2 text-gray-600">
+                    Loading analytics...
+                  </span>
                 </div>
               ) : analytics.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -286,10 +323,11 @@ export function DestinationsAnalytics() {
               ) : (
                 <div className="space-y-3">
                   {analytics.slice(0, 20).map((item, index) => {
-                    const conversionRate = item.total_searches > 0 
-                      ? (item.total_bookings / item.total_searches * 100) 
-                      : 0;
-                    
+                    const conversionRate =
+                      item.total_searches > 0
+                        ? (item.total_bookings / item.total_searches) * 100
+                        : 0;
+
                     return (
                       <div
                         key={item.destination_code}
@@ -297,17 +335,28 @@ export function DestinationsAnalytics() {
                       >
                         <div className="flex items-center gap-3">
                           <div className="text-lg">
-                            {index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🌍'}
+                            {index === 0
+                              ? "🏆"
+                              : index === 1
+                                ? "🥈"
+                                : index === 2
+                                  ? "🥉"
+                                  : "🌍"}
                           </div>
                           <div>
                             <div className="font-medium flex items-center gap-2">
-                              <span>{item.name}, {item.country_name}</span>
+                              <span>
+                                {item.name}, {item.country_name}
+                              </span>
                               <Badge variant="outline" className="text-xs">
                                 {item.destination_code}
                               </Badge>
                             </div>
                             <div className="text-sm text-gray-600">
-                              Last searched: {new Date(item.last_searched).toLocaleDateString()}
+                              Last searched:{" "}
+                              {new Date(
+                                item.last_searched,
+                              ).toLocaleDateString()}
                             </div>
                           </div>
                         </div>
@@ -316,13 +365,14 @@ export function DestinationsAnalytics() {
                             {item.total_searches.toLocaleString()} searches
                           </div>
                           <div className="text-sm text-gray-600">
-                            {item.total_bookings} bookings ({conversionRate.toFixed(1)}%)
+                            {item.total_bookings} bookings (
+                            {conversionRate.toFixed(1)}%)
                           </div>
                         </div>
                       </div>
                     );
                   })}
-                  
+
                   {analytics.length > 20 && (
                     <div className="text-center py-4 text-gray-500">
                       ... and {analytics.length - 20} more destinations
@@ -345,9 +395,12 @@ export function DestinationsAnalytics() {
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                 <div>
-                  <h3 className="font-medium text-blue-900">Hotel Cache Cleanup</h3>
+                  <h3 className="font-medium text-blue-900">
+                    Hotel Cache Cleanup
+                  </h3>
                   <p className="text-sm text-blue-700">
-                    Remove expired hotel data from the cache to free up database space
+                    Remove expired hotel data from the cache to free up database
+                    space
                   </p>
                 </div>
                 <Button
@@ -371,21 +424,36 @@ export function DestinationsAnalytics() {
 
               {cacheStats && (
                 <div className="p-4 bg-green-50 rounded-lg">
-                  <h3 className="font-medium text-green-900 mb-2">✅ Cache Cleanup Complete</h3>
+                  <h3 className="font-medium text-green-900 mb-2">
+                    ✅ Cache Cleanup Complete
+                  </h3>
                   <div className="text-sm text-green-700">
                     <p>Cleaned {cacheStats.cleanedEntries} expired entries</p>
-                    <p>Completed at: {new Date(cacheStats.timestamp).toLocaleString()}</p>
+                    <p>
+                      Completed at:{" "}
+                      {new Date(cacheStats.timestamp).toLocaleString()}
+                    </p>
                   </div>
                 </div>
               )}
 
               <div className="border rounded-lg p-4">
-                <h3 className="font-medium text-gray-900 mb-2">Cache Information</h3>
+                <h3 className="font-medium text-gray-900 mb-2">
+                  Cache Information
+                </h3>
                 <div className="text-sm text-gray-600 space-y-1">
-                  <p>• Hotel data is automatically cached for 24 hours to improve performance</p>
+                  <p>
+                    • Hotel data is automatically cached for 24 hours to improve
+                    performance
+                  </p>
                   <p>• Search results are cached for 12 hours by default</p>
-                  <p>• Popular destinations are cached indefinitely with manual refresh</p>
-                  <p>• Cache cleanup removes entries older than their expiry time</p>
+                  <p>
+                    • Popular destinations are cached indefinitely with manual
+                    refresh
+                  </p>
+                  <p>
+                    • Cache cleanup removes entries older than their expiry time
+                  </p>
                 </div>
               </div>
             </CardContent>

@@ -3,11 +3,11 @@
  * Handles all database operations for payments
  */
 
-const db = require('../database/connection');
+const db = require("../database/connection");
 
 class Payment {
   constructor() {
-    this.tableName = 'payments';
+    this.tableName = "payments";
   }
 
   /**
@@ -25,7 +25,7 @@ class Payment {
       payment_details,
       status,
       gateway_response,
-      gateway_fee
+      gateway_fee,
     } = paymentData;
 
     const query = `
@@ -39,9 +39,17 @@ class Payment {
     `;
 
     const values = [
-      booking_id, gateway, gateway_payment_id, gateway_order_id,
-      amount, currency, payment_method, JSON.stringify(payment_details),
-      status, JSON.stringify(gateway_response), gateway_fee
+      booking_id,
+      gateway,
+      gateway_payment_id,
+      gateway_order_id,
+      amount,
+      currency,
+      payment_method,
+      JSON.stringify(payment_details),
+      status,
+      JSON.stringify(gateway_response),
+      gateway_fee,
     ];
 
     try {
@@ -49,14 +57,14 @@ class Payment {
       return {
         success: true,
         data: result.rows[0],
-        message: 'Payment record created successfully'
+        message: "Payment record created successfully",
       };
     } catch (error) {
-      console.error('Error creating payment:', error);
+      console.error("Error creating payment:", error);
       return {
         success: false,
         error: error.message,
-        message: 'Failed to create payment record'
+        message: "Failed to create payment record",
       };
     }
   }
@@ -74,25 +82,25 @@ class Payment {
 
     try {
       const result = await db.query(query, [gateway_payment_id]);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Payment not found',
-          data: null
+          error: "Payment not found",
+          data: null,
         };
       }
 
       return {
         success: true,
-        data: result.rows[0]
+        data: result.rows[0],
       };
     } catch (error) {
-      console.error('Error finding payment:', error);
+      console.error("Error finding payment:", error);
       return {
         success: false,
         error: error.message,
-        data: null
+        data: null,
       };
     }
   }
@@ -111,14 +119,14 @@ class Payment {
       const result = await db.query(query, [booking_id]);
       return {
         success: true,
-        data: result.rows
+        data: result.rows,
       };
     } catch (error) {
-      console.error('Error finding payments for booking:', error);
+      console.error("Error finding payments for booking:", error);
       return {
         success: false,
         error: error.message,
-        data: []
+        data: [],
       };
     }
   }
@@ -127,13 +135,13 @@ class Payment {
    * Update payment status
    */
   async updateStatus(gateway_payment_id, status, additional_data = {}) {
-    let updateFields = ['status = $2'];
+    let updateFields = ["status = $2"];
     let values = [gateway_payment_id, status];
     let paramIndex = 3;
 
     // Add completion timestamp for successful payments
-    if (status === 'completed') {
-      updateFields.push('completed_at = CURRENT_TIMESTAMP');
+    if (status === "completed") {
+      updateFields.push("completed_at = CURRENT_TIMESTAMP");
     }
 
     // Add failure reason for failed payments
@@ -152,31 +160,31 @@ class Payment {
 
     const query = `
       UPDATE ${this.tableName}
-      SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+      SET ${updateFields.join(", ")}, updated_at = CURRENT_TIMESTAMP
       WHERE gateway_payment_id = $1
       RETURNING *
     `;
 
     try {
       const result = await db.query(query, values);
-      
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Payment not found'
+          error: "Payment not found",
         };
       }
 
       return {
         success: true,
         data: result.rows[0],
-        message: `Payment status updated to ${status}`
+        message: `Payment status updated to ${status}`,
       };
     } catch (error) {
-      console.error('Error updating payment status:', error);
+      console.error("Error updating payment status:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -198,25 +206,29 @@ class Payment {
     `;
 
     try {
-      const result = await db.query(query, [gateway_payment_id, refund_amount, refund_reference]);
-      
+      const result = await db.query(query, [
+        gateway_payment_id,
+        refund_amount,
+        refund_reference,
+      ]);
+
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Payment not found'
+          error: "Payment not found",
         };
       }
 
       return {
         success: true,
         data: result.rows[0],
-        message: 'Refund processed successfully'
+        message: "Refund processed successfully",
       };
     } catch (error) {
-      console.error('Error processing refund:', error);
+      console.error("Error processing refund:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -266,7 +278,7 @@ class Payment {
       const [analyticsResult, methodResult, dailyResult] = await Promise.all([
         db.query(query, [dateFrom, dateTo]),
         db.query(methodQuery, [dateFrom, dateTo]),
-        db.query(dailyQuery, [dateFrom, dateTo])
+        db.query(dailyQuery, [dateFrom, dateTo]),
       ]);
 
       return {
@@ -274,14 +286,14 @@ class Payment {
         data: {
           overview: analyticsResult.rows[0],
           paymentMethods: methodResult.rows,
-          dailyTrend: dailyResult.rows
-        }
+          dailyTrend: dailyResult.rows,
+        },
       };
     } catch (error) {
-      console.error('Error getting payment analytics:', error);
+      console.error("Error getting payment analytics:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -325,9 +337,10 @@ class Payment {
       paramIndex++;
     }
 
-    const whereClause = whereConditions.length > 0 
-      ? `WHERE ${whereConditions.join(' AND ')}`
-      : '';
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(" AND ")}`
+        : "";
 
     // Calculate offset
     const offset = (page - 1) * limit;
@@ -360,7 +373,7 @@ class Payment {
     try {
       const [countResult, dataResult] = await Promise.all([
         db.query(countQuery, values.slice(0, -2)),
-        db.query(dataQuery, values)
+        db.query(dataQuery, values),
       ]);
 
       const total = parseInt(countResult.rows[0].total);
@@ -375,15 +388,15 @@ class Payment {
           total,
           totalPages,
           hasNext: page < totalPages,
-          hasPrev: page > 1
-        }
+          hasPrev: page > 1,
+        },
       };
     } catch (error) {
-      console.error('Error getting payments:', error);
+      console.error("Error getting payments:", error);
       return {
         success: false,
         error: error.message,
-        data: []
+        data: [],
       };
     }
   }

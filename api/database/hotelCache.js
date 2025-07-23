@@ -9,12 +9,12 @@ class HotelCache {
     this.cache = new Map();
     this.destinationCache = new Map();
     this.searchCache = new Map();
-    
+
     // Cache TTL in milliseconds
     this.HOTEL_TTL = 24 * 60 * 60 * 1000; // 24 hours
     this.DESTINATION_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
     this.SEARCH_TTL = 30 * 60 * 1000; // 30 minutes
-    
+
     // Maximum cache sizes
     this.MAX_HOTELS = 10000;
     this.MAX_DESTINATIONS = 1000;
@@ -39,15 +39,9 @@ class HotelCache {
    * Generate cache key for search results
    */
   generateSearchKey(searchParams) {
-    const {
-      destinationCode,
-      checkIn,
-      checkOut,
-      rooms,
-      adults,
-      children
-    } = searchParams;
-    
+    const { destinationCode, checkIn, checkOut, rooms, adults, children } =
+      searchParams;
+
     return `search:${destinationCode}:${checkIn}:${checkOut}:${rooms}:${adults}:${children}`;
   }
 
@@ -59,7 +53,7 @@ class HotelCache {
     const cacheEntry = {
       data: hotelData,
       timestamp: Date.now(),
-      ttl: this.HOTEL_TTL
+      ttl: this.HOTEL_TTL,
     };
 
     this.cache.set(key, cacheEntry);
@@ -100,7 +94,7 @@ class HotelCache {
     const cacheEntry = {
       data: destinationData,
       timestamp: Date.now(),
-      ttl: this.DESTINATION_TTL
+      ttl: this.DESTINATION_TTL,
     };
 
     this.destinationCache.set(key, cacheEntry);
@@ -140,7 +134,7 @@ class HotelCache {
       data: searchResults,
       timestamp: Date.now(),
       ttl: this.SEARCH_TTL,
-      searchParams: { ...searchParams }
+      searchParams: { ...searchParams },
     };
 
     this.searchCache.set(key, cacheEntry);
@@ -203,7 +197,7 @@ class HotelCache {
 
     return {
       cached: hotels,
-      missing: missingCodes
+      missing: missingCodes,
     };
   }
 
@@ -257,7 +251,7 @@ class HotelCache {
    */
   getStats() {
     const now = Date.now();
-    
+
     // Count valid (non-expired) entries
     let validHotels = 0;
     let validDestinations = 0;
@@ -286,21 +280,21 @@ class HotelCache {
         total: this.cache.size,
         valid: validHotels,
         maxSize: this.MAX_HOTELS,
-        ttl: this.HOTEL_TTL
+        ttl: this.HOTEL_TTL,
       },
       destinations: {
         total: this.destinationCache.size,
         valid: validDestinations,
         maxSize: this.MAX_DESTINATIONS,
-        ttl: this.DESTINATION_TTL
+        ttl: this.DESTINATION_TTL,
       },
       searches: {
         total: this.searchCache.size,
         valid: validSearches,
         maxSize: this.MAX_SEARCHES,
-        ttl: this.SEARCH_TTL
+        ttl: this.SEARCH_TTL,
       },
-      totalMemoryUsage: this.estimateMemoryUsage()
+      totalMemoryUsage: this.estimateMemoryUsage(),
     };
   }
 
@@ -309,16 +303,16 @@ class HotelCache {
    */
   estimateMemoryUsage() {
     let totalSize = 0;
-    
+
     // Rough estimation based on JSON string length
     for (const [key, entry] of this.cache.entries()) {
       totalSize += JSON.stringify(entry).length;
     }
-    
+
     for (const [key, entry] of this.destinationCache.entries()) {
       totalSize += JSON.stringify(entry).length;
     }
-    
+
     for (const [key, entry] of this.searchCache.entries()) {
       totalSize += JSON.stringify(entry).length;
     }
@@ -360,8 +354,9 @@ class HotelCache {
 
     return {
       expiredEntriesRemoved: removed,
-      remainingEntries: this.cache.size + this.destinationCache.size + this.searchCache.size,
-      memoryUsage: this.estimateMemoryUsage()
+      remainingEntries:
+        this.cache.size + this.destinationCache.size + this.searchCache.size,
+      memoryUsage: this.estimateMemoryUsage(),
     };
   }
 }
@@ -370,9 +365,12 @@ class HotelCache {
 const hotelCache = new HotelCache();
 
 // Schedule periodic maintenance every 30 minutes
-setInterval(() => {
-  const result = hotelCache.performMaintenance();
-  console.log('Hotel cache maintenance completed:', result);
-}, 30 * 60 * 1000);
+setInterval(
+  () => {
+    const result = hotelCache.performMaintenance();
+    console.log("Hotel cache maintenance completed:", result);
+  },
+  30 * 60 * 1000,
+);
 
 module.exports = hotelCache;
