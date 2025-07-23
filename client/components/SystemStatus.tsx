@@ -32,6 +32,14 @@ export function SystemStatus() {
       details: ['Room standardization', 'Cross-supplier compatibility', 'Enhanced accuracy']
     },
     {
+      name: '📧 Email Delivery System',
+      status: isProduction ? 'testing' : 'operational',
+      description: isProduction ? 'Mock email delivery for testing' : 'SendGrid integration for vouchers',
+      details: isProduction
+        ? ['Mock email responses', 'Test delivery simulation', 'Production-safe testing']
+        : ['SendGrid API configured', 'Voucher email delivery', 'Tracking enabled']
+    },
+    {
       name: '💳 Razorpay Payments',
       status: 'operational',
       description: 'Live payment processing (test mode)',
