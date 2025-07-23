@@ -377,7 +377,7 @@ export function FlightStyleBargainModal({
                       );
                       setBargainPrice(numericValue);
                     }}
-                    placeholder="Input your bargain price here"
+                    placeholder="Enter the total price you want to pay for your stay"
                     className="text-xl font-bold text-center py-6 border-2 border-purple-200 focus:border-purple-500 placeholder:text-gray-400 placeholder:font-normal"
                   />
                   <div className="absolute inset-y-0 left-3 flex items-center">
