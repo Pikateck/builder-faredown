@@ -344,7 +344,7 @@ export function EnhancedBargainModal({
                 <Input
                   id="bargain-price"
                   type="text"
-                  placeholder="Enter your final total price"
+                  placeholder="Enter the total price you want to pay for your stay"
                   value={
                     bargainPrice
                       ? parseInt(bargainPrice).toLocaleString("en-IN")
