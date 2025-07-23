@@ -426,7 +426,7 @@ export function BookingSearchForm() {
                     {destinationSuggestions.map((dest, index) => (
                       <div
                         key={dest.id || index}
-                        className="flex items-center p-3 hover:bg-blue-50 cursor-pointer transition-all duration-150 border-l-3 border-transparent hover:border-blue-400 hover:shadow-sm"
+                        className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
                           console.log("🎯 Destination selected:", {
@@ -440,36 +440,57 @@ export function BookingSearchForm() {
                           setIsDestinationOpen(false);
                         }}
                       >
-                        <div className={`flex items-center justify-center w-8 h-8 rounded-full mr-3 flex-shrink-0 ${
-                          dest.type === 'hotel' ? 'bg-green-100' : 'bg-blue-100'
-                        }`}>
-                          <span className="text-sm">
-                            {dest.type === 'hotel' ? '🏨' : ((dest as any).flag || "🌍")}
-                          </span>
+                        {/* Clean minimal icon */}
+                        <div className="flex items-center justify-center w-7 h-7 mr-3 flex-shrink-0">
+                          {dest.type === 'hotel' ? (
+                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                          ) : (
+                            <div className="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
                         </div>
+
+                        {/* Main content area */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-900 truncate">
-                              {dest.type === 'hotel' ? dest.name : dest.name}
-                            </span>
-                            {dest.type === 'hotel' && (
-                              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                                Hotel
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              {/* City name and popular badge */}
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium text-gray-900 text-sm truncate">
+                                  {dest.name}
+                                </span>
+                                {(dest as any).popular && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                    Popular
+                                  </span>
+                                )}
+                                {dest.type === 'hotel' && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                    Hotel
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Country and region info */}
+                              <div className="text-xs text-gray-500">
+                                <span className="capitalize">{dest.type === 'hotel' ? 'Hotel' : dest.type}</span>
+                                {dest.country && (
+                                  <span> in {dest.country}</span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* City code aligned right */}
+                            <div className="flex-shrink-0 ml-3">
+                              <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
+                                {dest.code || dest.id}
                               </span>
-                            )}
-                            {(dest as any).popular && dest.type !== 'hotel' && (
-                              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
-                                Popular
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-sm text-gray-600 truncate">
-                            {dest.country}
-                          </div>
-                          <div className="text-xs text-gray-400 mt-0.5 flex items-center gap-2">
-                            <span className="capitalize">{dest.type === 'hotel' ? 'Hotel' : dest.type}</span>
-                            <span>•</span>
-                            <span className="font-mono">{dest.code || dest.id}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
