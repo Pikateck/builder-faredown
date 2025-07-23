@@ -100,6 +100,7 @@ const corsOptions = {
     "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
     "http://localhost:3000",
     "http://localhost:5173",
+    "http://localhost:8080",
     "https://faredown.com",
     "https://www.faredown.com",
   ],
