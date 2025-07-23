@@ -69,10 +69,12 @@ class ApiClient {
   private baseURL: string;
   private timeout: number;
   private authToken: string | null = null;
+  private devClient: DevApiClient;
 
   constructor() {
     this.baseURL = API_CONFIG.BASE_URL;
     this.timeout = API_CONFIG.TIMEOUT;
+    this.devClient = new DevApiClient(this.baseURL);
     this.loadAuthToken();
   }
 
