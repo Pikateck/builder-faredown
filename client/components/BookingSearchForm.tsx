@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { hotelsService } from "@/services/hotelsService";
 import {
   Popover,
   PopoverContent,
@@ -39,6 +40,8 @@ export function BookingSearchForm() {
   const navigate = useNavigate();
   const [destination, setDestination] = useState("Dubai");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<any[]>([]);
+  const [loadingDestinations, setLoadingDestinations] = useState(false);
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(new Date());
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
     addDays(new Date(), 3),
@@ -55,29 +58,43 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
-  const destinations = [
-    { name: "Dubai", country: "United Arab Emirates", type: "city" },
-    {
-      name: "Downtown Dubai",
-      country: "Dubai, United Arab Emirates",
-      type: "district",
+  // Search destinations with debounce
+  const searchDestinations = useCallback(
+    async (query: string) => {
+      if (query.length < 2) {
+        setDestinationSuggestions([]);
+        return;
+      }
+
+      try {
+        setLoadingDestinations(true);
+        const results = await hotelsService.searchDestinations(query);
+        setDestinationSuggestions(results.slice(0, 10)); // Limit to 10 results
+      } catch (error) {
+        console.error('Failed to search destinations:', error);
+        // Fallback to static destinations for Dubai
+        setDestinationSuggestions([
+          { id: "1", name: "Dubai", country: "United Arab Emirates", type: "city" },
+          { id: "2", name: "Downtown Dubai", country: "Dubai, United Arab Emirates", type: "district" },
+          { id: "3", name: "Dubai Marina", country: "Dubai, United Arab Emirates", type: "district" },
+        ]);
+      } finally {
+        setLoadingDestinations(false);
+      }
     },
-    {
-      name: "Dubai International Airport",
-      country: "Dubai, United Arab Emirates",
-      type: "airport",
-    },
-    {
-      name: "Dubai Marina",
-      country: "Dubai, United Arab Emirates",
-      type: "district",
-    },
-    {
-      name: "Bur Dubai",
-      country: "Dubai, United Arab Emirates",
-      type: "district",
-    },
-  ];
+    []
+  );
+
+  // Debounce destination search
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (destination && isDestinationOpen) {
+        searchDestinations(destination);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [destination, isDestinationOpen, searchDestinations]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
@@ -210,24 +227,44 @@ export function BookingSearchForm() {
             </PopoverTrigger>
             <PopoverContent className="w-80 sm:w-96 p-0" align="start">
               <div className="max-h-60 overflow-y-auto">
-                {destinations.map((dest, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => {
-                      setDestination(dest.name);
-                      setIsDestinationOpen(false);
-                    }}
-                  >
-                    <MapPin className="w-4 h-4 mr-3 text-gray-500" />
-                    <div>
-                      <div className="font-medium">{dest.name}</div>
-                      <div className="text-sm text-gray-600">
-                        {dest.country}
+                {loadingDestinations ? (
+                  <div className="flex items-center justify-center p-4">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                    <span className="text-sm text-gray-600">Searching...</span>
+                  </div>
+                ) : destinationSuggestions.length > 0 ? (
+                  destinationSuggestions.map((dest, index) => (
+                    <div
+                      key={dest.id || index}
+                      className="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        setDestination(dest.name);
+                        setIsDestinationOpen(false);
+                      }}
+                    >
+                      <MapPin className="w-4 h-4 mr-3 text-gray-500" />
+                      <div>
+                        <div className="font-medium">{dest.name}</div>
+                        <div className="text-sm text-gray-600">
+                          {dest.country}
+                        </div>
+                        {dest.type && (
+                          <div className="text-xs text-blue-600 capitalize">
+                            {dest.type}
+                          </div>
+                        )}
                       </div>
                     </div>
+                  ))
+                ) : destination.length >= 2 ? (
+                  <div className="p-4 text-center text-sm text-gray-500">
+                    No destinations found
                   </div>
-                ))}
+                ) : (
+                  <div className="p-4 text-center text-sm text-gray-500">
+                    Type at least 2 characters to search
+                  </div>
+                )}
               </div>
             </PopoverContent>
           </Popover>
