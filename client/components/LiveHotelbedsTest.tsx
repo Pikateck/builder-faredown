@@ -116,12 +116,12 @@ export function LiveHotelbedsTest() {
         </p>
 
         {isProduction && (
-          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
             <div className="flex items-center">
-              <div className="text-yellow-600 mr-2">⚠️</div>
-              <div className="text-sm text-yellow-800">
-                <div className="font-medium">Production Environment Detected</div>
-                <div>Live API testing is disabled in production. The application uses fallback data automatically.</div>
+              <div className="text-blue-600 mr-2">🏭</div>
+              <div className="text-sm text-blue-800">
+                <div className="font-medium">Production Environment - Mock API Testing</div>
+                <div>Testing production API endpoints with mock data. Real Hotelbeds integration would require live credentials.</div>
               </div>
             </div>
           </div>
