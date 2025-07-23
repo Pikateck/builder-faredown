@@ -97,7 +97,7 @@ export function SystemStatus() {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 max-w-lg">
+    <div className="w-full max-w-lg mx-auto">
       <div className={`border-2 rounded-lg p-4 shadow-lg ${getStatusColor(overallStatus)}`}>
         <div className="font-bold mb-3 text-center">
           {getOverallStatusMessage()}
