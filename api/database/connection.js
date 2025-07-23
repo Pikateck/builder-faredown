@@ -196,19 +196,30 @@ class DatabaseConnection {
         const schemaPath = path.join(__dirname, 'schema.sql');
         const schemaSQL = fs.readFileSync(schemaPath, 'utf8');
         
-        // Split by statements and execute
-        const statements = schemaSQL
-          .split(';')
-          .map(stmt => stmt.trim())
-          .filter(stmt => stmt.length > 0);
+        // Execute the entire schema as one transaction to handle functions properly
+        try {
+          await this.query(schemaSQL);
+        } catch (error) {
+          // If that fails, try splitting carefully
+          if (error.message.includes('already exists')) {
+            console.log('✅ Some schema elements already exist');
+          } else {
+            console.error('Schema error:', error.message);
 
-        for (const statement of statements) {
-          try {
-            await this.query(statement);
-          } catch (error) {
-            // Ignore "already exists" errors
-            if (!error.message.includes('already exists')) {
-              console.error('Schema error:', error.message);
+            // As fallback, try executing individual statements that are safe
+            const safeStatements = schemaSQL
+              .split(/;\s*(?=CREATE TABLE|CREATE INDEX|INSERT INTO)/g)
+              .map(stmt => stmt.trim())
+              .filter(stmt => stmt.length > 0 && !stmt.includes('FUNCTION') && !stmt.includes('TRIGGER'));
+
+            for (const statement of safeStatements) {
+              try {
+                await this.query(statement);
+              } catch (err) {
+                if (!err.message.includes('already exists')) {
+                  console.error('Individual statement error:', err.message);
+                }
+              }
             }
           }
         }
