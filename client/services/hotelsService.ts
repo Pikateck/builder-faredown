@@ -470,6 +470,59 @@ export class HotelsService {
 
     throw new Error("Failed to get amenities");
   }
+
+  /**
+   * Sync hotel content for destinations (Admin only)
+   */
+  async syncHotelContent(destinationCodes: string[], forceSync = false): Promise<any> {
+    try {
+      const response = await apiClient.post<ApiResponse<any>>(
+        `${this.baseUrl}/sync`,
+        { destinationCodes, forceSync }
+      );
+
+      if (response.success) {
+        return response.data;
+      }
+
+      throw new Error("Sync failed");
+    } catch (error) {
+      console.error('Hotel sync error:', error);
+      throw new Error("Failed to sync hotel content");
+    }
+  }
+
+  /**
+   * Get cache statistics (Admin only)
+   */
+  async getCacheStats(): Promise<any> {
+    try {
+      const response = await apiClient.get<ApiResponse<any>>(
+        `${this.baseUrl}/cache/stats`
+      );
+
+      if (response.success && response.data) {
+        return response.data;
+      }
+
+      return {};
+    } catch (error) {
+      console.error('Cache stats error:', error);
+      throw new Error("Failed to get cache statistics");
+    }
+  }
+
+  /**
+   * Clear hotel cache (Admin only)
+   */
+  async clearCache(): Promise<void> {
+    try {
+      await apiClient.delete(`${this.baseUrl}/cache`);
+    } catch (error) {
+      console.error('Clear cache error:', error);
+      throw new Error("Failed to clear cache");
+    }
+  }
 }
 
 // Export singleton instance
