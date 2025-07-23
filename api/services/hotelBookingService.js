@@ -382,6 +382,18 @@ class HotelBookingService {
   }
 
   /**
+   * Send booking confirmation email
+   */
+  async sendBookingConfirmationEmail(booking) {
+    try {
+      await emailService.sendBookingConfirmation(booking);
+      console.log(`Booking confirmation email sent for ${booking.bookingRef}`);
+    } catch (error) {
+      console.error(`Failed to send booking confirmation email for ${booking.bookingRef}:`, error);
+    }
+  }
+
+  /**
    * Cleanup expired pre-bookings
    */
   cleanupExpiredBookings() {
