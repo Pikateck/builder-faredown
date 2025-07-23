@@ -49,7 +49,7 @@ export class DevApiClient {
     const isServerAvailable = await this.quickConnectivityCheck();
 
     if (!isServerAvailable) {
-      console.warn(`API server not available, using fallback data for ${endpoint}`);
+      console.log(`🔄 DevApiClient: Server offline, using fallback for ${endpoint}`);
       return this.getFallbackData(endpoint, params) as T;
     }
 
