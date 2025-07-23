@@ -324,8 +324,41 @@ export function BookingSearchForm() {
                     No destinations found
                   </div>
                 ) : (
-                  <div className="p-4 text-center text-sm text-gray-500">
-                    Type at least 2 characters to search
+                  <div>
+                    <div className="px-4 py-2 border-b bg-gray-50">
+                      <h4 className="font-medium text-sm text-gray-700">Popular Destinations</h4>
+                    </div>
+                    {popularDestinations.map((dest, index) => (
+                      <div
+                        key={dest.id}
+                        className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors"
+                        onClick={() => {
+                          setDestination(`${dest.name}, ${dest.country}`);
+                          setDestinationCode(dest.code);
+                          setIsDestinationOpen(false);
+                        }}
+                      >
+                        <MapPin className="w-4 h-4 mr-3 text-gray-500" />
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-900">
+                            {dest.name}, {dest.country}
+                          </div>
+                          <div className="text-sm text-gray-500 flex items-center gap-2">
+                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-mono">
+                              {dest.code}
+                            </span>
+                            <span className="text-xs text-gray-400 capitalize">
+                              {dest.type}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="px-4 py-2 border-t bg-gray-50">
+                      <p className="text-xs text-gray-500">
+                        Type to search for more destinations
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
