@@ -36,12 +36,21 @@ export function ApiErrorTest() {
       console.log('🧪 Testing health check...');
       const health = await apiClient.healthCheck();
       if (health && health.status) {
-        results.healthCheck = '✅ Success - No fetch errors';
+        // Check if we're getting live data vs fallback
+        if (health.status === 'development') {
+          results.healthCheck = '✅ Fallback mode - Mock data';
+          results.mode = '🔄 FALLBACK MODE';
+        } else {
+          results.healthCheck = '✅ Live API - Real data';
+          results.mode = '🌐 LIVE MODE';
+        }
       } else {
         results.healthCheck = '⚠️ No response';
+        results.mode = '❓ Unknown';
       }
     } catch (error) {
       results.healthCheck = `❌ Error: ${error instanceof Error ? error.message : 'Unknown'}`;
+      results.mode = '❌ Error';
     }
 
     // Overall assessment
