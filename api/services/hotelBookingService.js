@@ -15,8 +15,23 @@ const { v4: uuidv4 } = require('uuid');
 
 class HotelBookingService {
   constructor() {
-    this.bookings = new Map(); // In production, this would be database
-    this.pendingBookings = new Map(); // Temporary storage for payment pending bookings
+    // Initialize database connection
+    this.initializeDatabase();
+    this.pendingBookings = new Map(); // Temporary storage for payment pending bookings (15 min TTL)
+  }
+
+  /**
+   * Initialize database connection
+   */
+  async initializeDatabase() {
+    try {
+      if (!db.isConnected) {
+        await db.initialize();
+        await db.initializeSchema();
+      }
+    } catch (error) {
+      console.error('Failed to initialize database for booking service:', error);
+    }
   }
 
   /**
