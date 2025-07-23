@@ -10,7 +10,7 @@ export function ApiHealthCheck() {
   const [status, setStatus] = useState<ApiStatus>({
     isOnline: false,
     message: 'Checking...',
-    endpoint: '/api/health'
+    endpoint: '/health'
   });
 
   useEffect(() => {
