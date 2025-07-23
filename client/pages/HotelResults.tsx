@@ -109,6 +109,7 @@ export default function HotelResults() {
       // Fallback to mock data if API fails
       setHotels(getMockHotels());
       setTotalResults(getMockHotels().length);
+      setIsLiveData(false);
     } finally {
       setLoading(false);
     }
