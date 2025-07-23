@@ -579,12 +579,20 @@ export class HotelsService {
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
-            if (data.success && data.data && data.isLiveData) {
-              console.log('🔴 Live destination data received:', data.data.length, 'destinations');
-              return data.data;
+            if (data.success && data.data) {
+              const dataSource = data.isLiveData ? 'Live' : 'Mock';
+              console.log(`🔍 ${dataSource} destination data received:`, data.data.length, 'destinations');
+
+              // Transform the data to match expected format
+              return data.data.map((dest: any) => ({
+                id: dest.code || dest.id,
+                name: dest.name,
+                type: (dest.type || 'city') as "city" | "region" | "country" | "landmark",
+                country: dest.countryName || dest.country || ''
+              }));
             }
           } else {
-            console.warn('Live destination API returned non-JSON response');
+            console.warn('Destination API returned non-JSON response');
           }
         } else {
           console.warn(`Live destination API returned status ${response.status}`);
