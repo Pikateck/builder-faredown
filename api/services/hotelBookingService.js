@@ -5,6 +5,7 @@
 
 const hotelbedsService = require('./hotelbedsService');
 const markupService = require('./markupService');
+const emailService = require('./emailService');
 const { v4: uuidv4 } = require('uuid');
 
 class HotelBookingService {
