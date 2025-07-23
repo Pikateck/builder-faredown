@@ -56,6 +56,10 @@ export class DevApiClient {
 
   async post<T>(endpoint: string, data?: any): Promise<T> {
     try {
+      // Create timeout manually for better browser support
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method: 'POST',
         headers: {
@@ -63,8 +67,10 @@ export class DevApiClient {
           'Accept': 'application/json',
         },
         body: data ? JSON.stringify(data) : undefined,
-        signal: AbortSignal.timeout(3000),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -72,7 +78,8 @@ export class DevApiClient {
 
       return await response.json();
     } catch (error) {
-      console.warn(`API POST failed, using fallback for ${endpoint}:`, error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.warn(`API POST failed, using fallback for ${endpoint}: ${errorMessage}`);
       return this.getFallbackData(endpoint, data) as T;
     }
   }
