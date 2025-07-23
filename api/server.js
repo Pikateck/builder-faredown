@@ -193,6 +193,7 @@ app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
 app.use("/api/flights", flightRoutes);
 app.use("/api/hotels", hotelRoutes);
+app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/bargain", bargainRoutes);
 app.use("/api/currency", currencyAdminRoutes);
 app.use("/api/promo", promoRoutes);
