@@ -16,32 +16,10 @@ export class DevApiClient {
   }
 
   private async quickConnectivityCheck(): Promise<boolean> {
-    const now = Date.now();
-
-    // Use cached result if checked recently
-    if (this.serverAvailable !== null && (now - this.lastCheck) < this.checkInterval) {
-      return this.serverAvailable;
-    }
-
-    try {
-      // Quick health check with very short timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 500); // 500ms timeout
-
-      const response = await fetch(`${this.baseUrl}/health`, {
-        method: 'HEAD', // Faster than GET
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-      this.serverAvailable = response.ok;
-      this.lastCheck = now;
-      return this.serverAvailable;
-    } catch {
-      this.serverAvailable = false;
-      this.lastCheck = now;
-      return false;
-    }
+    // For development mode, assume server is always offline to avoid fetch errors
+    // This method exists for future enhancement but currently returns false
+    // to force fallback mode and avoid any network requests
+    return false;
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
