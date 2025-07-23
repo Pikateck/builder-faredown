@@ -172,24 +172,21 @@ class HotelbedsService {
           rooms: searchParams.rooms || 1,
           adults: searchParams.adults || 2,
           children: searchParams.children || 0
-        }],
-        hotels: {
-          hotel: searchParams.hotelCodes ? searchParams.hotelCodes.map(code => ({ code })) : undefined
-        },
-        destination: searchParams.destinationCode ? {
-          code: searchParams.destinationCode
-        } : undefined
+        }]
       };
 
-      // Remove undefined fields
-      if (!requestBody.hotels.hotel) {
-        delete requestBody.hotels;
-      }
-      if (!requestBody.destination) {
-        delete requestBody.destination;
+      // Add destination filter using the correct API format
+      if (searchParams.destination || searchParams.destinationCode) {
+        requestBody.hotels = {
+          destination: searchParams.destination || searchParams.destinationCode
+        };
       }
 
+      console.log('🔴 Hotelbeds API Request:', JSON.stringify(requestBody, null, 2));
+
       const response = await this.makeRequest('hotels', 'POST', requestBody, false);
+      console.log('🔴 Hotelbeds API Response:', JSON.stringify(response, null, 2));
+
       return response.hotels || [];
     } catch (error) {
       console.error('Error searching availability:', error);
