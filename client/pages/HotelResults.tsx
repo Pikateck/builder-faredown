@@ -265,7 +265,7 @@ export default function HotelResults() {
     setSortBy("recommended");
   };
 
-  const filteredHotels = mockHotels.filter((hotel) => {
+  const filteredHotels = hotels.filter((hotel) => {
     const withinPriceRange =
       hotel.currentPrice >= priceRange[0] &&
       hotel.currentPrice <= priceRange[1];
