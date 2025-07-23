@@ -67,6 +67,16 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
+  // Popular destinations to show when search is empty
+  const popularDestinations: DestinationOption[] = [
+    { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
+    { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
+    { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
+    { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
+    { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
+    { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" }
+  ];
+
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
 
