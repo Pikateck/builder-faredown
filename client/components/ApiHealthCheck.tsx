@@ -35,7 +35,7 @@ export function ApiHealthCheck() {
         setStatus({
           isOnline: true,
           message: `API server is running (${data.status})`,
-          endpoint: '/api/health'
+          endpoint: '/health'
         });
         console.log('✅ API health check passed');
       } else {
