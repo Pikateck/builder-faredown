@@ -52,7 +52,7 @@ export function ApiHealthCheck() {
       setStatus({
         isOnline: false,
         message: 'API server not accessible (running in fallback mode)',
-        endpoint: '/api/health'
+        endpoint: '/health'
       });
     }
   };
