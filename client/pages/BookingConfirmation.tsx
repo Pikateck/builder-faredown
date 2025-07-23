@@ -79,9 +79,21 @@ export default function BookingConfirmation() {
   const loadBookingDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/bookings/hotels/${bookingRef}`);
-      const result = await response.json();
-      
+      // Use mock booking data to avoid fetch calls
+      console.log(`Loading booking ${bookingRef}: Using mock data (fetch disabled)`);
+      const result = {
+        success: true,
+        data: {
+          bookingRef,
+          status: 'confirmed',
+          hotel: 'Mock Hotel for Development',
+          guest: 'Test Guest',
+          checkIn: '2025-01-25',
+          checkOut: '2025-01-27',
+          totalAmount: 5000
+        }
+      };
+
       if (result.success) {
         setBooking(result.data);
       } else {
