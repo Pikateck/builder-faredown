@@ -458,17 +458,33 @@ export default function HotelResults() {
                   : "space-y-3 sm:space-y-6"
               }
             >
-              {sortedHotels.map((hotel) => (
-                <HotelCard
-                  key={hotel.id}
-                  hotel={hotel}
-                  onBargainClick={handleBargainClick}
-                  viewMode={viewMode}
-                />
-              ))}
+              {loading ? (
+                <div className="text-center py-8 sm:py-12 px-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#003580] mx-auto"></div>
+                  <p className="text-gray-600 text-sm sm:text-base mt-4">Loading hotels...</p>
+                </div>
+              ) : error ? (
+                <div className="text-center py-8 sm:py-12 px-4">
+                  <h3 className="text-base sm:text-lg font-medium text-red-600 mb-2">
+                    {error}
+                  </h3>
+                  <Button onClick={loadHotels} className="mt-4">
+                    Try Again
+                  </Button>
+                </div>
+              ) : (
+                filteredAndSortedHotels.map((hotel) => (
+                  <HotelCard
+                    key={hotel.id}
+                    hotel={hotel}
+                    onBargainClick={handleBargainClick}
+                    viewMode={viewMode}
+                  />
+                ))
+              )}
             </div>
 
-            {sortedHotels.length === 0 && (
+            {!loading && !error && filteredAndSortedHotels.length === 0 && (
               <div className="text-center py-8 sm:py-12 px-4">
                 <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
                   No hotels found
