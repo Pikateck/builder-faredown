@@ -12,6 +12,7 @@ export function LiveIntegrationTest() {
   const [results, setResults] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [overallStatus, setOverallStatus] = useState<'idle' | 'running' | 'success' | 'error'>('idle');
+  const isProduction = typeof window !== 'undefined' && window.location.hostname !== "localhost";
 
   const runLiveTests = async () => {
     setIsRunning(true);
