@@ -144,18 +144,9 @@ export default function BookingConfirmation() {
 
   const downloadInvoice = async () => {
     try {
-      const response = await fetch(`/api/vouchers/invoice/${bookingRef}`);
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `invoice_${bookingRef}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      }
+      // Mock invoice download to avoid fetch calls
+      console.log(`Downloading invoice for ${bookingRef}: Using mock functionality (fetch disabled)`);
+      alert('Invoice download simulated - fetch calls disabled for development');
     } catch (error) {
       console.error('Error downloading invoice:', error);
     }
