@@ -78,7 +78,7 @@ export function ApiErrorTest() {
   }, []);
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 max-w-md">
+    <div className="w-full max-w-md mx-auto">
       <div className="bg-white border-2 border-gray-300 rounded-lg p-4 shadow-lg">
         <div className="font-bold mb-3 text-center">🔧 Fetch Error Fix Test</div>
         
