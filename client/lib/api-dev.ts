@@ -21,7 +21,7 @@ export class DevApiClient {
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     // DevApiClient always uses fallback data to avoid fetch errors
-    console.log(`🔄 DevApiClient: Using fallback data for ${endpoint} (API server offline)`);
+    console.log(`🔄 FALLBACK: ${endpoint} (Live API unavailable - using mock data)`);
     return this.getFallbackData(endpoint, params) as T;
   }
 
