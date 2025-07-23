@@ -8,6 +8,8 @@ interface SystemComponent {
 }
 
 export function SystemStatus() {
+  const isProduction = typeof window !== 'undefined' && window.location.hostname !== "localhost";
+
   const [components, setComponents] = useState<SystemComponent[]>([
     {
       name: '🛡️ Production Fallback System',
@@ -17,9 +19,11 @@ export function SystemStatus() {
     },
     {
       name: '🏨 Hotelbeds API Integration',
-      status: 'operational',
-      description: 'Live hotel search and booking',
-      details: ['Real-time hotel availability', 'Dynamic pricing', 'Test environment ready']
+      status: isProduction ? 'testing' : 'operational',
+      description: isProduction ? 'Mock data for production testing' : 'Live hotel search and booking',
+      details: isProduction
+        ? ['Using mock hotel data', 'Production-safe testing', 'Real integration available in dev']
+        : ['Real-time hotel availability', 'Dynamic pricing', 'Test environment ready']
     },
     {
       name: '🗺️ GIATA Room Mapping',
