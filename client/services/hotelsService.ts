@@ -562,7 +562,16 @@ export class HotelsService {
     }[]
   > {
     try {
-      // Direct fetch to bypass API client fallback mode
+      // Check if we're in production environment
+      const isProduction = window.location.hostname !== "localhost";
+
+      if (isProduction) {
+        // In production, skip live API calls to avoid errors
+        console.log('🚫 Skipping live destination API in production environment');
+        return [];
+      }
+
+      // Direct fetch to bypass API client fallback mode (only in development)
       const response = await fetch(`/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`, {
         method: 'GET',
         headers: {
