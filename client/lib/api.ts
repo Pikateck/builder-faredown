@@ -114,9 +114,37 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // Always use dev client to completely avoid fetch errors
-    console.log('🔄 Using development fallback mode (fetch disabled)');
-    return this.devClient.get<T>(endpoint, params);
+    const url = new URL(`${this.baseURL}${endpoint}`);
+
+    if (params) {
+      Object.keys(params).forEach((key) => {
+        if (params[key] !== undefined && params[key] !== null) {
+          url.searchParams.append(key, String(params[key]));
+        }
+      });
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    try {
+      console.log(`🌐 API GET: ${url.toString()}`);
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: this.getHeaders(),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      console.log(`✅ API Response: ${response.status}`);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      // Smart fallback - use dev client only if fetch fails
+      console.warn(`⚠️ API call failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return this.devClient.get<T>(endpoint, params);
+    }
   }
 
   async post<T>(
