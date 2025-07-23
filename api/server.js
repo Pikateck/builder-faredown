@@ -260,16 +260,48 @@ process.on("SIGINT", () => {
   });
 });
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log("\n🚀 Faredown API Server Started");
-  console.log("================================");
-  console.log(`📍 Server URL: http://localhost:${PORT}`);
-  console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
-  console.log(`📚 API Docs: http://localhost:${PORT}/api/docs`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
-  console.log(`🕒 Started at: ${new Date().toISOString()}`);
-  console.log("================================\n");
-});
+// Initialize database and start server
+async function startServer() {
+  try {
+    // Initialize database connection
+    console.log("🔌 Initializing database connection...");
+    await db.initialize();
+    await db.initializeSchema();
+    console.log("✅ Database connected and schema ready");
+
+    // Start server
+    const server = app.listen(PORT, () => {
+      console.log("\n🚀 Faredown API Server Started");
+      console.log("================================");
+      console.log(`📍 Server URL: http://localhost:${PORT}`);
+      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+      console.log(`📚 API Docs: http://localhost:${PORT}/api/docs`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`🕒 Started at: ${new Date().toISOString()}`);
+      console.log(`🗄️  Database: Connected to PostgreSQL`);
+      console.log("================================\n");
+    });
+
+    return server;
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+    console.log("⚠️  Starting server without database (fallback mode)");
+
+    // Start server without database
+    const server = app.listen(PORT, () => {
+      console.log("\n🚀 Faredown API Server Started (Fallback Mode)");
+      console.log("================================");
+      console.log(`📍 Server URL: http://localhost:${PORT}`);
+      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+      console.log(`⚠️  Database: Offline (using in-memory storage)`);
+      console.log("================================\n");
+    });
+
+    return server;
+  }
+}
+
+// Start the server
+startServer();
 
 module.exports = app;
