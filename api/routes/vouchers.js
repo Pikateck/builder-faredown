@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const voucherService = require('../services/voucherService');
 const hotelBookingService = require('../services/hotelBookingService');
+const EnhancedEmailService = require('../services/enhancedEmailService');
 const { authenticateToken } = require('../middleware/auth');
+
+// Initialize enhanced email service
+const emailService = new EnhancedEmailService();
 
 /**
  * Generate hotel booking voucher
