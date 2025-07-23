@@ -19,7 +19,7 @@ const getBackendUrl = () => {
   }
 
   // Default to localhost for development
-  return "http://localhost:8000";
+  return "http://localhost:3001";
 };
 
 // API Configuration
