@@ -233,9 +233,9 @@ class HotelBookingService {
       // Remove from pending
       this.pendingBookings.delete(tempBookingRef);
 
-      // Send confirmation email (don't wait for it)
-      this.sendBookingConfirmationEmail(confirmedBooking).catch(error => {
-        console.error('Failed to send booking confirmation email:', error);
+      // Generate voucher and send confirmation email (don't wait for it)
+      this.processBookingConfirmation(confirmedBooking).catch(error => {
+        console.error('Failed to process booking confirmation:', error);
       });
 
       return {
