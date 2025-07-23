@@ -65,7 +65,7 @@ export function EmailDeliveryTest() {
         updateTest(1, {
           status: 'error',
           duration: Date.now() - configStart,
-          error: `Expected SendGrid, got ${statusData.data.emailProvider}`
+          error: `Expected SendGrid, got ${statusData.data?.emailProvider || 'undefined'}`
         });
       }
 
