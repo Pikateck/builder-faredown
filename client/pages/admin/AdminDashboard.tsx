@@ -677,6 +677,17 @@ export default function AdminDashboard() {
               <ReportsAnalytics />
             ) : activeModule === "suppliers" ? (
               <SupplierManagement />
+            ) : activeModule === "testing" ? (
+              <div className="text-center py-8">
+                <TestTube className="w-16 h-16 text-pink-500 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">API Testing Dashboard</h2>
+                <p className="text-gray-600 mb-6">Comprehensive testing tools for live API integrations</p>
+                <Link to="/admin/testing">
+                  <Button className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 text-lg">
+                    Open Testing Dashboard
+                  </Button>
+                </Link>
+              </div>
             ) : (
               renderModulePlaceholder(activeModule)
             )}
