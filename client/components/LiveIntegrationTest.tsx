@@ -175,7 +175,7 @@ export function LiveIntegrationTest() {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 max-w-md">
+    <div className="w-full max-w-md mx-auto">
       <div className={`border-2 rounded-lg p-4 shadow-lg ${getStatusColor(overallStatus)}`}>
         <div className="font-bold mb-3 text-center">
           {getOverallStatusIcon()} Live API Integration Test
