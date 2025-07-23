@@ -152,35 +152,8 @@ export function Header({ className }: HeaderProps) {
             </nav>
 
             {/* Currency Selector */}
-            <div className="relative hidden md:block currency-dropdown-container">
-              <button
-                onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-                className="flex items-center space-x-1 text-white hover:text-blue-200 text-sm px-2 py-1"
-              >
-                <span>
-                  {selectedCurrency.symbol} {selectedCurrency.code}
-                </span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {showCurrencyDropdown && (
-                <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
-                  {currencies.map((currency) => (
-                    <button
-                      key={currency.code}
-                      onClick={() => {
-                        setCurrency(currency);
-                        setShowCurrencyDropdown(false);
-                      }}
-                      className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
-                    >
-                      <span>{currency.name}</span>
-                      <span className="font-medium">
-                        {currency.symbol} {currency.code}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              )}
+            <div className="hidden md:block">
+              <CurrencySelector variant="header" />
             </div>
 
             <div className="flex items-center space-x-3">
