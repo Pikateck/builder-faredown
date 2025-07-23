@@ -12,12 +12,11 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // In production, try common backend URLs
+  // In production, we can't access localhost - use fallback mode
   if (window.location.hostname !== "localhost") {
-    const currentDomain = window.location.origin;
-    // Try backend subdomain
-    const backendUrl = currentDomain.replace("https://", "https://api-");
-    return backendUrl;
+    console.warn('⚠️ Production environment detected - API will use fallback mode');
+    // Return a non-existent URL to force fallback mode
+    return "https://api-unavailable-fallback-mode";
   }
 
   // Default to localhost for development
