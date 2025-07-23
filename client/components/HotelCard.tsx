@@ -208,7 +208,7 @@ export function HotelCard({
             <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
               <span className="text-sm font-medium">{hotel.rating}</span>
-              <span className="text-xs text-gray-600">({hotel.reviews})</span>
+              <span className="text-xs text-gray-600">({hotel.reviewCount || hotel.reviews || 0})</span>
             </div>
           </div>
 
