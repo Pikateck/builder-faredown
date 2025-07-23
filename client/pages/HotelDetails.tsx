@@ -455,25 +455,7 @@ export default function HotelDetails() {
 
 
 
-            {/* Price Range */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Price Range
-              </label>
-              <div className="text-sm text-gray-600 mb-2">
-                ₹{Math.round((priceRange / 100) * 15000).toLocaleString()}+
-              </div>
-              <div className="px-2">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={priceRange}
-                  onChange={(e) => setPriceRange(Number(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                />
-              </div>
-            </div>
+
 
             {/* Popular Filters */}
             <div className="mb-4">
@@ -1851,7 +1833,7 @@ export default function HotelDetails() {
                     </div>
                     <ul className="space-y-2 text-sm text-gray-700">
                       <li className="flex items-center">
-                        <span className="mr-2">🏨</span> 674 Total rooms
+                        <span className="mr-2">��</span> 674 Total rooms
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🏢</span> 40-floor main building
@@ -2164,7 +2146,7 @@ export default function HotelDetails() {
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       {[
                         { icon: "🇺🇸", text: "English" },
-                        { icon: "🇦🇪", text: "Arabic" },
+                        { icon: "🇦���", text: "Arabic" },
                         { icon: "🇩🇪", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
