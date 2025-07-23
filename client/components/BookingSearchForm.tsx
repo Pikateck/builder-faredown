@@ -101,7 +101,7 @@ export function BookingSearchForm() {
         );
       } catch (error) {
         console.error(
-          "�����️ Failed to load popular destinations, using fallback:",
+          "���️ Failed to load popular destinations, using fallback:",
           error,
         );
         // Static fallback if database fails
@@ -405,7 +405,7 @@ export function BookingSearchForm() {
                 )}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-80 sm:w-[420px] p-0 border-2 border-blue-200 shadow-xl" align="start">
+            <PopoverContent className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg" align="start">
               <div className="max-h-80 overflow-y-auto">
                 {!popularDestinationsLoaded ? (
                   <div className="flex items-center justify-center p-4">
