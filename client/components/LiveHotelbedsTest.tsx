@@ -58,10 +58,10 @@ export function LiveHotelbedsTest() {
 
       console.log(`🔴 Testing LIVE Hotelbeds API for: ${destination}`);
 
-      // Check if we're in production and skip the test
-      if (window.location.hostname !== "localhost") {
-        throw new Error('Live API testing is only available in development environment. Production uses fallback data.');
-      }
+      // In production, we'll use mock API endpoints for testing
+      const apiUrl = window.location.hostname !== "localhost"
+        ? `/api/hotels/search?${params}`
+        : `http://localhost:3001/api/hotels-live/search?${params}`;
 
       const response = await fetch(`http://localhost:3001/api/hotels-live/search?${params}`, {
         method: 'GET',
