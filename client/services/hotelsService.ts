@@ -500,6 +500,15 @@ export class HotelsService {
     }[]
   > {
     try {
+      // First try live API
+      const liveResults = await this.searchDestinationsLive(query);
+      if (liveResults.length > 0) {
+        console.log('✅ Using live destination data:', liveResults.length, 'destinations');
+        return liveResults;
+      }
+
+      // Fall back to regular API
+      console.log('⚠️ No live destination data, using fallback');
       const response = await apiClient.get<
         ApiResponse<
           {
@@ -529,6 +538,41 @@ export class HotelsService {
         { id: "DEL", name: "Delhi", type: "city", country: "India" },
         { id: "BLR", name: "Bangalore", type: "city", country: "India" }
       ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
+    }
+  }
+
+  /**
+   * Search destinations using live API endpoint
+   */
+  async searchDestinationsLive(query: string): Promise<
+    {
+      id: string;
+      name: string;
+      type: "city" | "region" | "country" | "landmark";
+      country: string;
+    }[]
+  > {
+    try {
+      // Direct fetch to bypass API client fallback mode
+      const response = await fetch(`/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data && data.isLiveData) {
+          console.log('🔴 Live destination data received:', data.data.length, 'destinations');
+          return data.data;
+        }
+      }
+
+      return [];
+    } catch (error) {
+      console.warn('Live destination search failed:', error);
+      return [];
     }
   }
 
