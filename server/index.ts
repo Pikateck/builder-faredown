@@ -11,6 +11,14 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // Add request logging for debugging
+  app.use((req, _res, next) => {
+    if (req.path.includes('/api/hotels')) {
+      console.log(`🔴 Hotelbeds API Request: ${req.method} ${req.path}`, req.query);
+    }
+    next();
+  });
+
   // Example API routes
   app.get("/api/ping", (_req, res) => {
     res.json({ message: "Hello from Express server v2!" });
@@ -42,74 +50,52 @@ export function createServer() {
   });
 
   app.get("/api/hotels/search", (_req, res) => {
-    const destination = _req.query.destination as string || 'Dubai';
+    const destinationCode = _req.query.destination as string || 'DXB';
     const destinationData = MASTER_DESTINATIONS.find(d =>
-      d.name.toLowerCase() === destination.toLowerCase() ||
-      d.code.toLowerCase() === destination.toLowerCase()
+      d.name.toLowerCase() === destinationCode.toLowerCase() ||
+      d.code.toLowerCase() === destinationCode.toLowerCase()
     ) || MASTER_DESTINATIONS.find(d => d.code === 'DXB'); // Default to Dubai
 
-    // Generate realistic hotels for the destination
-    const hotelNames = [
-      `Grand ${destinationData!.name} Hotel`,
-      `${destinationData!.name} Luxury Resort`,
-      `Premium Inn ${destinationData!.name}`,
-      `${destinationData!.name} Business Hotel`,
-      `Boutique Hotel ${destinationData!.name}`,
-      `${destinationData!.name} City Center`,
+    // Use simplified hotel data for fallback
+    const hotels = [
+      {
+        id: `fallback-${destinationData!.code}-001`,
+        code: `FB${destinationData!.code}001`,
+        name: `Grand ${destinationData!.name} Hotel`,
+        description: `Premium hotel in ${destinationData!.name} with excellent amenities.`,
+        currentPrice: 15000, // INR equivalent
+        originalPrice: 18000,
+        currency: 'INR',
+        rating: 4,
+        reviewScore: 8.2,
+        reviewCount: 245,
+        address: {
+          street: '1 Hotel Street',
+          city: destinationData!.name,
+          country: destinationData!.country,
+          zipCode: `${destinationData!.countryCode}12345`
+        },
+        images: [
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80'
+        ],
+        amenities: ['Free WiFi', 'Pool', 'Restaurant', 'Spa'],
+        rooms: [{
+          name: 'Standard Room',
+          price: 15000,
+          currency: 'INR',
+          features: ['City View', 'Free WiFi']
+        }],
+        isLiveData: false,
+        supplier: 'fallback-system'
+      }
     ];
-
-    const hotels = hotelNames.map((name, index) => ({
-      id: `hotel-${destinationData!.code}-${index + 1}`,
-      code: `HTL${destinationData!.code}${(index + 1).toString().padStart(3, '0')}`,
-      name,
-      description: `Experience luxury and comfort at ${name}, located in the heart of ${destinationData!.name}.`,
-      currentPrice: 120 + (index * 30) + Math.floor(Math.random() * 50),
-      originalPrice: 150 + (index * 35) + Math.floor(Math.random() * 60),
-      currency: destinationData!.countryCode === 'IN' ? 'INR' :
-                destinationData!.countryCode === 'US' ? 'USD' : 'EUR',
-      rating: 3 + Math.floor(Math.random() * 3), // 3-5 stars
-      reviewScore: 7.5 + Math.random() * 2, // 7.5-9.5
-      reviewCount: 150 + Math.floor(Math.random() * 500),
-      address: {
-        street: `${index + 1} Hotel Street`,
-        city: destinationData!.name,
-        country: destinationData!.country,
-        zipCode: `${destinationData!.countryCode}${(12345 + index)}`
-      },
-      location: {
-        latitude: 25.2048 + (Math.random() - 0.5) * 0.1,
-        longitude: 55.2708 + (Math.random() - 0.5) * 0.1
-      },
-      images: [
-        `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80`,
-        `https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80`,
-        `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80`
-      ],
-      amenities: [
-        'Free WiFi', 'Swimming Pool', 'Fitness Center', 'Restaurant',
-        'Room Service', 'Concierge', 'Spa', 'Business Center'
-      ].slice(0, 4 + Math.floor(Math.random() * 4)),
-      rooms: [{
-        name: 'Standard Room',
-        size: '25 sqm',
-        bedType: 'Double',
-        maxOccupancy: 2,
-        price: 120 + (index * 30),
-        currency: destinationData!.countryCode === 'IN' ? 'INR' :
-                  destinationData!.countryCode === 'US' ? 'USD' : 'EUR'
-      }],
-      cancellationPolicy: 'Free cancellation until 24 hours before check-in',
-      isLiveData: false,
-      supplier: 'mock-hotelbeds',
-      supplierHotelId: `mock-${destinationData!.code}-${index + 1}`
-    }));
 
     res.json({
       success: true,
-      data: hotels.slice(0, 4), // Return 4 hotels
+      data: hotels,
       totalResults: hotels.length,
       isLiveData: false,
-      source: 'Master Destinations Database',
+      source: 'Fallback System (Use Live API for better results)',
       searchParams: _req.query
     });
   });
@@ -338,39 +324,129 @@ export function createServer() {
   });
 
   app.get("/api/hotels-live/search", (_req, res) => {
-    const destination = _req.query.destination as string || 'Unknown';
+    const destinationCode = _req.query.destination as string || 'DXB';
+    const checkIn = _req.query.checkIn as string;
+    const checkOut = _req.query.checkOut as string;
+    const adults = parseInt(_req.query.adults as string) || 2;
+    const rooms = parseInt(_req.query.rooms as string) || 1;
+
+    // Find destination data
+    const destinationData = MASTER_DESTINATIONS.find(d =>
+      d.code === destinationCode ||
+      d.name.toLowerCase().includes(destinationCode.toLowerCase())
+    ) || MASTER_DESTINATIONS.find(d => d.code === 'DXB');
+
+    // Generate realistic Hotelbeds-style hotels
+    const hotelCategories = [
+      { prefix: 'Grand', stars: 5, basePrice: 250, amenityCount: 8 },
+      { prefix: 'Premium', stars: 4, basePrice: 180, amenityCount: 6 },
+      { prefix: 'Boutique', stars: 4, basePrice: 160, amenityCount: 5 },
+      { prefix: 'Business', stars: 4, basePrice: 140, amenityCount: 5 },
+      { prefix: 'City', stars: 3, basePrice: 120, amenityCount: 4 },
+      { prefix: 'Express', stars: 3, basePrice: 90, amenityCount: 3 }
+    ];
+
+    const allAmenities = [
+      'Free WiFi', 'Swimming Pool', 'Fitness Center', 'Restaurant', 'Room Service',
+      'Concierge', 'Spa & Wellness', 'Business Center', 'Airport Shuttle',
+      'Parking', 'Bar/Lounge', 'Meeting Rooms', 'Laundry Service',
+      'Air Conditioning', 'Safe', '24h Reception', 'Elevator', 'Balcony'
+    ];
+
+    const hotels = hotelCategories.map((category, index) => {
+      const basePrice = category.basePrice;
+      const currency = destinationData!.countryCode === 'IN' ? 'INR' :
+                      destinationData!.countryCode === 'US' ? 'USD' : 'EUR';
+      const priceMultiplier = currency === 'INR' ? 83 : currency === 'USD' ? 1 : 0.92;
+
+      const currentPrice = Math.round(basePrice * priceMultiplier * (0.9 + Math.random() * 0.2));
+      const originalPrice = Math.round(currentPrice * (1.1 + Math.random() * 0.3));
+
+      return {
+        id: `htl-${destinationData!.code}-${(index + 1).toString().padStart(3, '0')}`,
+        code: `HTL${destinationData!.code}${(index + 1).toString().padStart(3, '0')}`,
+        name: `${category.prefix} Hotel ${destinationData!.name}`,
+        description: `Experience ${category.stars}-star luxury at ${category.prefix} Hotel ${destinationData!.name}. Located in the heart of ${destinationData!.name}, offering exceptional service and world-class amenities.`,
+        currentPrice,
+        originalPrice,
+        currency,
+        rating: category.stars,
+        reviewScore: 7.5 + (category.stars - 3) * 0.5 + Math.random() * 1,
+        reviewCount: 150 + Math.floor(Math.random() * 500) + (category.stars * 50),
+        address: {
+          street: `${index + 1} Hotel Boulevard`,
+          city: destinationData!.name,
+          country: destinationData!.country,
+          zipCode: `${destinationData!.countryCode}${(12000 + index * 100)}`
+        },
+        location: {
+          latitude: 25.2048 + (Math.random() - 0.5) * 0.2,
+          longitude: 55.2708 + (Math.random() - 0.5) * 0.2
+        },
+        images: [
+          `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop`,
+          `https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop`,
+          `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop`,
+          `https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop`
+        ],
+        amenities: allAmenities.slice(0, category.amenityCount).concat(
+          allAmenities.slice(category.amenityCount).sort(() => 0.5 - Math.random()).slice(0, 2)
+        ),
+        rooms: [{
+          name: 'Standard Room',
+          size: '25-30 sqm',
+          bedType: adults > 2 ? 'Twin Beds' : 'Double/Twin',
+          maxOccupancy: Math.max(adults, 2),
+          price: currentPrice,
+          currency,
+          features: ['City View', 'Air Conditioning', 'Free WiFi', 'Safe']
+        }, {
+          name: 'Deluxe Room',
+          size: '35-40 sqm',
+          bedType: 'King Bed',
+          maxOccupancy: Math.max(adults + 1, 3),
+          price: Math.round(currentPrice * 1.3),
+          currency,
+          features: ['City/Sea View', 'Balcony', 'Mini Bar', 'Bathtub']
+        }],
+        cancellationPolicy: index < 3 ? 'Free cancellation until 24 hours before check-in' :
+                           'Free cancellation until 48 hours before check-in',
+        isLiveData: false, // Set to true when real Hotelbeds integration is active
+        supplier: 'hotelbeds-simulation',
+        supplierHotelId: `htl-sim-${destinationData!.code}-${index + 1}`,
+        checkInTime: '15:00',
+        checkOutTime: '11:00',
+        distanceToCenter: (Math.random() * 5).toFixed(1) + ' km',
+        facilities: {
+          general: ['WiFi', 'Air Conditioning', 'Elevator', '24h Reception'],
+          dining: category.amenityCount >= 5 ? ['Restaurant', 'Bar', 'Room Service'] : ['Restaurant'],
+          business: category.stars >= 4 ? ['Business Center', 'Meeting Rooms'] : [],
+          wellness: category.stars >= 4 ? ['Spa', 'Fitness Center', 'Pool'] : category.stars >= 3 ? ['Pool'] : []
+        }
+      };
+    });
+
     res.json({
       success: true,
-      data: [
-        {
-          id: 'mock-hotel-001',
-          name: `Mock Hotel ${destination}`,
-          currentPrice: 125,
-          currency: 'EUR',
-          rating: 4,
-          address: { city: destination, country: 'Mock Country' },
-          isLiveData: false,
-          supplier: 'mock-hotelbeds',
-          images: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400'],
-          amenities: ['WiFi', 'Pool', 'Restaurant', 'Spa']
-        },
-        {
-          id: 'mock-hotel-002',
-          name: `Premium Hotel ${destination}`,
-          currentPrice: 185,
-          currency: 'EUR',
-          rating: 5,
-          address: { city: destination, country: 'Mock Country' },
-          isLiveData: false,
-          supplier: 'mock-hotelbeds',
-          images: ['https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400'],
-          amenities: ['WiFi', 'Pool', 'Restaurant', 'Spa', 'Gym', 'Concierge']
-        }
-      ],
-      totalResults: 2,
-      isLiveData: false,
-      source: 'Production Mock Data (Hotelbeds Simulation)',
-      searchParams: _req.query
+      data: hotels,
+      totalResults: hotels.length,
+      isLiveData: false, // Will be true when connected to real Hotelbeds API
+      source: 'Enhanced Hotelbeds Simulation',
+      searchParams: {
+        destination: destinationCode,
+        destinationName: destinationData!.name,
+        checkIn,
+        checkOut,
+        adults,
+        rooms,
+        currency: hotels[0]?.currency
+      },
+      searchMeta: {
+        searchId: `search-${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        processingTime: '245ms',
+        hotelbedsStatus: 'simulated'
+      }
     });
   });
 
@@ -378,49 +454,117 @@ export function createServer() {
     const query = _req.query.q as string || '';
     const destinations = query ? searchDestinations(query) : MASTER_DESTINATIONS.filter(d => d.popular);
 
-    // Transform to Hotelbeds format
+    // Transform to Hotelbeds API format
     const formattedDestinations = destinations.map(dest => ({
       code: dest.code,
       name: dest.name,
       countryName: dest.country,
-      type: 'destination',
-      popular: dest.popular
+      countryCode: dest.countryCode,
+      type: dest.type,
+      zoneCode: dest.zone || null,
+      popular: dest.popular,
+      hotelCount: 50 + Math.floor(Math.random() * 200), // Simulated hotel count
+      coordinates: {
+        latitude: 25.2048 + (Math.random() - 0.5) * 10,
+        longitude: 55.2708 + (Math.random() - 0.5) * 20
+      }
     }));
 
     res.json({
       success: true,
       data: formattedDestinations,
-      isLiveData: false,
-      source: 'Master Destinations Database (Hotelbeds Format)'
+      totalResults: formattedDestinations.length,
+      isLiveData: false, // Will be true when connected to real Hotelbeds
+      source: 'Enhanced Master Destinations (Hotelbeds Format)',
+      searchMeta: {
+        query,
+        searchId: `dest-search-${Date.now()}`,
+        processingTime: '120ms'
+      }
     });
   });
 
-  // Proxy health check to main API server or provide fallback
+  // Enhanced health check with Hotelbeds API simulation status
   app.get("/health", async (_req, res) => {
     try {
       // Try to proxy to main API server
       const response = await fetch('http://localhost:3001/health');
       if (response.ok) {
         const data = await response.json();
+        // Add Hotelbeds simulation info
+        data.services = {
+          ...data.services,
+          hotelbeds_api: "simulated",
+          destinations_db: "loaded",
+          currency_api: "live"
+        };
         res.json(data);
       } else {
         throw new Error('Main API server not responding');
       }
     } catch (error) {
-      // Fallback response when main API server is not available
+      // Enhanced fallback response with Hotelbeds status
       res.json({
-        status: "fallback",
+        status: "enhanced_fallback",
         timestamp: new Date().toISOString(),
-        version: "1.0.0",
+        version: "2.0.0",
         environment: "development",
         services: {
           database: "offline",
           cache: "connected",
-          external_apis: "fallback",
+          hotelbeds_api: "simulated",
+          destinations_db: "loaded",
+          currency_api: "live",
+          external_apis: "fallback"
         },
-        message: "Main API server not available, using development fallback"
+        features: {
+          live_hotel_search: true,
+          destination_autocomplete: true,
+          currency_conversion: true,
+          mock_booking_flow: true
+        },
+        destinations_loaded: MASTER_DESTINATIONS.length,
+        message: "Enhanced development server with Hotelbeds simulation active"
       });
     }
+  });
+
+  // Additional Hotelbeds API simulation endpoints
+
+  // Hotel details endpoint
+  app.get("/api/hotels-live/:hotelId", (_req, res) => {
+    const hotelId = _req.params.hotelId;
+
+    res.json({
+      success: true,
+      data: {
+        id: hotelId,
+        name: 'Detailed Hotel Information',
+        description: 'Full hotel details would be fetched from Hotelbeds API',
+        isLiveData: false,
+        supplier: 'hotelbeds-simulation'
+      },
+      source: 'Hotelbeds Hotel Details Simulation'
+    });
+  });
+
+  // Hotel availability endpoint
+  app.get("/api/hotels-live/:hotelId/availability", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        available: true,
+        rooms: [
+          {
+            name: 'Standard Room',
+            available: 5,
+            price: 150,
+            currency: 'EUR'
+          }
+        ]
+      },
+      source: 'Hotelbeds Availability Simulation'
+    });
   });
 
   return app;
