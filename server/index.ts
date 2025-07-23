@@ -42,23 +42,75 @@ export function createServer() {
   });
 
   app.get("/api/hotels/search", (_req, res) => {
+    const destination = _req.query.destination as string || 'Dubai';
+    const destinationData = MASTER_DESTINATIONS.find(d =>
+      d.name.toLowerCase() === destination.toLowerCase() ||
+      d.code.toLowerCase() === destination.toLowerCase()
+    ) || MASTER_DESTINATIONS.find(d => d.code === 'DXB'); // Default to Dubai
+
+    // Generate realistic hotels for the destination
+    const hotelNames = [
+      `Grand ${destinationData!.name} Hotel`,
+      `${destinationData!.name} Luxury Resort`,
+      `Premium Inn ${destinationData!.name}`,
+      `${destinationData!.name} Business Hotel`,
+      `Boutique Hotel ${destinationData!.name}`,
+      `${destinationData!.name} City Center`,
+    ];
+
+    const hotels = hotelNames.map((name, index) => ({
+      id: `hotel-${destinationData!.code}-${index + 1}`,
+      code: `HTL${destinationData!.code}${(index + 1).toString().padStart(3, '0')}`,
+      name,
+      description: `Experience luxury and comfort at ${name}, located in the heart of ${destinationData!.name}.`,
+      currentPrice: 120 + (index * 30) + Math.floor(Math.random() * 50),
+      originalPrice: 150 + (index * 35) + Math.floor(Math.random() * 60),
+      currency: destinationData!.countryCode === 'IN' ? 'INR' :
+                destinationData!.countryCode === 'US' ? 'USD' : 'EUR',
+      rating: 3 + Math.floor(Math.random() * 3), // 3-5 stars
+      reviewScore: 7.5 + Math.random() * 2, // 7.5-9.5
+      reviewCount: 150 + Math.floor(Math.random() * 500),
+      address: {
+        street: `${index + 1} Hotel Street`,
+        city: destinationData!.name,
+        country: destinationData!.country,
+        zipCode: `${destinationData!.countryCode}${(12345 + index)}`
+      },
+      location: {
+        latitude: 25.2048 + (Math.random() - 0.5) * 0.1,
+        longitude: 55.2708 + (Math.random() - 0.5) * 0.1
+      },
+      images: [
+        `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80`,
+        `https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80`,
+        `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80`
+      ],
+      amenities: [
+        'Free WiFi', 'Swimming Pool', 'Fitness Center', 'Restaurant',
+        'Room Service', 'Concierge', 'Spa', 'Business Center'
+      ].slice(0, 4 + Math.floor(Math.random() * 4)),
+      rooms: [{
+        name: 'Standard Room',
+        size: '25 sqm',
+        bedType: 'Double',
+        maxOccupancy: 2,
+        price: 120 + (index * 30),
+        currency: destinationData!.countryCode === 'IN' ? 'INR' :
+                  destinationData!.countryCode === 'US' ? 'USD' : 'EUR'
+      }],
+      cancellationPolicy: 'Free cancellation until 24 hours before check-in',
+      isLiveData: false,
+      supplier: 'mock-hotelbeds',
+      supplierHotelId: `mock-${destinationData!.code}-${index + 1}`
+    }));
+
     res.json({
       success: true,
-      data: [
-        {
-          id: 'hotel-001',
-          name: 'Mock Hotel Barcelona',
-          currentPrice: 150,
-          currency: 'EUR',
-          rating: 4,
-          address: { city: 'Barcelona', country: 'Spain' },
-          isLiveData: false,
-          supplier: 'mock'
-        }
-      ],
-      totalResults: 1,
+      data: hotels.slice(0, 4), // Return 4 hotels
+      totalResults: hotels.length,
       isLiveData: false,
-      source: 'Production Mock Data'
+      source: 'Master Destinations Database',
+      searchParams: _req.query
     });
   });
 
