@@ -36,13 +36,13 @@ export function EmailDeliveryTest() {
       const statusResponse = await fetch('/api/vouchers/status');
       const statusData = await statusResponse.json();
       
-      if (statusData.success) {
+      if (statusData.success && statusData.data) {
         updateTest(0, {
           status: 'success',
           duration: Date.now() - statusStart,
           data: {
-            provider: statusData.data.emailProvider,
-            emailDelivery: statusData.data.features.emailDelivery
+            provider: statusData.data.emailProvider || 'Unknown',
+            emailDelivery: statusData.data.features?.emailDelivery || false
           }
         });
       } else {
