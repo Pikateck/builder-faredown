@@ -181,8 +181,15 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       // Check if this is a connection error (API server not running)
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        console.warn('API server not available, using development fallback for POST');
+      if (error instanceof TypeError ||
+          (error instanceof Error && (
+            error.message.includes('fetch') ||
+            error.message.includes('Failed to fetch') ||
+            error.message.includes('NetworkError') ||
+            error.message.includes('ERR_CONNECTION_REFUSED') ||
+            error.name === 'AbortError'
+          ))) {
+        console.warn('API server not available, using development fallback for POST:', error.message);
         return this.devClient.post<T>(endpoint, data);
       }
 
