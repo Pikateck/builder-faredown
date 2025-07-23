@@ -67,20 +67,46 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
-  // Popular destinations with Hotelbeds destination codes
-  const popularDestinations: DestinationOption[] = [
-    { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
-    { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
-    { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
-    { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
-    { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
-    { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" },
-    { id: "MAD", code: "MAD", name: "Madrid", country: "Spain", type: "city" },
-    { id: "ROM", code: "ROM", name: "Rome", country: "Italy", type: "city" }
-  ];
+  // Popular destinations will be loaded from database
+  const [popularDestinations, setPopularDestinations] = useState<DestinationOption[]>([]);
+  const [popularDestinationsLoaded, setPopularDestinationsLoaded] = useState(false);
 
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
+
+  // Load popular destinations from database on component mount
+  useEffect(() => {
+    const loadPopularDestinations = async () => {
+      try {
+        console.log('🎆 Loading popular destinations from database...');
+        const popular = await hotelsService.searchDestinations('', 8, true); // Get 8 popular destinations
+        const formattedPopular = popular.map(dest => ({
+          id: dest.id,
+          code: dest.id, // dest.id is the destination code
+          name: dest.name,
+          country: dest.country,
+          type: dest.type as "city" | "region" | "country" | "landmark"
+        }));
+        setPopularDestinations(formattedPopular);
+        setPopularDestinationsLoaded(true);
+        console.log('✅ Loaded', formattedPopular.length, 'popular destinations from database');
+      } catch (error) {
+        console.error('⚠️ Failed to load popular destinations, using fallback:', error);
+        // Static fallback if database fails
+        setPopularDestinations([
+          { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
+          { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
+          { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
+          { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
+          { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
+          { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" }
+        ]);
+        setPopularDestinationsLoaded(true);
+      }
+    };
+
+    loadPopularDestinations();
+  }, []);
 
   const searchDestinations = useCallback(
     async (query: string) => {
@@ -98,49 +124,56 @@ export function BookingSearchForm() {
       debouncedSearchRef.current = setTimeout(async () => {
         try {
           setLoadingDestinations(true);
-          const results = await hotelsService.searchDestinations(query);
-          setDestinationSuggestions(results.slice(0, 8)); // Limit to 8 results for better UX
-        } catch (error) {
-          console.error('Failed to search destinations:', error);
-          // Fallback to popular destinations based on query
-          const popularDestinations: DestinationOption[] = [
-            { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
-            { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city" },
-            { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city" },
-            { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city" },
-            { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city" },
-            { id: "BOM", code: "BOM", name: "Mumbai", country: "India", type: "city" },
-            { id: "MAD", code: "MAD", name: "Madrid", country: "Spain", type: "city" },
-            { id: "ROM", code: "ROM", name: "Rome", country: "Italy", type: "city" }
-          ];
+          console.log(`🔍 Searching destinations in database: "${query}"`);
 
-          // Filter destinations based on query
-          const filtered = popularDestinations.filter(dest =>
+          // Use database-backed search
+          const results = await hotelsService.searchDestinations(query, 10); // Get up to 10 results
+
+          const formattedResults = results.map(dest => ({
+            id: dest.id,
+            code: dest.id, // dest.id is the destination code
+            name: dest.name,
+            country: dest.country,
+            type: dest.type as "city" | "region" | "country" | "landmark",
+            popular: (dest as any).popular || false,
+            flag: (dest as any).flag || '🌍'
+          }));
+
+          setDestinationSuggestions(formattedResults);
+          console.log(`✅ Found ${formattedResults.length} destinations matching "${query}"`);
+
+        } catch (error) {
+          console.error('⚠️ Database destination search failed:', error);
+
+          // Enhanced fallback with popular destinations filter
+          const fallbackDestinations = popularDestinations.filter(dest =>
             dest.name.toLowerCase().includes(query.toLowerCase()) ||
-            dest.country.toLowerCase().includes(query.toLowerCase())
+            dest.country.toLowerCase().includes(query.toLowerCase()) ||
+            dest.code.toLowerCase().includes(query.toLowerCase())
           );
 
-          setDestinationSuggestions(filtered.slice(0, 5));
+          setDestinationSuggestions(fallbackDestinations.slice(0, 5));
+          console.log(`🔄 Using fallback: ${fallbackDestinations.length} destinations`);
         } finally {
           setLoadingDestinations(false);
         }
-      }, 300); // 300ms debounce
+      }, 300); // 300ms debounce for optimal UX
     },
-    []
+    [popularDestinations]
   );
 
   // Handle destination search when user types
   useEffect(() => {
-    if (isDestinationOpen) {
+    if (isDestinationOpen && popularDestinationsLoaded) {
       if (destination && destination.length >= 2) {
         // Search as user types (debounced in searchDestinations function)
         searchDestinations(destination);
       } else {
-        // Show popular destinations when no search query
+        // Clear suggestions when no search query - popular destinations will show in static section
         setDestinationSuggestions([]);
       }
     }
-  }, [destination, isDestinationOpen, searchDestinations]);
+  }, [destination, isDestinationOpen, searchDestinations, popularDestinationsLoaded]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
@@ -278,7 +311,8 @@ export function BookingSearchForm() {
                   onChange={(e) => setDestination(e.target.value)}
                   onClick={() => setIsDestinationOpen(true)}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-orange-400 focus:border-blue-500 rounded font-medium text-sm touch-manipulation"
-                  placeholder="Where are you going?"
+                  placeholder="Search destinations (e.g., Dubai, London)..."
+                  autoComplete="off"
                 />
                 {destination && (
                   <button
@@ -295,64 +329,92 @@ export function BookingSearchForm() {
             </PopoverTrigger>
             <PopoverContent className="w-80 sm:w-96 p-0" align="start">
               <div className="max-h-60 overflow-y-auto">
-                {loadingDestinations ? (
+                {!popularDestinationsLoaded ? (
                   <div className="flex items-center justify-center p-4">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    <span className="text-sm text-gray-600">Searching...</span>
+                    <span className="text-sm text-gray-600">Loading destinations...</span>
+                  </div>
+                ) : loadingDestinations ? (
+                  <div className="flex items-center justify-center p-4">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                    <span className="text-sm text-gray-600">🔍 Searching database...</span>
                   </div>
                 ) : destinationSuggestions.length > 0 ? (
-                  destinationSuggestions.map((dest, index) => (
-                    <div
-                      key={dest.id || index}
-                      className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors"
-                      onClick={() => {
-                        const fullName = `${dest.name}, ${dest.country}`;
-                        console.log("🎯 Selected destination:", {
-                          name: fullName,
-                          code: dest.code || dest.id,
-                          type: dest.type
-                        });
-                        setDestination(fullName);
-                        setDestinationCode(dest.code || dest.id);
-                        setIsDestinationOpen(false);
-                      }}
-                    >
-                      <MapPin className="w-4 h-4 mr-3 text-gray-500" />
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900">
-                          {dest.name}, {dest.country}
+                  <div>
+                    <div className="px-4 py-2 border-b bg-green-50">
+                      <h4 className="font-medium text-sm text-green-700">
+                        🔍 Search Results ({destinationSuggestions.length})
+                      </h4>
+                    </div>
+                    {destinationSuggestions.map((dest, index) => (
+                      <div
+                        key={dest.id || index}
+                        className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors border-l-2 border-transparent hover:border-blue-500"
+                        onClick={() => {
+                          const fullName = `${dest.name}, ${dest.country}`;
+                          console.log("🎯 Database destination selected:", {
+                            name: fullName,
+                            code: dest.code || dest.id,
+                            type: dest.type,
+                            popular: (dest as any).popular
+                          });
+                          setDestination(fullName);
+                          setDestinationCode(dest.code || dest.id);
+                          setIsDestinationOpen(false);
+                        }}
+                      >
+                        <div className="text-lg mr-3">
+                          {(dest as any).flag || '🌍'}
                         </div>
-                        <div className="text-sm text-gray-500 flex items-center gap-2">
-                          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-mono">
-                            {dest.code || dest.id}
-                          </span>
-                          {dest.type && (
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-gray-900">
+                              {dest.name}, {dest.country}
+                            </span>
+                            {(dest as any).popular && (
+                              <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded-full">
+                                ⭐ Popular
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-500 flex items-center gap-2">
+                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-mono">
+                              {dest.code || dest.id}
+                            </span>
                             <span className="text-xs text-gray-400 capitalize">
                               {dest.type}
                             </span>
-                          )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 ) : destination.length >= 2 ? (
-                  <div className="p-4 text-center text-sm text-gray-500">
-                    No destinations found
+                  <div className="p-4 text-center">
+                    <div className="text-gray-400 mb-2">
+                      🔍
+                    </div>
+                    <div className="text-sm text-gray-500 mb-2">
+                      No destinations found for "{destination}"
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      Try searching for a city or country name
+                    </div>
                   </div>
                 ) : (
                   <div>
-                    <div className="px-4 py-2 border-b bg-gray-50">
-                      <h4 className="font-medium text-sm text-gray-700">
-                        ⭐ Popular Destinations (Hotelbeds)
+                    <div className="px-4 py-2 border-b bg-blue-50">
+                      <h4 className="font-medium text-sm text-blue-700">
+                        ⭐ Popular Destinations
                       </h4>
                     </div>
                     {popularDestinations.map((dest, index) => (
                       <div
                         key={dest.id}
-                        className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors"
+                        className="flex items-center p-3 hover:bg-gray-100 cursor-pointer transition-colors border-l-2 border-transparent hover:border-blue-500"
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("⭐ Selected popular destination:", {
+                          console.log("⭐ Popular destination selected:", {
                             name: fullName,
                             code: dest.code,
                             type: dest.type
@@ -362,7 +424,9 @@ export function BookingSearchForm() {
                           setIsDestinationOpen(false);
                         }}
                       >
-                        <MapPin className="w-4 h-4 mr-3 text-gray-500" />
+                        <div className="text-lg mr-3">
+                          {index === 0 ? '🏆' : index === 1 ? '🎆' : index === 2 ? '✨' : '🌍'}
+                        </div>
                         <div className="flex-1">
                           <div className="font-medium text-gray-900">
                             {dest.name}, {dest.country}
@@ -379,8 +443,9 @@ export function BookingSearchForm() {
                       </div>
                     ))}
                     <div className="px-4 py-2 border-t bg-gray-50">
-                      <p className="text-xs text-gray-500">
-                        🔍 Type to search 1000+ Hotelbeds destinations
+                      <p className="text-xs text-gray-500 flex items-center gap-1">
+                        <span>🔍</span>
+                        <span>Type to search 1000+ destinations from database</span>
                       </p>
                     </div>
                   </div>
