@@ -72,12 +72,25 @@ export function BookingSearchForm() {
         setDestinationSuggestions(results.slice(0, 10)); // Limit to 10 results
       } catch (error) {
         console.error('Failed to search destinations:', error);
-        // Fallback to static destinations for Dubai
-        setDestinationSuggestions([
-          { id: "1", name: "Dubai", country: "United Arab Emirates", type: "city" },
-          { id: "2", name: "Downtown Dubai", country: "Dubai, United Arab Emirates", type: "district" },
-          { id: "3", name: "Dubai Marina", country: "Dubai, United Arab Emirates", type: "district" },
-        ]);
+        // Fallback to popular destinations based on query
+        const popularDestinations = [
+          { id: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city" },
+          { id: "DXB-DT", name: "Downtown Dubai", country: "Dubai, United Arab Emirates", type: "district" },
+          { id: "DXB-MAR", name: "Dubai Marina", country: "Dubai, United Arab Emirates", type: "district" },
+          { id: "LON", name: "London", country: "United Kingdom", type: "city" },
+          { id: "NYC", name: "New York", country: "United States", type: "city" },
+          { id: "PAR", name: "Paris", country: "France", type: "city" },
+          { id: "BOM", name: "Mumbai", country: "India", type: "city" },
+          { id: "DEL", name: "Delhi", country: "India", type: "city" }
+        ];
+
+        // Filter destinations based on query
+        const filtered = popularDestinations.filter(dest =>
+          dest.name.toLowerCase().includes(query.toLowerCase()) ||
+          dest.country.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setDestinationSuggestions(filtered.slice(0, 5));
       } finally {
         setLoadingDestinations(false);
       }
