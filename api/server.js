@@ -179,6 +179,7 @@ app.use("/api/markup", authenticateToken, markupRoutes);
 app.use("/api/vat", authenticateToken, vatRoutes);
 app.use("/api/reports", authenticateToken, reportsRoutes);
 app.use("/api/suppliers", authenticateToken, suppliersRoutes);
+app.use("/api/vouchers", voucherRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
