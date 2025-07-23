@@ -42,9 +42,9 @@ export function ApiErrorTest() {
       const health = await apiClient.healthCheck();
       if (health && health.status) {
         // Check if we're getting live data vs fallback
-        if (health.status === 'development') {
+        if (health.status === 'development' || health.status === 'fallback') {
           results.healthCheck = '✅ Fallback mode - Mock data';
-          results.mode = '🔄 FALLBACK MODE';
+          results.mode = isProduction ? '🌐 PRODUCTION (Fallback)' : '🔄 FALLBACK MODE';
         } else {
           results.healthCheck = '✅ Live API - Real data';
           results.mode = '🌐 LIVE MODE';
