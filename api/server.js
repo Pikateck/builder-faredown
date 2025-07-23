@@ -37,6 +37,7 @@ const currencyAdminRoutes = require("./routes/currency");
 const reportsRoutes = require("./routes/reports");
 const suppliersRoutes = require("./routes/suppliers");
 const voucherRoutes = require("./routes/vouchers");
+const adminBookingsRoutes = require("./routes/admin-bookings");
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
