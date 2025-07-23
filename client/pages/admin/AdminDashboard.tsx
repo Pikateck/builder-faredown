@@ -16,6 +16,7 @@ import MarkupManagementHotel from "./MarkupManagementHotel";
 import VATManagement from "./VATManagement";
 import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
+import SupplierManagement from "./SupplierManagement";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
