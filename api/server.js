@@ -28,6 +28,7 @@ const promoRoutes = require("./routes/promo");
 const analyticsRoutes = require("./routes/analytics");
 const paymentRoutes = require("./routes/payments");
 const cmsRoutes = require("./routes/cms");
+const testLiveRoutes = require("./routes/test-live");
 
 // New admin module routes
 const usersAdminRoutes = require("./routes/users");
