@@ -227,7 +227,18 @@ class ApiClient {
       return await this.get("/health");
     } catch (error) {
       console.warn('⚠️ Health check failed, using fallback');
-      return this.devClient.get("/health");
+
+      // Ensure fallback always works
+      try {
+        return this.devClient.get("/health");
+      } catch (fallbackError) {
+        // Ultimate fallback - return mock health data
+        return {
+          status: 'fallback',
+          database: 'mock (API unavailable)',
+          timestamp: new Date().toISOString()
+        };
+      }
     }
   }
 }
