@@ -428,22 +428,30 @@ export default function HotelDetails() {
             isMobileFilterOpen ? "fixed inset-0 z-50 bg-white" : "hidden"
           } lg:block lg:relative lg:w-80 bg-white border-r border-gray-200 min-h-screen`}
         >
-          <div className="overflow-y-auto h-full">
-            {/* Filters Header */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <Filter className="w-4 h-4 mr-2" />
-                <span className="font-medium text-gray-700">Filters</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="lg:hidden"
-                onClick={() => setIsMobileFilterOpen(false)}
-              >
-                ✕
-              </Button>
-            </div>
+          <div className="overflow-y-auto h-full p-4">
+            {/* Use the same EnhancedFilters component as HotelResults page */}
+            <EnhancedFilters
+              priceRange={[Math.round((priceRange / 100) * 15000), 15000]}
+              setPriceRange={(range) => setPriceRange((range[0] / 15000) * 100)}
+              selectedRating={selectedRating}
+              setSelectedRating={setSelectedRating}
+              selectedAmenities={selectedAmenities}
+              setSelectedAmenities={setSelectedAmenities}
+              onFilterChange={(filters) => {
+                // Handle filter changes
+                console.log('Filters changed:', filters);
+              }}
+            />
+
+            {/* Mobile close button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden mt-4 w-full"
+              onClick={() => setIsMobileFilterOpen(false)}
+            >
+              Close Filters
+            </Button>
 
             {/* Search by Hotel Name */}
             <div className="mb-4">
@@ -1941,7 +1949,7 @@ export default function HotelDetails() {
                         <span className="mr-2">☕</span> Tea & coffee facilities
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">��</span> Carpeted floors
+                        <span className="mr-2">���</span> Carpeted floors
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">❄️</span> Air conditioning
