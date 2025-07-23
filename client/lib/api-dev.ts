@@ -14,7 +14,7 @@ export class DevApiClient {
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     try {
-      // Try real API first
+      // Try real API first with proper error handling
       const url = new URL(endpoint, this.baseUrl);
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
@@ -24,15 +24,20 @@ export class DevApiClient {
         });
       }
 
+      // Create timeout manually for better browser support
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        // Shorter timeout for dev mode
-        signal: AbortSignal.timeout(3000),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -40,8 +45,10 @@ export class DevApiClient {
 
       return await response.json();
     } catch (error) {
-      console.warn(`API call failed, using fallback data for ${endpoint}:`, error);
-      
+      // Handle all types of fetch errors gracefully
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.warn(`API call failed, using fallback data for ${endpoint}: ${errorMessage}`);
+
       // Return fallback data based on endpoint
       return this.getFallbackData(endpoint, params) as T;
     }
