@@ -64,6 +64,12 @@ export function LiveHotelbedsTest() {
         },
       });
 
+      // Check if response is JSON before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('API server returned HTML instead of JSON (likely not running or misconfigured)');
+      }
+
       const data = await response.json();
       console.log('Live API Response:', data);
 
