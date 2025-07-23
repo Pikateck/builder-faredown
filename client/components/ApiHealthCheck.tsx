@@ -22,17 +22,9 @@ export function ApiHealthCheck() {
     try {
       console.log('🔍 Checking API health...');
 
-      const response = await fetch('/health', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const data = await apiClient.healthCheck();
 
-      const contentType = response.headers.get('content-type');
-
-      if (response.ok && contentType && contentType.includes('application/json')) {
-        const data = await response.json();
+      if (data.status && data.status !== 'fallback') {
         setStatus({
           isOnline: true,
           message: `API server is running (${data.status})`,
@@ -42,13 +34,13 @@ export function ApiHealthCheck() {
       } else {
         setStatus({
           isOnline: false,
-          message: 'API server returned non-JSON response',
+          message: data.status === 'fallback' ? 'Using fallback mode (API unavailable)' : 'API server returned unexpected status',
           endpoint: '/health'
         });
-        console.warn('⚠️ API returned non-JSON response');
+        console.warn('⚠️ API in fallback mode');
       }
     } catch (error) {
-      // Silently handle fetch failures without throwing errors
+      // Silently handle failures without throwing errors
       console.warn('⚠️ API health check failed (expected in production):', error instanceof Error ? error.message : 'Unknown error');
       setStatus({
         isOnline: false,
