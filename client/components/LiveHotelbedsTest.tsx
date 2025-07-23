@@ -63,7 +63,7 @@ export function LiveHotelbedsTest() {
         ? `/api/hotels/search?${params}`
         : `http://localhost:3001/api/hotels-live/search?${params}`;
 
-      const response = await fetch(`http://localhost:3001/api/hotels-live/search?${params}`, {
+      const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
