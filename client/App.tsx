@@ -111,6 +111,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
+
+        {/* Test component to verify fetch error fixes */}
+        <ApiErrorTest />
       </CurrencyProvider>
     </div>
   );
