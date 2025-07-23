@@ -137,6 +137,17 @@ export function Header({ className }: HeaderProps) {
               >
                 <span>Hotels</span>
               </Link>
+              <Link
+                to="/admin/testing"
+                className={cn(
+                  "text-red-300 hover:text-red-100 cursor-pointer flex items-center py-4 bg-red-500/20 px-3 rounded-md",
+                  location.pathname === "/admin/testing"
+                    ? "font-semibold border-b-2 border-red-300"
+                    : "",
+                )}
+              >
+                <span className="text-xs">🔴 Live Test</span>
+              </Link>
             </nav>
 
             {/* Currency Selector */}
