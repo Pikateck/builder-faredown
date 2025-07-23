@@ -117,12 +117,6 @@ function App() {
           </Routes>
         </Router>
 
-        {/* Test components to verify API integration */}
-        <ApiErrorTest />
-        <LiveIntegrationTest />
-        <BookingFlowTest />
-        <EmailDeliveryTest />
-        <SystemStatus />
       </CurrencyProvider>
     </div>
   );
