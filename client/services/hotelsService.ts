@@ -243,35 +243,39 @@ export class HotelsService {
         currency: searchParams.currencyCode || 'INR'
       };
 
-      // Direct fetch to bypass API client fallback mode
-      const params = new URLSearchParams();
-      Object.entries(queryParams).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          params.append(key, String(value));
-        }
-      });
+      // Direct fetch to bypass API client fallback mode - wrapped in try-catch
+      try {
+        const params = new URLSearchParams();
+        Object.entries(queryParams).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            params.append(key, String(value));
+          }
+        });
 
-      const response = await fetch(`/api/hotels-live/search?${params}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+        const response = await fetch(`/api/hotels-live/search?${params}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      if (response.ok) {
-        // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          if (data.success && data.data && data.isLiveData) {
-            console.log('🔴 Live Hotelbeds data received:', data.data.length, 'hotels');
-            return data.data;
+        if (response.ok) {
+          // Check if response is JSON
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            if (data.success && data.data && data.isLiveData) {
+              console.log('🔴 Live Hotelbeds data received:', data.data.length, 'hotels');
+              return data.data;
+            }
+          } else {
+            console.warn('Live API returned non-JSON response (likely HTML error page)');
           }
         } else {
-          console.warn('Live API returned non-JSON response (likely HTML error page)');
+          console.warn(`Live API returned status ${response.status}`);
         }
-      } else {
-        console.warn(`Live API returned status ${response.status}`);
+      } catch (fetchError) {
+        console.warn('Live hotel API fetch failed (likely API server not running):', fetchError instanceof Error ? fetchError.message : 'Unknown error');
       }
 
       return [];
