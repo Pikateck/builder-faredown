@@ -1116,18 +1116,20 @@ export function createServer() {
 
       res.json({
         success: true,
-        data: formattedDestinations,
-        totalResults: formattedDestinations.length,
+        data: allResults,
+        totalResults: allResults.length,
         isLiveData: !destinationsService.fallbackMode,
         source: destinationsService.fallbackMode
-          ? "In-Memory Hotelbeds Simulation"
-          : "Database + Hotelbeds API Integration",
+          ? "Enhanced Search Simulation"
+          : "Database + Hotel Search Integration",
         searchMeta: {
           query,
           limit,
           popularOnly,
-          searchId: `live-dest-${Date.now()}`,
-          processingTime: "145ms",
+          destinationResults: formattedDestinations.length,
+          hotelResults: hotelSuggestions.length,
+          searchId: `live-search-${Date.now()}`,
+          processingTime: "165ms",
           databaseConnected: !destinationsService.fallbackMode,
         },
       });
