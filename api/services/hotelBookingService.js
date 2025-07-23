@@ -161,9 +161,14 @@ class HotelBookingService {
 
       // Store confirmed booking
       this.bookings.set(finalBookingRef, confirmedBooking);
-      
+
       // Remove from pending
       this.pendingBookings.delete(tempBookingRef);
+
+      // Send confirmation email (don't wait for it)
+      this.sendBookingConfirmationEmail(confirmedBooking).catch(error => {
+        console.error('Failed to send booking confirmation email:', error);
+      });
 
       return {
         success: true,
