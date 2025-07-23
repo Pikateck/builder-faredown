@@ -152,9 +152,28 @@ class ApiClient {
     data?: any,
     customHeaders?: Record<string, string>,
   ): Promise<T> {
-    // Always use dev client to completely avoid fetch errors
-    console.log('🔄 Using development fallback mode for POST (fetch disabled)');
-    return this.devClient.post<T>(endpoint, data);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    try {
+      console.log(`🌐 API POST: ${this.baseURL}${endpoint}`);
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        method: "POST",
+        headers: this.getHeaders(customHeaders),
+        body: data ? JSON.stringify(data) : undefined,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      console.log(`✅ API POST Response: ${response.status}`);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      // Smart fallback - use dev client only if fetch fails
+      console.warn(`⚠️ API POST failed, using fallback: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return this.devClient.post<T>(endpoint, data);
+    }
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
