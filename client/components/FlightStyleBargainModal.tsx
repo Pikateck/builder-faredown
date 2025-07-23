@@ -461,9 +461,9 @@ export function FlightStyleBargainModal({
                       AI Tip
                     </p>
                     <p className="text-xs text-blue-700">
-                      Prices 20-30% below original have higher success rates.
+                      Prices 20-30% below the original total price have higher success rates.
                       All prices are completely inclusive (taxes, fees & payment
-                      charges). The AI will try to match your price or offer
+                      charges). The AI will try to match your total stay budget or offer
                       something closer!
                     </p>
                   </div>
