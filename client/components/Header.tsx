@@ -73,22 +73,7 @@ export function Header({ className }: HeaderProps) {
     }
   }, []);
 
-  // Effect to close currency dropdown when clicking outside
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showCurrencyDropdown) {
-        const target = event.target as HTMLElement;
-        if (!target.closest(".currency-dropdown-container")) {
-          setShowCurrencyDropdown(false);
-        }
-      }
-    };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showCurrencyDropdown]);
 
   return (
     <header
