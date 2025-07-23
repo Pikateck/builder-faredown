@@ -128,6 +128,9 @@ class HotelbedsService {
       );
 
       console.log('🔍 Destinations response status:', response ? 'success' : 'failed');
+      if (response && response.destinations && response.destinations.length > 0) {
+        console.log('🔍 Sample destination structure:', JSON.stringify(response.destinations[0], null, 2));
+      }
 
       const destinations = response.destinations || [];
 
