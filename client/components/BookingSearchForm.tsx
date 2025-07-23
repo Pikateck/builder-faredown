@@ -112,6 +112,7 @@ export function BookingSearchForm() {
             name: "Dubai",
             country: "United Arab Emirates",
             type: "city",
+            flag: "🇦🇪",
           },
           {
             id: "LON",
@@ -119,6 +120,7 @@ export function BookingSearchForm() {
             name: "London",
             country: "United Kingdom",
             type: "city",
+            flag: "🇬🇧",
           },
           {
             id: "BCN",
@@ -126,6 +128,7 @@ export function BookingSearchForm() {
             name: "Barcelona",
             country: "Spain",
             type: "city",
+            flag: "🇪🇸",
           },
           {
             id: "NYC",
@@ -133,6 +136,7 @@ export function BookingSearchForm() {
             name: "New York",
             country: "United States",
             type: "city",
+            flag: "🇺🇸",
           },
           {
             id: "PAR",
@@ -140,6 +144,7 @@ export function BookingSearchForm() {
             name: "Paris",
             country: "France",
             type: "city",
+            flag: "🇫🇷",
           },
           {
             id: "BOM",
@@ -147,6 +152,7 @@ export function BookingSearchForm() {
             name: "Mumbai",
             country: "India",
             type: "city",
+            flag: "🇮🇳",
           },
         ]);
         setPopularDestinationsLoaded(true);
