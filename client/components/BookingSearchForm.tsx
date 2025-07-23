@@ -146,13 +146,15 @@ export function BookingSearchForm() {
   const handleSearch = () => {
     console.log("Search button clicked", {
       destination,
+      destinationCode,
       checkInDate,
       checkOutDate,
     });
 
-    if (!destination || !checkInDate || !checkOutDate) {
+    if (!destination || !destinationCode || !checkInDate || !checkOutDate) {
       console.log("Missing required fields:", {
         destination,
+        destinationCode,
         checkInDate,
         checkOutDate,
       });
@@ -161,7 +163,8 @@ export function BookingSearchForm() {
 
     try {
       const searchParams = new URLSearchParams({
-        destination,
+        destination: destinationCode, // Use destination code for API
+        destinationName: destination, // Keep display name for UI
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
         adults: guests.adults.toString(),
