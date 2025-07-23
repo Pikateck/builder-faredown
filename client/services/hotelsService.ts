@@ -243,16 +243,7 @@ export class HotelsService {
         currency: searchParams.currencyCode || 'INR'
       };
 
-      // Check if we're in production environment
-      const isProduction = window.location.hostname !== "localhost";
-
-      if (isProduction) {
-        // In production, skip live API calls to avoid errors
-        console.log('🚫 Skipping live API in production environment');
-        return [];
-      }
-
-      // Direct fetch to bypass API client fallback mode (only in development)
+      // Direct fetch to bypass API client fallback mode
       const params = new URLSearchParams();
       Object.entries(queryParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -268,11 +259,19 @@ export class HotelsService {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data && data.isLiveData) {
-          console.log('🔴 Live Hotelbeds data received:', data.data.length, 'hotels');
-          return data.data;
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          if (data.success && data.data && data.isLiveData) {
+            console.log('🔴 Live Hotelbeds data received:', data.data.length, 'hotels');
+            return data.data;
+          }
+        } else {
+          console.warn('Live API returned non-JSON response (likely HTML error page)');
         }
+      } else {
+        console.warn(`Live API returned status ${response.status}`);
       }
 
       return [];
