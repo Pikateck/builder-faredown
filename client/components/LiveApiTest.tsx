@@ -3,12 +3,19 @@ import React, { useState } from 'react';
 export function LiveApiTest() {
   const [status, setStatus] = useState<string>('Ready to test');
   const [isLoading, setIsLoading] = useState(false);
+  const isProduction = window.location.hostname !== "localhost";
 
   const testLiveConnection = async () => {
     setIsLoading(true);
     setStatus('Testing...');
-    
+
     try {
+      // Check if we're in production
+      if (isProduction) {
+        setStatus('⚠️ Production Mode\nLive API testing disabled\nUsing fallback data');
+        return;
+      }
+
       // Test the exact endpoint our API client will use
       const apiUrl = 'http://localhost:3001/health';
       console.log(`🧪 Testing live API: ${apiUrl}`);
