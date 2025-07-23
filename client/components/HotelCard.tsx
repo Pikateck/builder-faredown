@@ -132,13 +132,13 @@ export function HotelCard({
 
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === hotel.images.length - 1 ? 0 : prev + 1,
+      prev === images.length - 1 ? 0 : prev + 1,
     );
   };
 
   const prevImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === 0 ? hotel.images.length - 1 : prev - 1,
+      prev === 0 ? images.length - 1 : prev - 1,
     );
   };
 
