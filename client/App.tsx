@@ -119,6 +119,7 @@ function App() {
         {/* Test components to verify API integration */}
         <ApiErrorTest />
         <LiveIntegrationTest />
+        <BookingFlowTest />
         <SystemStatus />
       </CurrencyProvider>
     </div>
