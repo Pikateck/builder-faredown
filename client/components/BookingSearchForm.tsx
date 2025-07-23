@@ -158,7 +158,8 @@ export function BookingSearchForm() {
 
   const searchDestinations = useCallback(
     async (query: string) => {
-      if (query.length < 2) {
+      // Show suggestions immediately like Booking.com (single character minimum)
+      if (query.length < 1) {
         setDestinationSuggestions([]);
         return;
       }
@@ -168,18 +169,18 @@ export function BookingSearchForm() {
         clearTimeout(debouncedSearchRef.current);
       }
 
-      // Set new timeout for debounced search
+      // Faster response time like Booking.com
       debouncedSearchRef.current = setTimeout(async () => {
         try {
           setLoadingDestinations(true);
-          console.log(`🔍 Searching destinations in database: "${query}"`);
+          console.log(`🔍 Real-time search: "${query}"`);
 
-          // Use database-backed search
-          const results = await hotelsService.searchDestinations(query, 10); // Get up to 10 results
+          // Get more results like Booking.com
+          const results = await hotelsService.searchDestinations(query, 15);
 
           const formattedResults = results.map((dest) => ({
             id: dest.id,
-            code: dest.id, // dest.id is the destination code
+            code: dest.id,
             name: dest.name,
             country: dest.country,
             type: dest.type as "city" | "region" | "country" | "landmark",
@@ -189,10 +190,10 @@ export function BookingSearchForm() {
 
           setDestinationSuggestions(formattedResults);
           console.log(
-            `✅ Found ${formattedResults.length} destinations matching "${query}"`,
+            `✅ Real-time results: ${formattedResults.length} destinations`,
           );
         } catch (error) {
-          console.error("⚠️ Database destination search failed:", error);
+          console.error("⚠️ Real-time search failed:", error);
 
           // Enhanced fallback with popular destinations filter
           const fallbackDestinations = popularDestinations.filter(
@@ -202,35 +203,31 @@ export function BookingSearchForm() {
               dest.code.toLowerCase().includes(query.toLowerCase()),
           );
 
-          setDestinationSuggestions(fallbackDestinations.slice(0, 5));
+          setDestinationSuggestions(fallbackDestinations.slice(0, 8));
           console.log(
-            `🔄 Using fallback: ${fallbackDestinations.length} destinations`,
+            `🔄 Fallback results: ${fallbackDestinations.length} destinations`,
           );
         } finally {
           setLoadingDestinations(false);
         }
-      }, 300); // 300ms debounce for optimal UX
+      }, 150); // Faster like Booking.com
     },
     [popularDestinations],
   );
 
-  // Handle destination search when user types
+  // Handle destination search when user types - immediate like Booking.com
   useEffect(() => {
-    if (isDestinationOpen && popularDestinationsLoaded) {
-      if (destination && destination.length >= 2) {
-        // Search as user types (debounced in searchDestinations function)
+    if (popularDestinationsLoaded) {
+      if (destination && destination.length >= 1) {
+        // Search immediately as user types (like Booking.com)
         searchDestinations(destination);
+        if (!isDestinationOpen) setIsDestinationOpen(true); // Auto-open dropdown
       } else {
-        // Clear suggestions when no search query - popular destinations will show in static section
+        // Clear suggestions when no search query
         setDestinationSuggestions([]);
       }
     }
-  }, [
-    destination,
-    isDestinationOpen,
-    searchDestinations,
-    popularDestinationsLoaded,
-  ]);
+  }, [destination, searchDestinations, popularDestinationsLoaded]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
@@ -369,10 +366,30 @@ export function BookingSearchForm() {
                 <Input
                   type="text"
                   value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  onClick={() => setIsDestinationOpen(true)}
+                  onChange={(e) => {
+                    setDestination(e.target.value);
+                    // Auto-open dropdown when user starts typing
+                    if (e.target.value.length > 0 && !isDestinationOpen) {
+                      setIsDestinationOpen(true);
+                    }
+                  }}
+                  onFocus={() => {
+                    setIsDestinationOpen(true);
+                    // Show popular destinations if no text
+                    if (!destination) {
+                      setDestinationSuggestions([]);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    // Delay hiding to allow selection
+                    setTimeout(() => {
+                      if (!e.currentTarget.contains(document.activeElement)) {
+                        setIsDestinationOpen(false);
+                      }
+                    }, 150);
+                  }}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-orange-400 focus:border-blue-500 rounded font-medium text-sm touch-manipulation"
-                  placeholder="Search destinations (e.g., Dubai, London)..."
+                  placeholder="Where are you going?"
                   autoComplete="off"
                 />
                 {destination && (
