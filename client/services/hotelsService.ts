@@ -208,9 +208,75 @@ export class HotelsService {
   private readonly baseUrl = "/api/hotels";
 
   /**
-   * Search for hotels using Hotelbeds integration
+   * Search for hotels using Hotelbeds integration (tries live data first, then fallback)
    */
   async searchHotels(searchParams: HotelSearchRequest): Promise<Hotel[]> {
+    try {
+      // First try live API
+      const liveResults = await this.searchHotelsLive(searchParams);
+      if (liveResults.length > 0) {
+        console.log('✅ Using live Hotelbeds data:', liveResults.length, 'hotels');
+        return liveResults;
+      }
+
+      // If no live results, fall back to regular API (which may use mock data)
+      console.log('⚠️ No live data available, using fallback');
+      return await this.searchHotelsFallback(searchParams);
+    } catch (error) {
+      console.error('Hotel search error:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Search hotels using live API endpoint (bypasses production fallback)
+   */
+  async searchHotelsLive(searchParams: HotelSearchRequest): Promise<Hotel[]> {
+    try {
+      const queryParams = {
+        destination: searchParams.destination,
+        checkIn: searchParams.checkIn,
+        checkOut: searchParams.checkOut,
+        rooms: searchParams.rooms || 1,
+        adults: searchParams.adults || 2,
+        children: searchParams.children || 0,
+        currency: searchParams.currencyCode || 'INR'
+      };
+
+      // Direct fetch to bypass API client fallback mode
+      const params = new URLSearchParams();
+      Object.entries(queryParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          params.append(key, String(value));
+        }
+      });
+
+      const response = await fetch(`/api/hotels-live/search?${params}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data && data.isLiveData) {
+          console.log('🔴 Live Hotelbeds data received:', data.data.length, 'hotels');
+          return data.data;
+        }
+      }
+
+      return [];
+    } catch (error) {
+      console.warn('Live hotel search failed:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Fallback hotel search using regular API
+   */
+  async searchHotelsFallback(searchParams: HotelSearchRequest): Promise<Hotel[]> {
     try {
       const queryParams = {
         destination: searchParams.destination,
@@ -233,9 +299,7 @@ export class HotelsService {
 
       return [];
     } catch (error) {
-      console.error('Hotel search error:', error);
-      // Return empty array for now - HotelResults component will handle this
-      // and show its own fallback data
+      console.error('Fallback hotel search error:', error);
       return [];
     }
   }
