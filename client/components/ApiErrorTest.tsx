@@ -17,13 +17,18 @@ export function ApiErrorTest() {
 
   const runAllTests = async () => {
     const results = { ...testResults };
-    
+
+    // Check if we're in production mode
+    const isProduction = window.location.hostname !== "localhost";
+
     try {
       // Test 1: Destinations search (the original failing call)
       console.log('🧪 Testing destinations search...');
       const destinations = await hotelsService.searchDestinations('Dubai');
       if (destinations && destinations.length > 0) {
-        results.destinations = '✅ Success - No fetch errors';
+        results.destinations = isProduction
+          ? '✅ Fallback data (Production mode)'
+          : '✅ Success - No fetch errors';
       } else {
         results.destinations = '⚠️ No data returned';
       }
