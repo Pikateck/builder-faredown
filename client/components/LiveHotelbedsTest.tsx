@@ -56,22 +56,26 @@ export function LiveHotelbedsTest() {
       });
 
       console.log(`🔴 Testing LIVE Hotelbeds API for: ${destination}`);
-      
-      const response = await fetch(`/api/hotels-live/search?${params}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
 
-      // Check if response is JSON before parsing
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('API server returned HTML instead of JSON (likely not running or misconfigured)');
+      try {
+        const response = await fetch(`/api/hotels-live/search?${params}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Check if response is JSON before parsing
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('API server returned HTML instead of JSON (likely not running or misconfigured)');
+        }
+
+        const data = await response.json();
+        console.log('Live API Response:', data);
+      } catch (fetchError) {
+        throw new Error(`API server not accessible: ${fetchError instanceof Error ? fetchError.message : 'Unknown error'}`);
       }
-
-      const data = await response.json();
-      console.log('Live API Response:', data);
 
       if (data.success) {
         setHotels(data.data || []);
