@@ -45,50 +45,8 @@ export default function AdminTestButton({
   }, []);
 
   const checkApiStatus = async () => {
-    setApiStatus("checking");
-
-    // Check if we're in development environment
-    const isLocalhost =
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1" ||
-      window.location.hostname.includes("localhost");
-
-    if (!isLocalhost) {
-      // In production, skip localhost API checks
-      setApiStatus("offline");
-      setApiPort(null);
-      return;
-    }
-
-    // Try different common ports for the API (only in development)
-    const ports = [3001, 8000, 5000, 3000];
-
-    for (const port of ports) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-
-        const response = await fetch(`http://localhost:${port}/health`, {
-          method: "GET",
-          mode: "cors",
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-          setApiStatus("online");
-          setApiPort(port);
-          return;
-        }
-      } catch (error) {
-        // Continue to next port - suppress console logs for cleaner output
-        if (error.name !== "AbortError") {
-          // Only log non-timeout errors in development
-        }
-      }
-    }
-
+    // Always set to offline to avoid fetch calls
+    console.log("API status check: Using fallback mode (fetch disabled)");
     setApiStatus("offline");
     setApiPort(null);
   };
