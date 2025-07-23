@@ -619,7 +619,7 @@ export function ComprehensiveFilters({
         {/* Price Range */}
         <div className="mb-6">
           <h3 className="text-base font-semibold text-gray-900 mb-3">
-            Your budget (per night)
+            Your budget (total stay)
           </h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between text-sm text-gray-600">
