@@ -204,8 +204,13 @@ class ApiClient {
     database: string;
     timestamp: string;
   }> {
-    // Always use dev client to avoid fetch errors
-    return this.devClient.get("/health");
+    try {
+      console.log('🌐 Health check: Trying live API');
+      return await this.get("/health");
+    } catch (error) {
+      console.warn('⚠️ Health check failed, using fallback');
+      return this.devClient.get("/health");
+    }
   }
 }
 
