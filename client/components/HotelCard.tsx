@@ -26,21 +26,23 @@ import {
   calculateNights,
 } from "@/lib/pricing";
 
-interface Hotel {
-  id: number;
+// Extend HotelType with additional props for backward compatibility
+interface Hotel extends Partial<HotelType> {
+  id?: number | string;
   name: string;
-  location: string;
-  images: string[];
+  location?: string;
+  images?: string[] | any[];
   rating: number;
-  reviews: number;
-  originalPrice: number;
-  currentPrice: number;
-  description: string;
-  amenities: string[];
-  features: string[];
-  roomTypes: {
+  reviews?: number;
+  originalPrice?: number;
+  currentPrice?: number;
+  description?: string;
+  amenities?: string[] | any[];
+  features?: string[];
+  roomTypes?: {
     name: string;
-    price: number;
+    price?: number;
+    pricePerNight?: number;
     features: string[];
   }[];
 }
