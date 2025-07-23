@@ -71,7 +71,7 @@ export function HotelCard({
 }: HotelCardProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { selectedCurrency } = useCurrency();
+  const { selectedCurrency, formatPrice } = useCurrency();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
