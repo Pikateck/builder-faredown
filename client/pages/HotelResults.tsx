@@ -93,6 +93,16 @@ export default function HotelResults() {
       console.log('Hotel search results:', results);
       setHotels(results);
       setTotalResults(results.length);
+
+      // Check if we got live data (hotels with isLiveData flag)
+      const hasLiveData = results.some(hotel => (hotel as any).isLiveData === true);
+      setIsLiveData(hasLiveData);
+
+      if (hasLiveData) {
+        console.log('🔴 Using LIVE Hotelbeds data!');
+      } else {
+        console.log('🔄 Using fallback/mock data');
+      }
     } catch (err) {
       console.error('Failed to load hotels:', err);
       setError('Failed to load hotels. Please try again.');
