@@ -1,19 +1,23 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export interface Currency {
   code: string;
   symbol: string;
   name: string;
-  rate: number; // Exchange rate to USD
+  rate: number; // Exchange rate from INR
+  flag: string;
+  decimalPlaces: number;
 }
 
 export const CURRENCIES: Currency[] = [
-  { code: "USD", symbol: "$", name: "US Dollar", rate: 1 },
-  { code: "EUR", symbol: "€", name: "Euro", rate: 0.85 },
-  { code: "GBP", symbol: "£", name: "British Pound", rate: 0.73 },
-  { code: "INR", symbol: "₹", name: "Indian Rupee", rate: 82.5 },
-  { code: "CAD", symbol: "C$", name: "Canadian Dollar", rate: 1.35 },
-  { code: "AUD", symbol: "A$", name: "Australian Dollar", rate: 1.52 },
+  { code: "INR", symbol: "₹", name: "Indian Rupee", rate: 1, flag: "🇮🇳", decimalPlaces: 0 },
+  { code: "USD", symbol: "$", name: "US Dollar", rate: 0.012, flag: "🇺🇸", decimalPlaces: 2 },
+  { code: "EUR", symbol: "€", name: "Euro", rate: 0.011, flag: "🇪🇺", decimalPlaces: 2 },
+  { code: "GBP", symbol: "£", name: "British Pound", rate: 0.0095, flag: "🇬🇧", decimalPlaces: 2 },
+  { code: "AED", symbol: "د.إ", name: "UAE Dirham", rate: 0.044, flag: "🇦🇪", decimalPlaces: 2 },
+  { code: "SGD", symbol: "S$", name: "Singapore Dollar", rate: 0.016, flag: "🇸🇬", decimalPlaces: 2 },
+  { code: "JPY", symbol: "¥", name: "Japanese Yen", rate: 1.83, flag: "🇯🇵", decimalPlaces: 0 },
+  { code: "CNY", symbol: "¥", name: "Chinese Yuan", rate: 0.087, flag: "🇨🇳", decimalPlaces: 2 },
 ];
 
 interface CurrencyContextType {
