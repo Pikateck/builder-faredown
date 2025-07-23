@@ -69,14 +69,14 @@ export function LiveApiTest() {
         
         <button
           onClick={testLiveConnection}
-          disabled={isLoading}
+          disabled={isLoading || isProduction}
           className={`w-full px-3 py-2 text-sm rounded font-medium ${
-            isLoading 
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+            isLoading || isProduction
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : 'bg-blue-500 text-white hover:bg-blue-600'
           }`}
         >
-          {isLoading ? '🔄 Testing...' : '🧪 Test Live API'}
+          {isLoading ? '🔄 Testing...' : isProduction ? '🚫 Production' : '🧪 Test Live API'}
         </button>
       </div>
     </div>
