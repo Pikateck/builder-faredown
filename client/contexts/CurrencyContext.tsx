@@ -24,8 +24,11 @@ interface CurrencyContextType {
   selectedCurrency: Currency;
   currencies: Currency[];
   setCurrency: (currency: Currency) => void;
-  convertPrice: (priceInUSD: number) => number;
-  formatPrice: (priceInUSD: number) => string;
+  convertPrice: (priceInINR: number) => number;
+  formatPrice: (priceInINR: number) => string;
+  isLoading: boolean;
+  lastUpdated: string | null;
+  refreshRates: () => Promise<void>;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(
@@ -38,20 +41,100 @@ interface CurrencyProviderProps {
 
 export function CurrencyProvider({ children }: CurrencyProviderProps) {
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>(
-    CURRENCIES[3],
-  ); // Default to INR
+    CURRENCIES[0], // Default to INR (index 0)
+  );
+  const [currencies, setCurrencies] = useState<Currency[]>(CURRENCIES);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+
+  // Load user preference and live rates on mount
+  useEffect(() => {
+    loadUserPreference();
+    refreshRates();
+
+    // Update rates every 15 minutes
+    const interval = setInterval(refreshRates, 15 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadUserPreference = () => {
+    const savedCurrency = localStorage.getItem('preferred_currency');
+    if (savedCurrency) {
+      const currency = currencies.find(c => c.code === savedCurrency);
+      if (currency) {
+        setSelectedCurrency(currency);
+      }
+    }
+  };
 
   const setCurrency = (currency: Currency) => {
     setSelectedCurrency(currency);
+    localStorage.setItem('preferred_currency', currency.code);
   };
 
-  const convertPrice = (priceInUSD: number): number => {
-    return priceInUSD * selectedCurrency.rate;
+  const refreshRates = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/currency/rates');
+      const data = await response.json();
+
+      if (data.success && data.data) {
+        const updatedCurrencies = currencies.map(currency => {
+          if (currency.code === 'INR') return currency; // INR is base currency
+
+          const rateData = data.data.find((r: any) => r.to === currency.code);
+          if (rateData) {
+            return { ...currency, rate: rateData.rate };
+          }
+          return currency;
+        });
+
+        setCurrencies(updatedCurrencies);
+        setLastUpdated(data.lastUpdated);
+
+        // Update selected currency if it was updated
+        const updatedSelected = updatedCurrencies.find(c => c.code === selectedCurrency.code);
+        if (updatedSelected) {
+          setSelectedCurrency(updatedSelected);
+        }
+
+        console.log(`💱 Exchange rates updated from ${data.source}`);
+      }
+    } catch (error) {
+      console.error('Failed to refresh exchange rates:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const formatPrice = (priceInUSD: number): string => {
-    const convertedPrice = Math.round(convertPrice(priceInUSD));
-    return `${selectedCurrency.symbol}${convertedPrice.toLocaleString()}`;
+  const convertPrice = (priceInINR: number): number => {
+    if (selectedCurrency.code === 'INR') return priceInINR;
+    return priceInINR * selectedCurrency.rate;
+  };
+
+  const formatPrice = (priceInINR: number): string => {
+    const convertedPrice = convertPrice(priceInINR);
+
+    if (selectedCurrency.code === 'INR') {
+      return formatINR(convertedPrice);
+    }
+
+    const formatted = convertedPrice.toFixed(selectedCurrency.decimalPlaces);
+    return `${selectedCurrency.symbol}${formatted}`;
+  };
+
+  const formatINR = (amount: number): string => {
+    const roundedAmount = Math.round(amount);
+
+    if (roundedAmount >= 10000000) {
+      const crores = roundedAmount / 10000000;
+      return `₹${crores.toFixed(2)} Cr`;
+    } else if (roundedAmount >= 100000) {
+      const lakhs = roundedAmount / 100000;
+      return `₹${lakhs.toFixed(2)} L`;
+    } else {
+      return `₹${roundedAmount.toLocaleString('en-IN')}`;
+    }
   };
 
   const value: CurrencyContextType = {
