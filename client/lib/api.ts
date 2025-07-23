@@ -157,7 +157,8 @@ class ApiClient {
     database: string;
     timestamp: string;
   }> {
-    return this.get("/health");
+    // Always use dev client to avoid fetch errors
+    return this.devClient.get("/health");
   }
 }
 
