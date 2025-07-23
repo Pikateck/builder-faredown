@@ -68,6 +68,10 @@ function App() {
               path="/booking-confirmation"
               element={<HotelBookingConfirmation />}
             />
+            <Route
+              path="/booking/confirmation/:bookingRef"
+              element={<BookingConfirmation />}
+            />
             <Route path="/booking-voucher" element={<BookingVoucher />} />
             <Route path="/booking-invoice" element={<BookingInvoice />} />
             <Route path="/bookings" element={<Bookings />} />
