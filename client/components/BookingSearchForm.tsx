@@ -42,6 +42,8 @@ interface DestinationOption {
   name: string;
   country: string;
   type: string;
+  flag?: string;
+  popular?: boolean;
 }
 
 export function BookingSearchForm() {
