@@ -21,19 +21,23 @@ export function createServer() {
   // Mock hotel endpoints for production testing
   app.get("/api/hotels/destinations/search", (_req, res) => {
     const query = _req.query.q as string || '';
-    const mockDestinations = [
-      { id: 'DXB', name: 'Dubai', type: 'city', country: 'United Arab Emirates', code: 'DXB' },
-      { id: 'BCN', name: 'Barcelona', type: 'city', country: 'Spain', code: 'BCN' },
-      { id: 'MAD', name: 'Madrid', type: 'city', country: 'Spain', code: 'MAD' },
-      { id: 'NYC', name: 'New York', type: 'city', country: 'United States', code: 'NYC' },
-      { id: 'LON', name: 'London', type: 'city', country: 'United Kingdom', code: 'LON' }
-    ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
+    const destinations = query ? searchDestinations(query) : MASTER_DESTINATIONS.filter(d => d.popular);
+
+    // Transform to expected format
+    const formattedDestinations = destinations.map(dest => ({
+      id: dest.code,
+      code: dest.code,
+      name: dest.name,
+      type: dest.type,
+      country: dest.country,
+      countryCode: dest.countryCode
+    }));
 
     res.json({
       success: true,
-      data: mockDestinations,
+      data: formattedDestinations,
       isLiveData: false,
-      source: 'Production Mock Data'
+      source: 'Master Destinations Database'
     });
   });
 
