@@ -7,6 +7,8 @@ import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { hotelsService } from "@/services/hotelsService";
+import type { Hotel as HotelType } from "@/services/hotelsService";
 import {
   Select,
   SelectContent,
@@ -35,23 +37,10 @@ import {
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
 
-interface Hotel {
-  id: number;
-  name: string;
-  location: string;
-  images: string[];
-  rating: number;
-  reviews: number;
-  originalPrice: number;
-  currentPrice: number;
-  description: string;
-  amenities: string[];
-  features: string[];
-  roomTypes: {
-    name: string;
-    price: number;
-    features: string[];
-  }[];
+// Use the Hotel type from hotelsService for consistency
+interface Hotel extends HotelType {
+  originalPrice?: number;
+  currentPrice?: number;
 }
 
 export default function HotelResults() {
@@ -64,6 +53,10 @@ export default function HotelResults() {
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalResults, setTotalResults] = useState(0);
 
   // Get search parameters
   const destination = searchParams.get("destination") || "";
@@ -73,15 +66,50 @@ export default function HotelResults() {
   const children = searchParams.get("children") || "0";
   const rooms = searchParams.get("rooms") || "1";
 
-  // Handle search function
-  const handleSearch = () => {
-    // For now, just refresh the page with current parameters
-    // In a real app, this would trigger a new search
-    window.location.reload();
+  // Load hotels from Hotelbeds API
+  useEffect(() => {
+    loadHotels();
+  }, [searchParams]);
+
+  const loadHotels = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const searchRequest = {
+        destination: destination || "Dubai",
+        checkIn: checkIn || new Date().toISOString(),
+        checkOut: checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+        rooms: parseInt(rooms) || 1,
+        adults: parseInt(adults) || 2,
+        children: parseInt(children) || 0,
+        currencyCode: selectedCurrency?.code || 'INR'
+      };
+
+      console.log('Searching hotels with params:', searchRequest);
+      const results = await hotelsService.searchHotels(searchRequest);
+
+      console.log('Hotel search results:', results);
+      setHotels(results);
+      setTotalResults(results.length);
+    } catch (err) {
+      console.error('Failed to load hotels:', err);
+      setError('Failed to load hotels. Please try again.');
+      // Fallback to mock data if API fails
+      setHotels(getMockHotels());
+      setTotalResults(getMockHotels().length);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Mock hotel data (prices in INR to avoid double currency conversion)
-  const mockHotels: Hotel[] = [
+  // Handle search function
+  const handleSearch = () => {
+    loadHotels();
+  };
+
+  // Mock hotel data (fallback if API fails)
+  const getMockHotels = (): Hotel[] => [
     {
       id: 1,
       name: "Grand Plaza Hotel",
@@ -182,6 +210,45 @@ export default function HotelResults() {
       ],
     },
   ];
+
+  // Filter and sort hotels
+  const filteredAndSortedHotels = React.useMemo(() => {
+    let filtered = hotels.filter(hotel => {
+      // Price range filter
+      const price = hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
+      if (price < priceRange[0] || price > priceRange[1]) return false;
+
+      // Rating filter
+      if (selectedRating.length > 0 && !selectedRating.includes(Math.floor(hotel.rating))) return false;
+
+      // Amenities filter
+      if (selectedAmenities.length > 0) {
+        const hotelAmenities = hotel.amenities?.map(a => a.name) || [];
+        if (!selectedAmenities.some(amenity => hotelAmenities.includes(amenity))) return false;
+      }
+
+      return true;
+    });
+
+    // Sort hotels
+    switch (sortBy) {
+      case 'price_low':
+        filtered.sort((a, b) => (a.priceRange?.min || 0) - (b.priceRange?.min || 0));
+        break;
+      case 'price_high':
+        filtered.sort((a, b) => (b.priceRange?.min || 0) - (a.priceRange?.min || 0));
+        break;
+      case 'rating':
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'recommended':
+      default:
+        filtered.sort((a, b) => (b.rating * (b.reviewCount || 1)) - (a.rating * (a.reviewCount || 1)));
+        break;
+    }
+
+    return filtered;
+  }, [hotels, priceRange, selectedRating, selectedAmenities, sortBy]);
 
   const handleBargainClick = (
     hotel: Hotel,
