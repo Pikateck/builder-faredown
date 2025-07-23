@@ -53,6 +53,11 @@ export default function AdminTestingDashboard() {
             </div>
           </div>
 
+          {/* API Health Check */}
+          <div className="lg:col-span-2 mb-4">
+            <ApiHealthCheck />
+          </div>
+
           {/* Live Hotelbeds Data Test */}
           <div className="lg:col-span-2 mb-8">
             <div className="bg-white rounded-lg shadow p-6">
