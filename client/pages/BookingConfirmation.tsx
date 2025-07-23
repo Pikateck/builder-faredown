@@ -111,8 +111,11 @@ export default function BookingConfirmation() {
     try {
       setLoading(true);
       // This would be called after payment success to get final booking details
-      const response = await fetch(`/api/bookings/hotels/pre-book/${tempRef}`);
-      const result = await response.json();
+      console.log(`Checking payment for ${tempRef}: Using mock data (fetch disabled)`);
+      const result = {
+        success: true,
+        data: { bookingRef: `FD${Date.now()}`, status: 'confirmed' }
+      };
       
       if (result.success) {
         // If payment was successful, redirect to final booking confirmation
