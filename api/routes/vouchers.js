@@ -224,10 +224,51 @@ router.post('/hotel/:bookingRef/email', async (req, res) => {
       specialRequests: booking.specialRequests
     });
 
-    // TODO: Implement email sending service
-    // For now, return success with email details
+    // Send voucher email using enhanced email service
+    const primaryEmail = email || booking.guestDetails.primaryGuest.email;
+    const allEmails = [primaryEmail, ...additionalEmails].filter(Boolean);
+
+    const emailResults = [];
+
+    for (const recipientEmail of allEmails) {
+      try {
+        const emailResult = await emailService.sendVoucherEmail({
+          bookingRef: booking.bookingRef,
+          hotelDetails: booking.hotelbedsDetails?.hotel || {
+            name: 'Hotel Name',
+            address: 'Hotel Address'
+          },
+          guestDetails: booking.guestDetails,
+          checkIn: booking.checkIn,
+          checkOut: booking.checkOut,
+          totalAmount: booking.totalAmount
+        }, voucherResult.pdf);
+
+        emailResults.push({
+          email: recipientEmail,
+          success: emailResult.success,
+          emailId: emailResult.emailId,
+          messageId: emailResult.messageId,
+          error: emailResult.error
+        });
+
+        console.log(`📧 Voucher email sent to ${recipientEmail}: ${emailResult.success ? 'SUCCESS' : 'FAILED'}`);
+
+      } catch (error) {
+        console.error(`❌ Failed to send voucher email to ${recipientEmail}:`, error);
+        emailResults.push({
+          email: recipientEmail,
+          success: false,
+          error: error.message
+        });
+      }
+    }
+
+    const successCount = emailResults.filter(r => r.success).length;
+    const allSuccess = successCount === emailResults.length;
+
     res.json({
-      success: true,
+      success: allSuccess,
       data: {
         message: 'Voucher email sent successfully',
         recipients: [email, ...additionalEmails],
