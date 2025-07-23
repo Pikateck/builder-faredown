@@ -93,6 +93,7 @@ function App() {
             <Route path="/admin/users" element={<UserManagement />} />
             <Route path="/admin/bargain" element={<BargainEngine />} />
             <Route path="/admin/payments" element={<PaymentDashboard />} />
+            <Route path="/admin/testing" element={<AdminTestingDashboard />} />
 
             {/* Mobile App Routes */}
             <Route path="/mobile" element={<MobileHome />} />
