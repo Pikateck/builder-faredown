@@ -150,13 +150,13 @@ export function HotelCard({
           {/* Image Gallery */}
           <div className="relative w-full h-40 sm:h-48 md:h-56 flex-shrink-0">
             <img
-              src={hotel.images[currentImageIndex]}
+              src={images[currentImageIndex]}
               alt={hotel.name}
               className="w-full h-full object-cover"
             />
 
             {/* Image Navigation */}
-            {hotel.images.length > 1 && (
+            {images.length > 1 && (
               <>
                 <Button
                   variant="ghost"
