@@ -157,30 +157,55 @@ class HotelBookingService {
       }
 
       // Generate final booking reference
-      const finalBookingRef = `FD${Date.now().toString().slice(-8).toUpperCase()}`;
+      const finalBookingRef = HotelBooking.generateBookingRef();
 
-      // Create confirmed booking record
-      const confirmedBooking = {
-        ...preBooking,
-        bookingRef: finalBookingRef,
-        hotelbedsBookingRef: hotelbedsResponse.bookingReference,
-        hotelbedsConfirmationNumber: hotelbedsResponse.confirmationNumber,
-        status: 'confirmed',
-        paymentDetails: {
-          razorpayPaymentId: paymentDetails.razorpay_payment_id,
-          razorpayOrderId: paymentDetails.razorpay_order_id,
-          razorpaySignature: paymentDetails.razorpay_signature,
-          method: paymentDetails.method,
-          amount: paymentDetails.amount,
-          currency: paymentDetails.currency,
-          paidAt: new Date().toISOString()
+      // Get hotel details for database storage
+      const hotelDetails = hotelbedsResponse.bookingDetails?.hotel || {};
+
+      // Prepare booking data for database
+      const bookingDbData = {
+        booking_ref: finalBookingRef,
+        supplier_id: 1, // Hotelbeds supplier ID from database
+        hotel_code: preBooking.hotelCode,
+        hotel_name: hotelDetails.name || 'Hotel Name',
+        hotel_address: hotelDetails.address || '',
+        hotel_city: hotelDetails.city || '',
+        hotel_country: hotelDetails.country || '',
+        hotel_rating: hotelDetails.rating || null,
+        room_type: hotelDetails.roomType || 'Standard Room',
+        room_name: hotelDetails.roomName || 'Standard Room',
+        room_code: preBooking.roomCode,
+        guest_details: {
+          primaryGuest: preBooking.guestDetails.primaryGuest,
+          additionalGuests: preBooking.guestDetails.additionalGuests || [],
+          contactInfo: preBooking.contactInfo
         },
-        confirmedAt: new Date().toISOString(),
-        hotelbedsDetails: hotelbedsResponse.bookingDetails
+        check_in_date: preBooking.checkIn,
+        check_out_date: preBooking.checkOut,
+        nights: this.calculateNights(preBooking.checkIn, preBooking.checkOut),
+        rooms_count: preBooking.rooms.length,
+        adults_count: preBooking.rooms.reduce((sum, room) => sum + room.adults, 0),
+        children_count: preBooking.rooms.reduce((sum, room) => sum + (room.children || 0), 0),
+        children_ages: preBooking.rooms.flatMap(room => room.childrenAges || []),
+        base_price: preBooking.totalAmount * 0.85, // Approximate base price
+        markup_amount: preBooking.totalAmount * 0.15, // Approximate markup
+        markup_percentage: 15.00,
+        total_amount: preBooking.totalAmount,
+        currency: preBooking.currency,
+        status: 'confirmed',
+        supplier_booking_ref: hotelbedsResponse.bookingReference,
+        supplier_response: hotelbedsResponse,
+        special_requests: preBooking.specialRequests
       };
 
-      // Store confirmed booking
-      this.bookings.set(finalBookingRef, confirmedBooking);
+      // Store confirmed booking in database
+      const dbResult = await HotelBooking.create(bookingDbData);
+
+      if (!dbResult.success) {
+        throw new Error(`Failed to store booking in database: ${dbResult.error}`);
+      }
+
+      const confirmedBooking = dbResult.data;
 
       // Remove from pending
       this.pendingBookings.delete(tempBookingRef);
