@@ -45,8 +45,16 @@ export class DevApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    // Quick connectivity check - if server is known to be down, skip the API call
+    const isServerAvailable = await this.quickConnectivityCheck();
+
+    if (!isServerAvailable) {
+      console.warn(`API server not available, using fallback data for ${endpoint}`);
+      return this.getFallbackData(endpoint, params) as T;
+    }
+
     try {
-      // Try real API first with proper error handling
+      // Try real API call
       const url = new URL(endpoint, this.baseUrl);
       if (params) {
         Object.entries(params).forEach(([key, value]) => {
@@ -58,7 +66,7 @@ export class DevApiClient {
 
       // Create timeout manually for better browser support
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
 
       const response = await fetch(url.toString(), {
         method: 'GET',
@@ -77,11 +85,13 @@ export class DevApiClient {
 
       return await response.json();
     } catch (error) {
-      // Handle all types of fetch errors gracefully
+      // Mark server as unavailable and use fallback
+      this.serverAvailable = false;
+      this.lastCheck = Date.now();
+
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.warn(`API call failed, using fallback data for ${endpoint}: ${errorMessage}`);
 
-      // Return fallback data based on endpoint
       return this.getFallbackData(endpoint, params) as T;
     }
   }
