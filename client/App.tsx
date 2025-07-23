@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { ApiErrorTest } from "./components/ApiErrorTest";
+import { LiveApiTest } from "./components/LiveApiTest";
 
 // Original pages
 import Index from "./pages/Index";
