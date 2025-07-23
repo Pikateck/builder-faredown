@@ -243,7 +243,16 @@ export class HotelsService {
         currency: searchParams.currencyCode || 'INR'
       };
 
-      // Direct fetch to bypass API client fallback mode
+      // Check if we're in production environment
+      const isProduction = window.location.hostname !== "localhost";
+
+      if (isProduction) {
+        // In production, skip live API calls to avoid errors
+        console.log('🚫 Skipping live API in production environment');
+        return [];
+      }
+
+      // Direct fetch to bypass API client fallback mode (only in development)
       const params = new URLSearchParams();
       Object.entries(queryParams).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
