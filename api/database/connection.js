@@ -23,25 +23,44 @@ class DatabaseConnection {
     try {
       console.log('🔌 Initializing PostgreSQL connection...');
       
-      // Database configuration
-      const config = {
-        host: process.env.DB_HOST || 'localhost',
-        port: parseInt(process.env.DB_PORT) || 5432,
-        database: process.env.DB_NAME || 'faredown_bookings',
-        user: process.env.DB_USER || 'faredown_user',
-        password: process.env.DB_PASSWORD || 'faredown_password',
-        
-        // Connection pool settings
-        max: 20, // Maximum connections in pool
-        min: 2,  // Minimum connections in pool
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 5000,
-        
-        // SSL configuration for production
-        ssl: process.env.NODE_ENV === 'production' ? {
-          rejectUnauthorized: false
-        } : false
-      };
+      // Database configuration - use DATABASE_URL if available (Render/Heroku style)
+      let config;
+
+      if (process.env.DATABASE_URL) {
+        // Use DATABASE_URL for production (Render, Heroku, etc.)
+        config = {
+          connectionString: process.env.DATABASE_URL,
+          // Connection pool settings
+          max: 20, // Maximum connections in pool
+          min: 2,  // Minimum connections in pool
+          idleTimeoutMillis: 30000,
+          connectionTimeoutMillis: 10000, // Increased for external DB
+          // SSL configuration for production
+          ssl: {
+            rejectUnauthorized: false // Required for Render PostgreSQL
+          }
+        };
+      } else {
+        // Fallback to individual environment variables
+        config = {
+          host: process.env.DB_HOST || 'localhost',
+          port: parseInt(process.env.DB_PORT) || 5432,
+          database: process.env.DB_NAME || 'faredown_bookings',
+          user: process.env.DB_USER || 'faredown_user',
+          password: process.env.DB_PASSWORD || 'faredown_password',
+
+          // Connection pool settings
+          max: 20,
+          min: 2,
+          idleTimeoutMillis: 30000,
+          connectionTimeoutMillis: 5000,
+
+          // SSL configuration for production
+          ssl: process.env.NODE_ENV === 'production' ? {
+            rejectUnauthorized: false
+          } : false
+        };
+      }
 
       this.pool = new Pool(config);
 
