@@ -17,6 +17,135 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Mock hotel endpoints for production testing
+  app.get("/api/hotels/destinations/search", (_req, res) => {
+    const query = _req.query.q as string || '';
+    const mockDestinations = [
+      { id: 'DXB', name: 'Dubai', type: 'city', country: 'United Arab Emirates', code: 'DXB' },
+      { id: 'BCN', name: 'Barcelona', type: 'city', country: 'Spain', code: 'BCN' },
+      { id: 'MAD', name: 'Madrid', type: 'city', country: 'Spain', code: 'MAD' },
+      { id: 'NYC', name: 'New York', type: 'city', country: 'United States', code: 'NYC' },
+      { id: 'LON', name: 'London', type: 'city', country: 'United Kingdom', code: 'LON' }
+    ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
+
+    res.json({
+      success: true,
+      data: mockDestinations,
+      isLiveData: false,
+      source: 'Production Mock Data'
+    });
+  });
+
+  app.get("/api/hotels/search", (_req, res) => {
+    res.json({
+      success: true,
+      data: [
+        {
+          id: 'hotel-001',
+          name: 'Mock Hotel Barcelona',
+          currentPrice: 150,
+          currency: 'EUR',
+          rating: 4,
+          address: { city: 'Barcelona', country: 'Spain' },
+          isLiveData: false,
+          supplier: 'mock'
+        }
+      ],
+      totalResults: 1,
+      isLiveData: false,
+      source: 'Production Mock Data'
+    });
+  });
+
+  app.post("/api/bookings/hotels/pre-book", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        bookingRef: 'MOCK-' + Date.now(),
+        totalPrice: 150,
+        currency: 'EUR',
+        holdTime: '15 minutes'
+      },
+      message: 'Mock pre-booking successful'
+    });
+  });
+
+  app.post("/api/payments/create-order", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        orderId: 'ORDER-MOCK-' + Date.now(),
+        amount: 150,
+        currency: 'EUR',
+        paymentUrl: '#mock-payment'
+      },
+      message: 'Mock payment order created'
+    });
+  });
+
+  app.post("/api/bookings/hotels/confirm", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        bookingRef: 'CONFIRMED-MOCK-' + Date.now(),
+        status: 'confirmed',
+        confirmationNumber: 'CONF123456'
+      },
+      message: 'Mock booking confirmed'
+    });
+  });
+
+  app.get("/api/vouchers/hotel/:bookingRef", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        voucherUrl: '#mock-voucher-pdf',
+        bookingRef: _req.params.bookingRef,
+        generated: true
+      },
+      message: 'Mock voucher generated'
+    });
+  });
+
+  app.post("/api/vouchers/hotel/:bookingRef/email", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        emailSent: true,
+        recipient: 'mock@example.com',
+        messageId: 'mock-msg-' + Date.now()
+      },
+      message: 'Mock email sent successfully'
+    });
+  });
+
+  app.get("/api/vouchers/status", (_req, res) => {
+    res.json({
+      success: true,
+      data: {
+        service: 'Mock Email Service',
+        status: 'operational',
+        lastTest: new Date().toISOString(),
+        totalSent: 42,
+        deliveryRate: 98.5
+      }
+    });
+  });
+
+  app.get("/api/vouchers/email/tracking", (_req, res) => {
+    res.json({
+      success: true,
+      data: [
+        {
+          messageId: 'mock-msg-001',
+          status: 'delivered',
+          timestamp: new Date().toISOString(),
+          recipient: 'test@example.com'
+        }
+      ]
+    });
+  });
+
   // Proxy health check to main API server or provide fallback
   app.get("/health", async (_req, res) => {
     try {
