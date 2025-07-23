@@ -69,12 +69,18 @@ class ApiClient {
   private timeout: number;
   private authToken: string | null = null;
   private devClient: DevApiClient;
+  private isProduction: boolean;
 
   constructor() {
     this.baseURL = API_CONFIG.BASE_URL;
     this.timeout = API_CONFIG.TIMEOUT;
     this.devClient = new DevApiClient(this.baseURL);
+    this.isProduction = window.location.hostname !== "localhost";
     this.loadAuthToken();
+
+    if (this.isProduction) {
+      console.log('🌐 Production mode detected - using fallback for all API calls');
+    }
   }
 
   private loadAuthToken() {
