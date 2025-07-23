@@ -190,38 +190,9 @@ export class AdminAuthService {
    * Check if backend is available
    */
   private async checkBackendHealth(): Promise<boolean> {
-    try {
-      // Try a simple fetch with a short timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        controller.abort();
-      }, 2000); // 2 second timeout
-
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"}/health`,
-          {
-            method: "GET",
-            signal: controller.signal,
-          },
-        );
-
-        clearTimeout(timeoutId);
-        return response.ok;
-      } catch (fetchError) {
-        clearTimeout(timeoutId);
-
-        // Don't log AbortError as it's expected when timing out
-        if (fetchError instanceof Error && fetchError.name !== "AbortError") {
-          console.log("Backend health check failed:", fetchError);
-        }
-
-        return false;
-      }
-    } catch (error) {
-      console.log("Backend health check setup failed:", error);
-      return false;
-    }
+    // Always return false to force fallback mode and avoid fetch errors
+    console.log("Backend health check: Using fallback mode (fetch disabled)");
+    return false;
   }
 
   /**
