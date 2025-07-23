@@ -139,10 +139,13 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
   const value: CurrencyContextType = {
     selectedCurrency,
-    currencies: CURRENCIES,
+    currencies,
     setCurrency,
     convertPrice,
     formatPrice,
+    isLoading,
+    lastUpdated,
+    refreshRates,
   };
 
   return (
