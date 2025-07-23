@@ -229,7 +229,7 @@ export class HotelsService {
   }
 
   /**
-   * Search hotels using live API endpoint (bypasses production fallback)
+   * Search hotels using database-cached live API endpoint
    */
   async searchHotelsLive(searchParams: HotelSearchRequest): Promise<Hotel[]> {
     try {
@@ -243,7 +243,9 @@ export class HotelsService {
         currency: searchParams.currencyCode || 'INR'
       };
 
-      // Direct fetch to bypass API client fallback mode - wrapped in try-catch
+      console.log('🔴 Searching live Hotelbeds API with database caching:', queryParams);
+
+      // Direct fetch with enhanced error handling
       try {
         const params = new URLSearchParams();
         Object.entries(queryParams).forEach(([key, value]) => {
@@ -264,18 +266,24 @@ export class HotelsService {
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
-            if (data.success && data.data && data.isLiveData) {
-              console.log('🔴 Live Hotelbeds data received:', data.data.length, 'hotels');
+            if (data.success && data.data) {
+              const cacheStatus = data.isCached ? 'Cached' : 'Fresh';
+              const dbStatus = data.searchMeta?.databaseConnected ? 'Database' : 'Fallback';
+
+              console.log(`✅ ${cacheStatus} Hotelbeds data received (${dbStatus}):`, data.data.length, 'hotels');
+              console.log(`   Source: ${data.source}`);
+              console.log(`   Processing time: ${data.searchMeta?.processingTime}`);
+
               return data.data;
             }
           } else {
-            console.warn('Live API returned non-JSON response (likely HTML error page)');
+            console.warn('⚠️ Live API returned non-JSON response (likely HTML error page)');
           }
         } else {
-          console.warn(`Live API returned status ${response.status}`);
+          console.warn(`⚠️ Live API returned status ${response.status}`);
         }
       } catch (fetchError) {
-        console.warn('Live hotel API fetch failed (likely API server not running):', fetchError instanceof Error ? fetchError.message : 'Unknown error');
+        console.warn('⚠️ Live hotel API fetch failed:', fetchError instanceof Error ? fetchError.message : 'Unknown error');
       }
 
       return [];
@@ -539,22 +547,24 @@ export class HotelsService {
       return [];
     } catch (error) {
       console.error('Destination search error:', error);
-      // Return popular destinations as fallback instead of throwing
+      // Enhanced fallback with database-style format
       return [
-        { id: "DXB", name: "Dubai", type: "city", country: "United Arab Emirates" },
-        { id: "LON", name: "London", type: "city", country: "United Kingdom" },
-        { id: "NYC", name: "New York", type: "city", country: "United States" },
-        { id: "PAR", name: "Paris", type: "city", country: "France" },
-        { id: "TOK", name: "Tokyo", type: "city", country: "Japan" },
-        { id: "BOM", name: "Mumbai", type: "city", country: "India" },
-        { id: "DEL", name: "Delhi", type: "city", country: "India" },
-        { id: "BLR", name: "Bangalore", type: "city", country: "India" }
+        { id: "DXB", name: "Dubai", type: "city", country: "United Arab Emirates", code: "DXB", popular: true },
+        { id: "LON", name: "London", type: "city", country: "United Kingdom", code: "LON", popular: true },
+        { id: "NYC", name: "New York", type: "city", country: "United States", code: "NYC", popular: true },
+        { id: "PAR", name: "Paris", type: "city", country: "France", code: "PAR", popular: true },
+        { id: "TYO", name: "Tokyo", type: "city", country: "Japan", code: "TYO", popular: true },
+        { id: "BOM", name: "Mumbai", type: "city", country: "India", code: "BOM", popular: true },
+        { id: "DEL", name: "Delhi", type: "city", country: "India", code: "DEL", popular: true },
+        { id: "BLR", name: "Bangalore", type: "city", country: "India", code: "BLR", popular: true },
+        { id: "BCN", name: "Barcelona", type: "city", country: "Spain", code: "BCN", popular: true },
+        { id: "MAD", name: "Madrid", type: "city", country: "Spain", code: "MAD", popular: true }
       ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
     }
   }
 
   /**
-   * Search destinations using live API endpoint
+   * Search destinations using database-backed API endpoint
    */
   async searchDestinationsLive(query: string): Promise<
     {
@@ -565,11 +575,11 @@ export class HotelsService {
     }[]
   > {
     try {
-      // Try production-safe endpoint first, then live endpoint
+      // Use database-backed endpoint for both production and development
       const isProduction = typeof window !== 'undefined' && window.location.hostname !== "localhost";
-      const apiUrl = isProduction
-        ? `/api/hotels/destinations/search?q=${encodeURIComponent(query)}`
-        : `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`;
+      const apiUrl = `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}&limit=15`;
+
+      console.log(`🔍 Searching destinations via database API: "${query}"`);
 
       try {
         const response = await fetch(apiUrl, {
@@ -585,30 +595,35 @@ export class HotelsService {
           if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
             if (data.success && data.data) {
-              const dataSource = data.isLiveData ? 'Live' : 'Mock';
-              console.log(`🔍 ${dataSource} destination data received:`, data.data.length, 'destinations');
+              const dataSource = data.isLiveData ? 'Database' : 'Fallback';
+              console.log(`✅ ${dataSource} destination data received:`, data.data.length, 'destinations');
+              console.log(`   Source: ${data.source}`);
+              console.log(`   Database connected: ${data.searchMeta?.databaseConnected}`);
 
               // Transform the data to match expected format
               return data.data.map((dest: any) => ({
                 id: dest.code || dest.id,
                 name: dest.name,
                 type: (dest.type || 'city') as "city" | "region" | "country" | "landmark",
-                country: dest.countryName || dest.country || ''
+                country: dest.countryName || dest.country || '',
+                code: dest.code,
+                flag: dest.flag,
+                popular: dest.popular
               }));
             }
           } else {
-            console.warn('Destination API returned non-JSON response');
+            console.warn('⚠️ Destination API returned non-JSON response');
           }
         } else {
-          console.warn(`Live destination API returned status ${response.status}`);
+          console.warn(`⚠️ Destination API returned status ${response.status}`);
         }
       } catch (fetchError) {
-        console.warn('Live destination API fetch failed (likely API server not running):', fetchError instanceof Error ? fetchError.message : 'Unknown error');
+        console.warn('⚠️ Destination API fetch failed:', fetchError instanceof Error ? fetchError.message : 'Unknown error');
       }
 
       return [];
     } catch (error) {
-      console.warn('Live destination search failed:', error);
+      console.warn('Destination search failed:', error);
       return [];
     }
   }
