@@ -5,6 +5,7 @@
 
 const axios = require('axios');
 const crypto = require('crypto');
+const hotelCache = require('../database/hotelCache');
 
 class HotelbedsService {
   constructor() {
