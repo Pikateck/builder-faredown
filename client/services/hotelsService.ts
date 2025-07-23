@@ -561,16 +561,7 @@ export class HotelsService {
     }[]
   > {
     try {
-      // Check if we're in production environment
-      const isProduction = window.location.hostname !== "localhost";
-
-      if (isProduction) {
-        // In production, skip live API calls to avoid errors
-        console.log('🚫 Skipping live destination API in production environment');
-        return [];
-      }
-
-      // Direct fetch to bypass API client fallback mode (only in development)
+      // Direct fetch to bypass API client fallback mode
       const response = await fetch(`/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}`, {
         method: 'GET',
         headers: {
@@ -579,11 +570,19 @@ export class HotelsService {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data && data.isLiveData) {
-          console.log('🔴 Live destination data received:', data.data.length, 'destinations');
-          return data.data;
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          if (data.success && data.data && data.isLiveData) {
+            console.log('🔴 Live destination data received:', data.data.length, 'destinations');
+            return data.data;
+          }
+        } else {
+          console.warn('Live destination API returned non-JSON response');
         }
+      } else {
+        console.warn(`Live destination API returned status ${response.status}`);
       }
 
       return [];
