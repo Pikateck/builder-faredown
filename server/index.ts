@@ -196,19 +196,22 @@ export function createServer() {
 
   app.get("/api/hotels-live/destinations/search", (_req, res) => {
     const query = _req.query.q as string || '';
-    const mockDestinations = [
-      { code: 'BCN', name: 'Barcelona', countryName: 'Spain', type: 'destination' },
-      { code: 'MAD', name: 'Madrid', countryName: 'Spain', type: 'destination' },
-      { code: 'PMI', name: 'Palma', countryName: 'Spain', type: 'destination' },
-      { code: 'DXB', name: 'Dubai', countryName: 'UAE', type: 'destination' },
-      { code: 'NYC', name: 'New York', countryName: 'USA', type: 'destination' }
-    ].filter(dest => dest.name.toLowerCase().includes(query.toLowerCase()));
+    const destinations = query ? searchDestinations(query) : MASTER_DESTINATIONS.filter(d => d.popular);
+
+    // Transform to Hotelbeds format
+    const formattedDestinations = destinations.map(dest => ({
+      code: dest.code,
+      name: dest.name,
+      countryName: dest.country,
+      type: 'destination',
+      popular: dest.popular
+    }));
 
     res.json({
       success: true,
-      data: mockDestinations,
+      data: formattedDestinations,
       isLiveData: false,
-      source: 'Production Mock Data'
+      source: 'Master Destinations Database (Hotelbeds Format)'
     });
   });
 
