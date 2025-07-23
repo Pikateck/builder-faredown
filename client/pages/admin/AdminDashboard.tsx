@@ -180,6 +180,12 @@ const adminModules = [
     color: "bg-indigo-500",
   },
   {
+    id: "testing",
+    name: "API Testing Dashboard",
+    icon: TestTube,
+    color: "bg-pink-500",
+  },
+  {
     id: "inventory",
     name: "Inventory/Extranet",
     icon: Package,
