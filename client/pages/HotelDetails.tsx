@@ -51,7 +51,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
-import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
+import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
   Star,
