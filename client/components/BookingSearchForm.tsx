@@ -391,7 +391,7 @@ export function BookingSearchForm() {
                   onBlur={(e) => {
                     // Delay hiding to allow selection
                     setTimeout(() => {
-                      if (!e.currentTarget.contains(document.activeElement)) {
+                      if (e.currentTarget && !e.currentTarget.contains(document.activeElement)) {
                         setIsDestinationOpen(false);
                       }
                     }, 150);
