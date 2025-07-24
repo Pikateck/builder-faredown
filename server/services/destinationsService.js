@@ -13,7 +13,7 @@ class DestinationsService {
       connectionString:
         process.env.DATABASE_URL || "postgresql://localhost:5432/faredown_db",
       ssl:
-        process.env.NODE_ENV === "production"
+        process.env.DATABASE_URL?.includes("render.com") || process.env.NODE_ENV === "production"
           ? { rejectUnauthorized: false }
           : false,
       max: 20,
