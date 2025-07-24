@@ -402,11 +402,11 @@ export default function BookingConfirmation() {
             </h1>
             <p className="text-gray-600 mb-6">{error}</p>
             <Button
-              onClick={() => navigate("/hotels")}
+              onClick={() => navigate(bookingType === "flight" ? "/flights" : "/hotels")}
               className="bg-[#003580] hover:bg-[#002a66]"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Hotels
+              Back to {bookingType === "flight" ? "Flights" : "Hotels"}
             </Button>
           </div>
         </div>
