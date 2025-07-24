@@ -247,8 +247,8 @@ export default function HotelResults() {
       ],
       rating: 4.8,
       reviews: 1234,
-      originalPrice: 24675, // ~₹299 USD equivalent in INR
-      currentPrice: 14765, // ~₹179 USD equivalent in INR
+      originalPrice: 210, // ₹210 per night
+      currentPrice: 167, // ₹167 per night
       description:
         "Experience luxury in the heart of the city with stunning views, world-class amenities, and exceptional service.",
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
