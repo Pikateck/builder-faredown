@@ -1008,13 +1008,16 @@ export default function ReservationPage() {
 
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold">Total</span>
+                    <span className="text-lg font-semibold">Total Price (incl. taxes)</span>
                     <span className="text-xl font-bold text-blue-600">
                       {formatINR(grandTotal)}
                     </span>
                   </div>
                   <div className="text-xs text-gray-500 text-right mt-1">
                     All taxes, fees & charges included
+                  </div>
+                  <div className="text-xs text-gray-400 text-right">
+                    {formatINR(pricing.perNightPrice)} per night × {nights} nights
                   </div>
                   {hotelData.isBargained && (
                     <div className="bg-green-50 p-2 rounded mt-2">
