@@ -293,7 +293,7 @@ export class HotelsService {
             }
           } else {
             console.warn(
-              "⚠️ Live API returned non-JSON response (likely HTML error page)",
+              "���️ Live API returned non-JSON response (likely HTML error page)",
             );
           }
         } else {
@@ -764,16 +764,19 @@ export class HotelsService {
           controller.abort();
         }, 5000); // 5 second timeout
 
-        const response = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-          },
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
+        let response;
+        try {
+          response = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
 
         if (response.ok) {
           const contentType = response.headers.get("content-type");
