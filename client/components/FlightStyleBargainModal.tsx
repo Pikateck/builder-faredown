@@ -398,8 +398,12 @@ export function FlightStyleBargainModal({
                       }
                       setBargainPrice(numericValue);
                     }}
-                    placeholder="Enter the total price you want to pay for your stay"
-                    className="text-xl font-bold text-center py-6 border-2 border-purple-200 focus:border-purple-500 placeholder:text-gray-400 placeholder:font-normal"
+                    placeholder={usedPrices.size > 0 ? `Already tried: ${Array.from(usedPrices).map(p => formatNumberWithCommas(p.split("-")[1])).join(", ")} - Try different price` : "Enter the total price you want to pay for your stay"}
+                    className={`text-xl font-bold text-center py-6 border-2 focus:border-purple-500 placeholder:text-gray-400 placeholder:font-normal ${
+                      usedPrices.size > 0 && bargainPrice && usedPrices.has(`${priceCalculation.total}-${parseInt(bargainPrice)}`)
+                        ? "border-red-300 bg-red-50"
+                        : "border-purple-200"
+                    }`}
                   />
                   <div className="absolute inset-y-0 left-3 flex items-center">
                     <span className="text-gray-500 text-xl">
