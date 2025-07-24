@@ -69,7 +69,10 @@ export default function BookingConfirmation() {
       searchParams.get("type") === "hotel" ||
       localStorage.getItem("currentBookingType") === "hotel";
 
-    if (savedFlightBooking) {
+    // If URL clearly indicates hotel booking, prioritize hotel flow
+    if (isHotelFlow && !isFlightFlow) {
+      // Skip flight data check and go directly to hotel logic
+    } else if (savedFlightBooking) {
       const flightData = JSON.parse(savedFlightBooking);
       // Check if this is actually flight data by looking for flight-specific fields
       if (
