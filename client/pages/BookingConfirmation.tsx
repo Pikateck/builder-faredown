@@ -110,12 +110,16 @@ export default function BookingConfirmation() {
     } else {
       // Create mock booking data from URL params for demo
       const hotelId = searchParams.get("hotelId");
+      const hotelName = searchParams.get("hotelName");
       const roomType = searchParams.get("roomType");
       const price = searchParams.get("price");
+      const totalPrice = searchParams.get("totalPrice");
       const nights = searchParams.get("nights");
       const bargained = searchParams.get("bargained");
 
-      if (hotelId && roomType && price && nights) {
+      console.log("🏨 Hotel URL params:", { hotelId, hotelName, roomType, price, totalPrice, nights });
+
+      if (hotelId || (hotelName && price)) {
         const mockBooking = {
           id: `HB${Date.now()}`,
           bookingDate: new Date().toISOString(),
