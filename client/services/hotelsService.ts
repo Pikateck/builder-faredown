@@ -787,7 +787,11 @@ export class HotelsService {
           }
         }
       } catch (fetchError) {
-        console.warn(`⚠️ API fetch failed:`, fetchError instanceof Error ? fetchError.message : "Unknown error");
+        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+          console.log(`⏰ API request was aborted (timeout or cancelled) for query: "${query}"`);
+        } else {
+          console.warn(`⚠️ API fetch failed:`, fetchError instanceof Error ? fetchError.message : "Unknown error");
+        }
       }
 
       // Filter fallback data based on query
