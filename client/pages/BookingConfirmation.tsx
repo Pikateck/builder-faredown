@@ -494,47 +494,102 @@ export default function BookingConfirmation() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Booking Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Hotel Details */}
+            {/* Flight/Hotel Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Hotel Details
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-xl font-bold text-gray-900">
-                        {booking.hotelDetails.name}
-                      </h4>
-                      {booking.hotelDetails.starRating && (
-                        <div className="flex">
-                          {Array.from({
-                            length: booking.hotelDetails.starRating,
-                          }).map((_, i) => (
-                            <span key={i} className="text-yellow-400 text-sm">
-                              ★
-                            </span>
-                          ))}
+                {bookingType === "flight" ? (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      Flight Details
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <h4 className="text-xl font-bold text-gray-900">
+                              {(booking as any).flightDetails.airline}
+                            </h4>
+                            <p className="text-lg text-gray-600">
+                              Flight {(booking as any).flightDetails.flightNumber}
+                            </p>
+                          </div>
+                          <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                            {(booking as any).flightDetails.class}
+                          </Badge>
                         </div>
-                      )}
-                    </div>
-                    <div className="flex items-start text-gray-600 text-sm">
-                      <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>{booking.hotelDetails.address}</span>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Phone className="w-4 h-4 mr-2" />
-                      {booking.hotelDetails.phone}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Departure */}
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <h5 className="font-semibold text-gray-900 mb-2">Departure</h5>
+                            <p className="text-sm text-gray-600">{(booking as any).flightDetails.departure.airport}</p>
+                            <p className="text-lg font-bold text-gray-900">
+                              {(booking as any).flightDetails.departure.time}
+                            </p>
+                            <p className="text-sm text-gray-600">{(booking as any).flightDetails.departure.date}</p>
+                          </div>
+
+                          {/* Arrival */}
+                          <div className="p-4 bg-gray-50 rounded-lg">
+                            <h5 className="font-semibold text-gray-900 mb-2">Arrival</h5>
+                            <p className="text-sm text-gray-600">{(booking as any).flightDetails.arrival.airport}</p>
+                            <p className="text-lg font-bold text-gray-900">
+                              {(booking as any).flightDetails.arrival.time}
+                            </p>
+                            <p className="text-sm text-gray-600">{(booking as any).flightDetails.arrival.date}</p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                          <p className="text-center text-blue-800">
+                            <span className="font-semibold">Duration:</span> {(booking as any).flightDetails.duration}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Mail className="w-4 h-4 mr-2" />
-                      {booking.hotelDetails.email}
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      Hotel Details
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="text-xl font-bold text-gray-900">
+                            {(booking as any).hotelDetails?.name}
+                          </h4>
+                          {(booking as any).hotelDetails?.starRating && (
+                            <div className="flex">
+                              {Array.from({
+                                length: (booking as any).hotelDetails.starRating,
+                              }).map((_, i) => (
+                                <span key={i} className="text-yellow-400 text-sm">
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-start text-gray-600 text-sm">
+                          <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                          <span>{(booking as any).hotelDetails?.address}</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Phone className="w-4 h-4 mr-2" />
+                          {(booking as any).hotelDetails?.phone}
+                        </div>
+                        <div className="flex items-center text-sm text-gray-600">
+                          <Mail className="w-4 h-4 mr-2" />
+                          {(booking as any).hotelDetails?.email}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </CardContent>
             </Card>
 
