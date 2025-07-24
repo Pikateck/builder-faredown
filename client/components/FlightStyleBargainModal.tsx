@@ -349,16 +349,28 @@ export function FlightStyleBargainModal({
 
             {/* AI Negotiation Interface - Exact flight layout */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold">AI</span>
+              <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50 rounded-xl border border-purple-200 shadow-sm">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                      <span className="text-transparent bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text font-bold text-sm">AI</span>
+                    </div>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  </div>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">
-                    AI Assistant
-                  </p>
+                  <div className="flex items-center space-x-2 mb-1">
+                    <p className="text-sm font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                      AI Price Negotiator
+                    </p>
+                    <div className="px-2 py-0.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-medium rounded-full">
+                      LIVE
+                    </div>
+                  </div>
                   <p className="text-xs text-gray-600">
-                    Tell me your target price and I'll negotiate with the hotel!
+                    Tell me your target price and I'll negotiate with the hotel in real-time!
                   </p>
                 </div>
               </div>
