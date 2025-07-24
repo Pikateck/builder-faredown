@@ -63,6 +63,12 @@ export default function BookingConfirmation() {
       searchParams.get("type") === "flight" ||
       localStorage.getItem("currentBookingType") === "flight";
 
+    const isHotelFlow =
+      window.location.pathname.includes("hotel") ||
+      searchParams.get("hotelId") ||
+      searchParams.get("type") === "hotel" ||
+      localStorage.getItem("currentBookingType") === "hotel";
+
     if (savedFlightBooking) {
       const flightData = JSON.parse(savedFlightBooking);
       // Check if this is actually flight data by looking for flight-specific fields
