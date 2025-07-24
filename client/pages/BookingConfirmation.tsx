@@ -66,6 +66,16 @@ export default function BookingConfirmation() {
   const [bookingType, setBookingType] = useState<"flight" | "hotel">("hotel");
 
   useEffect(() => {
+    // Detect booking type from URL params, localStorage, or default to hotel
+    const typeFromUrl = searchParams.get("type");
+    const typeFromStorage = localStorage.getItem("currentBookingType");
+
+    if (typeFromUrl === "flight" || typeFromStorage === "flight") {
+      setBookingType("flight");
+    } else {
+      setBookingType("hotel");
+    }
+
     if (bookingRef) {
       loadBookingDetails();
     } else {
