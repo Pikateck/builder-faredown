@@ -130,14 +130,16 @@ export function HotelCard({
   const roomsCount = parseInt(searchParams.get("rooms") || "1");
   const totalNights = calculateNights(checkInDate, checkOutDate);
 
-  // Calculate total pricing
+  // Calculate comprehensive pricing with taxes
   const priceCalculation = calculateTotalPrice(
     currentPrice,
     totalNights,
     roomsCount,
   );
 
-  // Removed discount calculation since we're not showing original prices
+  // Calculate per night price inclusive of taxes for display
+  const perNightInclusiveTaxes = Math.round(priceCalculation.total / totalNights);
+  const totalPriceInclusiveTaxes = priceCalculation.total;
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
@@ -327,39 +329,25 @@ export function HotelCard({
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="text-xl font-bold text-[#003580]">
-                      {formatPrice(priceCalculation.total)}
+                      {formatPrice(perNightInclusiveTaxes)}
                     </span>
                   </div>
                   <div className="text-sm text-gray-600">
                     per night (incl. taxes)
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Total: {formatPrice(totalPriceInclusiveTaxes)} for {totalNights} {totalNights === 1 ? 'night' : 'nights'}
                   </div>
                 </div>
               </div>
 
               <div className="flex space-x-2">
                 <Button
-                  className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium touch-manipulation text-sm flex items-center justify-center gap-1"
-                  onClick={handleQuickBooking}
-                  disabled={isBooking}
-                >
-                  {isBooking ? (
-                    <>
-                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
-                      <span>Booking...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CreditCard className="w-3 h-3" />
-                      <span>Book</span>
-                    </>
-                  )}
-                </Button>
-                <Button
                   variant="outline"
                   className="flex-1 touch-manipulation text-sm"
                   onClick={handleViewDetails}
                 >
-                  Details
+                  View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
@@ -506,37 +494,21 @@ export function HotelCard({
             <div className="min-w-0">
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-lg sm:text-2xl font-bold text-[#003580]">
-                  {formatPrice(priceCalculation.total)}
+                  {formatPrice(perNightInclusiveTaxes)}
                 </span>
               </div>
               <div className="text-xs sm:text-sm text-gray-600">
                 per night (incl. taxes)
               </div>
+              <div className="text-xs text-gray-500 mt-1">
+                Total: {formatPrice(totalPriceInclusiveTaxes)} for {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+              </div>
             </div>
 
             <div className="flex space-x-2 flex-shrink-0">
               <Button
-                className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium touch-manipulation text-sm flex items-center gap-1 flex-1 sm:flex-none"
-                onClick={handleQuickBooking}
-                disabled={isBooking}
-              >
-                {isBooking ? (
-                  <>
-                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
-                    <span className="hidden sm:inline">Booking...</span>
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>Book Now</span>
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 hidden sm:inline" />
-                  </>
-                )}
-              </Button>
-
-              <Button
                 variant="outline"
-                className="hidden md:flex touch-manipulation"
+                className="flex-1 sm:flex-none touch-manipulation"
                 onClick={handleViewDetails}
               >
                 View Details
@@ -548,14 +520,6 @@ export function HotelCard({
               >
                 <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                 <span className="hidden sm:inline">Bargain</span>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="md:hidden touch-manipulation text-sm"
-                onClick={handleViewDetails}
-              >
-                Details
               </Button>
             </div>
           </div>
