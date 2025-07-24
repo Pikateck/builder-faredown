@@ -555,25 +555,16 @@ export function FlightStyleBargainModal({
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <div className="relative w-20 h-20 mx-auto mb-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-400 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-xl">
-                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
+              <div className="w-16 h-16 mx-auto mb-4 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-[#003580]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
               </div>
-              <h3 className="font-bold text-xl bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
-                ✨ AI Counter Offer!
+              <h3 className="font-semibold text-xl text-gray-900 mb-2">
+                Counter Offer
               </h3>
-              <p className="text-gray-600 font-medium">
-                The hotel found your price, but here's their best offer!
+              <p className="text-gray-600 text-sm">
+                The hotel found your price, but here's their best offer
               </p>
             </div>
 
