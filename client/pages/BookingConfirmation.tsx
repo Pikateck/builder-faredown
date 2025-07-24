@@ -768,7 +768,7 @@ export default function BookingConfirmation() {
         {/* Action Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <Button
-            onClick={() => navigate("/hotels")}
+            onClick={() => navigate(bookingType === "flight" ? "/flights" : "/hotels")}
             variant="outline"
             className="border-gray-300 text-gray-700 hover:bg-gray-50"
           >
