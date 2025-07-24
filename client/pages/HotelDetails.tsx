@@ -130,6 +130,8 @@ export default function HotelDetails() {
   const [bargainedRooms, setBargainedRooms] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState(100);
+  const [selectedRating, setSelectedRating] = useState<number[]>([]);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [selectedFilters, setSelectedFilters] = useState({
     popularFilters: new Set<string>(),
     propertyTypes: new Set<string>(),
