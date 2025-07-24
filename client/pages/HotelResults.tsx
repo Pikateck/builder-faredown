@@ -72,6 +72,48 @@ export default function HotelResults() {
     loadHotels();
   }, [searchParams, selectedCurrency]);
 
+  // Helper function to transform Hotelbeds images to usable URLs
+  const transformHotelImages = (images: any[]): string[] => {
+    if (!images || !Array.isArray(images) || images.length === 0) {
+      // Fallback to high-quality hotel images
+      return [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&fit=crop&auto=format",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop&auto=format",
+      ];
+    }
+
+    // Transform Hotelbeds image URLs
+    const processedImages = images
+      .map((img: any) => {
+        if (typeof img === "string") {
+          // If it's already a URL string
+          return img.includes("http") ? img : `https://photos.hotelbeds.com/giata/original/${img}`;
+        } else if (img && img.path) {
+          // Hotelbeds image object with path
+          return `https://photos.hotelbeds.com/giata/original/${img.path}`;
+        } else if (img && img.url) {
+          // Image object with URL
+          return img.url;
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    // Ensure we have at least 2 images, add fallbacks if needed
+    if (processedImages.length === 0) {
+      return [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format",
+      ];
+    } else if (processedImages.length === 1) {
+      processedImages.push("https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format");
+    }
+
+    return processedImages.slice(0, 6); // Limit to 6 images max
+  };
+
   const loadHotels = async () => {
     try {
       setLoading(true);
