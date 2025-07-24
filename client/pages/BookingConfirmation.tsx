@@ -92,13 +92,58 @@ export default function BookingConfirmation() {
       setLoading(true);
       // Use mock booking data to avoid fetch calls
       console.log(
-        `Loading booking ${bookingRef}: Using mock data (fetch disabled)`,
+        `Loading ${bookingType} booking ${bookingRef}: Using mock data (fetch disabled)`,
       );
-      const result = {
-        success: true,
-        data: {
+
+      let mockData;
+
+      if (bookingType === "flight") {
+        // Mock flight booking data
+        mockData = {
           bookingRef: bookingRef || `FD${Date.now()}`,
           status: "confirmed",
+          type: "flight",
+          flightDetails: {
+            airline: "Emirates",
+            flightNumber: "EK 225",
+            departure: {
+              airport: "Dubai International (DXB)",
+              city: "Dubai",
+              time: "14:30",
+              date: "2025-01-25"
+            },
+            arrival: {
+              airport: "Indira Gandhi International (DEL)",
+              city: "Delhi",
+              time: "19:45",
+              date: "2025-01-25"
+            },
+            duration: "3h 15m",
+            class: "Economy"
+          },
+          passengers: [
+            {
+              title: "Mr",
+              firstName: "John",
+              lastName: "Doe",
+              type: "Adult"
+            }
+          ],
+          totalAmount: 12500,
+          currency: "INR",
+          paymentDetails: {
+            method: "Credit Card",
+            razorpay_payment_id: "pay_" + Math.random().toString(36).substr(2, 9),
+            paidAt: new Date().toISOString()
+          },
+          confirmedAt: new Date().toISOString()
+        };
+      } else {
+        // Mock hotel booking data
+        mockData = {
+          bookingRef: bookingRef || `FD${Date.now()}`,
+          status: "confirmed",
+          type: "hotel",
           hotelDetails: {
             name: "Grand Hotel Dubai",
             address: "Downtown Dubai, United Arab Emirates",
@@ -132,7 +177,12 @@ export default function BookingConfirmation() {
             paidAt: new Date().toISOString()
           },
           confirmedAt: new Date().toISOString()
-        } as BookingData,
+        } as BookingData;
+      }
+
+      const result = {
+        success: true,
+        data: mockData,
       };
 
       if (result.success) {
