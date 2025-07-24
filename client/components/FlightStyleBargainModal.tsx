@@ -614,23 +614,17 @@ export function FlightStyleBargainModal({
                 onClick={() =>
                   setBargainState((prev) => ({ ...prev, phase: "initial" }))
                 }
-                className="flex-1 border-2 border-purple-300 text-purple-600 hover:bg-purple-50 font-semibold"
+                className="flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50"
                 disabled={bargainState.timeRemaining === 0}
               >
-                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0L2.586 11H9a1 1 0 100-2H2.586l3.707-3.707a1 1 0 00-1.414-1.414l-5.657 5.657a1 1 0 000 1.414l5.657 5.657a1 1 0 001.414 0z" clipRule="evenodd" />
-                </svg>
                 Try Different Price
               </Button>
               <Button
                 onClick={handleAcceptCounterOffer}
-                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold shadow-lg"
+                className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white"
                 disabled={bargainState.timeRemaining === 0}
               >
-                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                Book This Deal
+                Accept Offer
               </Button>
             </div>
           </div>
