@@ -69,10 +69,21 @@ export default function BookingConfirmation() {
       searchParams.get("type") === "hotel" ||
       localStorage.getItem("currentBookingType") === "hotel";
 
+    // Debug logging
+    console.log("🔍 Booking type detection:", {
+      isHotelFlow,
+      isFlightFlow,
+      hasHotelId: !!searchParams.get("hotelId"),
+      currentUrl: window.location.href,
+      savedFlightBooking: !!savedFlightBooking,
+      savedHotelBooking: !!savedHotelBooking
+    });
+
     // If URL clearly indicates hotel booking, prioritize hotel flow
     if (isHotelFlow && !isFlightFlow) {
-      // Skip flight data check and go directly to hotel logic
-    } else if (savedFlightBooking) {
+      console.log("🏨 Hotel flow detected - skipping flight data");
+      // Skip flight data check and go directly to hotel logic below
+    } else if (savedFlightBooking && !isHotelFlow) {
       const flightData = JSON.parse(savedFlightBooking);
       // Check if this is actually flight data by looking for flight-specific fields
       if (
