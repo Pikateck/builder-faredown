@@ -730,7 +730,7 @@ export function FlightStyleBargainModal({
                   scrollToTop();
                 }
               }}
-              className="w-full bg-green-500 hover:bg-green-600 text-white py-4 text-lg font-semibold rounded-xl"
+              className="w-full bg-[#003580] hover:bg-[#002a66] text-white py-4 text-lg font-medium rounded-lg"
             >
               Book This Deal - {selectedCurrency.symbol}
               {finalPrice.toLocaleString()}
