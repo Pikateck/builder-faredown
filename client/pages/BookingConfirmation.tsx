@@ -485,7 +485,7 @@ export default function BookingConfirmation() {
                 className="border-blue-300 text-blue-700 hover:bg-blue-50"
               >
                 <Mail className="w-4 h-4 mr-2" />
-                Email Voucher
+                Email {bookingType === "flight" ? "E-Ticket" : "Voucher"}
               </Button>
             </div>
           </div>
