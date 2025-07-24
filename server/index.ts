@@ -6,8 +6,7 @@ import {
   searchDestinations,
 } from "../shared/destinations";
 
-// Import database service
-import destinationsService from "./services/destinationsService.js";
+// Database service will be imported dynamically when needed
 
 export function createServer() {
   const app = express();
