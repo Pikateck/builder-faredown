@@ -86,14 +86,42 @@ export default function BookingConfirmation() {
       const result = {
         success: true,
         data: {
-          bookingRef,
+          bookingRef: bookingRef || `FD${Date.now()}`,
           status: "confirmed",
-          hotel: "Mock Hotel for Development",
-          guest: "Test Guest",
+          hotelDetails: {
+            name: "Grand Hotel Dubai",
+            address: "Downtown Dubai, United Arab Emirates",
+            phone: "+971 4 123 4567",
+            email: "reservations@grandhoteldubai.com",
+            starRating: 5
+          },
+          guestDetails: {
+            primaryGuest: {
+              title: "Mr",
+              firstName: "John",
+              lastName: "Doe"
+            },
+            contactInfo: {
+              email: "john.doe@example.com",
+              phone: "+1 234 567 8900"
+            }
+          },
+          roomDetails: {
+            name: "Deluxe Suite with City View",
+            category: "Suite",
+            bedType: "King Bed"
+          },
           checkIn: "2025-01-25",
           checkOut: "2025-01-27",
-          totalAmount: 5000,
-        },
+          totalAmount: 15000,
+          currency: "INR",
+          paymentDetails: {
+            method: "Credit Card",
+            razorpay_payment_id: "pay_" + Math.random().toString(36).substr(2, 9),
+            paidAt: new Date().toISOString()
+          },
+          confirmedAt: new Date().toISOString()
+        } as BookingData,
       };
 
       if (result.success) {
