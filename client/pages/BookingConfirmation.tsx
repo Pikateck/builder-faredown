@@ -144,19 +144,55 @@ export default function BookingConfirmation() {
       console.log(
         `Checking payment for ${tempRef}: Using mock data (fetch disabled)`,
       );
+      const bookingRef = `FD${Date.now()}`;
       const result = {
         success: true,
-        data: { bookingRef: `FD${Date.now()}`, status: "confirmed" },
+        data: {
+          bookingRef,
+          status: "confirmed",
+          hotelDetails: {
+            name: "Premium Hotel Dubai",
+            address: "Business Bay, Dubai, United Arab Emirates",
+            phone: "+971 4 567 8901",
+            email: "reservations@premiumhoteldubai.com",
+            starRating: 4
+          },
+          guestDetails: {
+            primaryGuest: {
+              title: "Mr",
+              firstName: "Ahmed",
+              lastName: "Al-Rashid"
+            },
+            contactInfo: {
+              email: "ahmed.alrashid@example.com",
+              phone: "+971 50 123 4567"
+            }
+          },
+          roomDetails: {
+            name: "Executive Room with Burj Khalifa View",
+            category: "Executive",
+            bedType: "Queen Bed"
+          },
+          checkIn: "2025-01-26",
+          checkOut: "2025-01-28",
+          totalAmount: 8500,
+          currency: "AED",
+          paymentDetails: {
+            method: "Razorpay",
+            razorpay_payment_id: tempRef,
+            paidAt: new Date().toISOString()
+          },
+          confirmedAt: new Date().toISOString()
+        } as BookingData,
       };
 
       if (result.success) {
-        // If payment was successful, redirect to final booking confirmation
-        // For now, show a message to check email
-        setError(
-          "Payment processing. Please check your email for confirmation.",
-        );
+        // Set the booking data to display confirmation
+        setBooking(result.data);
+        // Update URL to show booking reference
+        navigate(`/booking-confirmation/${bookingRef}`, { replace: true });
       } else {
-        setError("Booking reference not found");
+        setError("Payment verification failed");
       }
     } catch (error) {
       console.error("Error checking payment status:", error);
