@@ -6,15 +6,8 @@ import {
   searchDestinations,
 } from "../shared/destinations";
 
-// Database service will be imported dynamically when needed
-let destinationsService: any = null;
-async function getDestinationsService() {
-  if (!destinationsService) {
-    const module = await import("./services/destinationsService.js");
-    destinationsService = module.default;
-  }
-  return destinationsService;
-}
+// Import database service
+import destinationsService from "./services/destinationsService.js";
 
 export function createServer() {
   const app = express();
