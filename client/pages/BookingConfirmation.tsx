@@ -120,12 +120,13 @@ export default function BookingConfirmation() {
       console.log("🏨 Hotel URL params:", { hotelId, hotelName, roomType, price, totalPrice, nights });
 
       if (hotelId || (hotelName && price)) {
+        console.log("🏨 Creating hotel booking from URL params");
         const mockBooking = {
           id: `HB${Date.now()}`,
           bookingDate: new Date().toISOString(),
           hotel: {
-            id: hotelId,
-            name: "Grand Hyatt Dubai",
+            id: hotelId || "htl-DXB-001",
+            name: hotelName ? decodeURIComponent(hotelName) : "Grand Hyatt Dubai",
             location:
               "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
             image:
