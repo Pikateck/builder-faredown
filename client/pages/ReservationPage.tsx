@@ -994,9 +994,11 @@ export default function ReservationPage() {
                     <span>{formatINR(pricing.basePrice)}</span>
                   </div>
                   <div className="text-xs text-gray-500 text-right">
-                    {formatINR(pricing.perNightPrice)} × {nights} nights ×{" "}
-                    {rooms} room{rooms > 1 ? "s" : ""} ={" "}
-                    {formatINR(pricing.total)} (incl. taxes & fees)
+                    {formatINR(pricing.perNightPrice)} per night × {nights} nights ×{" "}
+                    {rooms} room{rooms > 1 ? "s" : ""} = {formatINR(pricing.basePrice)}
+                  </div>
+                  <div className="text-xs text-blue-600 text-right font-medium">
+                    Total with taxes & fees: {formatINR(pricing.total)}
                   </div>
                   {calculateAddOns() > 0 && (
                     <div className="flex justify-between text-sm">
