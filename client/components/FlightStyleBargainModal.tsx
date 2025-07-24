@@ -322,7 +322,7 @@ export function FlightStyleBargainModal({
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-600">
-                    Current All-Inclusive Price
+                    Total Price (incl. taxes)
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
                     {formatLocalPrice(
@@ -331,7 +331,10 @@ export function FlightStyleBargainModal({
                     )}
                   </p>
                   <p className="text-xs text-gray-500">
-                    Taxes, fees & gateway charges included
+                    {formatLocalPrice(roomType.totalPrice, selectedCurrency.code)} per night × {Math.ceil((new Date(hotel.checkOut).getTime() - new Date(hotel.checkIn).getTime()) / (1000 * 60 * 60 * 24))} nights
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Taxes, fees & charges included
                   </p>
                 </div>
               </div>
