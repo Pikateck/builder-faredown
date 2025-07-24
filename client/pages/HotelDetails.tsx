@@ -1059,13 +1059,13 @@ export default function HotelDetails() {
                                     ).toLocaleString()}
                                   </div>
                                   <div className="text-sm font-semibold text-gray-900 mb-1">
-                                    Total Price
+                                    Total Price (incl. taxes)
                                   </div>
                                   <div className="text-xs text-gray-600">
-                                    ₹
-                                    {calculateTotalPrice(
-                                      room.pricePerNight,
-                                    ).toLocaleString()} Total Price
+                                    ₹{room.pricePerNight.toLocaleString()} per night × {hotel.totalNights} nights
+                                  </div>
+                                  <div className="text-xs text-gray-500 mt-1">
+                                    Includes taxes, fees & charges
                                   </div>
                                 </div>
 
@@ -1801,7 +1801,7 @@ export default function HotelDetails() {
                     </div>
                     <ul className="space-y-1 text-sm text-gray-600">
                       <li className="flex items-center">
-                        <span className="mr-2">📺</span> TV Lounge
+                        <span className="mr-2">���</span> TV Lounge
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🏊</span> Outdoor Freshwater pool
@@ -1927,7 +1927,7 @@ export default function HotelDetails() {
                         <span className="mr-2">❄️</span> Air conditioning
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🛋️</span> Living room
+                        <span className="mr-2">🛋���</span> Living room
                       </li>
                     </ul>
                     <ul className="space-y-2 text-sm text-gray-700">
