@@ -64,6 +64,7 @@ function App() {
             <Route path="/hotels/results" element={<HotelResults />} />
             <Route path="/hotels/:hotelId" element={<HotelDetails />} />
             <Route path="/hotels/booking" element={<HotelBooking />} />
+            <Route path="/booking/hotel" element={<HotelBookingConfirmation />} />
             <Route path="/reserve" element={<ReservationPage />} />
             <Route
               path="/booking-confirmation"
