@@ -44,7 +44,7 @@ export default function HotelBookingConfirmation() {
     createdAt: new Date().toISOString(),
     hotel: {
       id: hotelId,
-      name: "Grand Plaza Hotel",
+      name: hotelName ? decodeURIComponent(hotelName) : "Grand Plaza Hotel",
       location: "Downtown Dubai, United Arab Emirates",
       address: "123 Sheikh Zayed Road, Downtown Dubai, Dubai, UAE",
       image:
