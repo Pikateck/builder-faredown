@@ -457,21 +457,17 @@ export function FlightStyleBargainModal({
                 )}
               </div>
 
-              {/* Used Prices Warning */}
-              {usedPrices.size > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+              {/* Inline validation for duplicate prices */}
+              {bargainPrice && parseInt(bargainPrice) > 0 && usedPrices.has(`${priceCalculation.total}-${parseInt(bargainPrice)}`) && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
                   <div className="flex items-center space-x-2">
-                    <Info className="w-4 h-4 text-amber-600" />
-                    <span className="text-sm font-medium text-amber-800">
-                      Already tried:{" "}
-                      {Array.from(usedPrices)
-                        .map((p) => formatNumberWithCommas(p.split("-")[1]))
-                        .join(", ")}
+                    <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-sm font-medium text-red-800">
+                      This price was already tried. Please enter a different amount.
                     </span>
                   </div>
-                  <p className="text-xs text-amber-700 mt-1">
-                    Choose a different price to negotiate again
-                  </p>
                 </div>
               )}
 
