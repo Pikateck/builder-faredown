@@ -467,7 +467,7 @@ export default function BookingConfirmation() {
                 className="border-blue-300 text-blue-700 hover:bg-blue-50"
               >
                 <Download className="w-4 h-4 mr-2" />
-                Download Voucher
+                Download {bookingType === "flight" ? "E-Ticket" : "Voucher"}
               </Button>
               <Button
                 onClick={downloadInvoice}
