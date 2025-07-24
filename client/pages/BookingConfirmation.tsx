@@ -206,11 +206,56 @@ export default function BookingConfirmation() {
         `Checking payment for ${tempRef}: Using mock data (fetch disabled)`,
       );
       const bookingRef = `FD${Date.now()}`;
-      const result = {
-        success: true,
-        data: {
+
+      let mockData;
+
+      if (bookingType === "flight") {
+        // Mock flight booking data for payment success
+        mockData = {
           bookingRef,
           status: "confirmed",
+          type: "flight",
+          flightDetails: {
+            airline: "Air India",
+            flightNumber: "AI 131",
+            departure: {
+              airport: "Mumbai International (BOM)",
+              city: "Mumbai",
+              time: "08:15",
+              date: "2025-01-26"
+            },
+            arrival: {
+              airport: "Dubai International (DXB)",
+              city: "Dubai",
+              time: "10:30",
+              date: "2025-01-26"
+            },
+            duration: "3h 15m",
+            class: "Economy"
+          },
+          passengers: [
+            {
+              title: "Mr",
+              firstName: "Ahmed",
+              lastName: "Al-Rashid",
+              type: "Adult"
+            }
+          ],
+          totalAmount: 18500,
+          currency: "INR",
+          paymentDetails: {
+            method: "Razorpay",
+            razorpay_payment_id: tempRef,
+            paidAt: new Date().toISOString()
+          },
+          confirmedAt: new Date().toISOString()
+        };
+      } else {
+        // Mock hotel booking data for payment success
+        mockData = {
+          bookingRef,
+          status: "confirmed",
+          type: "hotel",
           hotelDetails: {
             name: "Premium Hotel Dubai",
             address: "Business Bay, Dubai, United Arab Emirates",
@@ -244,7 +289,12 @@ export default function BookingConfirmation() {
             paidAt: new Date().toISOString()
           },
           confirmedAt: new Date().toISOString()
-        } as BookingData,
+        } as BookingData;
+      }
+
+      const result = {
+        success: true,
+        data: mockData,
       };
 
       if (result.success) {
