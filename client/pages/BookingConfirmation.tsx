@@ -773,7 +773,7 @@ export default function BookingConfirmation() {
             className="border-gray-300 text-gray-700 hover:bg-gray-50"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Book Another Hotel
+            Book Another {bookingType === "flight" ? "Flight" : "Hotel"}
           </Button>
           <Button
             onClick={() => navigate("/account/bookings")}
