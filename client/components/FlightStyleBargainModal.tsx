@@ -568,16 +568,16 @@ export function FlightStyleBargainModal({
               </p>
             </div>
 
-            <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg">
+            <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
               <div className="flex items-center justify-center mb-2">
-                <Clock className="w-5 h-5 text-orange-600 mr-2" />
-                <span className="text-orange-600 font-medium">
-                  ⚡ Offer expires in {formatTime(bargainState.timeRemaining)}
+                <Clock className="w-4 h-4 text-gray-600 mr-2" />
+                <span className="text-gray-700 text-sm font-medium">
+                  Offer expires in {formatTime(bargainState.timeRemaining)}
                 </span>
               </div>
               <Progress
                 value={(bargainState.timeRemaining / 30) * 100}
-                className="h-2 mb-3"
+                className="h-1"
               />
             </div>
 
