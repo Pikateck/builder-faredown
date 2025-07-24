@@ -390,6 +390,12 @@ export function FlightStyleBargainModal({
                         /[^0-9]/g,
                         "",
                       );
+                      // Check if this price was already tried
+                      const priceKey = `${priceCalculation.total}-${parseInt(numericValue)}`;
+                      if (numericValue && usedPrices.has(priceKey)) {
+                        // Don't update if price already tried
+                        return;
+                      }
                       setBargainPrice(numericValue);
                     }}
                     placeholder="Enter the total price you want to pay for your stay"
