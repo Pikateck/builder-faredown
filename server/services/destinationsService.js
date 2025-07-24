@@ -4,7 +4,7 @@
  * Integrates with Hotelbeds API for live hotel data
  */
 
-const { Pool } = require("pg");
+import { Pool } from "pg";
 
 class DestinationsService {
   constructor() {
@@ -465,4 +465,4 @@ class DestinationsService {
   }
 }
 
-module.exports = new DestinationsService();
+export default new DestinationsService();
