@@ -99,10 +99,12 @@ export default function BookingConfirmation() {
     }
 
     if (savedHotelBooking) {
+      console.log("🏨 Using saved hotel booking data");
       setBooking(JSON.parse(savedHotelBooking));
       setBookingType("hotel");
-    } else if (savedFlightBooking) {
-      // Fallback to flight booking even if detection failed
+    } else if (savedFlightBooking && !isHotelFlow) {
+      // Only fallback to flight booking if it's not a hotel flow
+      console.log("✈️ Using saved flight booking data");
       setBooking(JSON.parse(savedFlightBooking));
       setBookingType("flight");
     } else {
