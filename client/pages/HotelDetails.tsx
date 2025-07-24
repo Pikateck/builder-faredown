@@ -969,7 +969,10 @@ export default function HotelDetails() {
                                 ).toLocaleString()}
                               </div>
                               <div className="text-xs text-gray-500">
-                                Total Price
+                                Total Price (incl. taxes)
+                              </div>
+                              <div className="text-xs text-gray-400">
+                                ₹{room.pricePerNight.toLocaleString()} per night
                               </div>
                             </div>
                             <ChevronDown
@@ -2149,7 +2152,7 @@ export default function HotelDetails() {
                       {[
                         { icon: "🇺🇸", text: "English" },
                         { icon: "🇦���", text: "Arabic" },
-                        { icon: "🇩🇪", text: "German" },
+                        { icon: "🇩����", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
                         { icon: "🇮🇳", text: "Hindi" },
