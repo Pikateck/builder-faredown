@@ -70,10 +70,18 @@ export default function BookingConfirmation() {
     const typeFromUrl = searchParams.get("type");
     const typeFromStorage = localStorage.getItem("currentBookingType");
 
+    console.log("🔍 Booking type detection:", {
+      typeFromUrl,
+      typeFromStorage,
+      currentUrl: window.location.href
+    });
+
     if (typeFromUrl === "flight" || typeFromStorage === "flight") {
       setBookingType("flight");
+      console.log("✈️ Setting booking type to FLIGHT");
     } else {
       setBookingType("hotel");
+      console.log("🏨 Setting booking type to HOTEL");
     }
 
     if (bookingRef) {
