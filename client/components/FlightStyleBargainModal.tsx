@@ -795,14 +795,14 @@ export function FlightStyleBargainModal({
                     isTimerActive: false,
                   })
                 }
-                className="flex-1 bg-purple-500 hover:bg-purple-600 text-white"
+                className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white"
               >
-                Negotiate Again
+                Try Again
               </Button>
               <Button
                 variant="outline"
                 onClick={handleBookOriginal}
-                className="flex-1"
+                className="flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50"
               >
                 Book Original
               </Button>
