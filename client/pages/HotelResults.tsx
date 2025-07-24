@@ -135,10 +135,7 @@ export default function HotelResults() {
       id: hotel.id || hotel.code || `hotel-${index}`,
       name: hotel.name || `Hotel ${destination}`,
       location: `${hotel.address?.city || destination}, ${hotel.address?.country || "Unknown"}`,
-      images: hotel.images || [
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
-      ],
+      images: transformHotelImages(hotel.images),
       rating: hotel.rating || hotel.reviewScore || 4.0,
       reviews: hotel.reviewCount || 150,
       originalPrice:
