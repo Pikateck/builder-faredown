@@ -256,17 +256,17 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Standard Room",
-          price: 14765, // ~₹179 USD equivalent in INR
+          price: 167, // ₹167 per night
           features: ["King Bed", "City View", "Free WiFi"],
         },
         {
           name: "Deluxe Suite",
-          price: 21370, // ~₹259 USD equivalent in INR
+          price: 215, // ₹215 per night
           features: ["Living Area", "Ocean View", "Mini Bar"],
         },
         {
           name: "Presidential Suite",
-          price: 41170, // ~₹499 USD equivalent in INR
+          price: 350, // ₹350 per night
           features: ["2 Bedrooms", "Private Balcony", "Butler Service"],
         },
       ],
@@ -282,8 +282,8 @@ export default function HotelResults() {
       ],
       rating: 4.6,
       reviews: 856,
-      originalPrice: 37040, // ~₹449 USD equivalent in INR
-      currentPrice: 22195, // ~₹269 USD equivalent in INR
+      originalPrice: 320, // ₹320 per night
+      currentPrice: 275, // ₹275 per night
       description:
         "Beachfront paradise with pristine white sand beaches, crystal clear waters, and tropical luxury.",
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
@@ -296,12 +296,12 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Ocean View Room",
-          price: 22195, // ~₹269 USD equivalent in INR
+          price: 275, // ₹275 per night
           features: ["Queen Bed", "Ocean View", "Balcony"],
         },
         {
           name: "Beach Villa",
-          price: 32920, // ~₹399 USD equivalent in INR
+          price: 450, // ₹450 per night
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
@@ -316,8 +316,8 @@ export default function HotelResults() {
       ],
       rating: 4.9,
       reviews: 567,
-      originalPrice: 16420, // ~₹199 USD equivalent in INR
-      currentPrice: 10640, // ~₹129 USD equivalent in INR
+      originalPrice: 195, // ₹195 per night
+      currentPrice: 155, // ₹155 per night
       description:
         "Cozy mountain retreat with fireplace, ski-in/ski-out access, and breathtaking alpine views.",
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
@@ -325,12 +325,12 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Standard Room",
-          price: 10640, // ~₹129 USD equivalent in INR
+          price: 155, // ₹155 per night
           features: ["Fireplace", "Mountain View", "Cozy Decor"],
         },
         {
           name: "Alpine Suite",
-          price: 16420, // ~₹199 USD equivalent in INR
+          price: 195, // ₹195 per night
           features: ["Separate Living Area", "Hot Tub", "Ski Storage"],
         },
       ],
