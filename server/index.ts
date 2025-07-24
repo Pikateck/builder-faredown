@@ -7,7 +7,7 @@ import {
 } from "../shared/destinations";
 
 // Import database service
-const destinationsService = require("./services/destinationsService");
+import destinationsService from "./services/destinationsService.js";
 
 export function createServer() {
   const app = express();
