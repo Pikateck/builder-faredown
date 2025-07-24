@@ -757,27 +757,33 @@ export function FlightStyleBargainModal({
               </p>
             </div>
 
-            <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
-              <div className="text-sm text-red-700">
-                Suggested minimum:{" "}
-                {formatLocalPrice(
-                  Math.round(priceCalculation.total * 0.75),
-                  selectedCurrency.code,
-                )}
+            <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+              <div className="text-sm text-gray-700">
+                <span className="font-medium">Suggested minimum:</span>{" "}
+                <span className="font-semibold text-gray-900">
+                  {formatLocalPrice(
+                    Math.round(priceCalculation.total * 0.75),
+                    selectedCurrency.code,
+                  )}
+                </span>
               </div>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-red-600">⚠️</span>
-                <span className="text-sm font-medium text-red-800">
-                  Offer Expired!
-                </span>
+            {bargainState.timeRemaining === 0 && (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                <div className="flex items-center space-x-2">
+                  <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700">
+                    Offer Expired
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600 mt-1">
+                  The special price has expired. Try negotiating again!
+                </p>
               </div>
-              <p className="text-xs text-red-700 mt-1">
-                The special price has expired. Try negotiating again!
-              </p>
-            </div>
+            )}
 
             <div className="flex space-x-3">
               <Button
