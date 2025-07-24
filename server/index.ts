@@ -47,8 +47,7 @@ export function createServer() {
       );
 
       // Use database service for search
-      const destinationsServiceInstance = await getDestinationsService();
-      const destinations = await destinationsServiceInstance.searchDestinations(
+      const destinations = await destinationsService.searchDestinations(
         query,
         limit,
         popularOnly,
