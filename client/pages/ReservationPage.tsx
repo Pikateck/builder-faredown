@@ -994,8 +994,9 @@ export default function ReservationPage() {
                     <span>{formatINR(pricing.basePrice)}</span>
                   </div>
                   <div className="text-xs text-gray-500 text-right">
-                    {formatINR(pricing.perNightPrice)} per night × {nights} nights ×{" "}
-                    {rooms} room{rooms > 1 ? "s" : ""} = {formatINR(pricing.basePrice)}
+                    {formatINR(pricing.perNightPrice)} per night × {nights}{" "}
+                    nights × {rooms} room{rooms > 1 ? "s" : ""} ={" "}
+                    {formatINR(pricing.basePrice)}
                   </div>
                   <div className="text-xs text-blue-600 text-right font-medium">
                     Total with taxes & fees: {formatINR(pricing.total)}
@@ -1010,7 +1011,9 @@ export default function ReservationPage() {
 
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold">Total Price (incl. taxes)</span>
+                    <span className="text-lg font-semibold">
+                      Total Price (incl. taxes)
+                    </span>
                     <span className="text-xl font-bold text-blue-600">
                       {formatINR(grandTotal)}
                     </span>
@@ -1019,7 +1022,8 @@ export default function ReservationPage() {
                     All taxes, fees & charges included
                   </div>
                   <div className="text-xs text-gray-400 text-right">
-                    {formatINR(pricing.perNightPrice)} per night × {nights} nights
+                    {formatINR(pricing.perNightPrice)} per night × {nights}{" "}
+                    nights
                   </div>
                   {hotelData.isBargained && (
                     <div className="bg-green-50 p-2 rounded mt-2">

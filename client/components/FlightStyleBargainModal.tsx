@@ -331,7 +331,17 @@ export function FlightStyleBargainModal({
                     )}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {formatLocalPrice(roomType.totalPrice, selectedCurrency.code)} per night × {Math.ceil((new Date(hotel.checkOut).getTime() - new Date(hotel.checkIn).getTime()) / (1000 * 60 * 60 * 24))} nights
+                    {formatLocalPrice(
+                      roomType.totalPrice,
+                      selectedCurrency.code,
+                    )}{" "}
+                    per night ×{" "}
+                    {Math.ceil(
+                      (new Date(hotel.checkOut).getTime() -
+                        new Date(hotel.checkIn).getTime()) /
+                        (1000 * 60 * 60 * 24),
+                    )}{" "}
+                    nights
                   </p>
                   <p className="text-xs text-gray-400 mt-1">
                     Taxes, fees & charges included
@@ -353,7 +363,9 @@ export function FlightStyleBargainModal({
                 <div className="relative">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                      <span className="text-transparent bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text font-bold text-sm">AI</span>
+                      <span className="text-transparent bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text font-bold text-sm">
+                        AI
+                      </span>
                     </div>
                   </div>
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
@@ -370,7 +382,8 @@ export function FlightStyleBargainModal({
                     </div>
                   </div>
                   <p className="text-xs text-gray-600">
-                    Tell me your target price and I'll negotiate with the hotel in real-time!
+                    Tell me your target price and I'll negotiate with the hotel
+                    in real-time!
                   </p>
                 </div>
               </div>
@@ -398,9 +411,19 @@ export function FlightStyleBargainModal({
                       }
                       setBargainPrice(numericValue);
                     }}
-                    placeholder={usedPrices.size > 0 ? `Already tried: ${Array.from(usedPrices).map(p => formatNumberWithCommas(p.split("-")[1])).join(", ")} - Try different price` : "Enter the total price you want to pay for your stay"}
+                    placeholder={
+                      usedPrices.size > 0
+                        ? `Already tried: ${Array.from(usedPrices)
+                            .map((p) => formatNumberWithCommas(p.split("-")[1]))
+                            .join(", ")} - Try different price`
+                        : "Enter the total price you want to pay for your stay"
+                    }
                     className={`text-xl font-bold text-center py-6 border-2 focus:border-purple-500 placeholder:text-gray-400 placeholder:font-normal ${
-                      usedPrices.size > 0 && bargainPrice && usedPrices.has(`${priceCalculation.total}-${parseInt(bargainPrice)}`)
+                      usedPrices.size > 0 &&
+                      bargainPrice &&
+                      usedPrices.has(
+                        `${priceCalculation.total}-${parseInt(bargainPrice)}`,
+                      )
                         ? "border-red-300 bg-red-50"
                         : "border-purple-200"
                     }`}
@@ -458,25 +481,46 @@ export function FlightStyleBargainModal({
               </div>
 
               {/* Inline validation for duplicate prices */}
-              {bargainPrice && parseInt(bargainPrice) > 0 && usedPrices.has(`${priceCalculation.total}-${parseInt(bargainPrice)}`) && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-sm font-medium text-red-800">
-                      This price was already tried. Please enter a different amount.
-                    </span>
+              {bargainPrice &&
+                parseInt(bargainPrice) > 0 &&
+                usedPrices.has(
+                  `${priceCalculation.total}-${parseInt(bargainPrice)}`,
+                ) && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mt-2">
+                    <div className="flex items-center space-x-2">
+                      <svg
+                        className="w-4 h-4 text-red-600"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium text-red-800">
+                        This price was already tried. Please enter a different
+                        amount.
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* AI Tips */}
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 shadow-sm">
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
-                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div>
@@ -486,15 +530,24 @@ export function FlightStyleBargainModal({
                     <div className="space-y-2 text-xs text-blue-800">
                       <p className="flex items-center space-x-1">
                         <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                        <span><strong>20-30% below</strong> current price = Higher success rate</span>
+                        <span>
+                          <strong>20-30% below</strong> current price = Higher
+                          success rate
+                        </span>
                       </p>
                       <p className="flex items-center space-x-1">
                         <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-                        <span><strong>Total Price Inclusive</strong> - taxes, fees & charges included</span>
+                        <span>
+                          <strong>Total Price Inclusive</strong> - taxes, fees &
+                          charges included
+                        </span>
                       </p>
                       <p className="flex items-center space-x-1">
                         <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
-                        <span>AI matches your budget or offers the closest possible deal!</span>
+                        <span>
+                          AI matches your budget or offers the closest possible
+                          deal!
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -556,8 +609,18 @@ export function FlightStyleBargainModal({
           <div className="space-y-6">
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-4 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-[#003580]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                <svg
+                  className="w-8 h-8 text-[#003580]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                  />
                 </svg>
               </div>
               <h3 className="font-semibold text-xl text-gray-900 mb-2">
@@ -588,14 +651,17 @@ export function FlightStyleBargainModal({
                   <div className="text-lg text-gray-700 font-medium">
                     {selectedCurrency.symbol}
                     {(
-                      bargainState.userOffers[bargainState.userOffers.length - 1] ||
-                      0
+                      bargainState.userOffers[
+                        bargainState.userOffers.length - 1
+                      ] || 0
                     ).toLocaleString()}
                   </div>
                 </div>
 
                 <div className="border-t border-gray-100 pt-4">
-                  <div className="text-sm text-[#003580] font-medium mb-2">Hotel's Counter Offer</div>
+                  <div className="text-sm text-[#003580] font-medium mb-2">
+                    Hotel's Counter Offer
+                  </div>
                   <div className="text-3xl font-bold text-gray-900 mb-2">
                     {selectedCurrency.symbol}
                     {(bargainState.currentCounterOffer || 0).toLocaleString()}
@@ -742,8 +808,18 @@ export function FlightStyleBargainModal({
         return (
           <div className="text-center space-y-6">
             <div className="w-16 h-16 mx-auto mb-4 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
             <div>
@@ -772,8 +848,16 @@ export function FlightStyleBargainModal({
             {bargainState.timeRemaining === 0 && (
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
                 <div className="flex items-center space-x-2">
-                  <svg className="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <svg
+                    className="w-4 h-4 text-gray-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                   <span className="text-sm font-medium text-gray-700">
                     Offer Expired

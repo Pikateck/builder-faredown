@@ -138,7 +138,9 @@ export function HotelCard({
   );
 
   // Calculate per night price inclusive of taxes for display
-  const perNightInclusiveTaxes = Math.round(priceCalculation.total / totalNights);
+  const perNightInclusiveTaxes = Math.round(
+    priceCalculation.total / totalNights,
+  );
   const totalPriceInclusiveTaxes = priceCalculation.total;
 
   const nextImage = () => {
@@ -333,7 +335,8 @@ export function HotelCard({
                     </span>
                   </div>
                   <div className="text-xs text-gray-500">
-                    {formatPrice(perNightInclusiveTaxes)} per night • {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+                    {formatPrice(perNightInclusiveTaxes)} per night •{" "}
+                    {totalNights} {totalNights === 1 ? "night" : "nights"}
                   </div>
                   <div className="text-xs text-gray-400">
                     incl. taxes & fees
@@ -498,11 +501,10 @@ export function HotelCard({
                 </span>
               </div>
               <div className="text-xs sm:text-sm text-gray-500">
-                {formatPrice(perNightInclusiveTaxes)} per night • {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+                {formatPrice(perNightInclusiveTaxes)} per night • {totalNights}{" "}
+                {totalNights === 1 ? "night" : "nights"}
               </div>
-              <div className="text-xs text-gray-400">
-                incl. taxes & fees
-              </div>
+              <div className="text-xs text-gray-400">incl. taxes & fees</div>
             </div>
 
             <div className="flex space-x-2 flex-shrink-0">

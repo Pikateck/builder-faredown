@@ -89,7 +89,9 @@ export default function HotelResults() {
       .map((img: any) => {
         if (typeof img === "string") {
           // If it's already a URL string
-          return img.includes("http") ? img : `https://photos.hotelbeds.com/giata/original/${img}`;
+          return img.includes("http")
+            ? img
+            : `https://photos.hotelbeds.com/giata/original/${img}`;
         } else if (img && img.path) {
           // Hotelbeds image object with path
           return `https://photos.hotelbeds.com/giata/original/${img.path}`;
@@ -108,7 +110,9 @@ export default function HotelResults() {
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format",
       ];
     } else if (processedImages.length === 1) {
-      processedImages.push("https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format");
+      processedImages.push(
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format",
+      );
     }
 
     return processedImages.slice(0, 6); // Limit to 6 images max
