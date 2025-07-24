@@ -63,6 +63,7 @@ export default function BookingConfirmation() {
   const [booking, setBooking] = useState<BookingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [bookingType, setBookingType] = useState<"flight" | "hotel">("hotel");
 
   useEffect(() => {
     if (bookingRef) {
