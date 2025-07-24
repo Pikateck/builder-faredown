@@ -440,7 +440,7 @@ export default function BookingConfirmation() {
                 Booking Confirmed!
               </h1>
               <p className="text-green-700 text-sm sm:text-base">
-                Your hotel reservation has been successfully confirmed
+                Your {bookingType === "flight" ? "flight ticket" : "hotel reservation"} has been successfully confirmed
               </p>
             </div>
           </div>
