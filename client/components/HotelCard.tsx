@@ -328,15 +328,15 @@ export function HotelCard({
               <div className="flex items-center justify-between mb-3">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-[#003580]">
-                      {formatPrice(perNightInclusiveTaxes)}
+                    <span className="text-2xl font-bold text-[#003580]">
+                      {formatPrice(totalPriceInclusiveTaxes)}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-600">
-                    per night (incl. taxes)
+                  <div className="text-xs text-gray-500">
+                    {formatPrice(perNightInclusiveTaxes)} per night • {totalNights} {totalNights === 1 ? 'night' : 'nights'}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Total: {formatPrice(totalPriceInclusiveTaxes)} for {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+                  <div className="text-xs text-gray-400">
+                    incl. taxes & fees
                   </div>
                 </div>
               </div>
@@ -493,15 +493,15 @@ export function HotelCard({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
             <div className="min-w-0">
               <div className="flex items-center space-x-2 mb-1">
-                <span className="text-lg sm:text-2xl font-bold text-[#003580]">
-                  {formatPrice(perNightInclusiveTaxes)}
+                <span className="text-xl sm:text-3xl font-bold text-[#003580]">
+                  {formatPrice(totalPriceInclusiveTaxes)}
                 </span>
               </div>
-              <div className="text-xs sm:text-sm text-gray-600">
-                per night (incl. taxes)
+              <div className="text-xs sm:text-sm text-gray-500">
+                {formatPrice(perNightInclusiveTaxes)} per night • {totalNights} {totalNights === 1 ? 'night' : 'nights'}
               </div>
-              <div className="text-xs text-gray-500 mt-1">
-                Total: {formatPrice(totalPriceInclusiveTaxes)} for {totalNights} {totalNights === 1 ? 'night' : 'nights'}
+              <div className="text-xs text-gray-400">
+                incl. taxes & fees
               </div>
             </div>
 
