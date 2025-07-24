@@ -759,7 +759,10 @@ export class HotelsService {
         console.log(`🔍 Searching destinations via ${isProduction ? 'production' : 'development'} API: "${query}"`);
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        const timeoutId = setTimeout(() => {
+          console.log("⏰ API request timeout - aborting");
+          controller.abort();
+        }, 5000); // 5 second timeout
 
         const response = await fetch(apiUrl, {
           method: "GET",
