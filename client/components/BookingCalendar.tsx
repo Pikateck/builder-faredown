@@ -264,7 +264,7 @@ export function BookingCalendar({
         }
       `}</style>
 
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-lg max-w-full overflow-hidden">
         {/* Header with selected dates and close button */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
