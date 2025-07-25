@@ -92,6 +92,7 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-conditions" element={<TermsConditions />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
             <Route path="/my-trips" element={<MyTrips />} />
 
             {/* Development/Testing Routes */}
