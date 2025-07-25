@@ -647,7 +647,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
         {/* Mumbai-Dubai Summary */}
         <div className="mb-4">
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Mumbai �� Dubai
+            Mumbai → Dubai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -2329,7 +2329,7 @@ export default function BookingFlow() {
                           {selectedRefundProtection === "yes" && (
                             <div className="flex justify-between">
                               <span>Refund Protection</span>
-                              <span>₹27,803</span>
+                              <span>{formatCurrency(calculateRefundProtectionCost())}</span>
                             </div>
                           )}
                           {selectedOtherOptions.length > 0 && (
