@@ -374,19 +374,22 @@ export default function FlightResults() {
     return result.trim() + " Rupees Only";
   };
 
-  // Airlines filter state - Initialize with all airlines selected to show all flights by default
-  const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
-    new Set([
-      "Emirates",
-      "Air India",
-      "Fly Dubai",
-      "Air Arabia",
-      "Spice Air",
-      "Gopal Air",
-      "Spicejet",
-      "Indigo",
-    ]),
-  );
+  // Enhanced filter states
+  const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(new Set());
+  const [selectedStops, setSelectedStops] = useState<string>("any");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
+  const [departureTimeRange, setDepartureTimeRange] = useState<[number, number]>([0, 24]);
+  const [arrivalTimeRange, setArrivalTimeRange] = useState<[number, number]>([0, 24]);
+  const [maxDuration, setMaxDuration] = useState<number>(24);
+  const [hoveredAirline, setHoveredAirline] = useState<string | null>(null);
+  const [selectedAirports, setSelectedAirports] = useState<Set<string>>(new Set());
+
+  // Get unique airlines from flight data
+  const availableAirlines = Array.from(new Set(flightData.map(flight => flight.airline)));
+  const airlineCounts = availableAirlines.reduce((acc, airline) => {
+    acc[airline] = flightData.filter(flight => flight.airline === airline).length;
+    return acc;
+  }, {} as Record<string, number>);
 
   // Exchange rates relative to INR (base currency)
   const exchangeRates = {
