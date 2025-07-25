@@ -505,7 +505,7 @@ export default function HotelDetails() {
                     <img
                       src={hotel.image}
                       alt={hotel.name}
-                      className="w-full h-48 sm:h-56 md:h-64 lg:h-80 object-cover rounded-t-lg"
+                      className="w-full h-40 sm:h-48 md:h-56 lg:h-72 xl:h-80 object-cover rounded-t-lg"
                     />
                     <div className="absolute top-4 right-4 flex items-center gap-2">
                       <div className="relative" ref={saveDropdownRef}>
@@ -1616,7 +1616,7 @@ export default function HotelDetails() {
                         <span className="mr-2">���</span> TV Lounge
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🏊</span> Outdoor Freshwater pool
+                        <span className="mr-2">����</span> Outdoor Freshwater pool
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🎵</span> Live music/performance
@@ -1659,7 +1659,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛎️</span> Concierge service
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">����</span> Luggage storage
+                        <span className="mr-2">🧳</span> Luggage storage
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">💼</span> Business centre
