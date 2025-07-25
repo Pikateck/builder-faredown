@@ -898,7 +898,12 @@ export class HotelsService {
       // Return default amenities if API fails
       return this.getDefaultAmenities();
     } catch (error) {
-      console.warn("Failed to fetch amenities, using defaults:", error);
+      // Handle AbortError specifically to avoid console noise
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log("⏰ Amenities request was aborted, using defaults");
+      } else {
+        console.warn("Failed to fetch amenities, using defaults:", error instanceof Error ? error.message : "Unknown error");
+      }
       return this.getDefaultAmenities();
     }
   }
