@@ -1395,57 +1395,7 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Popular Destinations Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Popular Flight Destinations
-              </h2>
-              <p className="text-gray-600 text-lg">
-                Discover the most searched destinations and get the best deals
-              </p>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[
-                { city: "Dubai", country: "UAE", price: "₹32,168", image: "🏙️", popular: true, savings: "Up to 20% Saved" },
-                { city: "London", country: "UK", price: "₹45,250", image: "🏛️", popular: true, savings: "Bargain Unlocked" },
-                { city: "Paris", country: "France", price: "₹42,890", image: "🗼", popular: false, savings: "Up to 15% Saved" },
-                { city: "Singapore", country: "Singapore", price: "₹28,450", image: "🌆", popular: true, savings: "Bargain Unlocked" },
-                { city: "Bangkok", country: "Thailand", price: "₹24,680", image: "🏯", popular: false, savings: "Up to 25% Saved" },
-                { city: "New York", country: "USA", price: "₹52,340", image: "🗽", popular: true, savings: "Bargain Unlocked" },
-                { city: "Tokyo", country: "Japan", price: "₹38,920", image: "🏯", popular: false, savings: "Up to 18% Saved" },
-                { city: "Sydney", country: "Australia", price: "₹48,750", image: "🏖️", popular: false, savings: "Up to 12% Saved" }
-              ].map((destination, index) => (
-                <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group relative">
-                  <div className="aspect-w-16 aspect-h-9 bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-center relative overflow-hidden">
-                    <div className="text-4xl mb-2">{destination.image}</div>
-                    {destination.popular && (
-                      <Badge className="bg-yellow-500 text-white text-xs">Popular</Badge>
-                    )}
-
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-green-600 bg-opacity-95 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="text-white text-center">
-                        <div className="text-sm font-bold">{destination.savings}</div>
-                        <div className="text-xs">Start Bargaining →</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900">{destination.city}</h3>
-                    <p className="text-sm text-gray-500 mb-2">{destination.country}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-[#003580]">{destination.price}</span>
-                      <span className="text-xs text-gray-500">Round trip</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* How It Works Section */}
         <section className="py-16 bg-white">
