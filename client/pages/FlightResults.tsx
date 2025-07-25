@@ -275,6 +275,7 @@ export default function FlightResults() {
   const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
   const [isOfferValid, setIsOfferValid] = useState(false);
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
+  const [duplicatePriceError, setDuplicatePriceError] = useState(false);
 
   // Format number with commas
   const formatNumberWithCommas = (num: string) => {
