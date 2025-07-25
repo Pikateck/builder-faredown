@@ -1125,26 +1125,34 @@ export default function Index() {
                       </button>
 
                       {showCalendar && (
-                        <div className="fixed top-14 left-0 right-0 bottom-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:bottom-auto z-[99999] w-full sm:w-[700px] max-w-[700px] overflow-y-auto bg-white sm:bg-transparent">
-                          <div className="p-4 sm:p-0 h-full sm:h-auto">
-                            <BookingCalendar
-                              initialRange={{
-                                startDate: selectedDepartureDate || new Date(),
-                                endDate: selectedReturnDate || (selectedDepartureDate ? new Date(selectedDepartureDate.getTime() + 7 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))
-                              }}
-                              onChange={(range) => {
-                                console.log("Flight calendar range selected:", range);
-                                setSelectedDepartureDate(range.startDate);
-                                if (tripType === "round-trip") {
-                                  setSelectedReturnDate(range.endDate);
-                                }
-                              }}
-                              onClose={() => setShowCalendar(false)}
-                              className="w-full"
-                              bookingType="flight"
-                            />
+                        <>
+                          {/* Mobile Overlay */}
+                          <div className="fixed inset-0 z-[99999] bg-black bg-opacity-50 sm:hidden" onClick={() => setShowCalendar(false)} />
+
+                          {/* Calendar Container */}
+                          <div className="fixed top-16 left-4 right-4 bottom-16 z-[100000] sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:top-14 sm:bottom-auto sm:w-[700px] sm:max-w-[700px]">
+                            <div className="h-full overflow-y-auto sm:h-auto bg-white rounded-lg sm:rounded-lg shadow-2xl">
+                              <div className="p-0">
+                                <BookingCalendar
+                                  initialRange={{
+                                    startDate: selectedDepartureDate || new Date(),
+                                    endDate: selectedReturnDate || (selectedDepartureDate ? new Date(selectedDepartureDate.getTime() + 7 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))
+                                  }}
+                                  onChange={(range) => {
+                                    console.log("Flight calendar range selected:", range);
+                                    setSelectedDepartureDate(range.startDate);
+                                    if (tripType === "round-trip") {
+                                      setSelectedReturnDate(range.endDate);
+                                    }
+                                  }}
+                                  onClose={() => setShowCalendar(false)}
+                                  className="w-full"
+                                  bookingType="flight"
+                                />
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        </>
                       )}
                     </div>
 
