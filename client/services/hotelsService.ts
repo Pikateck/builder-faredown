@@ -737,7 +737,7 @@ export class HotelsService {
       { id: "AKL", name: "Auckland", type: "city" as const, country: "New Zealand", code: "AKL", flag: "🇳🇿" },
       { id: "NRT", name: "Tokyo", type: "city" as const, country: "Japan", code: "NRT", flag: "🇯🇵", popular: true },
       { id: "KIX", name: "Osaka", type: "city" as const, country: "Japan", code: "KIX", flag: "🇯🇵" },
-      { id: "ICN", name: "Seoul", type: "city" as const, country: "South Korea", code: "ICN", flag: "🇰🇷" },
+      { id: "ICN", name: "Seoul", type: "city" as const, country: "South Korea", code: "ICN", flag: "🇰��" },
       { id: "TPE", name: "Taipei", type: "city" as const, country: "Taiwan", code: "TPE", flag: "🇹🇼" },
       { id: "HKG", name: "Hong Kong", type: "city" as const, country: "Hong Kong", code: "HKG", flag: "🇭🇰", popular: true },
       { id: "SIN", name: "Singapore", type: "city" as const, country: "Singapore", code: "SIN", flag: "🇸🇬", popular: true },
@@ -861,6 +861,12 @@ export class HotelsService {
       }));
 
     } catch (error) {
+      // Handle AbortError specifically
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log(`⏰ Main search was aborted for query: "${query}"`);
+        return [];
+      }
+
       console.warn("Destination search encountered error:", error);
 
       // Even in case of complete failure, return some popular destinations if query matches
