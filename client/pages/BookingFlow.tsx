@@ -1292,19 +1292,19 @@ export default function BookingFlow() {
             from: "Mumbai",
             to: "Dubai",
             date: "Aug 5, 2024",
-            time: "14:35",
-            duration: "3h 15m",
-            airline: "Emirates",
-            flightNumber: "EK 507",
+            time: selectedFlight?.departureTime || "14:35",
+            duration: selectedFlight?.duration || "3h 15m",
+            airline: selectedFlight?.airline || "Airlines",
+            flightNumber: selectedFlight?.flightNumber || "FL 507",
           },
           {
             from: "Dubai",
             to: "Mumbai",
             date: "Aug 8, 2024",
-            time: "08:45",
-            duration: "3h 20m",
-            airline: "Emirates",
-            flightNumber: "EK 508",
+            time: selectedFlight?.returnDepartureTime || "08:45",
+            duration: selectedFlight?.returnDuration || "3h 20m",
+            airline: selectedFlight?.airline || "Airlines",
+            flightNumber: selectedFlight?.returnFlightNumber || "FL 508",
           },
         ],
         seats: Object.entries(seatSelections).flatMap(([flight, seats]) =>
@@ -1777,7 +1777,7 @@ export default function BookingFlow() {
                                   15kg - ₹ 4,200
                                 </SelectItem>
                                 <SelectItem value="20kg">
-                                  20kg - ₹ 5,500
+                                  20kg - ��� 5,500
                                 </SelectItem>
                                 <SelectItem value="25kg">
                                   25kg - ��� 6,800
