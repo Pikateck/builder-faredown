@@ -459,7 +459,7 @@ export default function HotelDetails() {
                 <X className="w-5 h-5" />
               </Button>
             </div>
-            {/* Use the same EnhancedFilters component as HotelResults page */}
+            {/* Enhanced Filters Component */}
             <EnhancedFilters
               priceRange={[Math.round((priceRange / 100) * 15000), 15000]}
               setPriceRange={(range) => setPriceRange((range[0] / 15000) * 100)}
@@ -473,15 +473,15 @@ export default function HotelDetails() {
               }}
             />
 
-            {/* Mobile close button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="lg:hidden mt-4 w-full"
-              onClick={() => setIsMobileFilterOpen(false)}
-            >
-              Close Filters
-            </Button>
+            {/* Mobile Apply Filters Button */}
+            <div className="lg:hidden mt-6 pt-4 border-t border-gray-200">
+              <Button
+                className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-3"
+                onClick={() => setIsMobileFilterOpen(false)}
+              >
+                Apply Filters
+              </Button>
+            </div>
 
           </div>
         </div>
