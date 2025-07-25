@@ -1,6 +1,7 @@
 /* Import mobile enhancements */
 @import "./styles/mobile-enhancements.css";
 @import "./styles/admin-mobile.css";
+@import "./styles/mobile-optimizations.css";
 
 @tailwind base;
 @tailwind components;
