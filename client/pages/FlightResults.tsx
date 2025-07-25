@@ -893,7 +893,7 @@ export default function FlightResults() {
                       GBP: { symbol: "£", name: "British Pound" },
                       INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
-                      SAR: { symbol: "﷼", name: "Saudi Riyal" },
+                      SAR: { symbol: "���", name: "Saudi Riyal" },
                       JPY: { symbol: "¥", name: "Japanese Yen" },
                       CNY: { symbol: "¥", name: "Chinese Yuan" },
                       SGD: { symbol: "S$", name: "Singapore Dollar" },
@@ -1228,37 +1228,6 @@ export default function FlightResults() {
                   />
                 </PopoverContent>
               </Popover>
-
-              {showCalendar && (
-                <>
-                  {/* Mobile Overlay */}
-                  <div className="fixed inset-0 z-[99999] bg-black bg-opacity-50 sm:hidden" onClick={() => setShowCalendar(false)} />
-
-                  {/* Calendar Container */}
-                  <div className="fixed top-16 left-4 right-4 bottom-16 z-[100000] sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:top-14 sm:bottom-auto sm:w-[700px] sm:max-w-[700px]">
-                    <div className="h-full overflow-y-auto sm:h-auto bg-white rounded-lg sm:rounded-lg shadow-2xl">
-                      <div className="p-0">
-                        <BookingCalendar
-                          initialRange={{
-                            startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
-                            endDate: selectedReturnDate ? new Date(selectedReturnDate) : addDays(new Date(), 7)
-                          }}
-                          onChange={(range) => {
-                            console.log("Flight results calendar range selected:", range);
-                            setSelectedDepartureDate(formatDateHelper(range.startDate));
-                            if (tripType === "round-trip") {
-                              setSelectedReturnDate(formatDateHelper(range.endDate));
-                            }
-                          }}
-                          onClose={() => setShowCalendar(false)}
-                          className="w-full"
-                          bookingType="flight"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
 
             <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
