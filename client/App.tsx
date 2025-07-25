@@ -82,6 +82,9 @@ function App() {
             <Route path="/sports" element={<SportsEvents />} />
             <Route path="/sports-events" element={<SportsEvents />} />
             <Route path="/transfers" element={<Transfers />} />
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/help-center" element={<HelpCenter />} />
+            <Route path="/support" element={<HelpCenter />} />
             <Route path="/my-trips" element={<MyTrips />} />
 
             {/* Development/Testing Routes */}
