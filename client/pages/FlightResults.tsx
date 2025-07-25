@@ -1217,7 +1217,7 @@ export default function FlightResults() {
               </button>
 
               {showCalendar && (
-                <div className="absolute top-14 left-0 right-0 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-full sm:w-[700px] max-w-[700px] overflow-hidden">
+                <div className="fixed top-14 left-0 right-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[99999] w-full sm:w-[700px] max-w-[700px] overflow-hidden">
                   <div className="p-4">
                     {/* Calendar Header */}
                     <div className="flex items-center justify-between mb-4">
