@@ -110,7 +110,8 @@ function App() {
             <Route path="/admin/testing" element={<AdminTestingDashboard />} />
 
             {/* Mobile App Routes */}
-            <Route path="/mobile" element={<MobileHome />} />
+            <Route path="/mobile" element={<MobileSplash />} />
+            <Route path="/mobile-splash" element={<MobileSplash />} />
             <Route path="/mobile-home" element={<MobileHome />} />
             <Route path="/mobile-search" element={<MobileSearch />} />
             <Route path="/mobile-bargain" element={<MobileBargain />} />
