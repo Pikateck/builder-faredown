@@ -965,13 +965,13 @@ export default function FlightResults() {
               </div>
 
               {/* Airlines Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Airlines</h4>
-                <div className="space-y-1 max-h-40 overflow-y-auto">
+              <div className="p-3 border-b border-gray-100">
+                <h4 className="font-medium text-gray-900 mb-2">Airlines</h4>
+                <div className="space-y-0.5 max-h-40 overflow-y-auto">
                   {availableAirlines.map((airline) => (
                     <label
                       key={airline}
-                      className="flex items-center justify-between cursor-pointer hover:bg-blue-50 p-2 rounded transition-colors group relative"
+                      className="flex items-center justify-between cursor-pointer hover:bg-blue-50 px-2 py-1.5 rounded transition-colors group relative"
                       onMouseEnter={() => setHoveredAirline(airline)}
                       onMouseLeave={() => setHoveredAirline(null)}
                     >
@@ -980,7 +980,7 @@ export default function FlightResults() {
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
                           onChange={(e) => handleAirlineFilter(airline, e.target.checked)}
-                          className="text-blue-600 focus:ring-blue-500"
+                          className="text-blue-600 focus:ring-blue-500 w-4 h-4"
                         />
                         <span className={`text-sm transition-colors ${
                           hoveredAirline === airline ? 'text-blue-600 font-medium' : 'text-gray-700'
