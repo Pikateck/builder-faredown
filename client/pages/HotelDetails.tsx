@@ -937,13 +937,10 @@ export default function HotelDetails() {
                           </div>
                         </div>
 
-                        {/* Bottom Guarantee */}
-                        <div className="bg-white bg-opacity-60 rounded-lg p-2 text-center">
-                          <p className="text-xs text-gray-700">
-                            <span className="font-medium text-green-700">
-                              ✓ Final Price Guarantee
-                            </span>{" "}
-                            - No hidden costs or additional charges
+                        {/* Bottom Badge */}
+                        <div className="bg-[#e7f0fa] border border-[#0071c2] rounded-lg p-2 text-center mt-4">
+                          <p className="text-xs font-medium text-[#003580]">
+                            ✓ Booking.com-style transparency with smart pricing
                           </p>
                         </div>
                       </div>
