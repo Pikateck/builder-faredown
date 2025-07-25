@@ -1411,7 +1411,7 @@ export default function FlightResults() {
               </button>
             </div>
 
-            <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+            <div className="max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
               {/* Stops Filter */}
               <div className="space-y-1">
                 <div className="border-b border-gray-200 pb-1">
@@ -1423,7 +1423,7 @@ export default function FlightResults() {
                   { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
                   { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
                 ].map((option) => (
-                  <div key={option.value} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                  <div key={option.value} className="flex items-center justify-between py-0.5 min-h-[24px] pr-1">
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                       <div className="w-4 h-4 flex items-center justify-center mr-2">
                         <input
@@ -1437,7 +1437,7 @@ export default function FlightResults() {
                       </div>
                       {option.label}
                     </label>
-                    <span className="text-xs text-gray-500 ml-1">{option.count}</span>
+                    <span className="text-xs text-gray-500 ml-2 mr-1">{option.count}</span>
                   </div>
                 ))}
               </div>
@@ -1450,7 +1450,7 @@ export default function FlightResults() {
                 {availableAirlines.map((airline) => (
                   <div
                     key={airline}
-                    className="flex items-center justify-between py-0.5 min-h-[24px] group relative"
+                    className="flex items-center justify-between py-0.5 min-h-[24px] group relative pr-1"
                     onMouseEnter={() => setHoveredAirline(airline)}
                     onMouseLeave={() => setHoveredAirline(null)}
                   >
@@ -1468,7 +1468,7 @@ export default function FlightResults() {
                       </span>
                     </label>
                     <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500 ml-1">{airlineCounts[airline]}</span>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">{airlineCounts[airline]}</span>
                       {hoveredAirline === airline && (
                         <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
                           Only this airline
