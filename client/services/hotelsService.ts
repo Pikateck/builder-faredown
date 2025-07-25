@@ -415,16 +415,21 @@ export class HotelsService {
    * Book a hotel
    */
   async bookHotel(bookingData: HotelBookingRequest): Promise<HotelBooking> {
-    const response = await apiClient.post<ApiResponse<HotelBooking>>(
-      `${this.baseUrl}/book`,
-      bookingData,
-    );
+    try {
+      const response = await apiClient.post<ApiResponse<HotelBooking>>(
+        `${this.baseUrl}/book`,
+        bookingData,
+      );
 
-    if (response.data) {
-      return response.data;
+      if (response && response.data) {
+        return response.data;
+      }
+
+      throw new Error("Failed to book hotel");
+    } catch (error) {
+      console.error("Hotel booking error:", error);
+      throw new Error("Failed to book hotel");
     }
-
-    throw new Error("Failed to book hotel");
   }
 
   /**
