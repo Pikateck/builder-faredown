@@ -45,46 +45,73 @@ export default function MyTrips() {
     // Also load any existing bookings that haven't been added to trips yet
     const existingTrips = [...savedTrips];
 
+    // Generate unique ID function
+    const generateUniqueId = (bookingType: string, baseId?: string) => {
+      const timestamp = Date.now();
+      const random = Math.random().toString(36).substr(2, 5);
+      return baseId && baseId !== ""
+        ? `${baseId}_${timestamp}`
+        : `${bookingType.toUpperCase()}_${timestamp}_${random}`;
+    };
+
     // Check for flight booking
     const flightBooking = localStorage.getItem("latestBooking");
     if (flightBooking) {
-      const flightData = JSON.parse(flightBooking);
-      // Check if this booking is already in trips
-      const existsInTrips = existingTrips.some(
-        (trip) => trip.id === flightData.id,
-      );
-      if (!existsInTrips) {
-        const flightTrip: Trip = {
-          ...flightData,
-          bookingType: "flight",
-          bookingDate: new Date().toISOString(),
-        };
-        existingTrips.push(flightTrip);
+      try {
+        const flightData = JSON.parse(flightBooking);
+        // Ensure unique ID for flight booking
+        const uniqueFlightId = generateUniqueId("flight", flightData.id);
+
+        // Check if this booking is already in trips (by original ID or unique ID)
+        const existsInTrips = existingTrips.some(
+          (trip) => trip.id === flightData.id || trip.id === uniqueFlightId,
+        );
+
+        if (!existsInTrips && flightData.id) {
+          const flightTrip: Trip = {
+            ...flightData,
+            id: uniqueFlightId,
+            bookingType: "flight",
+            bookingDate: new Date().toISOString(),
+          };
+          existingTrips.push(flightTrip);
+        }
+      } catch (error) {
+        console.error("Error parsing flight booking:", error);
       }
     }
 
     // Check for hotel booking
     const hotelBooking = localStorage.getItem("latestHotelBooking");
     if (hotelBooking) {
-      const hotelData = JSON.parse(hotelBooking);
-      // Check if this booking is already in trips
-      const existsInTrips = existingTrips.some(
-        (trip) => trip.id === hotelData.id,
-      );
-      if (!existsInTrips) {
-        const hotelTrip: Trip = {
-          ...hotelData,
-          bookingType: "hotel",
-          bookingDate: hotelData.bookingDate || new Date().toISOString(),
-        };
-        existingTrips.push(hotelTrip);
+      try {
+        const hotelData = JSON.parse(hotelBooking);
+        // Ensure unique ID for hotel booking
+        const uniqueHotelId = generateUniqueId("hotel", hotelData.id);
+
+        // Check if this booking is already in trips (by original ID or unique ID)
+        const existsInTrips = existingTrips.some(
+          (trip) => trip.id === hotelData.id || trip.id === uniqueHotelId,
+        );
+
+        if (!existsInTrips && hotelData.id) {
+          const hotelTrip: Trip = {
+            ...hotelData,
+            id: uniqueHotelId,
+            bookingType: "hotel",
+            bookingDate: hotelData.bookingDate || new Date().toISOString(),
+          };
+          existingTrips.push(hotelTrip);
+        }
+      } catch (error) {
+        console.error("Error parsing hotel booking:", error);
       }
     }
 
     // Add a test hotel booking if no trips exist (for testing)
     if (existingTrips.length === 0) {
       const testHotelTrip: Trip = {
-        id: "HB240001",
+        id: generateUniqueId("hotel", "HB240001"),
         bookingType: "hotel",
         bookingDate: "2024-01-16",
         total: 9148,
@@ -119,19 +146,24 @@ export default function MyTrips() {
       existingTrips.push(testHotelTrip);
     }
 
-    // Update localStorage with the combined trips
-    if (existingTrips.length > savedTrips.length) {
-      localStorage.setItem("myTrips", JSON.stringify(existingTrips));
-    }
-
-    console.log("All trips:", existingTrips);
-    console.log(
-      "Hotel trips:",
-      existingTrips.filter((trip) => trip.bookingType === "hotel"),
+    // Remove any potential duplicates by ID (additional safeguard)
+    const uniqueTrips = existingTrips.filter((trip, index, self) =>
+      index === self.findIndex(t => t.id === trip.id)
     );
 
-    setTrips(existingTrips);
-    setFilteredTrips(existingTrips);
+    // Update localStorage with the combined trips
+    if (uniqueTrips.length > savedTrips.length) {
+      localStorage.setItem("myTrips", JSON.stringify(uniqueTrips));
+    }
+
+    console.log("All trips:", uniqueTrips);
+    console.log(
+      "Hotel trips:",
+      uniqueTrips.filter((trip) => trip.bookingType === "hotel"),
+    );
+
+    setTrips(uniqueTrips);
+    setFilteredTrips(uniqueTrips);
   }, []);
 
   useEffect(() => {
