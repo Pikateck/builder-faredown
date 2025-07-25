@@ -328,13 +328,13 @@ export function BookingCalendar({
             {selection[0].startDate && selection[0].endDate && (
               <div className="space-y-1">
                 <div>
-                  Check-in:{" "}
+                  {bookingType === 'flight' ? 'Departure Date' : 'Check-in'}:{" "}
                   <span className="font-medium text-gray-900">
                     {format(selection[0].startDate, "EEE, MMM d")}
                   </span>
                 </div>
                 <div>
-                  Check-out:{" "}
+                  {bookingType === 'flight' ? 'Arrival Date' : 'Check-out'}:{" "}
                   <span className="font-medium text-gray-900">
                     {format(selection[0].endDate, "EEE, MMM d")}
                   </span>
