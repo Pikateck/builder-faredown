@@ -494,7 +494,7 @@ export function MobileTravelers({
         <div className="pt-4">
           <Button
             onClick={onClose}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
           >
             Done
           </Button>
