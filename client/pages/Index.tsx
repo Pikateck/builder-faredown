@@ -841,11 +841,7 @@ export default function Index() {
                   </Button>
                 </div>
 
-                {/* Live Bargain Ticker */}
-                <div className="bg-green-600 text-white px-4 py-2 rounded-full inline-flex items-center space-x-2 text-xs sm:text-sm font-medium">
-                  <span>💸</span>
-                  <span>₹8,12,500 saved by travelers this week using Bargain It™</span>
-                </div>
+
               </div>
 
               {/* Desktop Search Form */}
