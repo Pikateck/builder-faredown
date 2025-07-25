@@ -1000,24 +1000,24 @@ export default function FlightResults() {
               </div>
 
               {/* Flight times */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Flight times</h4>
+              <div className="p-3 border-b border-gray-100">
+                <h4 className="font-medium text-gray-900 mb-2">Flight times</h4>
 
                 {/* Departure times */}
-                <div className="mb-4">
-                  <div className="text-sm font-medium text-gray-700 mb-2">Departing flight</div>
-                  <div className="space-y-2">
+                <div className="mb-3">
+                  <div className="text-sm font-medium text-gray-700 mb-1.5">Departing flight</div>
+                  <div className="space-y-0.5">
                     {[
                       { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
                       { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
                       { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
                       { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
                     ].map((time, index) => (
-                      <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded">
+                      <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded">
                         <div className="flex items-center space-x-2">
                           <input
                             type="checkbox"
-                            className="text-blue-600 focus:ring-blue-500"
+                            className="text-blue-600 focus:ring-blue-500 w-4 h-4"
                           />
                           <span className="text-sm text-gray-700">{time.label}</span>
                         </div>
@@ -1029,19 +1029,19 @@ export default function FlightResults() {
 
                 {/* Return times */}
                 <div>
-                  <div className="text-sm font-medium text-gray-700 mb-2">Return flight</div>
-                  <div className="space-y-2">
+                  <div className="text-sm font-medium text-gray-700 mb-1.5">Return flight</div>
+                  <div className="space-y-0.5">
                     {[
                       { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
                       { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
                       { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
                       { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
                     ].map((time, index) => (
-                      <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded">
+                      <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded">
                         <div className="flex items-center space-x-2">
                           <input
                             type="checkbox"
-                            className="text-blue-600 focus:ring-blue-500"
+                            className="text-blue-600 focus:ring-blue-500 w-4 h-4"
                           />
                           <span className="text-sm text-gray-700">{time.label}</span>
                         </div>
