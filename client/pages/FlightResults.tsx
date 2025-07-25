@@ -1053,17 +1053,17 @@ export default function FlightResults() {
               </div>
 
               {/* Arrives in Dubai */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Arrives in Dubai</h4>
-                <div className="space-y-2">
+              <div className="p-3 border-b border-gray-100">
+                <h4 className="font-medium text-gray-900 mb-2">Arrives in Dubai</h4>
+                <div className="space-y-0.5">
                   {[
                     { airport: "Dubai International Airport", code: "DXB", count: 643 }
                   ].map((airport, index) => (
-                    <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded">
+                    <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded">
                       <div className="flex items-center space-x-2">
                         <input
                           type="checkbox"
-                          className="text-blue-600 focus:ring-blue-500"
+                          className="text-blue-600 focus:ring-blue-500 w-4 h-4"
                           defaultChecked
                         />
                         <div>
@@ -1078,9 +1078,9 @@ export default function FlightResults() {
               </div>
 
               {/* Duration */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Duration</h4>
-                <div className="space-y-3">
+              <div className="p-3">
+                <h4 className="font-medium text-gray-900 mb-2">Duration</h4>
+                <div className="space-y-2">
                   <div className="text-sm text-gray-700">Maximum travel time</div>
                   <input
                     type="range"
