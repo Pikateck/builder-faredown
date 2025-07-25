@@ -1441,14 +1441,6 @@ export default function Index() {
         {/* Trust & Social Proof Section */}
         <section className="py-16 bg-gray-50">
           <div className="max-w-[1280px] mx-auto px-4">
-            {/* Live Support Banner Header */}
-            <div className="bg-blue-600 text-white px-8 py-4 rounded-lg flex items-center justify-center space-x-3 mb-12 mx-auto max-w-2xl">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span className="font-medium text-lg">24×7 Customer Support | Live Chat & Call Available</span>
-            </div>
-
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Trusted by 50M+ Travelers
@@ -1471,6 +1463,14 @@ export default function Index() {
                 <p className="text-sm text-gray-600">
                   Excellent • Based on 50,000+ reviews on Trustpilot
                 </p>
+              </div>
+
+              {/* Live Support Banner */}
+              <div className="bg-blue-600 text-white px-8 py-4 rounded-lg flex items-center justify-center space-x-3 mb-8 mx-auto max-w-2xl">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span className="font-medium text-lg">24×7 Customer Support | Live Chat & Call Available</span>
               </div>
 
               <p className="text-sm text-gray-500">
