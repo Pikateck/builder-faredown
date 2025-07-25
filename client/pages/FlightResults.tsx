@@ -2204,40 +2204,45 @@ export default function FlightResults() {
 
       {/* Enhanced AI Bargain Modal */}
       <Dialog open={showBargainModal} onOpenChange={setShowBargainModal}>
-        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-lg md:h-auto md:rounded-lg">
-          <DialogHeader className="border-b border-gray-200 pb-4">
-            <DialogTitle className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg bg-gradient-to-br from-blue-50 to-white">
+          <DialogHeader className="border-b border-[#003580]/20 pb-4 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white rounded-t-lg -m-6 mb-6 p-6">
+            <DialogTitle className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-white/20 backdrop-blur rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">AI</span>
               </div>
-              <span>AI Price Negotiator</span>
+              <span className="text-xl font-semibold">AI Price Negotiator</span>
             </DialogTitle>
           </DialogHeader>
 
           {bargainFlight && bargainFareType && (
-            <div className="space-y-6 p-4">
+            <div className="space-y-6 p-6">
               {bargainStep === "input" && (
                 <>
                   {/* Flight Info */}
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <h3 className="font-bold text-lg text-gray-900">
-                          {bargainFlight.airline}
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          {bargainFareType.name} • {bargainFlight.airline}
-                        </p>
+                  <div className="bg-white rounded-xl p-6 border border-[#003580]/10 shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-12 bg-[#003580]/10 rounded-lg flex items-center justify-center">
+                          <Plane className="w-6 h-6 text-[#003580]" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg text-gray-900">
+                            {bargainFlight.airline}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {bargainFareType.name} • {bargainFlight.flightNumber}
+                          </p>
+                        </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 mb-1">
                           Current All-Inclusive Price
                         </p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-3xl font-bold text-[#003580]">
                           {formatPrice(bargainFareType.price)}
                         </p>
-                        <p className="text-xs text-gray-500">
-                          Taxes, fees & gateway charges included
+                        <p className="text-xs text-gray-500 font-medium">
+                          {numberToWords(bargainFareType.price.toString())}
                         </p>
                       </div>
                     </div>
@@ -2245,22 +2250,22 @@ export default function FlightResults() {
 
                   {/* AI Interface */}
                   <div className="space-y-4">
-                    <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg">
-                      <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold">AI</span>
+                    <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-[#003580]/5 to-[#0071c2]/5 rounded-xl border border-[#003580]/10">
+                      <div className="w-12 h-12 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">AI</span>
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-semibold text-gray-900">
                           AI Assistant
                         </p>
-                        <p className="text-xs text-gray-600">
+                        <p className="text-sm text-gray-600">
                           Tell me your target price and I'll negotiate with the airline!
                         </p>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-3 text-gray-900">
+                      <label className="block text-sm font-semibold mb-3 text-gray-900">
                         What price would you like to pay? ({selectedCurrency.symbol})
                       </label>
                       <div className="relative">
@@ -2279,20 +2284,25 @@ export default function FlightResults() {
                             setBargainPrice(numericValue);
                           }}
                           placeholder="Enter your target price"
-                          className="text-xl font-bold text-center py-6 border-2 border-purple-200 focus:border-purple-500 placeholder:text-gray-400 placeholder:font-normal"
+                          className="text-xl font-bold text-center py-6 border-2 border-[#003580]/20 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm"
                         />
-                        <div className="absolute inset-y-0 left-3 flex items-center">
-                          <span className="text-gray-500 text-xl">
+                        <div className="absolute inset-y-0 left-4 flex items-center">
+                          <span className="text-[#003580] text-xl font-semibold">
                             {selectedCurrency.symbol}
                           </span>
                         </div>
                       </div>
+                      {bargainPrice && (
+                        <p className="text-center text-sm text-gray-600 mt-2 font-medium">
+                          {numberToWords(bargainPrice)}
+                        </p>
+                      )}
                     </div>
 
                     <Button
                       onClick={startBargaining}
                       disabled={!bargainPrice || parseInt(bargainPrice) <= 0}
-                      className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg font-semibold rounded-xl disabled:bg-gray-400"
+                      className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-6 text-lg font-semibold rounded-xl disabled:bg-gray-400 shadow-lg"
                     >
                       Start AI Negotiation
                     </Button>
@@ -2303,19 +2313,19 @@ export default function FlightResults() {
               {bargainStep === "progress" && (
                 <div className="text-center space-y-6 py-8">
                   <div className="relative">
-                    <div className="w-20 h-20 mx-auto bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center animate-pulse">
-                      <RefreshCw className="w-10 h-10 text-white animate-spin" />
+                    <div className="w-24 h-24 mx-auto bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center animate-pulse shadow-lg">
+                      <RefreshCw className="w-12 h-12 text-white animate-spin" />
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       AI Negotiating with {bargainFlight.airline}
                     </h3>
                     <p className="text-sm text-gray-600 mb-4">
                       Analyzing market rates and finding the best deal for you...
                     </p>
-                    <Progress value={bargainProgress} className="w-full h-3" />
-                    <p className="text-xs text-gray-500 mt-2">
+                    <Progress value={bargainProgress} className="w-full h-4 bg-gray-200" />
+                    <p className="text-sm text-[#003580] font-semibold mt-2">
                       {bargainProgress}% Complete
                     </p>
                   </div>
@@ -2327,47 +2337,53 @@ export default function FlightResults() {
                   {bargainResult === "accepted" ? (
                     <>
                       <div className="text-center">
-                        <div className="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-                          <CheckCircle className="w-12 h-12 text-green-600" />
+                        <div className="w-24 h-24 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                          <CheckCircle className="w-16 h-16 text-green-600" />
                         </div>
-                        <h3 className="text-2xl font-bold text-green-600 mb-2">
+                        <h3 className="text-3xl font-bold text-green-600 mb-2">
                           Perfect Match!
                         </h3>
-                        <p className="text-gray-600 mb-1">
+                        <p className="text-gray-600 mb-1 text-lg">
                           The airline accepted your exact price!
                         </p>
                       </div>
 
-                      <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-                        <div className="text-2xl font-bold text-green-700">
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-8 shadow-lg">
+                        <div className="text-4xl font-bold text-green-700 mb-2">
                           {selectedCurrency.symbol}
                           {parseInt(bargainPrice).toLocaleString()}
                         </div>
+                        <p className="text-sm text-green-600 font-medium">
+                          {numberToWords(bargainPrice)}
+                        </p>
                       </div>
                     </>
                   ) : bargainResult === "counter" ? (
                     <>
                       <div className="text-center">
-                        <div className="w-20 h-20 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                          <Target className="w-12 h-12 text-blue-600" />
+                        <div className="w-24 h-24 mx-auto bg-[#003580]/10 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                          <Target className="w-16 h-16 text-[#003580]" />
                         </div>
-                        <h3 className="text-2xl font-bold text-blue-600 mb-2">
+                        <h3 className="text-3xl font-bold text-[#003580] mb-2">
                           AI Counter Offer!
                         </h3>
-                        <p className="text-gray-600 mb-1">
+                        <p className="text-gray-600 mb-1 text-lg">
                           The airline couldn't match your price, but here's their best offer!
                         </p>
                       </div>
 
-                      <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                        <div className="text-2xl font-bold text-blue-700">
+                      <div className="bg-gradient-to-r from-[#003580]/5 to-[#0071c2]/5 border-2 border-[#003580]/20 rounded-xl p-8 shadow-lg">
+                        <div className="text-4xl font-bold text-[#003580] mb-2">
                           {selectedCurrency.symbol}
                           {aiOfferPrice
                             ? convertPrice(aiOfferPrice).toLocaleString()
                             : "0"}
                         </div>
-                        <div className="text-center pt-2">
-                          <span className="text-sm font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full">
+                        <p className="text-sm text-[#003580] font-medium mb-3">
+                          {aiOfferPrice ? numberToWords((convertPrice(aiOfferPrice) * (exchangeRates[selectedCurrency.code as keyof typeof exchangeRates] || 1)).toString()) : ""}
+                        </p>
+                        <div className="text-center">
+                          <span className="text-sm font-semibold text-green-600 bg-green-100 px-4 py-2 rounded-full">
                             You save {selectedCurrency.symbol}
                             {convertPrice(
                               bargainFareType.price - (aiOfferPrice || 0),
@@ -2378,20 +2394,20 @@ export default function FlightResults() {
                     </>
                   ) : null}
 
-                  {isOfferValid && (
+                  {isOfferValid ? (
                     <>
-                      <div className="bg-orange-100 border border-orange-200 rounded-lg p-4">
-                        <div className="flex items-center justify-center space-x-2">
-                          <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center animate-pulse">
-                            <span className="text-white text-xs">⏰</span>
+                      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-xl p-4 shadow-lg">
+                        <div className="flex items-center justify-center space-x-3">
+                          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center animate-pulse">
+                            <span className="text-white text-sm">⏰</span>
                           </div>
-                          <span className="font-bold text-orange-800 text-lg">
+                          <span className="font-bold text-orange-800 text-xl">
                             Offer expires in: {offerExpiryTime}s
                           </span>
                         </div>
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-4">
                         <Button
                           onClick={() => {
                             setShowBargainModal(false);
@@ -2401,7 +2417,7 @@ export default function FlightResults() {
                             });
                           }}
                           disabled={!isOfferValid}
-                          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-4 text-lg font-bold rounded-xl"
+                          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-5 text-xl font-bold rounded-xl shadow-lg"
                         >
                           Book This Deal - {selectedCurrency.symbol}
                           {bargainResult === "accepted"
@@ -2414,12 +2430,30 @@ export default function FlightResults() {
                         <Button
                           onClick={() => setBargainStep("input")}
                           variant="outline"
-                          className="w-full border-2 border-gray-300 hover:border-purple-400 py-3 rounded-xl"
+                          className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
                         >
                           Try Different Price
                         </Button>
                       </div>
                     </>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                        <p className="text-red-600 font-medium">Offer has expired</p>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          setBargainStep("input");
+                          setBargainPrice("");
+                          setBargainResult(null);
+                          setIsOfferValid(false);
+                          setOfferExpiryTime(0);
+                        }}
+                        className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-4 text-lg font-semibold rounded-xl"
+                      >
+                        Start New Negotiation
+                      </Button>
+                    </div>
                   )}
                 </div>
               )}
