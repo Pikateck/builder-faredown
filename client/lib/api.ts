@@ -213,12 +213,12 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Handle specific error types
+      // Handle specific error types gracefully
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          console.warn(`⚠️ POST request aborted (timeout): ${endpoint}`);
+          console.log(`⏰ POST request timeout for ${endpoint} - using fallback`);
         } else if (error.message.includes('Failed to fetch')) {
-          console.warn(`⚠️ POST network error: ${endpoint}`);
+          console.log(`🌐 POST network unavailable for ${endpoint} - using fallback`);
         } else {
           console.warn(`⚠️ POST request failed: ${error.message}`);
         }
@@ -228,8 +228,10 @@ class ApiClient {
       try {
         return this.devClient.post<T>(endpoint, data);
       } catch (fallbackError) {
-        // If even fallback fails, return safe default
-        console.error("POST fallback also failed:", fallbackError);
+        // If even fallback fails, return safe default but don't log AbortErrors
+        if (!(fallbackError instanceof Error && fallbackError.name === 'AbortError')) {
+          console.error("POST fallback also failed:", fallbackError);
+        }
         return {
           success: false,
           error: "Service unavailable",
