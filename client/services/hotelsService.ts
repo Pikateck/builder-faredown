@@ -779,20 +779,28 @@ export class HotelsService {
             },
             signal: controller.signal,
           });
-        } finally {
-          clearTimeout(timeoutId);
-        }
 
-        if (response.ok) {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
-            if (data.success && data.data && Array.isArray(data.data)) {
-              apiResults = data.data;
-              apiSuccess = true;
-              console.log(`✅ API destination data received: ${apiResults.length} destinations`);
+          if (response.ok) {
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+              try {
+                const data = await response.json();
+                if (data.success && data.data && Array.isArray(data.data)) {
+                  apiResults = data.data;
+                  apiSuccess = true;
+                  console.log(`✅ API destination data received: ${apiResults.length} destinations`);
+                }
+              } catch (jsonError) {
+                if (jsonError instanceof Error && jsonError.name === 'AbortError') {
+                  console.log(`⏰ API request was aborted during JSON parsing for query: "${query}"`);
+                } else {
+                  console.warn(`⚠️ Failed to parse JSON response:`, jsonError instanceof Error ? jsonError.message : "Unknown error");
+                }
+              }
             }
           }
+        } finally {
+          clearTimeout(timeoutId);
         }
       } catch (fetchError) {
         if (fetchError instanceof Error && fetchError.name === 'AbortError') {
