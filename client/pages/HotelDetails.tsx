@@ -410,21 +410,36 @@ export default function HotelDetails() {
       <style>{sliderStyles}</style>
       <Header />
 
-      {/* Mobile Filter Button */}
-      <div className="lg:hidden bg-white border-b border-gray-200 p-4">
-        <Button
-          variant="outline"
-          onClick={() => setIsMobileFilterOpen(true)}
-          className="w-full flex items-center justify-center gap-2"
-        >
-          <Filter className="w-4 h-4" />
-          <span>Filters</span>
-        </Button>
+      {/* Mobile Header Bar */}
+      <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-[64px] z-40">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileFilterOpen(true)}
+              className="flex items-center gap-2 px-3 py-2"
+            >
+              <Filter className="w-4 h-4" />
+              <span className="text-sm font-medium">Filters</span>
+            </Button>
+            <div className="h-4 w-px bg-gray-300"></div>
+            <span className="text-sm text-gray-600">₹{lowestPrice}+ per night</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-1 px-3 py-2"
+          >
+            <MapPin className="w-4 h-4" />
+            <span className="text-sm font-medium">Map</span>
+          </Button>
+        </div>
       </div>
 
       {/* Main Container */}
       <div className="flex relative">
-        {/* Left Sidebar - Filters */}
+        {/* Left Sidebar - Filters (Always Expanded on Desktop, Modal on Mobile) */}
         <div
           className={`${
             isMobileFilterOpen ? "fixed inset-0 z-50 bg-white" : "hidden"
@@ -1733,7 +1748,7 @@ export default function HotelDetails() {
                         <span className="mr-2">☕</span> Tea & coffee facilities
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">���</span> Carpeted floors
+                        <span className="mr-2">����</span> Carpeted floors
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">❄️</span> Air conditioning
