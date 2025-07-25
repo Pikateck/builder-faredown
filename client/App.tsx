@@ -114,6 +114,8 @@ function App() {
             <Route path="/mobile" element={<MobileSplash />} />
             <Route path="/mobile-splash" element={<MobileSplash />} />
             <Route path="/mobile-home" element={<MobileHome />} />
+            <Route path="/mobile-hotels" element={<MobileHotelResults />} />
+            <Route path="/mobile-hotel-results" element={<MobileHotelResults />} />
             <Route path="/mobile-search" element={<MobileSearch />} />
             <Route path="/mobile-bargain" element={<MobileBargain />} />
             <Route path="/mobile-booking" element={<MobileBooking />} />
