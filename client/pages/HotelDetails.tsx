@@ -454,8 +454,6 @@ export default function HotelDetails() {
             >
               Close Filters
             </Button>
-
-            {/* Popular Filters */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Popular Filters
@@ -1955,7 +1953,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛁</span> Private bathroom
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">������</span> Free WiFi
+                        <span className="mr-2">����</span> Free WiFi
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">☕</span> Tea & coffee facilities
