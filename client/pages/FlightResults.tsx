@@ -18,6 +18,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { BookingCalendar } from "@/components/BookingCalendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { addDays, format } from "date-fns";
 import {
   Plane,
   ChevronDown,
@@ -1193,127 +1200,57 @@ export default function FlightResults() {
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Travel dates
               </label>
-              <button
-                onClick={() => {
-                  if (!showCalendar) {
-                    setSelectingDeparture(true);
-                    setCurrentCalendarMonth(new Date().getMonth());
-                    setCurrentYear(new Date().getFullYear());
-                  }
-                  setShowCalendar(!showCalendar);
-                }}
-                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
-              >
-                <Calendar className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-700 font-medium">
-                    {tripType === "one-way"
-                      ? selectedDepartureDate || "Select date"
-                      : selectedDepartureDate
-                        ? `${selectedDepartureDate}${selectedReturnDate ? ` - ${selectedReturnDate}` : " - Return"}`
-                        : "Select dates"}
-                  </span>
-                </div>
-              </button>
+              <Popover open={showCalendar} onOpenChange={setShowCalendar}>
+                <PopoverTrigger asChild>
+                  <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation">
+                    <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-gray-700 font-medium">
+                        {tripType === "one-way"
+                          ? selectedDepartureDate || "Select date"
+                          : selectedDepartureDate
+                            ? `${selectedDepartureDate}${selectedReturnDate ? ` - ${selectedReturnDate}` : " - Return"}`
+                            : "Select dates"}
+                      </span>
+                    </div>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <BookingCalendar
+                    initialRange={{
+                      startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
+                      endDate: selectedReturnDate ? new Date(selectedReturnDate) : addDays(new Date(), 7)
+                    }}
+                    onChange={(range) => {
+                      console.log("Flight results calendar range selected:", range);
+                      setSelectedDepartureDate(formatDateHelper(range.startDate));
+                      if (tripType === "round-trip") {
+                        setSelectedReturnDate(formatDateHelper(range.endDate));
+                      }
+                    }}
+                    onClose={() => setShowCalendar(false)}
+                    className="w-full"
+                  />
+                </PopoverContent>
+              </Popover>
 
               {showCalendar && (
-                <div className="fixed top-14 left-0 right-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[99999] w-full sm:w-[700px] max-w-[700px] overflow-hidden">
-                  <div className="p-4">
-                    {/* Calendar Header */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-4">
-                        <button
-                          onClick={() => navigateMonth("prev")}
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                        >
-                          <ChevronLeft className="w-4 h-4" />
-                        </button>
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {getMonthName(currentCalendarMonth)} {currentYear}
-                        </h3>
-                        <button
-                          onClick={() => navigateMonth("next")}
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                        >
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <button
-                        onClick={() => setShowCalendar(false)}
-                        className="p-2 hover:bg-gray-100 rounded-full"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    {/* Trip Type Indicator */}
-                    {tripType === "round-trip" && (
-                      <div className="flex items-center space-x-4 mb-4 text-sm">
-                        <div className={`px-3 py-1 rounded-full ${
-                          selectingDeparture
-                            ? "bg-blue-100 text-blue-700 font-medium"
-                            : "bg-gray-100 text-gray-600"
-                        }`}>
-                          Departure: {selectedDepartureDate || "Select"}
-                        </div>
-                        <div className={`px-3 py-1 rounded-full ${
-                          !selectingDeparture
-                            ? "bg-blue-100 text-blue-700 font-medium"
-                            : "bg-gray-100 text-gray-600"
-                        }`}>
-                          Return: {selectedReturnDate || "Select"}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Calendar Grid */}
-                    <div className="grid grid-cols-7 gap-1">
-                      {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                        <div key={day} className="p-2 text-center text-xs font-medium text-gray-500">
-                          {day}
-                        </div>
-                      ))}
-
-                      {/* Empty cells for days before month starts */}
-                      {Array.from({ length: getFirstDayOfMonth(currentCalendarMonth, currentYear) }).map((_, index) => (
-                        <div key={`empty-${index}`} className="p-2"></div>
-                      ))}
-
-                      {/* Days of the month */}
-                      {Array.from({ length: getDaysInMonth(currentCalendarMonth, currentYear) }).map((_, index) => {
-                        const day = index + 1;
-                        const date = new Date(currentYear, currentCalendarMonth, day);
-                        const today = new Date();
-                        const isToday = date.toDateString() === today.toDateString();
-                        const isPast = date < today;
-                        const departureDate = selectedDepartureDate ? new Date(selectedDepartureDate) : null;
-                        const returnDate = selectedReturnDate ? new Date(selectedReturnDate) : null;
-                        const isSelected = isDateEqual(date, departureDate) || isDateEqual(date, returnDate);
-                        const isInRange = isDateInRange(date, departureDate, returnDate);
-
-                        return (
-                          <button
-                            key={day}
-                            onClick={() => !isPast && handleDateClick(day, currentCalendarMonth, currentYear)}
-                            disabled={isPast}
-                            className={`p-2 text-sm rounded-lg transition-colors ${
-                              isPast
-                                ? "text-gray-300 cursor-not-allowed"
-                                : isSelected
-                                  ? "bg-blue-600 text-white font-medium"
-                                  : isInRange
-                                    ? "bg-blue-100 text-blue-700"
-                                    : isToday
-                                      ? "bg-blue-50 text-blue-700 font-medium border border-blue-300"
-                                      : "hover:bg-gray-100 text-gray-700"
-                            }`}
-                          >
-                            {day}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
+                <div className="fixed top-14 left-0 right-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 z-[99999] w-full sm:w-[700px] max-w-[700px]">
+                  <BookingCalendar
+                    initialRange={{
+                      startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
+                      endDate: selectedReturnDate ? new Date(selectedReturnDate) : addDays(new Date(), 7)
+                    }}
+                    onChange={(range) => {
+                      console.log("Flight results calendar range selected:", range);
+                      setSelectedDepartureDate(formatDateHelper(range.startDate));
+                      if (tripType === "round-trip") {
+                        setSelectedReturnDate(formatDateHelper(range.endDate));
+                      }
+                    }}
+                    onClose={() => setShowCalendar(false)}
+                    className="w-full"
+                  />
                 </div>
               )}
             </div>
