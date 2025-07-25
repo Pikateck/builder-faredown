@@ -345,7 +345,7 @@ export function BookingCalendar({
         </div>
 
         {/* Footer with confirm button - Booking.com style */}
-        <div className="flex items-center justify-between p-4 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 p-4 border-t border-gray-200">
           <div className="text-sm text-gray-600">
             {selection[0].startDate && selection[0].endDate && (
               <div className="space-y-1">
