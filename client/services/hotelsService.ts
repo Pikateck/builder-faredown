@@ -873,15 +873,37 @@ export class HotelsService {
    * Get hotel amenities list
    */
   async getAmenities(): Promise<Amenity[]> {
-    const response = await apiClient.get<ApiResponse<Amenity[]>>(
-      `${this.baseUrl}/amenities`,
-    );
+    try {
+      const response = await apiClient.get<ApiResponse<Amenity[]>>(
+        `${this.baseUrl}/amenities`,
+      );
 
-    if (response.data) {
-      return response.data;
+      if (response && response.data) {
+        return response.data;
+      }
+
+      // Return default amenities if API fails
+      return this.getDefaultAmenities();
+    } catch (error) {
+      console.warn("Failed to fetch amenities, using defaults:", error);
+      return this.getDefaultAmenities();
     }
+  }
 
-    throw new Error("Failed to get amenities");
+  /**
+   * Get default amenities list as fallback
+   */
+  private getDefaultAmenities(): Amenity[] {
+    return [
+      { id: "wifi", name: "Free WiFi", icon: "wifi" },
+      { id: "parking", name: "Free Parking", icon: "parking" },
+      { id: "pool", name: "Swimming Pool", icon: "pool" },
+      { id: "gym", name: "Fitness Center", icon: "gym" },
+      { id: "spa", name: "Spa", icon: "spa" },
+      { id: "restaurant", name: "Restaurant", icon: "restaurant" },
+      { id: "breakfast", name: "Free Breakfast", icon: "breakfast" },
+      { id: "aircon", name: "Air Conditioning", icon: "aircon" },
+    ];
   }
 
   /**
