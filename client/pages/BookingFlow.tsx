@@ -2822,7 +2822,7 @@ export default function BookingFlow() {
                       {selectedRefundProtection === "yes" && (
                         <div className="flex justify-between">
                           <span>Refund Protection</span>
-                          <span>{formatCurrency(27803)}</span>
+                          <span>{formatCurrency(calculateRefundProtectionCost())}</span>
                         </div>
                       )}
                       {selectedOtherOptions.length > 0 && (
