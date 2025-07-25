@@ -468,6 +468,99 @@ export default function FlightResults() {
     setSelectedStops(stops);
   };
 
+  // Calendar helper functions (restored)
+  const getMonthName = (month: number) => {
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December",
+    ];
+    return months[month];
+  };
+
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    return new Date(year, month, 1).getDay();
+  };
+
+  const isDateInRange = (date: Date, startDate: Date | null, endDate: Date | null) => {
+    if (!startDate || !endDate) return false;
+    return date >= startDate && date <= endDate;
+  };
+
+  const isDateEqual = (date1: Date | null, date2: Date | null) => {
+    if (!date1 || !date2) return false;
+    return date1.toDateString() === date2.toDateString();
+  };
+
+  const navigateMonth = (direction: "prev" | "next") => {
+    if (direction === "prev") {
+      if (currentCalendarMonth === 0) {
+        setCurrentCalendarMonth(11);
+        setCurrentYear((prev) => prev - 1);
+      } else {
+        setCurrentCalendarMonth(currentCalendarMonth - 1);
+      }
+    } else {
+      if (currentCalendarMonth === 11) {
+        setCurrentCalendarMonth(0);
+        setCurrentYear((prev) => prev + 1);
+      } else {
+        setCurrentCalendarMonth(currentCalendarMonth + 1);
+      }
+    }
+  };
+
+  const handleDateClick = (day: number, month: number, year: number) => {
+    const clickedDate = new Date(year, month, day);
+    clickedDate.setHours(0, 0, 0, 0);
+
+    if (tripType === "one-way") {
+      setSelectedDepartureDate(formatDateHelper(clickedDate));
+      setShowCalendar(false);
+    } else {
+      if (selectingDeparture) {
+        setSelectedDepartureDate(formatDateHelper(clickedDate));
+        setSelectedReturnDate("");
+        setSelectingDeparture(false);
+      } else {
+        const departureDate = selectedDepartureDate ? new Date(selectedDepartureDate) : null;
+        if (departureDate && clickedDate <= departureDate) {
+          setSelectedDepartureDate(formatDateHelper(clickedDate));
+          setSelectedReturnDate("");
+          setSelectingDeparture(false);
+        } else {
+          setSelectedReturnDate(formatDateHelper(clickedDate));
+          setShowCalendar(false);
+        }
+      }
+    }
+  };
+
+  // Format date helper
+  const formatDateHelper = (date: Date | string, compact = false) => {
+    if (!date) return "";
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    if (compact) {
+      return dateObj.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+      });
+    }
+    return dateObj
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(/ /g, "-");
+  };
+
+  // Add calendar year state
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
   // City data mapping (from landing page)
   const cityData = {
     Mumbai: {
