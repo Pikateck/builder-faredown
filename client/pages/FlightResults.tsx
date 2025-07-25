@@ -1381,8 +1381,8 @@ export default function FlightResults() {
               )}
             </div>
 
-            <div className="w-full lg:w-auto">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
+            <div className="w-full lg:w-auto lg:min-w-[120px]">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
                 Search
               </Button>
             </div>
