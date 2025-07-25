@@ -1124,7 +1124,7 @@ export default function FlightResults() {
               )}
             </div>
 
-            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+            <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Going to
               </label>
@@ -1133,11 +1133,11 @@ export default function FlightResults() {
                 className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
               >
                 <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 min-w-0">
                   <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
                     {cityData[selectedToCity]?.code || "DXB"}
                   </div>
-                  <span className="text-sm text-gray-700 font-medium">
+                  <span className="text-sm text-gray-700 font-medium truncate">
                     {cityData[selectedToCity]?.airport || "Dubai International Airport"}
                   </span>
                 </div>
