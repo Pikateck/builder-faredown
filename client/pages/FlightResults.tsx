@@ -1237,22 +1237,24 @@ export default function FlightResults() {
 
               {showCalendar && (
                 <div className="fixed top-14 left-0 right-0 bottom-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:bottom-auto z-[99999] w-full sm:w-[700px] max-w-[700px] overflow-y-auto bg-white sm:bg-transparent">
-                  <BookingCalendar
-                    initialRange={{
-                      startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
-                      endDate: selectedReturnDate ? new Date(selectedReturnDate) : addDays(new Date(), 7)
-                    }}
-                    onChange={(range) => {
-                      console.log("Flight results calendar range selected:", range);
-                      setSelectedDepartureDate(formatDateHelper(range.startDate));
-                      if (tripType === "round-trip") {
-                        setSelectedReturnDate(formatDateHelper(range.endDate));
-                      }
-                    }}
-                    onClose={() => setShowCalendar(false)}
-                    className="w-full"
-                    bookingType="flight"
-                  />
+                  <div className="p-4 sm:p-0 h-full sm:h-auto">
+                    <BookingCalendar
+                      initialRange={{
+                        startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
+                        endDate: selectedReturnDate ? new Date(selectedReturnDate) : addDays(new Date(), 7)
+                      }}
+                      onChange={(range) => {
+                        console.log("Flight results calendar range selected:", range);
+                        setSelectedDepartureDate(formatDateHelper(range.startDate));
+                        if (tripType === "round-trip") {
+                          setSelectedReturnDate(formatDateHelper(range.endDate));
+                        }
+                      }}
+                      onClose={() => setShowCalendar(false)}
+                      className="w-full"
+                      bookingType="flight"
+                    />
+                  </div>
                 </div>
               )}
             </div>
