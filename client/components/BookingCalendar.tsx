@@ -234,10 +234,32 @@ export function BookingCalendar({
 
           .booking-calendar .rdrMonth {
             width: 100% !important;
+            padding: 0 !important;
           }
 
           .booking-calendar .rdrCalendarWrapper {
             width: 100% !important;
+            border-radius: 8px;
+            overflow: hidden;
+          }
+
+          .booking-calendar .rdrMonthAndYearWrapper {
+            padding: 12px 16px 8px;
+          }
+
+          .booking-calendar .rdrMonthWrapper {
+            padding: 0 12px 12px;
+          }
+
+          .booking-calendar .rdrNextPrevButton {
+            width: 32px;
+            height: 32px;
+          }
+
+          .booking-calendar .rdrDayNumber span {
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
           }
         }
       `}</style>
