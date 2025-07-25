@@ -443,9 +443,21 @@ export default function HotelDetails() {
         <div
           className={`${
             isMobileFilterOpen ? "fixed inset-0 z-50 bg-white" : "hidden"
-          } lg:block lg:relative lg:w-80 bg-white border-r border-gray-200 min-h-screen`}
+          } lg:block lg:relative lg:w-80 xl:w-96 bg-white border-r border-gray-200 min-h-screen lg:sticky lg:top-[64px] lg:max-h-[calc(100vh-64px)]`}
         >
-          <div className="overflow-y-auto h-full p-4">
+          <div className="overflow-y-auto h-full p-3 lg:p-4">
+            {/* Mobile Header */}
+            <div className="lg:hidden flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="p-2"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
             {/* Use the same EnhancedFilters component as HotelResults page */}
             <EnhancedFilters
               priceRange={[Math.round((priceRange / 100) * 15000), 15000]}
@@ -1971,7 +1983,7 @@ export default function HotelDetails() {
                         { icon: "🇮🇩", text: "Indonesian" },
                         { icon: "🇮🇹", text: "Italian" },
                         { icon: "🇯🇵", text: "Japanese" },
-                        { icon: "🇰🇷", text: "Korean" },
+                        { icon: "🇰��", text: "Korean" },
                         { icon: "🇷🇺", text: "Russian" },
                         { icon: "🇨🇳", text: "Chinese" },
                       ].map((item, idx) => (
