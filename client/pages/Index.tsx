@@ -1671,13 +1671,7 @@ export default function Index() {
         </footer>
       </div>
 
-      {/* Floating Bargain Assistant Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="bg-gradient-to-r from-[#febb02] to-yellow-500 hover:from-yellow-500 hover:to-[#febb02] text-[#003580] font-bold py-3 px-6 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 flex items-center space-x-2 animate-pulse">
-          <span className="text-xl">💬</span>
-          <span className="text-sm font-semibold">Bargain Assistant</span>
-        </button>
-      </div>
+
 
       {/* Mobile Dropdown Components */}
       <MobileCityDropdown
