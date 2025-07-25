@@ -417,7 +417,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
                   {/* Aircraft Front Indicator */}
                   <div className="text-center mb-4">
                     <div className="w-16 h-8 mx-auto bg-gray-300 rounded-t-full flex items-center justify-center">
-                      <span className="text-xs text-gray-600">✈️</span>
+                      <span className="text-xs text-gray-600">��️</span>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
                       Front of Aircraft
@@ -1047,6 +1047,16 @@ export default function BookingFlow() {
       completed: false,
     },
   ];
+
+  // Calculate total booking amount
+  const calculateGrandTotal = () => {
+    return calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees();
+  };
+
+  // Calculate refund protection cost (10% of total)
+  const calculateRefundProtectionCost = () => {
+    return Math.round(calculateGrandTotal() * 0.1);
+  };
 
   // Calculate extras total
   const calculateExtrasTotal = () => {
@@ -2182,7 +2192,7 @@ export default function BookingFlow() {
                             }`}
                           >
                             {selectedOtherOptions.length === 6
-                              ? "✓ All options selected"
+                              ? "�� All options selected"
                               : "Select all to get"}
                           </span>
                         </div>
