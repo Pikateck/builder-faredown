@@ -368,10 +368,7 @@ export default function Index() {
               <p className="text-blue-100 text-xs mb-3">
                 Join 50M+ travelers who bargain smarter.
               </p>
-              <Button className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold px-6 py-2 rounded-lg text-sm inline-flex items-center space-x-2">
-                <span>Try Bargain Now</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
+
             </div>
 
             {/* Mobile Trip Type Selector */}
