@@ -717,18 +717,19 @@ export default function FlightResults() {
 
     // Check if this exact price has been tried before
     if (usedPrices.has(priceKey)) {
-      alert(
-        "You've already tried this exact price! Please enter a different amount to negotiate.",
-      );
+      setDuplicatePriceError(true);
+      setTimeout(() => setDuplicatePriceError(false), 5000); // Hide after 5 seconds
       return;
     }
 
     if (targetPriceInINR >= currentPriceInINR) {
-      alert("Please enter a price lower than the current price to start negotiation!");
+      setDuplicatePriceError(true);
+      setTimeout(() => setDuplicatePriceError(false), 5000);
       return;
     }
 
-    // Add price to used prices
+    // Clear any existing error and add price to used prices
+    setDuplicatePriceError(false);
     setUsedPrices((prev) => new Set([...prev, priceKey]));
     setBargainStep("progress");
     setBargainProgress(0);
