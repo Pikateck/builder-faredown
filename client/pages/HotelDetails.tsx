@@ -280,6 +280,11 @@ export default function HotelDetails() {
     { id: "location", label: "Location" },
   ];
 
+  // Calculate the lowest price from available room types
+  const lowestPrice = roomTypes.length > 0
+    ? Math.min(...roomTypes.map(room => room.pricePerNight))
+    : 167; // fallback price
+
   const handleBargainClick = (roomType: any) => {
     console.log("Bargain clicked for room:", roomType.id);
     setSelectedRoomType(roomType);
@@ -1883,7 +1888,7 @@ export default function HotelDetails() {
                       { icon: "🦶", text: "Foot massage" },
                       { icon: "₹", text: "Back massage" },
                       { icon: "✨", text: "Beauty services" },
-                      { icon: "🏖️", text: "Sun loungers" },
+                      { icon: "��️", text: "Sun loungers" },
                       { icon: "🧖‍♀️", text: "Spa facilities" },
                       { icon: "💨", text: "Steam room" },
                       { icon: "🔥", text: "Sauna" },
