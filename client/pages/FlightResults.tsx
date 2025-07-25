@@ -1345,6 +1345,95 @@ export default function FlightResults() {
                     : ""}
                 </span>
               </button>
+
+              {showTravelers && (
+                <div className="absolute top-14 right-0 bg-white border border-gray-300 rounded-md shadow-xl p-4 z-50 w-72">
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between py-2">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Adults
+                        </div>
+                        <div className="text-sm text-gray-500">Age 18+</div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() =>
+                            setTravelers((prev) => ({
+                              ...prev,
+                              adults: Math.max(1, prev.adults - 1),
+                            }))
+                          }
+                          disabled={travelers.adults <= 1}
+                          className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                        >
+                          −
+                        </button>
+                        <span className="w-8 text-center font-medium text-gray-900">
+                          {travelers.adults}
+                        </span>
+                        <button
+                          onClick={() =>
+                            setTravelers((prev) => ({
+                              ...prev,
+                              adults: prev.adults + 1,
+                            }))
+                          }
+                          className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between py-2">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Children
+                        </div>
+                        <div className="text-sm text-gray-500">Age 0-17</div>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() =>
+                            setTravelers((prev) => ({
+                              ...prev,
+                              children: Math.max(0, prev.children - 1),
+                            }))
+                          }
+                          disabled={travelers.children <= 0}
+                          className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                        >
+                          −
+                        </button>
+                        <span className="w-8 text-center font-medium text-gray-900">
+                          {travelers.children}
+                        </span>
+                        <button
+                          onClick={() =>
+                            setTravelers((prev) => ({
+                              ...prev,
+                              children: prev.children + 1,
+                            }))
+                          }
+                          className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="pt-2">
+                      <Button
+                        onClick={() => setShowTravelers(false)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3"
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="w-full lg:w-auto">
