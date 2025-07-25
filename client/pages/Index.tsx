@@ -1614,26 +1614,54 @@ export default function Index() {
         </section>
 
         {/* Download App Section */}
-        <section className="py-16 bg-[#003580]">
-          <div className="max-w-[1280px] mx-auto px-4">
+        <section className="py-16 bg-[#003580] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#003580] to-[#0071c2] opacity-90"></div>
+          <div className="relative max-w-[1280px] mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="text-white">
                 <h2 className="text-3xl font-bold mb-4">
-                  Get the Faredown App
+                  Travel Smarter. Bargain Better. On the Go.
                 </h2>
                 <p className="text-xl mb-6 text-blue-200">
-                  Download our mobile app and bargain on the go. Available for iOS and Android.
+                  Download the Faredown app and access exclusive mobile-only deals. Bargain anywhere, anytime.
                 </p>
-                <div className="flex space-x-4">
+
+                {/* App Features */}
+                <div className="mb-6 space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-blue-100">Instant bargain notifications</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-blue-100">Mobile-exclusive deals</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-blue-100">Offline booking management</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <div className="bg-black rounded-lg px-6 py-3 flex items-center space-x-3 cursor-pointer hover:bg-gray-800 transition-colors">
-                    <div className="text-2xl">📱</div>
+                    <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
                     <div>
                       <div className="text-xs text-gray-300">Download on the</div>
                       <div className="text-lg font-semibold">App Store</div>
                     </div>
                   </div>
                   <div className="bg-black rounded-lg px-6 py-3 flex items-center space-x-3 cursor-pointer hover:bg-gray-800 transition-colors">
-                    <div className="text-2xl">🤖</div>
+                    <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22,9.5c0-1.79-1.46-3.25-3.25-3.25S15.5,7.71,15.5,9.5s1.46,3.25,3.25,3.25S22,11.29,22,9.5z M17.5,9.5c0-0.69,0.56-1.25,1.25-1.25S20,8.81,20,9.5s-0.56,1.25-1.25,1.25S17.5,10.19,17.5,9.5z M14.94,8L13.79,7.18c0.48-0.67,0.77-1.49,0.77-2.37c0-2.21-1.79-4-4-4s-4,1.79-4,4s1.79,4,4,4c0.88,0,1.7-0.29,2.37-0.77L13.94,8z"/>
+                    </svg>
                     <div>
                       <div className="text-xs text-gray-300">Get it on</div>
                       <div className="text-lg font-semibold">Google Play</div>
@@ -1641,9 +1669,25 @@ export default function Index() {
                   </div>
                 </div>
               </div>
-              <div className="text-center">
-                <div className="w-64 h-64 bg-white/10 rounded-2xl mx-auto flex items-center justify-center">
-                  <div className="text-6xl">📱</div>
+              <div className="text-center lg:text-right">
+                <div className="relative">
+                  <div className="w-64 h-80 bg-gradient-to-br from-white/20 to-white/10 rounded-3xl mx-auto relative overflow-hidden border border-white/20">
+                    {/* Phone mockup content */}
+                    <div className="absolute inset-4 bg-white rounded-2xl overflow-hidden">
+                      <div className="bg-[#003580] h-20 flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">Faredown</span>
+                      </div>
+                      <div className="p-4 space-y-3">
+                        <div className="bg-green-100 p-3 rounded-lg">
+                          <div className="text-green-800 text-sm font-medium">Deal Found!</div>
+                          <div className="text-green-600 text-xs">₹12,000 saved on Dubai flight</div>
+                        </div>
+                        <div className="bg-gray-100 p-3 rounded-lg">
+                          <div className="text-gray-800 text-sm">Bargain in progress...</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
