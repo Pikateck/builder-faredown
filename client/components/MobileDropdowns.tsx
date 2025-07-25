@@ -216,12 +216,20 @@ export function MobileDatePicker({
           />
         </div>
 
-        <Button
-          onClick={onClose}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
-        >
-          Done
-        </Button>
+        <div className="space-y-3">
+          <Button
+            onClick={onClose}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
+            disabled={!selectedDepartureDate || (tripType === "round-trip" && !selectedReturnDate)}
+          >
+            Done
+          </Button>
+          {tripType === "round-trip" && selectedDepartureDate && !selectedReturnDate && (
+            <p className="text-sm text-gray-500 text-center">
+              Please select a return date
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
