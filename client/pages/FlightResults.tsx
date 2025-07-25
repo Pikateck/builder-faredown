@@ -791,6 +791,116 @@ export default function FlightResults() {
         </div>
       </header>
 
+      {/* Desktop Search Form Section */}
+      <div className="hidden md:block bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="bg-white rounded-lg border border-gray-300 p-4">
+            <div className="flex items-center space-x-4">
+              {/* Trip Type */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id="roundtrip"
+                  name="tripType"
+                  checked={tripType === "round-trip"}
+                  onChange={() => setTripType("round-trip")}
+                  className="text-blue-600"
+                />
+                <label htmlFor="roundtrip" className="text-sm font-medium">Round trip</label>
+                <input
+                  type="radio"
+                  id="oneway"
+                  name="tripType"
+                  checked={tripType === "one-way"}
+                  onChange={() => setTripType("one-way")}
+                  className="text-blue-600 ml-4"
+                />
+                <label htmlFor="oneway" className="text-sm font-medium">One way</label>
+              </div>
+
+              {/* From City */}
+              <div className="flex items-center space-x-2">
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                    <Plane className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="pl-10 pr-4 py-2 text-left min-w-[140px] justify-start"
+                    onClick={() => setShowFromCities(true)}
+                  >
+                    <div>
+                      <div className="font-medium text-gray-900">BOM</div>
+                      <div className="text-xs text-gray-500">Mumbai</div>
+                    </div>
+                  </Button>
+                </div>
+                <ArrowRightLeft className="w-4 h-4 text-gray-400" />
+                {/* To City */}
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                    <Plane className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="pl-10 pr-4 py-2 text-left min-w-[140px] justify-start"
+                    onClick={() => setShowToCities(true)}
+                  >
+                    <div>
+                      <div className="font-medium text-gray-900">DXB</div>
+                      <div className="text-xs text-gray-500">Dubai</div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+
+              {/* Dates */}
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  className="px-4 py-2 text-left min-w-[120px] justify-start"
+                  onClick={() => setShowCalendar(true)}
+                >
+                  <div>
+                    <div className="text-xs text-gray-500">Departure</div>
+                    <div className="font-medium">Dec 9</div>
+                  </div>
+                </Button>
+                {tripType === "round-trip" && (
+                  <Button
+                    variant="outline"
+                    className="px-4 py-2 text-left min-w-[120px] justify-start"
+                    onClick={() => setShowCalendar(true)}
+                  >
+                    <div>
+                      <div className="text-xs text-gray-500">Return</div>
+                      <div className="font-medium">Dec 16</div>
+                    </div>
+                  </Button>
+                )}
+              </div>
+
+              {/* Travelers */}
+              <Button
+                variant="outline"
+                className="px-4 py-2 text-left min-w-[120px] justify-start"
+                onClick={() => setShowTravelers(true)}
+              >
+                <div>
+                  <div className="text-xs text-gray-500">Travelers</div>
+                  <div className="font-medium">{adults} adult{adults > 1 ? 's' : ''}</div>
+                </div>
+              </Button>
+
+              {/* Search Button */}
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 h-12 font-semibold">
+                Search
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content Container */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
         {/* Desktop Sidebar Filters (≥769px) */}
