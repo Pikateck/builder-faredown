@@ -396,8 +396,8 @@ export default function MyTrips() {
         {/* Trips List */}
         {filteredTrips.length > 0 ? (
           <div className="grid gap-6">
-            {filteredTrips.map((trip) => (
-              <TripCard key={trip.id} trip={trip} />
+            {filteredTrips.map((trip, index) => (
+              <TripCard key={`${trip.id}-${index}`} trip={trip} />
             ))}
           </div>
         ) : (
