@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { AlertCircle, Clock, CreditCard, RefreshCw } from "lucide-react";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export default function RefundPolicy() {
   return (
