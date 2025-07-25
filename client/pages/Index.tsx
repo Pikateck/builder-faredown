@@ -626,8 +626,7 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Mobile bottom padding */}
-        <div className="h-16"></div>
+
       </div>
 
       {/* DESKTOP LAYOUT (≥769px) - Enhanced Original Design */}
