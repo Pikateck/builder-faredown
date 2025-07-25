@@ -211,10 +211,16 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Comprehensive error handling - catch ALL fetch-related errors
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
-      console.warn(`⚠️ POST fetch failed, using fallback: ${errorMessage}`);
+      // Handle specific error types
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.warn(`⚠️ POST request aborted (timeout): ${endpoint}`);
+        } else if (error.message.includes('Failed to fetch')) {
+          console.warn(`⚠️ POST network error: ${endpoint}`);
+        } else {
+          console.warn(`⚠️ POST request failed: ${error.message}`);
+        }
+      }
 
       // Always return fallback data to prevent error propagation
       try {
