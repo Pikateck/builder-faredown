@@ -612,7 +612,7 @@ export default function HotelDetails() {
                             onClick={() => setIsWriteReviewModalOpen(true)}
                             className="ml-4 text-blue-600 text-sm hover:underline"
                           >
-                            📝 Write a review
+                            ���� Write a review
                           </button>
                         </div>
                         <div className="flex items-center text-gray-600 mb-4">
@@ -693,37 +693,26 @@ export default function HotelDetails() {
                     {/* Unified All-Inclusive & Bargain Benefits Banner */}
                     <div className="mt-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                       <div className="space-y-3">
-                        {/* Header */}
-                        <div className="text-center mb-3">
-                          <h3 className="text-base font-semibold text-[#222222] flex items-center justify-center space-x-2">
-                            <svg className="w-4 h-4 text-[#22c55e]" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span>One Smart Price. Zero Surprises.</span>
+                        {/* Header with Single Checkmark */}
+                        <div className="flex items-center space-x-2 mb-3">
+                          <svg className="w-4 h-4 text-[#22c55e] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          <h3 className="text-base font-semibold text-[#222222]">
+                            One Smart Price. Zero Surprises.
                           </h3>
                         </div>
 
-                        {/* Compact Benefits List */}
-                        <div className="space-y-2">
-                          <div className="flex items-start space-x-2">
-                            <svg className="w-3 h-3 text-[#22c55e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span className="text-sm text-[#222222]">Transparent pricing with all taxes and fees included</span>
+                        {/* Compact Benefits List - Text Only */}
+                        <div className="space-y-1 text-left pl-6">
+                          <div className="text-sm text-[#222222]">
+                            - Transparent pricing with all taxes and fees included
                           </div>
-
-                          <div className="flex items-start space-x-2">
-                            <svg className="w-3 h-3 text-[#22c55e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span className="text-sm text-[#222222]">AI Bargain Engine: Negotiate live rates instantly</span>
+                          <div className="text-sm text-[#222222]">
+                            - AI Bargain Engine: Negotiate live rates instantly
                           </div>
-
-                          <div className="flex items-start space-x-2">
-                            <svg className="w-3 h-3 text-[#22c55e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            <span className="text-sm text-[#222222]">Final Price Guarantee: No hidden fees ever</span>
+                          <div className="text-sm text-[#222222]">
+                            - Final Price Guarantee: No hidden fees ever
                           </div>
                         </div>
                       </div>
@@ -1978,7 +1967,7 @@ export default function HotelDetails() {
                         { icon: "🇩����", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
-                        { icon: "🇮����", text: "Hindi" },
+                        { icon: "🇮🇳", text: "Hindi" },
                         { icon: "🇮🇩", text: "Indonesian" },
                         { icon: "🇮🇹", text: "Italian" },
                         { icon: "🇯🇵", text: "Japanese" },
