@@ -474,15 +474,15 @@ export default function HotelDetails() {
         </div>
 
         {/* Right Content Area */}
-        <div className="flex-1">
-          {/* Tab Navigation */}
-          <div className="bg-white border-b border-gray-200">
+        <div className="flex-1 min-h-screen">
+          {/* Tab Navigation - Sticky */}
+          <div className="bg-white border-b border-gray-200 sticky top-[64px] lg:top-0 z-30">
             <div className="flex overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 lg:px-6 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${
+                  className={`px-3 sm:px-4 lg:px-6 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${
                     activeTab === tab.id
                       ? "border-blue-700 text-blue-700"
                       : "border-transparent text-gray-500 hover:text-gray-700"
@@ -494,8 +494,8 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="p-2 sm:p-3 lg:p-4">
+          {/* Main Content - Scrollable */}
+          <div className="p-2 sm:p-3 lg:p-4 overflow-y-auto max-h-[calc(100vh-120px)] lg:max-h-[calc(100vh-60px)]">
             {activeTab === "overview" && (
               <>
                 {/* Hotel Header with Large Image */}
@@ -1659,7 +1659,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛎️</span> Concierge service
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🧳</span> Luggage storage
+                        <span className="mr-2">����</span> Luggage storage
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">💼</span> Business centre
