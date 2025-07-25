@@ -813,6 +813,7 @@ export class HotelsService {
       } catch (fetchError) {
         if (fetchError instanceof Error && fetchError.name === 'AbortError') {
           console.log(`⏰ API request was aborted (timeout or cancelled) for query: "${query}"`);
+          return []; // Return empty array immediately on abort
         } else {
           console.warn(`⚠️ API fetch failed:`, fetchError instanceof Error ? fetchError.message : "Unknown error");
         }
