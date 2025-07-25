@@ -1010,7 +1010,12 @@ export default function FlightResults() {
                           />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 text-sm">
+                          <div
+                            className="font-medium text-gray-900 text-sm cursor-pointer hover:text-blue-600 transition-colors"
+                            onMouseEnter={() => setHoveredAirline(flight.airline)}
+                            onMouseLeave={() => setHoveredAirline(null)}
+                            title={`Show only ${flight.airline} flights`}
+                          >
                             {flight.airline}
                           </div>
                           <div className="text-xs text-gray-500">
