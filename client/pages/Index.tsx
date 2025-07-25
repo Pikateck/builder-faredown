@@ -1694,14 +1694,36 @@ export default function Index() {
           </div>
         </section>
 
+        {/* SEO Content Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                The Future of Travel Booking
+              </h2>
+              <div className="prose prose-lg mx-auto text-gray-600">
+                <p className="text-lg leading-relaxed mb-6">
+                  Faredown lets you pay what you feel is fair. Discover live, AI-powered bargaining across flights and hotels — a global first in travel technology.
+                </p>
+                <p className="leading-relaxed mb-4">
+                  Our revolutionary platform combines real-time booking engines with intelligent negotiation algorithms to deliver unprecedented savings on <strong>bargain flights</strong>, hotel upgrades, and travel essentials.
+                </p>
+                <p className="leading-relaxed">
+                  Whether you're looking for business class upgrades, luxury hotel rooms at budget prices, or simply the best deal on your next vacation, our <strong>travel deal engine</strong> works 24/7 to secure prices that traditional booking sites can't match.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Newsletter Section */}
         <section className="py-16 bg-white">
           <div className="max-w-[1280px] mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Stay Updated with Best Deals
+              Never Miss a Deal Again
             </h2>
             <p className="text-gray-600 text-lg mb-8">
-              Subscribe to our newsletter and never miss amazing travel deals
+              Get exclusive bargain alerts and early access to flash sales
             </p>
             <div className="max-w-md mx-auto flex space-x-4">
               <Input
@@ -1710,9 +1732,12 @@ export default function Index() {
                 className="flex-1"
               />
               <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8">
-                Subscribe
+                Get Deals
               </Button>
             </div>
+            <p className="text-xs text-gray-500 mt-3">
+              Join 2M+ subscribers getting exclusive travel deals weekly
+            </p>
           </div>
         </section>
 
