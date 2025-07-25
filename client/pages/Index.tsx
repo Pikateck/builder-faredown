@@ -983,10 +983,10 @@ export default function Index() {
                                         !isReturn &&
                                         "bg-gray-100 font-semibold",
                                       isDeparture &&
-                                        "bg-gray-900 text-white hover:bg-gray-800",
+                                        "bg-blue-600 text-white hover:bg-blue-700 ring-2 ring-blue-300",
                                       isReturn &&
-                                        "bg-gray-900 text-white hover:bg-gray-800",
-                                      isInRange && "bg-gray-100 text-gray-700",
+                                        "bg-blue-600 text-white hover:bg-blue-700 ring-2 ring-blue-300",
+                                      isInRange && "bg-blue-100 text-blue-700",
                                       !isPastDate &&
                                         !isDeparture &&
                                         !isReturn &&
