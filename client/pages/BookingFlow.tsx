@@ -1053,9 +1053,9 @@ export default function BookingFlow() {
     return calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees();
   };
 
-  // Calculate refund protection cost (10% of total)
+  // Calculate refund protection cost (10% of airline fare)
   const calculateRefundProtectionCost = () => {
-    return Math.round(calculateGrandTotal() * 0.1);
+    return Math.round(calculateBaseFareTotal() * 0.1);
   };
 
   // Calculate extras total
