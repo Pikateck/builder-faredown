@@ -1,359 +1,351 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MobileLayout from "@/components/MobileLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Plane,
-  MapPin,
-  Calendar,
-  Users,
-  Search,
-  TrendingUp,
-  Clock,
-  Star,
-  ArrowRight,
-  Zap,
-  Gift,
-  Globe,
-  Hotel,
-  Car,
-  Camera,
+import { 
+  MapPin, 
+  Calendar, 
+  Users, 
+  ChevronDown, 
+  ArrowUpDown,
+  Bell,
+  User,
+  Menu,
+  Plane
 } from "lucide-react";
 
-const MobileHome: React.FC = () => {
+const MobileHome = () => {
   const navigate = useNavigate();
-  const [from, setFrom] = useState("Mumbai (BOM)");
-  const [to, setTo] = useState("Dubai (DXB)");
-  const [departure, setDeparture] = useState("2024-08-16");
-  const [passengers, setPassengers] = useState(1);
+  const [searchData, setSearchData] = useState({
+    from: "",
+    to: "",
+    departure: "",
+    return: "",
+    travelers: { adults: 2, children: 0, infants: 0 },
+    tripType: "roundtrip",
+    class: "Economy"
+  });
+  const [showMenu, setShowMenu] = useState(false);
+  const [showTravelers, setShowTravelers] = useState(false);
+  const [showClass, setShowClass] = useState(false);
 
-  const quickActions = [
-    {
-      icon: Plane,
-      label: "Flights",
-      color: "bg-blue-500",
-      path: "/mobile-search",
-    },
-    {
-      icon: Hotel,
-      label: "Hotels",
-      color: "bg-green-500",
-      path: "/hotels",
-    },
-    {
-      icon: Car,
-      label: "Cars",
-      color: "bg-purple-500",
-      path: "/cars",
-    },
-    {
-      icon: Camera,
-      label: "Tours",
-      color: "bg-orange-500",
-      path: "/sightseeing",
-    },
-  ];
-
-  const trendingDestinations = [
-    {
-      city: "Dubai",
-      country: "UAE",
-      price: "₹18,500",
-      image: "🏙️",
-      discount: "30% OFF",
-    },
-    {
-      city: "Bangkok",
-      country: "Thailand",
-      price: "₹22,000",
-      image: "🏛️",
-      discount: "25% OFF",
-    },
-    {
-      city: "Singapore",
-      country: "Singapore",
-      price: "₹19,800",
-      image: "🌃",
-      discount: "35% OFF",
-    },
-    {
-      city: "London",
-      country: "UK",
-      price: "₹45,000",
-      image: "🏰",
-      discount: "20% OFF",
-    },
-  ];
-
-  const recentSearches = [
-    { from: "Mumbai", to: "Dubai", date: "Aug 16" },
-    { from: "Delhi", to: "Bangkok", date: "Aug 20" },
-    { from: "Mumbai", to: "Singapore", date: "Aug 25" },
-  ];
-
-  const handleSearch = () => {
-    navigate(
-      `/mobile-search?from=${from}&to=${to}&date=${departure}&passengers=${passengers}`,
-    );
+  const handleBargainNow = () => {
+    // Navigate to mobile search results with bargain enabled
+    navigate("/mobile-search", { state: { searchData, bargainEnabled: true } });
   };
 
+  const handleSearch = () => {
+    navigate("/mobile-search", { state: { searchData } });
+  };
+
+  const swapLocations = () => {
+    setSearchData(prev => ({
+      ...prev,
+      from: prev.to,
+      to: prev.from
+    }));
+  };
+
+  const updateTravelers = (type: string, operation: string) => {
+    setSearchData(prev => ({
+      ...prev,
+      travelers: {
+        ...prev.travelers,
+        [type]: operation === 'add' 
+          ? prev.travelers[type] + 1 
+          : Math.max(0, prev.travelers[type] - 1)
+      }
+    }));
+  };
+
+  const totalTravelers = searchData.travelers.adults + searchData.travelers.children + searchData.travelers.infants;
+
   return (
-    <MobileLayout>
-      <div className="space-y-6">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white p-6 rounded-b-3xl">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold mb-2">
-              Don't Just Book It. Bargain It!™
-            </h1>
-            <p className="text-blue-100">
-              Use AI to negotiate better flight prices
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Mobile Header */}
+      <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <button 
+          onClick={() => setShowMenu(true)}
+          className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
+        >
+          <Menu className="w-6 h-6 text-gray-700" />
+        </button>
+        
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-to-r from-fuchsia-500 to-purple-600 rounded-full flex items-center justify-center">
+            <Plane className="w-4 h-4 text-white" />
           </div>
-
-          {/* Quick Search Card */}
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-            <CardContent className="p-4 space-y-4">
-              {/* From/To Inputs */}
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <Input
-                    value={from}
-                    onChange={(e) => setFrom(e.target.value)}
-                    className="bg-white/90 border-white/30 text-gray-900 placeholder:text-gray-500"
-                    placeholder="From"
-                  />
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <Input
-                    value={to}
-                    onChange={(e) => setTo(e.target.value)}
-                    className="bg-white/90 border-white/30 text-gray-900 placeholder:text-gray-500"
-                    placeholder="To"
-                  />
-                </div>
-              </div>
-
-              {/* Date and Passengers */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-white" />
-                  <Input
-                    type="date"
-                    value={departure}
-                    onChange={(e) => setDeparture(e.target.value)}
-                    className="bg-white/90 border-white/30 text-gray-900 text-sm"
-                  />
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Users className="w-4 h-4 text-white" />
-                  <select
-                    value={passengers}
-                    onChange={(e) => setPassengers(Number(e.target.value))}
-                    className="bg-white/90 border-white/30 rounded-md p-2 text-gray-900 text-sm flex-1"
-                  >
-                    {[1, 2, 3, 4, 5, 6].map((num) => (
-                      <option key={num} value={num}>
-                        {num} {num === 1 ? "Passenger" : "Passengers"}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <Button
-                onClick={handleSearch}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl"
-              >
-                <Search className="w-4 h-4 mr-2" />
-                Search & Bargain Flights
-              </Button>
-            </CardContent>
-          </Card>
+          <span className="font-bold text-lg text-gray-800">Faredown</span>
         </div>
-
-        {/* Quick Actions */}
-        <div className="px-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-4 gap-4">
-            {quickActions.map((action) => (
-              <Button
-                key={action.label}
-                variant="ghost"
-                onClick={() => navigate(action.path)}
-                className="flex flex-col items-center space-y-2 h-auto py-4 hover:bg-gray-100"
-              >
-                <div
-                  className={`w-12 h-12 ${action.color} rounded-full flex items-center justify-center`}
-                >
-                  <action.icon className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-xs font-medium text-gray-700">
-                  {action.label}
-                </span>
-              </Button>
-            ))}
-          </div>
+        
+        <div className="flex items-center space-x-2">
+          <button className="p-2 rounded-lg hover:bg-gray-100 relative">
+            <Bell className="w-5 h-5 text-gray-600" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+          </button>
+          <button className="p-2 rounded-lg hover:bg-gray-100">
+            <User className="w-5 h-5 text-gray-600" />
+          </button>
         </div>
+      </div>
 
-        {/* Recent Searches */}
-        {recentSearches.length > 0 && (
-          <div className="px-4">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">
-                Recent Searches
-              </h2>
-              <Button variant="ghost" size="sm" className="text-blue-600">
-                <Clock className="w-4 h-4 mr-1" />
-                View All
-              </Button>
-            </div>
-            <div className="space-y-2">
-              {recentSearches.map((search, index) => (
-                <Card
-                  key={index}
-                  className="cursor-pointer hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="p-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Plane className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-sm">
-                            {search.from} → {search.to}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {search.date}
-                          </div>
-                        </div>
-                      </div>
-                      <ArrowRight className="w-4 h-4 text-gray-400" />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
+      {/* Hero Section */}
+      <div className="px-4 py-6 text-center">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          Find Your Perfect Flight
+        </h1>
+        <p className="text-gray-600 text-sm">
+          Upgrade. Bargain. Book. Save more with every search.
+        </p>
+      </div>
 
-        {/* Trending Destinations */}
-        <div className="px-4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">
-              Trending Destinations
-            </h2>
-            <Button variant="ghost" size="sm" className="text-blue-600">
-              <TrendingUp className="w-4 h-4 mr-1" />
-              View All
-            </Button>
+      {/* Search Card */}
+      <div className="mx-4 mb-6">
+        <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
+          {/* Trip Type Toggle */}
+          <div className="flex bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setSearchData(prev => ({ ...prev, tripType: "roundtrip" }))}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                searchData.tripType === "roundtrip" 
+                  ? "bg-white text-blue-600 shadow-sm" 
+                  : "text-gray-600"
+              }`}
+            >
+              Round Trip
+            </button>
+            <button
+              onClick={() => setSearchData(prev => ({ ...prev, tripType: "oneway" }))}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                searchData.tripType === "oneway" 
+                  ? "bg-white text-blue-600 shadow-sm" 
+                  : "text-gray-600"
+              }`}
+            >
+              One Way
+            </button>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {trendingDestinations.map((destination, index) => (
-              <Card
-                key={index}
-                className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-              >
-                <CardContent className="p-0">
-                  <div className="relative">
-                    <div className="h-24 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-4xl">
-                      {destination.image}
-                    </div>
-                    <Badge className="absolute top-2 right-2 bg-red-500 text-white text-xs">
-                      {destination.discount}
-                    </Badge>
-                  </div>
-                  <div className="p-3">
-                    <div className="font-semibold text-sm">
-                      {destination.city}
-                    </div>
-                    <div className="text-xs text-gray-500 mb-2">
-                      {destination.country}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-bold text-green-600">
-                        {destination.price}
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-xs text-gray-500">4.8</span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
 
-        {/* Special Features */}
-        <div className="px-4">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">
-            Faredown Features
-          </h2>
+          {/* From/To Fields */}
           <div className="space-y-3">
-            <Card className="bg-gradient-to-r from-orange-50 to-red-50 border-orange-200">
-              <CardContent className="p-4 flex items-center space-x-3">
-                <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-orange-800">
-                    AI Bargaining
-                  </div>
-                  <div className="text-sm text-orange-600">
-                    Let AI negotiate better prices for you
-                  </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-orange-600" />
-              </CardContent>
-            </Card>
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Departure city"
+                  value={searchData.from}
+                  onChange={(e) => setSearchData(prev => ({ ...prev, from: e.target.value }))}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
 
-            <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
-              <CardContent className="p-4 flex items-center space-x-3">
-                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                  <Gift className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-green-800">
-                    Instant Deals
-                  </div>
-                  <div className="text-sm text-green-600">
-                    Get notified of flash sales and discounts
-                  </div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-green-600" />
-              </CardContent>
-            </Card>
+            {/* Swap Button */}
+            <div className="flex justify-center">
+              <button
+                onClick={swapLocations}
+                className="p-2 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors"
+              >
+                <ArrowUpDown className="w-4 h-4 text-blue-600" />
+              </button>
+            </div>
 
-            <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
-              <CardContent className="p-4 flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                  <Globe className="w-5 h-5 text-white" />
+            <div className="relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Destination city"
+                  value={searchData.to}
+                  onChange={(e) => setSearchData(prev => ({ ...prev, to: e.target.value }))}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Date Fields */}
+          <div className={`grid ${searchData.tripType === "roundtrip" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Departure</label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="date"
+                  value={searchData.departure}
+                  onChange={(e) => setSearchData(prev => ({ ...prev, departure: e.target.value }))}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+            
+            {searchData.tripType === "roundtrip" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Return</label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                  <input
+                    type="date"
+                    value={searchData.return}
+                    onChange={(e) => setSearchData(prev => ({ ...prev, return: e.target.value }))}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
                 </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-blue-800">
-                    Global Coverage
-                  </div>
-                  <div className="text-sm text-blue-600">
-                    Book flights to 1000+ destinations worldwide
-                  </div>
+              </div>
+            )}
+          </div>
+
+          {/* Travelers and Class */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Travelers</label>
+              <button
+                onClick={() => setShowTravelers(true)}
+                className="w-full flex items-center justify-between px-3 py-3 border border-gray-200 rounded-lg bg-white hover:bg-gray-50"
+              >
+                <div className="flex items-center space-x-2">
+                  <Users className="w-5 h-5 text-gray-400" />
+                  <span className="text-gray-700">{totalTravelers} Traveler{totalTravelers !== 1 ? 's' : ''}</span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-blue-600" />
-              </CardContent>
-            </Card>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Class</label>
+              <button
+                onClick={() => setShowClass(true)}
+                className="w-full flex items-center justify-between px-3 py-3 border border-gray-200 rounded-lg bg-white hover:bg-gray-50"
+              >
+                <span className="text-gray-700">{searchData.class}</span>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </MobileLayout>
+
+      {/* Action Buttons */}
+      <div className="px-4 space-y-3 pb-6">
+        {/* Bargain Now Button - Primary */}
+        <button
+          onClick={handleBargainNow}
+          className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+        >
+          🔥 Bargain Now & Save More
+        </button>
+
+        {/* Regular Search Button - Secondary */}
+        <button
+          onClick={handleSearch}
+          className="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+        >
+          Search Flights
+        </button>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="px-4 pb-8">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <button className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="text-2xl mb-2">🏨</div>
+            <span className="text-sm font-medium text-gray-700">Hotels</span>
+          </button>
+          <button className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="text-2xl mb-2">🎫</div>
+            <span className="text-sm font-medium text-gray-700">My Trips</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Travelers Modal */}
+      {showTravelers && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+          <div className="bg-white w-full rounded-t-xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Select Travelers</h3>
+              <button
+                onClick={() => setShowTravelers(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            {[
+              { key: 'adults', label: 'Adults', desc: '12+ years' },
+              { key: 'children', label: 'Children', desc: '2-11 years' },
+              { key: 'infants', label: 'Infants', desc: 'Under 2 years' }
+            ].map(({ key, label, desc }) => (
+              <div key={key} className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">{label}</div>
+                  <div className="text-sm text-gray-500">{desc}</div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => updateTravelers(key, 'subtract')}
+                    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center font-medium">{searchData.travelers[key]}</span>
+                  <button
+                    onClick={() => updateTravelers(key, 'add')}
+                    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <button
+              onClick={() => setShowTravelers(false)}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Class Modal */}
+      {showClass && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+          <div className="bg-white w-full rounded-t-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Select Class</h3>
+              <button
+                onClick={() => setShowClass(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            {['Economy', 'Premium Economy', 'Business', 'First Class'].map((classType) => (
+              <button
+                key={classType}
+                onClick={() => {
+                  setSearchData(prev => ({ ...prev, class: classType }));
+                  setShowClass(false);
+                }}
+                className={`w-full text-left py-3 px-4 rounded-lg mb-2 border ${
+                  searchData.class === classType 
+                    ? 'border-blue-500 bg-blue-50 text-blue-600' 
+                    : 'border-gray-200 hover:bg-gray-50'
+                }`}
+              >
+                {classType}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
