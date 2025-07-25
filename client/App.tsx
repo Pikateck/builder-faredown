@@ -29,6 +29,7 @@ import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 
 // Mobile pages
+import MobileSplash from "./pages/MobileSplash";
 import MobileHome from "./pages/MobileHome";
 import MobileSearch from "./pages/MobileSearch";
 import MobileBargain from "./pages/MobileBargain";
