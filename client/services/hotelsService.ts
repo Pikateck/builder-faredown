@@ -737,7 +737,7 @@ export class HotelsService {
       { id: "AKL", name: "Auckland", type: "city" as const, country: "New Zealand", code: "AKL", flag: "🇳🇿" },
       { id: "NRT", name: "Tokyo", type: "city" as const, country: "Japan", code: "NRT", flag: "🇯🇵", popular: true },
       { id: "KIX", name: "Osaka", type: "city" as const, country: "Japan", code: "KIX", flag: "🇯🇵" },
-      { id: "ICN", name: "Seoul", type: "city" as const, country: "South Korea", code: "ICN", flag: "🇰��" },
+      { id: "ICN", name: "Seoul", type: "city" as const, country: "South Korea", code: "ICN", flag: "🇰🇷" },
       { id: "TPE", name: "Taipei", type: "city" as const, country: "Taiwan", code: "TPE", flag: "🇹🇼" },
       { id: "HKG", name: "Hong Kong", type: "city" as const, country: "Hong Kong", code: "HKG", flag: "🇭🇰", popular: true },
       { id: "SIN", name: "Singapore", type: "city" as const, country: "Singapore", code: "SIN", flag: "🇸🇬", popular: true },
@@ -764,8 +764,10 @@ export class HotelsService {
         console.log(`🔍 Searching destinations via ${isProduction ? 'production' : 'development'} API: "${query}"`);
 
         const controller = new AbortController();
+        let isAborted = false;
         const timeoutId = setTimeout(() => {
           console.log("⏰ API request timeout - aborting");
+          isAborted = true;
           controller.abort();
         }, 5000); // 5 second timeout
 
