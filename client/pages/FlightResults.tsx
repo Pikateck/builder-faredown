@@ -2379,10 +2379,7 @@ export default function FlightResults() {
                   {bargainResult === "accepted" ? (
                     <>
                       <div className="text-center">
-                        <div className="w-24 h-24 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                          <CheckCircle className="w-16 h-16 text-green-600" />
-                        </div>
-                        <h3 className="text-3xl font-bold text-green-600 mb-2">
+                        <h3 className="text-2xl font-bold text-[#003580] mb-2">
                           Perfect Match!
                         </h3>
                         <p className="text-gray-600 mb-1 text-lg">
@@ -2390,12 +2387,12 @@ export default function FlightResults() {
                         </p>
                       </div>
 
-                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-8 shadow-lg">
-                        <div className="text-4xl font-bold text-green-700 mb-2">
+                      <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-8 shadow-lg">
+                        <div className="text-4xl font-bold text-[#003580] mb-2">
                           {selectedCurrency.symbol}
                           {parseInt(bargainPrice).toLocaleString()}
                         </div>
-                        <p className="text-sm text-green-600 font-medium">
+                        <p className="text-sm text-[#003580] font-medium">
                           {numberToWords(bargainPrice)}
                         </p>
                       </div>
@@ -2403,10 +2400,7 @@ export default function FlightResults() {
                   ) : bargainResult === "counter" ? (
                     <>
                       <div className="text-center">
-                        <div className="w-24 h-24 mx-auto bg-[#003580]/10 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                          <Target className="w-16 h-16 text-[#003580]" />
-                        </div>
-                        <h3 className="text-3xl font-bold text-[#003580] mb-2">
+                        <h3 className="text-2xl font-bold text-[#003580] mb-2">
                           AI Counter Offer!
                         </h3>
                         <p className="text-gray-600 mb-1 text-lg">
@@ -2414,7 +2408,7 @@ export default function FlightResults() {
                         </p>
                       </div>
 
-                      <div className="bg-gradient-to-r from-[#003580]/5 to-[#0071c2]/5 border-2 border-[#003580]/20 rounded-xl p-8 shadow-lg">
+                      <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-8 shadow-lg">
                         <div className="text-4xl font-bold text-[#003580] mb-2">
                           {selectedCurrency.symbol}
                           {aiOfferPrice
@@ -2425,7 +2419,7 @@ export default function FlightResults() {
                           {aiOfferPrice ? numberToWords((convertPrice(aiOfferPrice) * (exchangeRates[selectedCurrency.code as keyof typeof exchangeRates] || 1)).toString()) : ""}
                         </p>
                         <div className="text-center">
-                          <span className="text-sm font-semibold text-green-600 bg-green-100 px-4 py-2 rounded-full">
+                          <span className="text-sm font-semibold text-[#003580] bg-[#003580]/10 px-4 py-2 rounded-full">
                             You save {selectedCurrency.symbol}
                             {convertPrice(
                               bargainFareType.price - (aiOfferPrice || 0),
@@ -2438,12 +2432,9 @@ export default function FlightResults() {
 
                   {isOfferValid ? (
                     <>
-                      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-xl p-4 shadow-lg">
+                      <div className="bg-white border-2 border-[#febb02] rounded-xl p-4 shadow-lg">
                         <div className="flex items-center justify-center space-x-3">
-                          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center animate-pulse">
-                            <span className="text-white text-sm">⏰</span>
-                          </div>
-                          <span className="font-bold text-orange-800 text-xl">
+                          <span className="font-bold text-[#003580] text-xl">
                             Offer expires in: {offerExpiryTime}s
                           </span>
                         </div>
@@ -2459,7 +2450,7 @@ export default function FlightResults() {
                             });
                           }}
                           disabled={!isOfferValid}
-                          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-5 text-xl font-bold rounded-xl shadow-lg"
+                          className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
                         >
                           Book This Deal - {selectedCurrency.symbol}
                           {bargainResult === "accepted"
@@ -2480,8 +2471,8 @@ export default function FlightResults() {
                     </>
                   ) : (
                     <div className="space-y-4">
-                      <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                        <p className="text-red-600 font-medium">Offer has expired</p>
+                      <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-4 shadow-lg">
+                        <p className="text-[#003580] font-medium">Offer has expired</p>
                       </div>
                       <Button
                         onClick={() => {
