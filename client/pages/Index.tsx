@@ -1517,15 +1517,38 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        {/* Trust & Testimonials Section */}
         <section className="py-16 bg-gray-50">
           <div className="max-w-[1280px] mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                What Our Travelers Say
+                Trusted by Millions Worldwide
               </h2>
-              <p className="text-gray-600 text-lg">
-                Real reviews from real travelers
+              <p className="text-gray-600 text-lg mb-6">
+                Real reviews from verified travelers
+              </p>
+
+              {/* Trust Rating */}
+              <div className="flex items-center justify-center space-x-4 mb-8">
+                <div className="flex items-center space-x-1">
+                  {Array(5).fill(0).map((_, i) => (
+                    <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <span className="text-xl font-bold text-gray-900">4.9</span>
+                <span className="text-gray-600">Rated by verified travelers worldwide</span>
+              </div>
+
+              {/* Live Support Banner */}
+              <div className="bg-blue-600 text-white px-6 py-3 rounded-full inline-flex items-center space-x-3 mb-8">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span className="font-medium">24×7 Customer Support | Live Chat & Call Available</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Safe, Verified, and Instant Confirmations. Backed by real humans.
               </p>
             </div>
 
