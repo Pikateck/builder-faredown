@@ -88,9 +88,11 @@ const MobileHome = () => {
       <div className="px-4 -mt-6 relative z-10">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Search Form Wrapper with Mobile Optimizations */}
-          <div className="mobile-search-wrapper">
-            <BookingSearchForm />
-          </div>
+          <MobileBookingFormWrapper
+            className="p-1"
+            showCurrencySelector={false}
+            redirectToMobileResults={true}
+          />
         </div>
       </div>
 
