@@ -1579,7 +1579,10 @@ export default function FlightResults() {
               <Button
                 variant="outline"
                 className="flex-1"
-                onClick={() => setShowMobileFilters(false)}
+                onClick={() => {
+                  resetAllFilters();
+                  setShowMobileFilters(false);
+                }}
               >
                 Clear all
               </Button>
