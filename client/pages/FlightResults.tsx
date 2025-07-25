@@ -1476,24 +1476,53 @@ export default function FlightResults() {
               </div>
             </div>
 
+            {/* Price Range Filter */}
+            <div>
+              <h3 className="font-medium mb-3">Price range (per person)</h3>
+              <div className="flex items-center space-x-2 mb-3">
+                <Input
+                  type="number"
+                  placeholder="Min"
+                  value={priceRange[0]}
+                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                  className="flex-1 h-10"
+                />
+                <span className="text-gray-400">-</span>
+                <Input
+                  type="number"
+                  placeholder="Max"
+                  value={priceRange[1]}
+                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                  className="flex-1 h-10"
+                />
+              </div>
+            </div>
+
             {/* Stops Filter */}
             <div>
               <h3 className="font-medium mb-3">Stops</h3>
               <div className="space-y-2">
-                <label className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <input type="radio" name="stops" className="text-[#003580]" />
-                    <span>Any</span>
-                  </div>
-                  <span className="text-sm text-gray-500">635 flights</span>
-                </label>
-                <label className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <input type="radio" name="stops" className="text-[#003580]" />
-                    <span>Direct only</span>
-                  </div>
-                  <span className="text-sm text-gray-500">29 flights</span>
-                </label>
+                {[
+                  { value: "any", label: "Any", count: flightData.length },
+                  { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
+                  { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
+                  { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
+                ].map((option) => (
+                  <label key={option.value} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name="mobile-stops"
+                        value={option.value}
+                        checked={selectedStops === option.value}
+                        onChange={() => handleStopsFilter(option.value)}
+                        className="text-[#003580]"
+                      />
+                      <span>{option.label}</span>
+                    </div>
+                    <span className="text-sm text-gray-500">{option.count}</span>
+                  </label>
+                ))}
               </div>
             </div>
 
@@ -1501,14 +1530,46 @@ export default function FlightResults() {
             <div>
               <h3 className="font-medium mb-3">Airlines</h3>
               <div className="space-y-2 max-h-40 overflow-y-auto">
-                {["Emirates", "Air India", "Indigo", "SpiceJet", "Qatar Airways"].map((airline) => (
+                {availableAirlines.map((airline) => (
                   <label key={airline} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <input type="checkbox" className="text-[#003580]" defaultChecked />
+                      <input
+                        type="checkbox"
+                        checked={selectedAirlines.has(airline)}
+                        onChange={(e) => handleAirlineFilter(airline, e.target.checked)}
+                        className="text-[#003580]"
+                      />
                       <span>{airline}</span>
                     </div>
-                    <span className="text-sm text-gray-500">25</span>
+                    <span className="text-sm text-gray-500">{airlineCounts[airline]}</span>
                   </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Flight Times */}
+            <div>
+              <h3 className="font-medium mb-3">Departure time</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "Morning", range: [6, 12], icon: "☀️" },
+                  { label: "Afternoon", range: [12, 18], icon: "☀️" },
+                  { label: "Evening", range: [18, 24], icon: "🌙" },
+                  { label: "Night", range: [0, 6], icon: "🌅" }
+                ].map((timeSlot) => (
+                  <button
+                    key={timeSlot.label}
+                    onClick={() => setDepartureTimeRange(timeSlot.range as [number, number])}
+                    className={`p-3 rounded-lg border text-center transition-colors ${
+                      departureTimeRange[0] === timeSlot.range[0] && departureTimeRange[1] === timeSlot.range[1]
+                        ? 'border-[#003580] bg-blue-50 text-[#003580]'
+                        : 'border-gray-200'
+                    }`}
+                  >
+                    <div className="text-lg mb-1">{timeSlot.icon}</div>
+                    <div className="text-xs font-medium">{timeSlot.label}</div>
+                    <div className="text-xs text-gray-500">{timeSlot.range[0]}:00-{timeSlot.range[1]}:00</div>
+                  </button>
                 ))}
               </div>
             </div>
