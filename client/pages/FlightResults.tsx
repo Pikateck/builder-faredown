@@ -1056,9 +1056,9 @@ export default function FlightResults() {
             </div>
           </div>
 
-          {/* Desktop Search inputs - Exact Homepage Design */}
-          <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 w-full max-w-5xl overflow-visible">
-            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+          {/* Desktop Search inputs - Responsive Design */}
+          <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 mt-2 w-full max-w-6xl overflow-visible">
+            <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Leaving from
               </label>
@@ -1067,12 +1067,12 @@ export default function FlightResults() {
                 className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
               >
                 <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 min-w-0">
                   <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
                     {cityData[selectedFromCity]?.code || "BOM"}
                   </div>
-                  <span className="text-sm text-gray-700 font-medium">
-                    {cityData[selectedFromCity]?.airport || "Chhatrapati Shivaji International"}...
+                  <span className="text-sm text-gray-700 font-medium truncate">
+                    {cityData[selectedFromCity]?.airport || "Chhatrapati Shivaji International"}
                   </span>
                 </div>
               </button>
