@@ -463,6 +463,18 @@ export default function FlightResults() {
     setMaxDuration(24);
   };
 
+  // Additional helper functions
+  const handleStopsFilter = (stops: string) => {
+    setSelectedStops(stops);
+  };
+
+  // Get unique airlines from flight data
+  const availableAirlines = Array.from(new Set(flightData.map(flight => flight.airline)));
+  const airlineCounts = availableAirlines.reduce((acc, airline) => {
+    acc[airline] = flightData.filter(flight => flight.airline === airline).length;
+    return acc;
+  }, {} as Record<string, number>);
+
   // Filter flights based on selected airlines with sorting and pricing logic
   const filteredFlights = (
     selectedAirlines.size === 0
