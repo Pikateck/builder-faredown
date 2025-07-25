@@ -1261,7 +1261,7 @@ export default function FlightResults() {
               )}
             </div>
 
-            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+            <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Travelers
               </label>
@@ -1270,7 +1270,7 @@ export default function FlightResults() {
                 className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
               >
                 <svg
-                  className="w-4 h-4 text-gray-500 mr-2"
+                  className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -1282,7 +1282,7 @@ export default function FlightResults() {
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                <span className="text-sm text-gray-700 font-medium">
+                <span className="text-sm text-gray-700 font-medium truncate">
                   {travelers.adults} adult
                   {travelers.adults > 1 ? "s" : ""}
                   {travelers.children > 0
