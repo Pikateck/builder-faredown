@@ -967,27 +967,49 @@ export default function FlightResults() {
 
         {/* Flight Results */}
         <div className="flex-1 p-0 md:p-4">
-          {/* Desktop Sort Header */}
-          <div className="hidden md:flex items-center justify-between mb-6 bg-white rounded-lg p-4">
-            <div className="flex items-center space-x-4">
-              <span className="font-medium">Sort by:</span>
-              <div className="flex space-x-2">
-                <Button
-                  variant={sortBy === "cheapest" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSortBy("cheapest")}
-                  className={sortBy === "cheapest" ? "bg-blue-600" : ""}
-                >
-                  Cheapest
-                </Button>
-                <Button
-                  variant={sortBy === "fastest" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSortBy("fastest")}
-                  className={sortBy === "fastest" ? "bg-blue-600" : ""}
-                >
-                  Fastest
-                </Button>
+          {/* Desktop Sort Header - Booking.com Style */}
+          <div className="hidden md:block bg-white border border-gray-200 rounded-lg p-4 mb-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-6">
+                <div className="text-sm text-gray-600">
+                  <span className="font-semibold text-gray-900">{filteredFlights.length}</span> flights found
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm font-medium text-gray-700">Sort by:</span>
+                  <div className="flex space-x-1">
+                    <Button
+                      variant={sortBy === "cheapest" ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setSortBy("cheapest")}
+                      className={`px-4 py-2 text-sm rounded-md ${
+                        sortBy === "cheapest"
+                          ? "bg-[#003580] text-white hover:bg-[#0071c2]"
+                          : "text-gray-600 hover:bg-gray-100 border border-gray-300"
+                      }`}
+                    >
+                      Cheapest
+                    </Button>
+                    <Button
+                      variant={sortBy === "fastest" ? "default" : "ghost"}
+                      size="sm"
+                      onClick={() => setSortBy("fastest")}
+                      className={`px-4 py-2 text-sm rounded-md ${
+                        sortBy === "fastest"
+                          ? "bg-[#003580] text-white hover:bg-[#0071c2]"
+                          : "text-gray-600 hover:bg-gray-100 border border-gray-300"
+                      }`}
+                    >
+                      Fastest
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional controls */}
+              <div className="flex items-center space-x-4">
+                <div className="text-sm text-gray-600">
+                  Showing flights from <span className="font-medium">BOM</span> to <span className="font-medium">DXB</span>
+                </div>
               </div>
             </div>
           </div>
