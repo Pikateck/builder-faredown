@@ -518,7 +518,7 @@ export function HotelCard({
 
               <Button
                 onClick={() => onBargainClick(hotel, searchParams)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold touch-manipulation text-sm sm:text-base"
+                className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm sm:text-base"
               >
                 <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                 <span className="hidden sm:inline">Bargain</span>
