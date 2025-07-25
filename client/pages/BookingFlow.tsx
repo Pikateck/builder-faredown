@@ -230,7 +230,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
               {flightTitle}
             </h3>
             <p className="text-sm text-[#666]">
-              3h 15m • Emirates Airlines • Economy
+              {selectedFlight?.duration || "3h 15m"} • {selectedFlight?.airline || "Airlines"} • {selectedFareType?.name || "Economy"}
             </p>
           </div>
           <ChevronDown
