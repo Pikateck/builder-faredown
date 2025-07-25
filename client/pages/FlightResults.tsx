@@ -703,7 +703,7 @@ export default function FlightResults() {
   };
 
   const startBargaining = () => {
-    if (!bargainFareType || !bargainPrice) return;
+    if (!bargainFlight || !bargainFareType || !bargainPrice) return;
 
     const targetPriceInSelectedCurrency = parseInt(bargainPrice);
     const targetPriceInINR = Math.round(
@@ -712,20 +712,22 @@ export default function FlightResults() {
           1),
     );
     const currentPriceInINR = bargainFareType.price;
-    const priceKey = `${bargainFareType.name}-${targetPriceInSelectedCurrency}`;
+    const priceKey = `${bargainFlight.id}-${bargainFareType.name}-${targetPriceInSelectedCurrency}`;
 
+    // Check if this exact price has been tried before
     if (usedPrices.has(priceKey)) {
       alert(
-        "You've already tried this price! Please enter a different amount.",
+        "You've already tried this exact price! Please enter a different amount to negotiate.",
       );
       return;
     }
 
     if (targetPriceInINR >= currentPriceInINR) {
-      alert("Please enter a price lower than the current price!");
+      alert("Please enter a price lower than the current price to start negotiation!");
       return;
     }
 
+    // Add price to used prices
     setUsedPrices((prev) => new Set([...prev, priceKey]));
     setBargainStep("progress");
     setBargainProgress(0);
