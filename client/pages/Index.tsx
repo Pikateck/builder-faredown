@@ -360,14 +360,18 @@ export default function Index() {
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
-                Upgrade. Bargain. Book.™
+                Upgrade. Bargain. Book.
               </h1>
               <p className="text-blue-200 text-sm mb-3">
-                The world's first travel platform where you control the price — for flights, hotels & upgrades.
+                Control your price for flights & hotels — with live AI bargaining.
               </p>
-              <p className="text-blue-100 text-xs">
-                Used by 50M+ travelers. Real-time AI-powered bargaining. Verified savings.
+              <p className="text-blue-100 text-xs mb-3">
+                Join 50M+ travelers who bargain smarter.
               </p>
+              <Button className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold px-6 py-2 rounded-lg text-sm inline-flex items-center space-x-2">
+                <span>Try Bargain Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </Button>
             </div>
 
             {/* Mobile Trip Type Selector */}
