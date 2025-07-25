@@ -711,197 +711,31 @@ export default function FlightResults() {
 
       {/* Main Content Container */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
-        {/* Desktop Sidebar Filters (≥769px) - Booking.com Style */}
-        <div className="hidden md:block w-72 flex-shrink-0 p-4">
-          <div className="bg-white rounded-lg border shadow-sm sticky top-24">
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900">Filter by:</h3>
-                <button
-                  onClick={resetAllFilters}
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Clear all
-                </button>
-              </div>
-            </div>
-
-            <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-              {/* Price Range Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Price range (per person)</h4>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="number"
-                      placeholder="Min"
-                      value={priceRange[0]}
-                      onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                      className="w-20 h-8 text-xs"
-                    />
-                    <span className="text-gray-400">-</span>
-                    <Input
-                      type="number"
-                      placeholder="Max"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                      className="w-20 h-8 text-xs"
-                    />
-                    <span className="text-xs text-gray-500">{selectedCurrency.symbol}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stops Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Stops</h4>
+        {/* Desktop Sidebar Filters (≥769px) */}
+        <div className="hidden md:block w-64 flex-shrink-0 p-4">
+          <div className="bg-white rounded-lg border p-4 sticky top-24">
+            <h3 className="font-semibold text-gray-900 mb-4">Filter Results</h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium mb-2">Stops</h4>
                 <div className="space-y-2">
-                  {[
-                    { value: "any", label: "Any", count: flightData.length },
-                    { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
-                    { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
-                    { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded">
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name="stops"
-                          value={option.value}
-                          checked={selectedStops === option.value}
-                          onChange={() => handleStopsFilter(option.value)}
-                          className="text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">{option.label}</span>
-                      </div>
-                      <span className="text-xs text-gray-500">{option.count}</span>
-                    </label>
-                  ))}
+                  <label className="flex items-center">
+                    <input type="radio" name="stops" className="mr-2" defaultChecked />
+                    <span className="text-sm">Any</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="radio" name="stops" className="mr-2" />
+                    <span className="text-sm">Direct only</span>
+                  </label>
                 </div>
               </div>
-
-              {/* Airlines Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Airlines</h4>
-                <div className="space-y-1 max-h-40 overflow-y-auto">
-                  {availableAirlines.map((airline) => (
-                    <label
-                      key={airline}
-                      className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-                      onMouseEnter={() => setHoveredAirline(airline)}
-                      onMouseLeave={() => setHoveredAirline(null)}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedAirlines.has(airline)}
-                          onChange={(e) => handleAirlineFilter(airline, e.target.checked)}
-                          className="text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className={`text-sm transition-colors ${
-                          hoveredAirline === airline ? 'text-blue-600 font-medium' : 'text-gray-700'
-                        }`}>{airline}</span>
-                      </div>
-                      <span className="text-xs text-gray-500">{airlineCounts[airline]}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Departure Time Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Departure time</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: "Early morning", range: [0, 6], icon: "🌅" },
-                    { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
-                    { label: "Evening", range: [18, 24], icon: "🌙" }
-                  ].map((timeSlot) => (
-                    <button
-                      key={timeSlot.label}
-                      onClick={() => setDepartureTimeRange(timeSlot.range as [number, number])}
-                      className={`p-2 rounded-lg border text-xs text-center transition-colors ${
-                        departureTimeRange[0] === timeSlot.range[0] && departureTimeRange[1] === timeSlot.range[1]
-                          ? 'border-blue-500 bg-blue-50 text-blue-700'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="text-lg mb-1">{timeSlot.icon}</div>
-                      <div className="font-medium">{timeSlot.label}</div>
-                      <div className="text-gray-500">{timeSlot.range[0]}:00 - {timeSlot.range[1]}:00</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Arrival Time Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Arrival time</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: "Early morning", range: [0, 6], icon: "🌅" },
-                    { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
-                    { label: "Evening", range: [18, 24], icon: "🌙" }
-                  ].map((timeSlot) => (
-                    <button
-                      key={timeSlot.label}
-                      onClick={() => setArrivalTimeRange(timeSlot.range as [number, number])}
-                      className={`p-2 rounded-lg border text-xs text-center transition-colors ${
-                        arrivalTimeRange[0] === timeSlot.range[0] && arrivalTimeRange[1] === timeSlot.range[1]
-                          ? 'border-blue-500 bg-blue-50 text-blue-700'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="text-lg mb-1">{timeSlot.icon}</div>
-                      <div className="font-medium">{timeSlot.label}</div>
-                      <div className="text-gray-500">{timeSlot.range[0]}:00 - {timeSlot.range[1]}:00</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Duration Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Maximum flight duration</h4>
-                <div className="space-y-2">
-                  <input
-                    type="range"
-                    min="2"
-                    max="24"
-                    value={maxDuration}
-                    onChange={(e) => setMaxDuration(Number(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>2h</span>
-                    <span className="font-medium text-gray-700">{maxDuration}h</span>
-                    <span>24h</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Flight Quality Filters */}
-              <div className="p-4">
-                <h4 className="font-medium text-gray-900 mb-3">Flight quality</h4>
-                <div className="space-y-2">
-                  {[
-                    { id: "wifi", label: "Wi-Fi available", icon: <Wifi className="w-4 h-4" /> },
-                    { id: "power", label: "Power outlets", icon: "🔌" },
-                    { id: "meals", label: "Meals included", icon: "🍽️" },
-                    { id: "entertainment", label: "Entertainment", icon: <Headphones className="w-4 h-4" /> }
-                  ].map((feature) => (
-                    <label key={feature.id} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
-                      <input type="checkbox" className="text-blue-600 focus:ring-blue-500" />
-                      <span className="flex items-center space-x-2">
-                        {typeof feature.icon === 'string' ? (
-                          <span className="text-sm">{feature.icon}</span>
-                        ) : (
-                          feature.icon
-                        )}
-                        <span className="text-sm text-gray-700">{feature.label}</span>
-                      </span>
+              <div>
+                <h4 className="font-medium mb-2">Airlines</h4>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
+                  {["Emirates", "Air India", "Indigo", "SpiceJet"].map((airline) => (
+                    <label key={airline} className="flex items-center">
+                      <input type="checkbox" className="mr-2" defaultChecked />
+                      <span className="text-sm">{airline}</span>
                     </label>
                   ))}
                 </div>
