@@ -29,8 +29,9 @@ import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 
 // Mobile pages
-import MobileSplash from "./pages/MobileSplash";
-import MobileHome from "./pages/MobileHome";
+import MobileSplash from "./pages/mobile/MobileSplash";
+import MobileHome from "./pages/mobile/MobileHome";
+import MobileHotelResults from "./pages/mobile/MobileHotelResults";
 import MobileSearch from "./pages/MobileSearch";
 import MobileBargain from "./pages/MobileBargain";
 import MobileBooking from "./pages/MobileBooking";
