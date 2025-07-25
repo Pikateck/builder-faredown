@@ -88,6 +88,9 @@ function App() {
             <Route path="/help" element={<HelpCenter />} />
             <Route path="/help-center" element={<HelpCenter />} />
             <Route path="/support" element={<HelpCenter />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
             <Route path="/my-trips" element={<MyTrips />} />
 
             {/* Development/Testing Routes */}
