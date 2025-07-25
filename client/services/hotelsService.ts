@@ -794,7 +794,7 @@ export class HotelsService {
                 }
               } catch (jsonError) {
                 if (jsonError instanceof Error && jsonError.name === 'AbortError') {
-                  console.log(`⏰ API request was aborted during JSON parsing for query: "${query}"`);
+                  console.log(`⏰ JSON parsing was aborted for query: "${query}"`);
                   return []; // Return empty array immediately on abort
                 } else {
                   console.warn(`⚠️ Failed to parse JSON response:`, jsonError instanceof Error ? jsonError.message : "Unknown error");
