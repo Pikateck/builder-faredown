@@ -1777,7 +1777,7 @@ export default function BookingFlow() {
                                   15kg - ₹ 4,200
                                 </SelectItem>
                                 <SelectItem value="20kg">
-                                  20kg - ��� 5,500
+                                  20kg - ₹ 5,500
                                 </SelectItem>
                                 <SelectItem value="25kg">
                                   25kg - ��� 6,800
@@ -2023,7 +2023,7 @@ export default function BookingFlow() {
                             <span className="text-xl">♾️</span>
                           </div>
                           <h4 className="text-lg font-semibold text-gray-900">
-                            Receive 100% refund if you cancel for any of the
+                            Receive 10% of total booking value refund if you cancel for any of the
                             reasons below
                           </h4>
                         </div>
