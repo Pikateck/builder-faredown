@@ -354,7 +354,7 @@ export function HotelCard({
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold touch-manipulation text-sm"
+                  className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm"
                 >
                   <TrendingDown className="w-4 h-4 mr-1" />
                   Bargain
