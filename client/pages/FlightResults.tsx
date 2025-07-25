@@ -1156,35 +1156,47 @@ export default function FlightResults() {
                           </div>
                         </div>
                       </div>
-                      <div className="text-right relative group">
-                        <div className="text-lg font-bold text-gray-900 cursor-help">
-                          {formatPrice(flight.fareTypes[0].price)}
+                      <div className="text-right relative">
+                        <div className="flex items-center justify-end space-x-1">
+                          <div className="text-lg font-bold text-gray-900">
+                            {formatPrice(flight.fareTypes[0].price)}
+                          </div>
+                          <button
+                            onClick={() => setExpandedTicketOptions(
+                              expandedTicketOptions === `mobile-tooltip-${flight.id}` ? null : `mobile-tooltip-${flight.id}`
+                            )}
+                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                          >
+                            <Info className="w-3 h-3" />
+                          </button>
                         </div>
                         <div className="text-xs text-gray-500">per person</div>
                         {/* Mobile Fare Breakdown Tooltip */}
-                        <div className="absolute right-0 bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                          <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[180px]">
-                            <div className="text-center font-medium mb-2">Fare breakdown</div>
-                            <div className="space-y-1">
-                              <div className="flex justify-between">
-                                <span>Base fare:</span>
-                                <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.75))}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span>Taxes & fees:</span>
-                                <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.25))}</span>
-                              </div>
-                              <div className="border-t border-gray-600 pt-1 mt-1">
-                                <div className="flex justify-between font-medium">
-                                  <span>Total:</span>
-                                  <span>{formatPrice(flight.fareTypes[0].price)}</span>
+                        {expandedTicketOptions === `mobile-tooltip-${flight.id}` && (
+                          <div className="absolute right-0 bottom-full mb-2 z-50">
+                            <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[180px]">
+                              <div className="text-center font-medium mb-2">Fare breakdown</div>
+                              <div className="space-y-1">
+                                <div className="flex justify-between">
+                                  <span>Base fare:</span>
+                                  <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.75))}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Taxes & fees:</span>
+                                  <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.25))}</span>
+                                </div>
+                                <div className="border-t border-gray-600 pt-1 mt-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>Total:</span>
+                                    <span>{formatPrice(flight.fareTypes[0].price)}</span>
+                                  </div>
                                 </div>
                               </div>
+                              {/* Tooltip arrow */}
+                              <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                             </div>
-                            {/* Tooltip arrow */}
-                            <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
 
