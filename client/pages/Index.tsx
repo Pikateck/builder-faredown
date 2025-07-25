@@ -449,10 +449,7 @@ export default function Index() {
               {/* Dates */}
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
-                  onClick={() => {
-                    console.log("Mobile calendar clicked, current showCalendar:", showCalendar);
-                    setShowCalendar(true);
-                  }}
+                  onClick={() => setShowCalendar(true)}
                   className="w-full text-left"
                 >
                   <div className="text-xs text-gray-500 mb-1">Dates</div>
