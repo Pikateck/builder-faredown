@@ -303,7 +303,7 @@ export default function CookiePolicy() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 Faredown Bookings and Travels Pvt Ltd. All rights reserved.</p>
+            <p>&copy; 2024 Faredown.com. All rights reserved.</p>
           </div>
         </div>
       </footer>
