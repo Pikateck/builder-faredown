@@ -1790,7 +1790,7 @@ export default function BookingFlow() {
                         <div className="flex items-center justify-between p-4 border rounded-lg">
                           <div className="flex items-center space-x-4">
                             <div className="w-8 h-8 bg-[#f2f6fa] rounded-full flex items-center justify-center">
-                              <span className="text-[#003580] text-sm">✈</span>
+                              <Plane className="w-4 h-4 text-[#003580]" />
                             </div>
                             <div>
                               <h5 className="font-medium text-gray-900">
