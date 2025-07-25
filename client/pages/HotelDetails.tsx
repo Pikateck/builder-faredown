@@ -682,65 +682,38 @@ export default function HotelDetails() {
                     {/* Unified All-Inclusive & Bargain Benefits Banner */}
                     <div className="mt-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                       <div className="space-y-3">
-                        {/* Header with Icons */}
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-4 h-4 text-white"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
+                        {/* Header */}
+                        <div className="text-center mb-3">
+                          <h3 className="text-base font-semibold text-[#222222] flex items-center justify-center space-x-2">
+                            <svg className="w-4 h-4 text-[#22c55e]" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
-                          </div>
-                          <h3 className="text-lg font-medium text-[#222222]">
-                            One Smart Price. Zero Surprises.
+                            <span>One Smart Price. Zero Surprises.</span>
                           </h3>
                         </div>
 
-                        {/* Subtitle */}
-                        <div className="text-center mb-4">
-                          <p className="text-sm text-[#6b6b6b]">
-                            Get full transparency, better rates with our AI Bargain Tool, and final prices you can trust.
-                          </p>
-                        </div>
-
-                        {/* Benefits Stack - Mobile Optimized */}
-                        <div className="space-y-3">
-                          <div className="flex items-center space-x-3 p-2 hover:bg-[#f2f2f2] rounded-lg transition-colors">
-                            <div className="text-[#003580] text-lg">💡</div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-[#222222]">Transparent Pricing</p>
-                              <p className="text-xs text-[#6b6b6b]">All taxes, fees & charges included</p>
-                            </div>
+                        {/* Compact Benefits List */}
+                        <div className="space-y-2">
+                          <div className="flex items-start space-x-2">
+                            <svg className="w-3 h-3 text-[#22c55e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            <span className="text-sm text-[#222222]">Transparent pricing with all taxes and fees included</span>
                           </div>
 
-                          <div className="flex items-center space-x-3 p-2 hover:bg-[#f2f2f2] rounded-lg transition-colors">
-                            <div className="text-[#003580] text-lg">⚡</div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-[#222222]">AI Bargain Engine</p>
-                              <p className="text-xs text-[#6b6b6b]">Negotiate live rates instantly</p>
-                            </div>
+                          <div className="flex items-start space-x-2">
+                            <svg className="w-3 h-3 text-[#22c55e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            <span className="text-sm text-[#222222]">AI Bargain Engine: Negotiate live rates instantly</span>
                           </div>
 
-                          <div className="flex items-center space-x-3 p-2 hover:bg-[#f2f2f2] rounded-lg transition-colors">
-                            <div className="text-[#003580] text-lg">🛡</div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-[#222222]">Final Price Guarantee</p>
-                              <p className="text-xs text-[#6b6b6b]">No hidden fees ever</p>
-                            </div>
+                          <div className="flex items-start space-x-2">
+                            <svg className="w-3 h-3 text-[#22c55e] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                            <span className="text-sm text-[#222222]">Final Price Guarantee: No hidden fees ever</span>
                           </div>
-                        </div>
-
-                        {/* Bottom Badge */}
-                        <div className="bg-[#e7f0fa] border border-[#0071c2] rounded-lg p-2 text-center mt-4">
-                          <p className="text-xs font-medium text-[#003580]">
-                            ✓ Booking.com-style transparency with smart pricing
-                          </p>
                         </div>
                       </div>
                     </div>
