@@ -1014,6 +1014,23 @@ export default function FlightResults() {
             </div>
           </div>
 
+          {/* Lucky Message - Move to top */}
+          <div className="hidden md:block mb-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">🍀</span>
+              </div>
+              <div>
+                <p className="font-medium text-[#003580]">
+                  You're lucky! There are no better prices on nearby dates.
+                </p>
+                <p className="text-sm text-gray-600">
+                  Latest prices found for your search.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Flight Cards */}
           <div className="space-y-0 md:space-y-4">
             {filteredFlights.map((flight) => (
