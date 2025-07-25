@@ -388,6 +388,14 @@ export default function FlightResults() {
     ]),
   );
 
+  // Additional filter states (needed to prevent errors)
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
+  const [selectedStops, setSelectedStops] = useState<string>("any");
+  const [departureTimeRange, setDepartureTimeRange] = useState<[number, number]>([0, 24]);
+  const [arrivalTimeRange, setArrivalTimeRange] = useState<[number, number]>([0, 24]);
+  const [maxDuration, setMaxDuration] = useState<number>(24);
+  const [hoveredAirline, setHoveredAirline] = useState<string | null>(null);
+
   // Exchange rates relative to INR (base currency)
   const exchangeRates = {
     USD: 0.012,
