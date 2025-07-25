@@ -898,8 +898,8 @@ export default function HotelDetails() {
                               />
                             </svg>
                           </div>
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            All-Inclusive Pricing + Smart Bargaining
+                          <h3 className="text-lg font-medium text-[#222222]">
+                            One Smart Price. Zero Surprises.
                           </h3>
                         </div>
 
@@ -1880,7 +1880,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🎪</span> Children's playground
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🏸</span> Tennis court
+                        <span className="mr-2">��</span> Tennis court
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">💳</span> Credit cards accepted
