@@ -1669,10 +1669,10 @@ export default function Index() {
               <div>
                 <h4 className="font-semibold mb-4">Legal</h4>
                 <div className="space-y-2 text-sm">
-                  <div className="text-gray-400 hover:text-white cursor-pointer">Privacy Policy</div>
-                  <div className="text-gray-400 hover:text-white cursor-pointer">Terms of Service</div>
-                  <div className="text-gray-400 hover:text-white cursor-pointer">Cookie Policy</div>
-                  <div className="text-gray-400 hover:text-white cursor-pointer">Refund Policy</div>
+                  <Link to="/privacy-policy" className="text-gray-400 hover:text-white cursor-pointer block">Privacy Policy</Link>
+                  <Link to="/terms-conditions" className="text-gray-400 hover:text-white cursor-pointer block">Terms of Service</Link>
+                  <Link to="/cookie-policy" className="text-gray-400 hover:text-white cursor-pointer block">Cookie Policy</Link>
+                  <Link to="/refund-policy" className="text-gray-400 hover:text-white cursor-pointer block">Refund Policy</Link>
                 </div>
               </div>
             </div>
