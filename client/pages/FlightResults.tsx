@@ -1251,6 +1251,7 @@ export default function FlightResults() {
                     }}
                     onClose={() => setShowCalendar(false)}
                     className="w-full"
+                    bookingType="flight"
                   />
                 </div>
               )}
