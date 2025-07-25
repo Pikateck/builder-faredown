@@ -1521,7 +1521,7 @@ export default function FlightResults() {
                     </div>
 
                     {/* Explore Options */}
-                    <div className="border-t border-gray-200 bg-gray-50 py-3 mt-4 -mx-6 -mb-6 rounded-b-lg">
+                    <div className="border-t border-gray-200 bg-gray-50 py-2 mt-4 -mx-6 -mb-6 rounded-b-lg">
                       <div className="flex justify-center">
                         <button
                           onClick={() =>
@@ -1529,11 +1529,11 @@ export default function FlightResults() {
                               expandedTicketOptions === flight.id ? null : flight.id,
                             )
                           }
-                          className="text-blue-600 text-sm font-bold hover:underline flex items-center"
+                          className="text-blue-600 text-sm font-medium hover:text-blue-800 transition-colors flex items-center py-1 px-2 rounded hover:bg-blue-50"
                         >
                           Explore ticket options
                           <ChevronDown
-                            className={`w-4 h-4 ml-1 transition-transform ${
+                            className={`w-4 h-4 ml-1 transition-transform duration-200 ${
                               expandedTicketOptions === flight.id ? "rotate-180" : ""
                             }`}
                           />
