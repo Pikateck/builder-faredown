@@ -137,7 +137,25 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   const refreshRates = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/currency/rates");
+
+      // Check if the API endpoint is available
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      const response = await fetch("/api/currency/rates", {
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
 
       if (data.success && data.data) {
@@ -163,9 +181,25 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         }
 
         console.log(`💱 Exchange rates updated from ${data.source}`);
+      } else {
+        console.warn("📈 Exchange rate API returned invalid data, using static rates");
       }
     } catch (error) {
-      console.error("Failed to refresh exchange rates:", error);
+      // Graceful fallback - don't show error to user, just log it
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.warn("📈 Exchange rate fetch timeout, using static rates");
+        } else if (error.message.includes('Failed to fetch')) {
+          console.warn("📈 Exchange rate API unavailable, using static rates");
+        } else {
+          console.warn("📈 Exchange rate fetch failed:", error.message);
+        }
+      } else {
+        console.warn("📈 Exchange rate fetch failed with unknown error");
+      }
+
+      // Continue with static rates - don't break the app
+      console.log("💰 Using static exchange rates for currency conversion");
     } finally {
       setIsLoading(false);
     }
