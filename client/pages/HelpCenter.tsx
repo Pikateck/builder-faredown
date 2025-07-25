@@ -36,64 +36,95 @@ export default function HelpCenter() {
       title: "Flight reservations and confirmations",
       description: "Booking, changes, cancellations, and confirmations",
       color: "bg-blue-500",
-      items: ["How to book a flight", "Change or cancel booking", "Flight confirmations", "Seat selection"]
+      items: [
+        "How to book a flight",
+        "Change or cancel booking",
+        "Flight confirmations",
+        "Seat selection",
+      ],
     },
     {
       icon: CreditCard,
       title: "Payment methods and charges",
       description: "Payment options, refunds, and billing inquiries",
       color: "bg-green-500",
-      items: ["Payment methods", "Refund process", "Additional charges", "Billing issues"]
+      items: [
+        "Payment methods",
+        "Refund process",
+        "Additional charges",
+        "Billing issues",
+      ],
     },
     {
       icon: Luggage,
       title: "Baggage and seats",
       description: "Baggage allowance, extra bags, and seat upgrades",
       color: "bg-purple-500",
-      items: ["Baggage allowance", "Extra baggage", "Seat upgrades", "Special assistance"]
+      items: [
+        "Baggage allowance",
+        "Extra baggage",
+        "Seat upgrades",
+        "Special assistance",
+      ],
     },
     {
       icon: User,
       title: "Passenger and flight details",
-      description: "Passenger information, flight changes, and special requests",
+      description:
+        "Passenger information, flight changes, and special requests",
       color: "bg-orange-500",
-      items: ["Passenger details", "Flight information", "Special requests", "Travel documents"]
+      items: [
+        "Passenger details",
+        "Flight information",
+        "Special requests",
+        "Travel documents",
+      ],
     },
     {
       icon: MapPin,
       title: "Check-in information",
       description: "Online check-in, boarding passes, and airport procedures",
       color: "bg-red-500",
-      items: ["Online check-in", "Boarding passes", "Airport check-in", "Security procedures"]
+      items: [
+        "Online check-in",
+        "Boarding passes",
+        "Airport check-in",
+        "Security procedures",
+      ],
     },
     {
       icon: HelpCircle,
       title: "General support",
       description: "FAQs, contact information, and general inquiries",
       color: "bg-gray-500",
-      items: ["Frequently asked questions", "Contact support", "Travel tips", "Terms & conditions"]
-    }
+      items: [
+        "Frequently asked questions",
+        "Contact support",
+        "Travel tips",
+        "Terms & conditions",
+      ],
+    },
   ];
 
   const quickActions = [
     {
       title: "How do I get my flight confirmation?",
-      description: "Find your booking confirmation email and e-tickets"
+      description: "Find your booking confirmation email and e-tickets",
     },
     {
       title: "I have a spelling mistake on a passenger name",
-      description: "Learn how to correct passenger name errors"
+      description: "Learn how to correct passenger name errors",
     },
     {
       title: "My child will be flying alone",
-      description: "Information about unaccompanied minor services"
-    }
+      description: "Information about unaccompanied minor services",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       {/* Hero Section with Search */}
       <section className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white py-20 overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -104,7 +135,7 @@ export default function HelpCenter() {
           <p className="text-xl mb-8 text-blue-100">
             Search our help center or manage your booking below
           </p>
-          
+
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mb-8">
             <div className="relative">
@@ -138,18 +169,30 @@ export default function HelpCenter() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {helpCategories.map((category, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+              <Card
+                key={index}
+                className="hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className={`w-12 h-12 ${category.color} rounded-lg flex items-center justify-center`}>
+                    <div
+                      className={`w-12 h-12 ${category.color} rounded-lg flex items-center justify-center`}
+                    >
                       <category.icon className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-2">{category.title}</h3>
-                      <p className="text-sm text-gray-600 mb-3">{category.description}</p>
+                      <h3 className="font-semibold text-gray-900 mb-2">
+                        {category.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-3">
+                        {category.description}
+                      </p>
                       <div className="space-y-1">
                         {category.items.slice(0, 2).map((item, itemIndex) => (
-                          <div key={itemIndex} className="text-xs text-blue-600 hover:text-blue-800">
+                          <div
+                            key={itemIndex}
+                            className="text-xs text-blue-600 hover:text-blue-800"
+                          >
                             • {item}
                           </div>
                         ))}
@@ -173,7 +216,8 @@ export default function HelpCenter() {
                 Manage your booking
               </h2>
               <p className="text-gray-600 mb-6">
-                If you have an existing booking with us please enter your booking details below to get tailored advice
+                If you have an existing booking with us please enter your
+                booking details below to get tailored advice
               </p>
 
               <div className="space-y-4">
@@ -208,7 +252,10 @@ export default function HelpCenter() {
                 </Button>
 
                 <div className="text-center pt-4">
-                  <Link to="/register" className="text-blue-600 hover:text-blue-800 text-sm">
+                  <Link
+                    to="/register"
+                    className="text-blue-600 hover:text-blue-800 text-sm"
+                  >
                     Don't have an account? Create one here
                   </Link>
                 </div>
@@ -217,8 +264,10 @@ export default function HelpCenter() {
 
             {/* Right Side - Benefits */}
             <div className="bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl p-8 text-white">
-              <h3 className="text-xl font-bold mb-6">Benefits of manage my booking</h3>
-              
+              <h3 className="text-xl font-bold mb-6">
+                Benefits of manage my booking
+              </h3>
+
               <div className="space-y-6">
                 <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
                   <div className="flex items-center space-x-3 mb-2">
@@ -226,7 +275,8 @@ export default function HelpCenter() {
                     <span className="font-medium">Download your e-tickets</span>
                   </div>
                   <p className="text-sm text-blue-100">
-                    Access and download your booking confirmation and e-tickets for your trip
+                    Access and download your booking confirmation and e-tickets
+                    for your trip
                   </p>
                 </div>
 
@@ -246,7 +296,8 @@ export default function HelpCenter() {
                     <span className="font-medium">Add extras & upgrades</span>
                   </div>
                   <p className="text-sm text-blue-100">
-                    Enhance your journey with extra baggage, meals, and seat upgrades
+                    Enhance your journey with extra baggage, meals, and seat
+                    upgrades
                   </p>
                 </div>
               </div>
@@ -291,7 +342,9 @@ export default function HelpCenter() {
                 <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Phone className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">+44 1543 234258</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  +44 1543 234258
+                </h3>
                 <p className="text-sm text-gray-600 mb-4">
                   Speak directly with our support team
                 </p>
@@ -325,7 +378,9 @@ export default function HelpCenter() {
                 <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Mail className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Email Support</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Email Support
+                </h3>
                 <p className="text-sm text-gray-600 mb-4">
                   Send us an email for detailed support
                 </p>
@@ -346,33 +401,37 @@ export default function HelpCenter() {
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-gray-600">
-              Quick answers to common questions
-            </p>
+            <p className="text-gray-600">Quick answers to common questions</p>
           </div>
 
           <div className="space-y-4">
             {[
               {
                 question: "How do I change my flight booking?",
-                answer: "You can change your flight booking through our Manage Booking section or by contacting our support team."
+                answer:
+                  "You can change your flight booking through our Manage Booking section or by contacting our support team.",
               },
               {
                 question: "What is the baggage allowance for my flight?",
-                answer: "Baggage allowance varies by airline and ticket type. Check your booking confirmation for specific details."
+                answer:
+                  "Baggage allowance varies by airline and ticket type. Check your booking confirmation for specific details.",
               },
               {
                 question: "How do I check in for my flight?",
-                answer: "You can check in online 24 hours before departure through our website or the airline's website."
+                answer:
+                  "You can check in online 24 hours before departure through our website or the airline's website.",
               },
               {
                 question: "Can I get a refund for my booking?",
-                answer: "Refund eligibility depends on your ticket type and cancellation timing. Contact our support for specific details."
-              }
+                answer:
+                  "Refund eligibility depends on your ticket type and cancellation timing. Contact our support for specific details.",
+              },
             ].map((faq, index) => (
               <Card key={index} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
+                  <h3 className="font-semibold text-gray-900 mb-2">
+                    {faq.question}
+                  </h3>
                   <p className="text-gray-600">{faq.answer}</p>
                 </CardContent>
               </Card>
@@ -394,25 +453,70 @@ export default function HelpCenter() {
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <div className="space-y-2 text-sm">
-                <Link to="/help" className="text-gray-400 hover:text-white block">Help Center</Link>
-                <Link to="/contact" className="text-gray-400 hover:text-white block">Contact Us</Link>
-                <Link to="/faq" className="text-gray-400 hover:text-white block">FAQ</Link>
+                <Link
+                  to="/help"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Help Center
+                </Link>
+                <Link
+                  to="/contact"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Contact Us
+                </Link>
+                <Link
+                  to="/faq"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  FAQ
+                </Link>
               </div>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Services</h4>
               <div className="space-y-2 text-sm">
-                <Link to="/flights" className="text-gray-400 hover:text-white block">Flights</Link>
-                <Link to="/hotels" className="text-gray-400 hover:text-white block">Hotels</Link>
-                <Link to="/manage" className="text-gray-400 hover:text-white block">Manage Booking</Link>
+                <Link
+                  to="/flights"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Flights
+                </Link>
+                <Link
+                  to="/hotels"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Hotels
+                </Link>
+                <Link
+                  to="/manage"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Manage Booking
+                </Link>
               </div>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <div className="space-y-2 text-sm">
-                <Link to="/about" className="text-gray-400 hover:text-white block">About Us</Link>
-                <Link to="/careers" className="text-gray-400 hover:text-white block">Careers</Link>
-                <Link to="/privacy" className="text-gray-400 hover:text-white block">Privacy Policy</Link>
+                <Link
+                  to="/about"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  About Us
+                </Link>
+                <Link
+                  to="/careers"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Careers
+                </Link>
+                <Link
+                  to="/privacy"
+                  className="text-gray-400 hover:text-white block"
+                >
+                  Privacy Policy
+                </Link>
               </div>
             </div>
           </div>

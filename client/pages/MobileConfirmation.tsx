@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { 
+import {
   Check,
   Download,
   Share,
@@ -10,7 +10,7 @@ import {
   User,
   Mail,
   Phone,
-  Plane
+  Plane,
 } from "lucide-react";
 
 const MobileConfirmation = () => {
@@ -21,7 +21,7 @@ const MobileConfirmation = () => {
   const bookingRef = `FD${Date.now().toString().slice(-6)}`;
 
   const formatCurrency = (amount) => {
-    return `₹${amount.toLocaleString('en-IN')}`;
+    return `₹${amount.toLocaleString("en-IN")}`;
   };
 
   const handleDownload = () => {
@@ -33,9 +33,9 @@ const MobileConfirmation = () => {
     // Implement share functionality
     if (navigator.share) {
       navigator.share({
-        title: 'Flight Booking Confirmation',
+        title: "Flight Booking Confirmation",
         text: `Flight booked! Booking reference: ${bookingRef}`,
-        url: window.location.href
+        url: window.location.href,
       });
     } else {
       alert("Sharing booking details...");
@@ -77,29 +77,37 @@ const MobileConfirmation = () => {
             <Plane className="w-5 h-5 mr-2 text-blue-600" />
             Flight Details
           </h3>
-          
+
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="text-2xl">{selectedFlight?.logo}</div>
                 <div>
                   <div className="font-medium">{selectedFlight?.airline}</div>
-                  <div className="text-sm text-gray-500">{selectedFlight?.class}</div>
+                  <div className="text-sm text-gray-500">
+                    {selectedFlight?.class}
+                  </div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-semibold">{formatCurrency(selectedFlight?.price || 0)}</div>
+                <div className="font-semibold">
+                  {formatCurrency(selectedFlight?.price || 0)}
+                </div>
                 <div className="text-xs text-gray-500">per person</div>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between py-3 border-t border-gray-100">
               <div className="text-center">
-                <div className="text-lg font-bold text-gray-800">{selectedFlight?.departure}</div>
-                <div className="text-sm text-gray-500">{selectedFlight?.from}</div>
+                <div className="text-lg font-bold text-gray-800">
+                  {selectedFlight?.departure}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {selectedFlight?.from}
+                </div>
                 <div className="text-xs text-gray-400">Departure</div>
               </div>
-              
+
               <div className="flex-1 mx-4 text-center">
                 <div className="relative">
                   <div className="h-px bg-gray-300 w-full"></div>
@@ -109,10 +117,14 @@ const MobileConfirmation = () => {
                   {selectedFlight?.duration}
                 </div>
               </div>
-              
+
               <div className="text-center">
-                <div className="text-lg font-bold text-gray-800">{selectedFlight?.arrival}</div>
-                <div className="text-sm text-gray-500">{selectedFlight?.to}</div>
+                <div className="text-lg font-bold text-gray-800">
+                  {selectedFlight?.arrival}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {selectedFlight?.to}
+                </div>
                 <div className="text-xs text-gray-400">Arrival</div>
               </div>
             </div>
@@ -127,10 +139,13 @@ const MobileConfirmation = () => {
             <User className="w-5 h-5 mr-2 text-blue-600" />
             Passenger Details
           </h3>
-          
+
           <div className="space-y-3">
             {travellers?.map((traveller, index) => (
-              <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+              <div
+                key={index}
+                className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+              >
                 <div>
                   <div className="font-medium">
                     {traveller.title} {traveller.firstName} {traveller.lastName}
@@ -156,31 +171,37 @@ const MobileConfirmation = () => {
       </div>
 
       {/* Add-ons */}
-      {Object.values(addOns || {}).some(addon => addon.selected) && (
+      {Object.values(addOns || {}).some((addon) => addon.selected) && (
         <div className="mx-4 mb-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <h3 className="font-semibold text-gray-800 mb-4">Selected Add-ons</h3>
-            
+            <h3 className="font-semibold text-gray-800 mb-4">
+              Selected Add-ons
+            </h3>
+
             <div className="space-y-2">
-              {addOns && Object.entries(addOns).map(([key, addon]) => {
-                if (!addon.selected) return null;
-                
-                const addonNames = {
-                  meals: '🍽️ Meals',
-                  baggage: '🧳 Extra Baggage',
-                  insurance: '🛡️ Travel Insurance',
-                  priorityBoarding: '🚀 Priority Boarding'
-                };
-                
-                return (
-                  <div key={key} className="flex items-center justify-between py-2">
-                    <span className="text-sm">{addonNames[key]}</span>
-                    <span className="text-sm font-medium text-blue-600">
-                      {formatCurrency(addon.price)}
-                    </span>
-                  </div>
-                );
-              })}
+              {addOns &&
+                Object.entries(addOns).map(([key, addon]) => {
+                  if (!addon.selected) return null;
+
+                  const addonNames = {
+                    meals: "🍽️ Meals",
+                    baggage: "🧳 Extra Baggage",
+                    insurance: "🛡️ Travel Insurance",
+                    priorityBoarding: "🚀 Priority Boarding",
+                  };
+
+                  return (
+                    <div
+                      key={key}
+                      className="flex items-center justify-between py-2"
+                    >
+                      <span className="text-sm">{addonNames[key]}</span>
+                      <span className="text-sm font-medium text-blue-600">
+                        {formatCurrency(addon.price)}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -190,7 +211,9 @@ const MobileConfirmation = () => {
       <div className="mx-4 mb-4">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-4">
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold text-gray-800">Total Paid</span>
+            <span className="text-lg font-semibold text-gray-800">
+              Total Paid
+            </span>
             <span className="text-2xl font-bold text-blue-600">
               {formatCurrency(total || 0)}
             </span>
@@ -210,7 +233,7 @@ const MobileConfirmation = () => {
           <Download className="w-5 h-5" />
           <span>Download Ticket</span>
         </button>
-        
+
         <button
           onClick={handleShare}
           className="w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 hover:bg-gray-200 transition-all"
@@ -223,7 +246,9 @@ const MobileConfirmation = () => {
       {/* Important Information */}
       <div className="mx-4 mb-8">
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <h4 className="font-semibold text-amber-800 mb-2">Important Information</h4>
+          <h4 className="font-semibold text-amber-800 mb-2">
+            Important Information
+          </h4>
           <ul className="text-sm text-amber-700 space-y-1">
             <li>• Arrive at airport 2 hours before domestic flights</li>
             <li>• Carry valid ID proof and printed/digital ticket</li>

@@ -147,8 +147,8 @@ export default function MyTrips() {
     }
 
     // Remove any potential duplicates by ID (additional safeguard)
-    const uniqueTrips = existingTrips.filter((trip, index, self) =>
-      index === self.findIndex(t => t.id === trip.id)
+    const uniqueTrips = existingTrips.filter(
+      (trip, index, self) => index === self.findIndex((t) => t.id === trip.id),
     );
 
     // Update localStorage with the combined trips

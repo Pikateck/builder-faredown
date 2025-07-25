@@ -8,7 +8,7 @@ const MobileSplash = () => {
   useEffect(() => {
     // Fade in animation
     setIsVisible(true);
-    
+
     // Auto-redirect after 2 seconds
     const timer = setTimeout(() => {
       navigate("/mobile-home");
@@ -31,9 +31,13 @@ const MobileSplash = () => {
       </div>
 
       {/* Main content */}
-      <div className={`text-center z-10 transition-all duration-1000 transform ${
-        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
-      }`}>
+      <div
+        className={`text-center z-10 transition-all duration-1000 transform ${
+          isVisible
+            ? "opacity-100 translate-y-0 scale-100"
+            : "opacity-0 translate-y-8 scale-95"
+        }`}
+      >
         {/* Logo */}
         <div className="mb-8">
           <div className="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-2xl">
@@ -61,9 +65,11 @@ const MobileSplash = () => {
         </div>
 
         {/* Enter button (appears after 1 second) */}
-        <div className={`transition-all duration-500 delay-1000 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        }`}>
+        <div
+          className={`transition-all duration-500 delay-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <button
             onClick={handleEnterNow}
             className="bg-white text-fuchsia-600 px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 active:scale-95"
@@ -74,9 +80,11 @@ const MobileSplash = () => {
       </div>
 
       {/* Bottom branding */}
-      <div className={`absolute bottom-8 left-0 right-0 text-center transition-all duration-1000 delay-1500 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}>
+      <div
+        className={`absolute bottom-8 left-0 right-0 text-center transition-all duration-1000 delay-1500 ${
+          isVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <p className="text-white/60 text-sm">
           Powered by AI • Instant Bargains
         </p>

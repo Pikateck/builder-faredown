@@ -281,9 +281,10 @@ export default function HotelDetails() {
   ];
 
   // Calculate the lowest price from available room types
-  const lowestPrice = roomTypes.length > 0
-    ? Math.min(...roomTypes.map(room => room.pricePerNight))
-    : 167; // fallback price
+  const lowestPrice =
+    roomTypes.length > 0
+      ? Math.min(...roomTypes.map((room) => room.pricePerNight))
+      : 167; // fallback price
 
   const handleBargainClick = (roomType: any) => {
     console.log("Bargain clicked for room:", roomType.id);
@@ -430,7 +431,9 @@ export default function HotelDetails() {
               <span className="text-sm font-medium">Filters</span>
             </Button>
             <div className="h-4 w-px bg-gray-300"></div>
-            <span className="text-sm text-gray-600">₹{lowestPrice}+ per night</span>
+            <span className="text-sm text-gray-600">
+              ₹{lowestPrice}+ per night
+            </span>
           </div>
           <Button
             variant="ghost"
@@ -487,7 +490,6 @@ export default function HotelDetails() {
                 Apply Filters
               </Button>
             </div>
-
           </div>
         </div>
 
@@ -681,7 +683,9 @@ export default function HotelDetails() {
                                   roomTypes[0].pricePerNight,
                                 ).toLocaleString()
                               : "586"}
-                            <span className="text-sm font-normal text-gray-600 ml-1">incl. taxes</span>
+                            <span className="text-sm font-normal text-gray-600 ml-1">
+                              incl. taxes
+                            </span>
                           </div>
                           <div className="text-xs text-gray-600 mb-1">
                             (₹
@@ -713,8 +717,16 @@ export default function HotelDetails() {
                       <div className="space-y-3">
                         {/* Header with Single Checkmark */}
                         <div className="flex items-center space-x-2 mb-3">
-                          <svg className="w-4 h-4 text-[#22c55e] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <svg
+                            className="w-4 h-4 text-[#22c55e] flex-shrink-0"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                           <h3 className="text-base font-semibold text-[#222222]">
                             One Smart Price. Zero Surprises.
@@ -724,7 +736,8 @@ export default function HotelDetails() {
                         {/* Compact Benefits List - Text Only */}
                         <div className="space-y-1 text-left pl-6">
                           <div className="text-sm text-[#222222]">
-                            - Transparent pricing with all taxes and fees included
+                            - Transparent pricing with all taxes and fees
+                            included
                           </div>
                           <div className="text-sm text-[#222222]">
                             - AI Bargain Engine: Negotiate live rates instantly
@@ -1634,7 +1647,8 @@ export default function HotelDetails() {
                         <span className="mr-2">���</span> TV Lounge
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">����</span> Outdoor Freshwater pool
+                        <span className="mr-2">����</span> Outdoor Freshwater
+                        pool
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🎵</span> Live music/performance

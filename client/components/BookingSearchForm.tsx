@@ -391,7 +391,10 @@ export function BookingSearchForm() {
                   onBlur={(e) => {
                     // Delay hiding to allow selection
                     setTimeout(() => {
-                      if (e.currentTarget && !e.currentTarget.contains(document.activeElement)) {
+                      if (
+                        e.currentTarget &&
+                        !e.currentTarget.contains(document.activeElement)
+                      ) {
                         setIsDestinationOpen(false);
                       }
                     }, 150);
@@ -413,7 +416,10 @@ export function BookingSearchForm() {
                 )}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg" align="start">
+            <PopoverContent
+              className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg"
+              align="start"
+            >
               <div className="max-h-80 overflow-y-auto">
                 {!popularDestinationsLoaded ? (
                   <div className="flex items-center justify-center p-4">
@@ -450,18 +456,38 @@ export function BookingSearchForm() {
                       >
                         {/* Clean minimal icon with country flag support */}
                         <div className="flex items-center justify-center w-7 h-7 mr-3 flex-shrink-0">
-                          {dest.type === 'hotel' ? (
-                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                          {dest.type === "hotel" ? (
+                            <svg
+                              className="w-4 h-4 text-gray-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                              />
                             </svg>
                           ) : (dest as any).flag ? (
                             <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-50 border border-gray-200">
-                              <span className="text-sm">{(dest as any).flag}</span>
+                              <span className="text-sm">
+                                {(dest as any).flag}
+                              </span>
                             </div>
                           ) : (
                             <div className="flex items-center justify-center w-5 h-5 bg-blue-500 rounded-full">
-                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              <svg
+                                className="w-3 h-3 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                  clipRule="evenodd"
+                                />
                               </svg>
                             </div>
                           )}
@@ -481,7 +507,7 @@ export function BookingSearchForm() {
                                     Popular
                                   </span>
                                 )}
-                                {dest.type === 'hotel' && (
+                                {dest.type === "hotel" && (
                                   <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
                                     Hotel
                                   </span>
@@ -490,7 +516,9 @@ export function BookingSearchForm() {
 
                               {/* Country and region info */}
                               <div className="text-xs text-gray-500">
-                                <span className="capitalize">{dest.type === 'hotel' ? 'Hotel' : dest.type}</span>
+                                <span className="capitalize">
+                                  {dest.type === "hotel" ? "Hotel" : dest.type}
+                                </span>
                                 {dest.country && (
                                   <span> in {dest.country}</span>
                                 )}
@@ -511,8 +539,18 @@ export function BookingSearchForm() {
                 ) : destination.length >= 1 && !loadingDestinations ? (
                   <div className="p-4 text-center">
                     <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
                       </svg>
                     </div>
                     <div className="text-sm text-gray-500 mb-2">
@@ -549,12 +587,22 @@ export function BookingSearchForm() {
                         <div className="flex items-center justify-center w-7 h-7 mr-3 flex-shrink-0">
                           {(dest as any).flag ? (
                             <div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-50 border border-gray-200">
-                              <span className="text-sm">{(dest as any).flag}</span>
+                              <span className="text-sm">
+                                {(dest as any).flag}
+                              </span>
                             </div>
                           ) : (
                             <div className="flex items-center justify-center w-5 h-5 bg-orange-500 rounded-full">
-                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                              <svg
+                                className="w-3 h-3 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                  clipRule="evenodd"
+                                />
                               </svg>
                             </div>
                           )}

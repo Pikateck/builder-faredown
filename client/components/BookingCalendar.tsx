@@ -16,7 +16,7 @@ interface BookingCalendarProps {
   };
   onClose?: () => void;
   className?: string;
-  bookingType?: 'hotel' | 'flight';
+  bookingType?: "hotel" | "flight";
 }
 
 export function BookingCalendar({
@@ -24,7 +24,7 @@ export function BookingCalendar({
   initialRange,
   onClose,
   className,
-  bookingType = 'hotel',
+  bookingType = "hotel",
 }: BookingCalendarProps) {
   const [selection, setSelection] = useState([
     {
@@ -357,13 +357,13 @@ export function BookingCalendar({
             {selection[0].startDate && selection[0].endDate && (
               <div className="space-y-1">
                 <div>
-                  {bookingType === 'flight' ? 'Departure Date' : 'Check-in'}:{" "}
+                  {bookingType === "flight" ? "Departure Date" : "Check-in"}:{" "}
                   <span className="font-medium text-gray-900">
                     {format(selection[0].startDate, "EEE, MMM d")}
                   </span>
                 </div>
                 <div>
-                  {bookingType === 'flight' ? 'Arrival Date' : 'Check-out'}:{" "}
+                  {bookingType === "flight" ? "Arrival Date" : "Check-out"}:{" "}
                   <span className="font-medium text-gray-900">
                     {format(selection[0].endDate, "EEE, MMM d")}
                   </span>

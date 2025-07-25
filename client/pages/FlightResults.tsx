@@ -385,18 +385,40 @@ export default function FlightResults() {
   // Airlines filter state - Initialize with all airlines selected to show all flights by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
     new Set([
-      "Emirates", "Air India", "Indigo", "Fly Dubai", "Air Arabia", "Spicejet",
-      "Vistara", "Air Asia", "GoAir", "Alliance Air", "Qatar Airways", "Etihad Airways",
-      "Lufthansa", "British Airways", "Singapore Airlines", "Thai Airways", "Malaysia Airlines",
-      "Kuwait Airways", "Oman Air", "Saudia", "Turkish Airlines", "Flydubai"
+      "Emirates",
+      "Air India",
+      "Indigo",
+      "Fly Dubai",
+      "Air Arabia",
+      "Spicejet",
+      "Vistara",
+      "Air Asia",
+      "GoAir",
+      "Alliance Air",
+      "Qatar Airways",
+      "Etihad Airways",
+      "Lufthansa",
+      "British Airways",
+      "Singapore Airlines",
+      "Thai Airways",
+      "Malaysia Airlines",
+      "Kuwait Airways",
+      "Oman Air",
+      "Saudia",
+      "Turkish Airlines",
+      "Flydubai",
     ]),
   );
 
   // Additional filter states (needed to prevent errors)
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
   const [selectedStops, setSelectedStops] = useState<string>("any");
-  const [departureTimeRange, setDepartureTimeRange] = useState<[number, number]>([0, 24]);
-  const [arrivalTimeRange, setArrivalTimeRange] = useState<[number, number]>([0, 24]);
+  const [departureTimeRange, setDepartureTimeRange] = useState<
+    [number, number]
+  >([0, 24]);
+  const [arrivalTimeRange, setArrivalTimeRange] = useState<[number, number]>([
+    0, 24,
+  ]);
   const [maxDuration, setMaxDuration] = useState<number>(24);
   const [hoveredAirline, setHoveredAirline] = useState<string | null>(null);
 
@@ -466,8 +488,18 @@ export default function FlightResults() {
   // Calendar helper functions (restored)
   const getMonthName = (month: number) => {
     const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     return months[month];
   };
@@ -480,7 +512,11 @@ export default function FlightResults() {
     return new Date(year, month, 1).getDay();
   };
 
-  const isDateInRange = (date: Date, startDate: Date | null, endDate: Date | null) => {
+  const isDateInRange = (
+    date: Date,
+    startDate: Date | null,
+    endDate: Date | null,
+  ) => {
     if (!startDate || !endDate) return false;
     return date >= startDate && date <= endDate;
   };
@@ -521,7 +557,9 @@ export default function FlightResults() {
         setSelectedReturnDate("");
         setSelectingDeparture(false);
       } else {
-        const departureDate = selectedDepartureDate ? new Date(selectedDepartureDate) : null;
+        const departureDate = selectedDepartureDate
+          ? new Date(selectedDepartureDate)
+          : null;
         if (departureDate && clickedDate <= departureDate) {
           setSelectedDepartureDate(formatDateHelper(clickedDate));
           setSelectedReturnDate("");
@@ -537,7 +575,7 @@ export default function FlightResults() {
   // Format date helper
   const formatDateHelper = (date: Date | string, compact = false) => {
     if (!date) return "";
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    const dateObj = typeof date === "string" ? new Date(date) : date;
     if (compact) {
       return dateObj.toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -590,21 +628,42 @@ export default function FlightResults() {
     },
   };
 
-
-
   // Expanded airlines list with more options
   const availableAirlines = [
-    "Emirates", "Air India", "Indigo", "Fly Dubai", "Air Arabia", "Spicejet",
-    "Vistara", "Air Asia", "GoAir", "Alliance Air", "Qatar Airways", "Etihad Airways",
-    "Lufthansa", "British Airways", "Singapore Airlines", "Thai Airways", "Malaysia Airlines",
-    "Kuwait Airways", "Oman Air", "Saudia", "Turkish Airlines", "Flydubai"
+    "Emirates",
+    "Air India",
+    "Indigo",
+    "Fly Dubai",
+    "Air Arabia",
+    "Spicejet",
+    "Vistara",
+    "Air Asia",
+    "GoAir",
+    "Alliance Air",
+    "Qatar Airways",
+    "Etihad Airways",
+    "Lufthansa",
+    "British Airways",
+    "Singapore Airlines",
+    "Thai Airways",
+    "Malaysia Airlines",
+    "Kuwait Airways",
+    "Oman Air",
+    "Saudia",
+    "Turkish Airlines",
+    "Flydubai",
   ];
 
-  const airlineCounts = availableAirlines.reduce((acc, airline) => {
-    const count = flightData.filter(flight => flight.airline === airline).length;
-    acc[airline] = count > 0 ? count : Math.floor(Math.random() * 15) + 1; // Random count for demo airlines
-    return acc;
-  }, {} as Record<string, number>);
+  const airlineCounts = availableAirlines.reduce(
+    (acc, airline) => {
+      const count = flightData.filter(
+        (flight) => flight.airline === airline,
+      ).length;
+      acc[airline] = count > 0 ? count : Math.floor(Math.random() * 15) + 1; // Random count for demo airlines
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   // Filter flights based on selected airlines with sorting and pricing logic
   const filteredFlights = (
@@ -783,7 +842,9 @@ export default function FlightResults() {
                 <ChevronLeft className="w-6 h-6 text-white" />
               </button>
               <div className="flex-1 text-center">
-                <h1 className="text-white font-semibold text-lg">Flight Results</h1>
+                <h1 className="text-white font-semibold text-lg">
+                  Flight Results
+                </h1>
                 <p className="text-blue-200 text-xs">BOM → DXB • 1 adult</p>
               </div>
               <button
@@ -835,7 +896,9 @@ export default function FlightResults() {
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 Filters
-                <Badge variant="secondary" className="ml-2">3</Badge>
+                <Badge variant="secondary" className="ml-2">
+                  3
+                </Badge>
               </Button>
               <Button
                 variant="outline"
@@ -856,7 +919,10 @@ export default function FlightResults() {
             <div className="flex items-center justify-between text-white">
               {/* Left: Logo */}
               <div className="flex items-center">
-                <Link to="/" className="text-2xl font-bold text-white hover:text-blue-200 transition-colors">
+                <Link
+                  to="/"
+                  className="text-2xl font-bold text-white hover:text-blue-200 transition-colors"
+                >
                   faredown.com
                 </Link>
               </div>
@@ -880,7 +946,10 @@ export default function FlightResults() {
               {/* Right: Currency + Auth */}
               <div className="flex items-center space-x-4">
                 {/* Currency Dropdown */}
-                <DropdownMenu open={showCurrencyDropdown} onOpenChange={setShowCurrencyDropdown}>
+                <DropdownMenu
+                  open={showCurrencyDropdown}
+                  onOpenChange={setShowCurrencyDropdown}
+                >
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
@@ -915,9 +984,13 @@ export default function FlightResults() {
                       >
                         <span className="flex items-center space-x-2">
                           <span className="font-medium">{code}</span>
-                          <span className="text-gray-600">{currency.symbol}</span>
+                          <span className="text-gray-600">
+                            {currency.symbol}
+                          </span>
                         </span>
-                        <span className="text-sm text-gray-500">{currency.name}</span>
+                        <span className="text-sm text-gray-500">
+                          {currency.name}
+                        </span>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -1020,9 +1093,7 @@ export default function FlightResults() {
                 </button>
                 <div className="relative">
                   <button
-                    onClick={() =>
-                      setShowClassDropdown(!showClassDropdown)
-                    }
+                    onClick={() => setShowClassDropdown(!showClassDropdown)}
                     className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded transition-colors"
                   >
                     <div className="w-3 h-3 border-2 border-gray-300 rounded-full"></div>
@@ -1077,7 +1148,8 @@ export default function FlightResults() {
                     {cityData[selectedFromCity]?.code || "BOM"}
                   </div>
                   <span className="text-sm text-gray-700 font-medium truncate">
-                    {cityData[selectedFromCity]?.airport || "Chhatrapati Shivaji International"}
+                    {cityData[selectedFromCity]?.airport ||
+                      "Chhatrapati Shivaji International"}
                   </span>
                 </div>
               </button>
@@ -1143,7 +1215,8 @@ export default function FlightResults() {
                     {cityData[selectedToCity]?.code || "DXB"}
                   </div>
                   <span className="text-sm text-gray-700 font-medium truncate">
-                    {cityData[selectedToCity]?.airport || "Dubai International Airport"}
+                    {cityData[selectedToCity]?.airport ||
+                      "Dubai International Airport"}
                   </span>
                 </div>
               </button>
@@ -1217,12 +1290,21 @@ export default function FlightResults() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <BookingCalendar
                     initialRange={{
-                      startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
-                      endDate: selectedReturnDate ? new Date(selectedReturnDate) : addDays(new Date(), 7)
+                      startDate: selectedDepartureDate
+                        ? new Date(selectedDepartureDate)
+                        : new Date(),
+                      endDate: selectedReturnDate
+                        ? new Date(selectedReturnDate)
+                        : addDays(new Date(), 7),
                     }}
                     onChange={(range) => {
-                      console.log("Flight results calendar range selected:", range);
-                      setSelectedDepartureDate(formatDateHelper(range.startDate));
+                      console.log(
+                        "Flight results calendar range selected:",
+                        range,
+                      );
+                      setSelectedDepartureDate(
+                        formatDateHelper(range.startDate),
+                      );
                       if (tripType === "round-trip") {
                         setSelectedReturnDate(formatDateHelper(range.endDate));
                       }
@@ -1270,9 +1352,7 @@ export default function FlightResults() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between py-2">
                       <div>
-                        <div className="font-medium text-gray-900">
-                          Adults
-                        </div>
+                        <div className="font-medium text-gray-900">Adults</div>
                         <div className="text-sm text-gray-500">Age 18+</div>
                       </div>
                       <div className="flex items-center space-x-4">
@@ -1389,15 +1469,32 @@ export default function FlightResults() {
               {/* Stops Filter */}
               <div className="space-y-1">
                 <div className="border-b border-gray-200 pb-1">
-                  <div className="text-sm font-semibold text-gray-900">Stops</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    Stops
+                  </div>
                 </div>
                 {[
                   { value: "any", label: "Any", count: flightData.length },
-                  { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
-                  { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
-                  { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
+                  {
+                    value: "direct",
+                    label: "Direct only",
+                    count: flightData.filter((f) => f.stops === 0).length,
+                  },
+                  {
+                    value: "1-stop",
+                    label: "1 stop",
+                    count: flightData.filter((f) => f.stops === 1).length,
+                  },
+                  {
+                    value: "2-plus",
+                    label: "2+ stops",
+                    count: flightData.filter((f) => f.stops >= 2).length,
+                  },
                 ].map((option) => (
-                  <div key={option.value} className="flex items-center justify-between py-0.5 min-h-[24px] pr-1">
+                  <div
+                    key={option.value}
+                    className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
+                  >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                       <div className="w-4 h-4 flex items-center justify-center mr-2">
                         <input
@@ -1406,12 +1503,14 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-4 h-4 ${selectedStops === option.value ? 'bg-blue-600' : 'bg-white border border-gray-400'}`}
+                          className={`w-4 h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
                       {option.label}
                     </label>
-                    <span className="text-xs text-gray-500 ml-2 mr-1">{option.count}</span>
+                    <span className="text-xs text-gray-500 ml-2 mr-1">
+                      {option.count}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -1419,7 +1518,9 @@ export default function FlightResults() {
               {/* Airlines Filter */}
               <div className="space-y-1 mt-4">
                 <div className="border-b border-gray-200 pb-1">
-                  <div className="text-sm font-semibold text-gray-900">Airlines</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    Airlines
+                  </div>
                 </div>
                 {availableAirlines.map((airline) => (
                   <div
@@ -1433,16 +1534,22 @@ export default function FlightResults() {
                         <input
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
-                          onChange={(e) => handleAirlineFilter(airline, e.target.checked)}
-                          className={`w-4 h-4 ${selectedAirlines.has(airline) ? 'bg-blue-600' : 'bg-white border border-gray-400'}`}
+                          onChange={(e) =>
+                            handleAirlineFilter(airline, e.target.checked)
+                          }
+                          className={`w-4 h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
-                      <span className={`transition-colors ${hoveredAirline === airline ? 'text-blue-600 font-medium' : 'text-gray-700'}`}>
+                      <span
+                        className={`transition-colors ${hoveredAirline === airline ? "text-blue-600 font-medium" : "text-gray-700"}`}
+                      >
                         {airline}
                       </span>
                     </label>
                     <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500 ml-2 mr-1">{airlineCounts[airline]}</span>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">
+                        {airlineCounts[airline]}
+                      </span>
                       {hoveredAirline === airline && (
                         <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
                           Only this airline
@@ -1456,19 +1563,34 @@ export default function FlightResults() {
               {/* Flight Times */}
               <div className="space-y-1 mt-4">
                 <div className="border-b border-gray-200 pb-1">
-                  <div className="text-sm font-semibold text-gray-900">Flight times</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    Flight times
+                  </div>
                 </div>
 
                 {/* Departure times */}
                 <div className="mt-1 space-y-0">
-                  <div className="text-sm font-medium text-gray-700 mb-1">Departing flight</div>
+                  <div className="text-sm font-medium text-gray-700 mb-1">
+                    Departing flight
+                  </div>
                   {[
                     { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
                     { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
-                    { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
-                    { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
+                    {
+                      label: "12:00 PM - 5:59 PM",
+                      range: [12, 18],
+                      count: 290,
+                    },
+                    {
+                      label: "6:00 PM - 11:59 PM",
+                      range: [18, 24],
+                      count: 145,
+                    },
                   ].map((time, index) => (
-                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px] pr-1">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
+                    >
                       <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
@@ -1478,21 +1600,36 @@ export default function FlightResults() {
                         </div>
                         {time.label}
                       </label>
-                      <span className="text-xs text-gray-500 ml-2 mr-1">{time.count}</span>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">
+                        {time.count}
+                      </span>
                     </div>
                   ))}
                 </div>
 
                 {/* Return times */}
                 <div className="mt-1 space-y-0">
-                  <div className="text-sm font-medium text-gray-700 mb-1">Return flight</div>
+                  <div className="text-sm font-medium text-gray-700 mb-1">
+                    Return flight
+                  </div>
                   {[
                     { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
                     { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
-                    { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
-                    { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
+                    {
+                      label: "12:00 PM - 5:59 PM",
+                      range: [12, 18],
+                      count: 290,
+                    },
+                    {
+                      label: "6:00 PM - 11:59 PM",
+                      range: [18, 24],
+                      count: 145,
+                    },
                   ].map((time, index) => (
-                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px] pr-1">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
+                    >
                       <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
@@ -1502,13 +1639,13 @@ export default function FlightResults() {
                         </div>
                         {time.label}
                       </label>
-                      <span className="text-xs text-gray-500 ml-2 mr-1">{time.count}</span>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">
+                        {time.count}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
@@ -1572,9 +1709,14 @@ export default function FlightResults() {
                             {formatPrice(flight.fareTypes[0].price)}
                           </div>
                           <button
-                            onClick={() => setExpandedTicketOptions(
-                              expandedTicketOptions === `mobile-tooltip-${flight.id}` ? null : `mobile-tooltip-${flight.id}`
-                            )}
+                            onClick={() =>
+                              setExpandedTicketOptions(
+                                expandedTicketOptions ===
+                                  `mobile-tooltip-${flight.id}`
+                                  ? null
+                                  : `mobile-tooltip-${flight.id}`,
+                              )
+                            }
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                           >
                             <Info className="w-3 h-3" />
@@ -1582,23 +1724,40 @@ export default function FlightResults() {
                         </div>
                         <div className="text-xs text-gray-500">per person</div>
                         {/* Mobile Fare Breakdown Tooltip */}
-                        {expandedTicketOptions === `mobile-tooltip-${flight.id}` && (
+                        {expandedTicketOptions ===
+                          `mobile-tooltip-${flight.id}` && (
                           <div className="absolute right-0 bottom-full mb-2 z-50">
                             <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[180px]">
-                              <div className="text-center font-medium mb-2">Fare breakdown</div>
+                              <div className="text-center font-medium mb-2">
+                                Fare breakdown
+                              </div>
                               <div className="space-y-1">
                                 <div className="flex justify-between">
                                   <span>Base fare:</span>
-                                  <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.75))}</span>
+                                  <span>
+                                    {formatPrice(
+                                      Math.round(
+                                        flight.fareTypes[0].price * 0.75,
+                                      ),
+                                    )}
+                                  </span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span>Taxes & fees:</span>
-                                  <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.25))}</span>
+                                  <span>
+                                    {formatPrice(
+                                      Math.round(
+                                        flight.fareTypes[0].price * 0.25,
+                                      ),
+                                    )}
+                                  </span>
                                 </div>
                                 <div className="border-t border-gray-600 pt-1 mt-1">
                                   <div className="flex justify-between font-medium">
                                     <span>Total:</span>
-                                    <span>{formatPrice(flight.fareTypes[0].price)}</span>
+                                    <span>
+                                      {formatPrice(flight.fareTypes[0].price)}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -1671,13 +1830,17 @@ export default function FlightResults() {
                       <Button
                         variant="outline"
                         className="bg-white border-2 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white font-semibold py-3 text-sm"
-                        onClick={() => handleBargain(flight, flight.fareTypes[0])}
+                        onClick={() =>
+                          handleBargain(flight, flight.fareTypes[0])
+                        }
                       >
                         🤝 Bargain
                       </Button>
                       <Button
                         className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 text-sm"
-                        onClick={() => handleBooking(flight, flight.fareTypes[0])}
+                        onClick={() =>
+                          handleBooking(flight, flight.fareTypes[0])
+                        }
                       >
                         Book Now
                       </Button>
@@ -1686,12 +1849,17 @@ export default function FlightResults() {
                     {/* View Details Link - Mobile */}
                     <div className="text-center mt-3">
                       <button
-                        onClick={() => setExpandedTicketOptions(
-                          expandedTicketOptions === flight.id ? null : flight.id
-                        )}
+                        onClick={() =>
+                          setExpandedTicketOptions(
+                            expandedTicketOptions === flight.id
+                              ? null
+                              : flight.id,
+                          )
+                        }
                         className="text-blue-600 text-sm font-medium"
                       >
-                        View ticket options {expandedTicketOptions === flight.id ? "▲" : "▼"}
+                        View ticket options{" "}
+                        {expandedTicketOptions === flight.id ? "▲" : "▼"}
                       </button>
                     </div>
                   </div>
@@ -1874,9 +2042,14 @@ export default function FlightResults() {
                               {formatPrice(flight.fareTypes[0].price)}
                             </div>
                             <button
-                              onClick={() => setExpandedTicketOptions(
-                                expandedTicketOptions === `tooltip-${flight.id}` ? null : `tooltip-${flight.id}`
-                              )}
+                              onClick={() =>
+                                setExpandedTicketOptions(
+                                  expandedTicketOptions ===
+                                    `tooltip-${flight.id}`
+                                    ? null
+                                    : `tooltip-${flight.id}`,
+                                )
+                              }
                               className="text-gray-400 hover:text-gray-600 transition-colors"
                             >
                               <Info className="w-4 h-4" />
@@ -1886,20 +2059,36 @@ export default function FlightResults() {
                           {expandedTicketOptions === `tooltip-${flight.id}` && (
                             <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 z-50">
                               <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
-                                <div className="text-center font-medium mb-2">Fare breakdown</div>
+                                <div className="text-center font-medium mb-2">
+                                  Fare breakdown
+                                </div>
                                 <div className="space-y-1">
                                   <div className="flex justify-between">
                                     <span>Base fare:</span>
-                                    <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.75))}</span>
+                                    <span>
+                                      {formatPrice(
+                                        Math.round(
+                                          flight.fareTypes[0].price * 0.75,
+                                        ),
+                                      )}
+                                    </span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span>Taxes & fees:</span>
-                                    <span>{formatPrice(Math.round(flight.fareTypes[0].price * 0.25))}</span>
+                                    <span>
+                                      {formatPrice(
+                                        Math.round(
+                                          flight.fareTypes[0].price * 0.25,
+                                        ),
+                                      )}
+                                    </span>
                                   </div>
                                   <div className="border-t border-gray-600 pt-1 mt-1">
                                     <div className="flex justify-between font-medium">
                                       <span>Total:</span>
-                                      <span>{formatPrice(flight.fareTypes[0].price)}</span>
+                                      <span>
+                                        {formatPrice(flight.fareTypes[0].price)}
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
@@ -1914,14 +2103,18 @@ export default function FlightResults() {
                         </div>
                         <div className="space-y-2 w-32">
                           <Button
-                            onClick={() => handleBargain(flight, flight.fareTypes[0])}
+                            onClick={() =>
+                              handleBargain(flight, flight.fareTypes[0])
+                            }
                             variant="outline"
                             className="w-full border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white"
                           >
                             Bargain
                           </Button>
                           <Button
-                            onClick={() => handleBooking(flight, flight.fareTypes[0])}
+                            onClick={() =>
+                              handleBooking(flight, flight.fareTypes[0])
+                            }
                             className="w-full bg-[#003580] hover:bg-[#0071c2]"
                           >
                             Book Now
@@ -1936,7 +2129,9 @@ export default function FlightResults() {
                         <button
                           onClick={() =>
                             setExpandedTicketOptions(
-                              expandedTicketOptions === flight.id ? null : flight.id,
+                              expandedTicketOptions === flight.id
+                                ? null
+                                : flight.id,
                             )
                           }
                           className="text-blue-600 text-sm font-medium hover:text-blue-800 transition-colors flex items-center py-1 px-2 rounded hover:bg-blue-50"
@@ -1944,7 +2139,9 @@ export default function FlightResults() {
                           Explore ticket options
                           <ChevronDown
                             className={`w-4 h-4 ml-1 transition-transform duration-200 ${
-                              expandedTicketOptions === flight.id ? "rotate-180" : ""
+                              expandedTicketOptions === flight.id
+                                ? "rotate-180"
+                                : ""
                             }`}
                           />
                         </button>
@@ -1968,7 +2165,9 @@ export default function FlightResults() {
                             <div className="text-lg font-bold text-gray-900 mb-1">
                               {formatPrice(fareType.price)}
                             </div>
-                            <div className="text-xs text-gray-600 mb-3">All-inclusive</div>
+                            <div className="text-xs text-gray-600 mb-3">
+                              All-inclusive
+                            </div>
                             <div className="space-y-2">
                               <Button
                                 onClick={() => handleBargain(flight, fareType)}
@@ -2080,7 +2279,9 @@ export default function FlightResults() {
                   />
                   <div className="flex-1">
                     <div className="font-medium">Fastest first</div>
-                    <div className="text-sm text-gray-500">Shortest duration</div>
+                    <div className="text-sm text-gray-500">
+                      Shortest duration
+                    </div>
                   </div>
                 </label>
               </div>
@@ -2094,7 +2295,9 @@ export default function FlightResults() {
                   type="number"
                   placeholder="Min"
                   value={priceRange[0]}
-                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                  onChange={(e) =>
+                    setPriceRange([Number(e.target.value), priceRange[1]])
+                  }
                   className="flex-1 h-10"
                 />
                 <span className="text-gray-400">-</span>
@@ -2102,7 +2305,9 @@ export default function FlightResults() {
                   type="number"
                   placeholder="Max"
                   value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number(e.target.value)])
+                  }
                   className="flex-1 h-10"
                 />
               </div>
@@ -2114,11 +2319,26 @@ export default function FlightResults() {
               <div className="space-y-2">
                 {[
                   { value: "any", label: "Any", count: flightData.length },
-                  { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
-                  { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
-                  { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
+                  {
+                    value: "direct",
+                    label: "Direct only",
+                    count: flightData.filter((f) => f.stops === 0).length,
+                  },
+                  {
+                    value: "1-stop",
+                    label: "1 stop",
+                    count: flightData.filter((f) => f.stops === 1).length,
+                  },
+                  {
+                    value: "2-plus",
+                    label: "2+ stops",
+                    count: flightData.filter((f) => f.stops >= 2).length,
+                  },
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                  <label
+                    key={option.value}
+                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       <input
                         type="radio"
@@ -2130,7 +2350,9 @@ export default function FlightResults() {
                       />
                       <span>{option.label}</span>
                     </div>
-                    <span className="text-sm text-gray-500">{option.count}</span>
+                    <span className="text-sm text-gray-500">
+                      {option.count}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -2141,17 +2363,24 @@ export default function FlightResults() {
               <h3 className="font-medium mb-3">Airlines</h3>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {availableAirlines.map((airline) => (
-                  <label key={airline} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                  <label
+                    key={airline}
+                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                  >
                     <div className="flex items-center space-x-3">
                       <input
                         type="checkbox"
                         checked={selectedAirlines.has(airline)}
-                        onChange={(e) => handleAirlineFilter(airline, e.target.checked)}
+                        onChange={(e) =>
+                          handleAirlineFilter(airline, e.target.checked)
+                        }
                         className="text-[#003580]"
                       />
                       <span>{airline}</span>
                     </div>
-                    <span className="text-sm text-gray-500">{airlineCounts[airline]}</span>
+                    <span className="text-sm text-gray-500">
+                      {airlineCounts[airline]}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -2165,20 +2394,25 @@ export default function FlightResults() {
                   { label: "Morning", range: [6, 12], icon: "☀️" },
                   { label: "Afternoon", range: [12, 18], icon: "☀️" },
                   { label: "Evening", range: [18, 24], icon: "🌙" },
-                  { label: "Night", range: [0, 6], icon: "🌅" }
+                  { label: "Night", range: [0, 6], icon: "🌅" },
                 ].map((timeSlot) => (
                   <button
                     key={timeSlot.label}
-                    onClick={() => setDepartureTimeRange(timeSlot.range as [number, number])}
+                    onClick={() =>
+                      setDepartureTimeRange(timeSlot.range as [number, number])
+                    }
                     className={`p-3 rounded-lg border text-center transition-colors ${
-                      departureTimeRange[0] === timeSlot.range[0] && departureTimeRange[1] === timeSlot.range[1]
-                        ? 'border-[#003580] bg-blue-50 text-[#003580]'
-                        : 'border-gray-200'
+                      departureTimeRange[0] === timeSlot.range[0] &&
+                      departureTimeRange[1] === timeSlot.range[1]
+                        ? "border-[#003580] bg-blue-50 text-[#003580]"
+                        : "border-gray-200"
                     }`}
                   >
                     <div className="text-lg mb-1">{timeSlot.icon}</div>
                     <div className="text-xs font-medium">{timeSlot.label}</div>
-                    <div className="text-xs text-gray-500">{timeSlot.range[0]}:00-{timeSlot.range[1]}:00</div>
+                    <div className="text-xs text-gray-500">
+                      {timeSlot.range[0]}:00-{timeSlot.range[1]}:00
+                    </div>
                   </button>
                 ))}
               </div>
@@ -2235,7 +2469,8 @@ export default function FlightResults() {
                             {bargainFlight.airline}
                           </h3>
                           <p className="text-sm text-gray-600">
-                            {bargainFareType.name} • {bargainFlight.flightNumber}
+                            {bargainFareType.name} •{" "}
+                            {bargainFlight.flightNumber}
                           </p>
                         </div>
                       </div>
@@ -2264,14 +2499,16 @@ export default function FlightResults() {
                           AI Assistant
                         </p>
                         <p className="text-sm text-gray-600">
-                          Tell me your target price and I'll negotiate with the airline!
+                          Tell me your target price and I'll negotiate with the
+                          airline!
                         </p>
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-sm font-semibold mb-3 text-gray-900">
-                        What price would you like to pay? ({selectedCurrency.symbol})
+                        What price would you like to pay? (
+                        {selectedCurrency.symbol})
                       </label>
 
                       {/* Error Message Box */}
@@ -2286,10 +2523,11 @@ export default function FlightResults() {
                                 Oops! Price Already Used
                               </h4>
                               <p className="text-red-700 text-sm font-medium">
-                                {usedPrices.has(`${bargainFlight?.id}-${bargainFareType?.name}-${parseInt(bargainPrice)}`)
+                                {usedPrices.has(
+                                  `${bargainFlight?.id}-${bargainFareType?.name}-${parseInt(bargainPrice)}`,
+                                )
                                   ? "You've already tried this exact price! Please enter a different amount to negotiate."
-                                  : "Please enter a price lower than the current price to start negotiation!"
-                                }
+                                  : "Please enter a price lower than the current price to start negotiation!"}
                               </p>
                             </div>
                             <button
@@ -2324,8 +2562,8 @@ export default function FlightResults() {
                           placeholder="Enter your target price"
                           className={`text-xl font-bold text-center py-6 border-2 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm transition-colors ${
                             duplicatePriceError
-                              ? 'border-red-300 focus:border-red-500'
-                              : 'border-[#003580]/20'
+                              ? "border-red-300 focus:border-red-500"
+                              : "border-[#003580]/20"
                           }`}
                         />
                         <div className="absolute inset-y-0 left-4 flex items-center">
@@ -2364,9 +2602,13 @@ export default function FlightResults() {
                       AI Negotiating with {bargainFlight.airline}
                     </h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      Analyzing market rates and finding the best deal for you...
+                      Analyzing market rates and finding the best deal for
+                      you...
                     </p>
-                    <Progress value={bargainProgress} className="w-full h-4 bg-gray-200" />
+                    <Progress
+                      value={bargainProgress}
+                      className="w-full h-4 bg-gray-200"
+                    />
                     <p className="text-sm text-[#003580] font-semibold mt-2">
                       {bargainProgress}% Complete
                     </p>
@@ -2404,7 +2646,8 @@ export default function FlightResults() {
                           AI Counter Offer!
                         </h3>
                         <p className="text-gray-600 mb-1 text-lg">
-                          The airline couldn't match your price, but here's their best offer!
+                          The airline couldn't match your price, but here's
+                          their best offer!
                         </p>
                       </div>
 
@@ -2416,14 +2659,24 @@ export default function FlightResults() {
                             : "0"}
                         </div>
                         <p className="text-sm text-[#003580] font-medium mb-3">
-                          {aiOfferPrice ? numberToWords((convertPrice(aiOfferPrice) * (exchangeRates[selectedCurrency.code as keyof typeof exchangeRates] || 1)).toString()) : ""}
+                          {aiOfferPrice
+                            ? numberToWords(
+                                (
+                                  convertPrice(aiOfferPrice) *
+                                  (exchangeRates[
+                                    selectedCurrency.code as keyof typeof exchangeRates
+                                  ] || 1)
+                                ).toString(),
+                              )
+                            : ""}
                         </p>
                         <div className="text-center">
                           <span className="text-sm font-semibold text-[#003580] bg-[#003580]/10 px-4 py-2 rounded-full">
                             You save {selectedCurrency.symbol}
                             {convertPrice(
                               bargainFareType.price - (aiOfferPrice || 0),
-                            ).toLocaleString()}!
+                            ).toLocaleString()}
+                            !
                           </span>
                         </div>
                       </div>
@@ -2472,7 +2725,9 @@ export default function FlightResults() {
                   ) : (
                     <div className="space-y-4">
                       <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-4 shadow-lg">
-                        <p className="text-[#003580] font-medium">Offer has expired</p>
+                        <p className="text-[#003580] font-medium">
+                          Offer has expired
+                        </p>
                       </div>
                       <Button
                         onClick={() => {

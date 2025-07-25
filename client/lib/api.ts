@@ -111,7 +111,7 @@ class ApiClient {
         errorData = await response.json();
       } catch (jsonError) {
         // Don't log AbortErrors in JSON parsing
-        if (!(jsonError instanceof Error && jsonError.name === 'AbortError')) {
+        if (!(jsonError instanceof Error && jsonError.name === "AbortError")) {
           console.warn("Failed to parse error response JSON:", jsonError);
         }
       }
@@ -128,7 +128,7 @@ class ApiClient {
         return await response.json();
       } catch (jsonError) {
         // Don't log AbortErrors in JSON parsing
-        if (jsonError instanceof Error && jsonError.name === 'AbortError') {
+        if (jsonError instanceof Error && jsonError.name === "AbortError") {
           throw jsonError; // Re-throw to be handled by calling method
         } else {
           console.warn("Failed to parse response JSON:", jsonError);
@@ -140,7 +140,7 @@ class ApiClient {
     try {
       return (await response.text()) as unknown as T;
     } catch (textError) {
-      if (textError instanceof Error && textError.name === 'AbortError') {
+      if (textError instanceof Error && textError.name === "AbortError") {
         throw textError; // Re-throw to be handled by calling method
       }
       throw new ApiError("Failed to read response", response.status);
@@ -183,10 +183,12 @@ class ApiClient {
 
       // Handle specific error types gracefully
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           console.log(`⏰ Request timeout for ${endpoint} - using fallback`);
-        } else if (error.message.includes('Failed to fetch')) {
-          console.log(`🌐 Network unavailable for ${endpoint} - using fallback`);
+        } else if (error.message.includes("Failed to fetch")) {
+          console.log(
+            `🌐 Network unavailable for ${endpoint} - using fallback`,
+          );
         } else {
           console.warn(`⚠️ Request failed: ${error.message}`);
         }
@@ -197,7 +199,12 @@ class ApiClient {
         return this.devClient.get<T>(endpoint, params);
       } catch (fallbackError) {
         // If even fallback fails, return safe default but don't log AbortErrors
-        if (!(fallbackError instanceof Error && fallbackError.name === 'AbortError')) {
+        if (
+          !(
+            fallbackError instanceof Error &&
+            fallbackError.name === "AbortError"
+          )
+        ) {
           console.error("Fallback also failed:", fallbackError);
         }
         return {
@@ -240,10 +247,14 @@ class ApiClient {
 
       // Handle specific error types gracefully
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          console.log(`⏰ POST request timeout for ${endpoint} - using fallback`);
-        } else if (error.message.includes('Failed to fetch')) {
-          console.log(`🌐 POST network unavailable for ${endpoint} - using fallback`);
+        if (error.name === "AbortError") {
+          console.log(
+            `⏰ POST request timeout for ${endpoint} - using fallback`,
+          );
+        } else if (error.message.includes("Failed to fetch")) {
+          console.log(
+            `🌐 POST network unavailable for ${endpoint} - using fallback`,
+          );
         } else {
           console.warn(`⚠️ POST request failed: ${error.message}`);
         }
@@ -254,7 +265,12 @@ class ApiClient {
         return this.devClient.post<T>(endpoint, data);
       } catch (fallbackError) {
         // If even fallback fails, return safe default but don't log AbortErrors
-        if (!(fallbackError instanceof Error && fallbackError.name === 'AbortError')) {
+        if (
+          !(
+            fallbackError instanceof Error &&
+            fallbackError.name === "AbortError"
+          )
+        ) {
           console.error("POST fallback also failed:", fallbackError);
         }
         return {

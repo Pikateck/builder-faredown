@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  MapPin, 
-  Calendar, 
-  Users, 
-  ChevronDown, 
+import {
+  MapPin,
+  Calendar,
+  Users,
+  ChevronDown,
   ArrowUpDown,
   Bell,
   User,
   Menu,
-  Plane
+  Plane,
 } from "lucide-react";
 
 const MobileHome = () => {
@@ -21,7 +21,7 @@ const MobileHome = () => {
     return: "",
     travelers: { adults: 2, children: 0, infants: 0 },
     tripType: "roundtrip",
-    class: "Economy"
+    class: "Economy",
   });
   const [showMenu, setShowMenu] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
@@ -37,45 +37,49 @@ const MobileHome = () => {
   };
 
   const swapLocations = () => {
-    setSearchData(prev => ({
+    setSearchData((prev) => ({
       ...prev,
       from: prev.to,
-      to: prev.from
+      to: prev.from,
     }));
   };
 
   const updateTravelers = (type: string, operation: string) => {
-    setSearchData(prev => ({
+    setSearchData((prev) => ({
       ...prev,
       travelers: {
         ...prev.travelers,
-        [type]: operation === 'add' 
-          ? prev.travelers[type] + 1 
-          : Math.max(0, prev.travelers[type] - 1)
-      }
+        [type]:
+          operation === "add"
+            ? prev.travelers[type] + 1
+            : Math.max(0, prev.travelers[type] - 1),
+      },
     }));
   };
 
-  const totalTravelers = searchData.travelers.adults + searchData.travelers.children + searchData.travelers.infants;
+  const totalTravelers =
+    searchData.travelers.adults +
+    searchData.travelers.children +
+    searchData.travelers.infants;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Mobile Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <button 
+        <button
           onClick={() => setShowMenu(true)}
           className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
         >
           <Menu className="w-6 h-6 text-gray-700" />
         </button>
-        
+
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-r from-fuchsia-500 to-purple-600 rounded-full flex items-center justify-center">
             <Plane className="w-4 h-4 text-white" />
           </div>
           <span className="font-bold text-lg text-gray-800">Faredown</span>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <button className="p-2 rounded-lg hover:bg-gray-100 relative">
             <Bell className="w-5 h-5 text-gray-600" />
@@ -103,20 +107,24 @@ const MobileHome = () => {
           {/* Trip Type Toggle */}
           <div className="flex bg-gray-100 rounded-lg p-1">
             <button
-              onClick={() => setSearchData(prev => ({ ...prev, tripType: "roundtrip" }))}
+              onClick={() =>
+                setSearchData((prev) => ({ ...prev, tripType: "roundtrip" }))
+              }
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                searchData.tripType === "roundtrip" 
-                  ? "bg-white text-blue-600 shadow-sm" 
+                searchData.tripType === "roundtrip"
+                  ? "bg-white text-blue-600 shadow-sm"
                   : "text-gray-600"
               }`}
             >
               Round Trip
             </button>
             <button
-              onClick={() => setSearchData(prev => ({ ...prev, tripType: "oneway" }))}
+              onClick={() =>
+                setSearchData((prev) => ({ ...prev, tripType: "oneway" }))
+              }
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                searchData.tripType === "oneway" 
-                  ? "bg-white text-blue-600 shadow-sm" 
+                searchData.tripType === "oneway"
+                  ? "bg-white text-blue-600 shadow-sm"
                   : "text-gray-600"
               }`}
             >
@@ -127,14 +135,18 @@ const MobileHome = () => {
           {/* From/To Fields */}
           <div className="space-y-3">
             <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                From
+              </label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Departure city"
                   value={searchData.from}
-                  onChange={(e) => setSearchData(prev => ({ ...prev, from: e.target.value }))}
+                  onChange={(e) =>
+                    setSearchData((prev) => ({ ...prev, from: e.target.value }))
+                  }
                   className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -151,14 +163,18 @@ const MobileHome = () => {
             </div>
 
             <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                To
+              </label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Destination city"
                   value={searchData.to}
-                  onChange={(e) => setSearchData(prev => ({ ...prev, to: e.target.value }))}
+                  onChange={(e) =>
+                    setSearchData((prev) => ({ ...prev, to: e.target.value }))
+                  }
                   className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -166,29 +182,45 @@ const MobileHome = () => {
           </div>
 
           {/* Date Fields */}
-          <div className={`grid ${searchData.tripType === "roundtrip" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
+          <div
+            className={`grid ${searchData.tripType === "roundtrip" ? "grid-cols-2" : "grid-cols-1"} gap-3`}
+          >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Departure</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Departure
+              </label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input
                   type="date"
                   value={searchData.departure}
-                  onChange={(e) => setSearchData(prev => ({ ...prev, departure: e.target.value }))}
+                  onChange={(e) =>
+                    setSearchData((prev) => ({
+                      ...prev,
+                      departure: e.target.value,
+                    }))
+                  }
                   className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
-            
+
             {searchData.tripType === "roundtrip" && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Return</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Return
+                </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                   <input
                     type="date"
                     value={searchData.return}
-                    onChange={(e) => setSearchData(prev => ({ ...prev, return: e.target.value }))}
+                    onChange={(e) =>
+                      setSearchData((prev) => ({
+                        ...prev,
+                        return: e.target.value,
+                      }))
+                    }
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -199,21 +231,27 @@ const MobileHome = () => {
           {/* Travelers and Class */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Travelers</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Travelers
+              </label>
               <button
                 onClick={() => setShowTravelers(true)}
                 className="w-full flex items-center justify-between px-3 py-3 border border-gray-200 rounded-lg bg-white hover:bg-gray-50"
               >
                 <div className="flex items-center space-x-2">
                   <Users className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-700">{totalTravelers} Traveler{totalTravelers !== 1 ? 's' : ''}</span>
+                  <span className="text-gray-700">
+                    {totalTravelers} Traveler{totalTravelers !== 1 ? "s" : ""}
+                  </span>
                 </div>
                 <ChevronDown className="w-4 h-4 text-gray-400" />
               </button>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Class</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Class
+              </label>
               <button
                 onClick={() => setShowClass(true)}
                 className="w-full flex items-center justify-between px-3 py-3 border border-gray-200 rounded-lg bg-white hover:bg-gray-50"
@@ -247,7 +285,9 @@ const MobileHome = () => {
 
       {/* Quick Actions */}
       <div className="px-4 pb-8">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Quick Actions
+        </h3>
         <div className="grid grid-cols-2 gap-3">
           <button className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="text-2xl mb-2">🏨</div>
@@ -275,9 +315,9 @@ const MobileHome = () => {
             </div>
 
             {[
-              { key: 'adults', label: 'Adults', desc: '12+ years' },
-              { key: 'children', label: 'Children', desc: '2-11 years' },
-              { key: 'infants', label: 'Infants', desc: 'Under 2 years' }
+              { key: "adults", label: "Adults", desc: "12+ years" },
+              { key: "children", label: "Children", desc: "2-11 years" },
+              { key: "infants", label: "Infants", desc: "Under 2 years" },
             ].map(({ key, label, desc }) => (
               <div key={key} className="flex items-center justify-between">
                 <div>
@@ -286,14 +326,16 @@ const MobileHome = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <button
-                    onClick={() => updateTravelers(key, 'subtract')}
+                    onClick={() => updateTravelers(key, "subtract")}
                     className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
                   >
                     -
                   </button>
-                  <span className="w-8 text-center font-medium">{searchData.travelers[key]}</span>
+                  <span className="w-8 text-center font-medium">
+                    {searchData.travelers[key]}
+                  </span>
                   <button
-                    onClick={() => updateTravelers(key, 'add')}
+                    onClick={() => updateTravelers(key, "add")}
                     className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
                   >
                     +
@@ -326,22 +368,24 @@ const MobileHome = () => {
               </button>
             </div>
 
-            {['Economy', 'Premium Economy', 'Business', 'First Class'].map((classType) => (
-              <button
-                key={classType}
-                onClick={() => {
-                  setSearchData(prev => ({ ...prev, class: classType }));
-                  setShowClass(false);
-                }}
-                className={`w-full text-left py-3 px-4 rounded-lg mb-2 border ${
-                  searchData.class === classType 
-                    ? 'border-blue-500 bg-blue-50 text-blue-600' 
-                    : 'border-gray-200 hover:bg-gray-50'
-                }`}
-              >
-                {classType}
-              </button>
-            ))}
+            {["Economy", "Premium Economy", "Business", "First Class"].map(
+              (classType) => (
+                <button
+                  key={classType}
+                  onClick={() => {
+                    setSearchData((prev) => ({ ...prev, class: classType }));
+                    setShowClass(false);
+                  }}
+                  className={`w-full text-left py-3 px-4 rounded-lg mb-2 border ${
+                    searchData.class === classType
+                      ? "border-blue-500 bg-blue-50 text-blue-600"
+                      : "border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  {classType}
+                </button>
+              ),
+            )}
           </div>
         </div>
       )}

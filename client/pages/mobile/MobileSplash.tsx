@@ -9,7 +9,7 @@ const MobileSplash = () => {
   useEffect(() => {
     // Start animations
     setIsVisible(true);
-    
+
     // Logo scale animation
     const scaleTimer = setTimeout(() => {
       setLogoScale(1);
@@ -40,27 +40,29 @@ const MobileSplash = () => {
       </div>
 
       {/* Main content */}
-      <div className={`text-center z-10 transition-all duration-1000 transform ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}>
+      <div
+        className={`text-center z-10 transition-all duration-1000 transform ${
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+        }`}
+      >
         {/* Logo Container */}
         <div className="mb-8">
-          <div 
+          <div
             className={`w-24 h-24 mx-auto mb-6 bg-white rounded-full flex items-center justify-center shadow-2xl transition-transform duration-700 ${
               logoScale === 1 ? "scale-100" : "scale-80"
             }`}
             style={{ transform: `scale(${logoScale})` }}
           >
             {/* Airplane Icon */}
-            <svg 
-              className="w-12 h-12 text-fuchsia-600" 
-              fill="currentColor" 
+            <svg
+              className="w-12 h-12 text-fuchsia-600"
+              fill="currentColor"
               viewBox="0 0 24 24"
             >
-              <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1L15 22v-1.5L13 19v-5.5l8 2.5z"/>
+              <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1L15 22v-1.5L13 19v-5.5l8 2.5z" />
             </svg>
           </div>
-          
+
           {/* Brand Name */}
           <h1 className="text-4xl font-bold text-white mb-3 tracking-wide">
             Faredown
@@ -88,9 +90,11 @@ const MobileSplash = () => {
         </div>
 
         {/* Enter Button */}
-        <div className={`transition-all duration-500 delay-1000 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        }`}>
+        <div
+          className={`transition-all duration-500 delay-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <button
             onClick={handleEnterNow}
             className="bg-white text-fuchsia-600 px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 active:scale-95 min-w-[140px]"
@@ -101,9 +105,11 @@ const MobileSplash = () => {
       </div>
 
       {/* Bottom Branding */}
-      <div className={`absolute bottom-8 left-0 right-0 text-center transition-all duration-1000 delay-1500 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}>
+      <div
+        className={`absolute bottom-8 left-0 right-0 text-center transition-all duration-1000 delay-1500 ${
+          isVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <p className="text-white/70 text-sm">
           Powered by AI • Instant Bargains • Secure Booking
         </p>

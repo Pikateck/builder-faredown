@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { 
+import {
   ArrowLeft,
   ChevronDown,
   ChevronUp,
@@ -11,7 +11,7 @@ import {
   User,
   Mail,
   Phone,
-  Calendar
+  Calendar,
 } from "lucide-react";
 
 const MobileBooking = () => {
@@ -21,36 +21,36 @@ const MobileBooking = () => {
   const searchData = location.state?.searchData;
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [expandedSection, setExpandedSection] = useState('travellers');
+  const [expandedSection, setExpandedSection] = useState("travellers");
   const [travellers, setTravellers] = useState([
     {
       id: 1,
-      type: 'Adult',
-      title: '',
-      firstName: '',
-      lastName: '',
-      dob: '',
-      gender: '',
-      email: '',
-      phone: ''
-    }
+      type: "Adult",
+      title: "",
+      firstName: "",
+      lastName: "",
+      dob: "",
+      gender: "",
+      email: "",
+      phone: "",
+    },
   ]);
-  
+
   const [addOns, setAddOns] = useState({
     meals: { selected: false, price: 1500 },
     baggage: { selected: false, price: 2000 },
     insurance: { selected: false, price: 899 },
-    priorityBoarding: { selected: false, price: 500 }
+    priorityBoarding: { selected: false, price: 500 },
   });
 
   const [seatSelection, setSeatSelection] = useState({});
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const steps = [
-    { id: 1, name: 'Travellers', icon: User },
-    { id: 2, name: 'Add-ons', icon: Plus },
-    { id: 3, name: 'Seats', icon: Calendar },
-    { id: 4, name: 'Payment', icon: CreditCard }
+    { id: 1, name: "Travellers", icon: User },
+    { id: 2, name: "Add-ons", icon: Plus },
+    { id: 3, name: "Seats", icon: Calendar },
+    { id: 4, name: "Payment", icon: CreditCard },
   ];
 
   const toggleSection = (section) => {
@@ -58,12 +58,12 @@ const MobileBooking = () => {
   };
 
   const toggleAddOn = (addOnKey) => {
-    setAddOns(prev => ({
+    setAddOns((prev) => ({
       ...prev,
       [addOnKey]: {
         ...prev[addOnKey],
-        selected: !prev[addOnKey].selected
-      }
+        selected: !prev[addOnKey].selected,
+      },
     }));
   };
 
@@ -76,14 +76,14 @@ const MobileBooking = () => {
   };
 
   const formatCurrency = (amount) => {
-    return `₹${amount.toLocaleString('en-IN')}`;
+    return `₹${amount.toLocaleString("en-IN")}`;
   };
 
   const handleContinue = () => {
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
       // Auto-expand next section
-      const sections = ['travellers', 'addons', 'seats', 'payment'];
+      const sections = ["travellers", "addons", "seats", "payment"];
       setExpandedSection(sections[currentStep]);
     } else {
       // Navigate to confirmation
@@ -92,8 +92,8 @@ const MobileBooking = () => {
           selectedFlight,
           travellers,
           addOns,
-          total: calculateTotal()
-        }
+          total: calculateTotal(),
+        },
       });
     }
   };
@@ -102,17 +102,21 @@ const MobileBooking = () => {
     <div className="flex items-center justify-between mb-6">
       {steps.map((step, index) => (
         <div key={step.id} className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-            currentStep >= step.id 
-              ? 'bg-blue-600 text-white' 
-              : 'bg-gray-200 text-gray-600'
-          }`}>
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+              currentStep >= step.id
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-600"
+            }`}
+          >
             {currentStep > step.id ? <Check className="w-4 h-4" /> : step.id}
           </div>
           {index < steps.length - 1 && (
-            <div className={`w-8 h-px mx-2 ${
-              currentStep > step.id ? 'bg-blue-600' : 'bg-gray-200'
-            }`} />
+            <div
+              className={`w-8 h-px mx-2 ${
+                currentStep > step.id ? "bg-blue-600" : "bg-gray-200"
+              }`}
+            />
           )}
         </div>
       ))}
@@ -123,20 +127,21 @@ const MobileBooking = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
         >
           <ArrowLeft className="w-6 h-6 text-gray-700" />
         </button>
-        
+
         <div className="flex-1 text-center">
           <div className="font-semibold text-gray-800">Complete Booking</div>
           <div className="text-xs text-gray-500">
-            {selectedFlight?.airline} • {selectedFlight?.from} → {selectedFlight?.to}
+            {selectedFlight?.airline} • {selectedFlight?.from} →{" "}
+            {selectedFlight?.to}
           </div>
         </div>
-        
+
         <div className="w-8"></div>
       </div>
 
@@ -151,8 +156,12 @@ const MobileBooking = () => {
             <div className="flex items-center space-x-3">
               <div className="text-2xl">{selectedFlight?.logo}</div>
               <div>
-                <div className="font-semibold text-gray-800">{selectedFlight?.airline}</div>
-                <div className="text-sm text-gray-500">{selectedFlight?.duration} • {selectedFlight?.stops}</div>
+                <div className="font-semibold text-gray-800">
+                  {selectedFlight?.airline}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {selectedFlight?.duration} • {selectedFlight?.stops}
+                </div>
               </div>
             </div>
             <div className="text-right">
@@ -162,7 +171,7 @@ const MobileBooking = () => {
               <div className="text-xs text-gray-500">per person</div>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between text-sm">
             <div>
               <div className="font-medium">{selectedFlight?.departure}</div>
@@ -179,30 +188,36 @@ const MobileBooking = () => {
         {/* Traveller Details */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-4">
           <button
-            onClick={() => toggleSection('travellers')}
+            onClick={() => toggleSection("travellers")}
             className="w-full px-4 py-4 flex items-center justify-between border-b border-gray-100"
           >
             <div className="flex items-center space-x-3">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}>
-                {currentStep > 1 ? <Check className="w-3 h-3" /> : '1'}
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  currentStep >= 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+                }`}
+              >
+                {currentStep > 1 ? <Check className="w-3 h-3" /> : "1"}
               </div>
               <span className="font-medium">Traveller Details</span>
             </div>
-            {expandedSection === 'travellers' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            {expandedSection === "travellers" ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <ChevronDown className="w-5 h-5" />
+            )}
           </button>
-          
-          {expandedSection === 'travellers' && (
+
+          {expandedSection === "travellers" && (
             <div className="p-4 space-y-4">
               {travellers.map((traveller, index) => (
                 <div key={traveller.id} className="space-y-3">
                   <h4 className="font-medium text-gray-800">
                     {traveller.type} {index + 1}
                   </h4>
-                  
+
                   <div className="grid grid-cols-2 gap-3">
-                    <select 
+                    <select
                       className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       value={traveller.title}
                       onChange={(e) => {
@@ -216,8 +231,8 @@ const MobileBooking = () => {
                       <option value="Ms">Ms</option>
                       <option value="Mrs">Mrs</option>
                     </select>
-                    
-                    <select 
+
+                    <select
                       className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
                       value={traveller.gender}
                       onChange={(e) => {
@@ -231,7 +246,7 @@ const MobileBooking = () => {
                       <option value="Female">Female</option>
                     </select>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-3">
                     <input
                       type="text"
@@ -256,7 +271,7 @@ const MobileBooking = () => {
                       }}
                     />
                   </div>
-                  
+
                   <input
                     type="date"
                     placeholder="Date of Birth"
@@ -268,7 +283,7 @@ const MobileBooking = () => {
                       setTravellers(updated);
                     }}
                   />
-                  
+
                   {index === 0 && (
                     <>
                       <input
@@ -295,7 +310,7 @@ const MobileBooking = () => {
                       />
                     </>
                   )}
-                  
+
                   {index < travellers.length - 1 && (
                     <hr className="border-gray-200" />
                   )}
@@ -308,29 +323,58 @@ const MobileBooking = () => {
         {/* Add-ons */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-4">
           <button
-            onClick={() => toggleSection('addons')}
+            onClick={() => toggleSection("addons")}
             className="w-full px-4 py-4 flex items-center justify-between border-b border-gray-100"
           >
             <div className="flex items-center space-x-3">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}>
-                {currentStep > 2 ? <Check className="w-3 h-3" /> : '2'}
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  currentStep >= 2 ? "bg-blue-600 text-white" : "bg-gray-200"
+                }`}
+              >
+                {currentStep > 2 ? <Check className="w-3 h-3" /> : "2"}
               </div>
               <span className="font-medium">Add-ons & Extras</span>
             </div>
-            {expandedSection === 'addons' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            {expandedSection === "addons" ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <ChevronDown className="w-5 h-5" />
+            )}
           </button>
-          
-          {expandedSection === 'addons' && (
+
+          {expandedSection === "addons" && (
             <div className="p-4 space-y-4">
               {[
-                { key: 'meals', icon: '🍽️', title: 'Meals', desc: 'Pre-order your meal' },
-                { key: 'baggage', icon: '🧳', title: 'Extra Baggage', desc: 'Additional 15kg checked baggage' },
-                { key: 'insurance', icon: '🛡️', title: 'Travel Insurance', desc: 'Comprehensive coverage' },
-                { key: 'priorityBoarding', icon: '🚀', title: 'Priority Boarding', desc: 'Board first and skip queues' }
+                {
+                  key: "meals",
+                  icon: "🍽️",
+                  title: "Meals",
+                  desc: "Pre-order your meal",
+                },
+                {
+                  key: "baggage",
+                  icon: "🧳",
+                  title: "Extra Baggage",
+                  desc: "Additional 15kg checked baggage",
+                },
+                {
+                  key: "insurance",
+                  icon: "🛡️",
+                  title: "Travel Insurance",
+                  desc: "Comprehensive coverage",
+                },
+                {
+                  key: "priorityBoarding",
+                  icon: "🚀",
+                  title: "Priority Boarding",
+                  desc: "Board first and skip queues",
+                },
               ].map(({ key, icon, title, desc }) => (
-                <div key={key} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                <div
+                  key={key}
+                  className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="text-2xl">{icon}</div>
                     <div>
@@ -345,12 +389,16 @@ const MobileBooking = () => {
                     <button
                       onClick={() => toggleAddOn(key)}
                       className={`w-12 h-6 rounded-full transition-colors ${
-                        addOns[key].selected ? 'bg-blue-600' : 'bg-gray-300'
+                        addOns[key].selected ? "bg-blue-600" : "bg-gray-300"
                       }`}
                     >
-                      <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
-                        addOns[key].selected ? 'translate-x-6' : 'translate-x-0.5'
-                      }`} />
+                      <div
+                        className={`w-5 h-5 bg-white rounded-full transition-transform ${
+                          addOns[key].selected
+                            ? "translate-x-6"
+                            : "translate-x-0.5"
+                        }`}
+                      />
                     </button>
                   </div>
                 </div>
@@ -362,26 +410,34 @@ const MobileBooking = () => {
         {/* Seat Selection */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-4">
           <button
-            onClick={() => toggleSection('seats')}
+            onClick={() => toggleSection("seats")}
             className="w-full px-4 py-4 flex items-center justify-between border-b border-gray-100"
           >
             <div className="flex items-center space-x-3">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}>
-                {currentStep > 3 ? <Check className="w-3 h-3" /> : '3'}
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  currentStep >= 3 ? "bg-blue-600 text-white" : "bg-gray-200"
+                }`}
+              >
+                {currentStep > 3 ? <Check className="w-3 h-3" /> : "3"}
               </div>
               <span className="font-medium">Select Seats</span>
             </div>
-            {expandedSection === 'seats' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            {expandedSection === "seats" ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <ChevronDown className="w-5 h-5" />
+            )}
           </button>
-          
-          {expandedSection === 'seats' && (
+
+          {expandedSection === "seats" && (
             <div className="p-4">
               <div className="text-center text-gray-500 py-8">
                 <div className="text-4xl mb-2">✈️</div>
                 <p>Seat selection will be available on next screen</p>
-                <p className="text-sm">Continue to choose your preferred seats</p>
+                <p className="text-sm">
+                  Continue to choose your preferred seats
+                </p>
               </div>
             </div>
           )}
@@ -390,29 +446,38 @@ const MobileBooking = () => {
         {/* Payment */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-6">
           <button
-            onClick={() => toggleSection('payment')}
+            onClick={() => toggleSection("payment")}
             className="w-full px-4 py-4 flex items-center justify-between"
           >
             <div className="flex items-center space-x-3">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                currentStep >= 4 ? 'bg-blue-600 text-white' : 'bg-gray-200'
-              }`}>
-                {currentStep > 4 ? <Check className="w-3 h-3" /> : '4'}
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  currentStep >= 4 ? "bg-blue-600 text-white" : "bg-gray-200"
+                }`}
+              >
+                {currentStep > 4 ? <Check className="w-3 h-3" /> : "4"}
               </div>
               <span className="font-medium">Payment Method</span>
             </div>
-            {expandedSection === 'payment' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            {expandedSection === "payment" ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <ChevronDown className="w-5 h-5" />
+            )}
           </button>
-          
-          {expandedSection === 'payment' && currentStep >= 4 && (
+
+          {expandedSection === "payment" && currentStep >= 4 && (
             <div className="p-4 space-y-3 border-t border-gray-100">
               {[
-                { id: 'card', name: 'Credit/Debit Card', icon: '💳' },
-                { id: 'upi', name: 'UPI Payment', icon: '📱' },
-                { id: 'netbanking', name: 'Net Banking', icon: '🏦' },
-                { id: 'wallet', name: 'Digital Wallet', icon: '👛' }
+                { id: "card", name: "Credit/Debit Card", icon: "💳" },
+                { id: "upi", name: "UPI Payment", icon: "📱" },
+                { id: "netbanking", name: "Net Banking", icon: "🏦" },
+                { id: "wallet", name: "Digital Wallet", icon: "👛" },
               ].map((method) => (
-                <label key={method.id} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
+                <label
+                  key={method.id}
+                  className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg"
+                >
                   <input
                     type="radio"
                     name="payment"
@@ -438,12 +503,14 @@ const MobileBooking = () => {
             {formatCurrency(calculateTotal())}
           </div>
         </div>
-        
+
         <button
           onClick={handleContinue}
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:shadow-lg transition-all"
         >
-          {currentStep < 4 ? `Continue to ${steps[currentStep]?.name}` : 'Complete Booking'}
+          {currentStep < 4
+            ? `Continue to ${steps[currentStep]?.name}`
+            : "Complete Booking"}
         </button>
       </div>
     </div>

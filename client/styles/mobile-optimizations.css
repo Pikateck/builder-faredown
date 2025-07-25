@@ -7,9 +7,9 @@
 }
 
 /* Allow text selection for inputs and content areas */
-input, 
-textarea, 
-[contenteditable], 
+input,
+textarea,
+[contenteditable],
 .selectable-text {
   -webkit-user-select: text;
   -webkit-touch-callout: default;
@@ -40,17 +40,17 @@ html {
   touch-action: manipulation;
 }
 
-button, 
-a, 
-[role="button"], 
+button,
+a,
+[role="button"],
 .clickable {
   min-height: 44px;
   touch-action: manipulation;
 }
 
 /* Prevent zoom on input focus (iOS) */
-input, 
-select, 
+input,
+select,
 textarea {
   font-size: 16px !important;
   transform: translateZ(0);
@@ -78,13 +78,17 @@ textarea {
 
 /* Optimized card shadows for mobile */
 .mobile-card {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.2s ease-out;
 }
 
 .mobile-card:hover,
 .mobile-card:active {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Pull-to-refresh styling */
@@ -248,7 +252,7 @@ textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .mobile-transition,
   .bottom-drawer,
   .mobile-filter-sidebar {
@@ -262,7 +266,7 @@ textarea {
     background-color: #1f2937;
     border-color: #374151;
   }
-  
+
   .bottom-drawer {
     background-color: #1f2937;
     border-top: 1px solid #374151;
@@ -274,7 +278,7 @@ textarea {
   .mobile-card {
     border: 2px solid;
   }
-  
+
   button,
   .touch-target {
     border: 2px solid;
@@ -286,7 +290,7 @@ textarea {
   .mobile-modal-content {
     align-items: center;
   }
-  
+
   .bottom-drawer {
     max-height: 90vh;
   }
@@ -298,7 +302,7 @@ textarea {
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
   }
-  
+
   /* Fix for iOS Safari bottom safe area */
   .ios-bottom-safe {
     padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);

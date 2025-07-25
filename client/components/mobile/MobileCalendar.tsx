@@ -1,6 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isBefore, isAfter } from 'date-fns';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar as CalendarIcon,
+} from "lucide-react";
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameDay,
+  isBefore,
+  isAfter,
+} from "date-fns";
 
 interface MobileCalendarProps {
   selectedDate?: Date;
@@ -21,18 +35,28 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
   minDate = new Date(),
   maxDate,
   isRange = false,
-  className = ''
+  className = "",
 }) => {
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
   const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
+
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   // Generate months for horizontal scrolling (current + next 11 months)
   const generateMonths = () => {
@@ -47,11 +71,11 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
     const start = startOfMonth(month);
     const end = endOfMonth(month);
     const days = eachDayOfInterval({ start, end });
-    
+
     // Add empty cells for days before the first day of the month
     const startDay = start.getDay();
     const emptyDays = Array(startDay).fill(null);
-    
+
     return [...emptyDays, ...days];
   };
 
@@ -68,8 +92,10 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
 
   const isDateInRange = (date: Date) => {
     if (!isRange || !selectedDate || !endDate) return false;
-    return (isAfter(date, selectedDate) || isSameDay(date, selectedDate)) && 
-           (isBefore(date, endDate) || isSameDay(date, endDate));
+    return (
+      (isAfter(date, selectedDate) || isSameDay(date, selectedDate)) &&
+      (isBefore(date, endDate) || isSameDay(date, endDate))
+    );
   };
 
   const isRangeStart = (date: Date) => {
@@ -105,18 +131,20 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
     }
   };
 
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    setCurrentMonth(prev => 
-      direction === 'next' ? addMonths(prev, 1) : subMonths(prev, 1)
+  const navigateMonth = (direction: "prev" | "next") => {
+    setCurrentMonth((prev) =>
+      direction === "next" ? addMonths(prev, 1) : subMonths(prev, 1),
     );
   };
 
   const scrollToMonth = (month: Date) => {
-    const monthIndex = Math.floor((month.getTime() - currentMonth.getTime()) / (1000 * 60 * 60 * 24 * 30));
+    const monthIndex = Math.floor(
+      (month.getTime() - currentMonth.getTime()) / (1000 * 60 * 60 * 24 * 30),
+    );
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
         left: monthIndex * 320, // Width of each month container
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   };
@@ -136,25 +164,27 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
 
     if (isLeftSwipe) {
-      navigateMonth('next');
+      navigateMonth("next");
     } else if (isRightSwipe) {
-      navigateMonth('prev');
+      navigateMonth("prev");
     }
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden ${className}`}>
+    <div
+      className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden ${className}`}
+    >
       {/* Calendar Header */}
       <div className="bg-blue-600 text-white p-4">
         <div className="flex items-center justify-between mb-2">
           <button
-            onClick={() => navigateMonth('prev')}
+            onClick={() => navigateMonth("prev")}
             className="p-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -166,12 +196,12 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
           >
             <CalendarIcon className="w-4 h-4" />
             <span className="font-medium">
-              {format(currentMonth, 'MMMM yyyy')}
+              {format(currentMonth, "MMMM yyyy")}
             </span>
           </button>
 
           <button
-            onClick={() => navigateMonth('next')}
+            onClick={() => navigateMonth("next")}
             className="p-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <ChevronRight className="w-5 h-5" />
@@ -180,12 +210,11 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
 
         {isRange && (
           <div className="text-center text-sm opacity-90">
-            {selectedDate && endDate 
-              ? `${format(selectedDate, 'MMM d')} - ${format(endDate, 'MMM d')}`
-              : selectedDate 
-                ? `${format(selectedDate, 'MMM d')} - Select end date`
-                : 'Select check-in date'
-            }
+            {selectedDate && endDate
+              ? `${format(selectedDate, "MMM d")} - ${format(endDate, "MMM d")}`
+              : selectedDate
+                ? `${format(selectedDate, "MMM d")} - Select end date`
+                : "Select check-in date"}
           </div>
         )}
       </div>
@@ -194,15 +223,18 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
       <div className="p-4">
         {/* Week Headers */}
         <div className="grid grid-cols-7 gap-1 mb-4">
-          {dayNames.map(day => (
-            <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">
+          {dayNames.map((day) => (
+            <div
+              key={day}
+              className="text-center text-xs font-medium text-gray-500 py-2"
+            >
               {day}
             </div>
           ))}
         </div>
 
         {/* Calendar Grid */}
-        <div 
+        <div
           className="grid grid-cols-7 gap-1"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
@@ -216,14 +248,14 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
                   disabled={isDateDisabled(date)}
                   className={`w-full h-full flex items-center justify-center text-sm rounded-lg transition-all font-medium touch-manipulation ${
                     isDateDisabled(date)
-                      ? 'text-gray-300 cursor-not-allowed'
+                      ? "text-gray-300 cursor-not-allowed"
                       : isRangeStart(date) || isRangeEnd(date)
-                        ? 'bg-blue-600 text-white shadow-md'
+                        ? "bg-blue-600 text-white shadow-md"
                         : isDateInRange(date)
-                          ? 'bg-blue-100 text-blue-700'
+                          ? "bg-blue-100 text-blue-700"
                           : isDateSelected(date)
-                            ? 'bg-blue-600 text-white shadow-md'
-                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100'
+                            ? "bg-blue-600 text-white shadow-md"
+                            : "text-gray-700 hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100"
                   }`}
                 >
                   {date.getDate()}
@@ -248,7 +280,7 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
         >
           Today
         </button>
-        
+
         <div className="flex items-center space-x-4 text-xs">
           <div className="flex items-center space-x-1">
             <div className="w-3 h-3 bg-blue-600 rounded-full" />
@@ -282,7 +314,7 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
                 </button>
               </div>
             </div>
-            
+
             <div className="p-4">
               <div className="grid grid-cols-3 gap-3">
                 {generateMonths().map((month, index) => (
@@ -293,12 +325,13 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
                       setIsMonthPickerOpen(false);
                     }}
                     className={`p-3 text-sm rounded-lg transition-colors ${
-                      format(month, 'yyyy-MM') === format(currentMonth, 'yyyy-MM')
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      format(month, "yyyy-MM") ===
+                      format(currentMonth, "yyyy-MM")
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
-                    {format(month, 'MMM yyyy')}
+                    {format(month, "MMM yyyy")}
                   </button>
                 ))}
               </div>

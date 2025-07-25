@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
-import { 
+import {
   ArrowLeft,
   Filter,
   SlidersHorizontal,
@@ -17,7 +17,7 @@ import {
   MapPin,
   Users,
   Calendar,
-  X
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -50,13 +50,13 @@ const MobileHotelResults = () => {
       rooms: [
         { type: "Deluxe Room", price: 45000, available: 3 },
         { type: "Suite", price: 75000, available: 2 },
-        { type: "Presidential Suite", price: 150000, available: 1 }
+        { type: "Presidential Suite", price: 150000, available: 1 },
       ],
       isBargainAvailable: true,
-      bargainDiscount: 15
+      bargainDiscount: 15,
     },
     {
-      id: "2", 
+      id: "2",
       name: "Atlantis, The Palm",
       rating: 5,
       reviewScore: 8.8,
@@ -71,10 +71,10 @@ const MobileHotelResults = () => {
       description: "Luxury resort with underwater suites and aquarium",
       rooms: [
         { type: "Ocean Room", price: 32000, available: 5 },
-        { type: "Neptune Suite", price: 65000, available: 2 }
+        { type: "Neptune Suite", price: 65000, available: 2 },
       ],
       isBargainAvailable: true,
-      bargainDiscount: 20
+      bargainDiscount: 20,
     },
     {
       id: "3",
@@ -83,7 +83,7 @@ const MobileHotelResults = () => {
       reviewScore: 9.0,
       reviewCount: 987,
       location: "Jumeirah Beach Road",
-      distance: "1.8 km from city center", 
+      distance: "1.8 km from city center",
       price: 28000,
       originalPrice: 33000,
       currency: "INR",
@@ -92,11 +92,11 @@ const MobileHotelResults = () => {
       description: "Beachfront luxury with stunning views and premium service",
       rooms: [
         { type: "Premium Room", price: 28000, available: 4 },
-        { type: "Royal Suite", price: 85000, available: 1 }
+        { type: "Royal Suite", price: 85000, available: 1 },
       ],
       isBargainAvailable: false,
-      bargainDiscount: 0
-    }
+      bargainDiscount: 0,
+    },
   ]);
 
   const amenityIcons = {
@@ -105,11 +105,11 @@ const MobileHotelResults = () => {
     pool: <span className="text-sm">🏊</span>,
     gym: <Dumbbell className="w-4 h-4" />,
     spa: <span className="text-sm">🧘</span>,
-    restaurant: <Coffee className="w-4 h-4" />
+    restaurant: <Coffee className="w-4 h-4" />,
   };
 
   const formatCurrency = (amount: number) => {
-    return `₹${amount.toLocaleString('en-IN')}`;
+    return `₹${amount.toLocaleString("en-IN")}`;
   };
 
   const toggleFilter = (filterName: string) => {
@@ -129,21 +129,21 @@ const MobileHotelResults = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
         >
           <ArrowLeft className="w-6 h-6 text-gray-700" />
         </button>
-        
+
         <div className="flex-1 text-center">
           <div className="font-semibold text-gray-800">Dubai Hotels</div>
           <div className="text-xs text-gray-500">
             Jan 15-18 • 2 guests • {hotels.length} properties
           </div>
         </div>
-        
-        <button 
+
+        <button
           onClick={() => setShowFilters(true)}
           className="p-2 rounded-lg hover:bg-gray-100 relative"
         >
@@ -162,7 +162,9 @@ const MobileHotelResults = () => {
           <span className="text-gray-400">•</span>
           <Users className="w-4 h-4 text-gray-400" />
           <span className="text-gray-600">2 guests</span>
-          <button className="ml-auto text-blue-600 text-sm font-medium">Edit</button>
+          <button className="ml-auto text-blue-600 text-sm font-medium">
+            Edit
+          </button>
         </div>
       </div>
 
@@ -174,14 +176,14 @@ const MobileHotelResults = () => {
             { key: "price_low", label: "Price: Low to High" },
             { key: "price_high", label: "Price: High to Low" },
             { key: "rating", label: "Guest Rating" },
-            { key: "distance", label: "Distance" }
+            { key: "distance", label: "Distance" },
           ].map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setSortBy(key)}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                sortBy === key 
-                  ? "bg-blue-600 text-white" 
+                sortBy === key
+                  ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -194,7 +196,10 @@ const MobileHotelResults = () => {
       {/* Hotel Results */}
       <div className="p-4 space-y-4">
         {hotels.map((hotel) => (
-          <div key={hotel.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div
+            key={hotel.id}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+          >
             {/* Hotel Image */}
             <div className="aspect-video bg-gradient-to-br from-blue-400 to-purple-500 relative">
               <div className="absolute inset-0 flex items-center justify-center text-6xl">
@@ -219,16 +224,23 @@ const MobileHotelResults = () => {
             <div className="p-4">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-800 text-lg leading-tight">{hotel.name}</h3>
+                  <h3 className="font-semibold text-gray-800 text-lg leading-tight">
+                    {hotel.name}
+                  </h3>
                   <div className="flex items-center mt-1">
                     {[...Array(hotel.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                      <Star
+                        key={i}
+                        className="w-4 h-4 text-yellow-400 fill-current"
+                      />
                     ))}
                   </div>
                 </div>
                 <div className="text-right ml-4">
                   <div className="flex items-center space-x-1">
-                    <span className="text-lg font-bold text-blue-600">{hotel.reviewScore}</span>
+                    <span className="text-lg font-bold text-blue-600">
+                      {hotel.reviewScore}
+                    </span>
                     <div className="text-xs text-gray-500">
                       <div>Excellent</div>
                       <div>{hotel.reviewCount} reviews</div>
@@ -247,13 +259,18 @@ const MobileHotelResults = () => {
               {/* Amenities */}
               <div className="flex items-center space-x-3 mb-4">
                 {hotel.amenities.slice(0, 4).map((amenity, index) => (
-                  <div key={index} className="flex items-center space-x-1 text-gray-500">
+                  <div
+                    key={index}
+                    className="flex items-center space-x-1 text-gray-500"
+                  >
                     {amenityIcons[amenity]}
                     <span className="text-xs capitalize">{amenity}</span>
                   </div>
                 ))}
                 {hotel.amenities.length > 4 && (
-                  <span className="text-xs text-blue-600">+{hotel.amenities.length - 4} more</span>
+                  <span className="text-xs text-blue-600">
+                    +{hotel.amenities.length - 4} more
+                  </span>
                 )}
               </div>
 
@@ -273,7 +290,8 @@ const MobileHotelResults = () => {
                   <div className="text-sm text-gray-500">per night</div>
                   {hotel.originalPrice > hotel.price && (
                     <div className="text-sm text-green-600 font-medium">
-                      You save {formatCurrency(hotel.originalPrice - hotel.price)}
+                      You save{" "}
+                      {formatCurrency(hotel.originalPrice - hotel.price)}
                     </div>
                   )}
                 </div>
@@ -288,7 +306,9 @@ const MobileHotelResults = () => {
                     </button>
                   )}
                   <button
-                    onClick={() => navigate(`/mobile-hotel-details/${hotel.id}`)}
+                    onClick={() =>
+                      navigate(`/mobile-hotel-details/${hotel.id}`)
+                    }
                     className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium text-sm hover:shadow-lg transition-all"
                   >
                     Reserve
@@ -302,10 +322,11 @@ const MobileHotelResults = () => {
                 className="w-full mt-4 pt-4 border-t border-gray-100 flex items-center justify-center text-blue-600 text-sm font-medium"
               >
                 {expandedHotel === hotel.id ? "Hide" : "Show"} Room Details
-                {expandedHotel === hotel.id ? 
-                  <ChevronUp className="w-4 h-4 ml-1" /> : 
+                {expandedHotel === hotel.id ? (
+                  <ChevronUp className="w-4 h-4 ml-1" />
+                ) : (
                   <ChevronDown className="w-4 h-4 ml-1" />
-                }
+                )}
               </button>
 
               {/* Expandable Room Details */}
@@ -313,16 +334,27 @@ const MobileHotelResults = () => {
                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
                   <p className="text-sm text-gray-600">{hotel.description}</p>
                   <div className="space-y-2">
-                    <h4 className="font-medium text-gray-800">Available Rooms:</h4>
+                    <h4 className="font-medium text-gray-800">
+                      Available Rooms:
+                    </h4>
                     {hotel.rooms.map((room, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+                      >
                         <div>
                           <div className="font-medium text-sm">{room.type}</div>
-                          <div className="text-xs text-gray-500">{room.available} left</div>
+                          <div className="text-xs text-gray-500">
+                            {room.available} left
+                          </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-blue-600">{formatCurrency(room.price)}</div>
-                          <button className="text-xs text-blue-600 hover:underline">Select</button>
+                          <div className="font-bold text-blue-600">
+                            {formatCurrency(room.price)}
+                          </div>
+                          <button className="text-xs text-blue-600 hover:underline">
+                            Select
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -340,7 +372,7 @@ const MobileHotelResults = () => {
           <div className="bg-white h-full flex flex-col">
             {/* Filter Header */}
             <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between border-b">
-              <button 
+              <button
                 onClick={() => setShowFilters(false)}
                 className="text-gray-600 hover:text-gray-800"
               >
@@ -357,13 +389,17 @@ const MobileHotelResults = () => {
               {/* Price Range */}
               <div className="border-b">
                 <button
-                  onClick={() => toggleFilter('price')}
+                  onClick={() => toggleFilter("price")}
                   className="w-full px-4 py-4 flex items-center justify-between"
                 >
                   <span className="font-medium">Price Range (per night)</span>
-                  {expandedFilter === 'price' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  {expandedFilter === "price" ? (
+                    <ChevronUp className="w-5 h-5" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5" />
+                  )}
                 </button>
-                {expandedFilter === 'price' && (
+                {expandedFilter === "price" && (
                   <div className="px-4 pb-4">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-sm text-gray-600">₹0</span>
@@ -382,22 +418,34 @@ const MobileHotelResults = () => {
               {/* Star Rating */}
               <div className="border-b">
                 <button
-                  onClick={() => toggleFilter('rating')}
+                  onClick={() => toggleFilter("rating")}
                   className="w-full px-4 py-4 flex items-center justify-between"
                 >
                   <span className="font-medium">Star Rating</span>
-                  {expandedFilter === 'rating' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  {expandedFilter === "rating" ? (
+                    <ChevronUp className="w-5 h-5" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5" />
+                  )}
                 </button>
-                {expandedFilter === 'rating' && (
+                {expandedFilter === "rating" && (
                   <div className="px-4 pb-4 space-y-3">
                     {[5, 4, 3, 2, 1].map((stars) => (
-                      <label key={stars} className="flex items-center space-x-3">
+                      <label
+                        key={stars}
+                        className="flex items-center space-x-3"
+                      >
                         <input type="checkbox" className="rounded" />
                         <div className="flex items-center space-x-1">
                           {[...Array(stars)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                            <Star
+                              key={i}
+                              className="w-4 h-4 text-yellow-400 fill-current"
+                            />
                           ))}
-                          <span className="text-sm ml-2">{stars} star{stars !== 1 ? 's' : ''}</span>
+                          <span className="text-sm ml-2">
+                            {stars} star{stars !== 1 ? "s" : ""}
+                          </span>
                         </div>
                       </label>
                     ))}
@@ -408,16 +456,30 @@ const MobileHotelResults = () => {
               {/* Amenities */}
               <div className="border-b">
                 <button
-                  onClick={() => toggleFilter('amenities')}
+                  onClick={() => toggleFilter("amenities")}
                   className="w-full px-4 py-4 flex items-center justify-between"
                 >
                   <span className="font-medium">Amenities</span>
-                  {expandedFilter === 'amenities' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  {expandedFilter === "amenities" ? (
+                    <ChevronUp className="w-5 h-5" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5" />
+                  )}
                 </button>
-                {expandedFilter === 'amenities' && (
+                {expandedFilter === "amenities" && (
                   <div className="px-4 pb-4 space-y-3">
-                    {['Free WiFi', 'Pool', 'Gym', 'Spa', 'Restaurant', 'Free Parking'].map((amenity) => (
-                      <label key={amenity} className="flex items-center space-x-3">
+                    {[
+                      "Free WiFi",
+                      "Pool",
+                      "Gym",
+                      "Spa",
+                      "Restaurant",
+                      "Free Parking",
+                    ].map((amenity) => (
+                      <label
+                        key={amenity}
+                        className="flex items-center space-x-3"
+                      >
                         <input type="checkbox" className="rounded" />
                         <span className="text-sm">{amenity}</span>
                       </label>
@@ -446,7 +508,9 @@ const MobileHotelResults = () => {
           <div className="bg-white w-full rounded-t-xl max-h-[80vh] overflow-y-auto">
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Bargain for Better Price</h3>
+                <h3 className="text-lg font-semibold">
+                  Bargain for Better Price
+                </h3>
                 <button
                   onClick={() => setShowBargainDrawer(false)}
                   className="p-2 rounded-lg hover:bg-gray-100"
@@ -455,36 +519,48 @@ const MobileHotelResults = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="p-4">
               <div className="text-center mb-6">
                 <div className="text-4xl mb-2">🔥</div>
-                <h4 className="text-xl font-bold text-gray-800">{selectedHotel.name}</h4>
-                <p className="text-gray-600">Get instant discount on your booking!</p>
+                <h4 className="text-xl font-bold text-gray-800">
+                  {selectedHotel.name}
+                </h4>
+                <p className="text-gray-600">
+                  Get instant discount on your booking!
+                </p>
               </div>
-              
+
               <div className="bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white p-4 rounded-lg mb-6 text-center">
-                <div className="text-2xl font-bold">{selectedHotel.bargainDiscount}% OFF</div>
+                <div className="text-2xl font-bold">
+                  {selectedHotel.bargainDiscount}% OFF
+                </div>
                 <div className="text-sm opacity-90">Limited time offer</div>
                 <div className="text-lg font-semibold mt-2">
-                  Save {formatCurrency(selectedHotel.originalPrice - selectedHotel.price)}
+                  Save{" "}
+                  {formatCurrency(
+                    selectedHotel.originalPrice - selectedHotel.price,
+                  )}
                 </div>
               </div>
-              
+
               <div className="space-y-3">
-                <Button 
+                <Button
                   className="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 text-white"
                   onClick={() => {
                     setShowBargainDrawer(false);
-                    navigate(`/mobile-hotel-details/${selectedHotel.id}`, { 
-                      state: { bargainApplied: true, discount: selectedHotel.bargainDiscount } 
+                    navigate(`/mobile-hotel-details/${selectedHotel.id}`, {
+                      state: {
+                        bargainApplied: true,
+                        discount: selectedHotel.bargainDiscount,
+                      },
                     });
                   }}
                 >
                   Accept Bargain & Book Now
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full"
                   onClick={() => setShowBargainDrawer(false)}
                 >

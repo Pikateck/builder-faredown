@@ -144,8 +144,6 @@ export function MobileDatePicker({
     }
   };
 
-
-
   return (
     <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
       <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -208,7 +206,12 @@ export function MobileDatePicker({
           <BookingCalendar
             initialRange={{
               startDate: selectedDepartureDate || new Date(),
-              endDate: selectedReturnDate || addDays(selectedDepartureDate || new Date(), tripType === "one-way" ? 1 : 7)
+              endDate:
+                selectedReturnDate ||
+                addDays(
+                  selectedDepartureDate || new Date(),
+                  tripType === "one-way" ? 1 : 7,
+                ),
             }}
             onChange={handleCalendarChange}
             onClose={() => {}} // Don't auto-close on selection for mobile
@@ -221,15 +224,20 @@ export function MobileDatePicker({
           <Button
             onClick={onClose}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
-            disabled={!selectedDepartureDate || (tripType === "round-trip" && !selectedReturnDate)}
+            disabled={
+              !selectedDepartureDate ||
+              (tripType === "round-trip" && !selectedReturnDate)
+            }
           >
             Done
           </Button>
-          {tripType === "round-trip" && selectedDepartureDate && !selectedReturnDate && (
-            <p className="text-sm text-gray-500 text-center">
-              Please select a return date
-            </p>
-          )}
+          {tripType === "round-trip" &&
+            selectedDepartureDate &&
+            !selectedReturnDate && (
+              <p className="text-sm text-gray-500 text-center">
+                Please select a return date
+              </p>
+            )}
         </div>
       </div>
     </div>

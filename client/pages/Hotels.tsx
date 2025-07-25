@@ -5,13 +5,13 @@ import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Star, 
-  MapPin, 
-  Heart, 
-  ChevronLeft, 
-  Menu, 
-  Search, 
+import {
+  Star,
+  MapPin,
+  Heart,
+  ChevronLeft,
+  Menu,
+  Search,
   Filter,
   SlidersHorizontal,
   Calendar,
@@ -29,7 +29,7 @@ import {
   Shield,
   Clock,
   CheckCircle,
-  Zap
+  Zap,
 } from "lucide-react";
 import { ApiConnectionTest } from "@/components/ApiConnectionTest";
 
@@ -49,7 +49,8 @@ export default function Hotels() {
       reviews: 234,
       price: 18500,
       originalPrice: 22000,
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
+      image:
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
       amenities: ["Wifi", "Pool", "Gym", "Parking"],
       distance: "2.1 km from center",
       breakfast: true,
@@ -65,7 +66,8 @@ export default function Hotels() {
       reviews: 1247,
       price: 45600,
       originalPrice: 52000,
-      image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400",
+      image:
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400",
       amenities: ["Beach", "Pool", "Spa", "Restaurant"],
       distance: "15.3 km from center",
       breakfast: true,
@@ -81,7 +83,8 @@ export default function Hotels() {
       reviews: 856,
       price: 38900,
       originalPrice: 44000,
-      image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400",
+      image:
+        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400",
       amenities: ["Beach", "Spa", "Fine Dining", "Kids Club"],
       distance: "12.8 km from center",
       breakfast: true,
@@ -94,7 +97,8 @@ export default function Hotels() {
     {
       destination: "Dubai",
       dates: "Aug 1 - Aug 5, 2 people",
-      image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100",
+      image:
+        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100",
     },
   ];
 
@@ -105,7 +109,7 @@ export default function Hotels() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
-      
+
       {/* Mobile Header & Search (≤768px) */}
       <div className="block md:hidden">
         {/* Mobile Header */}
@@ -117,7 +121,9 @@ export default function Hotels() {
               </button>
               <div className="flex-1 text-center">
                 <h1 className="text-lg font-semibold text-gray-900">Hotels</h1>
-                <p className="text-xs text-gray-500">Dubai • Aug 1-5 • 2 guests</p>
+                <p className="text-xs text-gray-500">
+                  Dubai • Aug 1-5 • 2 guests
+                </p>
               </div>
               <button className="p-2 -mr-2">
                 <Menu className="w-6 h-6 text-gray-700" />
@@ -136,7 +142,9 @@ export default function Hotels() {
                 <div className="text-sm font-medium text-gray-900">
                   Dubai • Aug 1-5 • 2 guests
                 </div>
-                <div className="text-xs text-gray-500">Tap to change search</div>
+                <div className="text-xs text-gray-500">
+                  Tap to change search
+                </div>
               </div>
             </button>
           </div>
@@ -177,8 +185,8 @@ export default function Hotels() {
 
           {/* Mobile Hotel Cards */}
           {hotels.map((hotel) => (
-            <Card 
-              key={hotel.id} 
+            <Card
+              key={hotel.id}
               className="overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => navigate(`/hotels/${hotel.id}`)}
             >
@@ -197,7 +205,7 @@ export default function Hotels() {
                   <Heart className="w-4 h-4 text-gray-600" />
                 </button>
               </div>
-              
+
               <CardContent className="p-4">
                 <div className="mb-2">
                   <h3 className="font-semibold text-gray-900 text-lg leading-tight">
@@ -205,10 +213,14 @@ export default function Hotels() {
                   </h3>
                   <div className="flex items-center space-x-2 mt-1">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">{hotel.location}</span>
+                    <span className="text-sm text-gray-600">
+                      {hotel.location}
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2 mt-1">
-                    <span className="text-xs text-gray-500">{hotel.distance}</span>
+                    <span className="text-xs text-gray-500">
+                      {hotel.distance}
+                    </span>
                   </div>
                 </div>
 
@@ -275,7 +287,10 @@ export default function Hotels() {
         {/* Mobile Bottom Navigation */}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
           <div className="grid grid-cols-4 h-16">
-            <Link to="/" className="flex flex-col items-center justify-center space-y-1">
+            <Link
+              to="/"
+              className="flex flex-col items-center justify-center space-y-1"
+            >
               <Plane className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Flights</span>
             </Link>

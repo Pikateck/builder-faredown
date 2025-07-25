@@ -9,15 +9,15 @@ const MobileBargain = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
         >
           <ArrowLeft className="w-6 h-6 text-gray-700" />
         </button>
-        
+
         <h1 className="font-semibold text-lg text-gray-800">Bargain Center</h1>
-        
+
         <div className="w-8"></div>
       </div>
 
@@ -30,7 +30,7 @@ const MobileBargain = () => {
         <p className="text-gray-600 mb-8">
           Advanced bargain features coming soon!
         </p>
-        
+
         <button
           onClick={() => navigate("/mobile-home")}
           className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold"

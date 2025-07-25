@@ -230,7 +230,9 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
               {flightTitle}
             </h3>
             <p className="text-sm text-[#666]">
-              {selectedFlight?.duration || "3h 15m"} • {selectedFlight?.airline || "Airlines"} • {selectedFareType?.name || "Economy"}
+              {selectedFlight?.duration || "3h 15m"} •{" "}
+              {selectedFlight?.airline || "Airlines"} •{" "}
+              {selectedFareType?.name || "Economy"}
             </p>
           </div>
           <ChevronDown
@@ -786,7 +788,6 @@ export default function BookingFlow() {
 
   // Define renderFlightSegment function after selectedFlight is available
 
-
   // If no flight data, redirect back to flight search
   useEffect(() => {
     if (!selectedFlight && !selectedFareType) {
@@ -1053,7 +1054,9 @@ export default function BookingFlow() {
 
   // Calculate total booking amount
   const calculateGrandTotal = () => {
-    return calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees();
+    return (
+      calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees()
+    );
   };
 
   // Calculate refund protection cost (10% of airline fare)
@@ -1109,7 +1112,8 @@ export default function BookingFlow() {
     if (selectedBaggageProtection === "gold") total += 200;
 
     // Refund protection
-    if (selectedRefundProtection === "yes") total += calculateRefundProtectionCost();
+    if (selectedRefundProtection === "yes")
+      total += calculateRefundProtectionCost();
 
     // Other options
     const optionPrices = {
@@ -2036,8 +2040,8 @@ export default function BookingFlow() {
                             <span className="text-xl">♾️</span>
                           </div>
                           <h4 className="text-lg font-semibold text-gray-900">
-                            Receive 10% of total booking value refund if you cancel for any of the
-                            reasons below
+                            Receive 10% of total booking value refund if you
+                            cancel for any of the reasons below
                           </h4>
                         </div>
 
@@ -2122,7 +2126,9 @@ export default function BookingFlow() {
                             <span className="font-medium text-gray-900">
                               Yes, protect my booking
                             </span>
-                            <span className="font-semibold">{formatCurrency(calculateRefundProtectionCost())}</span>
+                            <span className="font-semibold">
+                              {formatCurrency(calculateRefundProtectionCost())}
+                            </span>
                           </div>
                         </label>
 
@@ -2332,7 +2338,11 @@ export default function BookingFlow() {
                           {selectedRefundProtection === "yes" && (
                             <div className="flex justify-between">
                               <span>Refund Protection</span>
-                              <span>{formatCurrency(calculateRefundProtectionCost())}</span>
+                              <span>
+                                {formatCurrency(
+                                  calculateRefundProtectionCost(),
+                                )}
+                              </span>
                             </div>
                           )}
                           {selectedOtherOptions.length > 0 && (
@@ -2825,7 +2835,9 @@ export default function BookingFlow() {
                       {selectedRefundProtection === "yes" && (
                         <div className="flex justify-between">
                           <span>Refund Protection</span>
-                          <span>{formatCurrency(calculateRefundProtectionCost())}</span>
+                          <span>
+                            {formatCurrency(calculateRefundProtectionCost())}
+                          </span>
                         </div>
                       )}
                       {selectedOtherOptions.length > 0 && (

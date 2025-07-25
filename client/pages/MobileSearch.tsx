@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { 
-  ArrowLeft, 
-  Filter, 
+import {
+  ArrowLeft,
+  Filter,
   SlidersHorizontal,
   ChevronDown,
   ChevronUp,
   Clock,
   Plane,
   Star,
-  Zap
+  Zap,
 } from "lucide-react";
 
 const MobileSearch = () => {
@@ -17,7 +17,7 @@ const MobileSearch = () => {
   const navigate = useNavigate();
   const searchData = location.state?.searchData;
   const bargainEnabled = location.state?.bargainEnabled;
-  
+
   const [showFilters, setShowFilters] = useState(false);
   const [expandedFilter, setExpandedFilter] = useState(null);
   const [sortBy, setSortBy] = useState("price");
@@ -29,7 +29,7 @@ const MobileSearch = () => {
     departure: { min: 0, max: 24 },
     arrival: { min: 0, max: 24 },
     stops: "any",
-    duration: [0, 12]
+    duration: [0, 12],
   });
 
   // Mock flight data
@@ -39,7 +39,7 @@ const MobileSearch = () => {
       airline: "Indigo",
       logo: "🛩️",
       from: "BOM",
-      to: "DXB", 
+      to: "DXB",
       departure: "06:30",
       arrival: "08:45",
       duration: "3h 15m",
@@ -50,7 +50,7 @@ const MobileSearch = () => {
       class: "Economy",
       baggage: "7kg + 15kg",
       rating: 4.2,
-      bargainAvailable: true
+      bargainAvailable: true,
     },
     {
       id: 2,
@@ -58,7 +58,7 @@ const MobileSearch = () => {
       logo: "✈️",
       from: "BOM",
       to: "DXB",
-      departure: "14:20", 
+      departure: "14:20",
       arrival: "16:35",
       duration: "3h 15m",
       stops: "Non-stop",
@@ -68,7 +68,7 @@ const MobileSearch = () => {
       class: "Economy",
       baggage: "7kg + 20kg",
       rating: 4.5,
-      bargainAvailable: true
+      bargainAvailable: true,
     },
     {
       id: 3,
@@ -78,7 +78,7 @@ const MobileSearch = () => {
       to: "DXB",
       departure: "22:10",
       arrival: "00:25+1",
-      duration: "3h 15m", 
+      duration: "3h 15m",
       stops: "Non-stop",
       price: 24500,
       originalPrice: 29000,
@@ -86,15 +86,15 @@ const MobileSearch = () => {
       class: "Economy",
       baggage: "7kg + 15kg",
       rating: 4.0,
-      bargainAvailable: false
-    }
+      bargainAvailable: false,
+    },
   ]);
 
   useEffect(() => {
     if (bargainEnabled) {
       setShowBargainModal(true);
       const timer = setInterval(() => {
-        setBargainTimer(prev => {
+        setBargainTimer((prev) => {
           if (prev <= 1) {
             setShowBargainModal(false);
             return 30;
@@ -111,11 +111,11 @@ const MobileSearch = () => {
   };
 
   const handleFlightSelect = (flight) => {
-    navigate("/mobile-booking", { 
-      state: { 
-        selectedFlight: flight, 
-        searchData 
-      } 
+    navigate("/mobile-booking", {
+      state: {
+        selectedFlight: flight,
+        searchData,
+      },
     });
   };
 
@@ -125,7 +125,7 @@ const MobileSearch = () => {
   };
 
   const formatCurrency = (amount) => {
-    return `₹${amount.toLocaleString('en-IN')}`;
+    return `₹${amount.toLocaleString("en-IN")}`;
   };
 
   const formatTime = (time) => {
@@ -136,13 +136,13 @@ const MobileSearch = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
         >
           <ArrowLeft className="w-6 h-6 text-gray-700" />
         </button>
-        
+
         <div className="flex-1 text-center">
           <div className="font-semibold text-gray-800">
             {searchData?.from} → {searchData?.to}
@@ -151,8 +151,8 @@ const MobileSearch = () => {
             {searchData?.departure} • {flights.length} flights
           </div>
         </div>
-        
-        <button 
+
+        <button
           onClick={() => setShowFilters(true)}
           className="p-2 rounded-lg hover:bg-gray-100 relative"
         >
@@ -167,14 +167,14 @@ const MobileSearch = () => {
             { key: "price", label: "Cheapest" },
             { key: "duration", label: "Fastest" },
             { key: "departure", label: "Departure" },
-            { key: "rating", label: "Best" }
+            { key: "rating", label: "Best" },
           ].map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setSortBy(key)}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                sortBy === key 
-                  ? "bg-blue-600 text-white" 
+                sortBy === key
+                  ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -187,14 +187,19 @@ const MobileSearch = () => {
       {/* Flight Results */}
       <div className="p-4 space-y-4">
         {flights.map((flight) => (
-          <div key={flight.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div
+            key={flight.id}
+            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+          >
             {/* Flight Header */}
             <div className="p-4 border-b border-gray-100">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
                   <div className="text-2xl">{flight.logo}</div>
                   <div>
-                    <div className="font-semibold text-gray-800">{flight.airline}</div>
+                    <div className="font-semibold text-gray-800">
+                      {flight.airline}
+                    </div>
                     <div className="flex items-center space-x-2 text-xs text-gray-500">
                       <span>{flight.class}</span>
                       <span>•</span>
@@ -216,10 +221,12 @@ const MobileSearch = () => {
               {/* Flight Times */}
               <div className="flex items-center justify-between mb-3">
                 <div className="text-center">
-                  <div className="text-xl font-bold text-gray-800">{flight.departure}</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {flight.departure}
+                  </div>
                   <div className="text-sm text-gray-500">{flight.from}</div>
                 </div>
-                
+
                 <div className="flex-1 mx-4">
                   <div className="relative">
                     <div className="h-px bg-gray-300 w-full"></div>
@@ -229,9 +236,11 @@ const MobileSearch = () => {
                     {flight.duration} • {flight.stops}
                   </div>
                 </div>
-                
+
                 <div className="text-center">
-                  <div className="text-xl font-bold text-gray-800">{flight.arrival}</div>
+                  <div className="text-xl font-bold text-gray-800">
+                    {flight.arrival}
+                  </div>
                   <div className="text-sm text-gray-500">{flight.to}</div>
                 </div>
               </div>
@@ -290,7 +299,7 @@ const MobileSearch = () => {
         <div className="fixed inset-0 bg-white z-50 flex flex-col">
           {/* Filter Header */}
           <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between border-b">
-            <button 
+            <button
               onClick={() => setShowFilters(false)}
               className="text-gray-600 hover:text-gray-800"
             >
@@ -307,24 +316,23 @@ const MobileSearch = () => {
             {/* Price Range */}
             <div className="border-b">
               <button
-                onClick={() => toggleFilter('price')}
+                onClick={() => toggleFilter("price")}
                 className="w-full px-4 py-4 flex items-center justify-between"
               >
                 <span className="font-medium">Price Range</span>
-                {expandedFilter === 'price' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                {expandedFilter === "price" ? (
+                  <ChevronUp className="w-5 h-5" />
+                ) : (
+                  <ChevronDown className="w-5 h-5" />
+                )}
               </button>
-              {expandedFilter === 'price' && (
+              {expandedFilter === "price" && (
                 <div className="px-4 pb-4">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-sm text-gray-600">₹0</span>
                     <span className="text-sm text-gray-600">₹50,000+</span>
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="50000"
-                    className="w-full"
-                  />
+                  <input type="range" min="0" max="50000" className="w-full" />
                 </div>
               )}
             </div>
@@ -332,20 +340,29 @@ const MobileSearch = () => {
             {/* Airlines */}
             <div className="border-b">
               <button
-                onClick={() => toggleFilter('airlines')}
+                onClick={() => toggleFilter("airlines")}
                 className="w-full px-4 py-4 flex items-center justify-between"
               >
                 <span className="font-medium">Airlines</span>
-                {expandedFilter === 'airlines' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                {expandedFilter === "airlines" ? (
+                  <ChevronUp className="w-5 h-5" />
+                ) : (
+                  <ChevronDown className="w-5 h-5" />
+                )}
               </button>
-              {expandedFilter === 'airlines' && (
+              {expandedFilter === "airlines" && (
                 <div className="px-4 pb-4 space-y-3">
-                  {['Indigo', 'Emirates', 'Air India', 'SpiceJet'].map((airline) => (
-                    <label key={airline} className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded" />
-                      <span className="text-sm">{airline}</span>
-                    </label>
-                  ))}
+                  {["Indigo", "Emirates", "Air India", "SpiceJet"].map(
+                    (airline) => (
+                      <label
+                        key={airline}
+                        className="flex items-center space-x-3"
+                      >
+                        <input type="checkbox" className="rounded" />
+                        <span className="text-sm">{airline}</span>
+                      </label>
+                    ),
+                  )}
                 </div>
               )}
             </div>
@@ -353,21 +370,28 @@ const MobileSearch = () => {
             {/* Departure Time */}
             <div className="border-b">
               <button
-                onClick={() => toggleFilter('departure')}
+                onClick={() => toggleFilter("departure")}
                 className="w-full px-4 py-4 flex items-center justify-between"
               >
                 <span className="font-medium">Departure Time</span>
-                {expandedFilter === 'departure' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                {expandedFilter === "departure" ? (
+                  <ChevronUp className="w-5 h-5" />
+                ) : (
+                  <ChevronDown className="w-5 h-5" />
+                )}
               </button>
-              {expandedFilter === 'departure' && (
+              {expandedFilter === "departure" && (
                 <div className="px-4 pb-4 space-y-3">
                   {[
-                    { label: 'Early Morning', time: '6AM - 12PM', icon: '🌅' },
-                    { label: 'Afternoon', time: '12PM - 6PM', icon: '☀️' },
-                    { label: 'Evening', time: '6PM - 12AM', icon: '🌆' },
-                    { label: 'Night', time: '12AM - 6AM', icon: '🌙' }
+                    { label: "Early Morning", time: "6AM - 12PM", icon: "🌅" },
+                    { label: "Afternoon", time: "12PM - 6PM", icon: "☀️" },
+                    { label: "Evening", time: "6PM - 12AM", icon: "🌆" },
+                    { label: "Night", time: "12AM - 6AM", icon: "🌙" },
                   ].map((slot) => (
-                    <label key={slot.label} className="flex items-center space-x-3">
+                    <label
+                      key={slot.label}
+                      className="flex items-center space-x-3"
+                    >
                       <input type="checkbox" className="rounded" />
                       <span className="text-xl">{slot.icon}</span>
                       <div className="flex-1">
@@ -383,16 +407,23 @@ const MobileSearch = () => {
             {/* Stops */}
             <div className="border-b">
               <button
-                onClick={() => toggleFilter('stops')}
+                onClick={() => toggleFilter("stops")}
                 className="w-full px-4 py-4 flex items-center justify-between"
               >
                 <span className="font-medium">Stops</span>
-                {expandedFilter === 'stops' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                {expandedFilter === "stops" ? (
+                  <ChevronUp className="w-5 h-5" />
+                ) : (
+                  <ChevronDown className="w-5 h-5" />
+                )}
               </button>
-              {expandedFilter === 'stops' && (
+              {expandedFilter === "stops" && (
                 <div className="px-4 pb-4 space-y-3">
-                  {['Non-stop', '1 Stop', '2+ Stops'].map((stopType) => (
-                    <label key={stopType} className="flex items-center space-x-3">
+                  {["Non-stop", "1 Stop", "2+ Stops"].map((stopType) => (
+                    <label
+                      key={stopType}
+                      className="flex items-center space-x-3"
+                    >
                       <input type="radio" name="stops" className="rounded" />
                       <span className="text-sm">{stopType}</span>
                     </label>

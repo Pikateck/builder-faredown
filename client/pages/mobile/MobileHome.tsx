@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MobileBookingFormWrapper from "@/components/mobile/MobileBookingFormWrapper";
-import { 
+import {
   Menu,
   Bell,
   User,
@@ -10,7 +10,7 @@ import {
   Plane,
   Hotel,
   Car,
-  MapPin
+  MapPin,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
@@ -23,24 +23,26 @@ const MobileHome = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-50">
-        <button 
+        <button
           onClick={() => setShowMenu(true)}
           className="p-2 -ml-2 rounded-lg hover:bg-gray-100 transition-colors"
         >
           <Menu className="w-6 h-6 text-gray-700" />
         </button>
-        
+
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-r from-fuchsia-500 to-purple-600 rounded-full flex items-center justify-center">
             <Plane className="w-4 h-4 text-white" />
           </div>
           <span className="font-bold text-lg text-gray-800">Faredown</span>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded-md">
             <Globe className="w-4 h-4 text-gray-600" />
-            <span className="text-sm font-medium text-gray-700">{currency}</span>
+            <span className="text-sm font-medium text-gray-700">
+              {currency}
+            </span>
           </div>
           <button className="p-2 rounded-lg hover:bg-gray-100 relative">
             <Bell className="w-5 h-5 text-gray-600" />
@@ -54,13 +56,11 @@ const MobileHome = () => {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-600 to-indigo-700 px-4 py-8 text-center text-white">
-        <h1 className="text-2xl font-bold mb-2">
-          Find Your Perfect Trip
-        </h1>
+        <h1 className="text-2xl font-bold mb-2">Find Your Perfect Trip</h1>
         <p className="text-blue-100 text-sm mb-6">
           Hotels, flights, and more at unbeatable prices
         </p>
-        
+
         {/* Quick Service Icons */}
         <div className="flex justify-center space-x-8 mb-6">
           <div className="text-center">
@@ -102,24 +102,63 @@ const MobileHome = () => {
           <MapPin className="w-5 h-5 mr-2 text-blue-600" />
           Popular Destinations
         </h3>
-        
+
         <div className="grid grid-cols-2 gap-4">
           {[
-            { name: "Dubai", country: "UAE", image: "🏙️", deals: "2,847 deals" },
-            { name: "London", country: "UK", image: "🏰", deals: "1,923 deals" },
-            { name: "Barcelona", country: "Spain", image: "🏖️", deals: "1,456 deals" },
-            { name: "New York", country: "USA", image: "🗽", deals: "3,124 deals" },
-            { name: "Paris", country: "France", image: "🗼", deals: "2,234 deals" },
-            { name: "Tokyo", country: "Japan", image: "🏯", deals: "987 deals" }
+            {
+              name: "Dubai",
+              country: "UAE",
+              image: "🏙️",
+              deals: "2,847 deals",
+            },
+            {
+              name: "London",
+              country: "UK",
+              image: "🏰",
+              deals: "1,923 deals",
+            },
+            {
+              name: "Barcelona",
+              country: "Spain",
+              image: "🏖️",
+              deals: "1,456 deals",
+            },
+            {
+              name: "New York",
+              country: "USA",
+              image: "🗽",
+              deals: "3,124 deals",
+            },
+            {
+              name: "Paris",
+              country: "France",
+              image: "🗼",
+              deals: "2,234 deals",
+            },
+            {
+              name: "Tokyo",
+              country: "Japan",
+              image: "🏯",
+              deals: "987 deals",
+            },
           ].map((destination, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+            >
               <div className="aspect-video bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-4xl">
                 {destination.image}
               </div>
               <div className="p-3">
-                <div className="font-medium text-gray-800">{destination.name}</div>
-                <div className="text-sm text-gray-500">{destination.country}</div>
-                <div className="text-xs text-blue-600 font-medium mt-1">{destination.deals}</div>
+                <div className="font-medium text-gray-800">
+                  {destination.name}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {destination.country}
+                </div>
+                <div className="text-xs text-blue-600 font-medium mt-1">
+                  {destination.deals}
+                </div>
               </div>
             </div>
           ))}
@@ -128,8 +167,10 @@ const MobileHome = () => {
 
       {/* Special Offers */}
       <div className="px-4 pb-8">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Special Offers</h3>
-        
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Special Offers
+        </h3>
+
         <div className="space-y-4">
           <div className="bg-gradient-to-r from-fuchsia-500 to-purple-600 rounded-lg p-4 text-white">
             <div className="flex items-center justify-between">
@@ -142,7 +183,7 @@ const MobileHome = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg p-4 text-white">
             <div className="flex items-center justify-between">
               <div>
@@ -159,8 +200,14 @@ const MobileHome = () => {
 
       {/* Side Menu */}
       {showMenu && (
-        <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setShowMenu(false)}>
-          <div className="bg-white w-80 h-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/50 z-50"
+          onClick={() => setShowMenu(false)}
+        >
+          <div
+            className="bg-white w-80 h-full shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gradient-to-r from-fuchsia-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -168,18 +215,20 @@ const MobileHome = () => {
                 </div>
                 <div>
                   <div className="font-semibold text-gray-800">Welcome!</div>
-                  <div className="text-sm text-gray-500">Sign in to unlock deals</div>
+                  <div className="text-sm text-gray-500">
+                    Sign in to unlock deals
+                  </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="p-4">
               {[
                 { icon: Plane, label: "Flights", path: "/flights" },
                 { icon: Hotel, label: "Hotels", path: "/hotels" },
                 { icon: Car, label: "Transfers", path: "/transfers" },
                 { icon: User, label: "My Account", path: "/account" },
-                { icon: Settings, label: "Settings", path: "/settings" }
+                { icon: Settings, label: "Settings", path: "/settings" },
               ].map(({ icon: Icon, label, path }, index) => (
                 <button
                   key={index}
@@ -203,23 +252,23 @@ const MobileHome = () => {
         .mobile-search-wrapper {
           /* Override desktop styles for mobile */
         }
-        
+
         .mobile-search-wrapper .booking-search-form {
           padding: 1rem;
         }
-        
+
         .mobile-search-wrapper .search-input {
           font-size: 16px; /* Prevent zoom on iOS */
         }
-        
+
         .mobile-search-wrapper .date-picker {
           touch-action: manipulation;
         }
-        
+
         .mobile-search-wrapper .guest-selector {
           touch-action: manipulation;
         }
-        
+
         /* Ensure dropdowns work properly on mobile */
         .mobile-search-wrapper .dropdown-content {
           position: fixed;

@@ -119,11 +119,14 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     });
 
     // Update rates every 30 minutes (reduced frequency to prevent spam)
-    const interval = setInterval(() => {
-      refreshRates().catch(() => {
-        // Silent fail for periodic updates
-      });
-    }, 30 * 60 * 1000);
+    const interval = setInterval(
+      () => {
+        refreshRates().catch(() => {
+          // Silent fail for periodic updates
+        });
+      },
+      30 * 60 * 1000,
+    );
 
     return () => clearInterval(interval);
   }, []);
@@ -154,9 +157,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       const response = await fetch("/api/currency/rates", {
         signal: controller.signal,
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       });
 
       clearTimeout(timeoutId);
@@ -191,14 +194,16 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
         console.log(`💱 Exchange rates updated from ${data.source}`);
       } else {
-        console.warn("📈 Exchange rate API returned invalid data, using static rates");
+        console.warn(
+          "📈 Exchange rate API returned invalid data, using static rates",
+        );
       }
     } catch (error) {
       // Graceful fallback - don't show error to user, just log it
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
+        if (error.name === "AbortError") {
           console.warn("📈 Exchange rate fetch timeout, using static rates");
-        } else if (error.message.includes('Failed to fetch')) {
+        } else if (error.message.includes("Failed to fetch")) {
           console.warn("📈 Exchange rate API unavailable, using static rates");
         } else {
           console.warn("📈 Exchange rate fetch failed:", error.message);

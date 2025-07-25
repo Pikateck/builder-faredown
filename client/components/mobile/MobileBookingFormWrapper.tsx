@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { BookingSearchForm } from '@/components/BookingSearchForm';
-import MobileCurrencySelector from './MobileCurrencySelector';
-import { useNavigate } from 'react-router-dom';
-import { isMobileDevice } from '@/utils/mobileDetection';
+import React, { useEffect, useState } from "react";
+import { BookingSearchForm } from "@/components/BookingSearchForm";
+import MobileCurrencySelector from "./MobileCurrencySelector";
+import { useNavigate } from "react-router-dom";
+import { isMobileDevice } from "@/utils/mobileDetection";
 
 interface MobileBookingFormWrapperProps {
   className?: string;
@@ -11,20 +11,20 @@ interface MobileBookingFormWrapperProps {
 }
 
 const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
-  className = '',
+  className = "",
   showCurrencySelector = true,
-  redirectToMobileResults = true
+  redirectToMobileResults = true,
 }) => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsMobile(isMobileDevice());
-    
+
     // Add mobile-specific CSS classes
-    const formElement = document.querySelector('.booking-search-form');
+    const formElement = document.querySelector(".booking-search-form");
     if (formElement && isMobile) {
-      formElement.classList.add('mobile-optimized');
+      formElement.classList.add("mobile-optimized");
     }
 
     // Override form submission to redirect to mobile results
@@ -32,24 +32,24 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
       const handleFormSubmit = (event: any) => {
         event.preventDefault();
         // Extract form data and navigate to mobile results
-        navigate('/mobile-hotel-results', {
+        navigate("/mobile-hotel-results", {
           state: {
             searchData: {
               // Form data would be extracted here
-              destination: 'Dubai',
+              destination: "Dubai",
               checkIn: new Date(),
               checkOut: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-              guests: { adults: 2, children: 0, rooms: 1 }
-            }
-          }
+              guests: { adults: 2, children: 0, rooms: 1 },
+            },
+          },
         });
       };
 
-      const searchButton = document.querySelector('.search-hotels-btn');
+      const searchButton = document.querySelector(".search-hotels-btn");
       if (searchButton) {
-        searchButton.addEventListener('click', handleFormSubmit);
+        searchButton.addEventListener("click", handleFormSubmit);
         return () => {
-          searchButton.removeEventListener('click', handleFormSubmit);
+          searchButton.removeEventListener("click", handleFormSubmit);
         };
       }
     }
@@ -87,7 +87,8 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized input) {
+        .mobile-booking-wrapper
+          :global(.booking-search-form.mobile-optimized input) {
           font-size: 16px !important; /* Prevent zoom on iOS */
           padding: 0.75rem;
           border-radius: 0.5rem;
@@ -95,14 +96,16 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
           background: white;
         }
 
-        .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized input:focus) {
+        .mobile-booking-wrapper
+          :global(.booking-search-form.mobile-optimized input:focus) {
           border-color: #3b82f6;
           ring-color: #3b82f6;
           ring-width: 2px;
           outline: none;
         }
 
-        .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized button) {
+        .mobile-booking-wrapper
+          :global(.booking-search-form.mobile-optimized button) {
           min-height: 44px;
           touch-action: manipulation;
           border-radius: 0.5rem;
@@ -110,7 +113,8 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
           transition: all 0.2s ease-out;
         }
 
-        .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized .search-hotels-btn) {
+        .mobile-booking-wrapper
+          :global(.booking-search-form.mobile-optimized .search-hotels-btn) {
           background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
           color: white;
           padding: 0.875rem 1.5rem;
@@ -119,12 +123,18 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
           box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         }
 
-        .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized .search-hotels-btn:hover) {
+        .mobile-booking-wrapper
+          :global(
+            .booking-search-form.mobile-optimized .search-hotels-btn:hover
+          ) {
           transform: translateY(-1px);
           box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
         }
 
-        .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized .search-hotels-btn:active) {
+        .mobile-booking-wrapper
+          :global(
+            .booking-search-form.mobile-optimized .search-hotels-btn:active
+          ) {
           transform: translateY(0);
           box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
         }
@@ -228,12 +238,14 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
-          .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized) {
+          .mobile-booking-wrapper
+            :global(.booking-search-form.mobile-optimized) {
             background: #1f2937;
             border-color: #374151;
           }
 
-          .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized input) {
+          .mobile-booking-wrapper
+            :global(.booking-search-form.mobile-optimized input) {
             background: #374151;
             border-color: #4b5563;
             color: white;
@@ -242,11 +254,13 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
 
         /* High contrast mode */
         @media (prefers-contrast: high) {
-          .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized input) {
+          .mobile-booking-wrapper
+            :global(.booking-search-form.mobile-optimized input) {
             border-width: 2px;
           }
 
-          .mobile-booking-wrapper :global(.booking-search-form.mobile-optimized button) {
+          .mobile-booking-wrapper
+            :global(.booking-search-form.mobile-optimized button) {
             border: 2px solid;
           }
         }

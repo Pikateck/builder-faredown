@@ -683,77 +683,559 @@ export class HotelsService {
   > {
     // Fallback destination data for production environments
     const fallbackDestinations = [
-      { id: "DEL", name: "Delhi", type: "city" as const, country: "India", code: "DEL", flag: "🇮🇳", popular: true },
-      { id: "BOM", name: "Mumbai", type: "city" as const, country: "India", code: "BOM", flag: "🇮🇳", popular: true },
-      { id: "BLR", name: "Bangalore", type: "city" as const, country: "India", code: "BLR", flag: "🇮🇳", popular: true },
-      { id: "MAA", name: "Chennai", type: "city" as const, country: "India", code: "MAA", flag: "🇮🇳", popular: true },
-      { id: "CCU", name: "Kolkata", type: "city" as const, country: "India", code: "CCU", flag: "🇮🇳", popular: true },
-      { id: "HYD", name: "Hyderabad", type: "city" as const, country: "India", code: "HYD", flag: "🇮🇳", popular: true },
-      { id: "PNQ", name: "Pune", type: "city" as const, country: "India", code: "PNQ", flag: "🇮🇳" },
-      { id: "AMD", name: "Ahmedabad", type: "city" as const, country: "India", code: "AMD", flag: "🇮🇳" },
-      { id: "COK", name: "Kochi", type: "city" as const, country: "India", code: "COK", flag: "🇮🇳" },
-      { id: "GOI", name: "Goa", type: "city" as const, country: "India", code: "GOI", flag: "🇮🇳", popular: true },
-      { id: "JAI", name: "Jaipur", type: "city" as const, country: "India", code: "JAI", flag: "🇮🇳" },
-      { id: "LKO", name: "Lucknow", type: "city" as const, country: "India", code: "LKO", flag: "🇮🇳" },
-      { id: "SXR", name: "Kashmir", type: "region" as const, country: "India", code: "SXR", flag: "🇮🇳" },
-      { id: "IXM", name: "Madurai", type: "city" as const, country: "India", code: "IXM", flag: "🇮🇳" },
-      { id: "NAG", name: "Nagpur", type: "city" as const, country: "India", code: "NAG", flag: "🇮🇳" },
-      { id: "BBI", name: "Bhubaneswar", type: "city" as const, country: "India", code: "BBI", flag: "🇮🇳" },
-      { id: "RPR", name: "Raipur", type: "city" as const, country: "India", code: "RPR", flag: "🇮🇳" },
-      { id: "VNS", name: "Varanasi", type: "city" as const, country: "India", code: "VNS", flag: "🇮🇳" },
-      { id: "IXC", name: "Chandigarh", type: "city" as const, country: "India", code: "IXC", flag: "🇮🇳" },
-      { id: "GAU", name: "Guwahati", type: "city" as const, country: "India", code: "GAU", flag: "🇮🇳" },
-      { id: "IMP", name: "Imphal", type: "city" as const, country: "India", code: "IMP", flag: "🇮🇳" },
-      { id: "IMF", name: "Agartala", type: "city" as const, country: "India", code: "IMF", flag: "🇮🇳" },
-      { id: "SHL", name: "Shillong", type: "city" as const, country: "India", code: "SHL", flag: "🇮🇳" },
-      { id: "DXB", name: "Dubai", type: "city" as const, country: "UAE", code: "DXB", flag: "🇦🇪", popular: true },
-      { id: "AUH", name: "Abu Dhabi", type: "city" as const, country: "UAE", code: "AUH", flag: "🇦🇪" },
-      { id: "DOH", name: "Doha", type: "city" as const, country: "Qatar", code: "DOH", flag: "🇶🇦" },
-      { id: "KWI", name: "Kuwait City", type: "city" as const, country: "Kuwait", code: "KWI", flag: "🇰🇼" },
-      { id: "RUH", name: "Riyadh", type: "city" as const, country: "Saudi Arabia", code: "RUH", flag: "🇸🇦" },
-      { id: "JED", name: "Jeddah", type: "city" as const, country: "Saudi Arabia", code: "JED", flag: "🇸🇦" },
-      { id: "LHR", name: "London", type: "city" as const, country: "United Kingdom", code: "LHR", flag: "🇬🇧", popular: true },
-      { id: "CDG", name: "Paris", type: "city" as const, country: "France", code: "CDG", flag: "🇫🇷", popular: true },
-      { id: "FRA", name: "Frankfurt", type: "city" as const, country: "Germany", code: "FRA", flag: "🇩🇪" },
-      { id: "AMS", name: "Amsterdam", type: "city" as const, country: "Netherlands", code: "AMS", flag: "🇳🇱" },
-      { id: "ZUR", name: "Zurich", type: "city" as const, country: "Switzerland", code: "ZUR", flag: "🇨🇭" },
-      { id: "VIE", name: "Vienna", type: "city" as const, country: "Austria", code: "VIE", flag: "🇦🇹" },
-      { id: "BRU", name: "Brussels", type: "city" as const, country: "Belgium", code: "BRU", flag: "🇧🇪" },
-      { id: "CPH", name: "Copenhagen", type: "city" as const, country: "Denmark", code: "CPH", flag: "🇩🇰" },
-      { id: "ARN", name: "Stockholm", type: "city" as const, country: "Sweden", code: "ARN", flag: "🇸🇪" },
-      { id: "OSL", name: "Oslo", type: "city" as const, country: "Norway", code: "OSL", flag: "🇳🇴" },
-      { id: "HEL", name: "Helsinki", type: "city" as const, country: "Finland", code: "HEL", flag: "🇫🇮" },
-      { id: "JFK", name: "New York", type: "city" as const, country: "United States", code: "JFK", flag: "🇺🇸", popular: true },
-      { id: "LAX", name: "Los Angeles", type: "city" as const, country: "United States", code: "LAX", flag: "🇺🇸", popular: true },
-      { id: "ORD", name: "Chicago", type: "city" as const, country: "United States", code: "ORD", flag: "🇺🇸" },
-      { id: "MIA", name: "Miami", type: "city" as const, country: "United States", code: "MIA", flag: "🇺🇸" },
-      { id: "SFO", name: "San Francisco", type: "city" as const, country: "United States", code: "SFO", flag: "🇺🇸" },
-      { id: "YYZ", name: "Toronto", type: "city" as const, country: "Canada", code: "YYZ", flag: "🇨🇦" },
-      { id: "YVR", name: "Vancouver", type: "city" as const, country: "Canada", code: "YVR", flag: "🇨🇦" },
-      { id: "SYD", name: "Sydney", type: "city" as const, country: "Australia", code: "SYD", flag: "🇦🇺", popular: true },
-      { id: "MEL", name: "Melbourne", type: "city" as const, country: "Australia", code: "MEL", flag: "🇦🇺" },
-      { id: "PER", name: "Perth", type: "city" as const, country: "Australia", code: "PER", flag: "🇦🇺" },
-      { id: "BNE", name: "Brisbane", type: "city" as const, country: "Australia", code: "BNE", flag: "🇦🇺" },
-      { id: "AKL", name: "Auckland", type: "city" as const, country: "New Zealand", code: "AKL", flag: "🇳🇿" },
-      { id: "NRT", name: "Tokyo", type: "city" as const, country: "Japan", code: "NRT", flag: "🇯🇵", popular: true },
-      { id: "KIX", name: "Osaka", type: "city" as const, country: "Japan", code: "KIX", flag: "🇯🇵" },
-      { id: "ICN", name: "Seoul", type: "city" as const, country: "South Korea", code: "ICN", flag: "🇰🇷" },
-      { id: "TPE", name: "Taipei", type: "city" as const, country: "Taiwan", code: "TPE", flag: "🇹🇼" },
-      { id: "HKG", name: "Hong Kong", type: "city" as const, country: "Hong Kong", code: "HKG", flag: "🇭🇰", popular: true },
-      { id: "SIN", name: "Singapore", type: "city" as const, country: "Singapore", code: "SIN", flag: "🇸🇬", popular: true },
-      { id: "KUL", name: "Kuala Lumpur", type: "city" as const, country: "Malaysia", code: "KUL", flag: "🇲🇾" },
-      { id: "BKK", name: "Bangkok", type: "city" as const, country: "Thailand", code: "BKK", flag: "🇹🇭", popular: true },
-      { id: "CGK", name: "Jakarta", type: "city" as const, country: "Indonesia", code: "CGK", flag: "🇮🇩" },
-      { id: "MNL", name: "Manila", type: "city" as const, country: "Philippines", code: "MNL", flag: "🇵🇭" },
-      { id: "PEK", name: "Beijing", type: "city" as const, country: "China", code: "PEK", flag: "🇨🇳" },
-      { id: "PVG", name: "Shanghai", type: "city" as const, country: "China", code: "PVG", flag: "🇨🇳" },
-      { id: "CAN", name: "Guangzhou", type: "city" as const, country: "China", code: "CAN", flag: "🇨🇳" },
-      { id: "HND", name: "Haneda", type: "city" as const, country: "Japan", code: "HND", flag: "🇯🇵" }
+      {
+        id: "DEL",
+        name: "Delhi",
+        type: "city" as const,
+        country: "India",
+        code: "DEL",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "BOM",
+        name: "Mumbai",
+        type: "city" as const,
+        country: "India",
+        code: "BOM",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "BLR",
+        name: "Bangalore",
+        type: "city" as const,
+        country: "India",
+        code: "BLR",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "MAA",
+        name: "Chennai",
+        type: "city" as const,
+        country: "India",
+        code: "MAA",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "CCU",
+        name: "Kolkata",
+        type: "city" as const,
+        country: "India",
+        code: "CCU",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "HYD",
+        name: "Hyderabad",
+        type: "city" as const,
+        country: "India",
+        code: "HYD",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "PNQ",
+        name: "Pune",
+        type: "city" as const,
+        country: "India",
+        code: "PNQ",
+        flag: "🇮🇳",
+      },
+      {
+        id: "AMD",
+        name: "Ahmedabad",
+        type: "city" as const,
+        country: "India",
+        code: "AMD",
+        flag: "🇮🇳",
+      },
+      {
+        id: "COK",
+        name: "Kochi",
+        type: "city" as const,
+        country: "India",
+        code: "COK",
+        flag: "🇮🇳",
+      },
+      {
+        id: "GOI",
+        name: "Goa",
+        type: "city" as const,
+        country: "India",
+        code: "GOI",
+        flag: "🇮🇳",
+        popular: true,
+      },
+      {
+        id: "JAI",
+        name: "Jaipur",
+        type: "city" as const,
+        country: "India",
+        code: "JAI",
+        flag: "🇮🇳",
+      },
+      {
+        id: "LKO",
+        name: "Lucknow",
+        type: "city" as const,
+        country: "India",
+        code: "LKO",
+        flag: "🇮🇳",
+      },
+      {
+        id: "SXR",
+        name: "Kashmir",
+        type: "region" as const,
+        country: "India",
+        code: "SXR",
+        flag: "🇮🇳",
+      },
+      {
+        id: "IXM",
+        name: "Madurai",
+        type: "city" as const,
+        country: "India",
+        code: "IXM",
+        flag: "🇮🇳",
+      },
+      {
+        id: "NAG",
+        name: "Nagpur",
+        type: "city" as const,
+        country: "India",
+        code: "NAG",
+        flag: "🇮🇳",
+      },
+      {
+        id: "BBI",
+        name: "Bhubaneswar",
+        type: "city" as const,
+        country: "India",
+        code: "BBI",
+        flag: "🇮🇳",
+      },
+      {
+        id: "RPR",
+        name: "Raipur",
+        type: "city" as const,
+        country: "India",
+        code: "RPR",
+        flag: "🇮🇳",
+      },
+      {
+        id: "VNS",
+        name: "Varanasi",
+        type: "city" as const,
+        country: "India",
+        code: "VNS",
+        flag: "🇮🇳",
+      },
+      {
+        id: "IXC",
+        name: "Chandigarh",
+        type: "city" as const,
+        country: "India",
+        code: "IXC",
+        flag: "🇮🇳",
+      },
+      {
+        id: "GAU",
+        name: "Guwahati",
+        type: "city" as const,
+        country: "India",
+        code: "GAU",
+        flag: "🇮🇳",
+      },
+      {
+        id: "IMP",
+        name: "Imphal",
+        type: "city" as const,
+        country: "India",
+        code: "IMP",
+        flag: "🇮🇳",
+      },
+      {
+        id: "IMF",
+        name: "Agartala",
+        type: "city" as const,
+        country: "India",
+        code: "IMF",
+        flag: "🇮🇳",
+      },
+      {
+        id: "SHL",
+        name: "Shillong",
+        type: "city" as const,
+        country: "India",
+        code: "SHL",
+        flag: "🇮🇳",
+      },
+      {
+        id: "DXB",
+        name: "Dubai",
+        type: "city" as const,
+        country: "UAE",
+        code: "DXB",
+        flag: "🇦🇪",
+        popular: true,
+      },
+      {
+        id: "AUH",
+        name: "Abu Dhabi",
+        type: "city" as const,
+        country: "UAE",
+        code: "AUH",
+        flag: "🇦🇪",
+      },
+      {
+        id: "DOH",
+        name: "Doha",
+        type: "city" as const,
+        country: "Qatar",
+        code: "DOH",
+        flag: "🇶🇦",
+      },
+      {
+        id: "KWI",
+        name: "Kuwait City",
+        type: "city" as const,
+        country: "Kuwait",
+        code: "KWI",
+        flag: "🇰🇼",
+      },
+      {
+        id: "RUH",
+        name: "Riyadh",
+        type: "city" as const,
+        country: "Saudi Arabia",
+        code: "RUH",
+        flag: "🇸🇦",
+      },
+      {
+        id: "JED",
+        name: "Jeddah",
+        type: "city" as const,
+        country: "Saudi Arabia",
+        code: "JED",
+        flag: "🇸🇦",
+      },
+      {
+        id: "LHR",
+        name: "London",
+        type: "city" as const,
+        country: "United Kingdom",
+        code: "LHR",
+        flag: "🇬🇧",
+        popular: true,
+      },
+      {
+        id: "CDG",
+        name: "Paris",
+        type: "city" as const,
+        country: "France",
+        code: "CDG",
+        flag: "🇫🇷",
+        popular: true,
+      },
+      {
+        id: "FRA",
+        name: "Frankfurt",
+        type: "city" as const,
+        country: "Germany",
+        code: "FRA",
+        flag: "🇩🇪",
+      },
+      {
+        id: "AMS",
+        name: "Amsterdam",
+        type: "city" as const,
+        country: "Netherlands",
+        code: "AMS",
+        flag: "🇳🇱",
+      },
+      {
+        id: "ZUR",
+        name: "Zurich",
+        type: "city" as const,
+        country: "Switzerland",
+        code: "ZUR",
+        flag: "🇨🇭",
+      },
+      {
+        id: "VIE",
+        name: "Vienna",
+        type: "city" as const,
+        country: "Austria",
+        code: "VIE",
+        flag: "🇦🇹",
+      },
+      {
+        id: "BRU",
+        name: "Brussels",
+        type: "city" as const,
+        country: "Belgium",
+        code: "BRU",
+        flag: "🇧🇪",
+      },
+      {
+        id: "CPH",
+        name: "Copenhagen",
+        type: "city" as const,
+        country: "Denmark",
+        code: "CPH",
+        flag: "🇩🇰",
+      },
+      {
+        id: "ARN",
+        name: "Stockholm",
+        type: "city" as const,
+        country: "Sweden",
+        code: "ARN",
+        flag: "🇸🇪",
+      },
+      {
+        id: "OSL",
+        name: "Oslo",
+        type: "city" as const,
+        country: "Norway",
+        code: "OSL",
+        flag: "🇳🇴",
+      },
+      {
+        id: "HEL",
+        name: "Helsinki",
+        type: "city" as const,
+        country: "Finland",
+        code: "HEL",
+        flag: "🇫🇮",
+      },
+      {
+        id: "JFK",
+        name: "New York",
+        type: "city" as const,
+        country: "United States",
+        code: "JFK",
+        flag: "🇺🇸",
+        popular: true,
+      },
+      {
+        id: "LAX",
+        name: "Los Angeles",
+        type: "city" as const,
+        country: "United States",
+        code: "LAX",
+        flag: "🇺🇸",
+        popular: true,
+      },
+      {
+        id: "ORD",
+        name: "Chicago",
+        type: "city" as const,
+        country: "United States",
+        code: "ORD",
+        flag: "🇺🇸",
+      },
+      {
+        id: "MIA",
+        name: "Miami",
+        type: "city" as const,
+        country: "United States",
+        code: "MIA",
+        flag: "🇺🇸",
+      },
+      {
+        id: "SFO",
+        name: "San Francisco",
+        type: "city" as const,
+        country: "United States",
+        code: "SFO",
+        flag: "🇺🇸",
+      },
+      {
+        id: "YYZ",
+        name: "Toronto",
+        type: "city" as const,
+        country: "Canada",
+        code: "YYZ",
+        flag: "🇨🇦",
+      },
+      {
+        id: "YVR",
+        name: "Vancouver",
+        type: "city" as const,
+        country: "Canada",
+        code: "YVR",
+        flag: "🇨🇦",
+      },
+      {
+        id: "SYD",
+        name: "Sydney",
+        type: "city" as const,
+        country: "Australia",
+        code: "SYD",
+        flag: "🇦🇺",
+        popular: true,
+      },
+      {
+        id: "MEL",
+        name: "Melbourne",
+        type: "city" as const,
+        country: "Australia",
+        code: "MEL",
+        flag: "🇦🇺",
+      },
+      {
+        id: "PER",
+        name: "Perth",
+        type: "city" as const,
+        country: "Australia",
+        code: "PER",
+        flag: "🇦🇺",
+      },
+      {
+        id: "BNE",
+        name: "Brisbane",
+        type: "city" as const,
+        country: "Australia",
+        code: "BNE",
+        flag: "🇦🇺",
+      },
+      {
+        id: "AKL",
+        name: "Auckland",
+        type: "city" as const,
+        country: "New Zealand",
+        code: "AKL",
+        flag: "🇳🇿",
+      },
+      {
+        id: "NRT",
+        name: "Tokyo",
+        type: "city" as const,
+        country: "Japan",
+        code: "NRT",
+        flag: "🇯🇵",
+        popular: true,
+      },
+      {
+        id: "KIX",
+        name: "Osaka",
+        type: "city" as const,
+        country: "Japan",
+        code: "KIX",
+        flag: "🇯🇵",
+      },
+      {
+        id: "ICN",
+        name: "Seoul",
+        type: "city" as const,
+        country: "South Korea",
+        code: "ICN",
+        flag: "🇰🇷",
+      },
+      {
+        id: "TPE",
+        name: "Taipei",
+        type: "city" as const,
+        country: "Taiwan",
+        code: "TPE",
+        flag: "🇹🇼",
+      },
+      {
+        id: "HKG",
+        name: "Hong Kong",
+        type: "city" as const,
+        country: "Hong Kong",
+        code: "HKG",
+        flag: "🇭🇰",
+        popular: true,
+      },
+      {
+        id: "SIN",
+        name: "Singapore",
+        type: "city" as const,
+        country: "Singapore",
+        code: "SIN",
+        flag: "🇸🇬",
+        popular: true,
+      },
+      {
+        id: "KUL",
+        name: "Kuala Lumpur",
+        type: "city" as const,
+        country: "Malaysia",
+        code: "KUL",
+        flag: "🇲🇾",
+      },
+      {
+        id: "BKK",
+        name: "Bangkok",
+        type: "city" as const,
+        country: "Thailand",
+        code: "BKK",
+        flag: "🇹🇭",
+        popular: true,
+      },
+      {
+        id: "CGK",
+        name: "Jakarta",
+        type: "city" as const,
+        country: "Indonesia",
+        code: "CGK",
+        flag: "🇮🇩",
+      },
+      {
+        id: "MNL",
+        name: "Manila",
+        type: "city" as const,
+        country: "Philippines",
+        code: "MNL",
+        flag: "🇵🇭",
+      },
+      {
+        id: "PEK",
+        name: "Beijing",
+        type: "city" as const,
+        country: "China",
+        code: "PEK",
+        flag: "🇨🇳",
+      },
+      {
+        id: "PVG",
+        name: "Shanghai",
+        type: "city" as const,
+        country: "China",
+        code: "PVG",
+        flag: "🇨🇳",
+      },
+      {
+        id: "CAN",
+        name: "Guangzhou",
+        type: "city" as const,
+        country: "China",
+        code: "CAN",
+        flag: "🇨🇳",
+      },
+      {
+        id: "HND",
+        name: "Haneda",
+        type: "city" as const,
+        country: "Japan",
+        code: "HND",
+        flag: "🇯🇵",
+      },
     ];
 
     try {
       // Determine if we're in production environment
-      const isProduction = typeof window !== "undefined" && !window.location.hostname.includes("localhost") && !window.location.hostname.includes("127.0.0.1");
+      const isProduction =
+        typeof window !== "undefined" &&
+        !window.location.hostname.includes("localhost") &&
+        !window.location.hostname.includes("127.0.0.1");
 
       let apiResults: any[] = [];
       let apiSuccess = false;
@@ -761,7 +1243,9 @@ export class HotelsService {
       // Try API first in both environments
       try {
         const apiUrl = `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}&limit=15`;
-        console.log(`🔍 Searching destinations via ${isProduction ? 'production' : 'development'} API: "${query}"`);
+        console.log(
+          `🔍 Searching destinations via ${isProduction ? "production" : "development"} API: "${query}"`,
+        );
 
         const controller = new AbortController();
         let isAborted = false;
@@ -777,7 +1261,7 @@ export class HotelsService {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "Accept": "application/json",
+              Accept: "application/json",
             },
             signal: controller.signal,
           });
@@ -790,38 +1274,64 @@ export class HotelsService {
                 if (data.success && data.data && Array.isArray(data.data)) {
                   apiResults = data.data;
                   apiSuccess = true;
-                  console.log(`✅ API destination data received: ${apiResults.length} destinations`);
+                  console.log(
+                    `✅ API destination data received: ${apiResults.length} destinations`,
+                  );
                 }
               } catch (jsonError) {
-                if (jsonError instanceof Error && jsonError.name === 'AbortError') {
-                  console.log(`⏰ JSON parsing was aborted for query: "${query}"`);
+                if (
+                  jsonError instanceof Error &&
+                  jsonError.name === "AbortError"
+                ) {
+                  console.log(
+                    `⏰ JSON parsing was aborted for query: "${query}"`,
+                  );
                   return []; // Return empty array immediately on abort
                 } else {
-                  console.warn(`⚠️ Failed to parse JSON response:`, jsonError instanceof Error ? jsonError.message : "Unknown error");
+                  console.warn(
+                    `⚠️ Failed to parse JSON response:`,
+                    jsonError instanceof Error
+                      ? jsonError.message
+                      : "Unknown error",
+                  );
                 }
               }
             }
           }
         } catch (fetchError) {
-          if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+          if (fetchError instanceof Error && fetchError.name === "AbortError") {
             if (isAborted) {
-              console.log(`⏰ API request was aborted (timeout) for query: "${query}"`);
+              console.log(
+                `⏰ API request was aborted (timeout) for query: "${query}"`,
+              );
             } else {
-              console.log(`⏰ API request was aborted (cancelled) for query: "${query}"`);
+              console.log(
+                `⏰ API request was aborted (cancelled) for query: "${query}"`,
+              );
             }
             return []; // Return empty array immediately on abort
           } else {
-            console.warn(`⚠️ API fetch failed:`, fetchError instanceof Error ? fetchError.message : "Unknown error");
+            console.warn(
+              `⚠️ API fetch failed:`,
+              fetchError instanceof Error
+                ? fetchError.message
+                : "Unknown error",
+            );
           }
         } finally {
           clearTimeout(timeoutId);
         }
       } catch (fetchError) {
-        if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-          console.log(`⏰ API request was aborted (timeout or cancelled) for query: "${query}"`);
+        if (fetchError instanceof Error && fetchError.name === "AbortError") {
+          console.log(
+            `⏰ API request was aborted (timeout or cancelled) for query: "${query}"`,
+          );
           return []; // Return empty array immediately on abort
         } else {
-          console.warn(`⚠️ API fetch failed:`, fetchError instanceof Error ? fetchError.message : "Unknown error");
+          console.warn(
+            `⚠️ API fetch failed:`,
+            fetchError instanceof Error ? fetchError.message : "Unknown error",
+          );
         }
       }
 
@@ -831,10 +1341,11 @@ export class HotelsService {
 
       if (queryLower.length >= 1) {
         // Filter fallback destinations that match the query
-        filteredResults = fallbackDestinations.filter(dest =>
-          dest.name.toLowerCase().includes(queryLower) ||
-          dest.country.toLowerCase().includes(queryLower) ||
-          (dest.code && dest.code.toLowerCase().includes(queryLower))
+        filteredResults = fallbackDestinations.filter(
+          (dest) =>
+            dest.name.toLowerCase().includes(queryLower) ||
+            dest.country.toLowerCase().includes(queryLower) ||
+            (dest.code && dest.code.toLowerCase().includes(queryLower)),
         );
 
         // Sort results: popular first, then alphabetically
@@ -849,26 +1360,33 @@ export class HotelsService {
       }
 
       // Use API results if available and successful, otherwise use filtered fallback
-      const finalResults = apiSuccess && apiResults.length > 0 ? apiResults : filteredResults;
+      const finalResults =
+        apiSuccess && apiResults.length > 0 ? apiResults : filteredResults;
 
       if (!apiSuccess && filteredResults.length > 0) {
-        console.log(`📦 Using fallback data: ${filteredResults.length} destinations found for "${query}"`);
+        console.log(
+          `📦 Using fallback data: ${filteredResults.length} destinations found for "${query}"`,
+        );
       }
 
       // Transform results to consistent format
       return finalResults.map((dest: any) => ({
-        id: dest.code || dest.id || dest.name.replace(/\s+/g, '-').toLowerCase(),
+        id:
+          dest.code || dest.id || dest.name.replace(/\s+/g, "-").toLowerCase(),
         name: dest.name,
-        type: (dest.type || "city") as "city" | "region" | "country" | "landmark",
+        type: (dest.type || "city") as
+          | "city"
+          | "region"
+          | "country"
+          | "landmark",
         country: dest.countryName || dest.country || "",
         code: dest.code,
         flag: dest.flag,
         popular: dest.popular || false,
       }));
-
     } catch (error) {
       // Handle AbortError specifically
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === "AbortError") {
         console.log(`⏰ Main search was aborted for query: "${query}"`);
         return [];
       }
@@ -879,11 +1397,12 @@ export class HotelsService {
       const queryLower = query.toLowerCase().trim();
       if (queryLower.length >= 1) {
         const emergencyResults = fallbackDestinations
-          .filter(dest =>
-            dest.name.toLowerCase().includes(queryLower) && dest.popular
+          .filter(
+            (dest) =>
+              dest.name.toLowerCase().includes(queryLower) && dest.popular,
           )
           .slice(0, 5)
-          .map(dest => ({
+          .map((dest) => ({
             id: dest.code || dest.id,
             name: dest.name,
             type: dest.type,
@@ -894,7 +1413,9 @@ export class HotelsService {
           }));
 
         if (emergencyResults.length > 0) {
-          console.log(`🚨 Emergency fallback: ${emergencyResults.length} popular destinations`);
+          console.log(
+            `🚨 Emergency fallback: ${emergencyResults.length} popular destinations`,
+          );
           return emergencyResults;
         }
       }
@@ -920,10 +1441,13 @@ export class HotelsService {
       return this.getDefaultAmenities();
     } catch (error) {
       // Handle AbortError specifically to avoid console noise
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === "AbortError") {
         console.log("⏰ Amenities request was aborted, using defaults");
       } else {
-        console.warn("Failed to fetch amenities, using defaults:", error instanceof Error ? error.message : "Unknown error");
+        console.warn(
+          "Failed to fetch amenities, using defaults:",
+          error instanceof Error ? error.message : "Unknown error",
+        );
       }
       return this.getDefaultAmenities();
     }

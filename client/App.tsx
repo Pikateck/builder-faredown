@@ -71,7 +71,10 @@ function App() {
             <Route path="/hotels/results" element={<HotelResults />} />
             <Route path="/hotels/:hotelId" element={<HotelDetails />} />
             <Route path="/hotels/booking" element={<HotelBooking />} />
-            <Route path="/booking/hotel" element={<HotelBookingConfirmation />} />
+            <Route
+              path="/booking/hotel"
+              element={<HotelBookingConfirmation />}
+            />
             <Route path="/reserve" element={<ReservationPage />} />
             <Route
               path="/booking-confirmation"
@@ -115,7 +118,10 @@ function App() {
             <Route path="/mobile-splash" element={<MobileSplash />} />
             <Route path="/mobile-home" element={<MobileHome />} />
             <Route path="/mobile-hotels" element={<MobileHotelResults />} />
-            <Route path="/mobile-hotel-results" element={<MobileHotelResults />} />
+            <Route
+              path="/mobile-hotel-results"
+              element={<MobileHotelResults />}
+            />
             <Route path="/mobile-search" element={<MobileSearch />} />
             <Route path="/mobile-bargain" element={<MobileBargain />} />
             <Route path="/mobile-booking" element={<MobileBooking />} />
