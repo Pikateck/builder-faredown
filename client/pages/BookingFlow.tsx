@@ -1106,7 +1106,7 @@ export default function BookingFlow() {
     if (selectedBaggageProtection === "gold") total += 200;
 
     // Refund protection
-    if (selectedRefundProtection === "yes") total += 27803;
+    if (selectedRefundProtection === "yes") total += calculateRefundProtectionCost();
 
     // Other options
     const optionPrices = {
