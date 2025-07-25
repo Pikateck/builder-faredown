@@ -426,7 +426,7 @@ export default function FlightResults() {
     return `${selectedCurrency.symbol}${Math.round(convertedPrice).toLocaleString()}`;
   };
 
-  // Handle airline filter selection
+  // Filter handlers
   const handleAirlineFilter = (airlineName: string, isChecked: boolean) => {
     setSelectedAirlines((prev) => {
       const newSelected = new Set(prev);
@@ -437,6 +437,29 @@ export default function FlightResults() {
       }
       return newSelected;
     });
+  };
+
+  const handleStopsFilter = (stops: string) => {
+    setSelectedStops(stops);
+  };
+
+  const handlePriceRangeFilter = (range: [number, number]) => {
+    setPriceRange(range);
+  };
+
+  const convertTimeToMinutes = (timeStr: string): number => {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const resetAllFilters = () => {
+    setSelectedAirlines(new Set());
+    setSelectedStops("any");
+    setPriceRange([0, 100000]);
+    setDepartureTimeRange([0, 24]);
+    setArrivalTimeRange([0, 24]);
+    setMaxDuration(24);
+    setSelectedAirports(new Set());
   };
 
   // Filter flights based on selected airlines with sorting and pricing logic
