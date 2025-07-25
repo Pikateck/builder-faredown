@@ -112,10 +112,19 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   // Load user preference and live rates on mount
   useEffect(() => {
     loadUserPreference();
-    refreshRates();
 
-    // Update rates every 15 minutes
-    const interval = setInterval(refreshRates, 15 * 60 * 1000);
+    // Try to refresh rates, but don't block the app if it fails
+    refreshRates().catch(() => {
+      console.log("💰 Initial currency rate fetch failed, using static rates");
+    });
+
+    // Update rates every 30 minutes (reduced frequency to prevent spam)
+    const interval = setInterval(() => {
+      refreshRates().catch(() => {
+        // Silent fail for periodic updates
+      });
+    }, 30 * 60 * 1000);
+
     return () => clearInterval(interval);
   }, []);
 
