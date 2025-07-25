@@ -830,13 +830,7 @@ export default function Index() {
                   Join 50M+ travelers who bargain smarter.
                 </p>
 
-                {/* CTA Button */}
-                <div className="mb-4">
-                  <Button className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold px-8 py-3 text-lg rounded-lg shadow-lg inline-flex items-center space-x-2">
-                    <span>Try Bargain Now</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </Button>
-                </div>
+
 
 
               </div>
