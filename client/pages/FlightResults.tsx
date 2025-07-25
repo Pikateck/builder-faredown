@@ -444,6 +444,25 @@ export default function FlightResults() {
     });
   };
 
+  // Reset filters function
+  const resetAllFilters = () => {
+    setSelectedAirlines(new Set([
+      "Emirates",
+      "Air India",
+      "Fly Dubai",
+      "Air Arabia",
+      "Spice Air",
+      "Gopal Air",
+      "Spicejet",
+      "Indigo",
+    ]));
+    setPriceRange([0, 100000]);
+    setSelectedStops("any");
+    setDepartureTimeRange([0, 24]);
+    setArrivalTimeRange([0, 24]);
+    setMaxDuration(24);
+  };
+
   // Filter flights based on selected airlines with sorting and pricing logic
   const filteredFlights = (
     selectedAirlines.size === 0
