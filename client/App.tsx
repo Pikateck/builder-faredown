@@ -22,6 +22,9 @@ import Sightseeing from "./pages/Sightseeing";
 import SportsEvents from "./pages/SportsEvents";
 import Transfers from "./pages/Transfers";
 import HelpCenter from "./pages/HelpCenter";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+import RefundPolicy from "./pages/RefundPolicy";
 import NotFound from "./pages/NotFound";
 
 // Mobile pages
