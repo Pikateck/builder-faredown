@@ -819,18 +819,23 @@ export default function Index() {
               <div className="text-center mb-4 sm:mb-6">
                 <div className="mb-3 sm:mb-5">
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                    Upgrade. Bargain. Book.™
+                    Upgrade. Bargain. Book.
                   </h2>
                 </div>
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                  The world's first travel platform where you control the price — for flights, hotels & upgrades.
+                  Control your price for flights & hotels — with live AI bargaining.
                 </h1>
                 <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
-                  Don't Just Book It. <strong>Bargain It™.</strong>
+                  Join 50M+ travelers who bargain smarter.
                 </p>
-                <p className="text-white text-xs sm:text-sm opacity-70 mb-2">
-                  Used by 50M+ travelers. Real-time AI-powered bargaining. Verified savings.
-                </p>
+
+                {/* CTA Button */}
+                <div className="mb-4">
+                  <Button className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold px-8 py-3 text-lg rounded-lg shadow-lg inline-flex items-center space-x-2">
+                    <span>Try Bargain Now</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </Button>
+                </div>
 
                 {/* Live Bargain Ticker */}
                 <div className="bg-green-600 text-white px-4 py-2 rounded-full inline-flex items-center space-x-2 text-xs sm:text-sm font-medium">
