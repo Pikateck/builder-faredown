@@ -5,6 +5,8 @@ import { Settings, Shield, BarChart3, Target } from "lucide-react";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export default function CookiePolicy() {
+  useScrollToTop();
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
