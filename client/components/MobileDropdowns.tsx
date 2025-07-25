@@ -240,7 +240,7 @@ export function MobileDatePicker({
             className={cn(
               "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
               tripType === "round-trip"
-                ? "border-gray-900 bg-gray-100 text-gray-900"
+                ? "border-blue-600 bg-blue-50 text-blue-700"
                 : "border-gray-300 text-gray-700",
             )}
           >
