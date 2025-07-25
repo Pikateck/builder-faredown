@@ -156,10 +156,16 @@ class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Comprehensive error handling - catch ALL fetch-related errors
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
-      console.warn(`⚠️ Fetch failed, using fallback: ${errorMessage}`);
+      // Handle specific error types
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.warn(`⚠️ Request aborted (timeout): ${endpoint}`);
+        } else if (error.message.includes('Failed to fetch')) {
+          console.warn(`⚠️ Network error: ${endpoint}`);
+        } else {
+          console.warn(`⚠️ Request failed: ${error.message}`);
+        }
+      }
 
       // Always return fallback data to prevent error propagation
       try {
