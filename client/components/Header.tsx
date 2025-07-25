@@ -101,7 +101,7 @@ export function Header({ className }: HeaderProps) {
               <Link
                 to="/flights"
                 className={cn(
-                  "text-white hover:text-blue-200 cursor-pointer flex items-center py-4",
+                  "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
                   location.pathname === "/flights" || location.pathname === "/"
                     ? "font-semibold border-b-2 border-white"
                     : "",
