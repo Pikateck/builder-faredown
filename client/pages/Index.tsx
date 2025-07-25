@@ -1342,11 +1342,11 @@ export default function Index() {
                   <div className="text-sm font-medium text-gray-900 truncate">
                     {tripType === "one-way"
                       ? selectedDepartureDate
-                        ? formatDate(selectedDepartureDate).split("-")[0]
+                        ? formatDate(selectedDepartureDate, true)
                         : "Select"
                       : selectedDepartureDate
-                        ? `${formatDate(selectedDepartureDate).split("-")[0]} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate).split("-")[0]}` : "- Return"}`
-                        : "Select dates"}
+                        ? `${formatDate(selectedDepartureDate, true)}${selectedReturnDate ? ` - ${formatDate(selectedReturnDate, true)}` : " - Ret"}`
+                        : "Select"}
                   </div>
                 </div>
               </div>
