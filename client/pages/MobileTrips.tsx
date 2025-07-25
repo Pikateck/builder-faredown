@@ -1,375 +1,287 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MobileLayout from "@/components/MobileLayout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
+import { 
+  ArrowLeft,
+  User,
   Plane,
   Calendar,
-  Clock,
   MapPin,
-  Download,
-  Share,
-  Eye,
-  Plus,
-  Filter,
-  Search,
-  ChevronRight,
-  Star,
-  Gift,
-  User,
-  Mail,
   Phone,
-  Bell,
+  Mail,
   Settings,
+  LogOut,
+  CreditCard,
+  Bell,
+  Globe,
+  Shield,
+  Download,
+  Share
 } from "lucide-react";
 
-const MobileTrips: React.FC = () => {
+const MobileTrips = () => {
   const navigate = useNavigate();
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState<"upcoming" | "past" | "profile">(
-    "upcoming",
-  );
+  const [activeTab, setActiveTab] = useState('trips');
 
-  useEffect(() => {
-    // Load bookings from localStorage
-    const savedBookings = JSON.parse(
-      localStorage.getItem("faredownBookings") || "[]",
-    );
-    setBookings(savedBookings);
-  }, []);
+  // Mock user data
+  const user = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    phone: "+91 98765 43210",
+    avatar: "JD",
+    memberSince: "2023",
+    totalBookings: 12,
+    totalSavings: 45000
+  };
 
-  const upcomingBookings = bookings.filter(() => true); // For demo, all are upcoming
-  const pastBookings: any[] = []; // For demo
+  // Mock trips data
+  const trips = [
+    {
+      id: 1,
+      bookingRef: "FD123456",
+      status: "upcoming",
+      airline: "Indigo",
+      logo: "🛩️",
+      route: "Mumbai → Dubai",
+      date: "2024-02-15",
+      time: "06:30",
+      passenger: "John Doe",
+      price: 25890
+    },
+    {
+      id: 2,
+      bookingRef: "FD123455",
+      status: "completed",
+      airline: "Emirates", 
+      logo: "✈️",
+      route: "Delhi → London",
+      date: "2024-01-20",
+      time: "14:20",
+      passenger: "John Doe",
+      price: 45000
+    },
+    {
+      id: 3,
+      bookingRef: "FD123454", 
+      status: "cancelled",
+      airline: "Air India",
+      logo: "🇮🇳",
+      route: "Bangalore → Singapore",
+      date: "2024-01-10",
+      time: "22:10",
+      passenger: "John Doe",
+      price: 28000
+    }
+  ];
 
-  const getStatusColor = (status: string) => {
+  const formatCurrency = (amount) => {
+    return `₹${amount.toLocaleString('en-IN')}`;
+  };
+
+  const getStatusColor = (status) => {
     switch (status) {
-      case "Confirmed":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "Pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Cancelled":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+      case 'upcoming': return 'bg-blue-100 text-blue-600';
+      case 'completed': return 'bg-green-100 text-green-600';
+      case 'cancelled': return 'bg-red-100 text-red-600';
+      default: return 'bg-gray-100 text-gray-600';
     }
   };
 
-  const viewTicket = (booking: any) => {
-    navigate("/mobile-ticket-view", { state: { booking } });
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'upcoming': return 'Upcoming';
+      case 'completed': return 'Completed';
+      case 'cancelled': return 'Cancelled';
+      default: return status;
+    }
   };
 
-  return (
-    <MobileLayout title="My Trips">
-      <div className="space-y-4">
-        {/* Tab Navigation */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="flex">
-            <button
-              onClick={() => setActiveTab("upcoming")}
-              className={`flex-1 py-4 px-4 text-center font-medium border-b-2 transition-colors ${
-                activeTab === "upcoming"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500"
-              }`}
-            >
-              Upcoming
-              {upcomingBookings.length > 0 && (
-                <Badge className="ml-2 bg-blue-100 text-blue-800">
-                  {upcomingBookings.length}
-                </Badge>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab("past")}
-              className={`flex-1 py-4 px-4 text-center font-medium border-b-2 transition-colors ${
-                activeTab === "past"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500"
-              }`}
-            >
-              Past Trips
-            </button>
-            <button
-              onClick={() => setActiveTab("profile")}
-              className={`flex-1 py-4 px-4 text-center font-medium border-b-2 transition-colors ${
-                activeTab === "profile"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500"
-              }`}
-            >
-              Profile
-            </button>
+  const renderTripsTab = () => (
+    <div className="space-y-4">
+      {trips.map((trip) => (
+        <div key={trip.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-3">
+              <div className="text-2xl">{trip.logo}</div>
+              <div>
+                <div className="font-semibold text-gray-800">{trip.airline}</div>
+                <div className="text-sm text-gray-500">{trip.bookingRef}</div>
+              </div>
+            </div>
+            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(trip.status)}`}>
+              {getStatusText(trip.status)}
+            </span>
+          </div>
+          
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4 text-gray-400" />
+              <span className="text-sm text-gray-600">{trip.route}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4 text-gray-400" />
+              <span className="text-sm text-gray-600">{trip.date}</span>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Departure: {trip.time}
+            </div>
+            <div className="font-semibold text-blue-600">
+              {formatCurrency(trip.price)}
+            </div>
+          </div>
+          
+          {trip.status === 'upcoming' && (
+            <div className="mt-3 pt-3 border-t border-gray-100 flex space-x-2">
+              <button className="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg text-sm font-medium">
+                View Details
+              </button>
+              <button className="flex-1 bg-gray-50 text-gray-600 py-2 rounded-lg text-sm font-medium">
+                Download Ticket
+              </button>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderProfileTab = () => (
+    <div className="space-y-4">
+      {/* Profile Header */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex items-center space-x-4 mb-4">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+            <span className="text-white text-xl font-bold">{user.avatar}</span>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-gray-800">{user.name}</h3>
+            <p className="text-gray-500">Member since {user.memberSince}</p>
+          </div>
+          <button className="p-2 rounded-lg hover:bg-gray-100">
+            <Settings className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 text-center">
+          <div className="bg-blue-50 rounded-lg p-3">
+            <div className="text-2xl font-bold text-blue-600">{user.totalBookings}</div>
+            <div className="text-sm text-gray-600">Total Bookings</div>
+          </div>
+          <div className="bg-green-50 rounded-lg p-3">
+            <div className="text-2xl font-bold text-green-600">{formatCurrency(user.totalSavings)}</div>
+            <div className="text-sm text-gray-600">Total Savings</div>
           </div>
         </div>
-
-        {/* Content based on active tab */}
-        {activeTab === "upcoming" && (
-          <>
-            {upcomingBookings.length === 0 ? (
-              <div className="px-4 py-12 text-center">
-                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Plane className="w-10 h-10 text-gray-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  No Upcoming Trips
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Ready for your next adventure? Start by booking a flight.
-                </p>
-                <Button
-                  onClick={() => navigate("/mobile-search")}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Book a Flight
-                </Button>
-              </div>
-            ) : (
-              <div className="px-4 space-y-4">
-                {/* Search and Filter */}
-                <div className="flex space-x-2">
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                    <input
-                      type="text"
-                      placeholder="Search bookings..."
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
-                  <Button variant="outline" size="icon">
-                    <Filter className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                {/* Booking Cards */}
-                {upcomingBookings.map((booking, index) => (
-                  <Card
-                    key={index}
-                    className="overflow-hidden hover:shadow-lg transition-shadow"
-                  >
-                    <CardContent className="p-4">
-                      {/* Header */}
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                            <Plane className="w-5 h-5 text-blue-600" />
-                          </div>
-                          <div>
-                            <div className="font-semibold">
-                              Emirates Airlines
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {booking.bookingDetails.bookingRef}
-                            </div>
-                          </div>
-                        </div>
-                        <Badge
-                          className={getStatusColor("Confirmed")}
-                          variant="outline"
-                        >
-                          Confirmed
-                        </Badge>
-                      </div>
-
-                      {/* Bargain Success Indicator */}
-                      {booking.bookingDetails.bargainSuccess && (
-                        <div className="bg-orange-50 border border-orange-200 rounded-lg p-2 mb-3">
-                          <div className="flex items-center space-x-2">
-                            <Gift className="w-4 h-4 text-orange-600" />
-                            <span className="text-sm font-medium text-orange-800">
-                              Bargain Success!
-                            </span>
-                            <span className="text-sm text-orange-600">
-                              Saved ₹
-                              {(
-                                25000 - booking.bookingDetails.totalAmount
-                              ).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Flight Details */}
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center space-x-2">
-                          <MapPin className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm">Mumbai → Dubai</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm">Sat, Aug 16, 2024</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Clock className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm">
-                            10:15 AM - 11:45 AM (2h 25m)
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Price */}
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-sm text-gray-600">
-                          Total Paid:
-                        </span>
-                        <span className="text-lg font-bold text-green-600">
-                          ₹{booking.bookingDetails.totalAmount.toLocaleString()}
-                        </span>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="grid grid-cols-3 gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => viewTicket(booking)}
-                        >
-                          <Eye className="w-3 h-3 mr-1" />
-                          View
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Download className="w-3 h-3 mr-1" />
-                          Download
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Share className="w-3 h-3 mr-1" />
-                          Share
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </>
-        )}
-
-        {activeTab === "past" && (
-          <div className="px-4 py-12 text-center">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-10 h-10 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              No Past Trips
-            </h3>
-            <p className="text-gray-600">
-              Your completed trips will appear here.
-            </p>
-          </div>
-        )}
-
-        {activeTab === "profile" && (
-          <div className="px-4 space-y-6">
-            {/* Profile Header */}
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="w-10 h-10 text-blue-600" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-900 mb-1">
-                  Welcome to Faredown
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  Bargain smarter, travel better
-                </p>
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-blue-600">
-                      {bookings.length}
-                    </div>
-                    <div className="text-sm text-gray-600">Total Bookings</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-green-600">
-                      ₹
-                      {bookings
-                        .reduce(
-                          (total, booking) =>
-                            total +
-                            (25000 - booking.bookingDetails.totalAmount),
-                          0,
-                        )
-                        .toLocaleString()}
-                    </div>
-                    <div className="text-sm text-gray-600">Total Savings</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Profile Menu */}
-            <div className="space-y-2">
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <User className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium">Personal Details</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </CardContent>
-              </Card>
-
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Bell className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium">Notifications</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </CardContent>
-              </Card>
-
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Settings className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium">Settings</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </CardContent>
-              </Card>
-
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Gift className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium">Bargain History</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </CardContent>
-              </Card>
-
-              <Card className="cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Star className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium">Rate Us</span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* App Info */}
-            <Card className="bg-gradient-to-r from-blue-50 to-purple-50">
-              <CardContent className="p-4 text-center">
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Faredown App v1.0
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  The World's First Online Travel Bargain Portal™
-                </p>
-                <div className="text-xs text-gray-500">
-                  © 2024 Faredown Technologies
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
-    </MobileLayout>
+
+      {/* Contact Info */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <h4 className="font-semibold text-gray-800 mb-4">Contact Information</h4>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3">
+            <Mail className="w-5 h-5 text-gray-400" />
+            <span className="text-gray-600">{user.email}</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <Phone className="w-5 h-5 text-gray-400" />
+            <span className="text-gray-600">{user.phone}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Settings Menu */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        {[
+          { icon: Bell, label: "Notifications", action: () => {} },
+          { icon: Globe, label: "Language & Currency", action: () => {} },
+          { icon: CreditCard, label: "Payment Methods", action: () => {} },
+          { icon: Shield, label: "Privacy & Security", action: () => {} },
+          { icon: Download, label: "Download Data", action: () => {} },
+          { icon: Share, label: "Invite Friends", action: () => {} }
+        ].map(({ icon: Icon, label, action }, index) => (
+          <button
+            key={index}
+            onClick={action}
+            className="w-full flex items-center space-x-3 p-4 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+          >
+            <Icon className="w-5 h-5 text-gray-600" />
+            <span className="flex-1 text-left text-gray-800">{label}</span>
+            <span className="text-gray-400">›</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Logout */}
+      <button className="w-full bg-red-50 text-red-600 py-3 rounded-lg font-medium flex items-center justify-center space-x-2">
+        <LogOut className="w-5 h-5" />
+        <span>Sign Out</span>
+      </button>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <button 
+          onClick={() => navigate("/mobile-home")}
+          className="p-2 -ml-2 rounded-lg hover:bg-gray-100"
+        >
+          <ArrowLeft className="w-6 h-6 text-gray-700" />
+        </button>
+        
+        <h1 className="font-semibold text-lg text-gray-800">
+          {activeTab === 'trips' ? 'My Trips' : 'Profile'}
+        </h1>
+        
+        <div className="w-8"></div>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="bg-white border-b px-4">
+        <div className="flex">
+          <button
+            onClick={() => setActiveTab('trips')}
+            className={`flex-1 py-3 text-center font-medium transition-colors ${
+              activeTab === 'trips' 
+                ? 'text-blue-600 border-b-2 border-blue-600' 
+                : 'text-gray-500'
+            }`}
+          >
+            <Plane className="w-5 h-5 inline mr-2" />
+            My Trips
+          </button>
+          <button
+            onClick={() => setActiveTab('profile')}
+            className={`flex-1 py-3 text-center font-medium transition-colors ${
+              activeTab === 'profile' 
+                ? 'text-blue-600 border-b-2 border-blue-600' 
+                : 'text-gray-500'
+            }`}
+          >
+            <User className="w-5 h-5 inline mr-2" />
+            Profile
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 pb-20">
+        {activeTab === 'trips' ? renderTripsTab() : renderProfileTab()}
+      </div>
+
+      {/* Quick Actions - Floating */}
+      <div className="fixed bottom-4 right-4">
+        <button
+          onClick={() => navigate("/mobile-home")}
+          className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all"
+        >
+          <Plane className="w-6 h-6" />
+        </button>
+      </div>
+    </div>
   );
 };
 
