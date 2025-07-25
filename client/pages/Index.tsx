@@ -1096,6 +1096,7 @@ export default function Index() {
                       </label>
                       <button
                         onClick={() => {
+                          console.log("Desktop calendar clicked, current showCalendar:", showCalendar);
                           if (!showCalendar) {
                             setSelectingDeparture(true);
                             setCurrentMonth(new Date().getMonth());
