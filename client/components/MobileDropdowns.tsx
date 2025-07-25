@@ -203,112 +203,17 @@ export function MobileDatePicker({
           )}
         </div>
 
-        {/* Calendar Navigation */}
-        <div className="flex justify-between items-center mb-4">
-          <button
-            onClick={() => navigateMonth("prev")}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors touch-manipulation"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
-          </button>
-          <h3 className="text-lg font-semibold text-gray-900">
-            {getMonthName(currentMonth)} {currentYear}
-          </h3>
-          <button
-            onClick={() => navigateMonth("next")}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors touch-manipulation"
-          >
-            <ChevronRight className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
-
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-1 mb-4">
-          {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-            <div
-              key={day}
-              className="text-center py-3 text-sm font-medium text-gray-500"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 gap-1 mb-6">
-          {Array.from({ length: 42 }, (_, i) => {
-            const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
-            const daysInMonth = getDaysInMonth(currentMonth, currentYear);
-            const day = i - firstDay + 1;
-            const isValidDay = day >= 1 && day <= daysInMonth;
-            const currentDate = isValidDay
-              ? new Date(currentYear, currentMonth, day)
-              : null;
-            const isPastDate =
-              currentDate &&
-              currentDate < today &&
-              !isDateEqual(currentDate, today);
-
-            if (!isValidDay) {
-              return <div key={i} className="h-12"></div>;
-            }
-
-            const isDeparture = isDateEqual(currentDate, selectedDepartureDate);
-            const isReturn = isDateEqual(currentDate, selectedReturnDate);
-            const isInRange =
-              selectedDepartureDate &&
-              selectedReturnDate &&
-              currentDate &&
-              isDateInRange(
-                currentDate,
-                selectedDepartureDate,
-                selectedReturnDate,
-              ) &&
-              !isDeparture &&
-              !isReturn;
-            const isToday = isDateEqual(currentDate, today);
-
-            return (
-              <button
-                key={i}
-                disabled={isPastDate}
-                onClick={() => handleDateClick(day, currentMonth, currentYear)}
-                className={cn(
-                  "h-12 w-full text-base font-medium flex items-center justify-center rounded-lg touch-manipulation transition-colors",
-                  isPastDate && "text-gray-300 cursor-not-allowed",
-                  isToday &&
-                    !isDeparture &&
-                    !isReturn &&
-                    "bg-gray-100 font-bold",
-                  isDeparture && "bg-blue-600 text-white ring-2 ring-blue-300",
-                  isReturn && "bg-blue-600 text-white ring-2 ring-blue-300",
-                  isInRange && "bg-blue-100 text-blue-700",
-                  !isPastDate &&
-                    !isDeparture &&
-                    !isReturn &&
-                    !isInRange &&
-                    !isToday &&
-                    "text-gray-900 hover:bg-gray-100",
-                )}
-              >
-                {day}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Legend */}
-        <div className="mb-6 flex items-center justify-center space-x-4 text-xs text-gray-600">
-          <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-blue-600 rounded ring-1 ring-blue-300"></div>
-            <span>Selected</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-gray-100 rounded"></div>
-            <span>Range</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <div className="w-3 h-3 bg-gray-100 rounded"></div>
-            <span>Today</span>
-          </div>
+        {/* Professional Hotel-Style Calendar */}
+        <div className="mb-6">
+          <BookingCalendar
+            initialRange={{
+              startDate: selectedDepartureDate || new Date(),
+              endDate: selectedReturnDate || addDays(selectedDepartureDate || new Date(), tripType === "one-way" ? 1 : 7)
+            }}
+            onChange={handleCalendarChange}
+            onClose={() => {}} // Don't auto-close on selection for mobile
+            className="w-full"
+          />
         </div>
 
         <Button
