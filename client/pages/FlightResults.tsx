@@ -374,22 +374,19 @@ export default function FlightResults() {
     return result.trim() + " Rupees Only";
   };
 
-  // Enhanced filter states
-  const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(new Set());
-  const [selectedStops, setSelectedStops] = useState<string>("any");
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
-  const [departureTimeRange, setDepartureTimeRange] = useState<[number, number]>([0, 24]);
-  const [arrivalTimeRange, setArrivalTimeRange] = useState<[number, number]>([0, 24]);
-  const [maxDuration, setMaxDuration] = useState<number>(24);
-  const [hoveredAirline, setHoveredAirline] = useState<string | null>(null);
-  const [selectedAirports, setSelectedAirports] = useState<Set<string>>(new Set());
-
-  // Get unique airlines from flight data
-  const availableAirlines = Array.from(new Set(flightData.map(flight => flight.airline)));
-  const airlineCounts = availableAirlines.reduce((acc, airline) => {
-    acc[airline] = flightData.filter(flight => flight.airline === airline).length;
-    return acc;
-  }, {} as Record<string, number>);
+  // Airlines filter state - Initialize with all airlines selected to show all flights by default
+  const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
+    new Set([
+      "Emirates",
+      "Air India",
+      "Fly Dubai",
+      "Air Arabia",
+      "Spice Air",
+      "Gopal Air",
+      "Spicejet",
+      "Indigo",
+    ]),
+  );
 
   // Exchange rates relative to INR (base currency)
   const exchangeRates = {
@@ -866,7 +863,7 @@ export default function FlightResults() {
                 <h4 className="font-medium text-gray-900 mb-3">Arrival time</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { label: "Early morning", range: [0, 6], icon: "���" },
+                    { label: "Early morning", range: [0, 6], icon: "🌅" },
                     { label: "Morning", range: [6, 12], icon: "☀️" },
                     { label: "Afternoon", range: [12, 18], icon: "☀️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" }
