@@ -1540,19 +1540,42 @@ export default function FlightResults() {
                   <div className="text-sm font-semibold text-gray-900">Duration</div>
                 </div>
                 <div className="px-2">
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="text-sm text-gray-700">Maximum travel time</div>
-                    <input
-                      type="range"
-                      min="3"
-                      max="24"
-                      value={maxDuration}
-                      onChange={(e) => setMaxDuration(Number(e.target.value))}
-                      className="w-full h-1 bg-blue-200 rounded-lg appearance-none cursor-pointer"
-                      style={{
-                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((maxDuration - 3) / 21) * 100}%, #e5e7eb ${((maxDuration - 3) / 21) * 100}%, #e5e7eb 100%)`
-                      }}
-                    />
+                    <div className="relative">
+                      <input
+                        type="range"
+                        min="3"
+                        max="24"
+                        value={maxDuration}
+                        onChange={(e) => setMaxDuration(Number(e.target.value))}
+                        className="w-full h-0.5 bg-gray-200 rounded-full appearance-none cursor-pointer slider"
+                        style={{
+                          background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((maxDuration - 3) / 21) * 100}%, #e5e7eb ${((maxDuration - 3) / 21) * 100}%, #e5e7eb 100%)`
+                        }}
+                      />
+                      <style jsx>{`
+                        .slider::-webkit-slider-thumb {
+                          appearance: none;
+                          height: 12px;
+                          width: 12px;
+                          border-radius: 50%;
+                          background: #3b82f6;
+                          cursor: pointer;
+                          border: 2px solid white;
+                          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                        }
+                        .slider::-moz-range-thumb {
+                          height: 12px;
+                          width: 12px;
+                          border-radius: 50%;
+                          background: #3b82f6;
+                          cursor: pointer;
+                          border: 2px solid white;
+                          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                        }
+                      `}</style>
+                    </div>
                     <div className="flex justify-between text-xs text-gray-500">
                       <span>3h</span>
                       <span className="font-medium text-gray-700">{maxDuration}h+</span>
