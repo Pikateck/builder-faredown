@@ -634,7 +634,7 @@ export default function Index() {
       <div className="hidden md:block">
         {/* Desktop Header */}
         <header
-          className="text-white sticky top-0 z-40"
+          className="text-white"
           style={{ backgroundColor: "#003580" }}
         >
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
