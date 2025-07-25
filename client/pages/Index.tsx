@@ -602,7 +602,7 @@ export default function Index() {
         </div>
 
         {/* Mobile Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+        <div className="bg-white border-t border-gray-200">
           <div className="grid grid-cols-4 h-16">
             <button className="flex flex-col items-center justify-center space-y-1">
               <Plane className="w-5 h-5 text-[#003580]" />
