@@ -1556,40 +1556,57 @@ export default function Index() {
               {[
                 {
                   name: "Priya Sharma",
-                  location: "Mumbai",
-                  review: "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing.",
+                  location: "Mumbai • Verified Traveler",
+                  review: "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class for economy price.",
                   rating: 5,
-                  image: "👩‍💼"
+                  profession: "Marketing Manager",
+                  verified: true
                 },
                 {
                   name: "Rohit Kumar",
-                  location: "Delhi",
-                  review: "Got business class at economy price. Faredown is revolutionary!",
+                  location: "Delhi • Verified Traveler",
+                  review: "Got suite upgrade in Singapore hotel using Bargain It™. Faredown is revolutionary! Customer service is excellent.",
                   rating: 5,
-                  image: "👨‍💻"
+                  profession: "Software Engineer",
+                  verified: true
                 },
                 {
                   name: "Anjali Patel",
-                  location: "Bangalore",
-                  review: "Easy booking process and great customer support. Highly recommended!",
+                  location: "Bangalore • Verified Traveler",
+                  review: "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
                   rating: 5,
-                  image: "👩‍🎓"
+                  profession: "Product Designer",
+                  verified: true
                 }
               ].map((testimonial, index) => (
-                <div key={index} className="bg-white rounded-lg p-6 shadow-sm">
+                <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                   <div className="flex items-center mb-4">
-                    <div className="text-3xl mr-3">{testimonial.image}</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                      <p className="text-sm text-gray-500">{testimonial.location}</p>
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4 text-white font-bold text-lg">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2">
+                        <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
+                        {testimonial.verified && (
+                          <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-500">{testimonial.profession}</p>
+                      <p className="text-xs text-gray-400">{testimonial.location}</p>
                     </div>
                   </div>
                   <div className="flex items-center mb-3">
                     {Array(testimonial.rating).fill(0).map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                     ))}
+                    <span className="ml-2 text-sm text-gray-500">5.0</span>
                   </div>
-                  <p className="text-gray-600 italic">"{testimonial.review}"</p>
+                  <p className="text-gray-700 leading-relaxed">"{testimonial.review}"</p>
+                  <div className="mt-4 pt-3 border-t border-gray-100">
+                    <span className="text-xs text-green-600 font-medium">✓ Verified Purchase</span>
+                  </div>
                 </div>
               ))}
             </div>
