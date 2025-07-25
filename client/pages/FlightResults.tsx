@@ -937,16 +937,16 @@ export default function FlightResults() {
 
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
               {/* Stops Filter */}
-              <div className="p-4 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-3">Stops</h4>
-                <div className="space-y-2">
+              <div className="p-3 border-b border-gray-100">
+                <h4 className="font-medium text-gray-900 mb-2">Stops</h4>
+                <div className="space-y-0.5">
                   {[
                     { value: "any", label: "Any", count: flightData.length },
                     { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
                     { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
                     { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
                   ].map((option) => (
-                    <label key={option.value} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-2 rounded group">
+                    <label key={option.value} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded group">
                       <div className="flex items-center space-x-2">
                         <input
                           type="radio"
@@ -954,7 +954,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className="text-blue-600 focus:ring-blue-500"
+                          className="text-blue-600 focus:ring-blue-500 w-4 h-4"
                         />
                         <span className="text-sm text-gray-700">{option.label}</span>
                       </div>
