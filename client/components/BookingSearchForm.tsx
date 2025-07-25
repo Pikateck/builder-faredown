@@ -396,7 +396,7 @@ export function BookingSearchForm() {
                       }
                     }, 150);
                   }}
-                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-orange-400 focus:border-blue-500 rounded font-medium text-sm touch-manipulation"
+                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation"
                   placeholder="Where are you going? (e.g., Madrid, Business Hotel Dubai)"
                   autoComplete="off"
                 />
