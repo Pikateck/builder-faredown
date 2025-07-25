@@ -1398,182 +1398,209 @@ export default function FlightResults() {
 
       {/* Main Content Container */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
-        {/* Desktop Sidebar Filters (≥769px) - Booking.com Style */}
-        <div className="hidden md:block w-72 flex-shrink-0 p-4">
-          <div className="bg-white rounded-lg border shadow-sm sticky top-24">
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900">Filter by:</h3>
-                <button
-                  onClick={resetAllFilters}
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Clear all
-                </button>
-              </div>
+        {/* Desktop Sidebar Filters (≥769px) - Hotel Style Applied */}
+        <div className="hidden lg:block w-80 flex-shrink-0">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
+            {/* Filter Header */}
+            <div className="text-lg font-semibold mb-4 flex items-center">
+              <Filter className="w-5 h-5 mr-2 text-[#003580]" />
+              Filter by
+            </div>
+
+            {/* Clear Filters Button */}
+            <div className="mt-3 pt-2 border-t border-gray-200">
+              <button
+                onClick={resetAllFilters}
+                className="w-full text-blue-600 border border-blue-600 hover:bg-blue-50 text-sm h-8 rounded font-medium"
+              >
+                Clear all filters
+              </button>
             </div>
 
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+              {/* Price Range */}
+              <div className="border-b border-gray-200 pb-2 mb-2">
+                <div className="text-sm font-semibold text-gray-900 mb-1">Budget</div>
+                <div className="px-2">
+                  <div className="space-y-2">
+                    <div className="text-sm text-gray-700">Maximum price per person</div>
+                    <input
+                      type="range"
+                      min="15000"
+                      max="100000"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                      className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      style={{
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((priceRange[1] - 15000) / 85000) * 100}%, #e5e7eb ${((priceRange[1] - 15000) / 85000) * 100}%, #e5e7eb 100%)`
+                      }}
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>{formatPrice(15000)}</span>
+                      <span className="font-medium text-gray-700">{formatPrice(priceRange[1])}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Stops Filter */}
-              <div className="p-3 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-2">Stops</h4>
-                <div className="space-y-0.5">
-                  {[
-                    { value: "any", label: "Any", count: flightData.length },
-                    { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
-                    { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
-                    { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
-                  ].map((option) => (
-                    <label key={option.value} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded group">
-                      <div className="flex items-center space-x-2">
+              <div className="space-y-1">
+                <div className="border-b border-gray-200 pb-1">
+                  <div className="text-sm font-semibold text-gray-900">Stops</div>
+                </div>
+                {[
+                  { value: "any", label: "Any", count: flightData.length },
+                  { value: "direct", label: "Direct only", count: flightData.filter(f => f.stops === 0).length },
+                  { value: "1-stop", label: "1 stop", count: flightData.filter(f => f.stops === 1).length },
+                  { value: "2-plus", label: "2+ stops", count: flightData.filter(f => f.stops >= 2).length }
+                ].map((option) => (
+                  <div key={option.value} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-4 h-4 flex items-center justify-center mr-2">
                         <input
                           type="radio"
                           name="stops"
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className="text-blue-600 focus:ring-blue-500 w-4 h-4"
+                          className={`w-4 h-4 ${selectedStops === option.value ? 'bg-blue-600' : 'bg-white border border-gray-400'}`}
                         />
-                        <span className="text-sm text-gray-700">{option.label}</span>
                       </div>
-                      <span className="text-xs text-gray-500">{option.count}</span>
+                      {option.label}
                     </label>
-                  ))}
-                </div>
+                    <span className="text-xs text-gray-500 ml-1">{option.count}</span>
+                  </div>
+                ))}
               </div>
 
               {/* Airlines Filter */}
-              <div className="p-3 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-2">Airlines</h4>
-                <div className="space-y-0.5 max-h-40 overflow-y-auto">
-                  {availableAirlines.map((airline) => (
-                    <label
-                      key={airline}
-                      className="flex items-center justify-between cursor-pointer hover:bg-blue-50 px-2 py-1.5 rounded transition-colors group relative"
-                      onMouseEnter={() => setHoveredAirline(airline)}
-                      onMouseLeave={() => setHoveredAirline(null)}
-                    >
-                      <div className="flex items-center space-x-2">
+              <div className="space-y-1 mt-4">
+                <div className="border-b border-gray-200 pb-1">
+                  <div className="text-sm font-semibold text-gray-900">Airlines</div>
+                </div>
+                {availableAirlines.map((airline) => (
+                  <div key={airline} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-4 h-4 flex items-center justify-center mr-2">
                         <input
                           type="checkbox"
                           checked={selectedAirlines.has(airline)}
                           onChange={(e) => handleAirlineFilter(airline, e.target.checked)}
-                          className="text-blue-600 focus:ring-blue-500 w-4 h-4"
+                          className={`w-4 h-4 ${selectedAirlines.has(airline) ? 'bg-blue-600' : 'bg-white border border-gray-400'}`}
                         />
-                        <span className={`text-sm transition-colors ${
-                          hoveredAirline === airline ? 'text-blue-600 font-medium' : 'text-gray-700'
-                        }`}>{airline}</span>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs text-gray-500">{airlineCounts[airline]}</span>
-                        {hoveredAirline === airline && (
-                          <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
-                            Only this airline
-                          </span>
-                        )}
-                      </div>
+                      {airline}
                     </label>
-                  ))}
-                </div>
+                    <span className="text-xs text-gray-500 ml-1">{airlineCounts[airline]}</span>
+                  </div>
+                ))}
               </div>
 
-              {/* Flight times */}
-              <div className="p-3 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-2">Flight times</h4>
+              {/* Flight Times */}
+              <div className="space-y-1 mt-4">
+                <div className="border-b border-gray-200 pb-1">
+                  <div className="text-sm font-semibold text-gray-900">Flight times</div>
+                </div>
 
                 {/* Departure times */}
-                <div className="mb-3">
-                  <div className="text-sm font-medium text-gray-700 mb-1.5">Departing flight</div>
-                  <div className="space-y-0.5">
-                    {[
-                      { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
-                      { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
-                      { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
-                      { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
-                    ].map((time, index) => (
-                      <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded">
-                        <div className="flex items-center space-x-2">
+                <div className="mt-1 space-y-0">
+                  <div className="text-sm font-medium text-gray-700 mb-1">Departing flight</div>
+                  {[
+                    { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
+                    { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
+                    { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
+                    { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
+                  ].map((time, index) => (
+                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                      <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                        <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            className="text-blue-600 focus:ring-blue-500 w-4 h-4"
+                            className="w-4 h-4 bg-white border border-gray-400"
                           />
-                          <span className="text-sm text-gray-700">{time.label}</span>
                         </div>
-                        <span className="text-xs text-gray-500">{time.count}</span>
+                        {time.label}
                       </label>
-                    ))}
-                  </div>
+                      <span className="text-xs text-gray-500 ml-1">{time.count}</span>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Return times */}
-                <div>
-                  <div className="text-sm font-medium text-gray-700 mb-1.5">Return flight</div>
-                  <div className="space-y-0.5">
-                    {[
-                      { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
-                      { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
-                      { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
-                      { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
-                    ].map((time, index) => (
-                      <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded">
-                        <div className="flex items-center space-x-2">
+                <div className="mt-1 space-y-0">
+                  <div className="text-sm font-medium text-gray-700 mb-1">Return flight</div>
+                  {[
+                    { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
+                    { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
+                    { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
+                    { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
+                  ].map((time, index) => (
+                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                      <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                        <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
                             type="checkbox"
-                            className="text-blue-600 focus:ring-blue-500 w-4 h-4"
+                            className="w-4 h-4 bg-white border border-gray-400"
                           />
-                          <span className="text-sm text-gray-700">{time.label}</span>
                         </div>
-                        <span className="text-xs text-gray-500">{time.count}</span>
+                        {time.label}
                       </label>
-                    ))}
-                  </div>
+                      <span className="text-xs text-gray-500 ml-1">{time.count}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
               {/* Arrives in Dubai */}
-              <div className="p-3 border-b border-gray-100">
-                <h4 className="font-medium text-gray-900 mb-2">Arrives in Dubai</h4>
-                <div className="space-y-0.5">
-                  {[
-                    { airport: "Dubai International Airport", code: "DXB", count: 643 }
-                  ].map((airport, index) => (
-                    <label key={index} className="flex items-center justify-between cursor-pointer hover:bg-gray-50 px-2 py-1.5 rounded">
-                      <div className="flex items-center space-x-2">
+              <div className="space-y-1 mt-4">
+                <div className="border-b border-gray-200 pb-1">
+                  <div className="text-sm font-semibold text-gray-900">Arrives in Dubai</div>
+                </div>
+                {[
+                  { airport: "Dubai International Airport", code: "DXB", count: 643 }
+                ].map((airport, index) => (
+                  <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-4 h-4 flex items-center justify-center mr-2">
                         <input
                           type="checkbox"
-                          className="text-blue-600 focus:ring-blue-500 w-4 h-4"
+                          className="w-4 h-4 bg-blue-600"
                           defaultChecked
                         />
-                        <div>
-                          <div className="text-sm text-gray-700">{airport.airport}</div>
-                          <div className="text-xs text-gray-500">{airport.code}</div>
-                        </div>
                       </div>
-                      <span className="text-xs text-gray-500">{airport.count}</span>
+                      <div>
+                        <div className="text-sm text-gray-700">{airport.airport}</div>
+                        <div className="text-xs text-gray-500">{airport.code}</div>
+                      </div>
                     </label>
-                  ))}
-                </div>
+                    <span className="text-xs text-gray-500 ml-1">{airport.count}</span>
+                  </div>
+                ))}
               </div>
 
               {/* Duration */}
-              <div className="p-3">
-                <h4 className="font-medium text-gray-900 mb-2">Duration</h4>
-                <div className="space-y-2">
-                  <div className="text-sm text-gray-700">Maximum travel time</div>
-                  <input
-                    type="range"
-                    min="3"
-                    max="24"
-                    value={maxDuration}
-                    onChange={(e) => setMaxDuration(Number(e.target.value))}
-                    className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
-                    style={{
-                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((maxDuration - 3) / 21) * 100}%, #e5e7eb ${((maxDuration - 3) / 21) * 100}%, #e5e7eb 100%)`
-                    }}
-                  />
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>3h</span>
-                    <span className="font-medium text-gray-700">{maxDuration}h+</span>
+              <div className="space-y-1 mt-4">
+                <div className="border-b border-gray-200 pb-1">
+                  <div className="text-sm font-semibold text-gray-900">Duration</div>
+                </div>
+                <div className="px-2">
+                  <div className="space-y-2">
+                    <div className="text-sm text-gray-700">Maximum travel time</div>
+                    <input
+                      type="range"
+                      min="3"
+                      max="24"
+                      value={maxDuration}
+                      onChange={(e) => setMaxDuration(Number(e.target.value))}
+                      className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      style={{
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((maxDuration - 3) / 21) * 100}%, #e5e7eb ${((maxDuration - 3) / 21) * 100}%, #e5e7eb 100%)`
+                      }}
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>3h</span>
+                      <span className="font-medium text-gray-700">{maxDuration}h+</span>
+                    </div>
                   </div>
                 </div>
               </div>
