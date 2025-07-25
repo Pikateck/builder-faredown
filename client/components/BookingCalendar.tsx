@@ -16,6 +16,7 @@ interface BookingCalendarProps {
   };
   onClose?: () => void;
   className?: string;
+  bookingType?: 'hotel' | 'flight';
 }
 
 export function BookingCalendar({
