@@ -82,6 +82,14 @@ export default {
           down: "hsl(var(--price-down))",
           neutral: "hsl(var(--price-neutral))",
         },
+        booking: {
+          primary: "#003580",
+          secondary: "#0071c2",
+          yellow: "#febb02",
+          "light-gray": "#f2f2f2",
+          "accent-blue": "#e7f0fa",
+          "text-gray": "#6b6b6b",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
