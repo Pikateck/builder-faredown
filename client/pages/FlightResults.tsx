@@ -735,6 +735,49 @@ export default function FlightResults() {
                   </Link>
                 </nav>
                 <div className="flex items-center space-x-4">
+                  {/* Currency Dropdown */}
+                  <DropdownMenu open={showCurrencyDropdown} onOpenChange={setShowCurrencyDropdown}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-white hover:bg-blue-600 border border-blue-400 px-3"
+                      >
+                        {selectedCurrency.code}
+                        <ChevronDown className="w-4 h-4 ml-1" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-48 max-h-60 overflow-y-auto">
+                      {Object.entries({
+                        USD: { symbol: "$", name: "US Dollar" },
+                        EUR: { symbol: "€", name: "Euro" },
+                        GBP: { symbol: "£", name: "British Pound" },
+                        INR: { symbol: "₹", name: "Indian Rupee" },
+                        AED: { symbol: "د.إ", name: "UAE Dirham" },
+                        SAR: { symbol: "﷼", name: "Saudi Riyal" },
+                        JPY: { symbol: "¥", name: "Japanese Yen" },
+                        CNY: { symbol: "¥", name: "Chinese Yuan" },
+                        SGD: { symbol: "S$", name: "Singapore Dollar" },
+                        AUD: { symbol: "A$", name: "Australian Dollar" },
+                        CAD: { symbol: "C$", name: "Canadian Dollar" },
+                      }).map(([code, currency]) => (
+                        <DropdownMenuItem
+                          key={code}
+                          onClick={() => {
+                            setSelectedCurrency({ code, ...currency });
+                            setShowCurrencyDropdown(false);
+                          }}
+                          className="flex items-center justify-between cursor-pointer"
+                        >
+                          <span className="flex items-center space-x-2">
+                            <span className="font-medium">{code}</span>
+                            <span className="text-gray-600">{currency.symbol}</span>
+                          </span>
+                          <span className="text-sm text-gray-500">{currency.name}</span>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Button variant="outline" size="sm" className="bg-white text-blue-700">
                     Register
                   </Button>
