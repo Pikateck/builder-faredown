@@ -76,7 +76,7 @@ export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        "bg-blue-700 text-white sticky top-0 z-50 w-full border-b border-blue-600 shadow-lg",
+        "bg-[#003580] text-white sticky top-0 z-50 w-full border-b border-[#002a66] shadow-lg",
         className,
       )}
       style={{ minHeight: "60px" }}
