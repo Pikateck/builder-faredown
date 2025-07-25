@@ -353,9 +353,9 @@ export function MobileDatePicker({
                     !isDeparture &&
                     !isReturn &&
                     "bg-gray-100 font-bold",
-                  isDeparture && "bg-gray-900 text-white",
-                  isReturn && "bg-gray-900 text-white",
-                  isInRange && "bg-gray-100 text-gray-700",
+                  isDeparture && "bg-blue-600 text-white ring-2 ring-blue-300",
+                  isReturn && "bg-blue-600 text-white ring-2 ring-blue-300",
+                  isInRange && "bg-blue-100 text-blue-700",
                   !isPastDate &&
                     !isDeparture &&
                     !isReturn &&
