@@ -360,10 +360,13 @@ export default function Index() {
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
-                Upgrade. Bargain. Book.
+                Upgrade. Bargain. Book.™
               </h1>
-              <p className="text-blue-200 text-sm">
-                World's first travel portal where you control the price
+              <p className="text-blue-200 text-sm mb-3">
+                The world's first travel platform where you control the price — for flights, hotels & upgrades.
+              </p>
+              <p className="text-blue-100 text-xs">
+                Used by 50M+ travelers. Real-time AI-powered bargaining. Verified savings.
               </p>
             </div>
 
