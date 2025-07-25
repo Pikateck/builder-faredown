@@ -462,12 +462,41 @@ export default function FlightResults() {
     setSelectedAirports(new Set());
   };
 
-  // Filter flights based on selected airlines with sorting and pricing logic
-  const filteredFlights = (
-    selectedAirlines.size === 0
-      ? flightData
-      : flightData.filter((flight) => selectedAirlines.has(flight.airline))
-  )
+  // Enhanced flight filtering logic
+  const filteredFlights = flightData
+    .filter((flight) => {
+      // Airline filter (show all if none selected, or show hovered airline if hovering)
+      const airlineMatch = hoveredAirline
+        ? flight.airline === hoveredAirline
+        : selectedAirlines.size === 0 || selectedAirlines.has(flight.airline);
+
+      // Stops filter
+      const stopsMatch = selectedStops === "any" ||
+        (selectedStops === "direct" && flight.stops === 0) ||
+        (selectedStops === "1-stop" && flight.stops === 1) ||
+        (selectedStops === "2-plus" && flight.stops >= 2);
+
+      // Price filter
+      const priceMatch = flight.fareTypes[0] &&
+        flight.fareTypes[0].price >= priceRange[0] &&
+        flight.fareTypes[0].price <= priceRange[1];
+
+      // Departure time filter
+      const departureMinutes = convertTimeToMinutes(flight.departureTime);
+      const departureTimeMatch = departureMinutes >= departureTimeRange[0] * 60 &&
+        departureMinutes <= departureTimeRange[1] * 60;
+
+      // Arrival time filter
+      const arrivalMinutes = convertTimeToMinutes(flight.arrivalTime);
+      const arrivalTimeMatch = arrivalMinutes >= arrivalTimeRange[0] * 60 &&
+        arrivalMinutes <= arrivalTimeRange[1] * 60;
+
+      // Duration filter
+      const durationHours = flight.durationMinutes / 60;
+      const durationMatch = durationHours <= maxDuration;
+
+      return airlineMatch && stopsMatch && priceMatch && departureTimeMatch && arrivalTimeMatch && durationMatch;
+    })
     .map((flight) => ({
       ...flight,
       fareTypes: flight.fareTypes.map((fareType) => ({
