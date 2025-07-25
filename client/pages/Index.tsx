@@ -1493,26 +1493,31 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Trust & Testimonials Section */}
+        {/* Trust & Social Proof Section */}
         <section className="py-16 bg-gray-50">
           <div className="max-w-[1280px] mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Trusted by Millions Worldwide
+                Trusted by 50M+ Travelers
               </h2>
               <p className="text-gray-600 text-lg mb-6">
                 Real reviews from verified travelers
               </p>
 
-              {/* Trust Rating */}
-              <div className="flex items-center justify-center space-x-4 mb-8">
-                <div className="flex items-center space-x-1">
-                  {Array(5).fill(0).map((_, i) => (
-                    <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
-                  ))}
+              {/* Trustpilot Integration Placeholder */}
+              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8 inline-block">
+                <div className="flex items-center justify-center space-x-4 mb-4">
+                  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMTAwIDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8dGV4dCB4PSI1MCIgeT0iMTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzAwYjY3YSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VHJ1c3RwaWxvdDwvdGV4dD4KPHN2Zz4K" alt="Trustpilot" />
+                  <div className="flex items-center space-x-1">
+                    {Array(5).fill(0).map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-green-500 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-xl font-bold text-gray-900">4.9</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">4.9</span>
-                <span className="text-gray-600">Rated by verified travelers worldwide</span>
+                <p className="text-sm text-gray-600">
+                  Excellent • Based on 50,000+ reviews on Trustpilot
+                </p>
               </div>
 
               {/* Live Support Banner */}
