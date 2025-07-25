@@ -384,14 +384,10 @@ export default function FlightResults() {
   // Airlines filter state - Initialize with all airlines selected to show all flights by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
     new Set([
-      "Emirates",
-      "Air India",
-      "Fly Dubai",
-      "Air Arabia",
-      "Spice Air",
-      "Gopal Air",
-      "Spicejet",
-      "Indigo",
+      "Emirates", "Air India", "Indigo", "Fly Dubai", "Air Arabia", "Spicejet",
+      "Vistara", "Air Asia", "GoAir", "Alliance Air", "Qatar Airways", "Etihad Airways",
+      "Lufthansa", "British Airways", "Singapore Airlines", "Thai Airways", "Malaysia Airlines",
+      "Kuwait Airways", "Oman Air", "Saudia", "Turkish Airlines", "Flydubai"
     ]),
   );
 
