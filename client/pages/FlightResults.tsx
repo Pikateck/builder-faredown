@@ -1412,31 +1412,6 @@ export default function FlightResults() {
             </div>
 
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-              {/* Price Range */}
-              <div className="border-b border-gray-200 pb-2 mb-2">
-                <div className="text-sm font-semibold text-gray-900 mb-1">Budget</div>
-                <div className="px-2">
-                  <div className="space-y-2">
-                    <div className="text-sm text-gray-700">Maximum price per person</div>
-                    <input
-                      type="range"
-                      min="15000"
-                      max="100000"
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                      className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
-                      style={{
-                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((priceRange[1] - 15000) / 85000) * 100}%, #e5e7eb ${((priceRange[1] - 15000) / 85000) * 100}%, #e5e7eb 100%)`
-                      }}
-                    />
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{formatPrice(15000)}</span>
-                      <span className="font-medium text-gray-700">{formatPrice(priceRange[1])}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Stops Filter */}
               <div className="space-y-1">
                 <div className="border-b border-gray-200 pb-1">
@@ -1473,7 +1448,12 @@ export default function FlightResults() {
                   <div className="text-sm font-semibold text-gray-900">Airlines</div>
                 </div>
                 {availableAirlines.map((airline) => (
-                  <div key={airline} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                  <div
+                    key={airline}
+                    className="flex items-center justify-between py-0.5 min-h-[24px] group relative"
+                    onMouseEnter={() => setHoveredAirline(airline)}
+                    onMouseLeave={() => setHoveredAirline(null)}
+                  >
                     <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                       <div className="w-4 h-4 flex items-center justify-center mr-2">
                         <input
@@ -1483,9 +1463,18 @@ export default function FlightResults() {
                           className={`w-4 h-4 ${selectedAirlines.has(airline) ? 'bg-blue-600' : 'bg-white border border-gray-400'}`}
                         />
                       </div>
-                      {airline}
+                      <span className={`transition-colors ${hoveredAirline === airline ? 'text-blue-600 font-medium' : 'text-gray-700'}`}>
+                        {airline}
+                      </span>
                     </label>
-                    <span className="text-xs text-gray-500 ml-1">{airlineCounts[airline]}</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500 ml-1">{airlineCounts[airline]}</span>
+                      {hoveredAirline === airline && (
+                        <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
+                          Only this airline
+                        </span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
