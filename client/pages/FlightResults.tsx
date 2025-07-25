@@ -453,16 +453,7 @@ export default function FlightResults() {
 
   // Reset filters function
   const resetAllFilters = () => {
-    setSelectedAirlines(new Set([
-      "Emirates",
-      "Air India",
-      "Fly Dubai",
-      "Air Arabia",
-      "Spice Air",
-      "Gopal Air",
-      "Spicejet",
-      "Indigo",
-    ]));
+    setSelectedAirlines(new Set(availableAirlines));
     setPriceRange([0, 100000]);
     setSelectedStops("any");
     setDepartureTimeRange([0, 24]);
