@@ -88,6 +88,7 @@ import {
   Lock,
   ArrowUpDown,
   CheckCircle,
+  X,
 } from "lucide-react";
 
 export default function HotelDetails() {
