@@ -124,10 +124,6 @@ export function MobileDatePicker({
 }: MobileDatePickerProps) {
   if (!isOpen) return null;
 
-  const today = new Date();
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-
   // Helper functions
   const formatDate = (date: Date | null) => {
     if (!date) return "";
@@ -138,6 +134,14 @@ export function MobileDatePicker({
         year: "numeric",
       })
       .replace(/ /g, "-");
+  };
+
+  const handleCalendarChange = (range: { startDate: Date; endDate: Date }) => {
+    console.log("Mobile calendar range selected:", range);
+    setSelectedDepartureDate(range.startDate);
+    if (tripType === "round-trip") {
+      setSelectedReturnDate(range.endDate);
+    }
   };
 
   const getMonthName = (month: number) => {
