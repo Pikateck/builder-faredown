@@ -808,109 +808,224 @@ export default function FlightResults() {
         </div>
       </header>
 
-      {/* Desktop Search Form Section */}
+      {/* Desktop Search Form Section - Exact Homepage Design */}
       <div className="hidden md:block bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="bg-white rounded-lg border border-gray-300 p-4">
-            <div className="flex items-center space-x-4">
-              {/* Trip Type */}
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="roundtrip"
-                  name="tripType"
-                  checked={tripType === "round-trip"}
-                  onChange={() => setTripType("round-trip")}
-                  className="text-blue-600"
-                />
-                <label htmlFor="roundtrip" className="text-sm font-medium">Round trip</label>
-                <input
-                  type="radio"
-                  id="oneway"
-                  name="tripType"
-                  checked={tripType === "one-way"}
-                  onChange={() => setTripType("one-way")}
-                  className="text-blue-600 ml-4"
-                />
-                <label htmlFor="oneway" className="text-sm font-medium">One way</label>
-              </div>
-
-              {/* From City */}
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <Plane className="w-4 h-4 text-gray-400" />
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="pl-10 pr-4 py-2 text-left min-w-[140px] justify-start"
-                    onClick={() => setShowFromCities(true)}
-                  >
-                    <div>
-                      <div className="font-medium text-gray-900">BOM</div>
-                      <div className="text-xs text-gray-500">Mumbai</div>
-                    </div>
-                  </Button>
-                </div>
-                <ArrowRightLeft className="w-4 h-4 text-gray-400" />
-                {/* To City */}
-                <div className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <Plane className="w-4 h-4 text-gray-400" />
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="pl-10 pr-4 py-2 text-left min-w-[140px] justify-start"
-                    onClick={() => setShowToCities(true)}
-                  >
-                    <div>
-                      <div className="font-medium text-gray-900">DXB</div>
-                      <div className="text-xs text-gray-500">Dubai</div>
-                    </div>
-                  </Button>
-                </div>
-              </div>
-
-              {/* Dates */}
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  className="px-4 py-2 text-left min-w-[120px] justify-start"
-                  onClick={() => setShowCalendar(true)}
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-6 w-full sm:w-auto">
+                <button
+                  onClick={() => setTripType("round-trip")}
+                  className="flex items-center space-x-2"
                 >
-                  <div>
-                    <div className="text-xs text-gray-500">Departure</div>
-                    <div className="font-medium">Dec 9</div>
-                  </div>
-                </Button>
-                {tripType === "round-trip" && (
-                  <Button
-                    variant="outline"
-                    className="px-4 py-2 text-left min-w-[120px] justify-start"
-                    onClick={() => setShowCalendar(true)}
+                  <div
+                    className={cn(
+                      "w-3 h-3 rounded-full border-2",
+                      tripType === "round-trip"
+                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
+                        : "border-gray-300",
+                    )}
+                  ></div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      tripType === "round-trip"
+                        ? "font-medium text-gray-900"
+                        : "text-gray-500",
+                    )}
                   >
-                    <div>
-                      <div className="text-xs text-gray-500">Return</div>
-                      <div className="font-medium">Dec 16</div>
+                    Round trip
+                  </span>
+                </button>
+                <button
+                  onClick={() => setTripType("one-way")}
+                  className="flex items-center space-x-2"
+                >
+                  <div
+                    className={cn(
+                      "w-3 h-3 rounded-full border-2",
+                      tripType === "one-way"
+                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
+                        : "border-gray-300",
+                    )}
+                  ></div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      tripType === "one-way"
+                        ? "font-medium text-gray-900"
+                        : "text-gray-500",
+                    )}
+                  >
+                    One way
+                  </span>
+                </button>
+                <button
+                  onClick={() => setTripType("multi-city")}
+                  className="flex items-center space-x-2"
+                >
+                  <div
+                    className={cn(
+                      "w-3 h-3 rounded-full border-2",
+                      tripType === "multi-city"
+                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
+                        : "border-gray-300",
+                    )}
+                  ></div>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      tripType === "multi-city"
+                        ? "font-medium text-gray-900"
+                        : "text-gray-500",
+                    )}
+                  >
+                    Multi-city
+                  </span>
+                </button>
+                <div className="relative">
+                  <button
+                    onClick={() =>
+                      setShowClassDropdown(!showClassDropdown)
+                    }
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded transition-colors"
+                  >
+                    <div className="w-3 h-3 border-2 border-gray-300 rounded-full"></div>
+                    <span className="text-sm text-gray-500">
+                      {selectedClass}
+                    </span>
+                    <ChevronDown className="w-3 h-3 text-gray-500" />
+                  </button>
+                  {showClassDropdown && (
+                    <div className="absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999] w-48 min-w-[180px]">
+                      {[
+                        "Economy",
+                        "Premium Economy",
+                        "Business",
+                        "First Class",
+                      ].map((classType) => (
+                        <button
+                          key={classType}
+                          onClick={() => {
+                            setSelectedClass(classType);
+                            setShowClassDropdown(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors ${
+                            selectedClass === classType
+                              ? "bg-blue-100 text-blue-700 font-medium"
+                              : "text-gray-900"
+                          }`}
+                        >
+                          {classType}
+                        </button>
+                      ))}
                     </div>
-                  </Button>
-                )}
-              </div>
-
-              {/* Travelers */}
-              <Button
-                variant="outline"
-                className="px-4 py-2 text-left min-w-[120px] justify-start"
-                onClick={() => setShowTravelers(true)}
-              >
-                <div>
-                  <div className="text-xs text-gray-500">Travelers</div>
-                  <div className="font-medium">{adults} adult{adults > 1 ? 's' : ''}</div>
+                  )}
                 </div>
-              </Button>
+              </div>
+            </div>
+          </div>
 
-              {/* Search Button */}
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 h-12 font-semibold">
+          {/* Desktop Search inputs - Exact Homepage Design */}
+          <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 w-full max-w-5xl overflow-visible">
+            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Leaving from
+              </label>
+              <button
+                onClick={() => setShowFromCities(!showFromCities)}
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
+              >
+                <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2">
+                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                    BOM
+                  </div>
+                  <span className="text-sm text-gray-700 font-medium">
+                    Chhatrapati Shivaji International...
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Going to
+              </label>
+              <button
+                onClick={() => setShowToCities(!showToCities)}
+                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+              >
+                <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2">
+                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                    DXB
+                  </div>
+                  <span className="text-sm text-gray-700 font-medium">
+                    Dubai International Airport
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Travel dates
+              </label>
+              <button
+                onClick={() => setShowCalendar(!showCalendar)}
+                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+              >
+                <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-700 font-medium">
+                    {selectedDepartureDate}
+                  </span>
+                  {tripType === "round-trip" && (
+                    <>
+                      <span className="text-gray-400">–</span>
+                      <span className="text-sm text-gray-700 font-medium">
+                        {selectedReturnDate}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </button>
+            </div>
+
+            <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Travelers
+              </label>
+              <button
+                onClick={() => setShowTravelers(!showTravelers)}
+                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+              >
+                <svg
+                  className="w-4 h-4 text-gray-500 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                <span className="text-sm text-gray-700 font-medium">
+                  {travelers.adults} adult
+                  {travelers.adults > 1 ? "s" : ""}
+                  {travelers.children > 0
+                    ? `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`
+                    : ""}
+                </span>
+              </button>
+            </div>
+
+            <div className="w-full lg:w-auto">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
                 Search
               </Button>
             </div>
