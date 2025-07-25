@@ -227,6 +227,12 @@ export function BookingCalendar({
         }
 
         @media (max-width: 768px) {
+          .booking-calendar {
+            height: auto;
+            max-height: none;
+            overflow: visible;
+          }
+
           .booking-calendar .rdrMonths {
             flex-direction: column;
             gap: 10px;
@@ -240,7 +246,8 @@ export function BookingCalendar({
           .booking-calendar .rdrCalendarWrapper {
             width: 100% !important;
             border-radius: 8px;
-            overflow: hidden;
+            overflow: visible;
+            height: auto;
           }
 
           .booking-calendar .rdrMonthAndYearWrapper {
