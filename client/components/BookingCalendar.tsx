@@ -379,13 +379,13 @@ export function BookingCalendar({
                   endDate: addDays(new Date(), 3),
                 });
               }}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+              className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
             >
               Reset
             </button>
             <button
               onClick={onClose}
-              className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
+              className="flex-1 sm:flex-none px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
             >
               Done
             </button>
