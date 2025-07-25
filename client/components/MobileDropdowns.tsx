@@ -213,6 +213,7 @@ export function MobileDatePicker({
             onChange={handleCalendarChange}
             onClose={() => {}} // Don't auto-close on selection for mobile
             className="w-full"
+            bookingType="flight"
           />
         </div>
 
