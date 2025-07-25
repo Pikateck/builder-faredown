@@ -1494,7 +1494,7 @@ export default function FlightResults() {
                     { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
                     { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
                   ].map((time, index) => (
-                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px] pr-1">
                       <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
@@ -1504,7 +1504,7 @@ export default function FlightResults() {
                         </div>
                         {time.label}
                       </label>
-                      <span className="text-xs text-gray-500 ml-1">{time.count}</span>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">{time.count}</span>
                     </div>
                   ))}
                 </div>
@@ -1518,7 +1518,7 @@ export default function FlightResults() {
                     { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
                     { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 }
                   ].map((time, index) => (
-                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px]">
+                    <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px] pr-1">
                       <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
                         <div className="w-4 h-4 flex items-center justify-center mr-2">
                           <input
@@ -1528,7 +1528,7 @@ export default function FlightResults() {
                         </div>
                         {time.label}
                       </label>
-                      <span className="text-xs text-gray-500 ml-1">{time.count}</span>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">{time.count}</span>
                     </div>
                   ))}
                 </div>
