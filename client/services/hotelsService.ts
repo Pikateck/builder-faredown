@@ -793,11 +793,19 @@ export class HotelsService {
               } catch (jsonError) {
                 if (jsonError instanceof Error && jsonError.name === 'AbortError') {
                   console.log(`⏰ API request was aborted during JSON parsing for query: "${query}"`);
+                  return []; // Return empty array immediately on abort
                 } else {
                   console.warn(`⚠️ Failed to parse JSON response:`, jsonError instanceof Error ? jsonError.message : "Unknown error");
                 }
               }
             }
+          }
+        } catch (fetchError) {
+          if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+            console.log(`⏰ API request was aborted (timeout or cancelled) for query: "${query}"`);
+            return []; // Return empty array immediately on abort
+          } else {
+            console.warn(`⚠️ API fetch failed:`, fetchError instanceof Error ? fetchError.message : "Unknown error");
           }
         } finally {
           clearTimeout(timeoutId);
