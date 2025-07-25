@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export default function PrivacyPolicy() {
+  useScrollToTop();
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
