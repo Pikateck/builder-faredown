@@ -715,76 +715,93 @@ export default function FlightResults() {
           </div>
         </div>
 
-        {/* Desktop Header (≥769px) - Original Design */}
+        {/* Desktop Header (≥769px) - Builder.io Design Format */}
         <div className="hidden md:block">
-          <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between text-white">
-              <div className="flex items-center space-x-3">
-                <Link to="/" className="text-xl font-bold">
+              {/* Left: Logo */}
+              <div className="flex items-center">
+                <Link to="/" className="text-2xl font-bold text-white hover:text-blue-200 transition-colors">
                   faredown.com
                 </Link>
-                <div className="text-sm text-blue-200">/ Flight Results</div>
               </div>
-              <div className="flex items-center space-x-6">
-                <nav className="flex items-center space-x-6 text-sm font-medium">
-                  <Link to="/flights" className="border-b-2 border-white py-4">
-                    Flights
-                  </Link>
-                  <Link to="/hotels" className="py-4 hover:text-blue-200">
-                    Hotels
-                  </Link>
-                </nav>
-                <div className="flex items-center space-x-4">
-                  {/* Currency Dropdown */}
-                  <DropdownMenu open={showCurrencyDropdown} onOpenChange={setShowCurrencyDropdown}>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-white hover:bg-blue-600 border border-blue-400 px-3"
+
+              {/* Center: Navigation */}
+              <nav className="flex items-center space-x-8">
+                <Link
+                  to="/flights"
+                  className="text-white font-medium px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-600 transition-colors"
+                >
+                  Flights
+                </Link>
+                <Link
+                  to="/hotels"
+                  className="text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Hotels
+                </Link>
+              </nav>
+
+              {/* Right: Currency + Auth */}
+              <div className="flex items-center space-x-4">
+                {/* Currency Dropdown */}
+                <DropdownMenu open={showCurrencyDropdown} onOpenChange={setShowCurrencyDropdown}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:bg-blue-600 border border-blue-400 px-3 py-1 h-8 font-medium"
+                    >
+                      English (UK) • {selectedCurrency.code}
+                      <ChevronDown className="w-3 h-3 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
+                    {Object.entries({
+                      USD: { symbol: "$", name: "US Dollar" },
+                      EUR: { symbol: "€", name: "Euro" },
+                      GBP: { symbol: "£", name: "British Pound" },
+                      INR: { symbol: "₹", name: "Indian Rupee" },
+                      AED: { symbol: "د.إ", name: "UAE Dirham" },
+                      SAR: { symbol: "﷼", name: "Saudi Riyal" },
+                      JPY: { symbol: "¥", name: "Japanese Yen" },
+                      CNY: { symbol: "¥", name: "Chinese Yuan" },
+                      SGD: { symbol: "S$", name: "Singapore Dollar" },
+                      AUD: { symbol: "A$", name: "Australian Dollar" },
+                      CAD: { symbol: "C$", name: "Canadian Dollar" },
+                    }).map(([code, currency]) => (
+                      <DropdownMenuItem
+                        key={code}
+                        onClick={() => {
+                          setSelectedCurrency({ code, ...currency });
+                          setShowCurrencyDropdown(false);
+                        }}
+                        className="flex items-center justify-between cursor-pointer"
                       >
-                        {selectedCurrency.code}
-                        <ChevronDown className="w-4 h-4 ml-1" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-48 max-h-60 overflow-y-auto">
-                      {Object.entries({
-                        USD: { symbol: "$", name: "US Dollar" },
-                        EUR: { symbol: "€", name: "Euro" },
-                        GBP: { symbol: "£", name: "British Pound" },
-                        INR: { symbol: "₹", name: "Indian Rupee" },
-                        AED: { symbol: "د.إ", name: "UAE Dirham" },
-                        SAR: { symbol: "﷼", name: "Saudi Riyal" },
-                        JPY: { symbol: "¥", name: "Japanese Yen" },
-                        CNY: { symbol: "¥", name: "Chinese Yuan" },
-                        SGD: { symbol: "S$", name: "Singapore Dollar" },
-                        AUD: { symbol: "A$", name: "Australian Dollar" },
-                        CAD: { symbol: "C$", name: "Canadian Dollar" },
-                      }).map(([code, currency]) => (
-                        <DropdownMenuItem
-                          key={code}
-                          onClick={() => {
-                            setSelectedCurrency({ code, ...currency });
-                            setShowCurrencyDropdown(false);
-                          }}
-                          className="flex items-center justify-between cursor-pointer"
-                        >
-                          <span className="flex items-center space-x-2">
-                            <span className="font-medium">{code}</span>
-                            <span className="text-gray-600">{currency.symbol}</span>
-                          </span>
-                          <span className="text-sm text-gray-500">{currency.name}</span>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                  <Button variant="outline" size="sm" className="bg-white text-blue-700">
-                    Register
-                  </Button>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-800">
-                    Sign in
-                  </Button>
-                </div>
+                        <span className="flex items-center space-x-2">
+                          <span className="font-medium">{code}</span>
+                          <span className="text-gray-600">{currency.symbol}</span>
+                        </span>
+                        <span className="text-sm text-gray-500">{currency.name}</span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Auth Buttons */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
+                >
+                  Register
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
+                >
+                  Sign in
+                </Button>
               </div>
             </div>
           </div>
