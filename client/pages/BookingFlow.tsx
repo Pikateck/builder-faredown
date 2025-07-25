@@ -417,7 +417,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
                   {/* Aircraft Front Indicator */}
                   <div className="text-center mb-4">
                     <div className="w-16 h-8 mx-auto bg-gray-300 rounded-t-full flex items-center justify-center">
-                      <span className="text-xs text-gray-600">��️</span>
+                      <span className="text-xs text-gray-600">✈️</span>
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
                       Front of Aircraft
@@ -647,7 +647,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
         {/* Mumbai-Dubai Summary */}
         <div className="mb-4">
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Mumbai → Dubai
+            Mumbai �� Dubai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -2119,7 +2119,7 @@ export default function BookingFlow() {
                             <span className="font-medium text-gray-900">
                               Yes, protect my booking
                             </span>
-                            <span className="font-semibold">₹27,803</span>
+                            <span className="font-semibold">{formatCurrency(calculateRefundProtectionCost())}</span>
                           </div>
                         </label>
 
@@ -2192,7 +2192,7 @@ export default function BookingFlow() {
                             }`}
                           >
                             {selectedOtherOptions.length === 6
-                              ? "�� All options selected"
+                              ? "✓ All options selected"
                               : "Select all to get"}
                           </span>
                         </div>
