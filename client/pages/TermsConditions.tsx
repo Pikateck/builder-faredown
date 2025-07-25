@@ -206,7 +206,8 @@ export default function TermsConditions() {
               <h4 className="font-semibold mb-4">Legal</h4>
               <div className="space-y-2 text-sm">
                 <Link to="/privacy-policy" className="text-gray-400 hover:text-white block">Privacy Policy</Link>
-                <Link to="/terms-conditions" className="text-gray-400 hover:text-white block">Terms & Conditions</Link>
+                <Link to="/terms-conditions" className="text-gray-400 hover:text-white block">Terms of Service</Link>
+                <Link to="/cookie-policy" className="text-gray-400 hover:text-white block">Cookie Policy</Link>
                 <Link to="/refund-policy" className="text-gray-400 hover:text-white block">Refund Policy</Link>
               </div>
             </div>
