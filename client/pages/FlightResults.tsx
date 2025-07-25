@@ -1534,33 +1534,6 @@ export default function FlightResults() {
                 </div>
               </div>
 
-              {/* Arrives in Dubai */}
-              <div className="space-y-1 mt-4">
-                <div className="border-b border-gray-200 pb-1">
-                  <div className="text-sm font-semibold text-gray-900">Arrives in Dubai</div>
-                </div>
-                {[
-                  { airport: "Dubai International Airport", code: "DXB", count: 643 }
-                ].map((airport, index) => (
-                  <div key={index} className="flex items-center justify-between py-0.5 min-h-[24px]">
-                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
-                      <div className="w-4 h-4 flex items-center justify-center mr-2">
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 bg-blue-600"
-                          defaultChecked
-                        />
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-700">{airport.airport}</div>
-                        <div className="text-xs text-gray-500">{airport.code}</div>
-                      </div>
-                    </label>
-                    <span className="text-xs text-gray-500 ml-1">{airport.count}</span>
-                  </div>
-                ))}
-              </div>
-
               {/* Duration */}
               <div className="space-y-1 mt-4">
                 <div className="border-b border-gray-200 pb-1">
@@ -1575,7 +1548,7 @@ export default function FlightResults() {
                       max="24"
                       value={maxDuration}
                       onChange={(e) => setMaxDuration(Number(e.target.value))}
-                      className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-1 bg-blue-200 rounded-lg appearance-none cursor-pointer"
                       style={{
                         background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((maxDuration - 3) / 21) * 100}%, #e5e7eb ${((maxDuration - 3) / 21) * 100}%, #e5e7eb 100%)`
                       }}
