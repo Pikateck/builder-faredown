@@ -1126,11 +1126,99 @@ export default function Index() {
 
                       {showCalendar && (
                         <div className="absolute top-14 left-0 right-0 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-full sm:w-[700px] max-w-[700px] overflow-hidden">
-                          {/* Calendar implementation would go here - using the enhanced version from the original */}
                           <div className="p-4">
-                            <p className="text-center text-gray-500">
-                              Calendar functionality preserved from original
-                            </p>
+                            {/* Calendar Header */}
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="flex items-center space-x-4">
+                                <button
+                                  onClick={() => navigateMonth("prev")}
+                                  className="p-2 hover:bg-gray-100 rounded-full"
+                                >
+                                  <ChevronLeft className="w-4 h-4" />
+                                </button>
+                                <h3 className="text-lg font-semibold text-gray-900">
+                                  {getMonthName(currentMonth)} {currentYear}
+                                </h3>
+                                <button
+                                  onClick={() => navigateMonth("next")}
+                                  className="p-2 hover:bg-gray-100 rounded-full"
+                                >
+                                  <ChevronRight className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <button
+                                onClick={() => setShowCalendar(false)}
+                                className="p-2 hover:bg-gray-100 rounded-full"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            {/* Trip Type Indicator */}
+                            {tripType === "round-trip" && (
+                              <div className="flex items-center space-x-4 mb-4 text-sm">
+                                <div className={`px-3 py-1 rounded-full ${
+                                  selectingDeparture
+                                    ? "bg-blue-100 text-blue-700 font-medium"
+                                    : "bg-gray-100 text-gray-600"
+                                }`}>
+                                  Departure: {selectedDepartureDate ? formatDate(selectedDepartureDate) : "Select"}
+                                </div>
+                                <div className={`px-3 py-1 rounded-full ${
+                                  !selectingDeparture
+                                    ? "bg-blue-100 text-blue-700 font-medium"
+                                    : "bg-gray-100 text-gray-600"
+                                }`}>
+                                  Return: {selectedReturnDate ? formatDate(selectedReturnDate) : "Select"}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Calendar Grid */}
+                            <div className="grid grid-cols-7 gap-1">
+                              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                                <div key={day} className="p-2 text-center text-xs font-medium text-gray-500">
+                                  {day}
+                                </div>
+                              ))}
+
+                              {/* Empty cells for days before month starts */}
+                              {Array.from({ length: getFirstDayOfMonth(currentMonth, currentYear) }).map((_, index) => (
+                                <div key={`empty-${index}`} className="p-2"></div>
+                              ))}
+
+                              {/* Days of the month */}
+                              {Array.from({ length: getDaysInMonth(currentMonth, currentYear) }).map((_, index) => {
+                                const day = index + 1;
+                                const date = new Date(currentYear, currentMonth, day);
+                                const today = new Date();
+                                const isToday = date.toDateString() === today.toDateString();
+                                const isPast = date < today;
+                                const isSelected = isDateEqual(date, selectedDepartureDate) || isDateEqual(date, selectedReturnDate);
+                                const isInRange = isDateInRange(date, selectedDepartureDate, selectedReturnDate);
+
+                                return (
+                                  <button
+                                    key={day}
+                                    onClick={() => !isPast && handleDateClick(day, currentMonth, currentYear)}
+                                    disabled={isPast}
+                                    className={`p-2 text-sm rounded-lg transition-colors ${
+                                      isPast
+                                        ? "text-gray-300 cursor-not-allowed"
+                                        : isSelected
+                                          ? "bg-blue-600 text-white font-medium"
+                                          : isInRange
+                                            ? "bg-blue-100 text-blue-700"
+                                            : isToday
+                                              ? "bg-blue-50 text-blue-700 font-medium border border-blue-300"
+                                              : "hover:bg-gray-100 text-gray-700"
+                                    }`}
+                                  >
+                                    {day}
+                                  </button>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
                       )}
