@@ -1285,7 +1285,7 @@ export default function FlightResults() {
                           disabled={travelers.adults <= 1}
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                         >
-                          −
+                          ��
                         </button>
                         <span className="w-8 text-center font-medium text-gray-900">
                           {travelers.adults}
@@ -2272,6 +2272,35 @@ export default function FlightResults() {
                       <label className="block text-sm font-semibold mb-3 text-gray-900">
                         What price would you like to pay? ({selectedCurrency.symbol})
                       </label>
+
+                      {/* Error Message Box */}
+                      {duplicatePriceError && (
+                        <div className="mb-4 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-4 shadow-lg animate-pulse">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                              <XCircle className="w-6 h-6 text-red-600" />
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-red-800 font-bold text-lg mb-1">
+                                Oops! Price Already Used
+                              </h4>
+                              <p className="text-red-700 text-sm font-medium">
+                                {usedPrices.has(`${bargainFlight?.id}-${bargainFareType?.name}-${parseInt(bargainPrice)}`)
+                                  ? "You've already tried this exact price! Please enter a different amount to negotiate."
+                                  : "Please enter a price lower than the current price to start negotiation!"
+                                }
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => setDuplicatePriceError(false)}
+                              className="text-red-400 hover:text-red-600 transition-colors"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="relative">
                         <Input
                           type="text"
@@ -2286,9 +2315,17 @@ export default function FlightResults() {
                               "",
                             );
                             setBargainPrice(numericValue);
+                            // Clear error when user starts typing
+                            if (duplicatePriceError) {
+                              setDuplicatePriceError(false);
+                            }
                           }}
                           placeholder="Enter your target price"
-                          className="text-xl font-bold text-center py-6 border-2 border-[#003580]/20 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm"
+                          className={`text-xl font-bold text-center py-6 border-2 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm transition-colors ${
+                            duplicatePriceError
+                              ? 'border-red-300 focus:border-red-500'
+                              : 'border-[#003580]/20'
+                          }`}
                         />
                         <div className="absolute inset-y-0 left-4 flex items-center">
                           <span className="text-[#003580] text-xl font-semibold">
