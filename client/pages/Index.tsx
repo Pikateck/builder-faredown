@@ -176,8 +176,15 @@ export default function Index() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
   // Calendar helper functions
-  const formatDate = (date: Date | null) => {
+  const formatDate = (date: Date | null, compact = false) => {
     if (!date) return "";
+    if (compact) {
+      // For mobile and compact display - just day and month
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+      });
+    }
     return date
       .toLocaleDateString("en-GB", {
         day: "2-digit",
