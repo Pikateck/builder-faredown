@@ -881,7 +881,7 @@ export default function HotelDetails() {
                     </div>
 
                     {/* Unified All-Inclusive & Bargain Benefits Banner */}
-                    <div className="mt-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 shadow-sm">
+                    <div className="mt-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                       <div className="space-y-3">
                         {/* Header with Icons */}
                         <div className="flex items-center justify-center gap-2">
@@ -1955,7 +1955,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛁</span> Private bathroom
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">����</span> Free WiFi
+                        <span className="mr-2">������</span> Free WiFi
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">☕</span> Tea & coffee facilities
