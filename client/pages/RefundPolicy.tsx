@@ -280,30 +280,34 @@ export default function RefundPolicy() {
             <div>
               <h3 className="text-xl font-bold mb-4">Faredown</h3>
               <p className="text-gray-400 text-sm">
-                Faredown Bookings and Travels Pvt Ltd - Your trusted travel partner.
+                The world's first travel portal where you control the price. Bargain for better deals on flights and hotels.
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
               <div className="space-y-2 text-sm">
-                <Link to="/privacy-policy" className="text-gray-400 hover:text-white block">Privacy Policy</Link>
-                <Link to="/terms-conditions" className="text-gray-400 hover:text-white block">Terms of Service</Link>
-                <Link to="/cookie-policy" className="text-gray-400 hover:text-white block">Cookie Policy</Link>
-                <Link to="/refund-policy" className="text-gray-400 hover:text-white block">Refund Policy</Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <div className="space-y-2 text-sm">
-                <Link to="/help" className="text-gray-400 hover:text-white block">Help Center</Link>
-                <Link to="/contact" className="text-gray-400 hover:text-white block">Contact Us</Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer">About Us</div>
+                <div className="text-gray-400 hover:text-white cursor-pointer">How It Works</div>
+                <div className="text-gray-400 hover:text-white cursor-pointer">Contact</div>
+                <div className="text-gray-400 hover:text-white cursor-pointer">Help Center</div>
               </div>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Services</h4>
               <div className="space-y-2 text-sm">
-                <Link to="/flights" className="text-gray-400 hover:text-white block">Flights</Link>
-                <Link to="/hotels" className="text-gray-400 hover:text-white block">Hotels</Link>
+                <Link to="/flights" className="text-gray-400 hover:text-white cursor-pointer block">Flights</Link>
+                <Link to="/hotels" className="text-gray-400 hover:text-white cursor-pointer block">Hotels</Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer">Car Rentals</div>
+                <div className="text-gray-400 hover:text-white cursor-pointer">Travel Insurance</div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Legal</h4>
+              <div className="space-y-2 text-sm">
+                <Link to="/privacy-policy" className="text-gray-400 hover:text-white cursor-pointer block">Privacy Policy</Link>
+                <Link to="/terms-conditions" className="text-gray-400 hover:text-white cursor-pointer block">Terms of Service</Link>
+                <Link to="/cookie-policy" className="text-gray-400 hover:text-white cursor-pointer block">Cookie Policy</Link>
+                <Link to="/refund-policy" className="text-gray-400 hover:text-white cursor-pointer block">Refund Policy</Link>
               </div>
             </div>
           </div>
