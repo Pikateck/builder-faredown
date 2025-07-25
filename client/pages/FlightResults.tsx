@@ -1236,7 +1236,7 @@ export default function FlightResults() {
               </Popover>
 
               {showCalendar && (
-                <div className="fixed top-14 left-0 right-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 z-[99999] w-full sm:w-[700px] max-w-[700px]">
+                <div className="fixed top-14 left-0 right-0 bottom-0 sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:bottom-auto z-[99999] w-full sm:w-[700px] max-w-[700px] overflow-y-auto bg-white sm:bg-transparent">
                   <BookingCalendar
                     initialRange={{
                       startDate: selectedDepartureDate ? new Date(selectedDepartureDate) : new Date(),
