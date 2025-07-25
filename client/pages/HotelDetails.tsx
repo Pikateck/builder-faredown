@@ -653,32 +653,28 @@ export default function HotelDetails() {
                       {/* Price Summary Box */}
                       <div className="lg:col-span-1">
                         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                          <div className="text-sm font-medium text-gray-700 mb-2">
+                            Cheapest Room in This Listing
+                          </div>
                           <div className="text-2xl font-bold text-gray-900 mb-1">
                             ₹
                             {roomTypes.length > 0
                               ? calculateTotalPrice(
                                   roomTypes[0].pricePerNight,
                                 ).toLocaleString()
-                              : "0"}
-                          </div>
-                          <div className="text-sm font-semibold text-gray-900 mb-1">
-                            Total Price
+                              : "586"}
+                            <span className="text-sm font-normal text-gray-600 ml-1">incl. taxes</span>
                           </div>
                           <div className="text-xs text-gray-600 mb-1">
-                            Includes all taxes, fees & charges
+                            (₹
+                            {roomTypes.length > 0
+                              ? roomTypes[0].pricePerNight.toLocaleString()
+                              : "167"}
+                            {" per night x "}
+                            {hotel.totalNights} nights)
                           </div>
-                          <div className="text-xs text-gray-600 mb-3">
-                            ₹
-                            {roomTypes.length > 0
-                              ? calculateTotalPrice(
-                                  roomTypes[0].pricePerNight,
-                                ).toLocaleString()
-                              : "0"}
-                            {roomTypes.length > 0
-                              ? calculateTotalPrice(
-                                  roomTypes[0].pricePerNight,
-                                ).toLocaleString()
-                              : "0"}
+                          <div className="text-xs text-emerald-600 font-medium mb-3">
+                            ★ Best value room available
                           </div>
                           <Button
                             className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 px-4 rounded-lg text-sm mb-3"
@@ -688,7 +684,7 @@ export default function HotelDetails() {
                             }
                             disabled={roomTypes.length === 0}
                           >
-                            💰 Try Bargaining for Better Price
+                            Try Bargaining for Better Price
                           </Button>
                         </div>
                       </div>
@@ -1982,7 +1978,7 @@ export default function HotelDetails() {
                         { icon: "🇩����", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
-                        { icon: "🇮🇳", text: "Hindi" },
+                        { icon: "🇮����", text: "Hindi" },
                         { icon: "🇮🇩", text: "Indonesian" },
                         { icon: "🇮🇹", text: "Italian" },
                         { icon: "🇯🇵", text: "Japanese" },
