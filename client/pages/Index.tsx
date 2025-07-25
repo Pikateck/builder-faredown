@@ -1697,28 +1697,28 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Newsletter Section */}
+        {/* Email Signup Section */}
         <section className="py-16 bg-white">
           <div className="max-w-[1280px] mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Never Miss a Deal Again
+              Stay ahead with secret travel bargains
             </h2>
-            <p className="text-gray-600 text-lg mb-8">
-              Get exclusive bargain alerts and early access to flash sales
-            </p>
-            <div className="max-w-md mx-auto flex space-x-4">
+            <div className="max-w-md mx-auto flex space-x-4 mb-4">
               <Input
                 type="email"
                 placeholder="Enter your email address"
                 className="flex-1"
               />
               <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8">
-                Get Deals
+                Subscribe
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-3">
-              Join 2M+ subscribers getting exclusive travel deals weekly
-            </p>
+            <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              <span>We respect your inbox.</span>
+            </div>
           </div>
         </section>
 
