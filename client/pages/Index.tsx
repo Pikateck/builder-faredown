@@ -1140,6 +1140,7 @@ export default function Index() {
                             }}
                             onClose={() => setShowCalendar(false)}
                             className="w-full"
+                            bookingType="flight"
                           />
                         </div>
                       )}
