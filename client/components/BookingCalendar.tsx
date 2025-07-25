@@ -24,6 +24,7 @@ export function BookingCalendar({
   initialRange,
   onClose,
   className,
+  bookingType = 'hotel',
 }: BookingCalendarProps) {
   const [selection, setSelection] = useState([
     {
