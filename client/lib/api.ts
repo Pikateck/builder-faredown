@@ -106,9 +106,17 @@ class ApiClient {
 
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+      let errorData = {};
+      try {
+        errorData = await response.json();
+      } catch (jsonError) {
+        // Don't log AbortErrors in JSON parsing
+        if (!(jsonError instanceof Error && jsonError.name === 'AbortError')) {
+          console.warn("Failed to parse error response JSON:", jsonError);
+        }
+      }
       throw new ApiError(
-        errorData.message || "API request failed",
+        (errorData as any).message || "API request failed",
         response.status,
         errorData,
       );
@@ -116,10 +124,27 @@ class ApiClient {
 
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      return response.json();
+      try {
+        return await response.json();
+      } catch (jsonError) {
+        // Don't log AbortErrors in JSON parsing
+        if (jsonError instanceof Error && jsonError.name === 'AbortError') {
+          throw jsonError; // Re-throw to be handled by calling method
+        } else {
+          console.warn("Failed to parse response JSON:", jsonError);
+          throw new ApiError("Invalid JSON response", response.status);
+        }
+      }
     }
 
-    return response.text() as unknown as T;
+    try {
+      return (await response.text()) as unknown as T;
+    } catch (textError) {
+      if (textError instanceof Error && textError.name === 'AbortError') {
+        throw textError; // Re-throw to be handled by calling method
+      }
+      throw new ApiError("Failed to read response", response.status);
+    }
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
