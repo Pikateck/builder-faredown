@@ -207,15 +207,28 @@ export function EnhancedFilters({
   };
 
   const renderFilterItem = (item: FilterItem, categoryId: string) => {
+    const isChecked = selectedAmenities.includes(item.id);
+
     return (
       <div
         key={item.id}
-        className="flex items-center justify-between py-0 min-h-[16px]"
+        className="flex items-center justify-between py-0 min-h-[20px]"
       >
-        <div className="flex items-center flex-1">
-          <span className="text-xs text-gray-700 flex-1 leading-tight">
+        <div className="flex items-center space-x-2 flex-1">
+          <Checkbox
+            id={item.id}
+            checked={isChecked}
+            onCheckedChange={(checked) =>
+              handleFilterChange(item.id, checked === true)
+            }
+            className="w-4 h-4 sm:w-5 sm:h-5"
+          />
+          <label
+            htmlFor={item.id}
+            className="text-xs text-gray-700 cursor-pointer select-none flex-1 leading-tight"
+          >
             {item.label}
-          </span>
+          </label>
         </div>
         {item.count && (
           <span className="text-xs text-gray-500 ml-0.5">{item.count}</span>
