@@ -998,20 +998,90 @@ export default function FlightResults() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                {/* Auth Buttons */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
-                >
-                  Register
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
-                >
-                  Sign in
-                </Button>
+                {/* Auth Section */}
+                {isLoggedIn ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
+                      <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-black">
+                          {userName.charAt(0)}
+                        </span>
+                      </div>
+                      <span className="text-sm text-white hidden sm:inline">
+                        {userName}
+                      </span>
+                      <span className="text-xs text-yellow-300 hidden md:inline">
+                        Loyalty Level 1
+                      </span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem>
+                        <Link to="/account" className="flex items-center">
+                          <User className="w-4 h-4 mr-2" />
+                          My account
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link
+                          to="/account/trips"
+                          className="flex items-center"
+                        >
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          Bookings & Trips
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link
+                          to="/account?tab=loyalty"
+                          className="flex items-center"
+                        >
+                          <Award className="w-4 h-4 mr-2" />
+                          Loyalty program
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link
+                          to="/account/payment"
+                          className="flex items-center"
+                        >
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          Rewards & Wallet
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link
+                          to="/my-trips"
+                          className="flex items-center"
+                        >
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          Completed trips
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={logout}>
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
+                      onClick={() => setShowRegister(true)}
+                    >
+                      Register
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
+                      onClick={() => setShowSignIn(true)}
+                    >
+                      Sign in
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
