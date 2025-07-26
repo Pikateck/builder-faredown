@@ -133,10 +133,8 @@ export default function HotelResults() {
 
       const searchRequest = {
         destination: destination || "DXB", // Use destination code
-        checkIn: checkIn || new Date().toISOString(),
-        checkOut:
-          checkOut ||
-          new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+        checkIn: departureDate ? departureDate.toISOString() : (checkIn || new Date().toISOString()),
+        checkOut: returnDate ? returnDate.toISOString() : (checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()),
         rooms: parseInt(rooms) || 1,
         adults: parseInt(adults) || 2,
         children: parseInt(children) || 0,
