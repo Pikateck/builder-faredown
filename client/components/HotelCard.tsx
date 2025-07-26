@@ -329,6 +329,18 @@ export function HotelCard({
             <div className="mt-auto">
               <div className="flex items-center justify-between mb-3">
                 <div>
+                  {/* Original Price with Strikethrough */}
+                  {hotel.originalPrice && hotel.originalPrice > currentPrice && (
+                    <div className="flex items-center space-x-1 mb-1">
+                      <span className="text-sm text-gray-400 line-through">
+                        {formatPrice(Math.round((hotel.originalPrice * totalNights) * 1.18))}
+                      </span>
+                      <Badge variant="destructive" className="text-xs px-1 py-0">
+                        {Math.round(((hotel.originalPrice - currentPrice) / hotel.originalPrice) * 100)}% OFF
+                      </Badge>
+                    </div>
+                  )}
+
                   <div className="flex items-center space-x-2">
                     <span className="text-2xl font-bold text-[#003580]">
                       {formatPrice(totalPriceInclusiveTaxes)}
