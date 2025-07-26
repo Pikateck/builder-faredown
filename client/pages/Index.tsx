@@ -1167,9 +1167,9 @@ export default function Index() {
                         </svg>
                         <span className="text-sm text-gray-700 font-medium truncate">
                           {tripType === "one-way"
-                            ? formatDate(selectedDepartureDate) || "Select date"
-                            : selectedDepartureDate
-                              ? `${formatDate(selectedDepartureDate)}${selectedReturnDate ? ` - ${formatDate(selectedReturnDate)}` : " - Return"}`
+                            ? formatDisplayDate(departureDate) || "Select date"
+                            : departureDate
+                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` - ${formatDisplayDate(returnDate)}` : " - Return"}`
                               : "Select dates"}
                         </span>
                       </button>
