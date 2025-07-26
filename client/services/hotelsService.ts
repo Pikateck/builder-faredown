@@ -279,7 +279,21 @@ export class HotelsService {
           // Check if response is JSON
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
+            let data;
+            try {
+              data = await response.json();
+            } catch (jsonError) {
+              if (jsonError instanceof Error && jsonError.name === "AbortError") {
+                console.log("⏰ Hotel search JSON parsing was aborted");
+                return []; // Return empty array immediately on abort
+              } else {
+                console.warn(
+                  "⚠️ Failed to parse JSON response:",
+                  jsonError instanceof Error ? jsonError.message : "Unknown error",
+                );
+                return [];
+              }
+            }
             if (data.success && data.data) {
               const cacheStatus = data.isCached ? "Cached" : "Fresh";
               const dbStatus = data.searchMeta?.databaseConnected
