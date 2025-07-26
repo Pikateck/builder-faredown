@@ -335,7 +335,7 @@ export function EnhancedFilters({
       </div>
 
       {/* Filter Categories */}
-      <div className="space-y-1">
+      <div className="space-y-0">
         {filterCategories.map(renderFilterCategory)}
       </div>
 
