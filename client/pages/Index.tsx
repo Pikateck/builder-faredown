@@ -277,20 +277,20 @@ export default function Index() {
     clickedDate.setHours(0, 0, 0, 0);
 
     if (tripType === "one-way") {
-      setSelectedDepartureDate(clickedDate);
+      setDepartureDate(clickedDate);
       setShowCalendar(false);
     } else {
-      if (selectingDeparture || !selectedDepartureDate) {
-        setSelectedDepartureDate(clickedDate);
-        setSelectedReturnDate(null);
+      if (selectingDeparture || !departureDate) {
+        setDepartureDate(clickedDate);
+        setReturnDate(null);
         setSelectingDeparture(false);
       } else {
-        if (clickedDate <= selectedDepartureDate) {
-          setSelectedDepartureDate(clickedDate);
-          setSelectedReturnDate(null);
+        if (clickedDate <= departureDate) {
+          setDepartureDate(clickedDate);
+          setReturnDate(null);
           setSelectingDeparture(false);
         } else {
-          setSelectedReturnDate(clickedDate);
+          setReturnDate(clickedDate);
           setShowCalendar(false);
         }
       }
