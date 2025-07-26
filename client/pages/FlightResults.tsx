@@ -204,10 +204,22 @@ const flightData = [
 
 export default function FlightResults() {
   const { isLoggedIn, user, login, logout } = useAuth();
+  const {
+    departureDate,
+    returnDate,
+    tripType,
+    formatDisplayDate,
+    loadDatesFromParams
+  } = useDateContext();
   const userName = user?.name || "";
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  // Load dates from URL parameters when component mounts
+  useEffect(() => {
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
 
   // Get passenger data from URL params
   const adults = parseInt(searchParams.get("adults") || "1");
