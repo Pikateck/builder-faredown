@@ -116,6 +116,14 @@ export default function Account() {
     setBookings(savedBookings);
   }, []);
 
+  useEffect(() => {
+    // Update active tab based on URL parameter
+    const tabFromUrl = searchParams.get("tab");
+    if (tabFromUrl && ["bookings", "profile", "loyalty", "payment"].includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [searchParams]);
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
