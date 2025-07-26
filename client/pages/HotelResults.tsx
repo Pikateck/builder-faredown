@@ -302,8 +302,8 @@ export default function HotelResults() {
       ],
       rating: 4.6,
       reviews: 856,
-      originalPrice: 320, // ₹320 per night
-      currentPrice: 275, // ₹275 per night
+      originalPrice: 12000, // ₹12,000 per night
+      currentPrice: 9500, // ₹9,500 per night
       description:
         "Beachfront paradise with pristine white sand beaches, crystal clear waters, and tropical luxury.",
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
