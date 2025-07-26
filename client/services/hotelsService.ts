@@ -641,8 +641,8 @@ export class HotelsService {
         }
       }
 
-      // Return basic destinations when all APIs fail
-      return this.getBasicDestinations(query);
+      // Return empty array and let outer catch handle with basic destinations
+      return [];
     } catch (error) {
       console.error("Destination search error:", error);
       // Enhanced fallback with database-style format
@@ -1402,7 +1402,7 @@ export class HotelsService {
                   (fetchError.message.includes("Failed to fetch") ||
                    fetchError.name === "TypeError")) {
           console.log(
-            `🌐 Network connectivity issue (outer) - using fallback data for query: "${query}"`,
+            `���� Network connectivity issue (outer) - using fallback data for query: "${query}"`,
           );
           // Don't return here - let it fall through to use fallback data
         } else {
