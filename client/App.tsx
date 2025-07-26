@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 // Original pages
 import Index from "./pages/Index";
