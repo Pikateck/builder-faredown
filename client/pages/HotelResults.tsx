@@ -74,10 +74,11 @@ export default function HotelResults() {
   const children = searchParams.get("children") || "0";
   const rooms = searchParams.get("rooms") || "1";
 
-  // Load hotels from live Hotelbeds API
+  // Load hotels from live Hotelbeds API and dates from URL params
   useEffect(() => {
+    loadDatesFromParams(searchParams);
     loadHotels();
-  }, [searchParams, selectedCurrency]);
+  }, [searchParams, selectedCurrency, loadDatesFromParams]);
 
   // Helper function to transform Hotelbeds images to usable URLs
   const transformHotelImages = (images: any[]): string[] => {
