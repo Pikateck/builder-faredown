@@ -556,6 +556,84 @@ export default function Index() {
                 Search Flights
               </Button>
             </div>
+
+            {/* Mobile Multi-city Additional Flights */}
+            {tripType === "multi-city" && (
+              <div className="mt-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-gray-700">Additional flights</h3>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-600 border-blue-600 hover:bg-blue-50 text-xs px-3 py-2"
+                    onClick={() => {
+                      alert("Add flight functionality - to be implemented");
+                    }}
+                  >
+                    <Plus className="w-3 h-3 mr-1" />
+                    Add flight
+                  </Button>
+                </div>
+
+                {/* Mobile additional flight segment */}
+                <div className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 space-y-3">
+                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                    <div className="text-xs text-gray-500 mb-1">Flight 2</div>
+                    <div className="flex items-center space-x-3">
+                      <div className="flex-1">
+                        <div className="text-xs text-gray-500 mb-1">From</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900 text-sm">Select city</div>
+                            <div className="text-xs text-gray-500">Airport</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <ArrowRight className="w-4 h-4 text-gray-500" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-xs text-gray-500 mb-1">To</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <MapPin className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900 text-sm">Select city</div>
+                            <div className="text-xs text-gray-500">Airport</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-4 shadow-sm">
+                    <div className="text-xs text-gray-500 mb-1">Travel date</div>
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="w-5 h-5 text-[#003580]" />
+                      <div>
+                        <div className="font-medium text-gray-900 text-sm">Select date</div>
+                        <div className="text-xs text-gray-500">Choose departure date</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs px-3 py-2"
+                    >
+                      <X className="w-4 h-4 mr-1" />
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
