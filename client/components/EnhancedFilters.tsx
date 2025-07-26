@@ -340,7 +340,7 @@ export function EnhancedFilters({
       </div>
 
       {/* Clear Filters */}
-      <div className="mt-3 pt-2 border-t border-gray-200">
+      <div className="mt-2 pt-1 border-t border-gray-200">
         <Button
           variant="outline"
           onClick={onClearFilters}
