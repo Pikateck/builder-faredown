@@ -612,23 +612,37 @@ export class HotelsService {
       }
 
       // Fall back to regular API
-      console.log("⚠️ No live destination data, using fallback");
-      const response = await apiClient.get<
-        ApiResponse<
-          {
-            id: string;
-            name: string;
-            type: "city" | "region" | "country" | "landmark";
-            country: string;
-          }[]
-        >
-      >(`${this.baseUrl}/destinations/search`, { q: query });
+      console.log("⚠️ No live destination data, using fallback API");
+      try {
+        const response = await apiClient.get<
+          ApiResponse<
+            {
+              id: string;
+              name: string;
+              type: "city" | "region" | "country" | "landmark";
+              country: string;
+            }[]
+          >
+        >(`${this.baseUrl}/destinations/search`, { q: query });
 
-      if (response.success && response.data) {
-        return response.data;
+        if (response.success && response.data) {
+          return response.data;
+        }
+      } catch (apiError) {
+        if (apiError instanceof Error &&
+           (apiError.message.includes("Failed to fetch") ||
+            apiError.name === "TypeError")) {
+          console.log(`🌐 Fallback API also failed - using hardcoded destinations for query: "${query}"`);
+        } else if (apiError instanceof Error && apiError.name === "AbortError") {
+          console.log(`⏰ Fallback API aborted for query: "${query}"`);
+          return [];
+        } else {
+          console.warn("Fallback API error:", apiError);
+        }
       }
 
-      return [];
+      // Return basic destinations when all APIs fail
+      return this.getBasicDestinations(query);
     } catch (error) {
       console.error("Destination search error:", error);
       // Enhanced fallback with database-style format
