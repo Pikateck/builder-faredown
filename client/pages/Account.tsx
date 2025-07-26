@@ -31,6 +31,8 @@ import {
   BookOpen,
   Award,
   Heart,
+  CheckCircle,
+  Plus,
 } from "lucide-react";
 import {
   DropdownMenu,
