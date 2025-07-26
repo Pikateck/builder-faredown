@@ -218,6 +218,23 @@ export default function FlightResults() {
   const [showRegister, setShowRegister] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
+  // Auth form states
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
+  const [registerFirstName, setRegisterFirstName] = useState("");
+  const [registerLastName, setRegisterLastName] = useState("");
+  const [authError, setAuthError] = useState("");
+
+  // Test credentials for demo
+  const testCredentials = {
+    email: "test@faredown.com",
+    password: "password123",
+    name: "Zubin Aibara"
+  };
+
   // Mobile UI states
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showSortOptions, setShowSortOptions] = useState(false);
@@ -1429,7 +1446,7 @@ export default function FlightResults() {
                           disabled={travelers.adults <= 1}
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                         >
-                          −
+                          ���
                         </button>
                         <span className="w-8 text-center font-medium text-gray-900">
                           {travelers.adults}
