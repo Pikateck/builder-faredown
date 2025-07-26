@@ -474,14 +474,14 @@ export default function Index() {
                     <CalendarIcon className="w-5 h-5 text-[#003580]" />
                     <div>
                       <div className="font-medium text-gray-900">
-                        {selectedDepartureDate
-                          ? formatDate(selectedDepartureDate, true)
+                        {departureDate
+                          ? formatDisplayDate(departureDate, "dd MMM")
                           : "Departure"}
                         {tripType === "round-trip" && (
                           <>
                             {" - "}
-                            {selectedReturnDate
-                              ? formatDate(selectedReturnDate, true)
+                            {returnDate
+                              ? formatDisplayDate(returnDate, "dd MMM")
                               : "Return"}
                           </>
                         )}
