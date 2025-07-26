@@ -943,7 +943,9 @@ export default function FlightResults() {
                   </div>
                 </div>
                 <div className="text-gray-300">•</div>
-                <div className="text-sm text-gray-700">1 adult</div>
+                <div className="text-sm text-gray-700">
+                  {adults} adult{adults > 1 ? 's' : ''}{children > 0 ? `, ${children} child${children > 1 ? 'ren' : ''}` : ''}
+                </div>
               </div>
               <Button
                 variant="ghost"
