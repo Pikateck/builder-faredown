@@ -930,7 +930,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Qatar",
         code: "DOH",
-        flag: "🇶🇦",
+        flag: "����🇦",
       },
       {
         id: "KWI",
@@ -1044,7 +1044,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Finland",
         code: "HEL",
-        flag: "🇫🇮",
+        flag: "����🇮",
       },
       {
         id: "JFK",
@@ -1367,6 +1367,13 @@ export class HotelsService {
             `⏰ API request was aborted (timeout or cancelled) for query: "${query}"`,
           );
           return []; // Return empty array immediately on abort
+        } else if (fetchError instanceof Error &&
+                  (fetchError.message.includes("Failed to fetch") ||
+                   fetchError.name === "TypeError")) {
+          console.log(
+            `🌐 Network connectivity issue (outer) - using fallback data for query: "${query}"`,
+          );
+          // Don't return here - let it fall through to use fallback data
         } else {
           console.warn(
             `⚠️ API fetch failed:`,
