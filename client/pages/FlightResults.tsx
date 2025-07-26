@@ -713,16 +713,7 @@ export default function FlightResults() {
   };
 
   // Authentication functions
-  const handleSignIn = () => {
-    setIsLoggedIn(true);
-    setUserName(testCredentials.name);
-    setShowSignIn(false);
-  };
 
-  const handleSignOut = () => {
-    setIsLoggedIn(false);
-    setUserName("");
-  };
 
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
     navigate("/booking-flow", {
