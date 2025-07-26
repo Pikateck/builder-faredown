@@ -791,6 +791,15 @@ export default function Index() {
                             Rewards & Wallet
                           </Link>
                         </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link
+                            to="/my-trips"
+                            className="flex items-center"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Completed trips
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={downloadProjectInfo}
                           className="border-t mt-1 pt-2"
