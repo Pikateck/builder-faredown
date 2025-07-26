@@ -307,10 +307,17 @@ export class HotelsService {
           console.warn(`⚠️ Live API returned status ${response.status}`);
         }
       } catch (fetchError) {
-        console.warn(
-          "⚠️ Live hotel API fetch failed:",
-          fetchError instanceof Error ? fetchError.message : "Unknown error",
-        );
+        if (fetchError instanceof Error && fetchError.name === "AbortError") {
+          console.log("⏰ Hotel search API request was aborted");
+          return []; // Return empty array immediately on abort
+        } else {
+          console.warn(
+            "⚠️ Live hotel API fetch failed:",
+            fetchError instanceof Error ? fetchError.message : "Unknown error",
+          );
+        }
+      } finally {
+        clearTimeout(timeoutId);
       }
 
       return [];
@@ -741,7 +748,7 @@ export class HotelsService {
         type: "city" as const,
         country: "India",
         code: "HYD",
-        flag: "🇮🇳",
+        flag: "��🇳",
         popular: true,
       },
       {
@@ -896,7 +903,7 @@ export class HotelsService {
         type: "city" as const,
         country: "UAE",
         code: "AUH",
-        flag: "��🇪",
+        flag: "🇦🇪",
       },
       {
         id: "DOH",
