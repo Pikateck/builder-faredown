@@ -955,65 +955,65 @@ Please keep this ticket for your records.
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <Card className="p-4">
-              <nav className="space-y-2">
+              <nav className="space-y-1">
                 <button
                   onClick={() => setActiveTab("bookings")}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "bookings"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-100",
+                      ? "bg-blue-100 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
-                  <Plane className="w-4 h-4" />
+                  <Plane className="w-5 h-5 flex-shrink-0" />
                   <span>My Bookings</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("profile")}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "profile"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-100",
+                      ? "bg-blue-100 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
-                  <User className="w-4 h-4" />
+                  <User className="w-5 h-5 flex-shrink-0" />
                   <span>Profile</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("loyalty")}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "loyalty"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-100",
+                      ? "bg-blue-100 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
-                  <Award className="w-4 h-4" />
+                  <Award className="w-5 h-5 flex-shrink-0" />
                   <span>Loyalty Program</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("payment")}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "payment"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-100",
+                      ? "bg-blue-100 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
-                  <CreditCard className="w-4 h-4" />
+                  <CreditCard className="w-5 h-5 flex-shrink-0" />
                   <span>Payment & Wallet</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("settings")}
                   className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "settings"
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-100",
+                      ? "bg-blue-100 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
-                  <Settings className="w-4 h-4" />
+                  <Settings className="w-5 h-5 flex-shrink-0" />
                   <span>Settings</span>
                 </button>
               </nav>
