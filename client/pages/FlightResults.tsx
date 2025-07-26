@@ -2884,6 +2884,180 @@ export default function FlightResults() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Sign In Modal */}
+      <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-center">
+              Sign in or create an account
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 p-4">
+            {/* Test Credentials Info */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-sm font-medium text-blue-900 mb-1">
+                Test Credentials:
+              </p>
+              <p className="text-xs text-blue-700">Email: test@faredown.com</p>
+              <p className="text-xs text-blue-700">Password: password123</p>
+            </div>
+
+            {authError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-600">{authError}</p>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
+              <Input
+                type="email"
+                placeholder="Enter your email address"
+                className="w-full"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <Input
+                type="password"
+                placeholder="Enter your password"
+                className="w-full"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+              />
+            </div>
+
+            <Button
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+              onClick={handleSignIn}
+            >
+              Sign in
+            </Button>
+
+            <div className="text-center">
+              <Button
+                variant="link"
+                onClick={() => {
+                  setShowSignIn(false);
+                  setShowRegister(true);
+                }}
+                className="text-blue-600 hover:text-blue-700"
+              >
+                Don't have an account? Register here
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Register Modal */}
+      <Dialog open={showRegister} onOpenChange={setShowRegister}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-center">
+              Create your account
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 p-4">
+            {authError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-600">{authError}</p>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  First name
+                </label>
+                <Input
+                  type="text"
+                  placeholder="First name"
+                  value={registerFirstName}
+                  onChange={(e) => setRegisterFirstName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Last name
+                </label>
+                <Input
+                  type="text"
+                  placeholder="Last name"
+                  value={registerLastName}
+                  onChange={(e) => setRegisterLastName(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
+              <Input
+                type="email"
+                placeholder="Enter your email address"
+                value={registerEmail}
+                onChange={(e) => setRegisterEmail(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <Input
+                type="password"
+                placeholder="Create a password (8+ characters)"
+                value={registerPassword}
+                onChange={(e) => setRegisterPassword(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Confirm password
+              </label>
+              <Input
+                type="password"
+                placeholder="Confirm your password"
+                value={registerConfirmPassword}
+                onChange={(e) => setRegisterConfirmPassword(e.target.value)}
+              />
+            </div>
+
+            <Button
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+              onClick={handleRegister}
+            >
+              Create account
+            </Button>
+
+            <div className="text-center">
+              <Button
+                variant="link"
+                onClick={() => {
+                  setShowRegister(false);
+                  setShowSignIn(true);
+                }}
+                className="text-blue-600 hover:text-blue-700"
+              >
+                Already have an account? Sign in here
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
