@@ -1346,19 +1346,17 @@ export default function Index() {
                     </div>
 
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
-                      <button
+                      <Button
                         onClick={() => {
                           const searchParams = getSearchParams();
                           searchParams.set('adults', travelers.adults.toString());
                           searchParams.set('children', travelers.children.toString());
                           navigate(`/flights?${searchParams.toString()}`);
                         }}
-                        className="w-full"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
-                        <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
-                          Search
-                        </Button>
-                      </button>
+                        Search
+                      </Button>
                     </div>
                   </div>
                 </div>
