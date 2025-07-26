@@ -267,8 +267,8 @@ export default function HotelResults() {
       ],
       rating: 4.8,
       reviews: 1234,
-      originalPrice: 210, // ₹210 per night
-      currentPrice: 167, // ₹167 per night
+      originalPrice: 8500, // ₹8,500 per night
+      currentPrice: 6750, // ₹6,750 per night
       description:
         "Experience luxury in the heart of the city with stunning views, world-class amenities, and exceptional service.",
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
