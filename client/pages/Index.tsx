@@ -739,6 +739,9 @@ export default function Index() {
                   const searchParams = getSearchParams();
                   searchParams.set('adults', travelers.adults.toString());
                   searchParams.set('children', travelers.children.toString());
+                  if (tripType === 'multi-city') {
+                    searchParams.set('segments', JSON.stringify(flightSegments));
+                  }
                   navigate(`/flights?${searchParams.toString()}`);
                 }}
                 className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg"
