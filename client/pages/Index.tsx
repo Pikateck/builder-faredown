@@ -190,11 +190,6 @@ export default function Index() {
 
   // Live calendar states
   const today = new Date();
-  const [selectedDepartureDate, setSelectedDepartureDate] =
-    useState<Date | null>(null);
-  const [selectedReturnDate, setSelectedReturnDate] = useState<Date | null>(
-    null,
-  );
   const [selectingDeparture, setSelectingDeparture] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
