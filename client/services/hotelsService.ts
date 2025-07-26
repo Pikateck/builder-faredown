@@ -584,7 +584,24 @@ export class HotelsService {
   > {
     try {
       // First try live API with enhanced results
-      const liveResults = await this.searchDestinationsLive(query);
+      let liveResults: any[] = [];
+      try {
+        liveResults = await this.searchDestinationsLive(query);
+      } catch (liveError) {
+        if (liveError instanceof Error &&
+           (liveError.message.includes("Failed to fetch") ||
+            liveError.name === "TypeError")) {
+          console.log(`🌐 Live API network error - continuing to fallback for query: "${query}"`);
+        } else if (liveError instanceof Error && liveError.name === "AbortError") {
+          console.log(`⏰ Live API aborted for query: "${query}"`);
+          return [];
+        } else {
+          console.warn("Live API error:", liveError);
+        }
+        // Continue to fallback
+        liveResults = [];
+      }
+
       if (liveResults.length > 0) {
         console.log(
           "✅ Using live destination data:",
@@ -954,7 +971,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Saudi Arabia",
         code: "JED",
-        flag: "🇸🇦",
+        flag: "����🇦",
       },
       {
         id: "LHR",
