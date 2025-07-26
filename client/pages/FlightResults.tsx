@@ -578,28 +578,9 @@ export default function FlightResults() {
     const clickedDate = new Date(year, month, day);
     clickedDate.setHours(0, 0, 0, 0);
 
-    if (tripType === "one-way") {
-      setSelectedDepartureDate(formatDateHelper(clickedDate));
-      setShowCalendar(false);
-    } else {
-      if (selectingDeparture) {
-        setSelectedDepartureDate(formatDateHelper(clickedDate));
-        setSelectedReturnDate("");
-        setSelectingDeparture(false);
-      } else {
-        const departureDate = selectedDepartureDate
-          ? new Date(selectedDepartureDate)
-          : null;
-        if (departureDate && clickedDate <= departureDate) {
-          setSelectedDepartureDate(formatDateHelper(clickedDate));
-          setSelectedReturnDate("");
-          setSelectingDeparture(false);
-        } else {
-          setSelectedReturnDate(formatDateHelper(clickedDate));
-          setShowCalendar(false);
-        }
-      }
-    }
+    // Date handling is now managed by DateContext
+    // This function can be simplified or removed in future updates
+    setShowCalendar(false);
   };
 
   // Format date helper
