@@ -336,8 +336,8 @@ export default function HotelResults() {
       ],
       rating: 4.9,
       reviews: 567,
-      originalPrice: 195, // ₹195 per night
-      currentPrice: 155, // ₹155 per night
+      originalPrice: 7500, // ₹7,500 per night
+      currentPrice: 5800, // ₹5,800 per night
       description:
         "Cozy mountain retreat with fireplace, ski-in/ski-out access, and breathtaking alpine views.",
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
