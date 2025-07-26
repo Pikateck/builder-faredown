@@ -441,7 +441,13 @@ export function BookingSearchForm() {
                       <div
                         key={dest.id || index}
                         className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
-                        onClick={() => {
+                        onMouseDown={(e) => {
+                          // Prevent blur from firing before click
+                          e.preventDefault();
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           const fullName = `${dest.name}, ${dest.country}`;
                           console.log("🎯 Destination selected:", {
                             name: fullName,
