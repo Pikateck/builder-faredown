@@ -1479,7 +1479,14 @@ export class HotelsService {
         return [];
       }
 
-      console.warn("Destination search encountered error:", error);
+      // Handle network errors specifically to avoid noisy "Failed to fetch" errors
+      if (error instanceof Error &&
+         (error.message.includes("Failed to fetch") ||
+          error.name === "TypeError")) {
+        console.log(`🌐 Network error in searchDestinationsLive - using emergency fallback for query: "${query}"`);
+      } else {
+        console.warn("Destination search encountered error:", error);
+      }
 
       // Even in case of complete failure, return some popular destinations if query matches
       const queryLower = query.toLowerCase().trim();
