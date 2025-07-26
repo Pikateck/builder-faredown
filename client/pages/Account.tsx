@@ -33,6 +33,7 @@ import {
   Heart,
   CheckCircle,
   Plus,
+  Hotel,
 } from "lucide-react";
 import {
   DropdownMenu,
