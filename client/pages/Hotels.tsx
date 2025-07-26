@@ -373,7 +373,7 @@ export default function Hotels() {
           </div>
 
           {/* Mobile Hotel Cards */}
-          {hotels.map((hotel) => (
+          {filteredAndSortedHotels.map((hotel) => (
             <Card
               key={hotel.id}
               className="overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
