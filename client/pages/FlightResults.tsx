@@ -911,7 +911,9 @@ export default function FlightResults() {
                 <h1 className="text-white font-semibold text-lg">
                   Flight Results
                 </h1>
-                <p className="text-blue-200 text-xs">BOM → DXB • 1 adult</p>
+                <p className="text-blue-200 text-xs">
+                  BOM → DXB • {tripType === 'one-way' ? 'One way' : 'Round trip'} • {adults} adult{adults > 1 ? 's' : ''}
+                </p>
               </div>
               <button
                 onClick={() => setShowMobileMenu(true)}
