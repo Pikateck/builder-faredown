@@ -209,8 +209,8 @@ export default function Index() {
   }
 
   const [flightSegments, setFlightSegments] = useState<FlightSegment[]>([
-    { id: '1', from: 'Mumbai', to: 'Dubai', departureDate: null },
-    { id: '2', from: 'Dubai', to: 'London', departureDate: null }
+    { id: '1', from: '', to: '', departureDate: null },
+    { id: '2', from: '', to: '', departureDate: null }
   ]);
 
   // Add flight segment function
