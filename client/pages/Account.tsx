@@ -959,19 +959,20 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("bookings")}
                   className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
+                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
                     activeTab === "bookings"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
                   <Plane className="w-5 h-5 flex-shrink-0" />
-                  <span>My Bookings</span>
+                  <span className="hidden sm:inline lg:inline">My Bookings</span>
+                  <span className="sm:hidden">Bookings</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("profile")}
                   className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
+                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
                     activeTab === "profile"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -983,31 +984,33 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("loyalty")}
                   className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
+                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
                     activeTab === "loyalty"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
                   <Award className="w-5 h-5 flex-shrink-0" />
-                  <span>Loyalty Program</span>
+                  <span className="hidden sm:inline lg:inline">Loyalty Program</span>
+                  <span className="sm:hidden">Loyalty</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("payment")}
                   className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
+                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
                     activeTab === "payment"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                   )}
                 >
                   <CreditCard className="w-5 h-5 flex-shrink-0" />
-                  <span>Payment & Wallet</span>
+                  <span className="hidden sm:inline lg:inline">Payment & Wallet</span>
+                  <span className="sm:hidden">Payment</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("settings")}
                   className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
+                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
                     activeTab === "settings"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
