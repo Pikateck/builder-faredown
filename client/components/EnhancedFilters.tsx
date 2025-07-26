@@ -289,8 +289,8 @@ export function EnhancedFilters({
     }
 
     return (
-      <div key={category.id} className="border-b border-gray-200 pb-1">
-        <h3 className="text-sm font-semibold text-gray-900 mb-1">
+      <div key={category.id} className="border-b border-gray-200 pb-0.5">
+        <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
           {category.title}
         </h3>
         <div className="space-y-0">
