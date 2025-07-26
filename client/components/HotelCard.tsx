@@ -446,17 +446,25 @@ export function HotelCard({
 
         {/* Hotel Details */}
         <CardContent className="flex-1 p-3 sm:p-4 md:p-6">
-          <div className="flex justify-between items-start mb-3 sm:mb-4">
-            <div className="min-w-0 flex-1">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2 group-hover:text-[#003580] transition-colors line-clamp-2">
-                {hotel.name}
-              </h3>
-              <div className="flex items-center text-gray-600 mb-2 sm:mb-4">
-                <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
-                <span className="text-xs sm:text-sm truncate">
-                  {hotel.location}
-                </span>
-              </div>
+          <div className="mb-3 sm:mb-4">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 group-hover:text-[#003580] transition-colors line-clamp-2">
+              {hotel.name}
+            </h3>
+
+            {/* Address and Reviews directly below hotel name */}
+            <div className="flex items-center text-gray-600 mb-1">
+              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
+              <span className="text-xs sm:text-sm truncate">
+                {hotelLocation}
+              </span>
+            </div>
+
+            <div className="flex items-center mb-2">
+              <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400 mr-1" />
+              <span className="text-xs sm:text-sm font-medium mr-1">{hotel.rating}</span>
+              <span className="text-xs sm:text-sm text-gray-500">
+                ({hotel.reviewCount || hotel.reviews || 0} reviews)
+              </span>
             </div>
           </div>
 
