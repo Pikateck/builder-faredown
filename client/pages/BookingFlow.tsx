@@ -774,6 +774,13 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
 export default function BookingFlow() {
   const location = useLocation();
   const navigate = useNavigate();
+  const {
+    departureDate,
+    returnDate,
+    tripType,
+    formatDisplayDate,
+    loadDatesFromParams
+  } = useDateContext();
 
   // Get passenger data and flight data from navigation state
   const passengersFromState = location.state?.passengers || {
@@ -946,7 +953,7 @@ export default function BookingFlow() {
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
-    { name: "Hungary", code: "+36", flag: "🇭🇺" },
+    { name: "Hungary", code: "+36", flag: "���🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
     { name: "Indonesia", code: "+62", flag: "🇮🇩" },
@@ -1789,7 +1796,7 @@ export default function BookingFlow() {
                                   5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
-                                  10kg - �� 2,800
+                                  10kg - ₹ 2,800
                                 </SelectItem>
                                 <SelectItem value="15kg">
                                   15kg - ₹ 4,200
