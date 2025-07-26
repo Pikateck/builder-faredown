@@ -145,8 +145,12 @@ export default function Index() {
         setAuthError("Password must be at least 8 characters long");
         return;
       }
-      setIsLoggedIn(true);
-      setUserName(`${registerFirstName} ${registerLastName}`);
+      login({
+        id: '1',
+        name: `${registerFirstName} ${registerLastName}`,
+        email: registerEmail,
+        loyaltyLevel: 1
+      });
       setShowRegister(false);
       setRegisterEmail("");
       setRegisterPassword("");
