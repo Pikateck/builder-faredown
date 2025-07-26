@@ -804,6 +804,30 @@ Please keep this ticket for your records.
                   <span>Profile</span>
                 </button>
                 <button
+                  onClick={() => setActiveTab("loyalty")}
+                  className={cn(
+                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    activeTab === "loyalty"
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:bg-gray-100",
+                  )}
+                >
+                  <Award className="w-4 h-4" />
+                  <span>Loyalty Program</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("payment")}
+                  className={cn(
+                    "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
+                    activeTab === "payment"
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-600 hover:bg-gray-100",
+                  )}
+                >
+                  <CreditCard className="w-4 h-4" />
+                  <span>Payment & Wallet</span>
+                </button>
+                <button
                   onClick={() => setActiveTab("settings")}
                   className={cn(
                     "w-full text-left px-3 py-2 rounded-lg flex items-center space-x-2 transition-colors",
