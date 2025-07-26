@@ -47,16 +47,16 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
     }
   }, [departureDate, returnDate, tripType]);
 
-  const setDateRange = (departure: Date | null, returnDate?: Date | null) => {
+  const setDateRange = useCallback((departure: Date | null, returnDate?: Date | null) => {
     setDepartureDate(departure);
     if (tripType === 'round-trip' && returnDate) {
       setReturnDate(returnDate);
     } else if (tripType === 'one-way') {
       setReturnDate(null);
     }
-  };
+  }, [tripType]);
 
-  const formatDisplayDate = (date: Date | null, formatString: string = 'dd-MMM-yyyy') => {
+  const formatDisplayDate = useCallback((date: Date | null, formatString: string = 'dd-MMM-yyyy') => {
     if (!date) return '';
     try {
       return format(date, formatString);
@@ -64,14 +64,14 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
       console.error('Date formatting error:', error);
       return '';
     }
-  };
+  }, []);
 
-  const getUrlDateString = (date: Date | null) => {
+  const getUrlDateString = useCallback((date: Date | null) => {
     if (!date) return '';
     return format(date, 'yyyy-MM-dd');
-  };
+  }, []);
 
-  const loadDatesFromParams = (searchParams: URLSearchParams) => {
+  const loadDatesFromParams = useCallback((searchParams: URLSearchParams) => {
     const departureParam = searchParams.get('departureDate');
     const returnParam = searchParams.get('returnDate');
     const tripTypeParam = searchParams.get('tripType');
@@ -101,23 +101,23 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
     if (tripTypeParam && ['round-trip', 'one-way', 'multi-city'].includes(tripTypeParam)) {
       setTripType(tripTypeParam as 'round-trip' | 'one-way' | 'multi-city');
     }
-  };
+  }, [tripType]);
 
-  const getSearchParams = () => {
+  const getSearchParams = useCallback(() => {
     const params = new URLSearchParams();
-    
+
     if (departureDate) {
       params.set('departureDate', getUrlDateString(departureDate));
     }
-    
+
     if (returnDate && tripType === 'round-trip') {
       params.set('returnDate', getUrlDateString(returnDate));
     }
-    
+
     params.set('tripType', tripType);
-    
+
     return params;
-  };
+  }, [departureDate, returnDate, tripType, getUrlDateString]);
 
   const value: DateContextType = {
     departureDate,
