@@ -1359,6 +1359,72 @@ export default function Index() {
                       </Button>
                     </div>
                   </div>
+
+                  {/* Multi-city Additional Flights */}
+                  {tripType === "multi-city" && (
+                    <div className="mt-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium text-gray-700">Additional flights</h3>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                          onClick={() => {
+                            // Add logic to add more flight segments
+                            alert("Add flight functionality - to be implemented");
+                          }}
+                        >
+                          <Plus className="w-4 h-4 mr-1" />
+                          Add a flight
+                        </Button>
+                      </div>
+
+                      {/* Additional flight segment example */}
+                      <div className="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4">
+                        <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3">
+                          <div className="relative flex-1 lg:min-w-[200px] w-full">
+                            <label className="absolute -top-2 left-3 bg-gray-50 px-1 text-xs text-gray-600 font-medium z-10">
+                              Leaving from
+                            </label>
+                            <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
+                              <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                              <span className="text-sm text-gray-500">Select city</span>
+                            </button>
+                          </div>
+
+                          <div className="relative flex-1 lg:min-w-[200px] w-full">
+                            <label className="absolute -top-2 left-3 bg-gray-50 px-1 text-xs text-gray-600 font-medium z-10">
+                              Going to
+                            </label>
+                            <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
+                              <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                              <span className="text-sm text-gray-500">Select city</span>
+                            </button>
+                          </div>
+
+                          <div className="relative flex-1 lg:min-w-[160px] w-full">
+                            <label className="absolute -top-2 left-3 bg-gray-50 px-1 text-xs text-gray-600 font-medium z-10">
+                              Travel date
+                            </label>
+                            <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
+                              <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                              <span className="text-sm text-gray-500">Select date</span>
+                            </button>
+                          </div>
+
+                          <div className="w-full lg:w-auto">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50 h-12 px-3"
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
