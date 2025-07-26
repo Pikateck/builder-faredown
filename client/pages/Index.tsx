@@ -90,7 +90,18 @@ import AdminTestButton from "@/components/AdminTestButton";
 
 export default function Index() {
   const { isLoggedIn, user, login, logout } = useAuth();
+  const {
+    departureDate,
+    returnDate,
+    tripType,
+    setDepartureDate,
+    setReturnDate,
+    setTripType,
+    formatDisplayDate,
+    getSearchParams
+  } = useDateContext();
   const userName = user?.name || "";
+  const navigate = useNavigate();
 
   const [departureDate, setDepartureDate] = useState<Date>();
   const [showSignIn, setShowSignIn] = useState(false);
