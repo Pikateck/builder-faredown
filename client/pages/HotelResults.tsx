@@ -421,7 +421,7 @@ export default function HotelResults() {
   };
 
   const handleClearFilters = () => {
-    setPriceRange([0, 50000]); // Appropriate range for INR
+    setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
     setSelectedRating([]);
     setSelectedAmenities([]);
     setSortBy("recommended");
