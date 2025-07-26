@@ -779,8 +779,13 @@ export default function Index() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Award className="w-4 h-4 mr-2" />
-                          Loyalty program
+                          <Link
+                            to="/account?tab=loyalty"
+                            className="flex items-center"
+                          >
+                            <Award className="w-4 h-4 mr-2" />
+                            Loyalty program
+                          </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
