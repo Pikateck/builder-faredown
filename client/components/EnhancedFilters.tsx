@@ -212,26 +212,23 @@ export function EnhancedFilters({
     return (
       <div
         key={item.id}
-        className="flex items-center justify-between py-0 min-h-[20px]"
+        className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
       >
-        <div className="flex items-center space-x-2 flex-1">
-          <Checkbox
-            id={item.id}
-            checked={isChecked}
-            onCheckedChange={(checked) =>
-              handleFilterChange(item.id, checked === true)
-            }
-            className="w-4 h-4 sm:w-5 sm:h-5"
-          />
-          <label
-            htmlFor={item.id}
-            className="text-xs text-gray-700 cursor-pointer select-none flex-1 leading-tight"
-          >
-            {item.label}
-          </label>
-        </div>
+        <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+          <div className="w-4 h-4 flex items-center justify-center mr-2">
+            <input
+              type="checkbox"
+              className={`w-4 h-4 ${
+                isChecked ? "bg-blue-600" : "bg-white border border-gray-400"
+              }`}
+              checked={isChecked}
+              onChange={(e) => handleFilterChange(item.id, e.target.checked)}
+            />
+          </div>
+          {item.label}
+        </label>
         {item.count && (
-          <span className="text-xs text-gray-500 ml-0.5">{item.count}</span>
+          <span className="text-xs text-gray-500 ml-2 mr-1">{item.count}</span>
         )}
       </div>
     );
