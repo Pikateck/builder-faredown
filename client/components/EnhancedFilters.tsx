@@ -234,7 +234,7 @@ export function EnhancedFilters({
           </button>
           <label
             onClick={() => handleFilterChange(item.id, !isChecked)}
-            className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight"
+            className="text-xs text-gray-700 cursor-pointer flex-1 leading-tight"
           >
             {item.label}
           </label>
