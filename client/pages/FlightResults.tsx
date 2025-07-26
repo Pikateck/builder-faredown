@@ -936,7 +936,10 @@ export default function FlightResults() {
                     <div className="text-sm font-medium text-gray-900">
                       BOM → DXB
                     </div>
-                    <div className="text-xs text-gray-500">Dec 9-16</div>
+                    <div className="text-xs text-gray-500">
+                      {departureDate ? formatDisplayDate(departureDate, 'MMM d') : 'Select date'}
+                      {tripType === 'round-trip' && returnDate ? ` - ${formatDisplayDate(returnDate, 'MMM d')}` : ''}
+                    </div>
                   </div>
                 </div>
                 <div className="text-gray-300">•</div>
