@@ -195,6 +195,11 @@ export default function Index() {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
+  // Multi-city segment dropdown states
+  const [showSegmentFromCities, setShowSegmentFromCities] = useState<string | null>(null);
+  const [showSegmentToCities, setShowSegmentToCities] = useState<string | null>(null);
+  const [showSegmentCalendar, setShowSegmentCalendar] = useState<string | null>(null);
+
   // Multi-city flight segments state
   interface FlightSegment {
     id: string;
