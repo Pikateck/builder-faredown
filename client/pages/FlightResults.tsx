@@ -885,7 +885,7 @@ export default function FlightResults() {
         <div className="block md:hidden">
           <div className="px-4 py-3 bg-[#003580]">
             <div className="flex items-center justify-between">
-              <button onClick={() => navigate(-1)} className="p-2 -ml-2">
+              <button onClick={() => navigate("/")} className="p-2 -ml-2">
                 <ChevronLeft className="w-6 h-6 text-white" />
               </button>
               <div className="flex-1 text-center">
