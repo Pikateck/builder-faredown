@@ -543,14 +543,20 @@ export default function Index() {
               </div>
 
               {/* Search Button */}
-              <Link
-                to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
+              <button
+                onClick={() => {
+                  const searchParams = getSearchParams();
+                  searchParams.set('adults', travelers.adults.toString());
+                  searchParams.set('children', travelers.children.toString());
+                  navigate(`/flights?${searchParams.toString()}`);
+                }}
+                className="w-full"
               >
                 <Button className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg">
                   <Search className="w-5 h-5 mr-2" />
                   Search Flights
                 </Button>
-              </Link>
+              </button>
             </div>
           </div>
         </div>
