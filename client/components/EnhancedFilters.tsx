@@ -212,7 +212,7 @@ export function EnhancedFilters({
     return (
       <div
         key={item.id}
-        className="flex items-center justify-between py-0.5 min-h-[24px]"
+        className="flex items-center justify-between py-0 min-h-[20px]"
       >
         <div className="flex items-center gap-1.5 flex-1">
           <button
