@@ -1621,6 +1621,9 @@ export default function Index() {
                           const searchParams = getSearchParams();
                           searchParams.set('adults', travelers.adults.toString());
                           searchParams.set('children', travelers.children.toString());
+                          if (tripType === 'multi-city') {
+                            searchParams.set('segments', JSON.stringify(flightSegments));
+                          }
                           navigate(`/flights?${searchParams.toString()}`);
                         }}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
