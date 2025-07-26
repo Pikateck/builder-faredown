@@ -1,5 +1,26 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 import { Header } from "@/components/Header";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { Card, CardContent } from "@/components/ui/card";
@@ -37,6 +58,11 @@ export default function Hotels() {
   const navigate = useNavigate();
   const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showSort, setShowSort] = useState(false);
+  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState('price');
 
   // Sample hotel data
   const hotels = [
@@ -125,9 +151,19 @@ export default function Hotels() {
                   Dubai • Aug 1-5 • 2 guests
                 </p>
               </div>
-              <button className="p-2 -mr-2">
-                <Menu className="w-6 h-6 text-gray-700" />
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-2 -mr-2">
+                    <Menu className="w-6 h-6 text-gray-700" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate('/account')}>My Account</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/account/trips')}>My Trips</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/help')}>Help Center</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/')}>Home</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
@@ -152,20 +188,121 @@ export default function Hotels() {
           {/* Mobile Filter Bar */}
           <div className="border-t border-gray-100 px-4 py-3">
             <div className="flex items-center space-x-3 overflow-x-auto">
-              <Button variant="outline" size="sm" className="whitespace-nowrap">
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
-                Filters
-              </Button>
-              <Button variant="outline" size="sm" className="whitespace-nowrap">
-                Price
-              </Button>
-              <Button variant="outline" size="sm" className="whitespace-nowrap">
+              <Sheet open={showFilters} onOpenChange={setShowFilters}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="whitespace-nowrap">
+                    <SlidersHorizontal className="w-4 h-4 mr-2" />
+                    Filters
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="h-[80vh]">
+                  <SheetHeader>
+                    <SheetTitle>Filters</SheetTitle>
+                  </SheetHeader>
+                  <div className="py-4 space-y-6">
+                    {/* Price Range */}
+                    <div>
+                      <h3 className="font-medium mb-3">Price per night</h3>
+                      <Slider
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                        max={100000}
+                        step={1000}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-sm text-gray-600 mt-1">
+                        <span>₹{priceRange[0].toLocaleString()}</span>
+                        <span>₹{priceRange[1].toLocaleString()}</span>
+                      </div>
+                    </div>
+
+                    {/* Amenities */}
+                    <div>
+                      <h3 className="font-medium mb-3">Amenities</h3>
+                      <div className="space-y-2">
+                        {['Free WiFi', 'Breakfast', 'Pool', 'Gym', 'Spa', 'Parking'].map((amenity) => (
+                          <div key={amenity} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={amenity}
+                              checked={selectedAmenities.includes(amenity)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  setSelectedAmenities([...selectedAmenities, amenity]);
+                                } else {
+                                  setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
+                                }
+                              }}
+                            />
+                            <label htmlFor={amenity} className="text-sm">{amenity}</label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Apply Button */}
+                    <div className="pt-4">
+                      <Button className="w-full" onClick={() => setShowFilters(false)}>
+                        Apply Filters
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="whitespace-nowrap">
+                    Price
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => setSortBy('price-low')}>Lowest price first</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy('price-high')}>Highest price first</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button
+                variant={selectedAmenities.includes('Rating 8+') ? "default" : "outline"}
+                size="sm"
+                className="whitespace-nowrap"
+                onClick={() => {
+                  if (selectedAmenities.includes('Rating 8+')) {
+                    setSelectedAmenities(selectedAmenities.filter(a => a !== 'Rating 8+'));
+                  } else {
+                    setSelectedAmenities([...selectedAmenities, 'Rating 8+']);
+                  }
+                }}
+              >
                 Rating 8+
               </Button>
-              <Button variant="outline" size="sm" className="whitespace-nowrap">
+
+              <Button
+                variant={selectedAmenities.includes('Free WiFi') ? "default" : "outline"}
+                size="sm"
+                className="whitespace-nowrap"
+                onClick={() => {
+                  if (selectedAmenities.includes('Free WiFi')) {
+                    setSelectedAmenities(selectedAmenities.filter(a => a !== 'Free WiFi'));
+                  } else {
+                    setSelectedAmenities([...selectedAmenities, 'Free WiFi']);
+                  }
+                }}
+              >
                 Free WiFi
               </Button>
-              <Button variant="outline" size="sm" className="whitespace-nowrap">
+
+              <Button
+                variant={selectedAmenities.includes('Breakfast') ? "default" : "outline"}
+                size="sm"
+                className="whitespace-nowrap"
+                onClick={() => {
+                  if (selectedAmenities.includes('Breakfast')) {
+                    setSelectedAmenities(selectedAmenities.filter(a => a !== 'Breakfast'));
+                  } else {
+                    setSelectedAmenities([...selectedAmenities, 'Breakfast']);
+                  }
+                }}
+              >
                 Breakfast
               </Button>
             </div>
@@ -178,9 +315,19 @@ export default function Hotels() {
             <h2 className="text-lg font-semibold text-gray-900">
               {hotels.length} properties found
             </h2>
-            <Button variant="ghost" size="sm" className="text-blue-600">
-              Sort by: Price
-            </Button>
+            <DropdownMenu open={showSort} onOpenChange={setShowSort}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-blue-600">
+                  Sort by: {sortBy === 'price-low' ? 'Price (Low)' : sortBy === 'price-high' ? 'Price (High)' : sortBy === 'rating' ? 'Rating' : 'Price'}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setSortBy('price-low')}>Price (Lowest first)</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('price-high')}>Price (Highest first)</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('rating')}>Guest rating</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('distance')}>Distance from center</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Mobile Hotel Cards */}
@@ -298,14 +445,20 @@ export default function Hotels() {
               <Hotel className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">Hotels</span>
             </button>
-            <button className="flex flex-col items-center justify-center space-y-1">
+            <Link
+              to="/account"
+              className="flex flex-col items-center justify-center space-y-1"
+            >
               <Heart className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Saved</span>
-            </button>
-            <button className="flex flex-col items-center justify-center space-y-1">
+            </Link>
+            <Link
+              to="/account"
+              className="flex flex-col items-center justify-center space-y-1"
+            >
               <User className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Account</span>
-            </button>
+            </Link>
           </div>
         </div>
 
