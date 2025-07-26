@@ -5,6 +5,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
+import { useDateContext } from "@/contexts/DateContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -1788,7 +1789,7 @@ export default function BookingFlow() {
                                   5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
-                                  10kg - ₹ 2,800
+                                  10kg - �� 2,800
                                 </SelectItem>
                                 <SelectItem value="15kg">
                                   15kg - ₹ 4,200
