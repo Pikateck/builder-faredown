@@ -162,8 +162,7 @@ export default function Index() {
   };
 
   const handleSignOut = () => {
-    setIsLoggedIn(false);
-    setUserName("");
+    logout();
   };
 
   const [returnDate, setReturnDate] = useState<Date>();
