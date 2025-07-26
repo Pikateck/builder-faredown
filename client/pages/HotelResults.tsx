@@ -427,36 +427,7 @@ export default function HotelResults() {
     setSortBy("recommended");
   };
 
-  const filteredHotels = hotels.filter((hotel) => {
-    const withinPriceRange =
-      hotel.currentPrice >= priceRange[0] &&
-      hotel.currentPrice <= priceRange[1];
-    const meetsRating =
-      selectedRating.length === 0 ||
-      selectedRating.some((rating) => hotel.rating >= rating);
-    const hasAmenities =
-      selectedAmenities.length === 0 ||
-      selectedAmenities.every((amenity) => hotel.amenities.includes(amenity));
 
-    return withinPriceRange && meetsRating && hasAmenities;
-  });
-
-  const sortedHotels = [...filteredHotels].sort((a, b) => {
-    switch (sortBy) {
-      case "price-low":
-        return a.currentPrice - b.currentPrice;
-      case "price-high":
-        return b.currentPrice - a.currentPrice;
-      case "rating":
-        return b.rating - a.rating;
-      case "savings":
-        return (
-          b.originalPrice - b.currentPrice - (a.originalPrice - a.currentPrice)
-        );
-      default:
-        return b.rating - a.rating;
-    }
-  });
 
   return (
     <div className="min-h-screen bg-gray-50">
