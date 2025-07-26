@@ -257,10 +257,10 @@ export function EnhancedFilters({
 
     if (category.isCollapsible) {
       return (
-        <div key={category.id} className="border-b border-gray-200 pb-1">
+        <div key={category.id} className="border-b border-gray-200 pb-0.5">
           <button
             onClick={() => toggleSection(category.id)}
-            className="flex w-full items-center justify-between py-1 text-left"
+            className="flex w-full items-center justify-between py-0.5 text-left"
           >
             <h3 className="text-sm font-semibold text-gray-900">
               {category.title}
