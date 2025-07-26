@@ -1319,21 +1319,21 @@ export default function BookingFlow() {
           {
             from: "Mumbai",
             to: "Dubai",
-            date: "Aug 5, 2024",
+            date: departureDate ? formatDisplayDate(departureDate, 'MMM d, yyyy') : "Select date",
             time: selectedFlight?.departureTime || "14:35",
             duration: selectedFlight?.duration || "3h 15m",
             airline: selectedFlight?.airline || "Airlines",
             flightNumber: selectedFlight?.flightNumber || "FL 507",
           },
-          {
+          ...(tripType === 'round-trip' && returnDate ? [{
             from: "Dubai",
             to: "Mumbai",
-            date: "Aug 8, 2024",
+            date: formatDisplayDate(returnDate, 'MMM d, yyyy'),
             time: selectedFlight?.returnDepartureTime || "08:45",
             duration: selectedFlight?.returnDuration || "3h 20m",
             airline: selectedFlight?.airline || "Airlines",
             flightNumber: selectedFlight?.returnFlightNumber || "FL 508",
-          },
+          }] : []),
         ],
         seats: Object.entries(seatSelections).flatMap(([flight, seats]) =>
           Object.entries(seats).map(([seatId, travellerId]) => {
