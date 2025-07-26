@@ -1188,20 +1188,20 @@ export default function Index() {
                               <div className="p-0">
                                 <BookingCalendar
                                   initialRange={{
-                                    startDate:
-                                      selectedDepartureDate || new Date(),
-                                    endDate:
-                                      selectedReturnDate ||
-                                      (selectedDepartureDate
-                                        ? new Date(
-                                            selectedDepartureDate.getTime() +
-                                              7 * 24 * 60 * 60 * 1000,
-                                          )
-                                        : new Date(
-                                            Date.now() +
-                                              7 * 24 * 60 * 60 * 1000,
-                                          )),
-                                  }}
+                                  startDate:
+                                    departureDate || new Date(),
+                                  endDate:
+                                    returnDate ||
+                                    (departureDate
+                                      ? new Date(
+                                          departureDate.getTime() +
+                                            7 * 24 * 60 * 60 * 1000,
+                                        )
+                                      : new Date(
+                                          Date.now() +
+                                            7 * 24 * 60 * 60 * 1000,
+                                        )),
+                                }}
                                   onChange={(range) => {
                                   console.log(
                                     "Flight calendar range selected:",
