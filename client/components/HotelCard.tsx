@@ -432,16 +432,7 @@ export function HotelCard({
             />
           </Button>
 
-          {/* Rating Badge */}
-          <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 bg-white/90 backdrop-blur-sm rounded-full px-2 sm:px-3 py-1 flex items-center space-x-1">
-            <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-xs sm:text-sm font-medium">
-              {hotel.rating}
-            </span>
-            <span className="text-xs text-gray-600 hidden sm:inline">
-              ({hotel.reviews})
-            </span>
-          </div>
+
         </div>
 
         {/* Hotel Details */}
