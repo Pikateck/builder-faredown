@@ -99,7 +99,7 @@ export default function Index() {
     setTripType,
     formatDisplayDate,
     getSearchParams
-  } = useDateContext();
+  } = useDateContext() || {};
   const userName = user?.name || "";
   const navigate = useNavigate();
 
