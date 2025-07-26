@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface User {
   id: string;
@@ -20,7 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -35,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Load auth state from localStorage on component mount
   useEffect(() => {
-    const savedAuthState = localStorage.getItem('faredown_auth');
+    const savedAuthState = localStorage.getItem("faredown_auth");
     if (savedAuthState) {
       try {
         const authData = JSON.parse(savedAuthState);
@@ -44,58 +50,61 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(authData.user);
         }
       } catch (error) {
-        console.error('Error loading auth state:', error);
-        localStorage.removeItem('faredown_auth');
+        console.error("Error loading auth state:", error);
+        localStorage.removeItem("faredown_auth");
       }
     } else {
       // For demo purposes, set default logged-in state
       const defaultUser = {
-        id: '1',
-        name: 'Zubin Aibara',
-        email: 'zubin@faredown.com',
-        loyaltyLevel: 1
+        id: "1",
+        name: "Zubin Aibara",
+        email: "zubin@faredown.com",
+        loyaltyLevel: 1,
       };
       setIsLoggedIn(true);
       setUser(defaultUser);
       // Save to localStorage
-      localStorage.setItem('faredown_auth', JSON.stringify({
-        isLoggedIn: true,
-        user: defaultUser
-      }));
+      localStorage.setItem(
+        "faredown_auth",
+        JSON.stringify({
+          isLoggedIn: true,
+          user: defaultUser,
+        }),
+      );
     }
   }, []);
 
   const login = (userData: User) => {
     setIsLoggedIn(true);
     setUser(userData);
-    
+
     // Save to localStorage
     const authData = {
       isLoggedIn: true,
-      user: userData
+      user: userData,
     };
-    localStorage.setItem('faredown_auth', JSON.stringify(authData));
+    localStorage.setItem("faredown_auth", JSON.stringify(authData));
   };
 
   const logout = () => {
     setIsLoggedIn(false);
     setUser(null);
-    
+
     // Remove from localStorage
-    localStorage.removeItem('faredown_auth');
+    localStorage.removeItem("faredown_auth");
   };
 
   const setUserName = (name: string) => {
     if (user) {
       const updatedUser = { ...user, name };
       setUser(updatedUser);
-      
+
       // Update localStorage
       const authData = {
         isLoggedIn: true,
-        user: updatedUser
+        user: updatedUser,
       };
-      localStorage.setItem('faredown_auth', JSON.stringify(authData));
+      localStorage.setItem("faredown_auth", JSON.stringify(authData));
     }
   };
 
@@ -104,14 +113,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     login,
     logout,
-    setUserName
+    setUserName,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthContext;

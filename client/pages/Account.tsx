@@ -54,7 +54,9 @@ import { cn } from "@/lib/utils";
 export default function Account() {
   const [searchParams] = useSearchParams();
   const [bookings, setBookings] = useState([]);
-  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "bookings");
+  const [activeTab, setActiveTab] = useState(
+    searchParams.get("tab") || "bookings",
+  );
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [profileData, setProfileData] = useState({
     firstName: "John",
@@ -122,7 +124,10 @@ export default function Account() {
   useEffect(() => {
     // Update active tab based on URL parameter
     const tabFromUrl = searchParams.get("tab");
-    if (tabFromUrl && ["bookings", "profile", "loyalty", "payment"].includes(tabFromUrl)) {
+    if (
+      tabFromUrl &&
+      ["bookings", "profile", "loyalty", "payment"].includes(tabFromUrl)
+    ) {
       setActiveTab(tabFromUrl);
     }
   }, [searchParams]);
@@ -550,10 +555,14 @@ Please keep this ticket for your records.
             <span>0 / 1000 points</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-blue-600 h-2 rounded-full" style={{ width: "0%" }}></div>
+            <div
+              className="bg-blue-600 h-2 rounded-full"
+              style={{ width: "0%" }}
+            ></div>
           </div>
           <p className="text-xs text-gray-600">
-            Earn 1000 more points to reach Level 2 and unlock exclusive benefits!
+            Earn 1000 more points to reach Level 2 and unlock exclusive
+            benefits!
           </p>
         </div>
       </Card>
@@ -568,15 +577,21 @@ Please keep this ticket for your records.
           </div>
           <div className="flex items-center space-x-3">
             <CheckCircle className="w-5 h-5 text-green-500" />
-            <span className="text-sm">Free cancellation on select bookings</span>
+            <span className="text-sm">
+              Free cancellation on select bookings
+            </span>
           </div>
           <div className="flex items-center space-x-3">
             <X className="w-5 h-5 text-gray-400" />
-            <span className="text-sm text-gray-500">Priority customer support (Level 2+)</span>
+            <span className="text-sm text-gray-500">
+              Priority customer support (Level 2+)
+            </span>
           </div>
           <div className="flex items-center space-x-3">
             <X className="w-5 h-5 text-gray-400" />
-            <span className="text-sm text-gray-500">Room upgrades (Level 3+)</span>
+            <span className="text-sm text-gray-500">
+              Room upgrades (Level 3+)
+            </span>
           </div>
         </div>
       </Card>
@@ -619,7 +634,11 @@ Please keep this ticket for your records.
           </div>
           <div className="text-right">
             <div className="text-3xl font-bold">₹0</div>
-            <Button size="sm" variant="outline" className="mt-2 text-green-600 border-white hover:bg-white">
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2 text-green-600 border-white hover:bg-white"
+            >
               Add Money
             </Button>
           </div>
@@ -967,7 +986,9 @@ Please keep this ticket for your records.
                   )}
                 >
                   <Plane className="w-5 h-5 flex-shrink-0" />
-                  <span className="hidden sm:inline lg:inline">My Bookings</span>
+                  <span className="hidden sm:inline lg:inline">
+                    My Bookings
+                  </span>
                   <span className="sm:hidden">Bookings</span>
                 </button>
                 <button
@@ -992,7 +1013,9 @@ Please keep this ticket for your records.
                   )}
                 >
                   <Award className="w-5 h-5 flex-shrink-0" />
-                  <span className="hidden sm:inline lg:inline">Loyalty Program</span>
+                  <span className="hidden sm:inline lg:inline">
+                    Loyalty Program
+                  </span>
                   <span className="sm:hidden">Loyalty</span>
                 </button>
                 <button
@@ -1005,7 +1028,9 @@ Please keep this ticket for your records.
                   )}
                 >
                   <CreditCard className="w-5 h-5 flex-shrink-0" />
-                  <span className="hidden sm:inline lg:inline">Payment & Wallet</span>
+                  <span className="hidden sm:inline lg:inline">
+                    Payment & Wallet
+                  </span>
                   <span className="sm:hidden">Payment</span>
                 </button>
                 <button

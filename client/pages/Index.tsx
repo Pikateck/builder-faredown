@@ -98,7 +98,7 @@ export default function Index() {
     setReturnDate,
     setTripType,
     formatDisplayDate,
-    getSearchParams
+    getSearchParams,
   } = useDateContext();
   const userName = user?.name || "";
   const navigate = useNavigate();
@@ -132,10 +132,10 @@ export default function Index() {
       loginPassword === testCredentials.password
     ) {
       login({
-        id: '1',
+        id: "1",
         name: testCredentials.name,
         email: loginEmail,
-        loyaltyLevel: 1
+        loyaltyLevel: 1,
       });
       setShowSignIn(false);
       setLoginEmail("");
@@ -158,10 +158,10 @@ export default function Index() {
         return;
       }
       login({
-        id: '1',
+        id: "1",
         name: `${registerFirstName} ${registerLastName}`,
         email: registerEmail,
-        loyaltyLevel: 1
+        loyaltyLevel: 1,
       });
       setShowRegister(false);
       setRegisterEmail("");
@@ -196,9 +196,15 @@ export default function Index() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
   // Multi-city segment dropdown states
-  const [showSegmentFromCities, setShowSegmentFromCities] = useState<string | null>(null);
-  const [showSegmentToCities, setShowSegmentToCities] = useState<string | null>(null);
-  const [showSegmentCalendar, setShowSegmentCalendar] = useState<string | null>(null);
+  const [showSegmentFromCities, setShowSegmentFromCities] = useState<
+    string | null
+  >(null);
+  const [showSegmentToCities, setShowSegmentToCities] = useState<string | null>(
+    null,
+  );
+  const [showSegmentCalendar, setShowSegmentCalendar] = useState<string | null>(
+    null,
+  );
 
   // Multi-city flight segments state
   interface FlightSegment {
@@ -209,17 +215,17 @@ export default function Index() {
   }
 
   const [flightSegments, setFlightSegments] = useState<FlightSegment[]>([
-    { id: '1', from: '', to: '', departureDate: null },
-    { id: '2', from: '', to: '', departureDate: null }
+    { id: "1", from: "", to: "", departureDate: null },
+    { id: "2", from: "", to: "", departureDate: null },
   ]);
 
   // Add flight segment function
   const addFlightSegment = () => {
     const newSegment: FlightSegment = {
       id: Date.now().toString(),
-      from: '',
-      to: '',
-      departureDate: null
+      from: "",
+      to: "",
+      departureDate: null,
     };
     setFlightSegments([...flightSegments, newSegment]);
   };
@@ -227,15 +233,21 @@ export default function Index() {
   // Remove flight segment function
   const removeFlightSegment = (id: string) => {
     if (flightSegments.length > 2) {
-      setFlightSegments(flightSegments.filter(segment => segment.id !== id));
+      setFlightSegments(flightSegments.filter((segment) => segment.id !== id));
     }
   };
 
   // Update flight segment function
-  const updateFlightSegment = (id: string, field: keyof FlightSegment, value: string | Date | null) => {
-    setFlightSegments(flightSegments.map(segment =>
-      segment.id === id ? { ...segment, [field]: value } : segment
-    ));
+  const updateFlightSegment = (
+    id: string,
+    field: keyof FlightSegment,
+    value: string | Date | null,
+  ) => {
+    setFlightSegments(
+      flightSegments.map((segment) =>
+        segment.id === id ? { ...segment, [field]: value } : segment,
+      ),
+    );
   };
 
   // Calendar helper functions
@@ -508,8 +520,12 @@ export default function Index() {
                             </span>
                           </div>
                           <div>
-                            <div className="font-medium text-gray-900">{userName}</div>
-                            <div className="text-sm text-gray-600">Loyalty Level 1</div>
+                            <div className="font-medium text-gray-900">
+                              {userName}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Loyalty Level 1
+                            </div>
                           </div>
                         </div>
                         <button
@@ -742,10 +758,13 @@ export default function Index() {
               <Button
                 onClick={() => {
                   const searchParams = getSearchParams();
-                  searchParams.set('adults', travelers.adults.toString());
-                  searchParams.set('children', travelers.children.toString());
-                  if (tripType === 'multi-city') {
-                    searchParams.set('segments', JSON.stringify(flightSegments));
+                  searchParams.set("adults", travelers.adults.toString());
+                  searchParams.set("children", travelers.children.toString());
+                  if (tripType === "multi-city") {
+                    searchParams.set(
+                      "segments",
+                      JSON.stringify(flightSegments),
+                    );
                   }
                   navigate(`/flights?${searchParams.toString()}`);
                 }}
@@ -760,7 +779,9 @@ export default function Index() {
             {tripType === "multi-city" && (
               <div className="mt-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-700">Additional flights</h3>
+                  <h3 className="text-sm font-medium text-gray-700">
+                    Additional flights
+                  </h3>
                   <Button
                     variant="outline"
                     size="sm"
@@ -774,10 +795,15 @@ export default function Index() {
 
                 {/* Mobile flight segments */}
                 {flightSegments.slice(1).map((segment, index) => (
-                  <div key={segment.id} className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 space-y-3">
+                  <div
+                    key={segment.id}
+                    className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 space-y-3"
+                  >
                     <div className="bg-white rounded-xl p-4 shadow-sm">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="text-xs text-gray-500">Flight {index + 2}</div>
+                        <div className="text-xs text-gray-500">
+                          Flight {index + 2}
+                        </div>
                         {flightSegments.length > 2 && (
                           <Button
                             variant="ghost"
@@ -795,19 +821,26 @@ export default function Index() {
                             onClick={() => setShowSegmentFromCities(segment.id)}
                             className="w-full text-left"
                           >
-                            <div className="text-xs text-gray-500 mb-1">From</div>
+                            <div className="text-xs text-gray-500 mb-1">
+                              From
+                            </div>
                             <div className="flex items-center space-x-2">
                               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                                 <Plane className="w-4 h-4 text-[#003580]" />
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900 text-sm">
-                                  {segment.from || 'Select city'}
+                                  {segment.from || "Select city"}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {segment.from && cityData[segment.from as keyof typeof cityData]
-                                    ? cityData[segment.from as keyof typeof cityData].airport
-                                    : 'Airport'}
+                                  {segment.from &&
+                                  cityData[
+                                    segment.from as keyof typeof cityData
+                                  ]
+                                    ? cityData[
+                                        segment.from as keyof typeof cityData
+                                      ].airport
+                                    : "Airport"}
                                 </div>
                               </div>
                             </div>
@@ -828,12 +861,15 @@ export default function Index() {
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900 text-sm">
-                                  {segment.to || 'Select city'}
+                                  {segment.to || "Select city"}
                                 </div>
                                 <div className="text-xs text-gray-500">
-                                  {segment.to && cityData[segment.to as keyof typeof cityData]
-                                    ? cityData[segment.to as keyof typeof cityData].airport
-                                    : 'Airport'}
+                                  {segment.to &&
+                                  cityData[segment.to as keyof typeof cityData]
+                                    ? cityData[
+                                        segment.to as keyof typeof cityData
+                                      ].airport
+                                    : "Airport"}
                                 </div>
                               </div>
                             </div>
@@ -847,14 +883,20 @@ export default function Index() {
                         onClick={() => setShowSegmentCalendar(segment.id)}
                         className="w-full text-left"
                       >
-                        <div className="text-xs text-gray-500 mb-1">Travel date</div>
+                        <div className="text-xs text-gray-500 mb-1">
+                          Travel date
+                        </div>
                         <div className="flex items-center space-x-2">
                           <CalendarIcon className="w-5 h-5 text-[#003580]" />
                           <div>
                             <div className="font-medium text-gray-900 text-sm">
-                              {segment.departureDate ? formatDate(segment.departureDate) : 'Select date'}
+                              {segment.departureDate
+                                ? formatDate(segment.departureDate)
+                                : "Select date"}
                             </div>
-                            <div className="text-xs text-gray-500">Choose departure date</div>
+                            <div className="text-xs text-gray-500">
+                              Choose departure date
+                            </div>
                           </div>
                         </div>
                       </button>
@@ -1121,10 +1163,7 @@ export default function Index() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link
-                            to="/my-trips"
-                            className="flex items-center"
-                          >
+                          <Link to="/my-trips" className="flex items-center">
                             <CheckCircle className="w-4 h-4 mr-2" />
                             Completed trips
                           </Link>
@@ -1493,30 +1532,29 @@ export default function Index() {
                               <div className="p-0">
                                 <BookingCalendar
                                   initialRange={{
-                                  startDate:
-                                    departureDate || new Date(),
-                                  endDate:
-                                    returnDate ||
-                                    (departureDate
-                                      ? new Date(
-                                          departureDate.getTime() +
-                                            7 * 24 * 60 * 60 * 1000,
-                                        )
-                                      : new Date(
-                                          Date.now() +
-                                            7 * 24 * 60 * 60 * 1000,
-                                        )),
-                                }}
+                                    startDate: departureDate || new Date(),
+                                    endDate:
+                                      returnDate ||
+                                      (departureDate
+                                        ? new Date(
+                                            departureDate.getTime() +
+                                              7 * 24 * 60 * 60 * 1000,
+                                          )
+                                        : new Date(
+                                            Date.now() +
+                                              7 * 24 * 60 * 60 * 1000,
+                                          )),
+                                  }}
                                   onChange={(range) => {
-                                  console.log(
-                                    "Flight calendar range selected:",
-                                    range,
-                                  );
-                                  setDepartureDate(range.startDate);
-                                  if (tripType === "round-trip") {
-                                    setReturnDate(range.endDate);
-                                  }
-                                }}
+                                    console.log(
+                                      "Flight calendar range selected:",
+                                      range,
+                                    );
+                                    setDepartureDate(range.startDate);
+                                    if (tripType === "round-trip") {
+                                      setReturnDate(range.endDate);
+                                    }
+                                  }}
                                   onClose={() => setShowCalendar(false)}
                                   className="w-full"
                                   bookingType="flight"
@@ -1656,10 +1694,19 @@ export default function Index() {
                       <Button
                         onClick={() => {
                           const searchParams = getSearchParams();
-                          searchParams.set('adults', travelers.adults.toString());
-                          searchParams.set('children', travelers.children.toString());
-                          if (tripType === 'multi-city') {
-                            searchParams.set('segments', JSON.stringify(flightSegments));
+                          searchParams.set(
+                            "adults",
+                            travelers.adults.toString(),
+                          );
+                          searchParams.set(
+                            "children",
+                            travelers.children.toString(),
+                          );
+                          if (tripType === "multi-city") {
+                            searchParams.set(
+                              "segments",
+                              JSON.stringify(flightSegments),
+                            );
                           }
                           navigate(`/flights?${searchParams.toString()}`);
                         }}
@@ -1674,7 +1721,9 @@ export default function Index() {
                   {tripType === "multi-city" && (
                     <div className="mt-4 space-y-3">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium text-gray-700">Additional flights</h3>
+                        <h3 className="text-sm font-medium text-gray-700">
+                          Additional flights
+                        </h3>
                         <Button
                           variant="outline"
                           size="sm"
@@ -1695,7 +1744,9 @@ export default function Index() {
                             </label>
                             <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
                               <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                              <span className="text-sm text-gray-500">Select city</span>
+                              <span className="text-sm text-gray-500">
+                                Select city
+                              </span>
                             </button>
                           </div>
 
@@ -1705,7 +1756,9 @@ export default function Index() {
                             </label>
                             <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
                               <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                              <span className="text-sm text-gray-500">Select city</span>
+                              <span className="text-sm text-gray-500">
+                                Select city
+                              </span>
                             </button>
                           </div>
 
@@ -1715,7 +1768,9 @@ export default function Index() {
                             </label>
                             <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
                               <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
-                              <span className="text-sm text-gray-500">Select date</span>
+                              <span className="text-sm text-gray-500">
+                                Select date
+                              </span>
                             </button>
                           </div>
 
@@ -2658,49 +2713,50 @@ export default function Index() {
       </Dialog>
 
       {/* Multi-city segment dropdowns */}
-      {tripType === "multi-city" && flightSegments.slice(1).map((segment) => (
-        <Fragment key={segment.id}>
-          <MobileCityDropdown
-            isOpen={showSegmentFromCities === segment.id}
-            onClose={() => setShowSegmentFromCities(null)}
-            title={`Flight ${flightSegments.findIndex(s => s.id === segment.id) + 1} - Leaving from`}
-            cities={cityData}
-            selectedCity={segment.from}
-            onSelectCity={(city) => {
-              updateFlightSegment(segment.id, 'from', city);
-              setShowSegmentFromCities(null);
-            }}
-          />
+      {tripType === "multi-city" &&
+        flightSegments.slice(1).map((segment) => (
+          <Fragment key={segment.id}>
+            <MobileCityDropdown
+              isOpen={showSegmentFromCities === segment.id}
+              onClose={() => setShowSegmentFromCities(null)}
+              title={`Flight ${flightSegments.findIndex((s) => s.id === segment.id) + 1} - Leaving from`}
+              cities={cityData}
+              selectedCity={segment.from}
+              onSelectCity={(city) => {
+                updateFlightSegment(segment.id, "from", city);
+                setShowSegmentFromCities(null);
+              }}
+            />
 
-          <MobileCityDropdown
-            isOpen={showSegmentToCities === segment.id}
-            onClose={() => setShowSegmentToCities(null)}
-            title={`Flight ${flightSegments.findIndex(s => s.id === segment.id) + 1} - Going to`}
-            cities={cityData}
-            selectedCity={segment.to}
-            onSelectCity={(city) => {
-              updateFlightSegment(segment.id, 'to', city);
-              setShowSegmentToCities(null);
-            }}
-          />
+            <MobileCityDropdown
+              isOpen={showSegmentToCities === segment.id}
+              onClose={() => setShowSegmentToCities(null)}
+              title={`Flight ${flightSegments.findIndex((s) => s.id === segment.id) + 1} - Going to`}
+              cities={cityData}
+              selectedCity={segment.to}
+              onSelectCity={(city) => {
+                updateFlightSegment(segment.id, "to", city);
+                setShowSegmentToCities(null);
+              }}
+            />
 
-          <MobileDatePicker
-            isOpen={showSegmentCalendar === segment.id}
-            onClose={() => setShowSegmentCalendar(null)}
-            tripType="one-way"
-            setTripType={() => {}}
-            selectedDepartureDate={segment.departureDate}
-            selectedReturnDate={null}
-            setSelectedDepartureDate={(date) => {
-              updateFlightSegment(segment.id, 'departureDate', date);
-              setShowSegmentCalendar(null);
-            }}
-            setSelectedReturnDate={() => {}}
-            selectingDeparture={true}
-            setSelectingDeparture={() => {}}
-          />
-        </Fragment>
-      ))}
+            <MobileDatePicker
+              isOpen={showSegmentCalendar === segment.id}
+              onClose={() => setShowSegmentCalendar(null)}
+              tripType="one-way"
+              setTripType={() => {}}
+              selectedDepartureDate={segment.departureDate}
+              selectedReturnDate={null}
+              setSelectedDepartureDate={(date) => {
+                updateFlightSegment(segment.id, "departureDate", date);
+                setShowSegmentCalendar(null);
+              }}
+              setSelectedReturnDate={() => {}}
+              selectingDeparture={true}
+              setSelectingDeparture={() => {}}
+            />
+          </Fragment>
+        ))}
     </div>
   );
 }

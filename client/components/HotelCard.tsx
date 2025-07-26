@@ -259,8 +259,6 @@ export function HotelCard({
             >
               <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
             </Button>
-
-
           </div>
 
           {/* Hotel Details */}
@@ -431,8 +429,6 @@ export function HotelCard({
               className={`w-3 h-3 sm:w-4 sm:h-4 ${isLiked ? "fill-current" : ""}`}
             />
           </Button>
-
-
         </div>
 
         {/* Hotel Details */}
@@ -452,7 +448,9 @@ export function HotelCard({
 
             <div className="flex items-center mb-2">
               <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400 mr-1" />
-              <span className="text-xs sm:text-sm font-medium mr-1">{hotel.rating}</span>
+              <span className="text-xs sm:text-sm font-medium mr-1">
+                {hotel.rating}
+              </span>
               <span className="text-xs sm:text-sm text-gray-500">
                 ({hotel.reviewCount || hotel.reviews || 0} reviews)
               </span>

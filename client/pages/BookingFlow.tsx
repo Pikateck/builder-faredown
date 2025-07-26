@@ -779,7 +779,7 @@ export default function BookingFlow() {
     returnDate,
     tripType,
     formatDisplayDate,
-    loadDatesFromParams
+    loadDatesFromParams,
   } = useDateContext();
 
   // Get passenger data and flight data from navigation state
@@ -805,7 +805,13 @@ export default function BookingFlow() {
       console.warn("No flight data found, redirecting to flight search");
       navigate("/flights");
     }
-  }, [selectedFlight, selectedFareType, navigate, location.search, loadDatesFromParams]);
+  }, [
+    selectedFlight,
+    selectedFareType,
+    navigate,
+    location.search,
+    loadDatesFromParams,
+  ]);
 
   // Function to generate initial travellers based on passenger count
   const generateInitialTravellers = () => {
@@ -1319,21 +1325,27 @@ export default function BookingFlow() {
           {
             from: "Mumbai",
             to: "Dubai",
-            date: departureDate ? formatDisplayDate(departureDate, 'MMM d, yyyy') : "Select date",
+            date: departureDate
+              ? formatDisplayDate(departureDate, "MMM d, yyyy")
+              : "Select date",
             time: selectedFlight?.departureTime || "14:35",
             duration: selectedFlight?.duration || "3h 15m",
             airline: selectedFlight?.airline || "Airlines",
             flightNumber: selectedFlight?.flightNumber || "FL 507",
           },
-          ...(tripType === 'round-trip' && returnDate ? [{
-            from: "Dubai",
-            to: "Mumbai",
-            date: formatDisplayDate(returnDate, 'MMM d, yyyy'),
-            time: selectedFlight?.returnDepartureTime || "08:45",
-            duration: selectedFlight?.returnDuration || "3h 20m",
-            airline: selectedFlight?.airline || "Airlines",
-            flightNumber: selectedFlight?.returnFlightNumber || "FL 508",
-          }] : []),
+          ...(tripType === "round-trip" && returnDate
+            ? [
+                {
+                  from: "Dubai",
+                  to: "Mumbai",
+                  date: formatDisplayDate(returnDate, "MMM d, yyyy"),
+                  time: selectedFlight?.returnDepartureTime || "08:45",
+                  duration: selectedFlight?.returnDuration || "3h 20m",
+                  airline: selectedFlight?.airline || "Airlines",
+                  flightNumber: selectedFlight?.returnFlightNumber || "FL 508",
+                },
+              ]
+            : []),
         ],
         seats: Object.entries(seatSelections).flatMap(([flight, seats]) =>
           Object.entries(seats).map(([seatId, travellerId]) => {
@@ -1607,8 +1619,12 @@ export default function BookingFlow() {
             {/* Trip Info */}
             <div>
               <div className="text-sm text-[#666] mb-1">
-                {tripType === 'one-way' ? 'One way' : 'Round trip'} • {travellers.length} traveller
-                {travellers.length > 1 ? "s" : ""} • {departureDate ? formatDisplayDate(departureDate, 'eee, MMM d') : 'Select dates'}
+                {tripType === "one-way" ? "One way" : "Round trip"} •{" "}
+                {travellers.length} traveller
+                {travellers.length > 1 ? "s" : ""} •{" "}
+                {departureDate
+                  ? formatDisplayDate(departureDate, "eee, MMM d")
+                  : "Select dates"}
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
                 Mumbai to Dubai

@@ -210,7 +210,7 @@ export default function FlightResults() {
     tripType,
     setTripType,
     formatDisplayDate,
-    loadDatesFromParams
+    loadDatesFromParams,
   } = useDateContext();
   const userName = user?.name || "";
 
@@ -246,7 +246,7 @@ export default function FlightResults() {
   const testCredentials = {
     email: "test@faredown.com",
     password: "password123",
-    name: "Zubin Aibara"
+    name: "Zubin Aibara",
   };
 
   // Mobile UI states
@@ -723,10 +723,10 @@ export default function FlightResults() {
       loginPassword === testCredentials.password
     ) {
       login({
-        id: '1',
+        id: "1",
         name: testCredentials.name,
         email: loginEmail,
-        loyaltyLevel: 1
+        loyaltyLevel: 1,
       });
       setShowSignIn(false);
       setLoginEmail("");
@@ -754,10 +754,10 @@ export default function FlightResults() {
         return;
       }
       login({
-        id: '1',
+        id: "1",
         name: `${registerFirstName} ${registerLastName}`,
         email: registerEmail,
-        loyaltyLevel: 1
+        loyaltyLevel: 1,
       });
       setShowRegister(false);
       setRegisterEmail("");
@@ -894,7 +894,13 @@ export default function FlightResults() {
                   Flight Results
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  BOM → DXB • {tripType === 'one-way' ? 'One way' : tripType === 'multi-city' ? 'Multi-city' : 'Round trip'} • {adults} adult{adults > 1 ? 's' : ''}
+                  BOM → DXB •{" "}
+                  {tripType === "one-way"
+                    ? "One way"
+                    : tripType === "multi-city"
+                      ? "Multi-city"
+                      : "Round trip"}{" "}
+                  • {adults} adult{adults > 1 ? "s" : ""}
                 </p>
               </div>
               <button
@@ -919,14 +925,21 @@ export default function FlightResults() {
                       BOM → DXB
                     </div>
                     <div className="text-xs text-gray-500">
-                      {departureDate ? formatDisplayDate(departureDate, 'MMM d') : 'Select date'}
-                      {tripType === 'round-trip' && returnDate ? ` - ${formatDisplayDate(returnDate, 'MMM d')}` : ''}
+                      {departureDate
+                        ? formatDisplayDate(departureDate, "MMM d")
+                        : "Select date"}
+                      {tripType === "round-trip" && returnDate
+                        ? ` - ${formatDisplayDate(returnDate, "MMM d")}`
+                        : ""}
                     </div>
                   </div>
                 </div>
                 <div className="text-gray-300">•</div>
                 <div className="text-sm text-gray-700">
-                  {adults} adult{adults > 1 ? 's' : ''}{children > 0 ? `, ${children} child${children > 1 ? 'ren' : ''}` : ''}
+                  {adults} adult{adults > 1 ? "s" : ""}
+                  {children > 0
+                    ? `, ${children} child${children > 1 ? "ren" : ""}`
+                    : ""}
                 </div>
               </div>
               <Button
@@ -1075,10 +1088,7 @@ export default function FlightResults() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Link
-                          to="/account/trips"
-                          className="flex items-center"
-                        >
+                        <Link to="/account/trips" className="flex items-center">
                           <BookOpen className="w-4 h-4 mr-2" />
                           Bookings & Trips
                         </Link>
@@ -1102,10 +1112,7 @@ export default function FlightResults() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Link
-                          to="/my-trips"
-                          className="flex items-center"
-                        >
+                        <Link to="/my-trips" className="flex items-center">
                           <BookOpen className="w-4 h-4 mr-2" />
                           Completed trips
                         </Link>
@@ -1404,7 +1411,9 @@ export default function FlightResults() {
                     <div className="flex items-center space-x-2 min-w-0">
                       <span className="text-sm text-gray-700 font-medium truncate">
                         {tripType === "one-way"
-                          ? (departureDate ? formatDisplayDate(departureDate) : "Select date")
+                          ? departureDate
+                            ? formatDisplayDate(departureDate)
+                            : "Select date"
                           : departureDate
                             ? `${formatDisplayDate(departureDate)}${returnDate ? ` - ${formatDisplayDate(returnDate)}` : " - Return"}`
                             : "Select dates"}
@@ -1416,7 +1425,8 @@ export default function FlightResults() {
                   <BookingCalendar
                     initialRange={{
                       startDate: departureDate || new Date(),
-                      endDate: returnDate || addDays(departureDate || new Date(), 7),
+                      endDate:
+                        returnDate || addDays(departureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       console.log(
@@ -1891,7 +1901,9 @@ export default function FlightResults() {
                       {/* Outbound Flight */}
                       <div>
                         <div className="text-xs text-gray-500 mb-2 font-medium">
-                          {tripType === 'round-trip' ? 'Outbound Flight' : 'Flight'}
+                          {tripType === "round-trip"
+                            ? "Outbound Flight"
+                            : "Flight"}
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="text-center">
@@ -1934,7 +1946,7 @@ export default function FlightResults() {
                       </div>
 
                       {/* Return Flight - Only show for round-trip */}
-                      {tripType === 'round-trip' && (
+                      {tripType === "round-trip" && (
                         <div>
                           <div className="text-xs text-gray-500 mb-2 font-medium">
                             Return Flight
@@ -2127,7 +2139,10 @@ export default function FlightResults() {
                                   {flight.departureTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.departureCode} • {departureDate ? formatDisplayDate(departureDate, 'MMM d') : 'Select date'}
+                                  {flight.departureCode} •{" "}
+                                  {departureDate
+                                    ? formatDisplayDate(departureDate, "MMM d")
+                                    : "Select date"}
                                 </div>
                               </div>
                               <div className="flex flex-col items-center">
@@ -2149,7 +2164,10 @@ export default function FlightResults() {
                                   {flight.arrivalTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.arrivalCode} • {departureDate ? formatDisplayDate(departureDate, 'MMM d') : 'Select date'}
+                                  {flight.arrivalCode} •{" "}
+                                  {departureDate
+                                    ? formatDisplayDate(departureDate, "MMM d")
+                                    : "Select date"}
                                 </div>
                               </div>
                             </div>
@@ -2162,7 +2180,10 @@ export default function FlightResults() {
                                     {flight.returnDepartureTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.arrivalCode} • {returnDate ? formatDisplayDate(returnDate, 'MMM d') : 'Select return date'}
+                                    {flight.arrivalCode} •{" "}
+                                    {returnDate
+                                      ? formatDisplayDate(returnDate, "MMM d")
+                                      : "Select return date"}
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-center">
@@ -2184,7 +2205,10 @@ export default function FlightResults() {
                                     {flight.returnArrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.departureCode} • {returnDate ? formatDisplayDate(returnDate, 'MMM d') : 'Select return date'}
+                                    {flight.departureCode} •{" "}
+                                    {returnDate
+                                      ? formatDisplayDate(returnDate, "MMM d")
+                                      : "Select return date"}
                                   </div>
                                 </div>
                               </div>

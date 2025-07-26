@@ -47,12 +47,8 @@ interface Hotel extends HotelType {
 export default function HotelResults() {
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
-  const {
-    departureDate,
-    returnDate,
-    formatDisplayDate,
-    loadDatesFromParams
-  } = useDateContext();
+  const { departureDate, returnDate, formatDisplayDate, loadDatesFromParams } =
+    useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
@@ -133,8 +129,13 @@ export default function HotelResults() {
 
       const searchRequest = {
         destination: destination || "DXB", // Use destination code
-        checkIn: departureDate ? departureDate.toISOString() : (checkIn || new Date().toISOString()),
-        checkOut: returnDate ? returnDate.toISOString() : (checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()),
+        checkIn: departureDate
+          ? departureDate.toISOString()
+          : checkIn || new Date().toISOString(),
+        checkOut: returnDate
+          ? returnDate.toISOString()
+          : checkOut ||
+            new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
         rooms: parseInt(rooms) || 1,
         adults: parseInt(adults) || 2,
         children: parseInt(children) || 0,
@@ -168,7 +169,11 @@ export default function HotelResults() {
           setHotels(transformHotelbedsData(mockResults));
           setTotalResults(mockResults.length);
           setIsLiveData(false);
-          console.log("✅ Using fallback API data:", mockResults.length, "hotels");
+          console.log(
+            "✅ Using fallback API data:",
+            mockResults.length,
+            "hotels",
+          );
         } else {
           // If no fallback data, use static mock data
           console.log("🔄 Using static mock data");
@@ -361,7 +366,11 @@ export default function HotelResults() {
   const filteredAndSortedHotels = React.useMemo(() => {
     let filtered = hotels.filter((hotel) => {
       // Price range filter - use currentPrice which is available in mock data
-      const price = hotel.currentPrice || hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
+      const price =
+        hotel.currentPrice ||
+        hotel.priceRange?.min ||
+        hotel.roomTypes?.[0]?.pricePerNight ||
+        0;
       if (price < priceRange[0] || price > priceRange[1]) return false;
 
       // Rating filter
@@ -373,9 +382,9 @@ export default function HotelResults() {
 
       // Amenities filter - handle both string arrays and object arrays
       if (selectedAmenities.length > 0) {
-        const hotelAmenities = hotel.amenities?.map((a) =>
-          typeof a === 'string' ? a : a.name
-        ) || [];
+        const hotelAmenities =
+          hotel.amenities?.map((a) => (typeof a === "string" ? a : a.name)) ||
+          [];
         if (
           !selectedAmenities.some((amenity) => hotelAmenities.includes(amenity))
         )
@@ -389,12 +398,16 @@ export default function HotelResults() {
     switch (sortBy) {
       case "price-low":
         filtered.sort(
-          (a, b) => (a.currentPrice || a.priceRange?.min || 0) - (b.currentPrice || b.priceRange?.min || 0),
+          (a, b) =>
+            (a.currentPrice || a.priceRange?.min || 0) -
+            (b.currentPrice || b.priceRange?.min || 0),
         );
         break;
       case "price-high":
         filtered.sort(
-          (a, b) => (b.currentPrice || b.priceRange?.min || 0) - (a.currentPrice || a.priceRange?.min || 0),
+          (a, b) =>
+            (b.currentPrice || b.priceRange?.min || 0) -
+            (a.currentPrice || a.priceRange?.min || 0),
         );
         break;
       case "rating":
@@ -404,7 +417,8 @@ export default function HotelResults() {
       default:
         filtered.sort(
           (a, b) =>
-            b.rating * (b.reviewCount || b.reviews || 1) - a.rating * (a.reviewCount || a.reviews || 1),
+            b.rating * (b.reviewCount || b.reviews || 1) -
+            a.rating * (a.reviewCount || a.reviews || 1),
         );
         break;
     }
@@ -426,8 +440,6 @@ export default function HotelResults() {
     setSelectedAmenities([]);
     setSortBy("recommended");
   };
-
-
 
   return (
     <div className="min-h-screen bg-gray-50">

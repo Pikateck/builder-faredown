@@ -62,7 +62,7 @@ export default function Hotels() {
   const [showSort, setShowSort] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('price');
+  const [sortBy, setSortBy] = useState("price");
 
   // Sample hotel data
   const hotels = [
@@ -136,34 +136,38 @@ export default function Hotels() {
   const filteredAndSortedHotels = React.useMemo(() => {
     let filtered = hotels.filter((hotel) => {
       // Price filter
-      if (hotel.price < priceRange[0] || hotel.price > priceRange[1]) return false;
+      if (hotel.price < priceRange[0] || hotel.price > priceRange[1])
+        return false;
 
       // Rating filter
-      if (selectedAmenities.includes('Rating 8+') && hotel.rating < 8) return false;
+      if (selectedAmenities.includes("Rating 8+") && hotel.rating < 8)
+        return false;
 
       // Amenities filter
-      if (selectedAmenities.includes('Free WiFi') && !hotel.freeWifi) return false;
-      if (selectedAmenities.includes('Breakfast') && !hotel.breakfast) return false;
+      if (selectedAmenities.includes("Free WiFi") && !hotel.freeWifi)
+        return false;
+      if (selectedAmenities.includes("Breakfast") && !hotel.breakfast)
+        return false;
 
       return true;
     });
 
     // Sort hotels
     switch (sortBy) {
-      case 'price-low':
+      case "price-low":
         filtered.sort((a, b) => a.price - b.price);
         break;
-      case 'price-high':
+      case "price-high":
         filtered.sort((a, b) => b.price - a.price);
         break;
-      case 'rating':
+      case "rating":
         filtered.sort((a, b) => b.rating - a.rating);
         break;
-      case 'distance':
+      case "distance":
         // Simple distance sort based on distance string
         filtered.sort((a, b) => {
-          const aDistance = parseFloat(a.distance.split(' ')[0]);
-          const bDistance = parseFloat(b.distance.split(' ')[0]);
+          const aDistance = parseFloat(a.distance.split(" ")[0]);
+          const bDistance = parseFloat(b.distance.split(" ")[0]);
           return aDistance - bDistance;
         });
         break;
@@ -200,10 +204,18 @@ export default function Hotels() {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => navigate('/account')}>My Account</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/account/trips')}>My Trips</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/help')}>Help Center</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/')}>Home</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/account")}>
+                    My Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/account/trips")}>
+                    My Trips
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/help")}>
+                    Help Center
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/")}>
+                    Home
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -232,7 +244,11 @@ export default function Hotels() {
             <div className="flex items-center space-x-3 overflow-x-auto">
               <Sheet open={showFilters} onOpenChange={setShowFilters}>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="sm" className="whitespace-nowrap">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="whitespace-nowrap"
+                  >
                     <SlidersHorizontal className="w-4 h-4 mr-2" />
                     Filters
                   </Button>
@@ -262,20 +278,39 @@ export default function Hotels() {
                     <div>
                       <h3 className="font-medium mb-3">Amenities</h3>
                       <div className="space-y-2">
-                        {['Free WiFi', 'Breakfast', 'Pool', 'Gym', 'Spa', 'Parking'].map((amenity) => (
-                          <div key={amenity} className="flex items-center space-x-2">
+                        {[
+                          "Free WiFi",
+                          "Breakfast",
+                          "Pool",
+                          "Gym",
+                          "Spa",
+                          "Parking",
+                        ].map((amenity) => (
+                          <div
+                            key={amenity}
+                            className="flex items-center space-x-2"
+                          >
                             <Checkbox
                               id={amenity}
                               checked={selectedAmenities.includes(amenity)}
                               onCheckedChange={(checked) => {
                                 if (checked) {
-                                  setSelectedAmenities([...selectedAmenities, amenity]);
+                                  setSelectedAmenities([
+                                    ...selectedAmenities,
+                                    amenity,
+                                  ]);
                                 } else {
-                                  setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
+                                  setSelectedAmenities(
+                                    selectedAmenities.filter(
+                                      (a) => a !== amenity,
+                                    ),
+                                  );
                                 }
                               }}
                             />
-                            <label htmlFor={amenity} className="text-sm">{amenity}</label>
+                            <label htmlFor={amenity} className="text-sm">
+                              {amenity}
+                            </label>
                           </div>
                         ))}
                       </div>
@@ -283,7 +318,10 @@ export default function Hotels() {
 
                     {/* Apply Button */}
                     <div className="pt-4">
-                      <Button className="w-full" onClick={() => setShowFilters(false)}>
+                      <Button
+                        className="w-full"
+                        onClick={() => setShowFilters(false)}
+                      >
                         Apply Filters
                       </Button>
                     </div>
@@ -293,25 +331,39 @@ export default function Hotels() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="whitespace-nowrap">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="whitespace-nowrap"
+                  >
                     Price
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setSortBy('price-low')}>Lowest price first</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy('price-high')}>Highest price first</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("price-low")}>
+                    Lowest price first
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("price-high")}>
+                    Highest price first
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
               <Button
-                variant={selectedAmenities.includes('Rating 8+') ? "default" : "outline"}
+                variant={
+                  selectedAmenities.includes("Rating 8+")
+                    ? "default"
+                    : "outline"
+                }
                 size="sm"
                 className="whitespace-nowrap"
                 onClick={() => {
-                  if (selectedAmenities.includes('Rating 8+')) {
-                    setSelectedAmenities(selectedAmenities.filter(a => a !== 'Rating 8+'));
+                  if (selectedAmenities.includes("Rating 8+")) {
+                    setSelectedAmenities(
+                      selectedAmenities.filter((a) => a !== "Rating 8+"),
+                    );
                   } else {
-                    setSelectedAmenities([...selectedAmenities, 'Rating 8+']);
+                    setSelectedAmenities([...selectedAmenities, "Rating 8+"]);
                   }
                 }}
               >
@@ -319,14 +371,20 @@ export default function Hotels() {
               </Button>
 
               <Button
-                variant={selectedAmenities.includes('Free WiFi') ? "default" : "outline"}
+                variant={
+                  selectedAmenities.includes("Free WiFi")
+                    ? "default"
+                    : "outline"
+                }
                 size="sm"
                 className="whitespace-nowrap"
                 onClick={() => {
-                  if (selectedAmenities.includes('Free WiFi')) {
-                    setSelectedAmenities(selectedAmenities.filter(a => a !== 'Free WiFi'));
+                  if (selectedAmenities.includes("Free WiFi")) {
+                    setSelectedAmenities(
+                      selectedAmenities.filter((a) => a !== "Free WiFi"),
+                    );
                   } else {
-                    setSelectedAmenities([...selectedAmenities, 'Free WiFi']);
+                    setSelectedAmenities([...selectedAmenities, "Free WiFi"]);
                   }
                 }}
               >
@@ -334,14 +392,20 @@ export default function Hotels() {
               </Button>
 
               <Button
-                variant={selectedAmenities.includes('Breakfast') ? "default" : "outline"}
+                variant={
+                  selectedAmenities.includes("Breakfast")
+                    ? "default"
+                    : "outline"
+                }
                 size="sm"
                 className="whitespace-nowrap"
                 onClick={() => {
-                  if (selectedAmenities.includes('Breakfast')) {
-                    setSelectedAmenities(selectedAmenities.filter(a => a !== 'Breakfast'));
+                  if (selectedAmenities.includes("Breakfast")) {
+                    setSelectedAmenities(
+                      selectedAmenities.filter((a) => a !== "Breakfast"),
+                    );
                   } else {
-                    setSelectedAmenities([...selectedAmenities, 'Breakfast']);
+                    setSelectedAmenities([...selectedAmenities, "Breakfast"]);
                   }
                 }}
               >
@@ -360,14 +424,29 @@ export default function Hotels() {
             <DropdownMenu open={showSort} onOpenChange={setShowSort}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-blue-600">
-                  Sort by: {sortBy === 'price-low' ? 'Price (Low)' : sortBy === 'price-high' ? 'Price (High)' : sortBy === 'rating' ? 'Rating' : 'Price'}
+                  Sort by:{" "}
+                  {sortBy === "price-low"
+                    ? "Price (Low)"
+                    : sortBy === "price-high"
+                      ? "Price (High)"
+                      : sortBy === "rating"
+                        ? "Rating"
+                        : "Price"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setSortBy('price-low')}>Price (Lowest first)</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('price-high')}>Price (Highest first)</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('rating')}>Guest rating</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy('distance')}>Distance from center</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("price-low")}>
+                  Price (Lowest first)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("price-high")}>
+                  Price (Highest first)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("rating")}>
+                  Guest rating
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("distance")}>
+                  Distance from center
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -552,7 +631,7 @@ export default function Hotels() {
                 className="w-full bg-[#003580] hover:bg-[#0071c2]"
                 onClick={() => {
                   setShowMobileSearch(false);
-                  navigate('/hotels/results');
+                  navigate("/hotels/results");
                 }}
               >
                 Search Hotels

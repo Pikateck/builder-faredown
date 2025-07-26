@@ -246,13 +246,15 @@ export class HotelsService {
       const isDevelopment =
         typeof window !== "undefined" &&
         (window.location.hostname.includes("localhost") ||
-         window.location.hostname.includes("127.0.0.1") ||
-         window.location.hostname.includes(".dev") ||
-         window.location.hostname.includes(".local") ||
-         window.location.port !== "");
+          window.location.hostname.includes("127.0.0.1") ||
+          window.location.hostname.includes(".dev") ||
+          window.location.hostname.includes(".local") ||
+          window.location.port !== "");
 
       if (isDevelopment) {
-        console.log("🔧 Development mode - skipping hotel search API call, using fallback");
+        console.log(
+          "🔧 Development mode - skipping hotel search API call, using fallback",
+        );
         return this.searchHotelsFallback(searchParams);
       }
 
@@ -302,13 +304,18 @@ export class HotelsService {
             try {
               data = await response.json();
             } catch (jsonError) {
-              if (jsonError instanceof Error && jsonError.name === "AbortError") {
+              if (
+                jsonError instanceof Error &&
+                jsonError.name === "AbortError"
+              ) {
                 console.log("⏰ Hotel search JSON parsing was aborted");
                 return []; // Return empty array immediately on abort
               } else {
                 console.warn(
                   "⚠️ Failed to parse JSON response:",
-                  jsonError instanceof Error ? jsonError.message : "Unknown error",
+                  jsonError instanceof Error
+                    ? jsonError.message
+                    : "Unknown error",
                 );
                 return [];
               }
@@ -602,11 +609,18 @@ export class HotelsService {
       try {
         liveResults = await this.searchDestinationsLive(query);
       } catch (liveError) {
-        if (liveError instanceof Error &&
-           (liveError.message.includes("Failed to fetch") ||
-            liveError.name === "TypeError")) {
-          console.log(`🌐 Live API network error - continuing to fallback for query: "${query}"`);
-        } else if (liveError instanceof Error && liveError.name === "AbortError") {
+        if (
+          liveError instanceof Error &&
+          (liveError.message.includes("Failed to fetch") ||
+            liveError.name === "TypeError")
+        ) {
+          console.log(
+            `🌐 Live API network error - continuing to fallback for query: "${query}"`,
+          );
+        } else if (
+          liveError instanceof Error &&
+          liveError.name === "AbortError"
+        ) {
           console.log(`⏰ Live API aborted for query: "${query}"`);
           return [];
         } else {
@@ -643,11 +657,18 @@ export class HotelsService {
           return response.data;
         }
       } catch (apiError) {
-        if (apiError instanceof Error &&
-           (apiError.message.includes("Failed to fetch") ||
-            apiError.name === "TypeError")) {
-          console.log(`🌐 Fallback API also failed - using hardcoded destinations for query: "${query}"`);
-        } else if (apiError instanceof Error && apiError.name === "AbortError") {
+        if (
+          apiError instanceof Error &&
+          (apiError.message.includes("Failed to fetch") ||
+            apiError.name === "TypeError")
+        ) {
+          console.log(
+            `🌐 Fallback API also failed - using hardcoded destinations for query: "${query}"`,
+          );
+        } else if (
+          apiError instanceof Error &&
+          apiError.name === "AbortError"
+        ) {
           console.log(`⏰ Fallback API aborted for query: "${query}"`);
           return [];
         } else {
@@ -659,10 +680,14 @@ export class HotelsService {
       return [];
     } catch (error) {
       // Handle network errors gracefully
-      if (error instanceof Error &&
-         (error.message.includes("Failed to fetch") ||
-          error.name === "TypeError")) {
-        console.log(`🌐 All network requests failed - using emergency destinations for query: "${query}"`);
+      if (
+        error instanceof Error &&
+        (error.message.includes("Failed to fetch") ||
+          error.name === "TypeError")
+      ) {
+        console.log(
+          `🌐 All network requests failed - using emergency destinations for query: "${query}"`,
+        );
       } else if (error instanceof Error && error.name === "AbortError") {
         console.log(`⏰ Destination search was aborted for query: "${query}"`);
         return [];
@@ -1323,10 +1348,10 @@ export class HotelsService {
       const isDevelopment =
         typeof window !== "undefined" &&
         (window.location.hostname.includes("localhost") ||
-         window.location.hostname.includes("127.0.0.1") ||
-         window.location.hostname.includes(".dev") ||
-         window.location.hostname.includes(".local") ||
-         window.location.port !== "");
+          window.location.hostname.includes("127.0.0.1") ||
+          window.location.hostname.includes(".dev") ||
+          window.location.hostname.includes(".local") ||
+          window.location.port !== "");
 
       let apiResults: any[] = [];
       let apiSuccess = false;
@@ -1334,84 +1359,118 @@ export class HotelsService {
       // Skip API calls entirely in development mode to prevent "Failed to fetch" errors
       if (!isDevelopment) {
         // Try API only in production environments
-      try {
-        const apiUrl = `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}&limit=15`;
-        console.log(
-          `🔍 Searching destinations via production API: "${query}"`
-        );
-
-        const controller = new AbortController();
-        let isAborted = false;
-        const timeoutId = setTimeout(() => {
-          console.log("⏰ API request timeout - aborting");
-          isAborted = true;
-          controller.abort();
-        }, 5000); // 5 second timeout
-
-        let response;
         try {
-          response = await fetch(apiUrl, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            signal: controller.signal,
-          }).catch((fetchErr) => {
-            // Immediately catch any fetch errors to prevent unhandled promise rejections
-            console.log(`🌐 Fetch promise rejected for query: "${query}":`, fetchErr.message);
-            throw fetchErr; // Re-throw to be handled by outer catch
-          });
+          const apiUrl = `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}&limit=15`;
+          console.log(
+            `🔍 Searching destinations via production API: "${query}"`,
+          );
 
-          if (response.ok) {
-            const contentType = response.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-              try {
-                const data = await response.json();
-                if (data.success && data.data && Array.isArray(data.data)) {
-                  apiResults = data.data;
-                  apiSuccess = true;
-                  console.log(
-                    `✅ API destination data received: ${apiResults.length} destinations`,
-                  );
-                }
-              } catch (jsonError) {
-                if (
-                  jsonError instanceof Error &&
-                  jsonError.name === "AbortError"
-                ) {
-                  console.log(
-                    `⏰ JSON parsing was aborted for query: "${query}"`,
-                  );
-                  return []; // Return empty array immediately on abort
-                } else {
-                  console.warn(
-                    `⚠️ Failed to parse JSON response:`,
-                    jsonError instanceof Error
-                      ? jsonError.message
-                      : "Unknown error",
-                  );
+          const controller = new AbortController();
+          let isAborted = false;
+          const timeoutId = setTimeout(() => {
+            console.log("⏰ API request timeout - aborting");
+            isAborted = true;
+            controller.abort();
+          }, 5000); // 5 second timeout
+
+          let response;
+          try {
+            response = await fetch(apiUrl, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              signal: controller.signal,
+            }).catch((fetchErr) => {
+              // Immediately catch any fetch errors to prevent unhandled promise rejections
+              console.log(
+                `🌐 Fetch promise rejected for query: "${query}":`,
+                fetchErr.message,
+              );
+              throw fetchErr; // Re-throw to be handled by outer catch
+            });
+
+            if (response.ok) {
+              const contentType = response.headers.get("content-type");
+              if (contentType && contentType.includes("application/json")) {
+                try {
+                  const data = await response.json();
+                  if (data.success && data.data && Array.isArray(data.data)) {
+                    apiResults = data.data;
+                    apiSuccess = true;
+                    console.log(
+                      `✅ API destination data received: ${apiResults.length} destinations`,
+                    );
+                  }
+                } catch (jsonError) {
+                  if (
+                    jsonError instanceof Error &&
+                    jsonError.name === "AbortError"
+                  ) {
+                    console.log(
+                      `⏰ JSON parsing was aborted for query: "${query}"`,
+                    );
+                    return []; // Return empty array immediately on abort
+                  } else {
+                    console.warn(
+                      `⚠️ Failed to parse JSON response:`,
+                      jsonError instanceof Error
+                        ? jsonError.message
+                        : "Unknown error",
+                    );
+                  }
                 }
               }
             }
+          } catch (fetchError) {
+            if (
+              fetchError instanceof Error &&
+              fetchError.name === "AbortError"
+            ) {
+              if (isAborted) {
+                console.log(
+                  `⏰ API request was aborted (timeout) for query: "${query}"`,
+                );
+              } else {
+                console.log(
+                  `⏰ API request was aborted (cancelled) for query: "${query}"`,
+                );
+              }
+              return []; // Return empty array immediately on abort
+            } else if (
+              fetchError instanceof Error &&
+              (fetchError.message.includes("Failed to fetch") ||
+                fetchError.name === "TypeError")
+            ) {
+              console.log(
+                `🌐 Network connectivity issue - using fallback data for query: "${query}"`,
+              );
+              // Don't return here - let it fall through to use fallback data
+            } else {
+              console.warn(
+                `⚠️ API fetch failed:`,
+                fetchError instanceof Error
+                  ? fetchError.message
+                  : "Unknown error",
+              );
+            }
+          } finally {
+            clearTimeout(timeoutId);
           }
         } catch (fetchError) {
           if (fetchError instanceof Error && fetchError.name === "AbortError") {
-            if (isAborted) {
-              console.log(
-                `⏰ API request was aborted (timeout) for query: "${query}"`,
-              );
-            } else {
-              console.log(
-                `⏰ API request was aborted (cancelled) for query: "${query}"`,
-              );
-            }
-            return []; // Return empty array immediately on abort
-          } else if (fetchError instanceof Error &&
-                    (fetchError.message.includes("Failed to fetch") ||
-                     fetchError.name === "TypeError")) {
             console.log(
-              `🌐 Network connectivity issue - using fallback data for query: "${query}"`,
+              `⏰ API request was aborted (timeout or cancelled) for query: "${query}"`,
+            );
+            return []; // Return empty array immediately on abort
+          } else if (
+            fetchError instanceof Error &&
+            (fetchError.message.includes("Failed to fetch") ||
+              fetchError.name === "TypeError")
+          ) {
+            console.log(
+              `���� Network connectivity issue (outer) - using fallback data for query: "${query}"`,
             );
             // Don't return here - let it fall through to use fallback data
           } else {
@@ -1422,32 +1481,10 @@ export class HotelsService {
                 : "Unknown error",
             );
           }
-        } finally {
-          clearTimeout(timeoutId);
         }
-      } catch (fetchError) {
-        if (fetchError instanceof Error && fetchError.name === "AbortError") {
-          console.log(
-            `⏰ API request was aborted (timeout or cancelled) for query: "${query}"`,
-          );
-          return []; // Return empty array immediately on abort
-        } else if (fetchError instanceof Error &&
-                  (fetchError.message.includes("Failed to fetch") ||
-                   fetchError.name === "TypeError")) {
-          console.log(
-            `���� Network connectivity issue (outer) - using fallback data for query: "${query}"`,
-          );
-          // Don't return here - let it fall through to use fallback data
-        } else {
-          console.warn(
-            `⚠️ API fetch failed:`,
-            fetchError instanceof Error ? fetchError.message : "Unknown error",
-          );
-        }
-      }
       } else {
         console.log(
-          `🔧 Development mode detected - skipping API call for query: "${query}"`
+          `🔧 Development mode detected - skipping API call for query: "${query}"`,
         );
       }
 
@@ -1508,10 +1545,14 @@ export class HotelsService {
       }
 
       // Handle network errors specifically to avoid noisy "Failed to fetch" errors
-      if (error instanceof Error &&
-         (error.message.includes("Failed to fetch") ||
-          error.name === "TypeError")) {
-        console.log(`🌐 Network error in searchDestinationsLive - using emergency fallback for query: "${query}"`);
+      if (
+        error instanceof Error &&
+        (error.message.includes("Failed to fetch") ||
+          error.name === "TypeError")
+      ) {
+        console.log(
+          `🌐 Network error in searchDestinationsLive - using emergency fallback for query: "${query}"`,
+        );
       } else {
         console.warn("Destination search encountered error:", error);
       }
