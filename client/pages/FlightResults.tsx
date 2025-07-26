@@ -2183,7 +2183,7 @@ export default function FlightResults() {
                                     {flight.returnArrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.departureCode} • Aug 17
+                                    {flight.departureCode} • {returnDate ? formatDisplayDate(returnDate, 'MMM d') : 'Select return date'}
                                   </div>
                                 </div>
                               </div>
