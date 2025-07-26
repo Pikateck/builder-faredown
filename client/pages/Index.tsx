@@ -177,10 +177,7 @@ export default function Index() {
     logout();
   };
 
-  const [returnDate, setReturnDate] = useState<Date>();
-  const [tripType, setTripType] = useState<
-    "round-trip" | "one-way" | "multi-city"
-  >("round-trip");
+  // Return date and trip type now managed by DateContext
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showFromCities, setShowFromCities] = useState(false);
