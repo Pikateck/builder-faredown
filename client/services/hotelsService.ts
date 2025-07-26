@@ -242,6 +242,20 @@ export class HotelsService {
    */
   async searchHotelsLive(searchParams: HotelSearchRequest): Promise<Hotel[]> {
     try {
+      // Check if we're in development environment
+      const isDevelopment =
+        typeof window !== "undefined" &&
+        (window.location.hostname.includes("localhost") ||
+         window.location.hostname.includes("127.0.0.1") ||
+         window.location.hostname.includes(".dev") ||
+         window.location.hostname.includes(".local") ||
+         window.location.port !== "");
+
+      if (isDevelopment) {
+        console.log("🔧 Development mode - skipping hotel search API call, using fallback");
+        return this.searchHotelsFallback(searchParams);
+      }
+
       const queryParams = {
         destination: searchParams.destination,
         checkIn: searchParams.checkIn,
@@ -781,7 +795,7 @@ export class HotelsService {
         type: "city" as const,
         country: "India",
         code: "BLR",
-        flag: "🇮🇳",
+        flag: "🇮���",
         popular: true,
       },
       {
@@ -1012,7 +1026,7 @@ export class HotelsService {
         type: "city" as const,
         country: "France",
         code: "CDG",
-        flag: "🇫🇷",
+        flag: "����🇷",
         popular: true,
       },
       {
