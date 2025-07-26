@@ -355,7 +355,7 @@ export default function Hotels() {
         <div className="p-4 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
-              {hotels.length} properties found
+              {filteredAndSortedHotels.length} properties found
             </h2>
             <DropdownMenu open={showSort} onOpenChange={setShowSort}>
               <DropdownMenuTrigger asChild>
