@@ -796,13 +796,16 @@ export default function BookingFlow() {
 
   // Define renderFlightSegment function after selectedFlight is available
 
-  // If no flight data, redirect back to flight search
+  // Load dates from URL params and redirect if no flight data
   useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    loadDatesFromParams(urlParams);
+
     if (!selectedFlight && !selectedFareType) {
       console.warn("No flight data found, redirecting to flight search");
       navigate("/flights");
     }
-  }, [selectedFlight, selectedFareType, navigate]);
+  }, [selectedFlight, selectedFareType, navigate, location.search, loadDatesFromParams]);
 
   // Function to generate initial travellers based on passenger count
   const generateInitialTravellers = () => {
@@ -953,7 +956,7 @@ export default function BookingFlow() {
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
-    { name: "Hungary", code: "+36", flag: "���🇺" },
+    { name: "Hungary", code: "+36", flag: "🇭🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
     { name: "Indonesia", code: "+62", flag: "🇮🇩" },
