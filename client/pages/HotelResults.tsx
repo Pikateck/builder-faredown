@@ -47,6 +47,12 @@ interface Hotel extends HotelType {
 export default function HotelResults() {
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
+  const {
+    departureDate,
+    returnDate,
+    formatDisplayDate,
+    loadDatesFromParams
+  } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 50000]); // Appropriate range for INR
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
