@@ -531,7 +531,7 @@ export default function Index() {
               <button
                 onClick={() => setTripType("round-trip")}
                 className={cn(
-                  "flex-1 py-3 px-4 rounded-md text-sm font-medium transition-colors",
+                  "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "round-trip"
                     ? "bg-white text-[#003580]"
                     : "text-white",
@@ -542,13 +542,24 @@ export default function Index() {
               <button
                 onClick={() => setTripType("one-way")}
                 className={cn(
-                  "flex-1 py-3 px-4 rounded-md text-sm font-medium transition-colors",
+                  "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "one-way"
                     ? "bg-white text-[#003580]"
                     : "text-white",
                 )}
               >
                 One way
+              </button>
+              <button
+                onClick={() => setTripType("multi-city")}
+                className={cn(
+                  "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                  tripType === "multi-city"
+                    ? "bg-white text-[#003580]"
+                    : "text-white",
+                )}
+              >
+                Multi-city
               </button>
             </div>
 
