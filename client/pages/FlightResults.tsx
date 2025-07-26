@@ -208,6 +208,7 @@ export default function FlightResults() {
     departureDate,
     returnDate,
     tripType,
+    setTripType,
     formatDisplayDate,
     loadDatesFromParams
   } = useDateContext();
