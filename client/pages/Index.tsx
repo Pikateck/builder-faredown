@@ -755,7 +755,7 @@ export default function Index() {
                   <div className="bg-white rounded-xl p-4 shadow-sm">
                     <div className="text-xs text-gray-500 mb-1">Travel date</div>
                     <div className="flex items-center space-x-2">
-                      <Calendar className="w-5 h-5 text-[#003580]" />
+                      <CalendarIcon className="w-5 h-5 text-[#003580]" />
                       <div>
                         <div className="font-medium text-gray-900 text-sm">Select date</div>
                         <div className="text-xs text-gray-500">Choose departure date</div>
