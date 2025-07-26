@@ -1627,7 +1627,7 @@ export default function Index() {
                               Travel date
                             </label>
                             <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500">
-                              <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                              <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
                               <span className="text-sm text-gray-500">Select date</span>
                             </button>
                           </div>
