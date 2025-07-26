@@ -240,7 +240,7 @@ export function EnhancedFilters({
           </label>
         </div>
         {item.count && (
-          <span className="text-xs text-gray-500 ml-1">{item.count}</span>
+          <span className="text-xs text-gray-500 ml-0.5">{item.count}</span>
         )}
       </div>
     );
