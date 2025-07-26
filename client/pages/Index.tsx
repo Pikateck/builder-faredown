@@ -88,11 +88,12 @@ import { downloadProjectInfo } from "@/lib/codeExport";
 import AdminTestButton from "@/components/AdminTestButton";
 
 export default function Index() {
+  const { isLoggedIn, user, login, logout } = useAuth();
+  const userName = user?.name || "";
+
   const [departureDate, setDepartureDate] = useState<Date>();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [userName, setUserName] = useState("Zubin Aibara");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // Auth form states
