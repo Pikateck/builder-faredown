@@ -160,12 +160,22 @@ export default function HotelResults() {
         setIsLiveData(true);
       } else {
         console.log("⚠️ No live data available, using enhanced mock data");
-        // Use enhanced mock data that simulates Hotelbeds structure
+        // Try fallback API first
         const mockResults =
           await hotelsService.searchHotelsFallback(searchRequest);
-        setHotels(transformHotelbedsData(mockResults));
-        setTotalResults(mockResults.length);
-        setIsLiveData(false);
+
+        if (mockResults.length > 0) {
+          setHotels(transformHotelbedsData(mockResults));
+          setTotalResults(mockResults.length);
+          setIsLiveData(false);
+          console.log("✅ Using fallback API data:", mockResults.length, "hotels");
+        } else {
+          // If no fallback data, use static mock data
+          console.log("🔄 Using static mock data");
+          setHotels(getMockHotels());
+          setTotalResults(getMockHotels().length);
+          setIsLiveData(false);
+        }
       }
     } catch (err) {
       console.error("Live Hotelbeds search failed:", err);
