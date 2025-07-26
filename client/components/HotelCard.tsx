@@ -507,6 +507,18 @@ export function HotelCard({
           {/* Pricing and Actions */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
             <div className="min-w-0">
+              {/* Original Price with Strikethrough */}
+              {hotel.originalPrice && hotel.originalPrice > currentPrice && (
+                <div className="flex items-center space-x-2 mb-1">
+                  <span className="text-sm sm:text-base text-gray-400 line-through">
+                    {formatPrice(Math.round((hotel.originalPrice * totalNights) * 1.18))}
+                  </span>
+                  <Badge variant="destructive" className="text-xs px-2 py-0">
+                    {Math.round(((hotel.originalPrice - currentPrice) / hotel.originalPrice) * 100)}% OFF
+                  </Badge>
+                </div>
+              )}
+
               <div className="flex items-center space-x-2 mb-1">
                 <span className="text-xl sm:text-3xl font-bold text-[#003580]">
                   {formatPrice(totalPriceInclusiveTaxes)}
