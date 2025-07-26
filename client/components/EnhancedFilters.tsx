@@ -218,7 +218,7 @@ export function EnhancedFilters({
           <button
             type="button"
             onClick={() => handleFilterChange(item.id, !isChecked)}
-            className={`w-4 h-4 flex items-center justify-center ${
+            className={`w-3 h-3 flex items-center justify-center ${
               isChecked ? "bg-blue-600" : "bg-white border border-gray-400"
             }`}
           >
