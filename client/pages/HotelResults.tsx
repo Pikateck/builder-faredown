@@ -316,12 +316,12 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Ocean View Room",
-          price: 275, // ₹275 per night
+          price: 9500, // ₹9,500 per night
           features: ["Queen Bed", "Ocean View", "Balcony"],
         },
         {
           name: "Beach Villa",
-          price: 450, // ₹450 per night
+          price: 18000, // ₹18,000 per night
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
