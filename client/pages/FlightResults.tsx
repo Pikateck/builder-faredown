@@ -1433,12 +1433,8 @@ export default function FlightResults() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <BookingCalendar
                     initialRange={{
-                      startDate: selectedDepartureDate
-                        ? new Date(selectedDepartureDate)
-                        : new Date(),
-                      endDate: selectedReturnDate
-                        ? new Date(selectedReturnDate)
-                        : addDays(new Date(), 7),
+                      startDate: departureDate || new Date(),
+                      endDate: returnDate || addDays(departureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       console.log(
