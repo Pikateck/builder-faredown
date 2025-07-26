@@ -1607,8 +1607,8 @@ export default function BookingFlow() {
             {/* Trip Info */}
             <div>
               <div className="text-sm text-[#666] mb-1">
-                One way • {travellers.length} traveller
-                {travellers.length > 1 ? "s" : ""} • Sat, Aug 3
+                {tripType === 'one-way' ? 'One way' : 'Round trip'} • {travellers.length} traveller
+                {travellers.length > 1 ? "s" : ""} • {departureDate ? formatDisplayDate(departureDate, 'eee, MMM d') : 'Select dates'}
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
                 Mumbai to Dubai
