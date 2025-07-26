@@ -722,16 +722,6 @@ export default function FlightResults() {
       return 0;
     });
 
-  // Test credentials
-  const testCredentials = {
-    email: "test@faredown.com",
-    password: "password123",
-    name: "Zubin Aibara",
-  };
-
-  // Authentication functions
-
-
   // Authentication functions
   const handleSignIn = () => {
     setAuthError("");
