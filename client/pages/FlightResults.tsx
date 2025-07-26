@@ -264,9 +264,7 @@ export default function FlightResults() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
-  const [selectedDepartureDate, setSelectedDepartureDate] =
-    useState("09-Dec-2024");
-  const [selectedReturnDate, setSelectedReturnDate] = useState("16-Dec-2024");
+  // Dates now managed by DateContext and loaded from URL params
   const [selectingDeparture, setSelectingDeparture] = useState(true);
   const [currentCalendarMonth, setCurrentCalendarMonth] = useState(0);
 
@@ -1819,7 +1817,7 @@ export default function FlightResults() {
           <div className="space-y-0 md:space-y-4">
             {filteredFlights.map((flight) => (
               <div key={flight.id}>
-                {/* MOBILE CARD DESIGN (≤768px) - App Style */}
+                {/* MOBILE CARD DESIGN (���768px) - App Style */}
                 <div className="block md:hidden bg-white border-b border-gray-100">
                   <div className="p-4">
                     {/* Flight Header */}
