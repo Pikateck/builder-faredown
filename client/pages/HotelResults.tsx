@@ -360,9 +360,8 @@ export default function HotelResults() {
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
     let filtered = hotels.filter((hotel) => {
-      // Price range filter
-      const price =
-        hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
+      // Price range filter - use currentPrice which is available in mock data
+      const price = hotel.currentPrice || hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
       if (price < priceRange[0] || price > priceRange[1]) return false;
 
       // Rating filter
@@ -372,9 +371,11 @@ export default function HotelResults() {
       )
         return false;
 
-      // Amenities filter
+      // Amenities filter - handle both string arrays and object arrays
       if (selectedAmenities.length > 0) {
-        const hotelAmenities = hotel.amenities?.map((a) => a.name) || [];
+        const hotelAmenities = hotel.amenities?.map((a) =>
+          typeof a === 'string' ? a : a.name
+        ) || [];
         if (
           !selectedAmenities.some((amenity) => hotelAmenities.includes(amenity))
         )
@@ -386,14 +387,14 @@ export default function HotelResults() {
 
     // Sort hotels
     switch (sortBy) {
-      case "price_low":
+      case "price-low":
         filtered.sort(
-          (a, b) => (a.priceRange?.min || 0) - (b.priceRange?.min || 0),
+          (a, b) => (a.currentPrice || a.priceRange?.min || 0) - (b.currentPrice || b.priceRange?.min || 0),
         );
         break;
-      case "price_high":
+      case "price-high":
         filtered.sort(
-          (a, b) => (b.priceRange?.min || 0) - (a.priceRange?.min || 0),
+          (a, b) => (b.currentPrice || b.priceRange?.min || 0) - (a.currentPrice || a.priceRange?.min || 0),
         );
         break;
       case "rating":
@@ -403,7 +404,7 @@ export default function HotelResults() {
       default:
         filtered.sort(
           (a, b) =>
-            b.rating * (b.reviewCount || 1) - a.rating * (a.reviewCount || 1),
+            b.rating * (b.reviewCount || b.reviews || 1) - a.rating * (a.reviewCount || a.reviews || 1),
         );
         break;
     }
