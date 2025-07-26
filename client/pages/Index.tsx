@@ -90,8 +90,8 @@ export default function Index() {
   const [departureDate, setDepartureDate] = useState<Date>();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [userName, setUserName] = useState("Zubin Aibara");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // Auth form states
