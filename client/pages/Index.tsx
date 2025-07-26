@@ -772,63 +772,95 @@ export default function Index() {
                   </Button>
                 </div>
 
-                {/* Mobile additional flight segment */}
-                <div className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 space-y-3">
-                  <div className="bg-white rounded-xl p-4 shadow-sm">
-                    <div className="text-xs text-gray-500 mb-1">Flight 2</div>
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-1">
-                        <div className="text-xs text-gray-500 mb-1">From</div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                            <Plane className="w-4 h-4 text-[#003580]" />
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900 text-sm">Select city</div>
-                            <div className="text-xs text-gray-500">Airport</div>
-                          </div>
+                {/* Mobile flight segments */}
+                {flightSegments.slice(1).map((segment, index) => (
+                  <div key={segment.id} className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-4 space-y-3">
+                    <div className="bg-white rounded-xl p-4 shadow-sm">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-xs text-gray-500">Flight {index + 2}</div>
+                        {flightSegments.length > 2 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs px-2 py-1"
+                            onClick={() => removeFlightSegment(segment.id)}
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
+                        )}
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <div className="flex-1">
+                          <button
+                            onClick={() => setShowSegmentFromCities(segment.id)}
+                            className="w-full text-left"
+                          >
+                            <div className="text-xs text-gray-500 mb-1">From</div>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                                <Plane className="w-4 h-4 text-[#003580]" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900 text-sm">
+                                  {segment.from || 'Select city'}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {segment.from && cityData[segment.from as keyof typeof cityData]
+                                    ? cityData[segment.from as keyof typeof cityData].airport
+                                    : 'Airport'}
+                                </div>
+                              </div>
+                            </div>
+                          </button>
                         </div>
-                      </div>
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <ArrowRight className="w-4 h-4 text-gray-500" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-xs text-gray-500 mb-1">To</div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                            <MapPin className="w-4 h-4 text-[#003580]" />
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900 text-sm">Select city</div>
-                            <div className="text-xs text-gray-500">Airport</div>
-                          </div>
+                        <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                          <ArrowRight className="w-4 h-4 text-gray-500" />
+                        </div>
+                        <div className="flex-1">
+                          <button
+                            onClick={() => setShowSegmentToCities(segment.id)}
+                            className="w-full text-left"
+                          >
+                            <div className="text-xs text-gray-500 mb-1">To</div>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                                <MapPin className="w-4 h-4 text-[#003580]" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900 text-sm">
+                                  {segment.to || 'Select city'}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {segment.to && cityData[segment.to as keyof typeof cityData]
+                                    ? cityData[segment.to as keyof typeof cityData].airport
+                                    : 'Airport'}
+                                </div>
+                              </div>
+                            </div>
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="bg-white rounded-xl p-4 shadow-sm">
-                    <div className="text-xs text-gray-500 mb-1">Travel date</div>
-                    <div className="flex items-center space-x-2">
-                      <CalendarIcon className="w-5 h-5 text-[#003580]" />
-                      <div>
-                        <div className="font-medium text-gray-900 text-sm">Select date</div>
-                        <div className="text-xs text-gray-500">Choose departure date</div>
-                      </div>
+                    <div className="bg-white rounded-xl p-4 shadow-sm">
+                      <button
+                        onClick={() => setShowSegmentCalendar(segment.id)}
+                        className="w-full text-left"
+                      >
+                        <div className="text-xs text-gray-500 mb-1">Travel date</div>
+                        <div className="flex items-center space-x-2">
+                          <CalendarIcon className="w-5 h-5 text-[#003580]" />
+                          <div>
+                            <div className="font-medium text-gray-900 text-sm">
+                              {segment.departureDate ? formatDate(segment.departureDate) : 'Select date'}
+                            </div>
+                            <div className="text-xs text-gray-500">Choose departure date</div>
+                          </div>
+                        </div>
+                      </button>
                     </div>
                   </div>
-
-                  <div className="flex justify-end">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs px-3 py-2"
-                    >
-                      <X className="w-4 h-4 mr-1" />
-                      Remove
-                    </Button>
-                  </div>
-                </div>
+                ))}
               </div>
             )}
           </div>
