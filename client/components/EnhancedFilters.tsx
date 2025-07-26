@@ -207,37 +207,15 @@ export function EnhancedFilters({
   };
 
   const renderFilterItem = (item: FilterItem, categoryId: string) => {
-    const isChecked = selectedAmenities.includes(item.id);
-
     return (
       <div
         key={item.id}
         className="flex items-center justify-between py-0 min-h-[16px]"
       >
-        <div className="flex items-center gap-0.5 flex-1">
-          <button
-            type="button"
-            onClick={() => handleFilterChange(item.id, !isChecked)}
-            className={`w-3 h-3 flex items-center justify-center ${
-              isChecked ? "bg-blue-600" : "bg-white border border-gray-400"
-            }`}
-          >
-            {isChecked && (
-              <svg
-                className="w-2 h-2 text-white"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-              >
-                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
-              </svg>
-            )}
-          </button>
-          <label
-            onClick={() => handleFilterChange(item.id, !isChecked)}
-            className="text-xs text-gray-700 cursor-pointer flex-1 leading-tight"
-          >
+        <div className="flex items-center flex-1">
+          <span className="text-xs text-gray-700 flex-1 leading-tight">
             {item.label}
-          </label>
+          </span>
         </div>
         {item.count && (
           <span className="text-xs text-gray-500 ml-0.5">{item.count}</span>
