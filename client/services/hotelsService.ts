@@ -1338,6 +1338,10 @@ export class HotelsService {
               Accept: "application/json",
             },
             signal: controller.signal,
+          }).catch((fetchErr) => {
+            // Immediately catch any fetch errors to prevent unhandled promise rejections
+            console.log(`🌐 Fetch promise rejected for query: "${query}":`, fetchErr.message);
+            throw fetchErr; // Re-throw to be handled by outer catch
           });
 
           if (response.ok) {
