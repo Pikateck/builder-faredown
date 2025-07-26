@@ -1203,15 +1203,15 @@ export default function Index() {
                                           )),
                                   }}
                                   onChange={(range) => {
-                                    console.log(
-                                      "Flight calendar range selected:",
-                                      range,
-                                    );
-                                    setSelectedDepartureDate(range.startDate);
-                                    if (tripType === "round-trip") {
-                                      setSelectedReturnDate(range.endDate);
-                                    }
-                                  }}
+                                  console.log(
+                                    "Flight calendar range selected:",
+                                    range,
+                                  );
+                                  setDepartureDate(range.startDate);
+                                  if (tripType === "round-trip") {
+                                    setReturnDate(range.endDate);
+                                  }
+                                }}
                                   onClose={() => setShowCalendar(false)}
                                   className="w-full"
                                   bookingType="flight"
