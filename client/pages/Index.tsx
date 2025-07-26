@@ -2656,6 +2656,51 @@ export default function Index() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Multi-city segment dropdowns */}
+      {flightSegments.map((segment) => (
+        <React.Fragment key={segment.id}>
+          <MobileCityDropdown
+            isOpen={showSegmentFromCities === segment.id}
+            onClose={() => setShowSegmentFromCities(null)}
+            title={`Flight ${flightSegments.findIndex(s => s.id === segment.id) + 1} - Leaving from`}
+            cities={cityData}
+            selectedCity={segment.from}
+            onSelectCity={(city) => {
+              updateFlightSegment(segment.id, 'from', city);
+              setShowSegmentFromCities(null);
+            }}
+          />
+
+          <MobileCityDropdown
+            isOpen={showSegmentToCities === segment.id}
+            onClose={() => setShowSegmentToCities(null)}
+            title={`Flight ${flightSegments.findIndex(s => s.id === segment.id) + 1} - Going to`}
+            cities={cityData}
+            selectedCity={segment.to}
+            onSelectCity={(city) => {
+              updateFlightSegment(segment.id, 'to', city);
+              setShowSegmentToCities(null);
+            }}
+          />
+
+          <MobileDatePicker
+            isOpen={showSegmentCalendar === segment.id}
+            onClose={() => setShowSegmentCalendar(null)}
+            tripType="one-way"
+            setTripType={() => {}}
+            selectedDepartureDate={segment.departureDate}
+            selectedReturnDate={null}
+            setSelectedDepartureDate={(date) => {
+              updateFlightSegment(segment.id, 'departureDate', date);
+              setShowSegmentCalendar(null);
+            }}
+            setSelectedReturnDate={() => {}}
+            selectingDeparture={true}
+            setSelectingDeparture={() => {}}
+          />
+        </React.Fragment>
+      ))}
     </div>
   );
 }
