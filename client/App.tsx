@@ -53,7 +53,8 @@ import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
 function App() {
   return (
     <div className="App">
-      <CurrencyProvider>
+      <AuthProvider>
+        <CurrencyProvider>
         <Router>
           <Routes>
             {/* Original Web Routes */}
@@ -138,7 +139,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
-      </CurrencyProvider>
+        </CurrencyProvider>
+      </AuthProvider>
     </div>
   );
 }
