@@ -276,17 +276,17 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Standard Room",
-          price: 167, // ₹167 per night
+          price: 6750, // ₹6,750 per night
           features: ["King Bed", "City View", "Free WiFi"],
         },
         {
           name: "Deluxe Suite",
-          price: 215, // ₹215 per night
+          price: 9500, // ₹9,500 per night
           features: ["Living Area", "Ocean View", "Mini Bar"],
         },
         {
           name: "Presidential Suite",
-          price: 350, // ₹350 per night
+          price: 15000, // ₹15,000 per night
           features: ["2 Bedrooms", "Private Balcony", "Butler Service"],
         },
       ],
