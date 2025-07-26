@@ -256,7 +256,7 @@ export default function FlightResults() {
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
-  const [tripType, setTripType] = useState("round-trip");
+  // Trip type now managed by DateContext
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
@@ -1817,7 +1817,7 @@ export default function FlightResults() {
           <div className="space-y-0 md:space-y-4">
             {filteredFlights.map((flight) => (
               <div key={flight.id}>
-                {/* MOBILE CARD DESIGN (���768px) - App Style */}
+                {/* MOBILE CARD DESIGN (≤768px) - App Style */}
                 <div className="block md:hidden bg-white border-b border-gray-100">
                   <div className="p-4">
                     {/* Flight Header */}
