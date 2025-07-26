@@ -506,6 +506,60 @@ export default function Hotels() {
 
         {/* Mobile bottom padding */}
         <div className="h-16"></div>
+
+        {/* Mobile Search Modal */}
+        <Dialog open={showMobileSearch} onOpenChange={setShowMobileSearch}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Search Hotels</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Destination</label>
+                <input
+                  type="text"
+                  placeholder="Where are you going?"
+                  className="w-full p-3 border rounded-lg mt-1"
+                  defaultValue="Dubai"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm font-medium">Check-in</label>
+                  <input
+                    type="date"
+                    className="w-full p-3 border rounded-lg mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Check-out</label>
+                  <input
+                    type="date"
+                    className="w-full p-3 border rounded-lg mt-1"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-sm font-medium">Guests</label>
+                <select className="w-full p-3 border rounded-lg mt-1">
+                  <option>1 guest</option>
+                  <option>2 guests</option>
+                  <option>3 guests</option>
+                  <option>4+ guests</option>
+                </select>
+              </div>
+              <Button
+                className="w-full bg-[#003580] hover:bg-[#0071c2]"
+                onClick={() => {
+                  setShowMobileSearch(false);
+                  navigate('/hotels/results');
+                }}
+              >
+                Search Hotels
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* DESKTOP LAYOUT (≥769px) */}
