@@ -214,7 +214,7 @@ export function EnhancedFilters({
         key={item.id}
         className="flex items-center justify-between py-0 min-h-[16px]"
       >
-        <div className="flex items-center gap-1 flex-1">
+        <div className="flex items-center gap-0.5 flex-1">
           <button
             type="button"
             onClick={() => handleFilterChange(item.id, !isChecked)}
