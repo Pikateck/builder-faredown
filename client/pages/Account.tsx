@@ -520,6 +520,181 @@ Please keep this ticket for your records.
     </div>
   );
 
+  const renderLoyalty = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-900">Loyalty Program</h2>
+
+      {/* Loyalty Status Card */}
+      <Card className="p-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Level 1 Member</h3>
+            <p className="text-blue-100">Welcome to Faredown Loyalty!</p>
+          </div>
+          <div className="text-right">
+            <div className="text-3xl font-bold">0</div>
+            <div className="text-sm text-blue-100">Points Balance</div>
+          </div>
+        </div>
+      </Card>
+
+      {/* Progress to Next Level */}
+      <Card className="p-4">
+        <h3 className="font-medium text-gray-900 mb-4">Progress to Level 2</h3>
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span>Current Progress</span>
+            <span>0 / 1000 points</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-blue-600 h-2 rounded-full" style={{ width: "0%" }}></div>
+          </div>
+          <p className="text-xs text-gray-600">
+            Earn 1000 more points to reach Level 2 and unlock exclusive benefits!
+          </p>
+        </div>
+      </Card>
+
+      {/* Benefits */}
+      <Card className="p-4">
+        <h3 className="font-medium text-gray-900 mb-4">Your Benefits</h3>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3">
+            <CheckCircle className="w-5 h-5 text-green-500" />
+            <span className="text-sm">Member prices on hotels</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <CheckCircle className="w-5 h-5 text-green-500" />
+            <span className="text-sm">Free cancellation on select bookings</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <X className="w-5 h-5 text-gray-400" />
+            <span className="text-sm text-gray-500">Priority customer support (Level 2+)</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <X className="w-5 h-5 text-gray-400" />
+            <span className="text-sm text-gray-500">Room upgrades (Level 3+)</span>
+          </div>
+        </div>
+      </Card>
+
+      {/* How to Earn Points */}
+      <Card className="p-4">
+        <h3 className="font-medium text-gray-900 mb-4">How to Earn Points</h3>
+        <div className="space-y-3">
+          <div className="flex justify-between">
+            <span className="text-sm">Hotel booking</span>
+            <span className="text-sm font-medium">5 points per ₹100</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm">Flight booking</span>
+            <span className="text-sm font-medium">3 points per ₹100</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm">Review after stay</span>
+            <span className="text-sm font-medium">50 points</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm">Refer a friend</span>
+            <span className="text-sm font-medium">500 points</span>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
+  const renderPayment = () => (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-900">Payment & Wallet</h2>
+
+      {/* Wallet Balance */}
+      <Card className="p-6 bg-gradient-to-r from-green-500 to-green-600 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Wallet Balance</h3>
+            <p className="text-green-100">Use for instant bookings</p>
+          </div>
+          <div className="text-right">
+            <div className="text-3xl font-bold">₹0</div>
+            <Button size="sm" variant="outline" className="mt-2 text-green-600 border-white hover:bg-white">
+              Add Money
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Saved Payment Methods */}
+      <Card className="p-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-medium text-gray-900">Saved Payment Methods</h3>
+          <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Card
+          </Button>
+        </div>
+
+        <div className="space-y-3">
+          {paymentMethods.map((method) => (
+            <div key={method.id} className="border rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <CreditCard className="w-5 h-5 text-gray-600" />
+                  <div>
+                    <div className="font-medium">
+                      {method.type} •••• {method.last4}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Expires {method.expiryMonth}/{method.expiryYear}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  {method.isDefault && (
+                    <Badge variant="secondary" className="text-xs">
+                      Default
+                    </Badge>
+                  )}
+                  <Button size="sm" variant="outline">
+                    Edit
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Transaction History */}
+      <Card className="p-4">
+        <h3 className="font-medium text-gray-900 mb-4">Recent Transactions</h3>
+        <div className="space-y-3">
+          <div className="text-center py-8 text-gray-500">
+            <CreditCard className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+            <p>No transactions yet</p>
+            <p className="text-sm">Your payment history will appear here</p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Rewards & Cashback */}
+      <Card className="p-4">
+        <h3 className="font-medium text-gray-900 mb-4">Rewards & Cashback</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="text-center p-4 bg-yellow-50 rounded-lg">
+            <Gift className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+            <div className="text-2xl font-bold text-yellow-700">₹0</div>
+            <div className="text-sm text-yellow-600">Cashback Earned</div>
+          </div>
+          <div className="text-center p-4 bg-blue-50 rounded-lg">
+            <Award className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+            <div className="text-2xl font-bold text-blue-700">0</div>
+            <div className="text-sm text-blue-600">Reward Points</div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
   const renderSettings = () => (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
