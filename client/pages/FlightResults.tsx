@@ -732,6 +732,61 @@ export default function FlightResults() {
   // Authentication functions
 
 
+  // Authentication functions
+  const handleSignIn = () => {
+    setAuthError("");
+    if (
+      loginEmail === testCredentials.email &&
+      loginPassword === testCredentials.password
+    ) {
+      login({
+        id: '1',
+        name: testCredentials.name,
+        email: loginEmail,
+        loyaltyLevel: 1
+      });
+      setShowSignIn(false);
+      setLoginEmail("");
+      setLoginPassword("");
+    } else {
+      setAuthError("Invalid email or password");
+    }
+  };
+
+  const handleRegister = () => {
+    setAuthError("");
+    if (
+      registerEmail &&
+      registerPassword &&
+      registerConfirmPassword &&
+      registerFirstName &&
+      registerLastName
+    ) {
+      if (registerPassword.length < 8) {
+        setAuthError("Password must be at least 8 characters long");
+        return;
+      }
+      if (registerPassword !== registerConfirmPassword) {
+        setAuthError("Passwords do not match");
+        return;
+      }
+      login({
+        id: '1',
+        name: `${registerFirstName} ${registerLastName}`,
+        email: registerEmail,
+        loyaltyLevel: 1
+      });
+      setShowRegister(false);
+      setRegisterEmail("");
+      setRegisterPassword("");
+      setRegisterConfirmPassword("");
+      setRegisterFirstName("");
+      setRegisterLastName("");
+    } else {
+      setAuthError("Please fill in all fields");
+    }
+  };
+
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
     navigate("/booking-flow", {
       state: {
@@ -1446,7 +1501,7 @@ export default function FlightResults() {
                           disabled={travelers.adults <= 1}
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                         >
-                          ���
+                          −
                         </button>
                         <span className="w-8 text-center font-medium text-gray-900">
                           {travelers.adults}
