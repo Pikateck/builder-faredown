@@ -2010,10 +2010,10 @@ export default function Index() {
         onClose={() => setShowCalendar(false)}
         tripType={tripType}
         setTripType={setTripType}
-        selectedDepartureDate={selectedDepartureDate}
-        selectedReturnDate={selectedReturnDate}
-        setSelectedDepartureDate={setSelectedDepartureDate}
-        setSelectedReturnDate={setSelectedReturnDate}
+        selectedDepartureDate={departureDate}
+        selectedReturnDate={returnDate}
+        setSelectedDepartureDate={setDepartureDate}
+        setSelectedReturnDate={setReturnDate}
         selectingDeparture={selectingDeparture}
         setSelectingDeparture={setSelectingDeparture}
       />
