@@ -34,6 +34,8 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
   const [returnDate, setReturnDate] = useState<Date | null>(null);
   const [tripType, setTripType] = useState<'round-trip' | 'one-way' | 'multi-city'>('round-trip');
 
+  console.log('DateProvider render:', { departureDate, returnDate, tripType });
+
   // Initialize with default dates if none are set
   useEffect(() => {
     if (!departureDate) {
