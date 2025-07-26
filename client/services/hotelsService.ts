@@ -1305,20 +1305,25 @@ export class HotelsService {
     ];
 
     try {
-      // Determine if we're in production environment
-      const isProduction =
+      // Determine if we're in development environment
+      const isDevelopment =
         typeof window !== "undefined" &&
-        !window.location.hostname.includes("localhost") &&
-        !window.location.hostname.includes("127.0.0.1");
+        (window.location.hostname.includes("localhost") ||
+         window.location.hostname.includes("127.0.0.1") ||
+         window.location.hostname.includes(".dev") ||
+         window.location.hostname.includes(".local") ||
+         window.location.port !== "");
 
       let apiResults: any[] = [];
       let apiSuccess = false;
 
-      // Try API first in both environments
+      // Skip API calls entirely in development mode to prevent "Failed to fetch" errors
+      if (!isDevelopment) {
+        // Try API only in production environments
       try {
         const apiUrl = `/api/hotels-live/destinations/search?q=${encodeURIComponent(query)}&limit=15`;
         console.log(
-          `🔍 Searching destinations via ${isProduction ? "production" : "development"} API: "${query}"`,
+          `🔍 Searching destinations via production API: "${query}"`
         );
 
         const controller = new AbortController();
@@ -1425,6 +1430,11 @@ export class HotelsService {
             fetchError instanceof Error ? fetchError.message : "Unknown error",
           );
         }
+      }
+      } else {
+        console.log(
+          `🔧 Development mode detected - skipping API call for query: "${query}"`
+        );
       }
 
       // Filter fallback data based on query
