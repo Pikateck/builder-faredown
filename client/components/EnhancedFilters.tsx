@@ -311,8 +311,8 @@ export function EnhancedFilters({
   return (
     <div className="bg-white">
       {/* Price Range */}
-      <div className="border-b border-gray-200 pb-2 mb-2">
-        <h3 className="text-sm font-semibold text-gray-900 mb-1">
+      <div className="border-b border-gray-200 pb-1 mb-1">
+        <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
           Your budget (total stay)
         </h3>
         <div className="px-2">
