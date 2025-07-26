@@ -202,6 +202,9 @@ const flightData = [
 ];
 
 export default function FlightResults() {
+  const { isLoggedIn, user, login, logout } = useAuth();
+  const userName = user?.name || "";
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -213,8 +216,6 @@ export default function FlightResults() {
   >(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // Mobile UI states
