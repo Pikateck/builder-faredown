@@ -191,7 +191,7 @@ export default function HotelResults() {
       rating: hotel.rating || hotel.reviewScore || 4.0,
       reviews: hotel.reviewCount || 150,
       originalPrice:
-        hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.25),
+        hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.3), // 30% higher original price
       currentPrice: hotel.currentPrice || 120,
       description: hotel.description || `Experience luxury at ${hotel.name}`,
       amenities: hotel.amenities || ["WiFi", "Pool", "Restaurant"],
