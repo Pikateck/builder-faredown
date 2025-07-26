@@ -954,7 +954,7 @@ Please keep this ticket for your records.
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="p-4">
+            <Card className="p-2 lg:p-4">
               <nav className="space-y-1">
                 <button
                   onClick={() => setActiveTab("bookings")}
