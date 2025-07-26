@@ -1441,12 +1441,8 @@ export default function FlightResults() {
                         "Flight results calendar range selected:",
                         range,
                       );
-                      setSelectedDepartureDate(
-                        formatDateHelper(range.startDate),
-                      );
-                      if (tripType === "round-trip") {
-                        setSelectedReturnDate(formatDateHelper(range.endDate));
-                      }
+                      // Note: DateContext will handle the date updates
+                      // This is mainly for local display purposes
                     }}
                     onClose={() => setShowCalendar(false)}
                     className="w-full"
