@@ -103,7 +103,7 @@ export default function Index() {
   const userName = user?.name || "";
   const navigate = useNavigate();
 
-  const [departureDate, setDepartureDate] = useState<Date>();
+  // Date state now managed by DateContext
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
