@@ -757,9 +757,7 @@ export default function Index() {
                     variant="outline"
                     size="sm"
                     className="text-blue-600 border-blue-600 hover:bg-blue-50 text-xs px-3 py-2"
-                    onClick={() => {
-                      alert("Add flight functionality - to be implemented");
-                    }}
+                    onClick={addFlightSegment}
                   >
                     <Plus className="w-3 h-3 mr-1" />
                     Add flight
