@@ -224,7 +224,7 @@ export function EnhancedFilters({
           >
             {isChecked && (
               <svg
-                className="w-2.5 h-2.5 text-white"
+                className="w-2 h-2 text-white"
                 viewBox="0 0 16 16"
                 fill="currentColor"
               >
