@@ -345,12 +345,12 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Standard Room",
-          price: 155, // ₹155 per night
+          price: 5800, // ₹5,800 per night
           features: ["Fireplace", "Mountain View", "Cozy Decor"],
         },
         {
           name: "Alpine Suite",
-          price: 195, // ₹195 per night
+          price: 7500, // ₹7,500 per night
           features: ["Separate Living Area", "Hot Tub", "Ski Storage"],
         },
       ],
