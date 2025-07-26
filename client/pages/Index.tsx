@@ -119,8 +119,12 @@ export default function Index() {
       loginEmail === testCredentials.email &&
       loginPassword === testCredentials.password
     ) {
-      setIsLoggedIn(true);
-      setUserName(testCredentials.name);
+      login({
+        id: '1',
+        name: testCredentials.name,
+        email: loginEmail,
+        loyaltyLevel: 1
+      });
       setShowSignIn(false);
       setLoginEmail("");
       setLoginPassword("");
