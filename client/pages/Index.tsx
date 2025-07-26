@@ -2658,7 +2658,7 @@ export default function Index() {
       </Dialog>
 
       {/* Multi-city segment dropdowns */}
-      {flightSegments.map((segment) => (
+      {tripType === "multi-city" && flightSegments.slice(1).map((segment) => (
         <Fragment key={segment.id}>
           <MobileCityDropdown
             isOpen={showSegmentFromCities === segment.id}
