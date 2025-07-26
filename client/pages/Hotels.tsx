@@ -132,6 +132,48 @@ export default function Hotels() {
     return `₹${price.toLocaleString()}`;
   };
 
+  // Filter and sort hotels
+  const filteredAndSortedHotels = React.useMemo(() => {
+    let filtered = hotels.filter((hotel) => {
+      // Price filter
+      if (hotel.price < priceRange[0] || hotel.price > priceRange[1]) return false;
+
+      // Rating filter
+      if (selectedAmenities.includes('Rating 8+') && hotel.rating < 8) return false;
+
+      // Amenities filter
+      if (selectedAmenities.includes('Free WiFi') && !hotel.freeWifi) return false;
+      if (selectedAmenities.includes('Breakfast') && !hotel.breakfast) return false;
+
+      return true;
+    });
+
+    // Sort hotels
+    switch (sortBy) {
+      case 'price-low':
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'distance':
+        // Simple distance sort based on distance string
+        filtered.sort((a, b) => {
+          const aDistance = parseFloat(a.distance.split(' ')[0]);
+          const bDistance = parseFloat(b.distance.split(' ')[0]);
+          return aDistance - bDistance;
+        });
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
+  }, [hotels, priceRange, selectedAmenities, sortBy]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
