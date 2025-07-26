@@ -56,7 +56,8 @@ function App() {
     <div className="App">
       <AuthProvider>
         <CurrencyProvider>
-        <Router>
+          <DateProvider>
+            <Router>
           <Routes>
             {/* Original Web Routes */}
             <Route path="/" element={<Index />} />
@@ -139,7 +140,8 @@ function App() {
             {/* Fallback */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Router>
+            </Router>
+          </DateProvider>
         </CurrencyProvider>
       </AuthProvider>
     </div>
