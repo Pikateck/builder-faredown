@@ -644,7 +644,17 @@ export class HotelsService {
       // Return empty array and let outer catch handle with basic destinations
       return [];
     } catch (error) {
-      console.error("Destination search error:", error);
+      // Handle network errors gracefully
+      if (error instanceof Error &&
+         (error.message.includes("Failed to fetch") ||
+          error.name === "TypeError")) {
+        console.log(`🌐 All network requests failed - using emergency destinations for query: "${query}"`);
+      } else if (error instanceof Error && error.name === "AbortError") {
+        console.log(`⏰ Destination search was aborted for query: "${query}"`);
+        return [];
+      } else {
+        console.error("Destination search error:", error);
+      }
       // Enhanced fallback with database-style format
       return [
         {
