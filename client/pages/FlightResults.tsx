@@ -1886,43 +1886,98 @@ export default function FlightResults() {
                     </div>
 
                     {/* Flight Route - Mobile */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-gray-900">
-                          {flight.departureTime}
+                    <div className="space-y-4 mb-4">
+                      {/* Outbound Flight */}
+                      <div>
+                        <div className="text-xs text-gray-500 mb-2 font-medium">
+                          {tripType === 'round-trip' ? 'Outbound Flight' : 'Flight'}
                         </div>
-                        <div className="text-sm text-gray-600">
-                          {flight.departureCode}
-                        </div>
-                      </div>
-                      <div className="flex-1 mx-4">
-                        <div className="relative">
-                          <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-center">
+                            <div className="text-xl font-bold text-gray-900">
+                              {flight.departureTime}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              {flight.departureCode}
+                            </div>
                           </div>
-                          <div className="relative flex justify-center">
-                            <div className="bg-white px-2">
-                              <div className="flex flex-col items-center">
-                                <div className="text-xs text-gray-500 mb-1">
-                                  {flight.duration}
-                                </div>
-                                <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
-                                <div className="text-xs text-green-600 mt-1">
-                                  {flight.flightType}
+                          <div className="flex-1 mx-4">
+                            <div className="relative">
+                              <div className="absolute inset-0 flex items-center">
+                                <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                              </div>
+                              <div className="relative flex justify-center">
+                                <div className="bg-white px-2">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-xs text-gray-500 mb-1">
+                                      {flight.duration}
+                                    </div>
+                                    <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                    <div className="text-xs text-green-600 mt-1">
+                                      {flight.flightType}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
+                          <div className="text-center">
+                            <div className="text-xl font-bold text-gray-900">
+                              {flight.arrivalTime}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              {flight.arrivalCode}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-gray-900">
-                          {flight.arrivalTime}
+
+                      {/* Return Flight - Only show for round-trip */}
+                      {tripType === 'round-trip' && (
+                        <div>
+                          <div className="text-xs text-gray-500 mb-2 font-medium">
+                            Return Flight
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="text-center">
+                              <div className="text-xl font-bold text-gray-900">
+                                {flight.returnDepartureTime}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {flight.arrivalCode}
+                              </div>
+                            </div>
+                            <div className="flex-1 mx-4">
+                              <div className="relative">
+                                <div className="absolute inset-0 flex items-center">
+                                  <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                                </div>
+                                <div className="relative flex justify-center">
+                                  <div className="bg-white px-2">
+                                    <div className="flex flex-col items-center">
+                                      <div className="text-xs text-gray-500 mb-1">
+                                        {flight.returnDuration}
+                                      </div>
+                                      <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                      <div className="text-xs text-green-600 mt-1">
+                                        {flight.flightType}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-xl font-bold text-gray-900">
+                                {flight.returnArrivalTime}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {flight.departureCode}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-600">
-                          {flight.arrivalCode}
-                        </div>
-                      </div>
+                      )}
                     </div>
 
                     {/* Flight Features - Mobile */}
