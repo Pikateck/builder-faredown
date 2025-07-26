@@ -2659,7 +2659,7 @@ export default function Index() {
 
       {/* Multi-city segment dropdowns */}
       {flightSegments.map((segment) => (
-        <React.Fragment key={segment.id}>
+        <Fragment key={segment.id}>
           <MobileCityDropdown
             isOpen={showSegmentFromCities === segment.id}
             onClose={() => setShowSegmentFromCities(null)}
@@ -2699,7 +2699,7 @@ export default function Index() {
             selectingDeparture={true}
             setSelectingDeparture={() => {}}
           />
-        </React.Fragment>
+        </Fragment>
       ))}
     </div>
   );
