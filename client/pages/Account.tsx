@@ -49,8 +49,9 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 export default function Account() {
+  const [searchParams] = useSearchParams();
   const [bookings, setBookings] = useState([]);
-  const [activeTab, setActiveTab] = useState("bookings");
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "bookings");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [profileData, setProfileData] = useState({
     firstName: "John",
