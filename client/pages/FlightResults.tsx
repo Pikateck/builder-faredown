@@ -893,7 +893,7 @@ export default function FlightResults() {
                   Flight Results
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  BOM → DXB • {tripType === 'one-way' ? 'One way' : 'Round trip'} • {adults} adult{adults > 1 ? 's' : ''}
+                  BOM → DXB • {tripType === 'one-way' ? 'One way' : tripType === 'multi-city' ? 'Multi-city' : 'Round trip'} • {adults} adult{adults > 1 ? 's' : ''}
                 </p>
               </div>
               <button
