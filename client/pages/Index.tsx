@@ -195,6 +195,44 @@ export default function Index() {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
+  // Multi-city flight segments state
+  interface FlightSegment {
+    id: string;
+    from: string;
+    to: string;
+    departureDate: Date | null;
+  }
+
+  const [flightSegments, setFlightSegments] = useState<FlightSegment[]>([
+    { id: '1', from: 'Mumbai', to: 'Dubai', departureDate: null },
+    { id: '2', from: 'Dubai', to: 'London', departureDate: null }
+  ]);
+
+  // Add flight segment function
+  const addFlightSegment = () => {
+    const newSegment: FlightSegment = {
+      id: Date.now().toString(),
+      from: '',
+      to: '',
+      departureDate: null
+    };
+    setFlightSegments([...flightSegments, newSegment]);
+  };
+
+  // Remove flight segment function
+  const removeFlightSegment = (id: string) => {
+    if (flightSegments.length > 2) {
+      setFlightSegments(flightSegments.filter(segment => segment.id !== id));
+    }
+  };
+
+  // Update flight segment function
+  const updateFlightSegment = (id: string, field: keyof FlightSegment, value: string | Date | null) => {
+    setFlightSegments(flightSegments.map(segment =>
+      segment.id === id ? { ...segment, [field]: value } : segment
+    ));
+  };
+
   // Calendar helper functions
   const formatDate = (date: Date | null, compact = false) => {
     if (!date) return "";
