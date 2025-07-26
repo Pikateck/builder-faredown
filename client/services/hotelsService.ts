@@ -227,6 +227,11 @@ export class HotelsService {
       console.log("⚠️ No live data available, using fallback");
       return await this.searchHotelsFallback(searchParams);
     } catch (error) {
+      // Handle AbortError specifically to avoid console noise
+      if (error instanceof Error && error.name === "AbortError") {
+        console.log("⏰ Hotel search was aborted, returning empty results");
+        return [];
+      }
       console.error("Hotel search error:", error);
       return [];
     }
