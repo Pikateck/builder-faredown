@@ -847,6 +847,8 @@ Please keep this ticket for your records.
           <div className="lg:col-span-3">
             {activeTab === "bookings" && renderBookings()}
             {activeTab === "profile" && renderProfile()}
+            {activeTab === "loyalty" && renderLoyalty()}
+            {activeTab === "payment" && renderPayment()}
             {activeTab === "settings" && renderSettings()}
           </div>
         </div>
