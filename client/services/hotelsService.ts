@@ -897,7 +897,7 @@ export class HotelsService {
         type: "city" as const,
         country: "India",
         code: "IMF",
-        flag: "🇮🇳",
+        flag: "🇮��",
       },
       {
         id: "SHL",
@@ -1343,6 +1343,13 @@ export class HotelsService {
               );
             }
             return []; // Return empty array immediately on abort
+          } else if (fetchError instanceof Error &&
+                    (fetchError.message.includes("Failed to fetch") ||
+                     fetchError.name === "TypeError")) {
+            console.log(
+              `🌐 Network connectivity issue - using fallback data for query: "${query}"`,
+            );
+            // Don't return here - let it fall through to use fallback data
           } else {
             console.warn(
               `⚠️ API fetch failed:`,
