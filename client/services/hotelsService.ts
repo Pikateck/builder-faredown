@@ -252,7 +252,13 @@ export class HotelsService {
         queryParams,
       );
 
-      // Direct fetch with enhanced error handling
+      // Direct fetch with enhanced error handling and AbortController
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.log("⏰ Hotel search API request timeout - aborting");
+        controller.abort();
+      }, 10000); // 10 second timeout for hotel search
+
       try {
         const params = new URLSearchParams();
         Object.entries(queryParams).forEach(([key, value]) => {
@@ -266,6 +272,7 @@ export class HotelsService {
           headers: {
             "Content-Type": "application/json",
           },
+          signal: controller.signal,
         });
 
         if (response.ok) {
@@ -889,7 +896,7 @@ export class HotelsService {
         type: "city" as const,
         country: "UAE",
         code: "AUH",
-        flag: "🇦🇪",
+        flag: "��🇪",
       },
       {
         id: "DOH",
