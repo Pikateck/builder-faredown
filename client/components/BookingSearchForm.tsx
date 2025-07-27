@@ -225,17 +225,16 @@ export function BookingSearchForm() {
 
   // Handle destination search when user types - immediate like Booking.com
   useEffect(() => {
-    if (popularDestinationsLoaded) {
+    if (popularDestinationsLoaded && isDestinationOpen) {
       if (destination && destination.length >= 1) {
         // Search immediately as user types (like Booking.com)
         searchDestinations(destination);
-        if (!isDestinationOpen) setIsDestinationOpen(true); // Auto-open dropdown
       } else {
-        // Clear suggestions when no search query
+        // Show popular destinations when no search query
         setDestinationSuggestions([]);
       }
     }
-  }, [destination, searchDestinations, popularDestinationsLoaded]);
+  }, [destination, searchDestinations, popularDestinationsLoaded, isDestinationOpen]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
