@@ -953,35 +953,7 @@ export function BookingSearchForm() {
         </div>
       </div>
 
-      {/* Checkboxes */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 text-xs sm:text-sm">
-        <div className="flex items-center space-x-2 touch-manipulation">
-          <Checkbox
-            id="entire-home"
-            checked={lookingForEntireHome}
-            onCheckedChange={(checked) =>
-              setLookingForEntireHome(checked === true)
-            }
-            className="w-4 h-4 sm:w-5 sm:h-5"
-          />
-          <label htmlFor="entire-home" className="cursor-pointer select-none">
-            I'm looking for an entire home or apartment
-          </label>
-        </div>
-        <div className="flex items-center space-x-2 touch-manipulation">
-          <Checkbox
-            id="flights"
-            checked={lookingForFlights}
-            onCheckedChange={(checked) =>
-              setLookingForFlights(checked === true)
-            }
-            className="w-4 h-4 sm:w-5 sm:h-5"
-          />
-          <label htmlFor="flights" className="cursor-pointer select-none">
-            I'm looking for flights
-          </label>
-        </div>
-      </div>
+
     </div>
   );
 }
