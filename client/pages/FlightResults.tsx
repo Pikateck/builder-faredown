@@ -1799,6 +1799,50 @@ export default function FlightResults() {
                     </div>
                   ))}
                 </div>
+
+                {/* Fare Type Filter */}
+                <div className="space-y-1 mt-4">
+                  <div className="border-b border-gray-200 pb-1">
+                    <div className="text-sm font-semibold text-gray-900">
+                      Fare Type
+                    </div>
+                  </div>
+                  {[
+                    { value: "all", label: "All", count: flightData.length },
+                    {
+                      value: "refundable",
+                      label: "Refundable",
+                      count: flightData.filter((f) => f.refundability === "Refundable").length,
+                    },
+                    {
+                      value: "non-refundable",
+                      label: "Non-Refundable",
+                      count: flightData.filter((f) => f.refundability === "Non-Refundable").length,
+                    },
+                  ].map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center justify-between py-0.5 min-h-[24px] pr-1"
+                    >
+                      <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                        <div className="w-4 h-4 flex items-center justify-center mr-2">
+                          <input
+                            type="radio"
+                            name="fareType"
+                            value={option.value}
+                            checked={selectedFareType === option.value}
+                            onChange={() => handleFareTypeFilter(option.value)}
+                            className={`w-4 h-4 ${selectedFareType === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          />
+                        </div>
+                        {option.label}
+                      </label>
+                      <span className="text-xs text-gray-500 ml-2 mr-1">
+                        {option.count}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
