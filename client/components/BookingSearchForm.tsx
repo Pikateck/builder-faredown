@@ -383,21 +383,12 @@ export function BookingSearchForm() {
                   }}
                   onFocus={() => {
                     setIsDestinationOpen(true);
-                    // Show popular destinations if no text
+                    // Show popular destinations if no text or trigger search if text exists
                     if (!destination) {
                       setDestinationSuggestions([]);
+                    } else if (destination.length >= 1) {
+                      searchDestinations(destination);
                     }
-                  }}
-                  onBlur={(e) => {
-                    // Delay hiding to allow selection
-                    setTimeout(() => {
-                      if (
-                        e.currentTarget &&
-                        !e.currentTarget.contains(document.activeElement)
-                      ) {
-                        setIsDestinationOpen(false);
-                      }
-                    }, 150);
                   }}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation"
                   placeholder="Where are you going? (e.g., Madrid, Business Hotel Dubai)"
