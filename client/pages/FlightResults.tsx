@@ -1008,7 +1008,7 @@ export default function FlightResults() {
           </div>
         </div>
 
-        {/* Desktop Header (≥769px) - Builder.io Design Format */}
+        {/* Desktop Header (��769px) - Builder.io Design Format */}
         <div className="hidden md:block">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between text-white">
@@ -1933,7 +1933,7 @@ export default function FlightResults() {
                         <div className={`text-xs font-medium ${
                           flight.fareTypes[0].refundability === 'Refundable'
                             ? 'text-green-600'
-                            : 'text-green-600'
+                            : 'text-red-600'
                         }`}>
                           {flight.fareTypes[0].refundability}
                         </div>
