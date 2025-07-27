@@ -2599,17 +2599,17 @@ export default function FlightResults() {
 
       {/* Mobile Filters Modal */}
       <Dialog open={showMobileFilters} onOpenChange={setShowMobileFilters}>
-        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-lg md:h-auto md:rounded-lg">
-          <DialogHeader className="border-b border-gray-200 pb-4">
+        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-lg md:h-auto md:rounded-lg flex flex-col">
+          <DialogHeader className="border-b border-gray-200 pb-3 px-4 pt-4 bg-white sticky top-0 z-10">
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-lg font-semibold">
+              <DialogTitle className="text-lg font-semibold text-gray-900">
                 Filters & Sort
               </DialogTitle>
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
           </DialogHeader>
