@@ -2365,8 +2365,17 @@ export default function FlightResults() {
                             </div>
                           )}
                         </div>
-                        <div className="text-xs text-gray-600 mb-4">
+                        <div className="text-xs text-gray-600 mb-1">
                           All-inclusive price
+                        </div>
+                        <div className={`text-xs mb-4 font-medium ${
+                          flight.refundability === 'Refundable'
+                            ? 'text-green-600'
+                            : flight.refundability === 'Non-Refundable'
+                            ? 'text-red-600'
+                            : 'text-orange-600'
+                        }`}>
+                          {flight.refundability}
                         </div>
                         <div className="space-y-2 w-32">
                           <Button
