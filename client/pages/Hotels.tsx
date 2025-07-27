@@ -664,6 +664,119 @@ export default function Hotels() {
               <BookingSearchForm />
             </div>
 
+            {/* Features Section */}
+            <div className="bg-white rounded-xl p-6 sm:p-8 mb-8">
+              <h2 className="text-2xl font-bold text-center mb-8 text-gray-900">
+                Why Choose Faredown for Hotels?
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
+                    <Hotel className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Best Hotels</h3>
+                  <p className="text-gray-600 text-sm">
+                    Handpicked accommodations for every budget
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Secure Booking</h3>
+                  <p className="text-gray-600 text-sm">
+                    Safe and secure payment processing
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
+                    <Zap className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">Instant Confirmation</h3>
+                  <p className="text-gray-600 text-sm">
+                    Get immediate booking confirmations
+                  </p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
+                    <Clock className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">24/7 Support</h3>
+                  <p className="text-gray-600 text-sm">
+                    Round-the-clock customer assistance
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Popular Hotel Destinations */}
+            <div className="bg-white rounded-xl p-6 sm:p-8 mb-8">
+              <h2 className="text-2xl font-bold text-center mb-8 text-gray-900">
+                Popular Hotel Destinations
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[
+                  { name: "Dubai", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400", hotels: "1,200+ hotels" },
+                  { name: "Mumbai", image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400", hotels: "800+ hotels" },
+                  { name: "Delhi", image: "https://images.unsplash.com/photo-1586339277416-6dbbd9e8ca45?w=400", hotels: "950+ hotels" },
+                  { name: "Singapore", image: "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=400", hotels: "600+ hotels" },
+                  { name: "Abu Dhabi", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400", hotels: "400+ hotels" },
+                  { name: "Bangkok", image: "https://images.unsplash.com/photo-1563492065-4c242d4c8234?w=400", hotels: "750+ hotels" },
+                  { name: "Goa", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400", hotels: "300+ hotels" },
+                  { name: "London", image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400", hotels: "900+ hotels" },
+                ].map((destination) => (
+                  <div key={destination.name} className="group cursor-pointer">
+                    <div className="relative overflow-hidden rounded-xl mb-3">
+                      <img
+                        src={destination.image}
+                        alt={destination.name}
+                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
+                      <div className="absolute bottom-2 left-2 text-white">
+                        <div className="font-semibold">{destination.name}</div>
+                        <div className="text-xs opacity-90">{destination.hotels}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Hotel Booking Benefits */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 sm:p-8">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  More Than Just Hotel Booking
+                </h2>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  Discover exclusive deals, earn loyalty points, and enjoy personalized recommendations for your perfect stay.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white rounded-lg p-6 text-center">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Gift className="w-6 h-6 text-green-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Exclusive Deals</h3>
+                  <p className="text-gray-600 text-sm">Member-only rates and special promotions</p>
+                </div>
+                <div className="bg-white rounded-lg p-6 text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">No Hidden Fees</h3>
+                  <p className="text-gray-600 text-sm">Transparent pricing with no surprise charges</p>
+                </div>
+                <div className="bg-white rounded-lg p-6 text-center">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">Loyalty Rewards</h3>
+                  <p className="text-gray-600 text-sm">Earn points and unlock exclusive benefits</p>
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
