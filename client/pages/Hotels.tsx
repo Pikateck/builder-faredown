@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { useDateContext } from "@/contexts/DateContext";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,547 +10,170 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
-import { Header } from "@/components/Header";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { BookingCalendar } from "@/components/BookingCalendar";
+import { addDays } from "date-fns";
 import {
-  Star,
+  Plane,
+  ChevronDown,
+  ArrowRightLeft,
   MapPin,
-  Heart,
-  ChevronLeft,
-  Menu,
-  Search,
-  Filter,
-  SlidersHorizontal,
-  Calendar,
+  Calendar as CalendarIcon,
   Users,
-  ArrowRight,
-  Wifi,
-  Car,
-  Coffee,
-  Dumbbell,
-  Waves,
+  Settings,
   User,
   Hotel,
-  Plane,
-  Gift,
+  Heart,
+  TrendingUp,
+  DollarSign,
   Shield,
-  Clock,
-  CheckCircle,
-  Zap,
+  Headphones,
+  ArrowRight,
 } from "lucide-react";
-import { ApiConnectionTest } from "@/components/ApiConnectionTest";
+import { AdminTestButton } from "@/components/AdminTestButton";
 
 export default function Hotels() {
   const navigate = useNavigate();
-  const [showMobileSearch, setShowMobileSearch] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(false);
-  const [showSort, setShowSort] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 50000]);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("price");
+  const { 
+    departureDate,
+    returnDate,
+    tripType,
+    setTripType,
+    formatDisplayDate,
+  } = useDateContext();
 
-  // Sample hotel data
-  const hotels = [
-    {
-      id: 1,
-      name: "Grand Hyatt Dubai",
-      location: "Dubai - Deira Creek",
-      rating: 8.1,
-      ratingText: "Excellent",
-      reviews: 234,
-      price: 18500,
-      originalPrice: 22000,
-      image:
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400",
-      amenities: ["Wifi", "Pool", "Gym", "Parking"],
-      distance: "2.1 km from center",
-      breakfast: true,
-      freeWifi: true,
-      discount: 15,
-    },
-    {
-      id: 2,
-      name: "Atlantis The Palm",
-      location: "Dubai - Palm Jumeirah",
-      rating: 9.2,
-      ratingText: "Wonderful",
-      reviews: 1247,
-      price: 45600,
-      originalPrice: 52000,
-      image:
-        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400",
-      amenities: ["Beach", "Pool", "Spa", "Restaurant"],
-      distance: "15.3 km from center",
-      breakfast: true,
-      freeWifi: true,
-      discount: 12,
-    },
-    {
-      id: 3,
-      name: "Four Seasons Resort Dubai",
-      location: "Dubai - Jumeirah Beach",
-      rating: 9.0,
-      ratingText: "Wonderful",
-      reviews: 856,
-      price: 38900,
-      originalPrice: 44000,
-      image:
-        "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400",
-      amenities: ["Beach", "Spa", "Fine Dining", "Kids Club"],
-      distance: "12.8 km from center",
-      breakfast: true,
-      freeWifi: true,
-      discount: 11,
-    },
-  ];
+  // State for hotel search functionality
+  const [activeTab, setActiveTab] = useState("hotels");
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState({
+    code: "INR",
+    symbol: "₹",
+    name: "Indian Rupee",
+  });
+  const [showFromCities, setShowFromCities] = useState(false);
+  const [showToCities, setShowToCities] = useState(false);
+  const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
+  const [selectedToCity, setSelectedToCity] = useState("Dubai");
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showClassDropdown, setShowClassDropdown] = useState(false);
+  const [selectedClass, setSelectedClass] = useState("Economy");
+  const [showTravelers, setShowTravelers] = useState(false);
+  const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const recentSearches = [
-    {
-      destination: "Dubai",
-      dates: "Aug 1 - Aug 5, 2 people",
-      image:
-        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100",
+  // City data for hotels
+  const cityData = {
+    Mumbai: {
+      code: "BOM",
+      name: "Mumbai",
+      airport: "Mumbai, Maharashtra, India",
+      fullName: "Mumbai, Maharashtra, India",
     },
-  ];
-
-  const formatPrice = (price: number) => {
-    return `₹${price.toLocaleString()}`;
+    Delhi: {
+      code: "DEL", 
+      name: "Delhi",
+      airport: "New Delhi, Delhi, India",
+      fullName: "New Delhi, Delhi, India",
+    },
+    Dubai: {
+      code: "DXB",
+      name: "Dubai",
+      airport: "Dubai, United Arab Emirates", 
+      fullName: "Dubai, United Arab Emirates",
+    },
+    "Abu Dhabi": {
+      code: "AUH",
+      name: "Abu Dhabi",
+      airport: "Abu Dhabi, United Arab Emirates",
+      fullName: "Abu Dhabi, United Arab Emirates", 
+    },
+    Singapore: {
+      code: "SIN",
+      name: "Singapore", 
+      airport: "Singapore, Singapore",
+      fullName: "Singapore, Singapore",
+    },
   };
-
-  // Filter and sort hotels
-  const filteredAndSortedHotels = React.useMemo(() => {
-    let filtered = hotels.filter((hotel) => {
-      // Price filter
-      if (hotel.price < priceRange[0] || hotel.price > priceRange[1])
-        return false;
-
-      // Rating filter
-      if (selectedAmenities.includes("Rating 8+") && hotel.rating < 8)
-        return false;
-
-      // Amenities filter
-      if (selectedAmenities.includes("Free WiFi") && !hotel.freeWifi)
-        return false;
-      if (selectedAmenities.includes("Breakfast") && !hotel.breakfast)
-        return false;
-
-      return true;
-    });
-
-    // Sort hotels
-    switch (sortBy) {
-      case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case "rating":
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      case "distance":
-        // Simple distance sort based on distance string
-        filtered.sort((a, b) => {
-          const aDistance = parseFloat(a.distance.split(" ")[0]);
-          const bDistance = parseFloat(b.distance.split(" ")[0]);
-          return aDistance - bDistance;
-        });
-        break;
-      default:
-        break;
-    }
-
-    return filtered;
-  }, [hotels, priceRange, selectedAmenities, sortBy]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
 
-      {/* Mobile Header & Search (≤768px) */}
+      {/* Mobile Layout (≤768px) */}
       <div className="block md:hidden">
-        {/* Mobile Header */}
-        <header className="bg-white shadow-sm sticky top-0 z-50">
-          <div className="px-4 py-3">
-            <div className="flex items-center justify-between">
-              <button onClick={() => navigate(-1)} className="p-2 -ml-2">
-                <ChevronLeft className="w-6 h-6 text-gray-700" />
-              </button>
-              <div className="flex-1 text-center">
-                <h1 className="text-lg font-semibold text-gray-900">Hotels</h1>
-                <p className="text-xs text-gray-500">
-                  Dubai • Aug 1-5 • 2 guests
+        {/* Mobile Features Section */}
+        <div className="bg-gray-50 py-8">
+          <div className="px-4">
+            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
+              Why Faredown?
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <TrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
+                <p className="text-xs text-gray-600">
+                  Negotiate real-time prices
                 </p>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-2 -mr-2">
-                    <Menu className="w-6 h-6 text-gray-700" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => navigate("/account")}>
-                    My Account
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/account/trips")}>
-                    My Trips
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/help")}>
-                    Help Center
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/")}>
-                    Home
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <DollarSign className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
+                <p className="text-xs text-gray-600">
+                  Pay what you feel is fair
+                </p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
+                <p className="text-xs text-gray-600">Instant confirmations</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Headphones className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
+                <p className="text-xs text-gray-600">Always here to help</p>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Mobile Search Summary */}
-          <div className="border-t border-gray-100 px-4 py-3">
-            <button
-              onClick={() => setShowMobileSearch(true)}
-              className="w-full flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
-            >
-              <Search className="w-5 h-5 text-gray-400" />
-              <div className="flex-1 text-left">
-                <div className="text-sm font-medium text-gray-900">
-                  Dubai • Aug 1-5 • 2 guests
-                </div>
-                <div className="text-xs text-gray-500">
-                  Tap to change search
-                </div>
-              </div>
-            </button>
-          </div>
-
-          {/* Mobile Filter Bar */}
-          <div className="border-t border-gray-100 px-4 py-3">
-            <div className="flex items-center space-x-3 overflow-x-auto">
-              <Sheet open={showFilters} onOpenChange={setShowFilters}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="whitespace-nowrap"
-                  >
-                    <SlidersHorizontal className="w-4 h-4 mr-2" />
-                    Filters
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="bottom" className="h-[80vh]">
-                  <SheetHeader>
-                    <SheetTitle>Filters</SheetTitle>
-                  </SheetHeader>
-                  <div className="py-4 space-y-6">
-                    {/* Price Range */}
-                    <div>
-                      <h3 className="font-medium mb-3">Price per night</h3>
-                      <Slider
-                        value={priceRange}
-                        onValueChange={setPriceRange}
-                        max={100000}
-                        step={1000}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-sm text-gray-600 mt-1">
-                        <span>₹{priceRange[0].toLocaleString()}</span>
-                        <span>₹{priceRange[1].toLocaleString()}</span>
-                      </div>
-                    </div>
-
-                    {/* Amenities */}
-                    <div>
-                      <h3 className="font-medium mb-3">Amenities</h3>
-                      <div className="space-y-2">
-                        {[
-                          "Free WiFi",
-                          "Breakfast",
-                          "Pool",
-                          "Gym",
-                          "Spa",
-                          "Parking",
-                        ].map((amenity) => (
-                          <div
-                            key={amenity}
-                            className="flex items-center space-x-2"
-                          >
-                            <Checkbox
-                              id={amenity}
-                              checked={selectedAmenities.includes(amenity)}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  setSelectedAmenities([
-                                    ...selectedAmenities,
-                                    amenity,
-                                  ]);
-                                } else {
-                                  setSelectedAmenities(
-                                    selectedAmenities.filter(
-                                      (a) => a !== amenity,
-                                    ),
-                                  );
-                                }
-                              }}
-                            />
-                            <label htmlFor={amenity} className="text-sm">
-                              {amenity}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Apply Button */}
-                    <div className="pt-4">
-                      <Button
-                        className="w-full"
-                        onClick={() => setShowFilters(false)}
-                      >
-                        Apply Filters
-                      </Button>
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="whitespace-nowrap"
-                  >
-                    Price
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => setSortBy("price-low")}>
-                    Lowest price first
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy("price-high")}>
-                    Highest price first
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Button
-                variant={
-                  selectedAmenities.includes("Rating 8+")
-                    ? "default"
-                    : "outline"
-                }
-                size="sm"
-                className="whitespace-nowrap"
-                onClick={() => {
-                  if (selectedAmenities.includes("Rating 8+")) {
-                    setSelectedAmenities(
-                      selectedAmenities.filter((a) => a !== "Rating 8+"),
-                    );
-                  } else {
-                    setSelectedAmenities([...selectedAmenities, "Rating 8+"]);
-                  }
-                }}
+        {/* Mobile Quick Links */}
+        <div className="bg-white py-6">
+          <div className="px-4">
+            <h3 className="font-semibold mb-4">Quick Links</h3>
+            <div className="space-y-3">
+              <Link
+                to="/hotels"
+                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
               >
-                Rating 8+
-              </Button>
-
-              <Button
-                variant={
-                  selectedAmenities.includes("Free WiFi")
-                    ? "default"
-                    : "outline"
-                }
-                size="sm"
-                className="whitespace-nowrap"
-                onClick={() => {
-                  if (selectedAmenities.includes("Free WiFi")) {
-                    setSelectedAmenities(
-                      selectedAmenities.filter((a) => a !== "Free WiFi"),
-                    );
-                  } else {
-                    setSelectedAmenities([...selectedAmenities, "Free WiFi"]);
-                  }
-                }}
+                <Hotel className="w-5 h-5 text-[#003580]" />
+                <span className="font-medium">Hotels</span>
+                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
+              </Link>
+              <Link
+                to="/account"
+                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
               >
-                Free WiFi
-              </Button>
-
-              <Button
-                variant={
-                  selectedAmenities.includes("Breakfast")
-                    ? "default"
-                    : "outline"
-                }
-                size="sm"
-                className="whitespace-nowrap"
-                onClick={() => {
-                  if (selectedAmenities.includes("Breakfast")) {
-                    setSelectedAmenities(
-                      selectedAmenities.filter((a) => a !== "Breakfast"),
-                    );
-                  } else {
-                    setSelectedAmenities([...selectedAmenities, "Breakfast"]);
-                  }
-                }}
-              >
-                Breakfast
-              </Button>
+                <User className="w-5 h-5 text-[#003580]" />
+                <span className="font-medium">My Account</span>
+                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
+              </Link>
             </div>
-          </div>
-        </header>
-
-        {/* Mobile Hotel Results */}
-        <div className="p-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {filteredAndSortedHotels.length} properties found
-            </h2>
-            <DropdownMenu open={showSort} onOpenChange={setShowSort}>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-blue-600">
-                  Sort by:{" "}
-                  {sortBy === "price-low"
-                    ? "Price (Low)"
-                    : sortBy === "price-high"
-                      ? "Price (High)"
-                      : sortBy === "rating"
-                        ? "Rating"
-                        : "Price"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setSortBy("price-low")}>
-                  Price (Lowest first)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy("price-high")}>
-                  Price (Highest first)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy("rating")}>
-                  Guest rating
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy("distance")}>
-                  Distance from center
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          {/* Mobile Hotel Cards */}
-          {filteredAndSortedHotels.map((hotel) => (
-            <Card
-              key={hotel.id}
-              className="overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => navigate(`/hotels/${hotel.id}`)}
-            >
-              <div className="relative">
-                <img
-                  src={hotel.image}
-                  alt={hotel.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-3 left-3">
-                  <Badge className="bg-green-600 text-white">
-                    {hotel.discount}% OFF
-                  </Badge>
-                </div>
-                <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-gray-600" />
-                </button>
-              </div>
-
-              <CardContent className="p-4">
-                <div className="mb-2">
-                  <h3 className="font-semibold text-gray-900 text-lg leading-tight">
-                    {hotel.name}
-                  </h3>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">
-                      {hotel.location}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 mt-1">
-                    <span className="text-xs text-gray-500">
-                      {hotel.distance}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Rating */}
-                <div className="flex items-center space-x-2 mb-3">
-                  <div className="bg-[#003580] text-white px-2 py-1 rounded text-sm font-semibold">
-                    {hotel.rating}
-                  </div>
-                  <div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {hotel.ratingText}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {hotel.reviews} reviews
-                    </div>
-                  </div>
-                </div>
-
-                {/* Amenities */}
-                <div className="flex items-center space-x-3 mb-3 text-xs">
-                  {hotel.freeWifi && (
-                    <div className="flex items-center space-x-1 text-green-600">
-                      <Wifi className="w-3 h-3" />
-                      <span>Free WiFi</span>
-                    </div>
-                  )}
-                  {hotel.breakfast && (
-                    <div className="flex items-center space-x-1 text-green-600">
-                      <Coffee className="w-3 h-3" />
-                      <span>Breakfast</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Pricing */}
-                <div className="flex items-end justify-between">
-                  <div>
-                    <div className="text-xs text-gray-500 line-through">
-                      {formatPrice(hotel.originalPrice)}
-                    </div>
-                    <div className="text-xl font-bold text-gray-900">
-                      {formatPrice(hotel.price)}
-                    </div>
-                    <div className="text-xs text-gray-500">per night</div>
-                  </div>
-                  <div className="text-right">
-                    <Button className="bg-[#003580] hover:bg-[#0071c2]">
-                      Select
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-
-          {/* Mobile Load More */}
-          <div className="text-center py-6">
-            <Button variant="outline" className="w-full">
-              Load more properties
-            </Button>
           </div>
         </div>
 
         {/* Mobile Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
+        <div className="bg-white border-t border-gray-200">
           <div className="grid grid-cols-4 h-16">
             <Link
               to="/"
@@ -566,218 +186,371 @@ export default function Hotels() {
               <Hotel className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">Hotels</span>
             </button>
-            <Link
-              to="/account"
-              className="flex flex-col items-center justify-center space-y-1"
-            >
+            <button className="flex flex-col items-center justify-center space-y-1">
               <Heart className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Saved</span>
-            </Link>
-            <Link
-              to="/account"
-              className="flex flex-col items-center justify-center space-y-1"
-            >
+            </button>
+            <button className="flex flex-col items-center justify-center space-y-1">
               <User className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Account</span>
-            </Link>
+            </button>
           </div>
         </div>
-
-        {/* Mobile bottom padding */}
-        <div className="h-16"></div>
-
-        {/* Mobile Search Modal */}
-        <Dialog open={showMobileSearch} onOpenChange={setShowMobileSearch}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Search Hotels</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Destination</label>
-                <input
-                  type="text"
-                  placeholder="Where are you going?"
-                  className="w-full p-3 border rounded-lg mt-1"
-                  defaultValue="Dubai"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-sm font-medium">Check-in</label>
-                  <input
-                    type="date"
-                    className="w-full p-3 border rounded-lg mt-1"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Check-out</label>
-                  <input
-                    type="date"
-                    className="w-full p-3 border rounded-lg mt-1"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="text-sm font-medium">Guests</label>
-                <select className="w-full p-3 border rounded-lg mt-1">
-                  <option>1 guest</option>
-                  <option>2 guests</option>
-                  <option>3 guests</option>
-                  <option>4+ guests</option>
-                </select>
-              </div>
-              <Button
-                className="w-full bg-[#003580] hover:bg-[#0071c2]"
-                onClick={() => {
-                  setShowMobileSearch(false);
-                  navigate("/hotels/results");
-                }}
-              >
-                Search Hotels
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
 
-      {/* DESKTOP LAYOUT (≥769px) */}
+      {/* DESKTOP LAYOUT (≥769px) - Enhanced Original Design */}
       <div className="hidden md:block">
-        <div className="min-h-screen bg-[#003580]">
-          <Header />
-          <ApiConnectionTest />
+        {/* Desktop Header */}
+        <header className="text-white" style={{ backgroundColor: "#003580" }}>
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <Link to="/" className="flex items-center space-x-2">
+                <span className="text-lg sm:text-xl font-bold tracking-tight">
+                  faredown.com
+                </span>
+              </Link>
 
-          {/* Desktop Content */}
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
-            {/* Desktop Hero Section */}
-            <div className="text-center mb-6 sm:mb-8">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-4">
-                Find your next stay
-              </h1>
-              <p className="text-white/90 text-sm sm:text-base">
-                Search low prices on hotels, homes and much more...
-              </p>
-            </div>
+              {/* Centered Navigation */}
+              <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+                <Link
+                  to="/"
+                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
+                >
+                  <span>Flights</span>
+                </Link>
+                <button
+                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
+                >
+                  <span>Hotels</span>
+                </button>
+              </nav>
 
-            {/* Desktop Search Form */}
-            <div className="mb-6 sm:mb-8">
-              <BookingSearchForm />
-            </div>
-
-            {/* Features Section */}
-            <div className="bg-white rounded-xl p-6 sm:p-8 mb-8">
-              <h2 className="text-2xl font-bold text-center mb-8 text-gray-900">
-                Why Choose Faredown for Hotels?
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
-                    <Hotel className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Best Hotels</h3>
-                  <p className="text-gray-600 text-sm">
-                    Handpicked accommodations for every budget
-                  </p>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
-                    <Shield className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Secure Booking</h3>
-                  <p className="text-gray-600 text-sm">
-                    Safe and secure payment processing
-                  </p>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
-                    <Zap className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Instant Confirmation</h3>
-                  <p className="text-gray-600 text-sm">
-                    Get immediate booking confirmations
-                  </p>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-4">
-                    <Clock className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">24/7 Support</h3>
-                  <p className="text-gray-600 text-sm">
-                    Round-the-clock customer assistance
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Popular Hotel Destinations */}
-            <div className="bg-white rounded-xl p-6 sm:p-8 mb-8">
-              <h2 className="text-2xl font-bold text-center mb-8 text-gray-900">
-                Popular Hotel Destinations
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {[
-                  { name: "Dubai", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400", hotels: "1,200+ hotels" },
-                  { name: "Mumbai", image: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=400", hotels: "800+ hotels" },
-                  { name: "Delhi", image: "https://images.unsplash.com/photo-1586339277416-6dbbd9e8ca45?w=400", hotels: "950+ hotels" },
-                  { name: "Singapore", image: "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=400", hotels: "600+ hotels" },
-                  { name: "Abu Dhabi", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400", hotels: "400+ hotels" },
-                  { name: "Bangkok", image: "https://images.unsplash.com/photo-1563492065-4c242d4c8234?w=400", hotels: "750+ hotels" },
-                  { name: "Goa", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400", hotels: "300+ hotels" },
-                  { name: "London", image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400", hotels: "900+ hotels" },
-                ].map((destination) => (
-                  <div key={destination.name} className="group cursor-pointer">
-                    <div className="relative overflow-hidden rounded-xl mb-3">
-                      <img
-                        src={destination.image}
-                        alt={destination.name}
-                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
-                      <div className="absolute bottom-2 left-2 text-white">
-                        <div className="font-semibold">{destination.name}</div>
-                        <div className="text-xs opacity-90">{destination.hotels}</div>
+              <div className="flex items-center space-x-2 md:space-x-6">
+                {/* Language and Currency */}
+                <div className="flex items-center space-x-4 text-sm">
+                  <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
+                    <span>English (UK)</span>
+                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() =>
+                        setShowCurrencyDropdown(!showCurrencyDropdown)
+                      }
+                      className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
+                    >
+                      <span>
+                        {selectedCurrency.symbol} {selectedCurrency.code}
+                      </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showCurrencyDropdown && (
+                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
+                        {[
+                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
+                          { code: "AED", symbol: "د.إ", name: "United Arab Emirates Dirham" },
+                          { code: "USD", symbol: "$", name: "US Dollar" },
+                          { code: "GBP", symbol: "£", name: "Great Britain Pound" },
+                          { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+                          { code: "EUR", symbol: "€", name: "Euro" },
+                        ].map((currency) => (
+                          <button
+                            key={currency.code}
+                            onClick={() => {
+                              setSelectedCurrency(currency);
+                              setShowCurrencyDropdown(false);
+                            }}
+                            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
+                          >
+                            <span>{currency.name}</span>
+                            <span className="font-medium">
+                              {currency.symbol} {currency.code}
+                            </span>
+                          </button>
+                        ))}
                       </div>
-                    </div>
+                    )}
                   </div>
-                ))}
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  {/* Admin Test Button */}
+                  <AdminTestButton variant="desktop" />
+
+                  {!isLoggedIn && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
+                      >
+                        Register
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
+                      >
+                        Sign in
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
+          </div>
+        </header>
 
-            {/* Hotel Booking Benefits */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 sm:p-8">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  More Than Just Hotel Booking
+        {/* Desktop Main Content */}
+        <div
+          className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
+          style={{ backgroundColor: "#003580" }}
+        >
+          <div className="max-w-7xl mx-auto px-3 sm:px-4">
+            <div className="text-center mb-2 sm:mb-3">
+              <div className="mb-3 sm:mb-5">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+                  Find your perfect stay
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Discover exclusive deals, earn loyalty points, and enjoy personalized recommendations for your perfect stay.
-                </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Gift className="w-6 h-6 text-green-600" />
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
+                Search hotels with live AI bargaining.
+              </h1>
+            </div>
+
+            {/* Desktop Hotel Search Form */}
+            <div className="bg-white border-b border-gray-200 overflow-visible rounded-t-lg">
+              <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
+                {/* Hotel Search inputs */}
+                <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 w-full max-w-6xl overflow-visible">
+                  {/* Destination */}
+                  <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Destination
+                    </label>
+                    <button
+                      onClick={() => setShowFromCities(!showFromCities)}
+                      className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
+                    >
+                      <Hotel className="w-4 h-4 text-gray-500 mr-2" />
+                      <div className="flex items-center space-x-2 min-w-0">
+                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                          {cityData[selectedFromCity]?.code || "BOM"}
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium truncate">
+                          {cityData[selectedFromCity]?.airport ||
+                            "Mumbai, Maharashtra, India"}
+                        </span>
+                      </div>
+                    </button>
+
+                    {showFromCities && (
+                      <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                        <div className="mb-3">
+                          <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                            City or destination
+                          </h3>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              placeholder="Mumbai"
+                              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          {Object.entries(cityData).map(([city, data]) => (
+                            <button
+                              key={city}
+                              onClick={() => {
+                                setSelectedFromCity(city);
+                                setShowFromCities(false);
+                              }}
+                              className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                  <span className="text-xs font-bold text-gray-600">
+                                    🏨
+                                  </span>
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {city}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {data.fullName}
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  <h3 className="font-semibold mb-2">Exclusive Deals</h3>
-                  <p className="text-gray-600 text-sm">Member-only rates and special promotions</p>
-                </div>
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-6 h-6 text-blue-600" />
+
+                  {/* Check-in / Check-out Dates */}
+                  <div className="relative flex-1 lg:min-w-[320px] lg:max-w-[380px] w-full">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Check-in / Check-out
+                    </label>
+                    <Popover open={showCalendar} onOpenChange={setShowCalendar}>
+                      <PopoverTrigger asChild>
+                        <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation">
+                          <CalendarIcon className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
+                          <div className="flex items-center space-x-2 min-w-0">
+                            <span className="text-sm text-gray-700 font-medium truncate">
+                              {departureDate
+                                ? `${formatDisplayDate(departureDate)} - ${
+                                    returnDate
+                                      ? formatDisplayDate(returnDate)
+                                      : "Check-out"
+                                  }`
+                                : "Select dates"}
+                            </span>
+                          </div>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <BookingCalendar
+                          initialRange={{
+                            startDate: departureDate || new Date(),
+                            endDate:
+                              returnDate || addDays(departureDate || new Date(), 7),
+                          }}
+                          onChange={(range) => {
+                            console.log(
+                              "Hotel calendar range selected:",
+                              range,
+                            );
+                          }}
+                          onClose={() => setShowCalendar(false)}
+                          className="w-full"
+                          bookingType="hotel"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                  <h3 className="font-semibold mb-2">No Hidden Fees</h3>
-                  <p className="text-gray-600 text-sm">Transparent pricing with no surprise charges</p>
-                </div>
-                <div className="bg-white rounded-lg p-6 text-center">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star className="w-6 h-6 text-purple-600" />
+
+                  {/* Guests */}
+                  <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Guests
+                    </label>
+                    <button
+                      onClick={() => setShowTravelers(!showTravelers)}
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+                    >
+                      <Users className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
+                      <span className="text-sm text-gray-700 font-medium truncate">
+                        {travelers.adults} adult
+                        {travelers.adults > 1 ? "s" : ""}
+                        {travelers.children > 0
+                          ? `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`
+                          : ""}
+                      </span>
+                    </button>
+
+                    {showTravelers && (
+                      <div className="absolute top-14 right-0 bg-white border border-gray-300 rounded-md shadow-xl p-4 z-50 w-72">
+                        <div className="space-y-6">
+                          <div className="flex items-center justify-between py-2">
+                            <div>
+                              <div className="font-medium text-gray-900">Adults</div>
+                              <div className="text-sm text-gray-500">Age 18+</div>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    adults: Math.max(1, prev.adults - 1),
+                                  }))
+                                }
+                                disabled={travelers.adults <= 1}
+                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                              >
+                                −
+                              </button>
+                              <span className="w-8 text-center font-medium text-gray-900">
+                                {travelers.adults}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    adults: prev.adults + 1,
+                                  }))
+                                }
+                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between py-2">
+                            <div>
+                              <div className="font-medium text-gray-900">
+                                Children
+                              </div>
+                              <div className="text-sm text-gray-500">Age 0-17</div>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    children: Math.max(0, prev.children - 1),
+                                  }))
+                                }
+                                disabled={travelers.children <= 0}
+                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                              >
+                                −
+                              </button>
+                              <span className="w-8 text-center font-medium text-gray-900">
+                                {travelers.children}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    children: prev.children + 1,
+                                  }))
+                                }
+                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="pt-2">
+                            <Button
+                              onClick={() => setShowTravelers(false)}
+                              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3"
+                            >
+                              Done
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  <h3 className="font-semibold mb-2">Loyalty Rewards</h3>
-                  <p className="text-gray-600 text-sm">Earn points and unlock exclusive benefits</p>
+
+                  <div className="w-full lg:w-auto lg:min-w-[120px]">
+                    <Button 
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
+                      onClick={() => navigate("/hotels/results")}
+                    >
+                      Search
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
