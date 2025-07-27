@@ -582,9 +582,7 @@ export default function Index() {
                 Control your price for flights & hotels — with live AI
                 bargaining.
               </p>
-              <p className="text-blue-100 text-xs mb-3">
-                Join 50M+ travelers who bargain smarter.
-              </p>
+
             </div>
 
             {/* Mobile Trip Type Selector */}
@@ -1456,7 +1454,7 @@ export default function Index() {
                                 <div className="flex items-center space-x-3">
                                   <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                                     <span className="text-xs font-bold text-gray-600">
-                                      ✈
+                                      ���
                                     </span>
                                   </div>
                                   <div>
