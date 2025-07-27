@@ -1799,6 +1799,33 @@ export default function Index() {
           </div>
         </header>
 
+        {/* Hotels Search Form */}
+        {activeTab === "hotels" && (
+          <header
+            className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
+            style={{ backgroundColor: "#003580" }}
+          >
+            <div className="max-w-7xl mx-auto px-3 sm:px-4">
+              <div className="text-center mb-4 sm:mb-6">
+                <div className="mb-3 sm:mb-5">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+                    Find your next stay
+                  </h2>
+                </div>
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
+                  Search low prices on hotels, homes and much more...
+                </h1>
+                <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
+                  Join 50M+ travelers who bargain smarter.
+                </p>
+              </div>
+
+              {/* Hotel Search Form */}
+              <BookingSearchForm />
+            </div>
+          </header>
+        )}
+
         {/* Upgrade & Add-ons Section */}
         <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4">
