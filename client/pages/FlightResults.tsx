@@ -991,9 +991,18 @@ export default function FlightResults() {
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 Filters
-                <Badge variant="secondary" className="ml-2">
-                  3
-                </Badge>
+                {(() => {
+                  let count = 0;
+                  if (selectedStops !== "any") count++;
+                  if (selectedAirlines.size < availableAirlines.length && selectedAirlines.size > 0) count++;
+                  if (selectedFareType !== "all") count++;
+                  if (priceRange[0] > 0 || priceRange[1] < 100000) count++;
+                  return count > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {count}
+                    </Badge>
+                  );
+                })()}
               </Button>
               <Button
                 variant="outline"
