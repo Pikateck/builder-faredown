@@ -653,32 +653,6 @@ export default function FlightResults() {
     },
   };
 
-  // Expanded airlines list with more options
-  const availableAirlines = [
-    "Emirates",
-    "Air India",
-    "Indigo",
-    "Fly Dubai",
-    "Air Arabia",
-    "Spicejet",
-    "Vistara",
-    "Air Asia",
-    "GoAir",
-    "Alliance Air",
-    "Qatar Airways",
-    "Etihad Airways",
-    "Lufthansa",
-    "British Airways",
-    "Singapore Airlines",
-    "Thai Airways",
-    "Malaysia Airlines",
-    "Kuwait Airways",
-    "Oman Air",
-    "Saudia",
-    "Turkish Airlines",
-    "Flydubai",
-  ];
-
   const airlineCounts = availableAirlines.reduce(
     (acc, airline) => {
       const count = flightData.filter(
