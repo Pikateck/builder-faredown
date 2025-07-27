@@ -2834,6 +2834,56 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
+      {/* Search Edit Modal */}
+      <Dialog open={showSearchEdit} onOpenChange={setShowSearchEdit}>
+        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg">
+          <DialogHeader className="border-b border-gray-200 pb-4">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-lg font-semibold">
+                Edit Search
+              </DialogTitle>
+              <button
+                onClick={() => setShowSearchEdit(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </DialogHeader>
+          <div className="p-6">
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Plane className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Edit Your Search
+              </h3>
+              <p className="text-gray-600 mb-6">
+                To modify your search criteria, please go back to the homepage
+              </p>
+              <div className="space-y-3">
+                <Button
+                  onClick={() => {
+                    setShowSearchEdit(false);
+                    window.location.href = '/';
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  Go to Homepage
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowSearchEdit(false)}
+                  className="w-full"
+                >
+                  Continue with Current Search
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Enhanced AI Bargain Modal */}
       <Dialog open={showBargainModal} onOpenChange={setShowBargainModal}>
         <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg bg-gradient-to-br from-blue-50 to-white">
