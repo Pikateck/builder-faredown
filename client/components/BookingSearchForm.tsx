@@ -389,11 +389,21 @@ export function BookingSearchForm() {
                   onFocus={() => {
                     setIsDestinationOpen(true);
                   }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIsDestinationOpen(true);
                   }}
-
-                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation"
+                  onKeyDown={(e) => {
+                    // Prevent PopoverTrigger from capturing keyboard events
+                    e.stopPropagation();
+                  }}
+                  onMouseDown={(e) => {
+                    // Prevent PopoverTrigger from capturing mouse events
+                    e.stopPropagation();
+                  }}
+                  readOnly={false}
+                  disabled={false}
+                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation relative z-10"
                   placeholder="Where are you going?"
                   autoComplete="off"
                   data-destination-input="true"
