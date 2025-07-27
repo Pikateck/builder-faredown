@@ -466,6 +466,8 @@ export function BookingSearchForm() {
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code || dest.id);
+                          setInputValue("");
+                          setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
                       >
