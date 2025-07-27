@@ -405,7 +405,7 @@ export function BookingSearchForm() {
                   autoComplete="off"
                   data-destination-input="true"
                 />
-                {destination && (
+                {(inputValue || destination) && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
