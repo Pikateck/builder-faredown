@@ -687,12 +687,20 @@ export default function FlightResults() {
     {} as Record<string, number>,
   );
 
-  // Filter flights based on selected airlines with sorting and pricing logic
-  const filteredFlights = (
-    selectedAirlines.size === 0 || selectedAirlines.size === availableAirlines.length
-      ? flightData
-      : flightData.filter((flight) => selectedAirlines.has(flight.airline))
-  )
+  // Filter flights based on selected airlines and fare type with sorting and pricing logic
+  const filteredFlights = flightData
+    .filter((flight) => {
+      // Filter by airlines
+      const airlineMatch = selectedAirlines.size === 0 || selectedAirlines.size === availableAirlines.length || selectedAirlines.has(flight.airline);
+
+      // Filter by fare type
+      const fareTypeMatch = selectedFareType === "all" ||
+        (selectedFareType === "refundable" && flight.refundability === "Refundable") ||
+        (selectedFareType === "non-refundable" && flight.refundability === "Non-Refundable") ||
+        (selectedFareType === "partially-refundable" && flight.refundability === "Partially Refundable");
+
+      return airlineMatch && fareTypeMatch;
+    })
     .map((flight) => ({
       ...flight,
       fareTypes: flight.fareTypes.map((fareType) => ({
