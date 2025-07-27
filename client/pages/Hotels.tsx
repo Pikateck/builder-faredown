@@ -173,8 +173,8 @@ export default function Hotels() {
         </div>
 
         {/* Mobile Bottom Navigation */}
-        <div className="bg-white border-t border-gray-200">
-          <div className="grid grid-cols-4 h-16">
+        <div className="bg-white border-t border-gray-200 relative z-50">
+          <div className="grid grid-cols-4 h-16 relative">
             <Link
               to="/"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
