@@ -571,7 +571,7 @@ export function BookingSearchForm() {
                       </svg>
                     </div>
                     <div className="text-sm text-gray-500 mb-2">
-                      No destinations found for "{destination}"
+                      No destinations found for "{inputValue}"
                     </div>
                     <div className="text-xs text-gray-400">
                       Try a different city or country name
