@@ -1213,7 +1213,7 @@ export default function Index() {
 
           {/* Desktop Hero Search Section */}
           <div
-            className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
+            className={`py-3 sm:py-6 md:py-8 pb-24 sm:pb-8 ${activeTab === "flights" ? "" : "hidden"}`}
             style={{ backgroundColor: "#003580" }}
           >
             <div className="max-w-7xl mx-auto px-3 sm:px-4">
