@@ -233,7 +233,10 @@ export function MobileDatePicker({
               console.log("tripType:", tripType);
               onClose();
             }}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
+            onTouchStart={() => console.log("Touch start on Done button")}
+            onTouchEnd={() => console.log("Touch end on Done button")}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation relative z-10 min-h-[48px]"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             disabled={
               !selectedDepartureDate ||
               (tripType === "round-trip" && !selectedReturnDate)
