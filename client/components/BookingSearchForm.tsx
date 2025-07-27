@@ -644,7 +644,7 @@ export function BookingSearchForm() {
                                 <span className="font-medium text-gray-900 text-sm truncate">
                                   {dest.name}
                                 </span>
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                   Popular
                                 </span>
                               </div>
