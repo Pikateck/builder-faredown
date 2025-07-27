@@ -376,7 +376,7 @@ export function BookingSearchForm() {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 w-4 h-4 z-10" />
                 <Input
                   type="text"
-                  value={inputValue || destination}
+                  value={isUserTyping ? inputValue : destination}
                   onChange={(e) => {
                     const value = e.target.value;
                     setInputValue(value);
@@ -388,6 +388,11 @@ export function BookingSearchForm() {
                   }}
                   onFocus={() => {
                     setIsDestinationOpen(true);
+                    // Set inputValue to current destination when focusing for editing
+                    if (!isUserTyping && destination) {
+                      setInputValue(destination);
+                      setIsUserTyping(true);
+                    }
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
