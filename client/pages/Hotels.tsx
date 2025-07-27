@@ -37,7 +37,7 @@ import AdminTestButton from "@/components/AdminTestButton";
 
 export default function Hotels() {
   const navigate = useNavigate();
-  const { 
+  const {
     departureDate,
     returnDate,
     tripType,
@@ -73,7 +73,7 @@ export default function Hotels() {
       fullName: "Mumbai, Maharashtra, India",
     },
     Delhi: {
-      code: "DEL", 
+      code: "DEL",
       name: "Delhi",
       airport: "New Delhi, Delhi, India",
       fullName: "New Delhi, Delhi, India",
@@ -81,18 +81,18 @@ export default function Hotels() {
     Dubai: {
       code: "DXB",
       name: "Dubai",
-      airport: "Dubai, United Arab Emirates", 
+      airport: "Dubai, United Arab Emirates",
       fullName: "Dubai, United Arab Emirates",
     },
     "Abu Dhabi": {
       code: "AUH",
       name: "Abu Dhabi",
       airport: "Abu Dhabi, United Arab Emirates",
-      fullName: "Abu Dhabi, United Arab Emirates", 
+      fullName: "Abu Dhabi, United Arab Emirates",
     },
     Singapore: {
       code: "SIN",
-      name: "Singapore", 
+      name: "Singapore",
       airport: "Singapore, Singapore",
       fullName: "Singapore, Singapore",
     },
@@ -178,7 +178,9 @@ export default function Hotels() {
             <Link
               to="/"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() => console.log("Flights button clicked - navigating to /")}
+              onClick={() =>
+                console.log("Flights button clicked - navigating to /")
+              }
             >
               <Plane className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Flights</span>
@@ -186,7 +188,9 @@ export default function Hotels() {
             <Link
               to="/hotels"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() => console.log("Hotels button clicked - already on Hotels page")}
+              onClick={() =>
+                console.log("Hotels button clicked - already on Hotels page")
+              }
             >
               <Hotel className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">Hotels</span>
@@ -194,7 +198,9 @@ export default function Hotels() {
             <Link
               to="/saved"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() => console.log("Saved button clicked - navigating to /saved")}
+              onClick={() =>
+                console.log("Saved button clicked - navigating to /saved")
+              }
             >
               <Heart className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Saved</span>
@@ -202,7 +208,9 @@ export default function Hotels() {
             <Link
               to="/account"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() => console.log("Account button clicked - navigating to /account")}
+              onClick={() =>
+                console.log("Account button clicked - navigating to /account")
+              }
             >
               <User className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Account</span>
@@ -232,9 +240,7 @@ export default function Hotels() {
                 >
                   <span>Flights</span>
                 </Link>
-                <button
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
-                >
+                <button className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white">
                   <span>Hotels</span>
                 </button>
               </nav>
@@ -291,10 +297,22 @@ export default function Hotels() {
                       <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
                         {[
                           { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                          { code: "AED", symbol: "د.إ", name: "United Arab Emirates Dirham" },
+                          {
+                            code: "AED",
+                            symbol: "د.إ",
+                            name: "United Arab Emirates Dirham",
+                          },
                           { code: "USD", symbol: "$", name: "US Dollar" },
-                          { code: "GBP", symbol: "£", name: "Great Britain Pound" },
-                          { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+                          {
+                            code: "GBP",
+                            symbol: "£",
+                            name: "Great Britain Pound",
+                          },
+                          {
+                            code: "SGD",
+                            symbol: "S$",
+                            name: "Singapore Dollar",
+                          },
                           { code: "EUR", symbol: "€", name: "Euro" },
                         ].map((currency) => (
                           <button
@@ -460,7 +478,8 @@ export default function Hotels() {
                           initialRange={{
                             startDate: departureDate || new Date(),
                             endDate:
-                              returnDate || addDays(departureDate || new Date(), 7),
+                              returnDate ||
+                              addDays(departureDate || new Date(), 7),
                           }}
                           onChange={(range) => {
                             console.log(
@@ -500,8 +519,12 @@ export default function Hotels() {
                         <div className="space-y-6">
                           <div className="flex items-center justify-between py-2">
                             <div>
-                              <div className="font-medium text-gray-900">Adults</div>
-                              <div className="text-sm text-gray-500">Age 18+</div>
+                              <div className="font-medium text-gray-900">
+                                Adults
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                Age 18+
+                              </div>
                             </div>
                             <div className="flex items-center space-x-4">
                               <button
@@ -538,7 +561,9 @@ export default function Hotels() {
                               <div className="font-medium text-gray-900">
                                 Children
                               </div>
-                              <div className="text-sm text-gray-500">Age 0-17</div>
+                              <div className="text-sm text-gray-500">
+                                Age 0-17
+                              </div>
                             </div>
                             <div className="flex items-center space-x-4">
                               <button
@@ -584,7 +609,7 @@ export default function Hotels() {
                   </div>
 
                   <div className="w-full lg:w-auto lg:min-w-[120px]">
-                    <Button 
+                    <Button
                       className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       onClick={() => navigate("/hotels/results")}
                     >

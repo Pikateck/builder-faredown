@@ -79,7 +79,8 @@ const flightData = [
     flightNumber: "EK 500",
     returnFlightNumber: "EK 501",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
-    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
+    returnLogo:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
     aircraft: "Boeing 777",
     flightType: "Direct",
     stops: 0,
@@ -123,7 +124,8 @@ const flightData = [
     flightNumber: "EK 502",
     returnFlightNumber: "6E 1407",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
-    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
+    returnLogo:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Boeing 777",
     flightType: "Direct",
     stops: 0,
@@ -167,7 +169,8 @@ const flightData = [
     flightNumber: "AI 131",
     returnFlightNumber: "AI 132",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
-    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
+    returnLogo:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
     aircraft: "Airbus A320",
     flightType: "Direct",
     stops: 0,
@@ -204,7 +207,8 @@ const flightData = [
     flightNumber: "6E 1406",
     returnFlightNumber: "6E 1408",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
-    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
+    returnLogo:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Airbus A321",
     flightType: "1 Stop",
     stops: 1,
@@ -467,7 +471,7 @@ export default function FlightResults() {
 
   // Airlines filter state - Initialize with all airlines selected by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
-    new Set(availableAirlines)
+    new Set(availableAirlines),
   );
 
   // Additional filter states (needed to prevent errors)
@@ -701,12 +705,18 @@ export default function FlightResults() {
   const filteredFlights = flightData
     .filter((flight) => {
       // Filter by airlines
-      const airlineMatch = selectedAirlines.size === 0 || selectedAirlines.size === availableAirlines.length || selectedAirlines.has(flight.airline);
+      const airlineMatch =
+        selectedAirlines.size === 0 ||
+        selectedAirlines.size === availableAirlines.length ||
+        selectedAirlines.has(flight.airline);
 
       // Filter by fare type
-      const fareTypeMatch = selectedFareType === "all" ||
-        (selectedFareType === "refundable" && flight.refundability === "Refundable") ||
-        (selectedFareType === "non-refundable" && flight.refundability === "Non-Refundable");
+      const fareTypeMatch =
+        selectedFareType === "all" ||
+        (selectedFareType === "refundable" &&
+          flight.refundability === "Refundable") ||
+        (selectedFareType === "non-refundable" &&
+          flight.refundability === "Non-Refundable");
 
       return airlineMatch && fareTypeMatch;
     })
@@ -994,13 +1004,19 @@ export default function FlightResults() {
                 {(() => {
                   let count = 0;
                   if (selectedStops !== "any") count++;
-                  if (selectedAirlines.size < availableAirlines.length && selectedAirlines.size > 0) count++;
+                  if (
+                    selectedAirlines.size < availableAirlines.length &&
+                    selectedAirlines.size > 0
+                  )
+                    count++;
                   if (selectedFareType !== "all") count++;
                   if (priceRange[0] > 0 || priceRange[1] < 100000) count++;
-                  return count > 0 && (
-                    <Badge variant="secondary" className="ml-2">
-                      {count}
-                    </Badge>
+                  return (
+                    count > 0 && (
+                      <Badge variant="secondary" className="ml-2">
+                        {count}
+                      </Badge>
+                    )
                   );
                 })()}
               </Button>
@@ -1011,7 +1027,12 @@ export default function FlightResults() {
                 onClick={() => setShowSortOptions(true)}
               >
                 <ArrowUpDown className="w-4 h-4 mr-2" />
-                Sort: {sortBy === "cheapest" ? "Price" : sortBy === "fastest" ? "Duration" : "Default"}
+                Sort:{" "}
+                {sortBy === "cheapest"
+                  ? "Price"
+                  : sortBy === "fastest"
+                    ? "Duration"
+                    : "Default"}
               </Button>
             </div>
           </div>
@@ -1867,12 +1888,16 @@ export default function FlightResults() {
                     {
                       value: "refundable",
                       label: "Refundable",
-                      count: flightData.filter((f) => f.refundability === "Refundable").length,
+                      count: flightData.filter(
+                        (f) => f.refundability === "Refundable",
+                      ).length,
                     },
                     {
                       value: "non-refundable",
                       label: "Non-Refundable",
-                      count: flightData.filter((f) => f.refundability === "Non-Refundable").length,
+                      count: flightData.filter(
+                        (f) => f.refundability === "Non-Refundable",
+                      ).length,
                     },
                   ].map((option) => (
                     <div
@@ -1976,11 +2001,13 @@ export default function FlightResults() {
                           </button>
                         </div>
                         <div className="text-xs text-gray-500">per person</div>
-                        <div className={`text-xs font-medium ${
-                          flight.fareTypes[0].refundability === 'Refundable'
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                        }`}>
+                        <div
+                          className={`text-xs font-medium ${
+                            flight.fareTypes[0].refundability === "Refundable"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
                           {flight.fareTypes[0].refundability}
                         </div>
                         {/* Mobile Fare Breakdown Tooltip */}
@@ -2207,11 +2234,13 @@ export default function FlightResults() {
                                 <span key={idx}>{feature}</span>
                               ))}
                             </div>
-                            <div className={`text-xs mb-3 font-medium ${
-                              fareType.refundability === 'Refundable'
-                                ? 'text-green-600'
-                                : 'text-red-600'
-                            }`}>
+                            <div
+                              className={`text-xs mb-3 font-medium ${
+                                fareType.refundability === "Refundable"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
                               {fareType.refundability}
                             </div>
                             <div className="grid grid-cols-2 gap-2">
@@ -2437,11 +2466,13 @@ export default function FlightResults() {
                         <div className="text-xs text-gray-600 mb-1">
                           All-inclusive price
                         </div>
-                        <div className={`text-xs mb-4 font-medium ${
-                          flight.fareTypes[0].refundability === 'Refundable'
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                        }`}>
+                        <div
+                          className={`text-xs mb-4 font-medium ${
+                            flight.fareTypes[0].refundability === "Refundable"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
                           {flight.fareTypes[0].refundability}
                         </div>
                         <div className="space-y-2 w-32">
@@ -2511,11 +2542,13 @@ export default function FlightResults() {
                             <div className="text-xs text-gray-600 mb-1">
                               All-inclusive
                             </div>
-                            <div className={`text-xs mb-3 font-medium ${
-                              fareType.refundability === 'Refundable'
-                                ? 'text-green-600'
-                                : 'text-red-600'
-                            }`}>
+                            <div
+                              className={`text-xs mb-3 font-medium ${
+                                fareType.refundability === "Refundable"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }`}
+                            >
                               {fareType.refundability}
                             </div>
                             <div className="space-y-2">
@@ -2615,319 +2648,407 @@ export default function FlightResults() {
           </DialogHeader>
           <div className="flex-1 overflow-y-auto">
             <div className="space-y-4 p-4 pb-0">
-            {/* Sort Options */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Sort by</h3>
-              <div className="space-y-1">
-                <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      name="sort"
-                      checked={sortBy === "cheapest"}
-                      onChange={() => setSortBy("cheapest")}
-                      className="w-4 h-4 text-[#003580]"
-                    />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">Cheapest first</div>
-                      <div className="text-xs text-gray-500">Lowest price</div>
-                    </div>
-                  </div>
-                </label>
-                <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      name="sort"
-                      checked={sortBy === "fastest"}
-                      onChange={() => setSortBy("fastest")}
-                      className="w-4 h-4 text-[#003580]"
-                    />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900">Fastest first</div>
-                      <div className="text-xs text-gray-500">Shortest duration</div>
-                    </div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            {/* Price Range Filter */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Price range (per person)</h3>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="number"
-                  placeholder="0"
-                  value={priceRange[0]}
-                  onChange={(e) =>
-                    setPriceRange([Number(e.target.value), priceRange[1]])
-                  }
-                  className="flex-1 h-8 text-sm"
-                />
-                <span className="text-gray-400 text-sm">-</span>
-                <Input
-                  type="number"
-                  placeholder="100000"
-                  value={priceRange[1]}
-                  onChange={(e) =>
-                    setPriceRange([priceRange[0], Number(e.target.value)])
-                  }
-                  className="flex-1 h-8 text-sm"
-                />
-              </div>
-            </div>
-
-            {/* Stops Filter */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Stops</h3>
-              <div className="space-y-1">
-                {[
-                  { value: "any", label: "Any", count: flightData.length },
-                  {
-                    value: "direct",
-                    label: "Direct only",
-                    count: flightData.filter((f) => f.stops === 0).length,
-                  },
-                  {
-                    value: "1-stop",
-                    label: "1 stop",
-                    count: flightData.filter((f) => f.stops === 1).length,
-                  },
-                  {
-                    value: "2-plus",
-                    label: "2+ stops",
-                    count: flightData.filter((f) => f.stops >= 2).length,
-                  },
-                ].map((option) => (
-                  <label
-                    key={option.value}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
+              {/* Sort Options */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Sort by
+                </h3>
+                <div className="space-y-1">
+                  <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
                     <div className="flex items-center space-x-3">
                       <input
                         type="radio"
-                        name="mobile-stops"
-                        value={option.value}
-                        checked={selectedStops === option.value}
-                        onChange={() => handleStopsFilter(option.value)}
+                        name="sort"
+                        checked={sortBy === "cheapest"}
+                        onChange={() => setSortBy("cheapest")}
                         className="w-4 h-4 text-[#003580]"
                       />
-                      <span className="text-sm font-medium text-gray-900">{option.label}</span>
+                      <div className="text-sm">
+                        <div className="font-medium text-gray-900">
+                          Cheapest first
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Lowest price
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
-                      {option.count}
-                    </span>
                   </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Airlines Filter */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Airlines</h3>
-              <div className="space-y-1 max-h-32 overflow-y-auto">
-                {availableAirlines.map((airline) => (
-                  <label
-                    key={airline}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={selectedAirlines.has(airline)}
-                        onChange={(e) =>
-                          handleAirlineFilter(airline, e.target.checked)
-                        }
-                        className="w-4 h-4 text-[#003580] rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-900">{airline}</span>
-                    </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
-                      {airlineCounts[airline]}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Fare Type Filter */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Fare Type</h3>
-              <div className="space-y-1">
-                {[
-                  { value: "all", label: "All", count: flightData.length },
-                  {
-                    value: "refundable",
-                    label: "Refundable",
-                    count: flightData.filter((f) => f.refundability === "Refundable").length,
-                  },
-                  {
-                    value: "non-refundable",
-                    label: "Non-Refundable",
-                    count: flightData.filter((f) => f.refundability === "Non-Refundable").length,
-                  },
-                ].map((option) => (
-                  <label
-                    key={option.value}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
+                  <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
                     <div className="flex items-center space-x-3">
                       <input
                         type="radio"
-                        name="mobile-fareType"
-                        value={option.value}
-                        checked={selectedFareType === option.value}
-                        onChange={() => handleFareTypeFilter(option.value)}
+                        name="sort"
+                        checked={sortBy === "fastest"}
+                        onChange={() => setSortBy("fastest")}
                         className="w-4 h-4 text-[#003580]"
                       />
-                      <span className="text-sm font-medium text-gray-900">{option.label}</span>
+                      <div className="text-sm">
+                        <div className="font-medium text-gray-900">
+                          Fastest first
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Shortest duration
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
-                      {option.count}
-                    </span>
                   </label>
-                ))}
+                </div>
               </div>
-            </div>
 
-            {/* Departure Times */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Departure time</h3>
-
-              {/* Quick Time Slots */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {[
-                  { label: "Morning", range: [6, 12], icon: "☀️" },
-                  { label: "Afternoon", range: [12, 18], icon: "☀️" },
-                  { label: "Evening", range: [18, 24], icon: "🌙" },
-                  { label: "Night", range: [0, 6], icon: "🌅" },
-                ].map((timeSlot) => (
-                  <button
-                    key={timeSlot.label}
-                    onClick={() =>
-                      setDepartureTimeRange(timeSlot.range as [number, number])
+              {/* Price Range Filter */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Price range (per person)
+                </h3>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    value={priceRange[0]}
+                    onChange={(e) =>
+                      setPriceRange([Number(e.target.value), priceRange[1]])
                     }
-                    className={`py-2 px-3 rounded-lg text-center transition-colors ${
-                      departureTimeRange[0] === timeSlot.range[0] &&
-                      departureTimeRange[1] === timeSlot.range[1]
-                        ? "bg-[#003580] text-white"
-                        : "bg-gray-50 text-gray-700 active:bg-gray-100"
-                    }`}
-                  >
-                    <div className="text-sm mb-1">{timeSlot.icon}</div>
-                    <div className="text-xs font-medium">{timeSlot.label}</div>
-                    <div className="text-xs opacity-75">
-                      {timeSlot.range[0]}:00-{timeSlot.range[1]}:00
-                    </div>
-                  </button>
-                ))}
+                    className="flex-1 h-8 text-sm"
+                  />
+                  <span className="text-gray-400 text-sm">-</span>
+                  <Input
+                    type="number"
+                    placeholder="100000"
+                    value={priceRange[1]}
+                    onChange={(e) =>
+                      setPriceRange([priceRange[0], Number(e.target.value)])
+                    }
+                    className="flex-1 h-8 text-sm"
+                  />
+                </div>
               </div>
 
-              {/* Detailed Time Options */}
-              <div className="space-y-1">
-                {[
-                  { label: "Early morning (3:00-5:59 AM)", range: [3, 6], count: 115 },
-                  { label: "Morning (6:00-11:59 AM)", range: [6, 12], count: 93 },
-                  { label: "Afternoon (12:00-5:59 PM)", range: [12, 18], count: 290 },
-                  { label: "Evening (6:00-11:59 PM)", range: [18, 24], count: 145 },
-                ].map((time) => (
-                  <label
-                    key={time.label}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-[#003580] rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-900">{time.label}</span>
-                    </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">{time.count}</span>
-                  </label>
-                ))}
+              {/* Stops Filter */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Stops
+                </h3>
+                <div className="space-y-1">
+                  {[
+                    { value: "any", label: "Any", count: flightData.length },
+                    {
+                      value: "direct",
+                      label: "Direct only",
+                      count: flightData.filter((f) => f.stops === 0).length,
+                    },
+                    {
+                      value: "1-stop",
+                      label: "1 stop",
+                      count: flightData.filter((f) => f.stops === 1).length,
+                    },
+                    {
+                      value: "2-plus",
+                      label: "2+ stops",
+                      count: flightData.filter((f) => f.stops >= 2).length,
+                    },
+                  ].map((option) => (
+                    <label
+                      key={option.value}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          name="mobile-stops"
+                          value={option.value}
+                          checked={selectedStops === option.value}
+                          onChange={() => handleStopsFilter(option.value)}
+                          className="w-4 h-4 text-[#003580]"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {option.label}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {option.count}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Return Flight Times */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Return time</h3>
-              <div className="space-y-1">
-                {[
-                  { label: "Early morning (3:00-5:59 AM)", range: [3, 6], count: 115 },
-                  { label: "Morning (6:00-11:59 AM)", range: [6, 12], count: 93 },
-                  { label: "Afternoon (12:00-5:59 PM)", range: [12, 18], count: 290 },
-                  { label: "Evening (6:00-11:59 PM)", range: [18, 24], count: 145 },
-                ].map((time) => (
-                  <label
-                    key={time.label}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-[#003580] rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-900">{time.label}</span>
-                    </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">{time.count}</span>
-                  </label>
-                ))}
+              {/* Airlines Filter */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Airlines
+                </h3>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {availableAirlines.map((airline) => (
+                    <label
+                      key={airline}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedAirlines.has(airline)}
+                          onChange={(e) =>
+                            handleAirlineFilter(airline, e.target.checked)
+                          }
+                          className="w-4 h-4 text-[#003580] rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {airline}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {airlineCounts[airline]}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Duration Filter */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Flight duration</h3>
-              <div className="space-y-1">
-                {[
-                  { label: "Under 6 hours", count: 45 },
-                  { label: "6-12 hours", count: 120 },
-                  { label: "12-18 hours", count: 89 },
-                  { label: "Over 18 hours", count: 34 },
-                ].map((duration) => (
-                  <label
-                    key={duration.label}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-[#003580] rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-900">{duration.label}</span>
-                    </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">{duration.count}</span>
-                  </label>
-                ))}
+              {/* Fare Type Filter */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Fare Type
+                </h3>
+                <div className="space-y-1">
+                  {[
+                    { value: "all", label: "All", count: flightData.length },
+                    {
+                      value: "refundable",
+                      label: "Refundable",
+                      count: flightData.filter(
+                        (f) => f.refundability === "Refundable",
+                      ).length,
+                    },
+                    {
+                      value: "non-refundable",
+                      label: "Non-Refundable",
+                      count: flightData.filter(
+                        (f) => f.refundability === "Non-Refundable",
+                      ).length,
+                    },
+                  ].map((option) => (
+                    <label
+                      key={option.value}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="radio"
+                          name="mobile-fareType"
+                          value={option.value}
+                          checked={selectedFareType === option.value}
+                          onChange={() => handleFareTypeFilter(option.value)}
+                          className="w-4 h-4 text-[#003580]"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {option.label}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {option.count}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Baggage Allowance */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">Baggage</h3>
-              <div className="space-y-1">
-                {[
-                  { label: "Cabin bag only", count: 78 },
-                  { label: "Cabin + Check-in bag", count: 210 },
-                  { label: "Extra baggage", count: 45 },
-                ].map((baggage) => (
-                  <label
-                    key={baggage.label}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        className="w-4 h-4 text-[#003580] rounded"
-                      />
-                      <span className="text-sm font-medium text-gray-900">{baggage.label}</span>
-                    </div>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">{baggage.count}</span>
-                  </label>
-                ))}
+              {/* Departure Times */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Departure time
+                </h3>
+
+                {/* Quick Time Slots */}
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  {[
+                    { label: "Morning", range: [6, 12], icon: "☀️" },
+                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
+                    { label: "Evening", range: [18, 24], icon: "🌙" },
+                    { label: "Night", range: [0, 6], icon: "🌅" },
+                  ].map((timeSlot) => (
+                    <button
+                      key={timeSlot.label}
+                      onClick={() =>
+                        setDepartureTimeRange(
+                          timeSlot.range as [number, number],
+                        )
+                      }
+                      className={`py-2 px-3 rounded-lg text-center transition-colors ${
+                        departureTimeRange[0] === timeSlot.range[0] &&
+                        departureTimeRange[1] === timeSlot.range[1]
+                          ? "bg-[#003580] text-white"
+                          : "bg-gray-50 text-gray-700 active:bg-gray-100"
+                      }`}
+                    >
+                      <div className="text-sm mb-1">{timeSlot.icon}</div>
+                      <div className="text-xs font-medium">
+                        {timeSlot.label}
+                      </div>
+                      <div className="text-xs opacity-75">
+                        {timeSlot.range[0]}:00-{timeSlot.range[1]}:00
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Detailed Time Options */}
+                <div className="space-y-1">
+                  {[
+                    {
+                      label: "Early morning (3:00-5:59 AM)",
+                      range: [3, 6],
+                      count: 115,
+                    },
+                    {
+                      label: "Morning (6:00-11:59 AM)",
+                      range: [6, 12],
+                      count: 93,
+                    },
+                    {
+                      label: "Afternoon (12:00-5:59 PM)",
+                      range: [12, 18],
+                      count: 290,
+                    },
+                    {
+                      label: "Evening (6:00-11:59 PM)",
+                      range: [18, 24],
+                      count: 145,
+                    },
+                  ].map((time) => (
+                    <label
+                      key={time.label}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-[#003580] rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {time.label}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {time.count}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
+
+              {/* Return Flight Times */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Return time
+                </h3>
+                <div className="space-y-1">
+                  {[
+                    {
+                      label: "Early morning (3:00-5:59 AM)",
+                      range: [3, 6],
+                      count: 115,
+                    },
+                    {
+                      label: "Morning (6:00-11:59 AM)",
+                      range: [6, 12],
+                      count: 93,
+                    },
+                    {
+                      label: "Afternoon (12:00-5:59 PM)",
+                      range: [12, 18],
+                      count: 290,
+                    },
+                    {
+                      label: "Evening (6:00-11:59 PM)",
+                      range: [18, 24],
+                      count: 145,
+                    },
+                  ].map((time) => (
+                    <label
+                      key={time.label}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-[#003580] rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {time.label}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {time.count}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duration Filter */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Flight duration
+                </h3>
+                <div className="space-y-1">
+                  {[
+                    { label: "Under 6 hours", count: 45 },
+                    { label: "6-12 hours", count: 120 },
+                    { label: "12-18 hours", count: 89 },
+                    { label: "Over 18 hours", count: 34 },
+                  ].map((duration) => (
+                    <label
+                      key={duration.label}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-[#003580] rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {duration.label}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {duration.count}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Baggage Allowance */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Baggage
+                </h3>
+                <div className="space-y-1">
+                  {[
+                    { label: "Cabin bag only", count: 78 },
+                    { label: "Cabin + Check-in bag", count: 210 },
+                    { label: "Extra baggage", count: 45 },
+                  ].map((baggage) => (
+                    <label
+                      key={baggage.label}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-[#003580] rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {baggage.label}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {baggage.count}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
           <div className="border-t border-gray-200 p-4 bg-white sticky bottom-0">
@@ -3037,7 +3158,7 @@ export default function FlightResults() {
                 <Button
                   onClick={() => {
                     setShowSearchEdit(false);
-                    window.location.href = '/';
+                    window.location.href = "/";
                   }}
                   className="w-full bg-blue-600 hover:bg-blue-700"
                 >

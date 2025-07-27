@@ -582,7 +582,6 @@ export default function Index() {
                 Control your price for flights & hotels — with live AI
                 bargaining.
               </p>
-
             </div>
 
             {/* Mobile Trip Type Selector */}
@@ -1098,28 +1097,68 @@ export default function Index() {
                       <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
                         {[
                           { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                          { code: "AED", symbol: "د.إ", name: "United Arab Emirates Dirham" },
+                          {
+                            code: "AED",
+                            symbol: "د.إ",
+                            name: "United Arab Emirates Dirham",
+                          },
                           { code: "USD", symbol: "$", name: "US Dollar" },
-                          { code: "GBP", symbol: "£", name: "Great Britain Pound" },
-                          { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+                          {
+                            code: "GBP",
+                            symbol: "£",
+                            name: "Great Britain Pound",
+                          },
+                          {
+                            code: "SGD",
+                            symbol: "S$",
+                            name: "Singapore Dollar",
+                          },
                           { code: "EUR", symbol: "€", name: "Euro" },
                           { code: "THB", symbol: "฿", name: "Thai Baht" },
-                          { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+                          {
+                            code: "CAD",
+                            symbol: "C$",
+                            name: "Canadian Dollar",
+                          },
                           { code: "RUB", symbol: "₽", name: "Russian Ruble" },
-                          { code: "NZD", symbol: "NZ$", name: "New Zealand Dollar" },
+                          {
+                            code: "NZD",
+                            symbol: "NZ$",
+                            name: "New Zealand Dollar",
+                          },
                           { code: "KRW", symbol: "₩", name: "Korean Won" },
-                          { code: "HKD", symbol: "HK$", name: "Hong Kong Dollar" },
+                          {
+                            code: "HKD",
+                            symbol: "HK$",
+                            name: "Hong Kong Dollar",
+                          },
                           { code: "KWD", symbol: "د.ك", name: "Kuwaiti Dinar" },
                           { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
                           { code: "QAR", symbol: "ر.ق", name: "Qatari Riyal" },
                           { code: "DKK", symbol: "kr", name: "Danish Krone" },
-                          { code: "BHD", symbol: ".د.ب", name: "Bahraini Dinar" },
-                          { code: "ZAR", symbol: "R", name: "South African Rand" },
+                          {
+                            code: "BHD",
+                            symbol: ".د.ب",
+                            name: "Bahraini Dinar",
+                          },
+                          {
+                            code: "ZAR",
+                            symbol: "R",
+                            name: "South African Rand",
+                          },
                           { code: "JPY", symbol: "¥", name: "Japanese Yen" },
                           { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-                          { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+                          {
+                            code: "AUD",
+                            symbol: "A$",
+                            name: "Australian Dollar",
+                          },
                           { code: "OMR", symbol: "ر.ع.", name: "Omani Rial" },
-                          { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" },
+                          {
+                            code: "MYR",
+                            symbol: "RM",
+                            name: "Malaysian Ringgit",
+                          },
                         ].map((currency) => (
                           <button
                             key={currency.code}
@@ -1826,21 +1865,21 @@ export default function Index() {
           className={`py-3 sm:py-6 md:py-8 pb-24 sm:pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}
           style={{ backgroundColor: "#003580" }}
         >
-            <div className="max-w-7xl mx-auto px-3 sm:px-4">
-              <div className="text-center mb-2 sm:mb-3">
-                <div className="mb-3 sm:mb-5">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                    Find your next stay
-                  </h2>
-                </div>
-                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                  Search low prices on hotels, homes and much more...
-                </h1>
+          <div className="max-w-7xl mx-auto px-3 sm:px-4">
+            <div className="text-center mb-2 sm:mb-3">
+              <div className="mb-3 sm:mb-5">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+                  Find your next stay
+                </h2>
               </div>
-
-              {/* Hotel Search Form */}
-              <BookingSearchForm />
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
+                Search low prices on hotels, homes and much more...
+              </h1>
             </div>
+
+            {/* Hotel Search Form */}
+            <BookingSearchForm />
+          </div>
         </header>
 
         {/* Upgrade & Add-ons Section */}

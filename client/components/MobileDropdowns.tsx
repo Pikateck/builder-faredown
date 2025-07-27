@@ -236,7 +236,7 @@ export function MobileDatePicker({
             onTouchStart={() => console.log("Touch start on Done button")}
             onTouchEnd={() => console.log("Touch end on Done button")}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation relative z-10 min-h-[48px]"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
+            style={{ WebkitTapHighlightColor: "transparent" }}
             disabled={
               !selectedDepartureDate ||
               (tripType === "round-trip" && !selectedReturnDate)
@@ -357,10 +357,12 @@ export function MobileTravelers({
               console.log("Done button clicked - Mobile Travelers");
               onClose();
             }}
-            onTouchStart={() => console.log("Touch start on Travelers Done button")}
+            onTouchStart={() =>
+              console.log("Touch start on Travelers Done button")
+            }
             onTouchEnd={() => console.log("Touch end on Travelers Done button")}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation relative z-10 min-h-[48px]"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
+            style={{ WebkitTapHighlightColor: "transparent" }}
           >
             Done
           </Button>

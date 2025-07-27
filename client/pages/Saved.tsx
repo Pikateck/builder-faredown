@@ -1,21 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
-import { 
-  Heart,
-  Plane,
-  Hotel,
-  User,
-  Search,
-  Bookmark
-} from "lucide-react";
+import { Heart, Plane, Hotel, User, Search, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Saved() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       {/* Main Content */}
       <div className="pt-20 pb-20 md:pb-8">
         <div className="max-w-4xl mx-auto px-4">
@@ -27,9 +20,10 @@ export default function Saved() {
               Your Saved Items
             </h1>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Save flights, hotels, and destinations you're interested in to easily find them later.
+              Save flights, hotels, and destinations you're interested in to
+              easily find them later.
             </p>
-            
+
             <div className="space-y-4 mb-8">
               <Button asChild>
                 <Link to="/">

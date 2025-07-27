@@ -238,7 +238,13 @@ export function BookingSearchForm() {
         setDestinationSuggestions([]);
       }
     }
-  }, [inputValue, searchDestinations, popularDestinationsLoaded, isDestinationOpen, isUserTyping]);
+  }, [
+    inputValue,
+    searchDestinations,
+    popularDestinationsLoaded,
+    isDestinationOpen,
+    isUserTyping,
+  ]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
@@ -413,7 +419,8 @@ export function BookingSearchForm() {
                   autoComplete="off"
                   data-destination-input="true"
                 />
-                {((isUserTyping && inputValue) || (!isUserTyping && destination)) && (
+                {((isUserTyping && inputValue) ||
+                  (!isUserTyping && destination)) && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -449,7 +456,9 @@ export function BookingSearchForm() {
                       🔍 Searching...
                     </span>
                   </div>
-                ) : isUserTyping && inputValue.length > 0 && destinationSuggestions.length > 0 ? (
+                ) : isUserTyping &&
+                  inputValue.length > 0 &&
+                  destinationSuggestions.length > 0 ? (
                   <div>
                     {destinationSuggestions.map((dest, index) => (
                       <div
@@ -558,7 +567,9 @@ export function BookingSearchForm() {
                       </div>
                     ))}
                   </div>
-                ) : isUserTyping && inputValue.length > 0 && !loadingDestinations ? (
+                ) : isUserTyping &&
+                  inputValue.length > 0 &&
+                  !loadingDestinations ? (
                   <div className="p-4 text-center">
                     <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
                       <svg
@@ -952,8 +963,6 @@ export function BookingSearchForm() {
           </Button>
         </div>
       </div>
-
-
     </div>
   );
 }
