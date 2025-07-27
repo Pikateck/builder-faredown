@@ -177,7 +177,7 @@ export function BookingSearchForm() {
         clearTimeout(debouncedSearchRef.current);
       }
 
-      // Faster response time like Booking.com
+      // Ultra-fast response time like Booking.com
       debouncedSearchRef.current = setTimeout(async () => {
         try {
           setLoadingDestinations(true);
