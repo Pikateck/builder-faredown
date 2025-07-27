@@ -422,20 +422,6 @@ export function BookingSearchForm() {
             <PopoverContent
               className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg"
               align="start"
-              onInteractOutside={(e) => {
-                // Allow clicking on the input field to keep dropdown open
-                const target = e.target as Element;
-                if (target.closest('[data-destination-input]') ||
-                    target.closest('.destination-container')) {
-                  e.preventDefault();
-                  return;
-                }
-                // Close dropdown and reset typing state when clicking outside
-                setIsUserTyping(false);
-                if (!inputValue && destination) {
-                  setInputValue("");
-                }
-              }}
             >
               <div className="max-h-80 overflow-y-auto">
                 {!popularDestinationsLoaded ? (
