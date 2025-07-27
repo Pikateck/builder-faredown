@@ -706,8 +706,7 @@ export default function FlightResults() {
       // Filter by fare type
       const fareTypeMatch = selectedFareType === "all" ||
         (selectedFareType === "refundable" && flight.refundability === "Refundable") ||
-        (selectedFareType === "non-refundable" && flight.refundability === "Non-Refundable") ||
-        (selectedFareType === "partially-refundable" && flight.refundability === "Partially Refundable");
+        (selectedFareType === "non-refundable" && flight.refundability === "Non-Refundable");
 
       return airlineMatch && fareTypeMatch;
     })
