@@ -2890,6 +2890,59 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
+      {/* Sort Options Modal */}
+      <Dialog open={showSortOptions} onOpenChange={setShowSortOptions}>
+        <DialogContent className="w-full h-auto max-w-none m-0 rounded-t-2xl rounded-b-none md:max-w-lg md:h-auto md:rounded-lg fixed bottom-0 md:relative">
+          <DialogHeader className="border-b border-gray-200 pb-4">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-lg font-semibold">
+                Sort by
+              </DialogTitle>
+              <button
+                onClick={() => setShowSortOptions(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </DialogHeader>
+          <div className="p-4 space-y-3">
+            <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+              <input
+                type="radio"
+                name="mobile-sort"
+                checked={sortBy === "cheapest"}
+                onChange={() => {
+                  setSortBy("cheapest");
+                  setShowSortOptions(false);
+                }}
+                className="text-[#003580]"
+              />
+              <div className="flex-1">
+                <div className="font-medium">Cheapest first</div>
+                <div className="text-sm text-gray-500">Lowest price</div>
+              </div>
+            </label>
+            <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+              <input
+                type="radio"
+                name="mobile-sort"
+                checked={sortBy === "fastest"}
+                onChange={() => {
+                  setSortBy("fastest");
+                  setShowSortOptions(false);
+                }}
+                className="text-[#003580]"
+              />
+              <div className="flex-1">
+                <div className="font-medium">Fastest first</div>
+                <div className="text-sm text-gray-500">Shortest duration</div>
+              </div>
+            </label>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Search Edit Modal */}
       <Dialog open={showSearchEdit} onOpenChange={setShowSearchEdit}>
         <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg">
