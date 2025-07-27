@@ -2154,7 +2154,7 @@ export default function FlightResults() {
                                 {formatPrice(fareType.price)}
                               </div>
                             </div>
-                            <div className="flex items-center space-x-4 text-xs text-gray-600 mb-3">
+                            <div className="flex items-center space-x-4 text-xs text-gray-600 mb-2">
                               <div className="flex items-center space-x-1">
                                 <Luggage className="w-3 h-3" />
                                 <span>{fareType.baggage}</span>
@@ -2162,6 +2162,13 @@ export default function FlightResults() {
                               {fareType.features.map((feature, idx) => (
                                 <span key={idx}>{feature}</span>
                               ))}
+                            </div>
+                            <div className={`text-xs mb-3 font-medium ${
+                              fareType.refundability === 'Refundable'
+                                ? 'text-green-600'
+                                : 'text-red-600'
+                            }`}>
+                              {fareType.refundability}
                             </div>
                             <div className="grid grid-cols-2 gap-2">
                               <Button
