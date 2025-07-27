@@ -177,14 +177,15 @@ export default function Hotels() {
           <div className="grid grid-cols-4 h-16">
             <Link
               to="/"
-              className="flex flex-col items-center justify-center space-y-1"
+              className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
+              onClick={() => console.log("Flights button clicked - navigating to /")}
             >
               <Plane className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Flights</span>
             </Link>
             <Link
               to="/hotels"
-              className="flex flex-col items-center justify-center space-y-1"
+              className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
               onClick={() => console.log("Hotels button clicked - already on Hotels page")}
             >
               <Hotel className="w-5 h-5 text-[#003580]" />
@@ -192,7 +193,7 @@ export default function Hotels() {
             </Link>
             <Link
               to="/saved"
-              className="flex flex-col items-center justify-center space-y-1"
+              className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
               onClick={() => console.log("Saved button clicked - navigating to /saved")}
             >
               <Heart className="w-5 h-5 text-gray-400" />
@@ -200,7 +201,7 @@ export default function Hotels() {
             </Link>
             <Link
               to="/account"
-              className="flex flex-col items-center justify-center space-y-1"
+              className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
               onClick={() => console.log("Account button clicked - navigating to /account")}
             >
               <User className="w-5 h-5 text-gray-400" />
