@@ -421,8 +421,15 @@ export function BookingSearchForm() {
               onInteractOutside={(e) => {
                 // Allow clicking on the input field to keep dropdown open
                 const target = e.target as Element;
-                if (target.closest('[data-destination-input]')) {
+                if (target.closest('[data-destination-input]') ||
+                    target.closest('.destination-container')) {
                   e.preventDefault();
+                  return;
+                }
+                // Close dropdown and reset typing state when clicking outside
+                setIsUserTyping(false);
+                if (!inputValue && destination) {
+                  setInputValue("");
                 }
               }}
             >
