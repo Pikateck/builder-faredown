@@ -1040,6 +1040,43 @@ export default function FlightResults() {
 
               {/* Right: Currency + Auth */}
               <div className="flex items-center space-x-4">
+                {/* Language Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:bg-blue-600 border border-blue-400 px-3 py-1 h-8 font-medium"
+                    >
+                      🌐 English
+                      <ChevronDown className="w-3 h-3 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
+                    {[
+                      { code: "en", name: "English", flag: "🇬🇧" },
+                      { code: "es", name: "Español", flag: "🇪🇸" },
+                      { code: "fr", name: "Français", flag: "🇫🇷" },
+                      { code: "de", name: "Deutsch", flag: "🇩🇪" },
+                      { code: "it", name: "Italiano", flag: "🇮🇹" },
+                      { code: "pt", name: "Português", flag: "🇵🇹" },
+                      { code: "ar", name: "العربية", flag: "🇸🇦" },
+                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "ja", name: "日本語", flag: "🇯🇵" },
+                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "zh", name: "中文", flag: "🇨🇳" },
+                    ].map((language) => (
+                      <DropdownMenuItem
+                        key={language.code}
+                        className="flex items-center space-x-2 cursor-pointer"
+                      >
+                        <span>{language.flag}</span>
+                        <span>{language.name}</span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 {/* Currency Dropdown */}
                 <DropdownMenu
                   open={showCurrencyDropdown}
@@ -1051,7 +1088,7 @@ export default function FlightResults() {
                       size="sm"
                       className="text-white hover:bg-blue-600 border border-blue-400 px-3 py-1 h-8 font-medium"
                     >
-                      English (UK) • {selectedCurrency.code}
+                      {selectedCurrency.code}
                       <ChevronDown className="w-3 h-3 ml-1" />
                     </Button>
                   </DropdownMenuTrigger>
