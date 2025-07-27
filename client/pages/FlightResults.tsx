@@ -2613,36 +2613,38 @@ export default function FlightResults() {
               </button>
             </div>
           </DialogHeader>
-          <div className="space-y-6 p-4">
+          <div className="space-y-4 p-4 max-h-[70vh] overflow-y-auto">
             {/* Sort Options */}
             <div>
-              <h3 className="font-medium mb-3">Sort by</h3>
-              <div className="space-y-2">
-                <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
-                  <input
-                    type="radio"
-                    name="sort"
-                    checked={sortBy === "cheapest"}
-                    onChange={() => setSortBy("cheapest")}
-                    className="text-[#003580]"
-                  />
-                  <div className="flex-1">
-                    <div className="font-medium">Cheapest first</div>
-                    <div className="text-sm text-gray-500">Lowest price</div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Sort by</h3>
+              <div className="space-y-1">
+                <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <input
+                      type="radio"
+                      name="sort"
+                      checked={sortBy === "cheapest"}
+                      onChange={() => setSortBy("cheapest")}
+                      className="w-4 h-4 text-[#003580]"
+                    />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">Cheapest first</div>
+                      <div className="text-xs text-gray-500">Lowest price</div>
+                    </div>
                   </div>
                 </label>
-                <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
-                  <input
-                    type="radio"
-                    name="sort"
-                    checked={sortBy === "fastest"}
-                    onChange={() => setSortBy("fastest")}
-                    className="text-[#003580]"
-                  />
-                  <div className="flex-1">
-                    <div className="font-medium">Fastest first</div>
-                    <div className="text-sm text-gray-500">
-                      Shortest duration
+                <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <input
+                      type="radio"
+                      name="sort"
+                      checked={sortBy === "fastest"}
+                      onChange={() => setSortBy("fastest")}
+                      className="w-4 h-4 text-[#003580]"
+                    />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">Fastest first</div>
+                      <div className="text-xs text-gray-500">Shortest duration</div>
                     </div>
                   </div>
                 </label>
@@ -2651,34 +2653,34 @@ export default function FlightResults() {
 
             {/* Price Range Filter */}
             <div>
-              <h3 className="font-medium mb-3">Price range (per person)</h3>
-              <div className="flex items-center space-x-2 mb-3">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Price range (per person)</h3>
+              <div className="flex items-center space-x-2">
                 <Input
                   type="number"
-                  placeholder="Min"
+                  placeholder="0"
                   value={priceRange[0]}
                   onChange={(e) =>
                     setPriceRange([Number(e.target.value), priceRange[1]])
                   }
-                  className="flex-1 h-10"
+                  className="flex-1 h-8 text-sm"
                 />
-                <span className="text-gray-400">-</span>
+                <span className="text-gray-400 text-sm">-</span>
                 <Input
                   type="number"
-                  placeholder="Max"
+                  placeholder="100000"
                   value={priceRange[1]}
                   onChange={(e) =>
                     setPriceRange([priceRange[0], Number(e.target.value)])
                   }
-                  className="flex-1 h-10"
+                  className="flex-1 h-8 text-sm"
                 />
               </div>
             </div>
 
             {/* Stops Filter */}
             <div>
-              <h3 className="font-medium mb-3">Stops</h3>
-              <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Stops</h3>
+              <div className="space-y-1">
                 {[
                   { value: "any", label: "Any", count: flightData.length },
                   {
@@ -2699,7 +2701,7 @@ export default function FlightResults() {
                 ].map((option) => (
                   <label
                     key={option.value}
-                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       <input
@@ -2708,11 +2710,11 @@ export default function FlightResults() {
                         value={option.value}
                         checked={selectedStops === option.value}
                         onChange={() => handleStopsFilter(option.value)}
-                        className="text-[#003580]"
+                        className="w-4 h-4 text-[#003580]"
                       />
-                      <span>{option.label}</span>
+                      <span className="text-sm font-medium text-gray-900">{option.label}</span>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
                       {option.count}
                     </span>
                   </label>
@@ -2722,12 +2724,12 @@ export default function FlightResults() {
 
             {/* Airlines Filter */}
             <div>
-              <h3 className="font-medium mb-3">Airlines</h3>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Airlines</h3>
+              <div className="space-y-1 max-h-32 overflow-y-auto">
                 {availableAirlines.map((airline) => (
                   <label
                     key={airline}
-                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       <input
@@ -2736,11 +2738,11 @@ export default function FlightResults() {
                         onChange={(e) =>
                           handleAirlineFilter(airline, e.target.checked)
                         }
-                        className="text-[#003580]"
+                        className="w-4 h-4 text-[#003580] rounded"
                       />
-                      <span>{airline}</span>
+                      <span className="text-sm font-medium text-gray-900">{airline}</span>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
                       {airlineCounts[airline]}
                     </span>
                   </label>
@@ -2750,8 +2752,8 @@ export default function FlightResults() {
 
             {/* Fare Type Filter */}
             <div>
-              <h3 className="font-medium mb-3">Fare Type</h3>
-              <div className="space-y-2">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Fare Type</h3>
+              <div className="space-y-1">
                 {[
                   { value: "all", label: "All", count: flightData.length },
                   {
@@ -2767,7 +2769,7 @@ export default function FlightResults() {
                 ].map((option) => (
                   <label
                     key={option.value}
-                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
                   >
                     <div className="flex items-center space-x-3">
                       <input
@@ -2776,11 +2778,11 @@ export default function FlightResults() {
                         value={option.value}
                         checked={selectedFareType === option.value}
                         onChange={() => handleFareTypeFilter(option.value)}
-                        className="text-[#003580]"
+                        className="w-4 h-4 text-[#003580]"
                       />
-                      <span>{option.label}</span>
+                      <span className="text-sm font-medium text-gray-900">{option.label}</span>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
                       {option.count}
                     </span>
                   </label>
