@@ -1002,7 +1002,7 @@ export default function FlightResults() {
                 onClick={() => setShowSortOptions(true)}
               >
                 <ArrowUpDown className="w-4 h-4 mr-2" />
-                Sort: {sortBy === "cheapest" ? "Price" : "Duration"}
+                Sort: {sortBy === "cheapest" ? "Price" : sortBy === "fastest" ? "Duration" : "Default"}
               </Button>
             </div>
           </div>
