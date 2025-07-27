@@ -1060,41 +1060,29 @@ export default function Index() {
                     {showCurrencyDropdown && (
                       <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
                         {[
-                          { code: "USD", symbol: "$", name: "US Dollar" },
-                          { code: "EUR", symbol: "€", name: "Euro" },
-                          { code: "GBP", symbol: "£", name: "British Pound" },
                           { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                          { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                          { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
-                          { code: "JPY", symbol: "¥", name: "Japanese Yen" },
-                          { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
-                          {
-                            code: "KRW",
-                            symbol: "₩",
-                            name: "South Korean Won",
-                          },
-                          {
-                            code: "SGD",
-                            symbol: "S$",
-                            name: "Singapore Dollar",
-                          },
-                          {
-                            code: "AUD",
-                            symbol: "A$",
-                            name: "Australian Dollar",
-                          },
-                          {
-                            code: "CAD",
-                            symbol: "C$",
-                            name: "Canadian Dollar",
-                          },
-                          { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
+                          { code: "AED", symbol: "د.إ", name: "United Arab Emirates Dirham" },
+                          { code: "USD", symbol: "$", name: "US Dollar" },
+                          { code: "GBP", symbol: "£", name: "Great Britain Pound" },
+                          { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+                          { code: "EUR", symbol: "€", name: "Euro" },
                           { code: "THB", symbol: "฿", name: "Thai Baht" },
-                          {
-                            code: "MYR",
-                            symbol: "RM",
-                            name: "Malaysian Ringgit",
-                          },
+                          { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+                          { code: "RUB", symbol: "₽", name: "Russian Ruble" },
+                          { code: "NZD", symbol: "NZ$", name: "New Zealand Dollar" },
+                          { code: "KRW", symbol: "₩", name: "Korean Won" },
+                          { code: "HKD", symbol: "HK$", name: "Hong Kong Dollar" },
+                          { code: "KWD", symbol: "د.ك", name: "Kuwaiti Dinar" },
+                          { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
+                          { code: "QAR", symbol: "ر.ق", name: "Qatari Riyal" },
+                          { code: "DKK", symbol: "kr", name: "Danish Krone" },
+                          { code: "BHD", symbol: ".د.ب", name: "Bahraini Dinar" },
+                          { code: "ZAR", symbol: "R", name: "South African Rand" },
+                          { code: "JPY", symbol: "¥", name: "Japanese Yen" },
+                          { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
+                          { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+                          { code: "OMR", symbol: "ر.ع.", name: "Omani Rial" },
+                          { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" },
                         ].map((currency) => (
                           <button
                             key={currency.code}
