@@ -1933,7 +1933,7 @@ export default function FlightResults() {
                         <div className={`text-xs font-medium ${
                           flight.fareTypes[0].refundability === 'Refundable'
                             ? 'text-green-600'
-                            : 'text-red-600'
+                            : 'text-green-600'
                         }`}>
                           {flight.fareTypes[0].refundability}
                         </div>
