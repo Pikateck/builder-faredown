@@ -413,9 +413,9 @@ export default function FlightResults() {
     return result.trim() + " Rupees Only";
   };
 
-  // Airlines filter state - Initialize empty so user can select specific airlines
+  // Airlines filter state - Initialize with all airlines selected by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
-    new Set()
+    new Set(availableAirlines)
   );
 
   // Additional filter states (needed to prevent errors)
@@ -480,12 +480,22 @@ export default function FlightResults() {
 
   // Reset filters function
   const resetAllFilters = () => {
-    setSelectedAirlines(new Set());
+    setSelectedAirlines(new Set(availableAirlines));
     setPriceRange([0, 100000]);
     setSelectedStops("any");
     setDepartureTimeRange([0, 24]);
     setArrivalTimeRange([0, 24]);
     setMaxDuration(24);
+  };
+
+  // Function to handle "Only this airline" selection
+  const handleOnlyThisAirline = (airlineName: string) => {
+    setSelectedAirlines(new Set([airlineName]));
+  };
+
+  // Function to reset airline selection (select all)
+  const resetAirlineSelection = () => {
+    setSelectedAirlines(new Set(availableAirlines));
   };
 
   // Additional helper functions
@@ -656,7 +666,7 @@ export default function FlightResults() {
 
   // Filter flights based on selected airlines with sorting and pricing logic
   const filteredFlights = (
-    selectedAirlines.size === 0
+    selectedAirlines.size === 0 || selectedAirlines.size === availableAirlines.length
       ? flightData
       : flightData.filter((flight) => selectedAirlines.has(flight.airline))
   )
@@ -1621,10 +1631,16 @@ export default function FlightResults() {
 
               {/* Airlines Filter */}
               <div className="space-y-1 mt-4">
-                <div className="border-b border-gray-200 pb-1">
+                <div className="border-b border-gray-200 pb-1 flex items-center justify-between">
                   <div className="text-sm font-semibold text-gray-900">
                     Airlines
                   </div>
+                  <button
+                    onClick={resetAirlineSelection}
+                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Reset
+                  </button>
                 </div>
                 {availableAirlines.map((airline) => (
                   <div
@@ -1655,9 +1671,12 @@ export default function FlightResults() {
                         {airlineCounts[airline]}
                       </span>
                       {hoveredAirline === airline && (
-                        <span className="text-xs text-blue-600 font-medium whitespace-nowrap">
+                        <button
+                          onClick={() => handleOnlyThisAirline(airline)}
+                          className="text-xs text-blue-600 font-medium whitespace-nowrap hover:text-blue-800 transition-colors"
+                        >
                           Only this airline
-                        </span>
+                        </button>
                       )}
                     </div>
                   </div>
