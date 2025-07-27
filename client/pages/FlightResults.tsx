@@ -2613,7 +2613,8 @@ export default function FlightResults() {
               </button>
             </div>
           </DialogHeader>
-          <div className="space-y-4 p-4 max-h-[70vh] overflow-y-auto">
+          <div className="flex-1 overflow-y-auto">
+            <div className="space-y-4 p-4 pb-0">
             {/* Sort Options */}
             <div>
               <h3 className="text-sm font-semibold text-gray-900 mb-2">Sort by</h3>
@@ -2926,6 +2927,7 @@ export default function FlightResults() {
                   </label>
                 ))}
               </div>
+            </div>
             </div>
           </div>
           <div className="border-t border-gray-200 p-4 bg-white sticky bottom-0">
