@@ -1931,13 +1931,11 @@ export default function FlightResults() {
                         </div>
                         <div className="text-xs text-gray-500">per person</div>
                         <div className={`text-xs font-medium ${
-                          flight.refundability === 'Refundable'
+                          flight.fareTypes[0].refundability === 'Refundable'
                             ? 'text-green-600'
-                            : flight.refundability === 'Non-Refundable'
-                            ? 'text-red-600'
-                            : 'text-orange-600'
+                            : 'text-red-600'
                         }`}>
-                          {flight.refundability}
+                          {flight.fareTypes[0].refundability}
                         </div>
                         {/* Mobile Fare Breakdown Tooltip */}
                         {expandedTicketOptions ===
