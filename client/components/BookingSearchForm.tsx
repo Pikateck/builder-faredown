@@ -408,7 +408,7 @@ export function BookingSearchForm() {
                   }}
                   readOnly={false}
                   disabled={false}
-                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation relative z-10"
+                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation relative z-10"
                   placeholder="Where are you going?"
                   autoComplete="off"
                   data-destination-input="true"
