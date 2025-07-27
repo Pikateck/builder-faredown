@@ -366,7 +366,7 @@ export function BookingSearchForm() {
       {/* Main Search Form */}
       <div className="flex flex-col lg:flex-row gap-2 mb-4">
         {/* Destination */}
-        <div className="flex-1 lg:max-w-[320px] relative">
+        <div className="flex-1 lg:max-w-[320px] relative destination-container">
           <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
             Destination
           </label>
