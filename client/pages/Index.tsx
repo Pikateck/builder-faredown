@@ -1800,11 +1800,10 @@ export default function Index() {
         </header>
 
         {/* Hotels Search Form */}
-        {activeTab === "hotels" && (
-          <header
-            className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
-            style={{ backgroundColor: "#003580" }}
-          >
+        <header
+          className={`py-3 sm:py-6 md:py-8 pb-24 sm:pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}
+          style={{ backgroundColor: "#003580" }}
+        >
             <div className="max-w-7xl mx-auto px-3 sm:px-4">
               <div className="text-center mb-4 sm:mb-6">
                 <div className="mb-3 sm:mb-5">
@@ -1823,8 +1822,7 @@ export default function Index() {
               {/* Hotel Search Form */}
               <BookingSearchForm />
             </div>
-          </header>
-        )}
+        </header>
 
         {/* Upgrade & Add-ons Section */}
         <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
