@@ -376,25 +376,32 @@ export function BookingSearchForm() {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 w-4 h-4 z-10" />
                 <Input
                   type="text"
-                  value={destination}
+                  value={inputValue || destination}
                   onChange={(e) => {
-                    setDestination(e.target.value);
+                    const value = e.target.value;
+                    setInputValue(value);
+                    setIsUserTyping(true);
                     // Auto-open dropdown when user starts typing
-                    if (e.target.value.length > 0 && !isDestinationOpen) {
+                    if (!isDestinationOpen) {
                       setIsDestinationOpen(true);
                     }
                   }}
                   onFocus={() => {
                     setIsDestinationOpen(true);
-                    // Show popular destinations if no text or trigger search if text exists
-                    if (!destination) {
+                    // Reset to show trending destinations when focusing
+                    if (!isUserTyping) {
                       setDestinationSuggestions([]);
-                    } else if (destination.length >= 1) {
-                      searchDestinations(destination);
                     }
                   }}
+                  onBlur={() => {
+                    // If user clicked away without selecting, restore original destination
+                    if (!inputValue && destination) {
+                      setInputValue("");
+                    }
+                    setIsUserTyping(false);
+                  }}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation"
-                  placeholder="Where are you going? (e.g., Madrid, Business Hotel Dubai)"
+                  placeholder="Where are you going?"
                   autoComplete="off"
                   data-destination-input="true"
                 />
