@@ -1213,9 +1213,6 @@ export default function Index() {
                   Control your price for flights & hotels — with live AI
                   bargaining.
                 </h1>
-                <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
-                  Join 50M+ travelers who bargain smarter.
-                </p>
               </div>
 
               {/* Desktop Search Form */}
@@ -1454,7 +1451,7 @@ export default function Index() {
                                 <div className="flex items-center space-x-3">
                                   <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                                     <span className="text-xs font-bold text-gray-600">
-                                      ���
+                                      ✈
                                     </span>
                                   </div>
                                   <div>
