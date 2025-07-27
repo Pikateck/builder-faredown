@@ -1797,9 +1797,6 @@ export default function Index() {
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
                   Search low prices on hotels, homes and much more...
                 </h1>
-                <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
-                  Join 50M+ travelers who bargain smarter.
-                </p>
               </div>
 
               {/* Hotel Search Form */}
