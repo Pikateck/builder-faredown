@@ -222,7 +222,13 @@ export function MobileDatePicker({
 
         <div className="space-y-3">
           <Button
-            onClick={onClose}
+            onClick={() => {
+              console.log("Done button clicked - Mobile Date Picker");
+              console.log("selectedDepartureDate:", selectedDepartureDate);
+              console.log("selectedReturnDate:", selectedReturnDate);
+              console.log("tripType:", tripType);
+              onClose();
+            }}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation"
             disabled={
               !selectedDepartureDate ||
