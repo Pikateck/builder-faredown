@@ -327,9 +327,6 @@ export function BookingCalendar({
             >
               7 days
             </button>
-            <button className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors">
-              I'm flexible
-            </button>
           </div>
         </div>
 
