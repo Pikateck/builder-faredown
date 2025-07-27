@@ -138,9 +138,13 @@ export function MobileDatePicker({
 
   const handleCalendarChange = (range: { startDate: Date; endDate: Date }) => {
     console.log("Mobile calendar range selected:", range);
+    console.log("Current tripType:", tripType);
     setSelectedDepartureDate(range.startDate);
     if (tripType === "round-trip") {
       setSelectedReturnDate(range.endDate);
+      console.log("Set return date:", range.endDate);
+    } else {
+      console.log("One-way trip, not setting return date");
     }
   };
 
