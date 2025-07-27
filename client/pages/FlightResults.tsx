@@ -2203,8 +2203,8 @@ export default function FlightResults() {
                             </div>
                             <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                               <img
-                                src={flight.logo}
-                                alt={flight.airline}
+                                src={flight.returnLogo || flight.logo}
+                                alt={flight.returnAirline || flight.airline}
                                 className="w-8 h-6 object-contain"
                               />
                             </div>
