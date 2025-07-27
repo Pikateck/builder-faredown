@@ -370,7 +370,7 @@ export function BookingSearchForm() {
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-4 h-4" />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 w-4 h-4 z-10" />
                 <Input
                   type="text"
                   value={destination}
