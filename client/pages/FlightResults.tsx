@@ -54,7 +54,7 @@ import {
   Filter,
   SlidersHorizontal,
   ArrowUpDown,
-  MapPin,
+  Hotel,
   Clock,
   Wifi,
   Headphones,
