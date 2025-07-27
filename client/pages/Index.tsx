@@ -979,12 +979,15 @@ export default function Index() {
         {/* Mobile Bottom Navigation */}
         <div className="bg-white border-t border-gray-200">
           <div className="grid grid-cols-4 h-16">
-            <button className="flex flex-col items-center justify-center space-y-1">
+            <Link
+              to="/"
+              className="flex flex-col items-center justify-center space-y-1"
+            >
               <Plane className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">
                 Flights
               </span>
-            </button>
+            </Link>
             <Link
               to="/hotels"
               className="flex flex-col items-center justify-center space-y-1"
@@ -992,14 +995,20 @@ export default function Index() {
               <Hotel className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Hotels</span>
             </Link>
-            <button className="flex flex-col items-center justify-center space-y-1">
+            <Link
+              to="/saved"
+              className="flex flex-col items-center justify-center space-y-1"
+            >
               <Heart className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Saved</span>
-            </button>
-            <button className="flex flex-col items-center justify-center space-y-1">
+            </Link>
+            <Link
+              to="/account"
+              className="flex flex-col items-center justify-center space-y-1"
+            >
               <User className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Account</span>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
