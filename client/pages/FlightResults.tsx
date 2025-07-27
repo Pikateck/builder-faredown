@@ -2779,10 +2779,12 @@ export default function FlightResults() {
               </div>
             </div>
 
-            {/* Flight Times */}
+            {/* Flight Times - Enhanced */}
             <div>
               <h3 className="font-medium mb-3">Departure time</h3>
-              <div className="grid grid-cols-2 gap-2">
+
+              {/* Quick Time Slots */}
+              <div className="grid grid-cols-2 gap-2 mb-4">
                 {[
                   { label: "Morning", range: [6, 12], icon: "☀️" },
                   { label: "Afternoon", range: [12, 18], icon: "☀️" },
@@ -2807,6 +2809,60 @@ export default function FlightResults() {
                       {timeSlot.range[0]}:00-{timeSlot.range[1]}:00
                     </div>
                   </button>
+                ))}
+              </div>
+
+              {/* Detailed Time Options */}
+              <div className="border-t pt-4">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Detailed departure times</h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
+                    { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
+                    { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
+                    { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 },
+                  ].map((time) => (
+                    <label
+                      key={time.label}
+                      className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          className="text-[#003580]"
+                        />
+                        <span className="text-sm">{time.label}</span>
+                      </div>
+                      <span className="text-sm text-gray-500">{time.count}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Return Flight Times */}
+            <div>
+              <h3 className="font-medium mb-3">Return flight time</h3>
+              <div className="space-y-2">
+                {[
+                  { label: "3:00 AM - 5:59 AM", range: [3, 6], count: 115 },
+                  { label: "6:00 AM - 11:59 AM", range: [6, 12], count: 93 },
+                  { label: "12:00 PM - 5:59 PM", range: [12, 18], count: 290 },
+                  { label: "6:00 PM - 11:59 PM", range: [18, 24], count: 145 },
+                ].map((time) => (
+                  <label
+                    key={time.label}
+                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        className="text-[#003580]"
+                      />
+                      <span className="text-sm">{time.label}</span>
+                    </div>
+                    <span className="text-sm text-gray-500">{time.count}</span>
+                  </label>
                 ))}
               </div>
             </div>
