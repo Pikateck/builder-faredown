@@ -2459,8 +2459,15 @@ export default function FlightResults() {
                             <div className="text-lg font-bold text-gray-900 mb-1">
                               {formatPrice(fareType.price)}
                             </div>
-                            <div className="text-xs text-gray-600 mb-3">
+                            <div className="text-xs text-gray-600 mb-1">
                               All-inclusive
+                            </div>
+                            <div className={`text-xs mb-3 font-medium ${
+                              fareType.refundability === 'Refundable'
+                                ? 'text-green-600'
+                                : 'text-red-600'
+                            }`}>
+                              {fareType.refundability}
                             </div>
                             <div className="space-y-2">
                               <Button
