@@ -185,6 +185,7 @@ export default function Hotels() {
             <Link
               to="/hotels"
               className="flex flex-col items-center justify-center space-y-1"
+              onClick={() => console.log("Hotels button clicked - already on Hotels page")}
             >
               <Hotel className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">Hotels</span>
@@ -192,6 +193,7 @@ export default function Hotels() {
             <Link
               to="/saved"
               className="flex flex-col items-center justify-center space-y-1"
+              onClick={() => console.log("Saved button clicked - navigating to /saved")}
             >
               <Heart className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Saved</span>
@@ -199,6 +201,7 @@ export default function Hotels() {
             <Link
               to="/account"
               className="flex flex-col items-center justify-center space-y-1"
+              onClick={() => console.log("Account button clicked - navigating to /account")}
             >
               <User className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Account</span>
