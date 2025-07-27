@@ -218,7 +218,7 @@ export function BookingSearchForm() {
         } finally {
           setLoadingDestinations(false);
         }
-      }, 150); // Faster like Booking.com
+      }, 100); // Ultra-fast like Booking.com
     },
     [popularDestinations],
   );
