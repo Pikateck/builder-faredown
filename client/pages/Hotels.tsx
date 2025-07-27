@@ -33,7 +33,7 @@ import {
   Headphones,
   ArrowRight,
 } from "lucide-react";
-import { AdminTestButton } from "@/components/AdminTestButton";
+import AdminTestButton from "@/components/AdminTestButton";
 
 export default function Hotels() {
   const navigate = useNavigate();
