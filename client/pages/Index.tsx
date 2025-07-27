@@ -1020,18 +1020,22 @@ export default function Index() {
 
               {/* Centered Navigation */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
-                <Link
-                  to="/flights"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold border-b-2 border-white py-3 lg:py-4"
+                <button
+                  onClick={() => setActiveTab("flights")}
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "flights" ? "border-b-2 border-white" : ""
+                  }`}
                 >
                   <span>Flights</span>
-                </Link>
-                <Link
-                  to="/hotels"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
+                </button>
+                <button
+                  onClick={() => setActiveTab("hotels")}
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "hotels" ? "border-b-2 border-white" : ""
+                  }`}
                 >
                   <span>Hotels</span>
-                </Link>
+                </button>
               </nav>
 
               <div className="flex items-center space-x-2 md:space-x-6">
