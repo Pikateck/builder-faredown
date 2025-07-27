@@ -553,7 +553,7 @@ export function BookingSearchForm() {
                       </div>
                     ))}
                   </div>
-                ) : destination.length >= 1 && !loadingDestinations ? (
+                ) : isUserTyping && inputValue.length > 0 && !loadingDestinations ? (
                   <div className="p-4 text-center">
                     <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
                       <svg
