@@ -2671,6 +2671,46 @@ export default function FlightResults() {
               </div>
             </div>
 
+            {/* Fare Type Filter */}
+            <div>
+              <h3 className="font-medium mb-3">Fare Type</h3>
+              <div className="space-y-2">
+                {[
+                  { value: "all", label: "All", count: flightData.length },
+                  {
+                    value: "refundable",
+                    label: "Refundable",
+                    count: flightData.filter((f) => f.refundability === "Refundable").length,
+                  },
+                  {
+                    value: "non-refundable",
+                    label: "Non-Refundable",
+                    count: flightData.filter((f) => f.refundability === "Non-Refundable").length,
+                  },
+                ].map((option) => (
+                  <label
+                    key={option.value}
+                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="radio"
+                        name="mobile-fareType"
+                        value={option.value}
+                        checked={selectedFareType === option.value}
+                        onChange={() => handleFareTypeFilter(option.value)}
+                        className="text-[#003580]"
+                      />
+                      <span>{option.label}</span>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {option.count}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
             {/* Flight Times */}
             <div>
               <h3 className="font-medium mb-3">Departure time</h3>
