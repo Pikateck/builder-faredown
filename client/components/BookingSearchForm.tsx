@@ -393,13 +393,7 @@ export function BookingSearchForm() {
                       setDestinationSuggestions([]);
                     }
                   }}
-                  onBlur={() => {
-                    // If user clicked away without selecting, restore original destination
-                    if (!inputValue && destination) {
-                      setInputValue("");
-                    }
-                    setIsUserTyping(false);
-                  }}
+
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-[#febb02] focus:border-[#003580] rounded font-medium text-sm touch-manipulation"
                   placeholder="Where are you going?"
                   autoComplete="off"
