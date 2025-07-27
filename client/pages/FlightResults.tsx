@@ -1069,7 +1069,7 @@ export default function FlightResults() {
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
-                      { code: "ar", name: "العرب��ة", flag: "🇸🇦" },
+                      { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
@@ -2928,11 +2928,11 @@ export default function FlightResults() {
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-200 p-4">
+          <div className="border-t border-gray-200 p-4 bg-white sticky bottom-0">
             <div className="flex space-x-3">
               <Button
                 variant="outline"
-                className="flex-1"
+                className="flex-1 h-12 font-medium border-gray-300 text-gray-700"
                 onClick={() => {
                   resetAllFilters();
                   setShowMobileFilters(false);
@@ -2941,10 +2941,10 @@ export default function FlightResults() {
                 Clear all
               </Button>
               <Button
-                className="flex-1 bg-[#003580] hover:bg-[#0071c2]"
+                className="flex-1 h-12 bg-[#003580] hover:bg-[#0071c2] font-semibold text-white"
                 onClick={() => setShowMobileFilters(false)}
               >
-                Show results
+                Show {filteredFlights.length} results
               </Button>
             </div>
           </div>
