@@ -388,13 +388,8 @@ export function BookingSearchForm() {
                   }}
                   onFocus={() => {
                     setIsDestinationOpen(true);
-                    // Reset to show trending destinations when focusing
-                    if (!isUserTyping) {
-                      setDestinationSuggestions([]);
-                    }
                   }}
                   onClick={() => {
-                    // Ensure dropdown opens on click
                     setIsDestinationOpen(true);
                   }}
 
