@@ -2394,7 +2394,7 @@ export default function FlightResults() {
                         <div className={`text-xs mb-4 font-medium ${
                           flight.fareTypes[0].refundability === 'Refundable'
                             ? 'text-green-600'
-                            : 'text-red-600'
+                            : 'text-green-600'
                         }`}>
                           {flight.fareTypes[0].refundability}
                         </div>
@@ -2735,7 +2735,7 @@ export default function FlightResults() {
               <h3 className="font-medium mb-3">Departure time</h3>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { label: "Morning", range: [6, 12], icon: "���️" },
+                  { label: "Morning", range: [6, 12], icon: "☀️" },
                   { label: "Afternoon", range: [12, 18], icon: "☀️" },
                   { label: "Evening", range: [18, 24], icon: "🌙" },
                   { label: "Night", range: [0, 6], icon: "🌅" },
