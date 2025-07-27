@@ -588,15 +588,20 @@ export function BookingSearchForm() {
                       <div
                         key={dest.id}
                         className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                        }}
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("⭐ Popular destination selected:", {
+                          console.log("⭐ Trending destination selected:", {
                             name: fullName,
                             code: dest.code,
                             type: dest.type,
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code);
+                          setInputValue("");
+                          setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
                       >
