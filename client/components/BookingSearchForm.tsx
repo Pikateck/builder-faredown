@@ -444,7 +444,7 @@ export function BookingSearchForm() {
                       🔍 Searching...
                     </span>
                   </div>
-                ) : destinationSuggestions.length > 0 ? (
+                ) : isUserTyping && inputValue.length > 0 && destinationSuggestions.length > 0 ? (
                   <div>
                     {destinationSuggestions.map((dest, index) => (
                       <div
