@@ -229,9 +229,39 @@ export default function Hotels() {
               <div className="flex items-center space-x-2 md:space-x-6">
                 {/* Language and Currency */}
                 <div className="flex items-center space-x-4 text-sm">
-                  <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                    <span>English (UK)</span>
-                  </button>
+                  <div className="relative">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
+                          <span>🌐 English</span>
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48">
+                        {[
+                          { code: "en", name: "English", flag: "🇬🇧" },
+                          { code: "es", name: "Español", flag: "🇪🇸" },
+                          { code: "fr", name: "Français", flag: "🇫🇷" },
+                          { code: "de", name: "Deutsch", flag: "🇩🇪" },
+                          { code: "it", name: "Italiano", flag: "🇮🇹" },
+                          { code: "pt", name: "Português", flag: "🇵🇹" },
+                          { code: "ar", name: "العربية", flag: "🇸🇦" },
+                          { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                          { code: "ja", name: "日本語", flag: "🇯🇵" },
+                          { code: "ko", name: "한국어", flag: "🇰🇷" },
+                          { code: "zh", name: "中文", flag: "🇨🇳" },
+                        ].map((language) => (
+                          <DropdownMenuItem
+                            key={language.code}
+                            className="flex items-center space-x-2 cursor-pointer"
+                          >
+                            <span>{language.flag}</span>
+                            <span>{language.name}</span>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                   <div className="relative">
                     <button
                       onClick={() =>
