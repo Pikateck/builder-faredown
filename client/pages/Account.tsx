@@ -1402,14 +1402,20 @@ Please keep this ticket for your records.
             <Hotel className="w-5 h-5 text-gray-400" />
             <span className="text-xs text-gray-500">Hotels</span>
           </Link>
-          <button className="flex flex-col items-center justify-center space-y-1">
+          <Link
+            to="/saved"
+            className="flex flex-col items-center justify-center space-y-1"
+          >
             <Heart className="w-5 h-5 text-gray-400" />
             <span className="text-xs text-gray-500">Saved</span>
-          </button>
-          <button className="flex flex-col items-center justify-center space-y-1">
+          </Link>
+          <Link
+            to="/account"
+            className="flex flex-col items-center justify-center space-y-1"
+          >
             <User className="w-5 h-5 text-[#003580]" />
             <span className="text-xs text-[#003580] font-medium">Account</span>
-          </button>
+          </Link>
         </div>
       </div>
     </div>
