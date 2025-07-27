@@ -75,11 +75,15 @@ const flightData = [
     returnArrivalTime: "17:40",
     returnDuration: "4h 40m",
     airline: "Emirates",
+    returnAirline: "Emirates",
     flightNumber: "EK 500",
+    returnFlightNumber: "EK 501",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
+    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
     aircraft: "Boeing 777",
     flightType: "Direct",
     stops: 0,
+    refundability: "Refundable",
     fareTypes: [
       {
         name: "Eco Saver",
@@ -112,11 +116,15 @@ const flightData = [
     returnArrivalTime: "17:40",
     returnDuration: "4h 40m",
     airline: "Emirates",
+    returnAirline: "Indigo",
     flightNumber: "EK 502",
+    returnFlightNumber: "6E 1407",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
+    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Boeing 777",
     flightType: "Direct",
     stops: 0,
+    refundability: "Partially Refundable",
     fareTypes: [
       {
         name: "Eco Saver",
@@ -149,11 +157,15 @@ const flightData = [
     returnArrivalTime: "23:15",
     returnDuration: "4h 45m",
     airline: "Air India",
+    returnAirline: "Air India",
     flightNumber: "AI 131",
+    returnFlightNumber: "AI 132",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
+    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
     aircraft: "Airbus A320",
     flightType: "Direct",
     stops: 0,
+    refundability: "Non-Refundable",
     fareTypes: [
       {
         name: "Economy",
@@ -180,11 +192,15 @@ const flightData = [
     returnArrivalTime: "19:30",
     returnDuration: "5h 30m",
     airline: "Indigo",
+    returnAirline: "Indigo",
     flightNumber: "6E 1406",
+    returnFlightNumber: "6E 1408",
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
+    returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Airbus A321",
     flightType: "1 Stop",
     stops: 1,
+    refundability: "Refundable",
     fareTypes: [
       {
         name: "Saver",
@@ -447,6 +463,7 @@ export default function FlightResults() {
   // Additional filter states (needed to prevent errors)
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
   const [selectedStops, setSelectedStops] = useState<string>("any");
+  const [selectedFareType, setSelectedFareType] = useState<string>("all");
   const [departureTimeRange, setDepartureTimeRange] = useState<
     [number, number]
   >([0, 24]);
@@ -509,6 +526,7 @@ export default function FlightResults() {
     setSelectedAirlines(new Set(availableAirlines));
     setPriceRange([0, 100000]);
     setSelectedStops("any");
+    setSelectedFareType("all");
     setDepartureTimeRange([0, 24]);
     setArrivalTimeRange([0, 24]);
     setMaxDuration(24);
@@ -527,6 +545,11 @@ export default function FlightResults() {
   // Additional helper functions
   const handleStopsFilter = (stops: string) => {
     setSelectedStops(stops);
+  };
+
+  // Handle fare type filter
+  const handleFareTypeFilter = (fareType: string) => {
+    setSelectedFareType(fareType);
   };
 
   // Calendar helper functions (restored)
