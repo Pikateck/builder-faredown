@@ -2392,13 +2392,11 @@ export default function FlightResults() {
                           All-inclusive price
                         </div>
                         <div className={`text-xs mb-4 font-medium ${
-                          flight.refundability === 'Refundable'
+                          flight.fareTypes[0].refundability === 'Refundable'
                             ? 'text-green-600'
-                            : flight.refundability === 'Non-Refundable'
-                            ? 'text-red-600'
-                            : 'text-orange-600'
+                            : 'text-red-600'
                         }`}>
-                          {flight.refundability}
+                          {flight.fareTypes[0].refundability}
                         </div>
                         <div className="space-y-2 w-32">
                           <Button
