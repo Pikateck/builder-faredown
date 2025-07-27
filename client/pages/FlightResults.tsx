@@ -413,6 +413,32 @@ export default function FlightResults() {
     return result.trim() + " Rupees Only";
   };
 
+  // Expanded airlines list with more options
+  const availableAirlines = [
+    "Emirates",
+    "Air India",
+    "Indigo",
+    "Fly Dubai",
+    "Air Arabia",
+    "Spicejet",
+    "Vistara",
+    "Air Asia",
+    "GoAir",
+    "Alliance Air",
+    "Qatar Airways",
+    "Etihad Airways",
+    "Lufthansa",
+    "British Airways",
+    "Singapore Airlines",
+    "Thai Airways",
+    "Malaysia Airlines",
+    "Kuwait Airways",
+    "Oman Air",
+    "Saudia",
+    "Turkish Airlines",
+    "Flydubai",
+  ];
+
   // Airlines filter state - Initialize with all airlines selected by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
     new Set(availableAirlines)
