@@ -138,7 +138,7 @@ export function BookingSearchForm() {
             name: "New York",
             country: "United States",
             type: "city",
-            flag: "��🇸",
+            flag: "🇺🇸",
           },
           {
             id: "PAR",
@@ -441,7 +441,7 @@ export function BookingSearchForm() {
                         key={dest.id || index}
                         className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                         onMouseDown={(e) => {
-                          // Prevent blur from firing before click
+                          // Prevent input blur from firing before click
                           e.preventDefault();
                         }}
                         onClick={(e) => {
