@@ -100,6 +100,14 @@ export default function Account() {
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
 
+  // Delete profile function
+  const deleteProfile = (profileId) => {
+    const updatedProfiles = savedProfiles.filter(p => p.id !== profileId);
+    setSavedProfiles(updatedProfiles);
+    localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
+    setShowDeleteConfirm(null);
+  };
+
   // Payment methods (mock data)
   const [paymentMethods] = useState([
     {
