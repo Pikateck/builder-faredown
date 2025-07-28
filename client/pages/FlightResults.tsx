@@ -299,6 +299,10 @@ export default function FlightResults() {
   const [selectingDeparture, setSelectingDeparture] = useState(true);
   const [currentCalendarMonth, setCurrentCalendarMonth] = useState(0);
 
+  // Fare rules states
+  const [showFareRules, setShowFareRules] = useState<{ [key: string]: boolean }>({});
+  const [fareRulesFlightId, setFareRulesFlightId] = useState<string | null>(null);
+
   // Bargain states
   const [showBargainModal, setShowBargainModal] = useState(false);
   const [bargainFlight, setBargainFlight] = useState<
