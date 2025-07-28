@@ -1441,6 +1441,7 @@ export default function BookingFlow() {
         ...travellerData,
         savedAt: new Date().toISOString(),
         profileName: `${travellerData.firstName} ${travellerData.lastName}`,
+        isAccountHolder: false, // Mark as additional traveller
       };
 
       // Check if similar profile already exists (avoid duplicates)
