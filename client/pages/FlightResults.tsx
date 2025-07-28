@@ -2507,10 +2507,10 @@ export default function FlightResults() {
                           </div>
                         </div>
 
-                        {/* Compact info row */}
-                        <div className="flex items-center justify-center space-x-2 mb-2">
-                          <Luggage className="w-3 h-3 text-green-600" />
-                          <Shield className="w-3 h-3 text-green-600" />
+                        {/* Compact info row - Larger Icons */}
+                        <div className="flex items-center justify-center space-x-3 mb-2">
+                          <Luggage className="w-5 h-5 text-green-600" />
+                          <Shield className="w-5 h-5 text-green-600" />
                           <button
                             onClick={() =>
                               setExpandedTicketOptions(
@@ -2522,7 +2522,7 @@ export default function FlightResults() {
                             }
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                           >
-                            <Info className="w-3 h-3" />
+                            <Info className="w-5 h-5" />
                           </button>
                         </div>
 
