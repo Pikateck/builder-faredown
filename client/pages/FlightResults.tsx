@@ -49,6 +49,7 @@ import {
   CheckCircle,
   XCircle,
   RefreshCw,
+  FileText,
   Menu,
   Star,
   Filter,
