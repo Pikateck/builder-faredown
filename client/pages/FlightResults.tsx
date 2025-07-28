@@ -1106,7 +1106,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한��어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -2588,6 +2588,14 @@ export default function FlightResults() {
                                 className="w-full bg-[#003580] hover:bg-[#0071c2] text-xs py-1.5"
                               >
                                 Book Now
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                onClick={() => handleFareRulesToggle(flight.id, fareType.id)}
+                                className="w-full text-[#003580] hover:bg-[#003580]/10 text-xs py-1.5"
+                              >
+                                <Info className="w-3 h-3 mr-1" />
+                                View Fare Rules
                               </Button>
                             </div>
                           </div>
