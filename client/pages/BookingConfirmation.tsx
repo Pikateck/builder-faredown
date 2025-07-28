@@ -718,6 +718,146 @@ export default function BookingConfirmation() {
                 </div>
               </div>
 
+              {/* Fare Rules Section */}
+              <div className="border-2 border-blue-700 rounded-lg p-6 mb-8">
+                <h3 className="text-xl font-bold text-blue-700 mb-4 border-b pb-2 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  FARE RULES & CONDITIONS
+                </h3>
+
+                <div className="space-y-6">
+                  {/* Outbound Flight Rules */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      </svg>
+                      Outbound Flight: {booking.flights?.[0]?.from || "Mumbai"} → {booking.flights?.[0]?.to || "Dubai"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="space-y-2">
+                        <div>
+                          <span className="font-medium text-gray-700">Cancellation Policy:</span>
+                          <p className="text-gray-600">Allowed with fee: ₹3,500 per passenger</p>
+                          <p className="text-xs text-gray-500">Must be done 24 hours before departure</p>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700">Date Change Fee:</span>
+                          <p className="text-gray-600">₹2,500 per passenger + fare difference</p>
+                          <p className="text-xs text-gray-500">Subject to seat availability</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div>
+                          <span className="font-medium text-gray-700">Refund Policy:</span>
+                          <p className="text-gray-600">
+                            {booking.bargained || booking.flights?.[0]?.refundable ? "Fully Refundable" : "Partially Refundable"}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {booking.bargained || booking.flights?.[0]?.refundable
+                              ? "Full refund minus service charges"
+                              : "Only taxes and fees refundable"}
+                          </p>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700">Baggage Allowance:</span>
+                          <p className="text-gray-600">25kg checked + 7kg cabin bag included</p>
+                          <p className="text-xs text-gray-500">Additional baggage charges apply</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Return Flight Rules (if applicable) */}
+                  {booking.flights && booking.flights.length > 1 && (
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                        Return Flight: {booking.flights[1]?.from || "Dubai"} → {booking.flights[1]?.to || "Mumbai"}
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div className="space-y-2">
+                          <div>
+                            <span className="font-medium text-gray-700">Cancellation Policy:</span>
+                            <p className="text-gray-600">Allowed with fee: ₹3,500 per passenger</p>
+                            <p className="text-xs text-gray-500">Must be done 24 hours before departure</p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Date Change Fee:</span>
+                            <p className="text-gray-600">₹2,500 per passenger + fare difference</p>
+                            <p className="text-xs text-gray-500">Subject to seat availability</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div>
+                            <span className="font-medium text-gray-700">Refund Policy:</span>
+                            <p className="text-gray-600">
+                              {booking.bargained || booking.flights[1]?.refundable ? "Fully Refundable" : "Partially Refundable"}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {booking.bargained || booking.flights[1]?.refundable
+                                ? "Full refund minus service charges"
+                                : "Only taxes and fees refundable"}
+                            </p>
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700">Baggage Allowance:</span>
+                            <p className="text-gray-600">25kg checked + 7kg cabin bag included</p>
+                            <p className="text-xs text-gray-500">Additional baggage charges apply</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Important Terms & Conditions */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start">
+                      <svg className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-yellow-800 mb-2">Important Terms & Conditions</h5>
+                        <ul className="text-sm text-yellow-700 space-y-1">
+                          <li>• Passenger names cannot be changed after booking confirmation</li>
+                          <li>• Check-in must be completed 2 hours before domestic flight departure</li>
+                          <li>• Valid government-issued photo ID required for travel</li>
+                          <li>• All fees mentioned are per passenger and inclusive of applicable taxes</li>
+                          <li>• Cancellation/change requests subject to airline approval</li>
+                          <li>• Infant fares (below 2 years) have separate terms and conditions</li>
+                          <li>• No-show will result in forfeiture of entire ticket value</li>
+                          <li>• Group bookings (9+ passengers) may have different terms</li>
+                          <li>• Force majeure events may affect refund/change policies</li>
+                          <li>• Seat assignments are subject to aircraft type and availability</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact Information for Changes */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-start">
+                      <svg className="w-5 h-5 text-blue-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-blue-800 mb-2">For Cancellations, Changes & Support</h5>
+                        <div className="text-sm text-blue-700 space-y-1">
+                          <p>📞 Customer Support: +91-80-4728-2525</p>
+                          <p>📧 Email: support@faredown.com</p>
+                          <p>🕐 Available: 24/7 for booking assistance</p>
+                          <p>📱 WhatsApp: +91-80-4728-2525</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Important Information */}
               <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
                 <h4 className="font-bold text-red-700 mb-2">
