@@ -1218,10 +1218,10 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "🇮🇹" },
+                      { code: "it", name: "Italiano", flag: "���🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "ह���न्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -3001,7 +3001,7 @@ export default function FlightResults() {
                             <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                               <h5 className="font-medium text-blue-900 mb-3 flex items-center">
                                 <Plane className="w-4 h-4 mr-2" />
-                                {flight.airline} | {flight.departureCode} - {flight.arrivalCode}
+                                {flight.airline || "Emirates"} | {flight.departureCode || "BOM"} - {flight.arrivalCode || "DXB"}
                               </h5>
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                 <div>
