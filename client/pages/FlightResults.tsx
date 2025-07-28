@@ -1084,7 +1084,7 @@ export default function FlightResults() {
                   </div>
                   <div>
                     <div className="text-sm font-medium text-gray-900">
-                      BOM → DXB
+                      BOM ��� DXB
                     </div>
                     <div className="text-xs text-gray-500">
                       {departureDate
@@ -2910,7 +2910,7 @@ export default function FlightResults() {
                                       </div>
                                       <div className="flex justify-between">
                                         <span className="text-gray-700">Clearing fee:</span>
-                                        <span className="font-medium">��500</span>
+                                        <span className="font-medium">₹500</span>
                                       </div>
                                     </div>
                                     <p className="text-xs text-gray-600 mt-3">
