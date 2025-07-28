@@ -905,10 +905,18 @@ export default function BookingFlow() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userName, setUserName] = useState("Zubin Aibara");
 
+  // Customer profile states
+  const [savedProfiles, setSavedProfiles] = useState(() => {
+    const saved = localStorage.getItem("customer_profiles");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [showProfileSelector, setShowProfileSelector] = useState(false);
+  const [selectedProfileId, setSelectedProfileId] = useState("");
+
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
-    symbol: "���",
+    symbol: "�����",
     name: "Indian Rupee",
   });
 
@@ -2694,7 +2702,7 @@ export default function BookingFlow() {
                             </div>
                             <div>
                               <p className="font-medium text-[#666] mb-1">Date Change</p>
-                              <p className="text-gray-900">Allowed with fee: ���2,500 per passenger</p>
+                              <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
                               <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
                             </div>
                             <div>
