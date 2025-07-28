@@ -326,11 +326,6 @@ export default function FlightResults() {
   const [bargainTimer, setBargainTimer] = useState(0);
   const [faredownBonus, setFaredownBonus] = useState(0);
 
-  // Flight details modal states
-  const [showFlightDetails, setShowFlightDetails] = useState(false);
-  const [selectedFlightForDetails, setSelectedFlightForDetails] = useState<
-    (typeof flightData)[0] | null
-  >(null);
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
     number | null
