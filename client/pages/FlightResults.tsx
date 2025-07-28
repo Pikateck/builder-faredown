@@ -175,8 +175,8 @@ const flightData = [
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
     returnLogo:
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
-    aircraft: "Airbus A320",
-    returnAircraft: "Airbus A320",
+    aircraft: "Airbus A350-900",
+    returnAircraft: "Boeing 737 MAX 8",
     flightType: "Direct",
     stops: 0,
     refundability: "Non-Refundable",
