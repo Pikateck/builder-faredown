@@ -214,8 +214,8 @@ const flightData = [
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     returnLogo:
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
-    aircraft: "Airbus A321",
-    returnAircraft: "Airbus A321",
+    aircraft: "Airbus A321neo",
+    returnAircraft: "Embraer E190",
     flightType: "1 Stop",
     stops: 1,
     refundability: "Refundable",
@@ -2873,7 +2873,7 @@ export default function FlightResults() {
                                       </div>
                                       <div className="flex justify-between">
                                         <span className="text-gray-700">Clearing fee:</span>
-                                        <span className="font-medium">₹500</span>
+                                        <span className="font-medium">��500</span>
                                       </div>
                                     </div>
                                     <p className="text-xs text-gray-600 mt-3">
