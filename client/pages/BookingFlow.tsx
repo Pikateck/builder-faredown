@@ -1003,7 +1003,7 @@ export default function BookingFlow() {
     { name: "Hungary", code: "+36", flag: "🇭🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮🇳" },
-    { name: "Indonesia", code: "+62", flag: "🇮🇩" },
+    { name: "Indonesia", code: "+62", flag: "����🇩" },
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
@@ -3559,6 +3559,167 @@ export default function BookingFlow() {
                     <SelectItem value="Female">Female</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* Additional Profile Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#666] mb-1">
+                    Date of Birth
+                  </label>
+                  <Input
+                    type="date"
+                    value={
+                      travellers.find((t) => t.id === selectedTraveller)
+                        ?.dateOfBirth || ""
+                    }
+                    onChange={(e) => {
+                      const updatedTravellers = travellers.map((t) =>
+                        t.id === selectedTraveller
+                          ? { ...t, dateOfBirth: e.target.value }
+                          : t,
+                      );
+                      setTravellers(updatedTravellers);
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#666] mb-1">
+                    Nationality
+                  </label>
+                  <Input
+                    value={
+                      travellers.find((t) => t.id === selectedTraveller)
+                        ?.nationality || ""
+                    }
+                    onChange={(e) => {
+                      const updatedTravellers = travellers.map((t) =>
+                        t.id === selectedTraveller
+                          ? { ...t, nationality: e.target.value }
+                          : t,
+                      );
+                      setTravellers(updatedTravellers);
+                    }}
+                    placeholder="e.g., Indian"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#666] mb-1">
+                    Passport Number
+                  </label>
+                  <Input
+                    value={
+                      travellers.find((t) => t.id === selectedTraveller)
+                        ?.passportNumber || ""
+                    }
+                    onChange={(e) => {
+                      const updatedTravellers = travellers.map((t) =>
+                        t.id === selectedTraveller
+                          ? { ...t, passportNumber: e.target.value }
+                          : t,
+                      );
+                      setTravellers(updatedTravellers);
+                    }}
+                    placeholder="Enter passport number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#666] mb-1">
+                    PAN Card Number
+                  </label>
+                  <Input
+                    value={
+                      travellers.find((t) => t.id === selectedTraveller)
+                        ?.panCardNumber || ""
+                    }
+                    onChange={(e) => {
+                      const updatedTravellers = travellers.map((t) =>
+                        t.id === selectedTraveller
+                          ? { ...t, panCardNumber: e.target.value }
+                          : t,
+                      );
+                      setTravellers(updatedTravellers);
+                    }}
+                    placeholder="Enter PAN card number"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#666] mb-1">
+                  Address (as per passport)
+                </label>
+                <Input
+                  value={
+                    travellers.find((t) => t.id === selectedTraveller)
+                      ?.address || ""
+                  }
+                  onChange={(e) => {
+                    const updatedTravellers = travellers.map((t) =>
+                      t.id === selectedTraveller
+                        ? { ...t, address: e.target.value }
+                        : t,
+                    );
+                    setTravellers(updatedTravellers);
+                  }}
+                  placeholder="Enter full address"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[#666] mb-1">
+                    Pincode
+                  </label>
+                  <Input
+                    value={
+                      travellers.find((t) => t.id === selectedTraveller)
+                        ?.pincode || ""
+                    }
+                    onChange={(e) => {
+                      const updatedTravellers = travellers.map((t) =>
+                        t.id === selectedTraveller
+                          ? { ...t, pincode: e.target.value }
+                          : t,
+                      );
+                      setTravellers(updatedTravellers);
+                    }}
+                    placeholder="Enter pincode"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#666] mb-1">
+                    Meal Preference
+                  </label>
+                  <Select
+                    value={
+                      travellers.find((t) => t.id === selectedTraveller)
+                        ?.mealPreference || ""
+                    }
+                    onValueChange={(value) => {
+                      const updatedTravellers = travellers.map((t) =>
+                        t.id === selectedTraveller ? { ...t, mealPreference: value } : t,
+                      );
+                      setTravellers(updatedTravellers);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select meal preference" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Veg">Vegetarian</SelectItem>
+                      <SelectItem value="Non-Veg">Non-Vegetarian</SelectItem>
+                      <SelectItem value="Vegan">Vegan</SelectItem>
+                      <SelectItem value="Jain">Jain</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <div className="flex justify-end space-x-3 pt-4">
