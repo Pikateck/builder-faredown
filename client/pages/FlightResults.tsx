@@ -2665,6 +2665,312 @@ export default function FlightResults() {
                   )}
                 </div>
 
+                {/* Tabbed Flight Details Section - Appears when View Details is clicked */}
+                {Object.keys(expandedFlightDetails).some(key =>
+                  key.startsWith(flight.id) && expandedFlightDetails[key]
+                ) && (
+                  <div className="mt-4 mx-4 md:mx-0">
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      {/* Tabs Header */}
+                      <div className="border-b border-gray-200">
+                        <div className="flex">
+                          {Object.keys(expandedFlightDetails).filter(key =>
+                            key.startsWith(flight.id) && expandedFlightDetails[key]
+                          ).map(detailKey => {
+                            const currentTab = activeDetailTab[detailKey] || 'itinerary';
+                            return (
+                              <React.Fragment key={detailKey}>
+                                <button
+                                  onClick={() => {
+                                    const [flightId, fareTypeId] = detailKey.split('-');
+                                    handleTabChange(flightId, fareTypeId, 'itinerary');
+                                  }}
+                                  className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
+                                    currentTab === 'itinerary'
+                                      ? 'border-[#003580] text-[#003580] bg-blue-50'
+                                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                  }`}
+                                >
+                                  Itinerary
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const [flightId, fareTypeId] = detailKey.split('-');
+                                    handleTabChange(flightId, fareTypeId, 'fare-rules');
+                                  }}
+                                  className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
+                                    currentTab === 'fare-rules'
+                                      ? 'border-[#003580] text-[#003580] bg-blue-50'
+                                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                                  }`}
+                                >
+                                  Fare Rules
+                                </button>
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Tab Content */}
+                      <div className="p-6">
+                        {Object.keys(expandedFlightDetails).filter(key =>
+                          key.startsWith(flight.id) && expandedFlightDetails[key]
+                        ).map(detailKey => {
+                          const currentTab = activeDetailTab[detailKey] || 'itinerary';
+
+                          return (
+                            <div key={detailKey}>
+                              {/* Itinerary Tab Content */}
+                              {currentTab === 'itinerary' && (
+                                <div className="space-y-6">
+                                  {/* Outbound Flight */}
+                                  <div>
+                                    <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                      <Plane className="w-5 h-5 mr-2 text-[#003580]" />
+                                      Outbound • {departureDate ? formatDisplayDate(departureDate, "eee, MMM d") : "Select date"}
+                                    </h4>
+
+                                    <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                                      <div className="flex items-center space-x-4 mb-3">
+                                        <img
+                                          src={flight.logo}
+                                          alt={flight.airline}
+                                          className="w-8 h-6 object-contain"
+                                        />
+                                        <div>
+                                          <p className="font-semibold text-gray-900">{flight.airline}</p>
+                                          <p className="text-sm text-gray-600">{flight.flightNumber}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                      {/* Departure */}
+                                      <div className="text-center">
+                                        <div className="text-2xl font-bold text-gray-900 mb-1">{flight.departureTime}</div>
+                                        <div className="text-sm font-medium text-gray-700">{flight.departureCode}</div>
+                                        <div className="text-xs text-gray-500">{flight.departureCity}</div>
+                                        <div className="text-xs text-gray-500 mt-1">Terminal {flight.departureTerminal || "1"}</div>
+                                      </div>
+
+                                      {/* Flight Path */}
+                                      <div className="flex flex-col items-center justify-center">
+                                        <div className="w-full flex items-center justify-center mb-2">
+                                          <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                                          <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                                          <div className="bg-[#003580] text-white text-xs px-2 py-1 rounded font-medium">
+                                            {flight.flightType}
+                                          </div>
+                                          <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                                          <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                                        </div>
+                                        <div className="text-sm text-gray-600">{flight.duration}</div>
+                                        <div className="text-xs text-gray-500">{flight.stops}</div>
+                                      </div>
+
+                                      {/* Arrival */}
+                                      <div className="text-center">
+                                        <div className="text-2xl font-bold text-gray-900 mb-1">{flight.arrivalTime}</div>
+                                        <div className="text-sm font-medium text-gray-700">{flight.arrivalCode}</div>
+                                        <div className="text-xs text-gray-500">{flight.arrivalCity}</div>
+                                        <div className="text-xs text-gray-500 mt-1">Terminal {flight.arrivalTerminal || "3"}</div>
+                                      </div>
+                                    </div>
+
+                                    {/* Flight Details */}
+                                    <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                      <div>
+                                        <span className="text-gray-600">Aircraft:</span>
+                                        <p className="font-medium">{flight.aircraft || "Boeing 777-300ER"}</p>
+                                      </div>
+                                      <div>
+                                        <span className="text-gray-600">Distance:</span>
+                                        <p className="font-medium">{flight.distance || "1,940 km"}</p>
+                                      </div>
+                                      <div>
+                                        <span className="text-gray-600">Flight Time:</span>
+                                        <p className="font-medium">{flight.duration}</p>
+                                      </div>
+                                      <div>
+                                        <span className="text-gray-600">Operated by:</span>
+                                        <p className="font-medium">{flight.airline}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Return Flight (if round trip) */}
+                                  {tripType === "round-trip" && (
+                                    <div className="border-t border-gray-200 pt-6">
+                                      <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                        <Plane className="w-5 h-5 mr-2 text-[#003580] rotate-180" />
+                                        Return • {returnDate ? formatDisplayDate(returnDate, "eee, MMM d") : "Select date"}
+                                      </h4>
+
+                                      <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                                        <div className="flex items-center space-x-4 mb-3">
+                                          <img
+                                            src={flight.returnLogo || flight.logo}
+                                            alt={flight.returnAirline || flight.airline}
+                                            className="w-8 h-6 object-contain"
+                                          />
+                                          <div>
+                                            <p className="font-semibold text-gray-900">{flight.returnAirline || flight.airline}</p>
+                                            <p className="text-sm text-gray-600">{flight.returnFlightNumber || "FL 508"}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {/* Return Departure */}
+                                        <div className="text-center">
+                                          <div className="text-2xl font-bold text-gray-900 mb-1">{flight.returnDepartureTime || "08:45"}</div>
+                                          <div className="text-sm font-medium text-gray-700">{flight.arrivalCode}</div>
+                                          <div className="text-xs text-gray-500">{flight.arrivalCity}</div>
+                                          <div className="text-xs text-gray-500 mt-1">Terminal {flight.returnDepartureTerminal || "3"}</div>
+                                        </div>
+
+                                        {/* Return Flight Path */}
+                                        <div className="flex flex-col items-center justify-center">
+                                          <div className="w-full flex items-center justify-center mb-2">
+                                            <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                                            <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                                            <div className="bg-[#003580] text-white text-xs px-2 py-1 rounded font-medium">
+                                              {flight.returnFlightType || flight.flightType}
+                                            </div>
+                                            <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                                            <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                                          </div>
+                                          <div className="text-sm text-gray-600">{flight.returnDuration || "3h 20m"}</div>
+                                          <div className="text-xs text-gray-500">{flight.returnStops || "Non-stop"}</div>
+                                        </div>
+
+                                        {/* Return Arrival */}
+                                        <div className="text-center">
+                                          <div className="text-2xl font-bold text-gray-900 mb-1">{flight.returnArrivalTime || "14:05"}</div>
+                                          <div className="text-sm font-medium text-gray-700">{flight.departureCode}</div>
+                                          <div className="text-xs text-gray-500">{flight.departureCity}</div>
+                                          <div className="text-xs text-gray-500 mt-1">Terminal {flight.returnArrivalTerminal || "2"}</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Book Now Button */}
+                                  <div className="border-t border-gray-200 pt-6">
+                                    <Button
+                                      onClick={() => {
+                                        // Find the fare type for this detail key
+                                        const [flightId, fareTypeId] = detailKey.split('-');
+                                        const fareType = flight.fareTypes.find(ft => ft.id === fareTypeId) || flight.fareTypes[0];
+                                        handleBooking(flight, fareType);
+                                      }}
+                                      className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-3 text-base font-semibold"
+                                    >
+                                      Book Now - {formatPrice(flight.fareTypes[0]?.price || 0)}
+                                    </Button>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Fare Rules Tab Content */}
+                              {currentTab === 'fare-rules' && (
+                                <div className="space-y-6">
+                                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    <FileText className="w-5 h-5 mr-2 text-[#003580]" />
+                                    Standard fare (Price per traveller)
+                                  </h4>
+
+                                  {/* Fare Rules Grid */}
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Cancellation */}
+                                    <div className="bg-red-50 rounded-lg p-4">
+                                      <h5 className="font-semibold text-red-800 mb-3">Cancellation fee</h5>
+                                      <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between">
+                                          <span className="text-red-700">Airline fee:</span>
+                                          <span className="font-medium">₹11,504</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-red-700">Clearing fee:</span>
+                                          <span className="font-medium">₹500</span>
+                                        </div>
+                                      </div>
+                                      <p className="text-xs text-red-600 mt-3">
+                                        Cancellation/Flight change charges are indicated per traveller.
+                                        Clearing will stop accepting cancellation/change request 4- 72 hours before departure of the flight,
+                                        depending on the airline.
+                                      </p>
+                                    </div>
+
+                                    {/* Date Change */}
+                                    <div className="bg-yellow-50 rounded-lg p-4">
+                                      <h5 className="font-semibold text-yellow-800 mb-3">Date change fee</h5>
+                                      <div className="space-y-2 text-sm">
+                                        <div className="flex justify-between">
+                                          <span className="text-yellow-700">Airline fee:</span>
+                                          <span className="font-medium">₹2,314</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-yellow-700">Clearing fee:</span>
+                                          <span className="font-medium">₹500</span>
+                                        </div>
+                                      </div>
+                                      <p className="text-xs text-yellow-600 mt-3">
+                                        Cancellation/Flight change charges are indicated per traveller.
+                                        72 hours before departure of the flight, depending on the airline.
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {/* Baggage Information */}
+                                  <div className="bg-blue-50 rounded-lg p-4">
+                                    <h5 className="font-semibold text-blue-800 mb-3">Baggage Information:</h5>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                      <div className="flex justify-between">
+                                        <span className="text-blue-700">Check-in:</span>
+                                        <span className="font-medium">1 x 23 kg / Adult</span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-blue-700">Cabin:</span>
+                                        <span className="font-medium">1 x 7 kg / Adult</span>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Important Notice */}
+                                  <div className="bg-gray-50 rounded-lg p-4">
+                                    <h5 className="font-semibold text-gray-800 mb-3">Important:</h5>
+                                    <div className="text-sm text-gray-700 space-y-2">
+                                      <p>Non-refundable flights are usually cheaper than refundable flights. However, you may have to pay a large fee to cancel or change your flight.</p>
+                                      <p>Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request 4- 72 hours before departure of the flight, depending on the airline.</p>
+                                    </div>
+                                  </div>
+
+                                  {/* Book Now Button */}
+                                  <div className="border-t border-gray-200 pt-6">
+                                    <Button
+                                      onClick={() => {
+                                        // Find the fare type for this detail key
+                                        const [flightId, fareTypeId] = detailKey.split('-');
+                                        const fareType = flight.fareTypes.find(ft => ft.id === fareTypeId) || flight.fareTypes[0];
+                                        handleBooking(flight, fareType);
+                                      }}
+                                      className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-3 text-base font-semibold"
+                                    >
+                                      Book Now - {formatPrice(flight.fareTypes[0]?.price || 0)}
+                                    </Button>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Fare Rules Section - Appears when View Fare Rules is clicked */}
                 {Object.keys(showFareRules).some(key =>
                   key.startsWith(flight.id) && showFareRules[key]
