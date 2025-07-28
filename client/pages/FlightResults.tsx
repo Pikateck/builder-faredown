@@ -2526,19 +2526,6 @@ export default function FlightResults() {
                         <div className="flex items-center justify-center space-x-3 mb-2">
                           <Luggage className="w-5 h-5 text-green-600" />
                           <Shield className="w-5 h-5 text-green-600" />
-                          <button
-                            onClick={() =>
-                              setExpandedTicketOptions(
-                                expandedTicketOptions ===
-                                  `tooltip-${flight.id}`
-                                  ? null
-                                  : `tooltip-${flight.id}`,
-                              )
-                            }
-                            className="text-gray-400 hover:text-gray-600 transition-colors"
-                          >
-                            <Info className="w-5 h-5" />
-                          </button>
                         </div>
 
                         {/* Fare Breakdown Tooltip */}
