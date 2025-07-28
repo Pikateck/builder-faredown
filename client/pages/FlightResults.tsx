@@ -583,6 +583,12 @@ export default function FlightResults() {
     }));
   };
 
+  // Handle flight details modal
+  const handleViewFlightDetails = (flight: (typeof flightData)[0]) => {
+    setSelectedFlightForDetails(flight);
+    setShowFlightDetails(true);
+  };
+
   // Calendar helper functions (restored)
   const getMonthName = (month: number) => {
     const months = [
