@@ -1255,7 +1255,7 @@ export default function FlightResults() {
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {Object.entries({
                       USD: { symbol: "$", name: "US Dollar" },
-                      EUR: { symbol: "€", name: "Euro" },
+                      EUR: { symbol: "���", name: "Euro" },
                       GBP: { symbol: "£", name: "British Pound" },
                       INR: { symbol: "��", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
@@ -2497,7 +2497,7 @@ export default function FlightResults() {
 
                       {/* Right Side - Pricing - Compact Layout */}
                       <div className="text-center ml-8">
-                        {/* Fare Type and Price with Info Button */}
+                        {/* Fare Type and Price with Baggage and Tooltip */}
                         <div className="mb-1 relative">
                           <span className="text-sm font-medium text-gray-900">
                             {flight.fareTypes[0].name}
@@ -2506,6 +2506,7 @@ export default function FlightResults() {
                             <div className="text-xl font-bold text-gray-900">
                               {formatPrice(flight.fareTypes[0].price)}
                             </div>
+                            <Luggage className="w-5 h-5 text-green-600" />
                             <button
                               onClick={() =>
                                 setExpandedTicketOptions(
@@ -2520,12 +2521,6 @@ export default function FlightResults() {
                               <Info className="w-4 h-4" />
                             </button>
                           </div>
-                        </div>
-
-                        {/* Compact info row - Larger Icons */}
-                        <div className="flex items-center justify-center space-x-3 mb-2">
-                          <Luggage className="w-5 h-5 text-green-600" />
-                          <Shield className="w-5 h-5 text-green-600" />
                         </div>
 
                         {/* Fare Breakdown Tooltip - Positioned next to price */}
