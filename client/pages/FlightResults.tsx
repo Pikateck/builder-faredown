@@ -2744,15 +2744,15 @@ export default function FlightResults() {
 
                                         {/* Connection Line */}
                                         <div className="flex-1 flex items-center mx-8">
-                                          <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                          <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                                           <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
                                             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                              <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded font-medium">
+                                              <div className="bg-gray-600 text-white text-xs px-2 py-1 rounded font-medium">
                                                 Stop
                                               </div>
                                             </div>
                                           </div>
-                                          <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                          <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                                         </div>
 
                                         {/* Arrival */}
