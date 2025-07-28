@@ -1232,7 +1232,7 @@ export default function BookingFlow() {
 
   const handleNextStep = () => {
     console.log("handleNextStep called, currentStep:", currentStep);
-    if (currentStep < 4) {
+    if (currentStep < 5) {
       console.log("Moving to next step:", currentStep + 1);
       setCurrentStep(currentStep + 1);
       // Scroll to top of page when navigating between steps
