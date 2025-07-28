@@ -478,9 +478,33 @@ export default function FlightResults() {
     "Flydubai",
   ];
 
+  // Aircraft types list with comprehensive options
+  const availableAircraftTypes = [
+    "Airbus A320",
+    "Airbus A321",
+    "Airbus A330",
+    "Airbus A340",
+    "Airbus A350",
+    "Airbus A380",
+    "Boeing 737",
+    "Boeing 737-800",
+    "Boeing 747",
+    "Boeing 777",
+    "Boeing 787",
+    "Boeing 787 Dreamliner",
+    "Embraer E190",
+    "ATR 72",
+    "Bombardier Q400",
+  ];
+
   // Airlines filter state - Initialize with all airlines selected by default
   const [selectedAirlines, setSelectedAirlines] = useState<Set<string>>(
     new Set(availableAirlines),
+  );
+
+  // Aircraft types filter state - Initialize with all aircraft types selected by default
+  const [selectedAircraftTypes, setSelectedAircraftTypes] = useState<Set<string>>(
+    new Set(availableAircraftTypes),
   );
 
   // Additional filter states (needed to prevent errors)
