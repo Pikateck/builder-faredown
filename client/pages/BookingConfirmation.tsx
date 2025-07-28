@@ -1528,12 +1528,11 @@ export default function BookingConfirmation() {
                 </Button>
               </Link>
             )}
-            <Button
-              onClick={handleViewMyTrips}
-              className="bg-blue-700 hover:bg-blue-800 w-full sm:w-auto"
-            >
-              View My Trips
-            </Button>
+            <Link to="/account?tab=bookings">
+              <Button className="bg-blue-700 hover:bg-blue-800 w-full sm:w-auto">
+                View My Bookings
+              </Button>
+            </Link>
             <Link to="/my-account">
               <Button variant="outline" className="w-full sm:w-auto">
                 My Account
