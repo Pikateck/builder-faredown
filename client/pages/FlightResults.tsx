@@ -2977,7 +2977,9 @@ export default function FlightResults() {
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="font-semibold text-gray-900 flex items-center">
                           <Info className="w-5 h-5 mr-2 text-[#003580]" />
-                          Fare Rules - {flight.airline} Flight
+                          Fare Rules - {flight.returnAirline && flight.returnAirline !== flight.airline
+                            ? `${flight.airline} & ${flight.returnAirline}`
+                            : flight.airline} Flight
                         </h4>
                         <Button
                           variant="ghost"
