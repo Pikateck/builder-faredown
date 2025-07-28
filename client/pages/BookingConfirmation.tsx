@@ -1585,15 +1585,15 @@ export default function BookingConfirmation() {
                   </div>
                 </>
               )}
-              <div className="bg-blue-50 p-3 rounded-lg">
+              <div className="p-3 border border-gray-200 rounded-lg">
                 <div className="flex items-center mb-2">
-                  <CreditCard className="w-4 h-4 text-blue-700 mr-2" />
+                  <CreditCard className="w-4 h-4 text-gray-700 mr-2" />
                   <span className="text-sm font-medium">Payment Method</span>
                 </div>
                 <p className="text-sm text-gray-700">
                   {booking.paymentMethod || "Credit Card"}
                 </p>
-                <p className="text-xs text-green-600 mt-1">
+                <p className="text-xs text-gray-600 mt-1">
                   Status: {booking.paymentStatus || "Pending"}
                 </p>
               </div>
