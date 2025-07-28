@@ -3412,7 +3412,7 @@ export default function BookingFlow() {
                   <p className="text-xs text-blue-700 mb-3">
                     Select a previously saved traveller to auto-fill all details
                   </p>
-                  <div className="flex space-x-2">
+                  <div className="space-y-3">
                     <Select
                       value={selectedProfileId}
                       onValueChange={(value) => {
@@ -3422,7 +3422,7 @@ export default function BookingFlow() {
                         }
                       }}
                     >
-                      <SelectTrigger className="flex-1 bg-white">
+                      <SelectTrigger className="w-full bg-white border-blue-200 hover:border-blue-300">
                         <SelectValue placeholder="🔍 Choose from saved travellers..." />
                       </SelectTrigger>
                       <SelectContent className="max-w-lg">
@@ -3455,13 +3455,25 @@ export default function BookingFlow() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSelectedProfileId("")}
-                    >
-                      Clear
-                    </Button>
+
+                    {selectedProfileId && (
+                      <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+                        <div className="flex items-center text-green-800">
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          <span className="text-sm font-medium">
+                            Profile loaded: {savedProfiles.find(p => p.id === selectedProfileId)?.profileName}
+                          </span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedProfileId("")}
+                          className="text-green-700 hover:text-green-900 hover:bg-green-100"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
