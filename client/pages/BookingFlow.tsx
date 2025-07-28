@@ -841,6 +841,15 @@ export default function BookingFlow() {
         middleName: "",
         lastName: "",
         gender: "",
+        dateOfBirth: "",
+        passportNumber: "",
+        passportIssueDate: "",
+        passportExpiryDate: "",
+        panCardNumber: "",
+        nationality: "",
+        address: "",
+        pincode: "",
+        mealPreference: "Veg",
       });
     }
 
@@ -855,6 +864,15 @@ export default function BookingFlow() {
         lastName: "",
         gender: "",
         age: "",
+        dateOfBirth: "",
+        passportNumber: "",
+        passportIssueDate: "",
+        passportExpiryDate: "",
+        panCardNumber: "",
+        nationality: "",
+        address: "",
+        pincode: "",
+        mealPreference: "Veg",
       });
     }
 
@@ -2676,7 +2694,7 @@ export default function BookingFlow() {
                             </div>
                             <div>
                               <p className="font-medium text-[#666] mb-1">Date Change</p>
-                              <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
+                              <p className="text-gray-900">Allowed with fee: ���2,500 per passenger</p>
                               <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
                             </div>
                             <div>
