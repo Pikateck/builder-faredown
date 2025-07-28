@@ -1374,7 +1374,7 @@ export default function BookingConfirmation() {
             {bookingType === "flight" ? (
               // Flight Details
               <div className="space-y-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="p-4 border border-gray-200 rounded-lg">
                   <div className="flex justify-between items-center mb-2">
                     <div>
                       <h3 className="font-bold text-lg text-gray-900">
