@@ -102,7 +102,7 @@ export default function Account() {
 
   // Delete profile function
   const deleteProfile = (profileId) => {
-    const updatedProfiles = savedProfiles.filter(p => p.id !== profileId);
+    const updatedProfiles = savedProfiles.filter((p) => p.id !== profileId);
     setSavedProfiles(updatedProfiles);
     localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
     setShowDeleteConfirm(null);
@@ -111,35 +111,38 @@ export default function Account() {
   // Save account holder as primary profile
   const saveAccountHolderProfile = () => {
     const accountProfile = {
-      id: 'account_holder_primary',
+      id: "account_holder_primary",
       firstName: profileData.firstName,
       lastName: profileData.lastName,
-      gender: 'Male', // Default, can be updated
-      type: 'Adult',
-      title: 'Mr',
-      nationality: 'Indian',
+      gender: "Male", // Default, can be updated
+      type: "Adult",
+      title: "Mr",
+      nationality: "Indian",
       profileName: `${profileData.firstName} ${profileData.lastName}`,
       isAccountHolder: true,
       email: profileData.email,
       phone: profileData.phone,
       savedAt: new Date().toISOString(),
-      mealPreference: 'Veg',
-      middleName: '',
-      dateOfBirth: '',
-      passportNumber: '',
-      passportIssueDate: '',
-      passportExpiryDate: '',
-      panCardNumber: '',
-      address: '',
-      pincode: '',
+      mealPreference: "Veg",
+      middleName: "",
+      dateOfBirth: "",
+      passportNumber: "",
+      passportIssueDate: "",
+      passportExpiryDate: "",
+      panCardNumber: "",
+      address: "",
+      pincode: "",
     };
 
     // Check if account holder profile already exists
-    const existingAccountProfile = savedProfiles.find(p => p.isAccountHolder);
+    const existingAccountProfile = savedProfiles.find((p) => p.isAccountHolder);
     if (!existingAccountProfile) {
       const updatedProfiles = [accountProfile, ...savedProfiles];
       setSavedProfiles(updatedProfiles);
-      localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
+      localStorage.setItem(
+        "customer_profiles",
+        JSON.stringify(updatedProfiles),
+      );
     }
   };
 
@@ -267,7 +270,8 @@ export default function Account() {
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Plane className="w-4 h-4" />
                         <span>
-                          {booking.flightDetails?.airline || "Airlines"} {booking.flightDetails?.flightNumber || "FL-001"}
+                          {booking.flightDetails?.airline || "Airlines"}{" "}
+                          {booking.flightDetails?.flightNumber || "FL-001"}
                         </span>
                       </div>
                     </div>
@@ -287,7 +291,9 @@ export default function Account() {
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Plane className="w-4 h-4" />
                         <span>
-                          {booking.flightDetails?.airline || "Airlines"} {booking.flightDetails?.returnFlightNumber || "FL-002"}
+                          {booking.flightDetails?.airline || "Airlines"}{" "}
+                          {booking.flightDetails?.returnFlightNumber ||
+                            "FL-002"}
                         </span>
                       </div>
                     </div>
@@ -649,12 +655,16 @@ Please keep this ticket for your records.
               <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4">
                 <Plus className="w-8 h-8 text-gray-400" />
               </div>
-              <h4 className="text-lg font-medium text-gray-900 mb-2">No Additional Profiles</h4>
+              <h4 className="text-lg font-medium text-gray-900 mb-2">
+                No Additional Profiles
+              </h4>
               <p className="text-sm text-gray-600 mb-4 max-w-sm">
-                Additional traveller profiles will appear here when you complete bookings with different passenger details
+                Additional traveller profiles will appear here when you complete
+                bookings with different passenger details
               </p>
               <div className="bg-blue-50 rounded-lg p-3 text-xs text-blue-700">
-                💡 Tip: Profiles are automatically saved during the booking process
+                💡 Tip: Profiles are automatically saved during the booking
+                process
               </div>
             </div>
           ) : (
@@ -674,7 +684,7 @@ Please keep this ticket for your records.
                       </h4>
                       <p className="text-sm text-gray-600 flex items-center">
                         <Badge variant="outline" className="mr-2 text-xs">
-                          {profile.type || 'Adult'}
+                          {profile.type || "Adult"}
                         </Badge>
                         {profile.gender}
                       </p>
@@ -710,9 +720,13 @@ Please keep this ticket for your records.
                       <div className="bg-gray-50 rounded-lg p-3">
                         <div className="flex items-center mb-1">
                           <MapPin className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600 text-xs">Nationality</span>
+                          <span className="text-gray-600 text-xs">
+                            Nationality
+                          </span>
                         </div>
-                        <p className="font-medium text-gray-900">{profile.nationality}</p>
+                        <p className="font-medium text-gray-900">
+                          {profile.nationality}
+                        </p>
                       </div>
                     )}
 
@@ -720,9 +734,13 @@ Please keep this ticket for your records.
                       <div className="bg-gray-50 rounded-lg p-3">
                         <div className="flex items-center mb-1">
                           <Gift className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600 text-xs">Meal Pref</span>
+                          <span className="text-gray-600 text-xs">
+                            Meal Pref
+                          </span>
                         </div>
-                        <p className="font-medium text-gray-900">{profile.mealPreference}</p>
+                        <p className="font-medium text-gray-900">
+                          {profile.mealPreference}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -749,7 +767,8 @@ Please keep this ticket for your records.
                           <span className="text-gray-600">PAN Card</span>
                         </div>
                         <span className="font-medium text-gray-900 font-mono">
-                          ***{profile.panCardNumber?.slice(-4) || 'Not provided'}
+                          ***
+                          {profile.panCardNumber?.slice(-4) || "Not provided"}
                         </span>
                       </div>
                     </div>
@@ -762,7 +781,10 @@ Please keep this ticket for your records.
                       <Clock className="w-3 h-3 mr-1" />
                       Saved: {new Date(profile.savedAt).toLocaleDateString()}
                     </div>
-                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="text-xs bg-green-50 text-green-700 border-green-200"
+                    >
                       Ready to use
                     </Badge>
                   </div>
@@ -1667,14 +1689,18 @@ Please keep this ticket for your records.
       </div>
 
       {/* Delete Profile Confirmation Dialog */}
-      <Dialog open={showDeleteConfirm !== null} onOpenChange={() => setShowDeleteConfirm(null)}>
+      <Dialog
+        open={showDeleteConfirm !== null}
+        onOpenChange={() => setShowDeleteConfirm(null)}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Delete Profile</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <p className="text-gray-600">
-              Are you sure you want to delete this saved profile? This action cannot be undone.
+              Are you sure you want to delete this saved profile? This action
+              cannot be undone.
             </p>
           </div>
           <div className="flex justify-end space-x-3">

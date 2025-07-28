@@ -61,7 +61,13 @@ const formatCurrency = (amount: number) => {
 };
 
 // Seat Map Component
-const SeatMap = ({ travellers, seatSelections, setSeatSelections, selectedFlight, selectedFareType }) => {
+const SeatMap = ({
+  travellers,
+  seatSelections,
+  setSeatSelections,
+  selectedFlight,
+  selectedFareType,
+}) => {
   // Use the shared seat selections from parent component
   const selectedSeats = seatSelections;
   const setSelectedSeats = setSeatSelections;
@@ -225,7 +231,13 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections, selectedFlight
     }, 0);
   };
 
-  const renderFlightSegment = (flightLeg, flightTitle, isExpanded, flightData, fareData) => (
+  const renderFlightSegment = (
+    flightLeg,
+    flightTitle,
+    isExpanded,
+    flightData,
+    fareData,
+  ) => (
     <div className="border border-[#f2f6fa] rounded-lg">
       <div
         className={`p-4 cursor-pointer ${!isExpanded ? "border-b border-[#f2f6fa] bg-gray-50" : "border-b border-[#f2f6fa]"}`}
@@ -1434,7 +1446,11 @@ export default function BookingFlow() {
   // Auto-save profile function
   const autoSaveProfile = (travellerData) => {
     // Only save if essential fields are filled
-    if (travellerData.firstName && travellerData.lastName && travellerData.gender) {
+    if (
+      travellerData.firstName &&
+      travellerData.lastName &&
+      travellerData.gender
+    ) {
       const profileId = `profile_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const profile = {
         id: profileId,
@@ -1445,16 +1461,20 @@ export default function BookingFlow() {
       };
 
       // Check if similar profile already exists (avoid duplicates)
-      const existingProfile = savedProfiles.find(p =>
-        p.firstName === travellerData.firstName &&
-        p.lastName === travellerData.lastName &&
-        p.passportNumber === travellerData.passportNumber
+      const existingProfile = savedProfiles.find(
+        (p) =>
+          p.firstName === travellerData.firstName &&
+          p.lastName === travellerData.lastName &&
+          p.passportNumber === travellerData.passportNumber,
       );
 
       if (!existingProfile) {
         const updatedProfiles = [...savedProfiles, profile];
         setSavedProfiles(updatedProfiles);
-        localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
+        localStorage.setItem(
+          "customer_profiles",
+          JSON.stringify(updatedProfiles),
+        );
         console.log("Profile auto-saved:", profile.profileName);
       }
     }
@@ -1462,15 +1482,17 @@ export default function BookingFlow() {
 
   // Load profile data into traveller
   const loadProfileIntoTraveller = (profileId) => {
-    const profile = savedProfiles.find(p => p.id === profileId);
+    const profile = savedProfiles.find((p) => p.id === profileId);
     if (profile && selectedTraveller) {
       const updatedTravellers = travellers.map((t) =>
-        t.id === selectedTraveller ? {
-          ...t,
-          ...profile,
-          id: t.id, // Keep original traveller ID
-          type: t.type // Keep original traveller type
-        } : t
+        t.id === selectedTraveller
+          ? {
+              ...t,
+              ...profile,
+              id: t.id, // Keep original traveller ID
+              type: t.type, // Keep original traveller type
+            }
+          : t,
       );
       setTravellers(updatedTravellers);
       console.log("Profile loaded:", profile.profileName);
@@ -1479,7 +1501,7 @@ export default function BookingFlow() {
 
   const handleTravellerSubmit = () => {
     // Auto-save the current traveller as a profile
-    const currentTraveller = travellers.find(t => t.id === selectedTraveller);
+    const currentTraveller = travellers.find((t) => t.id === selectedTraveller);
     if (currentTraveller) {
       autoSaveProfile(currentTraveller);
     }
@@ -2543,7 +2565,8 @@ export default function BookingFlow() {
                     Review Your Booking
                   </h2>
                   <p className="text-[#666] text-sm mb-6">
-                    Please review all details carefully before proceeding to payment
+                    Please review all details carefully before proceeding to
+                    payment
                   </p>
 
                   <div className="space-y-6">
@@ -2558,7 +2581,12 @@ export default function BookingFlow() {
                             Important Notice
                           </p>
                           <p className="mt-2 text-sm text-red-700">
-                            <strong>Once names are entered and confirmed, they cannot be changed.</strong> Please ensure all passenger names exactly match their government-issued photo ID documents.
+                            <strong>
+                              Once names are entered and confirmed, they cannot
+                              be changed.
+                            </strong>{" "}
+                            Please ensure all passenger names exactly match
+                            their government-issued photo ID documents.
                           </p>
                         </div>
                       </div>
@@ -2575,7 +2603,9 @@ export default function BookingFlow() {
                       <div className="mb-6">
                         <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                           <div className="flex items-center justify-between mb-3">
-                            <h4 className="font-medium text-gray-900 text-lg">Outbound Flight</h4>
+                            <h4 className="font-medium text-gray-900 text-lg">
+                              Outbound Flight
+                            </h4>
                             <span className="text-sm px-2 py-1 bg-[#003580] text-white rounded">
                               {selectedFlight?.airline || "Airlines"}
                             </span>
@@ -2586,8 +2616,12 @@ export default function BookingFlow() {
                               <div className="flex items-center">
                                 <div className="w-2 h-2 bg-[#009fe3] rounded-full mr-3"></div>
                                 <div>
-                                  <p className="text-sm text-[#666]">Flight Number</p>
-                                  <p className="font-medium">{selectedFlight?.flightNumber || "FL 507"}</p>
+                                  <p className="text-sm text-[#666]">
+                                    Flight Number
+                                  </p>
+                                  <p className="font-medium">
+                                    {selectedFlight?.flightNumber || "FL 507"}
+                                  </p>
                                 </div>
                               </div>
 
@@ -2595,15 +2629,22 @@ export default function BookingFlow() {
                                 <MapPin className="w-4 h-4 text-[#666] mr-3" />
                                 <div>
                                   <p className="text-sm text-[#666]">Route</p>
-                                  <p className="font-medium">{selectedFlight?.from || "Mumbai"} → {selectedFlight?.to || "Dubai"}</p>
+                                  <p className="font-medium">
+                                    {selectedFlight?.from || "Mumbai"} →{" "}
+                                    {selectedFlight?.to || "Dubai"}
+                                  </p>
                                 </div>
                               </div>
 
                               <div className="flex items-center">
                                 <Clock className="w-4 h-4 text-[#666] mr-3" />
                                 <div>
-                                  <p className="text-sm text-[#666]">Duration</p>
-                                  <p className="font-medium">{selectedFlight?.duration || "3h 15m"}</p>
+                                  <p className="text-sm text-[#666]">
+                                    Duration
+                                  </p>
+                                  <p className="font-medium">
+                                    {selectedFlight?.duration || "3h 15m"}
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -2611,19 +2652,36 @@ export default function BookingFlow() {
                             <div className="space-y-3">
                               <div>
                                 <p className="text-sm text-[#666]">Departure</p>
-                                <p className="font-medium">{selectedFlight?.departureTime || "14:35"}</p>
-                                <p className="text-xs text-[#666]">{departureDate ? formatDisplayDate(departureDate, "eee, MMM d, yyyy") : "Select date"}</p>
+                                <p className="font-medium">
+                                  {selectedFlight?.departureTime || "14:35"}
+                                </p>
+                                <p className="text-xs text-[#666]">
+                                  {departureDate
+                                    ? formatDisplayDate(
+                                        departureDate,
+                                        "eee, MMM d, yyyy",
+                                      )
+                                    : "Select date"}
+                                </p>
                               </div>
 
                               <div>
                                 <p className="text-sm text-[#666]">Arrival</p>
-                                <p className="font-medium">{selectedFlight?.arrivalTime || "17:50"}</p>
-                                <p className="text-xs text-[#666]">Terminal {selectedFlight?.arrivalTerminal || "3"}</p>
+                                <p className="font-medium">
+                                  {selectedFlight?.arrivalTime || "17:50"}
+                                </p>
+                                <p className="text-xs text-[#666]">
+                                  Terminal{" "}
+                                  {selectedFlight?.arrivalTerminal || "3"}
+                                </p>
                               </div>
 
                               <div>
                                 <p className="text-sm text-[#666]">Aircraft</p>
-                                <p className="font-medium">{selectedFlight?.aircraft || "Boeing 777-300ER"}</p>
+                                <p className="font-medium">
+                                  {selectedFlight?.aircraft ||
+                                    "Boeing 777-300ER"}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -2635,7 +2693,9 @@ export default function BookingFlow() {
                         <div className="mb-4">
                           <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                             <div className="flex items-center justify-between mb-3">
-                              <h4 className="font-medium text-gray-900 text-lg">Return Flight</h4>
+                              <h4 className="font-medium text-gray-900 text-lg">
+                                Return Flight
+                              </h4>
                               <span className="text-sm px-2 py-1 bg-[#003580] text-white rounded">
                                 {selectedFlight?.airline || "Airlines"}
                               </span>
@@ -2646,8 +2706,13 @@ export default function BookingFlow() {
                                 <div className="flex items-center">
                                   <div className="w-2 h-2 bg-[#009fe3] rounded-full mr-3"></div>
                                   <div>
-                                    <p className="text-sm text-[#666]">Flight Number</p>
-                                    <p className="font-medium">{selectedFlight?.returnFlightNumber || "FL 508"}</p>
+                                    <p className="text-sm text-[#666]">
+                                      Flight Number
+                                    </p>
+                                    <p className="font-medium">
+                                      {selectedFlight?.returnFlightNumber ||
+                                        "FL 508"}
+                                    </p>
                                   </div>
                                 </div>
 
@@ -2655,35 +2720,65 @@ export default function BookingFlow() {
                                   <MapPin className="w-4 h-4 text-[#666] mr-3" />
                                   <div>
                                     <p className="text-sm text-[#666]">Route</p>
-                                    <p className="font-medium">{selectedFlight?.to || "Dubai"} → {selectedFlight?.from || "Mumbai"}</p>
+                                    <p className="font-medium">
+                                      {selectedFlight?.to || "Dubai"} →{" "}
+                                      {selectedFlight?.from || "Mumbai"}
+                                    </p>
                                   </div>
                                 </div>
 
                                 <div className="flex items-center">
                                   <Clock className="w-4 h-4 text-[#666] mr-3" />
                                   <div>
-                                    <p className="text-sm text-[#666]">Duration</p>
-                                    <p className="font-medium">{selectedFlight?.returnDuration || "3h 20m"}</p>
+                                    <p className="text-sm text-[#666]">
+                                      Duration
+                                    </p>
+                                    <p className="font-medium">
+                                      {selectedFlight?.returnDuration ||
+                                        "3h 20m"}
+                                    </p>
                                   </div>
                                 </div>
                               </div>
 
                               <div className="space-y-3">
                                 <div>
-                                  <p className="text-sm text-[#666]">Departure</p>
-                                  <p className="font-medium">{selectedFlight?.returnDepartureTime || "08:45"}</p>
-                                  <p className="text-xs text-[#666]">{formatDisplayDate(returnDate, "eee, MMM d, yyyy")}</p>
+                                  <p className="text-sm text-[#666]">
+                                    Departure
+                                  </p>
+                                  <p className="font-medium">
+                                    {selectedFlight?.returnDepartureTime ||
+                                      "08:45"}
+                                  </p>
+                                  <p className="text-xs text-[#666]">
+                                    {formatDisplayDate(
+                                      returnDate,
+                                      "eee, MMM d, yyyy",
+                                    )}
+                                  </p>
                                 </div>
 
                                 <div>
                                   <p className="text-sm text-[#666]">Arrival</p>
-                                  <p className="font-medium">{selectedFlight?.returnArrivalTime || "14:05"}</p>
-                                  <p className="text-xs text-[#666]">Terminal {selectedFlight?.returnArrivalTerminal || "2"}</p>
+                                  <p className="font-medium">
+                                    {selectedFlight?.returnArrivalTime ||
+                                      "14:05"}
+                                  </p>
+                                  <p className="text-xs text-[#666]">
+                                    Terminal{" "}
+                                    {selectedFlight?.returnArrivalTerminal ||
+                                      "2"}
+                                  </p>
                                 </div>
 
                                 <div>
-                                  <p className="text-sm text-[#666]">Aircraft</p>
-                                  <p className="font-medium">{selectedFlight?.returnAircraft || "Boeing 777-300ER"}</p>
+                                  <p className="text-sm text-[#666]">
+                                    Aircraft
+                                  </p>
+                                  <p className="font-medium">
+                                    {selectedFlight?.returnAircraft ||
+                                      "Boeing 777-300ER"}
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -2700,19 +2795,26 @@ export default function BookingFlow() {
                       </h3>
                       <div className="space-y-4">
                         {travellers.map((traveller, index) => (
-                          <div key={index} className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                          <div
+                            key={index}
+                            className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]"
+                          >
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center space-x-3">
                                   <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
-                                    <span className="text-white text-sm font-bold">{index + 1}</span>
+                                    <span className="text-white text-sm font-bold">
+                                      {index + 1}
+                                    </span>
                                   </div>
                                   <div>
                                     <p className="font-medium text-gray-900">
-                                      {traveller.title} {traveller.firstName} {traveller.lastName}
+                                      {traveller.title} {traveller.firstName}{" "}
+                                      {traveller.lastName}
                                     </p>
                                     <p className="text-sm text-[#666]">
-                                      {traveller.type} • {traveller.gender || "Not specified"}
+                                      {traveller.type} •{" "}
+                                      {traveller.gender || "Not specified"}
                                     </p>
                                   </div>
                                 </div>
@@ -2745,27 +2847,54 @@ export default function BookingFlow() {
                       <div className="space-y-4">
                         {/* Outbound Flight Fare Rules */}
                         <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
-                          <h4 className="font-medium text-gray-900 mb-3">Outbound: {selectedFlight?.from || "Mumbai"} → {selectedFlight?.to || "Dubai"}</h4>
+                          <h4 className="font-medium text-gray-900 mb-3">
+                            Outbound: {selectedFlight?.from || "Mumbai"} →{" "}
+                            {selectedFlight?.to || "Dubai"}
+                          </h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="font-medium text-[#666] mb-1">Cancellation</p>
-                              <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
-                              <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
+                              <p className="font-medium text-[#666] mb-1">
+                                Cancellation
+                              </p>
+                              <p className="text-gray-900">
+                                Allowed with fee: ₹3,500 per passenger
+                              </p>
+                              <p className="text-xs text-[#666] mt-1">
+                                24 hours before departure
+                              </p>
                             </div>
                             <div>
-                              <p className="font-medium text-[#666] mb-1">Date Change</p>
-                              <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
-                              <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
+                              <p className="font-medium text-[#666] mb-1">
+                                Date Change
+                              </p>
+                              <p className="text-gray-900">
+                                Allowed with fee: ₹2,500 per passenger
+                              </p>
+                              <p className="text-xs text-[#666] mt-1">
+                                Subject to fare difference
+                              </p>
                             </div>
                             <div>
-                              <p className="font-medium text-[#666] mb-1">Refundability</p>
-                              <p className="text-gray-900">Partially refundable</p>
-                              <p className="text-xs text-[#666] mt-1">Taxes and fees refundable</p>
+                              <p className="font-medium text-[#666] mb-1">
+                                Refundability
+                              </p>
+                              <p className="text-gray-900">
+                                Partially refundable
+                              </p>
+                              <p className="text-xs text-[#666] mt-1">
+                                Taxes and fees refundable
+                              </p>
                             </div>
                             <div>
-                              <p className="font-medium text-[#666] mb-1">Baggage</p>
-                              <p className="text-gray-900">25kg checked + 7kg cabin bag</p>
-                              <p className="text-xs text-[#666] mt-1">Additional baggage chargeable</p>
+                              <p className="font-medium text-[#666] mb-1">
+                                Baggage
+                              </p>
+                              <p className="text-gray-900">
+                                25kg checked + 7kg cabin bag
+                              </p>
+                              <p className="text-xs text-[#666] mt-1">
+                                Additional baggage chargeable
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -2773,27 +2902,54 @@ export default function BookingFlow() {
                         {/* Return Flight Fare Rules (if applicable) */}
                         {tripType === "round-trip" && returnDate && (
                           <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
-                            <h4 className="font-medium text-gray-900 mb-3">Return: {selectedFlight?.to || "Dubai"} → {selectedFlight?.from || "Mumbai"}</h4>
+                            <h4 className="font-medium text-gray-900 mb-3">
+                              Return: {selectedFlight?.to || "Dubai"} →{" "}
+                              {selectedFlight?.from || "Mumbai"}
+                            </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                               <div>
-                                <p className="font-medium text-[#666] mb-1">Cancellation</p>
-                                <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
-                                <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
+                                <p className="font-medium text-[#666] mb-1">
+                                  Cancellation
+                                </p>
+                                <p className="text-gray-900">
+                                  Allowed with fee: ₹3,500 per passenger
+                                </p>
+                                <p className="text-xs text-[#666] mt-1">
+                                  24 hours before departure
+                                </p>
                               </div>
                               <div>
-                                <p className="font-medium text-[#666] mb-1">Date Change</p>
-                                <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
-                                <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
+                                <p className="font-medium text-[#666] mb-1">
+                                  Date Change
+                                </p>
+                                <p className="text-gray-900">
+                                  Allowed with fee: ₹2,500 per passenger
+                                </p>
+                                <p className="text-xs text-[#666] mt-1">
+                                  Subject to fare difference
+                                </p>
                               </div>
                               <div>
-                                <p className="font-medium text-[#666] mb-1">Refundability</p>
-                                <p className="text-gray-900">Partially refundable</p>
-                                <p className="text-xs text-[#666] mt-1">Taxes and fees refundable</p>
+                                <p className="font-medium text-[#666] mb-1">
+                                  Refundability
+                                </p>
+                                <p className="text-gray-900">
+                                  Partially refundable
+                                </p>
+                                <p className="text-xs text-[#666] mt-1">
+                                  Taxes and fees refundable
+                                </p>
                               </div>
                               <div>
-                                <p className="font-medium text-[#666] mb-1">Baggage</p>
-                                <p className="text-gray-900">25kg checked + 7kg cabin bag</p>
-                                <p className="text-xs text-[#666] mt-1">Additional baggage chargeable</p>
+                                <p className="font-medium text-[#666] mb-1">
+                                  Baggage
+                                </p>
+                                <p className="text-gray-900">
+                                  25kg checked + 7kg cabin bag
+                                </p>
+                                <p className="text-xs text-[#666] mt-1">
+                                  Additional baggage chargeable
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -2804,13 +2960,28 @@ export default function BookingFlow() {
                           <div className="flex items-start">
                             <Info className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
                             <div>
-                              <h5 className="font-medium text-yellow-800 mb-2">Important Information</h5>
+                              <h5 className="font-medium text-yellow-800 mb-2">
+                                Important Information
+                              </h5>
                               <ul className="text-sm text-yellow-700 space-y-1">
-                                <li>• Check-in opens 2 hours before departure</li>
-                                <li>• Carry valid government-issued photo ID</li>
-                                <li>• Arrive at airport 2 hours before domestic flights</li>
-                                <li>• Name changes not allowed after booking confirmation</li>
-                                <li>• Seat selection included for standard economy seats</li>
+                                <li>
+                                  • Check-in opens 2 hours before departure
+                                </li>
+                                <li>
+                                  • Carry valid government-issued photo ID
+                                </li>
+                                <li>
+                                  • Arrive at airport 2 hours before domestic
+                                  flights
+                                </li>
+                                <li>
+                                  • Name changes not allowed after booking
+                                  confirmation
+                                </li>
+                                <li>
+                                  • Seat selection included for standard economy
+                                  seats
+                                </li>
                               </ul>
                             </div>
                           </div>
@@ -2819,32 +2990,58 @@ export default function BookingFlow() {
                     </div>
 
                     {/* Selected Extras */}
-                    {(Object.keys(seatSelections).some(flight => Object.keys(seatSelections[flight]).length > 0) ||
+                    {(Object.keys(seatSelections).some(
+                      (flight) =>
+                        Object.keys(seatSelections[flight]).length > 0,
+                    ) ||
                       selectedMealIds.length > 0 ||
-                      selectedBaggage.outbound.weight || selectedBaggage.return.weight) && (
+                      selectedBaggage.outbound.weight ||
+                      selectedBaggage.return.weight) && (
                       <div className="bg-white border border-[#f2f6fa] rounded-lg p-4 md:p-6">
-                        <h3 className="font-semibold text-gray-900 mb-4">Selected Extras</h3>
+                        <h3 className="font-semibold text-gray-900 mb-4">
+                          Selected Extras
+                        </h3>
                         <div className="space-y-3">
-                          {Object.keys(seatSelections).map(flight =>
-                            Object.keys(seatSelections[flight]).length > 0 && (
-                              <div key={flight} className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]">
-                                <p className="font-medium text-gray-900">Seats ({flight}):</p>
-                                <p className="text-sm text-[#666]">{Object.keys(seatSelections[flight]).join(", ")}</p>
-                              </div>
-                            )
+                          {Object.keys(seatSelections).map(
+                            (flight) =>
+                              Object.keys(seatSelections[flight]).length >
+                                0 && (
+                                <div
+                                  key={flight}
+                                  className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]"
+                                >
+                                  <p className="font-medium text-gray-900">
+                                    Seats ({flight}):
+                                  </p>
+                                  <p className="text-sm text-[#666]">
+                                    {Object.keys(seatSelections[flight]).join(
+                                      ", ",
+                                    )}
+                                  </p>
+                                </div>
+                              ),
                           )}
                           {selectedMealIds.length > 0 && (
                             <div className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]">
-                              <p className="font-medium text-gray-900">Meals:</p>
-                              <p className="text-sm text-[#666]">{selectedMealIds.length} meal(s) selected</p>
+                              <p className="font-medium text-gray-900">
+                                Meals:
+                              </p>
+                              <p className="text-sm text-[#666]">
+                                {selectedMealIds.length} meal(s) selected
+                              </p>
                             </div>
                           )}
-                          {(selectedBaggage.outbound.weight || selectedBaggage.return.weight) && (
+                          {(selectedBaggage.outbound.weight ||
+                            selectedBaggage.return.weight) && (
                             <div className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]">
-                              <p className="font-medium text-gray-900">Extra Baggage:</p>
+                              <p className="font-medium text-gray-900">
+                                Extra Baggage:
+                              </p>
                               <p className="text-sm text-[#666]">
-                                {selectedBaggage.outbound.weight && ` ${selectedBaggage.outbound.weight} (Outbound)`}
-                                {selectedBaggage.return.weight && ` ${selectedBaggage.return.weight} (Return)`}
+                                {selectedBaggage.outbound.weight &&
+                                  ` ${selectedBaggage.outbound.weight} (Outbound)`}
+                                {selectedBaggage.return.weight &&
+                                  ` ${selectedBaggage.return.weight} (Return)`}
                               </p>
                             </div>
                           )}
@@ -2854,13 +3051,24 @@ export default function BookingFlow() {
 
                     {/* Total Price with Words */}
                     <div className="bg-[#003580] text-white rounded-lg p-6">
-                      <h3 className="font-semibold mb-4 text-lg">Total Amount</h3>
+                      <h3 className="font-semibold mb-4 text-lg">
+                        Total Amount
+                      </h3>
                       <div className="space-y-2">
                         <p className="text-3xl font-bold">
-                          {formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}
+                          {formatCurrency(
+                            calculateBaseFareTotal() +
+                              calculateExtrasTotal() +
+                              getTotalSeatFees(),
+                          )}
                         </p>
                         <p className="text-sm text-blue-100 capitalize">
-                          {formatPriceInWords(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())} only
+                          {formatPriceInWords(
+                            calculateBaseFareTotal() +
+                              calculateExtrasTotal() +
+                              getTotalSeatFees(),
+                          )}{" "}
+                          only
                         </p>
                         <p className="text-xs text-blue-200 mt-3">
                           ✓ All taxes and fees included • No hidden charges
@@ -3137,8 +3345,8 @@ export default function BookingFlow() {
                     {currentStep === 5
                       ? `Pay ${formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}`
                       : currentStep === 4
-                      ? "Proceed to Payment"
-                      : "Next"}
+                        ? "Proceed to Payment"
+                        : "Next"}
                   </Button>
                 </div>
               </div>
@@ -3428,7 +3636,11 @@ export default function BookingFlow() {
                       </SelectTrigger>
                       <SelectContent className="max-w-lg">
                         {savedProfiles.map((profile) => (
-                          <SelectItem key={profile.id} value={profile.id} className="p-3">
+                          <SelectItem
+                            key={profile.id}
+                            value={profile.id}
+                            className="p-3"
+                          >
                             <div className="flex items-center space-x-3 w-full">
                               <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
                                 <User className="w-4 h-4 text-blue-700" />
@@ -3439,7 +3651,7 @@ export default function BookingFlow() {
                                 </div>
                                 <div className="text-xs text-gray-600 flex items-center space-x-2">
                                   <span className="bg-gray-100 px-2 py-0.5 rounded">
-                                    {profile.type || 'Adult'}
+                                    {profile.type || "Adult"}
                                   </span>
                                   <span>•</span>
                                   <span>{profile.gender}</span>
@@ -3462,7 +3674,12 @@ export default function BookingFlow() {
                         <div className="flex items-center text-green-800">
                           <CheckCircle className="w-4 h-4 mr-2" />
                           <span className="text-sm font-medium">
-                            Profile loaded: {savedProfiles.find(p => p.id === selectedProfileId)?.profileName}
+                            Profile loaded:{" "}
+                            {
+                              savedProfiles.find(
+                                (p) => p.id === selectedProfileId,
+                              )?.profileName
+                            }
                           </span>
                         </div>
                         <Button
@@ -3746,7 +3963,9 @@ export default function BookingFlow() {
                     }
                     onValueChange={(value) => {
                       const updatedTravellers = travellers.map((t) =>
-                        t.id === selectedTraveller ? { ...t, mealPreference: value } : t,
+                        t.id === selectedTraveller
+                          ? { ...t, mealPreference: value }
+                          : t,
                       );
                       setTravellers(updatedTravellers);
                     }}

@@ -76,7 +76,7 @@ export default function BookingConfirmation() {
       hasHotelId: !!searchParams.get("hotelId"),
       currentUrl: window.location.href,
       savedFlightBooking: !!savedFlightBooking,
-      savedHotelBooking: !!savedHotelBooking
+      savedHotelBooking: !!savedHotelBooking,
     });
 
     // If URL clearly indicates hotel booking, prioritize hotel flow
@@ -110,8 +110,12 @@ export default function BookingConfirmation() {
       setBookingType("flight");
 
       // Save to faredownBookings array for My Bookings display
-      const existingBookings = JSON.parse(localStorage.getItem("faredownBookings") || "[]");
-      const bookingExists = existingBookings.some(b => b.id === flightBookingData.id);
+      const existingBookings = JSON.parse(
+        localStorage.getItem("faredownBookings") || "[]",
+      );
+      const bookingExists = existingBookings.some(
+        (b) => b.id === flightBookingData.id,
+      );
 
       if (!bookingExists) {
         const formattedBooking = {
@@ -124,22 +128,27 @@ export default function BookingConfirmation() {
             contactDetails: {
               email: "user@example.com",
               phone: "+91 9876543210",
-              countryCode: "+91"
-            }
+              countryCode: "+91",
+            },
           },
           flightDetails: {
             airline: flightBookingData.flights?.[0]?.airline || "Airlines",
-            flightNumber: flightBookingData.flights?.[0]?.flightNumber || "FL-001",
+            flightNumber:
+              flightBookingData.flights?.[0]?.flightNumber || "FL-001",
             route: "Mumbai ⇄ Dubai",
-            departureDate: flightBookingData.flights?.[0]?.date || "Select date",
+            departureDate:
+              flightBookingData.flights?.[0]?.date || "Select date",
             returnDate: flightBookingData.flights?.[1]?.date || null,
-            class: "Economy"
+            class: "Economy",
           },
-          totalAmount: flightBookingData.total || 0
+          totalAmount: flightBookingData.total || 0,
         };
 
         existingBookings.push(formattedBooking);
-        localStorage.setItem("faredownBookings", JSON.stringify(existingBookings));
+        localStorage.setItem(
+          "faredownBookings",
+          JSON.stringify(existingBookings),
+        );
       }
     } else {
       // Create mock booking data from URL params for demo
@@ -151,7 +160,14 @@ export default function BookingConfirmation() {
       const nights = searchParams.get("nights");
       const bargained = searchParams.get("bargained");
 
-      console.log("🏨 Hotel URL params:", { hotelId, hotelName, roomType, price, totalPrice, nights });
+      console.log("🏨 Hotel URL params:", {
+        hotelId,
+        hotelName,
+        roomType,
+        price,
+        totalPrice,
+        nights,
+      });
 
       if (hotelId || (hotelName && price)) {
         console.log("🏨 Creating hotel booking from URL params");
@@ -160,7 +176,9 @@ export default function BookingConfirmation() {
           bookingDate: new Date().toISOString(),
           hotel: {
             id: hotelId || "htl-DXB-001",
-            name: hotelName ? decodeURIComponent(hotelName) : "Grand Hyatt Dubai",
+            name: hotelName
+              ? decodeURIComponent(hotelName)
+              : "Grand Hyatt Dubai",
             location:
               "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
             image:
@@ -721,8 +739,18 @@ export default function BookingConfirmation() {
               {/* Fare Rules Section */}
               <div className="border-2 border-blue-700 rounded-lg p-6 mb-8">
                 <h3 className="text-xl font-bold text-blue-700 mb-4 border-b pb-2 flex items-center">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
                   </svg>
                   FARE RULES & CONDITIONS
                 </h3>
@@ -731,40 +759,75 @@ export default function BookingConfirmation() {
                   {/* Outbound Flight Rules */}
                   <div className="bg-gray-50 rounded-lg p-4">
                     <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        />
                       </svg>
-                      Outbound Flight: {booking.flights?.[0]?.from || "Mumbai"} → {booking.flights?.[0]?.to || "Dubai"}
+                      Outbound Flight: {booking.flights?.[0]?.from || "Mumbai"}{" "}
+                      → {booking.flights?.[0]?.to || "Dubai"}
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                       <div className="space-y-2">
                         <div>
-                          <span className="font-medium text-gray-700">Cancellation Policy:</span>
-                          <p className="text-gray-600">Allowed with fee: ₹3,500 per passenger</p>
-                          <p className="text-xs text-gray-500">Must be done 24 hours before departure</p>
+                          <span className="font-medium text-gray-700">
+                            Cancellation Policy:
+                          </span>
+                          <p className="text-gray-600">
+                            Allowed with fee: ₹3,500 per passenger
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Must be done 24 hours before departure
+                          </p>
                         </div>
                         <div>
-                          <span className="font-medium text-gray-700">Date Change Fee:</span>
-                          <p className="text-gray-600">₹2,500 per passenger + fare difference</p>
-                          <p className="text-xs text-gray-500">Subject to seat availability</p>
+                          <span className="font-medium text-gray-700">
+                            Date Change Fee:
+                          </span>
+                          <p className="text-gray-600">
+                            ₹2,500 per passenger + fare difference
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Subject to seat availability
+                          </p>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <div>
-                          <span className="font-medium text-gray-700">Refund Policy:</span>
+                          <span className="font-medium text-gray-700">
+                            Refund Policy:
+                          </span>
                           <p className="text-gray-600">
-                            {booking.bargained || booking.flights?.[0]?.refundable ? "Fully Refundable" : "Partially Refundable"}
+                            {booking.bargained ||
+                            booking.flights?.[0]?.refundable
+                              ? "Fully Refundable"
+                              : "Partially Refundable"}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {booking.bargained || booking.flights?.[0]?.refundable
+                            {booking.bargained ||
+                            booking.flights?.[0]?.refundable
                               ? "Full refund minus service charges"
                               : "Only taxes and fees refundable"}
                           </p>
                         </div>
                         <div>
-                          <span className="font-medium text-gray-700">Baggage Allowance:</span>
-                          <p className="text-gray-600">25kg checked + 7kg cabin bag included</p>
-                          <p className="text-xs text-gray-500">Additional baggage charges apply</p>
+                          <span className="font-medium text-gray-700">
+                            Baggage Allowance:
+                          </span>
+                          <p className="text-gray-600">
+                            25kg checked + 7kg cabin bag included
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Additional baggage charges apply
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -774,40 +837,75 @@ export default function BookingConfirmation() {
                   {booking.flights && booking.flights.length > 1 && (
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
                         </svg>
-                        Return Flight: {booking.flights[1]?.from || "Dubai"} → {booking.flights[1]?.to || "Mumbai"}
+                        Return Flight: {booking.flights[1]?.from || "Dubai"} →{" "}
+                        {booking.flights[1]?.to || "Mumbai"}
                       </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div className="space-y-2">
                           <div>
-                            <span className="font-medium text-gray-700">Cancellation Policy:</span>
-                            <p className="text-gray-600">Allowed with fee: ₹3,500 per passenger</p>
-                            <p className="text-xs text-gray-500">Must be done 24 hours before departure</p>
+                            <span className="font-medium text-gray-700">
+                              Cancellation Policy:
+                            </span>
+                            <p className="text-gray-600">
+                              Allowed with fee: ₹3,500 per passenger
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Must be done 24 hours before departure
+                            </p>
                           </div>
                           <div>
-                            <span className="font-medium text-gray-700">Date Change Fee:</span>
-                            <p className="text-gray-600">₹2,500 per passenger + fare difference</p>
-                            <p className="text-xs text-gray-500">Subject to seat availability</p>
+                            <span className="font-medium text-gray-700">
+                              Date Change Fee:
+                            </span>
+                            <p className="text-gray-600">
+                              ₹2,500 per passenger + fare difference
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Subject to seat availability
+                            </p>
                           </div>
                         </div>
                         <div className="space-y-2">
                           <div>
-                            <span className="font-medium text-gray-700">Refund Policy:</span>
+                            <span className="font-medium text-gray-700">
+                              Refund Policy:
+                            </span>
                             <p className="text-gray-600">
-                              {booking.bargained || booking.flights[1]?.refundable ? "Fully Refundable" : "Partially Refundable"}
+                              {booking.bargained ||
+                              booking.flights[1]?.refundable
+                                ? "Fully Refundable"
+                                : "Partially Refundable"}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {booking.bargained || booking.flights[1]?.refundable
+                              {booking.bargained ||
+                              booking.flights[1]?.refundable
                                 ? "Full refund minus service charges"
                                 : "Only taxes and fees refundable"}
                             </p>
                           </div>
                           <div>
-                            <span className="font-medium text-gray-700">Baggage Allowance:</span>
-                            <p className="text-gray-600">25kg checked + 7kg cabin bag included</p>
-                            <p className="text-xs text-gray-500">Additional baggage charges apply</p>
+                            <span className="font-medium text-gray-700">
+                              Baggage Allowance:
+                            </span>
+                            <p className="text-gray-600">
+                              25kg checked + 7kg cabin bag included
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Additional baggage charges apply
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -817,22 +915,64 @@ export default function BookingConfirmation() {
                   {/* Important Terms & Conditions */}
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <div className="flex items-start">
-                      <svg className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="w-5 h-5 text-yellow-600 mr-3 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       <div className="flex-1">
-                        <h5 className="font-semibold text-yellow-800 mb-2">Important Terms & Conditions</h5>
+                        <h5 className="font-semibold text-yellow-800 mb-2">
+                          Important Terms & Conditions
+                        </h5>
                         <ul className="text-sm text-yellow-700 space-y-1">
-                          <li>• Passenger names cannot be changed after booking confirmation</li>
-                          <li>• Check-in must be completed 2 hours before domestic flight departure</li>
-                          <li>• Valid government-issued photo ID required for travel</li>
-                          <li>• All fees mentioned are per passenger and inclusive of applicable taxes</li>
-                          <li>• Cancellation/change requests subject to airline approval</li>
-                          <li>• Infant fares (below 2 years) have separate terms and conditions</li>
-                          <li>• No-show will result in forfeiture of entire ticket value</li>
-                          <li>• Group bookings (9+ passengers) may have different terms</li>
-                          <li>• Force majeure events may affect refund/change policies</li>
-                          <li>• Seat assignments are subject to aircraft type and availability</li>
+                          <li>
+                            • Passenger names cannot be changed after booking
+                            confirmation
+                          </li>
+                          <li>
+                            • Check-in must be completed 2 hours before domestic
+                            flight departure
+                          </li>
+                          <li>
+                            • Valid government-issued photo ID required for
+                            travel
+                          </li>
+                          <li>
+                            • All fees mentioned are per passenger and inclusive
+                            of applicable taxes
+                          </li>
+                          <li>
+                            • Cancellation/change requests subject to airline
+                            approval
+                          </li>
+                          <li>
+                            • Infant fares (below 2 years) have separate terms
+                            and conditions
+                          </li>
+                          <li>
+                            • No-show will result in forfeiture of entire ticket
+                            value
+                          </li>
+                          <li>
+                            • Group bookings (9+ passengers) may have different
+                            terms
+                          </li>
+                          <li>
+                            • Force majeure events may affect refund/change
+                            policies
+                          </li>
+                          <li>
+                            • Seat assignments are subject to aircraft type and
+                            availability
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -841,11 +981,23 @@ export default function BookingConfirmation() {
                   {/* Contact Information for Changes */}
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-start">
-                      <svg className="w-5 h-5 text-blue-600 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      <svg
+                        className="w-5 h-5 text-blue-600 mr-3 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                        />
                       </svg>
                       <div className="flex-1">
-                        <h5 className="font-semibold text-blue-800 mb-2">For Cancellations, Changes & Support</h5>
+                        <h5 className="font-semibold text-blue-800 mb-2">
+                          For Cancellations, Changes & Support
+                        </h5>
                         <div className="text-sm text-blue-700 space-y-1">
                           <p>Customer Support: +91-80-4728-2525</p>
                           <p>Email: support@faredown.com</p>
@@ -1499,55 +1651,81 @@ export default function BookingConfirmation() {
                     <div className="p-3 border border-gray-200 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Departure</p>
                       <p className="font-bold">
-                        {formatDate(booking.flights?.[0]?.date || booking.departureDate || new Date().toISOString())}
+                        {formatDate(
+                          booking.flights?.[0]?.date ||
+                            booking.departureDate ||
+                            new Date().toISOString(),
+                        )}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {booking.flights?.[0]?.departureTime || "10:15"} - {booking.flights?.[0]?.from || "BOM"}
+                        {booking.flights?.[0]?.departureTime || "10:15"} -{" "}
+                        {booking.flights?.[0]?.from || "BOM"}
                       </p>
                     </div>
                     <div className="p-3 border border-gray-200 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Arrival</p>
                       <p className="font-bold">
-                        {formatDate(booking.flights?.[0]?.arrivalDate || booking.flights?.[0]?.date || new Date().toISOString())}
+                        {formatDate(
+                          booking.flights?.[0]?.arrivalDate ||
+                            booking.flights?.[0]?.date ||
+                            new Date().toISOString(),
+                        )}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {booking.flights?.[0]?.arrivalTime || "12:30"} - {booking.flights?.[0]?.to || "DXB"}
+                        {booking.flights?.[0]?.arrivalTime || "12:30"} -{" "}
+                        {booking.flights?.[0]?.to || "DXB"}
                       </p>
                     </div>
                   </div>
                   {booking.flights?.[1] && (
                     <div className="grid grid-cols-2 gap-4">
                       <div className="p-3 border border-gray-200 rounded-lg text-center">
-                        <p className="text-sm text-gray-600">Return Departure</p>
+                        <p className="text-sm text-gray-600">
+                          Return Departure
+                        </p>
                         <p className="font-bold">
-                          {formatDate(booking.flights[1].date || new Date().toISOString())}
+                          {formatDate(
+                            booking.flights[1].date || new Date().toISOString(),
+                          )}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {booking.flights[1].departureTime || "14:00"} - {booking.flights[1].from || "DXB"}
+                          {booking.flights[1].departureTime || "14:00"} -{" "}
+                          {booking.flights[1].from || "DXB"}
                         </p>
                       </div>
                       <div className="p-3 border border-gray-200 rounded-lg text-center">
                         <p className="text-sm text-gray-600">Return Arrival</p>
                         <p className="font-bold">
-                          {formatDate(booking.flights[1].arrivalDate || booking.flights[1].date || new Date().toISOString())}
+                          {formatDate(
+                            booking.flights[1].arrivalDate ||
+                              booking.flights[1].date ||
+                              new Date().toISOString(),
+                          )}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {booking.flights[1].arrivalTime || "19:30"} - {booking.flights[1].to || "BOM"}
+                          {booking.flights[1].arrivalTime || "19:30"} -{" "}
+                          {booking.flights[1].to || "BOM"}
                         </p>
                       </div>
                     </div>
                   )}
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div>
-                      <p className="text-lg font-bold">{booking.passengers?.adults || booking.adults || 1}</p>
+                      <p className="text-lg font-bold">
+                        {booking.passengers?.adults || booking.adults || 1}
+                      </p>
                       <p className="text-xs text-gray-600">adults</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold">{booking.passengers?.children || booking.children || 0}</p>
+                      <p className="text-lg font-bold">
+                        {booking.passengers?.children || booking.children || 0}
+                      </p>
                       <p className="text-xs text-gray-600">children</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold">{booking.flightClass || "Economy"}</p>
+                      <p className="text-lg font-bold">
+                        {booking.flightClass || "Economy"}
+                      </p>
                       <p className="text-xs text-gray-600">class</p>
                     </div>
                   </div>
@@ -1559,13 +1737,17 @@ export default function BookingConfirmation() {
                     <div className="bg-gray-50 p-3 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Check-in</p>
                       <p className="font-bold">
-                        {formatDate(booking.checkIn || new Date().toISOString())}
+                        {formatDate(
+                          booking.checkIn || new Date().toISOString(),
+                        )}
                       </p>
                     </div>
                     <div className="bg-gray-50 p-3 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Check-out</p>
                       <p className="font-bold">
-                        {formatDate(booking.checkOut || new Date().toISOString())}
+                        {formatDate(
+                          booking.checkOut || new Date().toISOString(),
+                        )}
                       </p>
                     </div>
                   </div>
@@ -1612,46 +1794,64 @@ export default function BookingConfirmation() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">
-                {bookingType === "flight" ? "Primary Passenger" : "Primary Guest"}
+                {bookingType === "flight"
+                  ? "Primary Passenger"
+                  : "Primary Guest"}
               </h3>
               <div className="space-y-1 text-sm">
                 <p>
                   <span className="text-gray-600">Name:</span>{" "}
                   {bookingType === "flight"
-                    ? (booking.passengers?.[0]?.firstName || booking.contactDetails?.firstName || booking.guest?.firstName || "John")
-                    : (booking.guest?.firstName || "Guest")}{" "}
+                    ? booking.passengers?.[0]?.firstName ||
+                      booking.contactDetails?.firstName ||
+                      booking.guest?.firstName ||
+                      "John"
+                    : booking.guest?.firstName || "Guest"}{" "}
                   {bookingType === "flight"
-                    ? (booking.passengers?.[0]?.lastName || booking.contactDetails?.lastName || booking.guest?.lastName || "Doe")
-                    : (booking.guest?.lastName || "Name")}
+                    ? booking.passengers?.[0]?.lastName ||
+                      booking.contactDetails?.lastName ||
+                      booking.guest?.lastName ||
+                      "Doe"
+                    : booking.guest?.lastName || "Name"}
                 </p>
                 <p>
                   <span className="text-gray-600">Email:</span>{" "}
                   {bookingType === "flight"
-                    ? (booking.contactDetails?.email || booking.guest?.email || "john.doe@example.com")
-                    : (booking.guest?.email || "email@example.com")}
+                    ? booking.contactDetails?.email ||
+                      booking.guest?.email ||
+                      "john.doe@example.com"
+                    : booking.guest?.email || "email@example.com"}
                 </p>
                 <p>
                   <span className="text-gray-600">Phone:</span>{" "}
                   {bookingType === "flight"
-                    ? (booking.contactDetails?.phone || booking.guest?.phone || "+91 9876543210")
-                    : (booking.guest?.phone || "Phone Number")}
+                    ? booking.contactDetails?.phone ||
+                      booking.guest?.phone ||
+                      "+91 9876543210"
+                    : booking.guest?.phone || "Phone Number"}
                 </p>
-                {bookingType === "flight" && booking.passengers && booking.passengers.length > 1 && (
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="font-medium text-gray-700 mb-2">Additional Passengers:</p>
-                    {booking.passengers.slice(1).map((passenger, index) => (
-                      <p key={index} className="text-sm text-gray-600">
-                        {passenger.firstName} {passenger.lastName}
-                        {passenger.age && ` (Age: ${passenger.age})`}
+                {bookingType === "flight" &&
+                  booking.passengers &&
+                  booking.passengers.length > 1 && (
+                    <div className="mt-3 pt-3 border-t border-gray-200">
+                      <p className="font-medium text-gray-700 mb-2">
+                        Additional Passengers:
                       </p>
-                    ))}
-                  </div>
-                )}
+                      {booking.passengers.slice(1).map((passenger, index) => (
+                        <p key={index} className="text-sm text-gray-600">
+                          {passenger.firstName} {passenger.lastName}
+                          {passenger.age && ` (Age: ${passenger.age})`}
+                        </p>
+                      ))}
+                    </div>
+                  )}
               </div>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">
-                {bookingType === "flight" ? "Flight Information" : "Special Requests"}
+                {bookingType === "flight"
+                  ? "Flight Information"
+                  : "Special Requests"}
               </h3>
               {bookingType === "flight" ? (
                 <div className="space-y-2 text-sm">
@@ -1669,13 +1869,15 @@ export default function BookingConfirmation() {
                   </p>
                   <p>
                     <span className="text-gray-600">Route:</span>{" "}
-                    {booking.flights?.[0]?.from || "BOM"} → {booking.flights?.[0]?.to || "DXB"}
+                    {booking.flights?.[0]?.from || "BOM"} →{" "}
+                    {booking.flights?.[0]?.to || "DXB"}
                   </p>
                   {booking.flights?.[1] && (
                     <p>
                       <span className="text-gray-600">Return:</span>{" "}
                       {booking.flights[1].flightNumber || "6E 1408"} |
-                      {booking.flights[1].from || "DXB"} → {booking.flights[1].to || "BOM"}
+                      {booking.flights[1].from || "DXB"} →{" "}
+                      {booking.flights[1].to || "BOM"}
                     </p>
                   )}
                 </div>
@@ -1710,19 +1912,33 @@ export default function BookingConfirmation() {
 
         {/* Cancellation Policy */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
-          <h3 className="font-bold text-gray-900 mb-3">
-            Cancellation Policy
-          </h3>
+          <h3 className="font-bold text-gray-900 mb-3">Cancellation Policy</h3>
           <div className="text-gray-700 text-sm space-y-2">
             {bookingType === "flight" ? (
               <>
-                <p>• <strong>Free cancellation:</strong> Cancel up to 24 hours before departure for domestic flights, 48 hours for international flights</p>
-                <p>• <strong>Partial cancellation:</strong> Cancellation fees may apply as per airline policy</p>
-                <p>• <strong>No-show policy:</strong> No refund for no-shows or missed flights</p>
-                <p>• <strong>Name changes:</strong> Name corrections may incur additional charges</p>
+                <p>
+                  • <strong>Free cancellation:</strong> Cancel up to 24 hours
+                  before departure for domestic flights, 48 hours for
+                  international flights
+                </p>
+                <p>
+                  • <strong>Partial cancellation:</strong> Cancellation fees may
+                  apply as per airline policy
+                </p>
+                <p>
+                  • <strong>No-show policy:</strong> No refund for no-shows or
+                  missed flights
+                </p>
+                <p>
+                  • <strong>Name changes:</strong> Name corrections may incur
+                  additional charges
+                </p>
               </>
             ) : (
-              <p>{booking.cancellation || "Cancellation terms as per provider policy"}</p>
+              <p>
+                {booking.cancellation ||
+                  "Cancellation terms as per provider policy"}
+              </p>
             )}
           </div>
         </div>
@@ -1735,16 +1951,31 @@ export default function BookingConfirmation() {
           <ul className="text-gray-700 space-y-2 text-sm">
             {bookingType === "flight" ? (
               <>
-                <li>• Please carry a valid government-issued photo ID for check-in</li>
-                <li>• Arrive at airport 2 hours before domestic flights, 3 hours before international flights</li>
-                <li>• Check-in opens 48 hours before departure for most airlines</li>
+                <li>
+                  • Please carry a valid government-issued photo ID for check-in
+                </li>
+                <li>
+                  • Arrive at airport 2 hours before domestic flights, 3 hours
+                  before international flights
+                </li>
+                <li>
+                  • Check-in opens 48 hours before departure for most airlines
+                </li>
                 <li>• Baggage restrictions apply as per airline policy</li>
-                <li>• Contact airline directly for seat preferences and special assistance</li>
-                <li>• Present your e-ticket and booking confirmation at the airport</li>
+                <li>
+                  • Contact airline directly for seat preferences and special
+                  assistance
+                </li>
+                <li>
+                  • Present your e-ticket and booking confirmation at the
+                  airport
+                </li>
               </>
             ) : (
               <>
-                <li>• Please carry a valid photo ID for check-in verification</li>
+                <li>
+                  • Please carry a valid photo ID for check-in verification
+                </li>
                 <li>• Check-in time: 3:00 PM | Check-out time: 12:00 PM</li>
                 <li>• Contact the hotel directly for any special requests</li>
                 <li>• Present your booking confirmation at the reception</li>
