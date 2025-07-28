@@ -2994,6 +2994,11 @@ export default function FlightResults() {
                       </div>
 
                       <div className="space-y-4">
+                        {/* Debug info */}
+                        <div className="text-xs text-gray-500 bg-yellow-100 p-2 rounded">
+                          Debug: airline={flight.airline}, returnAirline={flight.returnAirline},
+                          condition={(flight.returnAirline && flight.returnAirline !== flight.airline) ? 'true' : 'false'}
+                        </div>
                         {/* Check if there are different airlines for outbound and return */}
                         {flight.returnAirline && flight.returnAirline !== flight.airline ? (
                           <>
