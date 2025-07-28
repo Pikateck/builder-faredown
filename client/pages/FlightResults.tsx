@@ -2932,19 +2932,19 @@ export default function FlightResults() {
                                   </div>
 
                                   {/* Baggage Information */}
-                                  <div className="bg-blue-50 rounded-lg p-4">
-                                    <h5 className="font-semibold text-blue-800 mb-3">Baggage Information:</h5>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                      <div className="flex justify-between">
-                                        <span className="text-blue-700">Check-in:</span>
-                                        <span className="font-medium">1 x 23 kg / Adult</span>
-                                      </div>
-                                      <div className="flex justify-between">
-                                        <span className="text-blue-700">Cabin:</span>
-                                        <span className="font-medium">1 x 7 kg / Adult</span>
-                                      </div>
+                                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                  <h5 className="font-semibold text-gray-800 mb-3">Baggage Information:</h5>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-700">Check-in:</span>
+                                      <span className="font-medium">1 x 23 kg / Adult</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-700">Cabin:</span>
+                                      <span className="font-medium">1 x 7 kg / Adult</span>
                                     </div>
                                   </div>
+                                </div>
 
                                   {/* Important Notice */}
                                   <div className="bg-gray-50 rounded-lg p-4">
