@@ -93,6 +93,13 @@ export default function Account() {
     twoFactorAuth: false,
   });
 
+  // Saved profiles management
+  const [savedProfiles, setSavedProfiles] = useState(() => {
+    const saved = localStorage.getItem("customer_profiles");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+
   // Payment methods (mock data)
   const [paymentMethods] = useState([
     {
