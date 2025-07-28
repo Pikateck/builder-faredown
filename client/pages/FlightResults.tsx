@@ -1255,7 +1255,7 @@ export default function FlightResults() {
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {Object.entries({
                       USD: { symbol: "$", name: "US Dollar" },
-                      EUR: { symbol: "���", name: "Euro" },
+                      EUR: { symbol: "€", name: "Euro" },
                       GBP: { symbol: "£", name: "British Pound" },
                       INR: { symbol: "��", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
@@ -1386,7 +1386,7 @@ export default function FlightResults() {
                     className={cn(
                       "w-3 h-3 rounded-full border-2",
                       tripType === "round-trip"
-                        ? "bg-[#febb02] border-white ring-1 ring-[#febb02]"
+                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
                         : "border-gray-300",
                     )}
                   ></div>
@@ -1409,7 +1409,7 @@ export default function FlightResults() {
                     className={cn(
                       "w-3 h-3 rounded-full border-2",
                       tripType === "one-way"
-                        ? "bg-[#febb02] border-white ring-1 ring-[#febb02]"
+                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
                         : "border-gray-300",
                     )}
                   ></div>
@@ -1432,7 +1432,7 @@ export default function FlightResults() {
                     className={cn(
                       "w-3 h-3 rounded-full border-2",
                       tripType === "multi-city"
-                        ? "bg-[#febb02] border-white ring-1 ring-[#febb02]"
+                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
                         : "border-gray-300",
                     )}
                   ></div>
@@ -1472,9 +1472,9 @@ export default function FlightResults() {
                             setSelectedClass(classType);
                             setShowClassDropdown(false);
                           }}
-                          className={`w-full text-left px-3 py-2 hover:bg-orange-50 rounded text-sm transition-colors ${
+                          className={`w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors ${
                             selectedClass === classType
-                              ? "bg-orange-100 text-orange-700 font-medium"
+                              ? "bg-blue-100 text-blue-700 font-medium"
                               : "text-gray-900"
                           }`}
                         >
@@ -1496,11 +1496,11 @@ export default function FlightResults() {
               </label>
               <button
                 onClick={() => setShowFromCities(!showFromCities)}
-                className="flex items-center bg-white rounded border-2 border-orange-500 px-3 py-2 h-12 w-full hover:border-orange-600 touch-manipulation"
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
               >
                 <Plane className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
-                  <div className="bg-[#febb02] text-black px-2 py-1 rounded text-xs font-bold">
+                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
                     {cityData[selectedFromCity]?.code || "BOM"}
                   </div>
                   <span className="text-sm text-gray-700 font-medium truncate">
@@ -1520,7 +1520,7 @@ export default function FlightResults() {
                       <input
                         type="text"
                         placeholder="Mumbai"
-                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-orange-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
                       />
                     </div>
                   </div>
@@ -1587,7 +1587,7 @@ export default function FlightResults() {
                       <input
                         type="text"
                         placeholder="Dubai"
-                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-orange-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
                       />
                     </div>
                   </div>
@@ -1787,7 +1787,7 @@ export default function FlightResults() {
             </div>
 
             <div className="w-full lg:w-auto lg:min-w-[120px]">
-              <Button className="bg-[#febb02] hover:bg-[#e6a602] text-black px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
                 Search
               </Button>
             </div>
@@ -1810,7 +1810,7 @@ export default function FlightResults() {
             <div className="mt-3 pt-2 border-t border-gray-200">
               <button
                 onClick={resetAllFilters}
-                className="w-full text-gray-600 border border-gray-600 hover:bg-gray-50 text-sm h-8 rounded font-medium"
+                className="w-full text-blue-600 border border-blue-600 hover:bg-blue-50 text-sm h-8 rounded font-medium"
               >
                 Clear all filters
               </button>
@@ -1854,7 +1854,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-4 h-4 ${selectedStops === option.value ? "bg-[#febb02]" : "bg-white border border-gray-400"}`}
+                          className={`w-4 h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
                       {option.label}
@@ -1874,7 +1874,7 @@ export default function FlightResults() {
                   </div>
                   <button
                     onClick={resetAirlineSelection}
-                    className="text-xs text-orange-600 hover:text-orange-800 font-medium"
+                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                   >
                     Reset
                   </button>
@@ -2497,7 +2497,7 @@ export default function FlightResults() {
 
                       {/* Right Side - Pricing - Compact Layout */}
                       <div className="text-center ml-8">
-                        {/* Fare Type and Price with Baggage and Tooltip */}
+                        {/* Fare Type and Price with Info Button */}
                         <div className="mb-1 relative">
                           <span className="text-sm font-medium text-gray-900">
                             {flight.fareTypes[0].name}
@@ -2506,7 +2506,6 @@ export default function FlightResults() {
                             <div className="text-xl font-bold text-gray-900">
                               {formatPrice(flight.fareTypes[0].price)}
                             </div>
-                            <Luggage className="w-5 h-5 text-green-600" />
                             <button
                               onClick={() =>
                                 setExpandedTicketOptions(
@@ -2523,37 +2522,46 @@ export default function FlightResults() {
                           </div>
                         </div>
 
+                        {/* Compact info row - Larger Icons */}
+                        <div className="flex items-center justify-center space-x-3 mb-2">
+                          <Luggage className="w-5 h-5 text-green-600" />
+                          <Shield className="w-5 h-5 text-green-600" />
+                        </div>
+
                         {/* Fare Breakdown Tooltip - Positioned next to price */}
                         {expandedTicketOptions === `tooltip-${flight.id}` && (
                           <div className="absolute right-0 top-full mt-2 z-50">
-                            <div className="bg-gray-900 text-white text-sm rounded-lg p-4 shadow-lg min-w-[220px]">
-                              <div className="text-center font-semibold mb-3 text-white">
-                                Fare Breakdown
+                            <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
+                              <div className="text-center font-medium mb-2">
+                                Fare breakdown
                               </div>
-                              <div className="space-y-2">
-                                <div className="flex justify-between items-center">
-                                  <span className="text-gray-300">Base fare:</span>
-                                  <span className="font-medium text-white">
-                                    {formatPrice(Math.round(flight.fareTypes[0].price * 0.75))}
+                              <div className="space-y-1">
+                                <div className="flex justify-between">
+                                  <span>Base fare:</span>
+                                  <span>
+                                    {formatPrice(
+                                      Math.round(
+                                        flight.fareTypes[0].price * 0.75,
+                                      ),
+                                    )}
                                   </span>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                  <span className="text-gray-300">Taxes & fees:</span>
-                                  <span className="font-medium text-white">
-                                    {formatPrice(Math.round(flight.fareTypes[0].price * 0.25))}
+                                <div className="flex justify-between">
+                                  <span>Taxes & fees:</span>
+                                  <span>
+                                    {formatPrice(
+                                      Math.round(
+                                        flight.fareTypes[0].price * 0.25,
+                                      ),
+                                    )}
                                   </span>
                                 </div>
-                                <div className="border-t border-gray-600 pt-2 mt-2">
-                                  <div className="flex justify-between items-center">
-                                    <span className="font-semibold text-white">Total:</span>
-                                    <span className="font-bold text-lg text-white">
+                                <div className="border-t border-gray-600 pt-1 mt-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>Total:</span>
+                                    <span>
                                       {formatPrice(flight.fareTypes[0].price)}
                                     </span>
-                                  </div>
-                                </div>
-                                <div className="mt-3 pt-2 border-t border-gray-600">
-                                  <div className="text-xs text-gray-400 text-center">
-                                    All taxes and fees included
                                   </div>
                                 </div>
                               </div>
@@ -3062,8 +3070,8 @@ export default function FlightResults() {
           </div>
 
           {/* Lucky Message */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-6 mx-4 md:mx-0 flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 mx-4 md:mx-0 flex items-center space-x-3">
+            <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
               <span className="text-white text-sm">🍀</span>
             </div>
             <div>
@@ -3662,8 +3670,8 @@ export default function FlightResults() {
           </DialogHeader>
           <div className="p-6">
             <div className="text-center py-8">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Plane className="w-8 h-8 text-gray-600" />
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Plane className="w-8 h-8 text-blue-600" />
               </div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 Edit Your Search
