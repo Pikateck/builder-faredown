@@ -841,6 +841,15 @@ export default function BookingFlow() {
         middleName: "",
         lastName: "",
         gender: "",
+        dateOfBirth: "",
+        passportNumber: "",
+        passportIssueDate: "",
+        passportExpiryDate: "",
+        panCardNumber: "",
+        nationality: "Indian",
+        address: "",
+        pincode: "",
+        mealPreference: "Veg",
       });
     }
 
@@ -855,6 +864,15 @@ export default function BookingFlow() {
         lastName: "",
         gender: "",
         age: "",
+        dateOfBirth: "",
+        passportNumber: "",
+        passportIssueDate: "",
+        passportExpiryDate: "",
+        panCardNumber: "",
+        nationality: "Indian",
+        address: "",
+        pincode: "",
+        mealPreference: "Veg",
       });
     }
 
