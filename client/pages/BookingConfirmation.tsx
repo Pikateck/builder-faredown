@@ -548,8 +548,8 @@ export default function BookingConfirmation() {
                   <div className="flex justify-between items-center mb-4">
                     <div>
                       <h4 className="text-lg font-bold text-gray-900">
-                        {booking.flight?.airline || "Emirates"} -{" "}
-                        {booking.flight?.flightNumber || "EK-215"}
+                        {booking.flights?.[0]?.airline || "Airlines"} -{" "}
+                        {booking.flights?.[0]?.flightNumber || "FL-001"}
                       </h4>
                       <p className="text-sm text-gray-600">
                         Aircraft: {booking.flight?.aircraft || "Boeing 777"} |
