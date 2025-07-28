@@ -3006,7 +3006,7 @@ export default function FlightResults() {
                         {/* Outbound Flight Rules */}
                         <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                           <h5 className="font-medium text-gray-900 mb-3">
-                            Outbound: {flight.departureCode} → {flight.arrivalCode}
+                            Outbound: {flight.departureCode} → {flight.arrivalCode} ({flight.airline})
                           </h5>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
