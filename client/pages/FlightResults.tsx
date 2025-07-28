@@ -1139,7 +1139,7 @@ export default function FlightResults() {
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
-                      { code: "ar", name: "العربية", flag: "🇸���" },
+                      { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
@@ -1636,7 +1636,7 @@ export default function FlightResults() {
                           disabled={travelers.adults <= 1}
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                         >
-                          −
+                          ��
                         </button>
                         <span className="w-8 text-center font-medium text-gray-900">
                           {travelers.adults}
@@ -2634,10 +2634,15 @@ export default function FlightResults() {
                                 Bargain
                               </Button>
                               <Button
-                                onClick={() => handleBooking(flight, fareType)}
-                                className="w-full bg-[#003580] hover:bg-[#0071c2] text-xs py-1.5"
+                                onClick={() => handleToggleFlightDetails(flight.id, fareType.id)}
+                                className="w-full bg-[#003580] hover:bg-[#0071c2] text-xs py-1.5 flex items-center justify-center"
                               >
-                                Book Now
+                                View Details
+                                <ChevronDown
+                                  className={`w-3 h-3 ml-1 transition-transform duration-200 ${
+                                    expandedFlightDetails[`${flight.id}-${fareType.id}`] ? 'rotate-180' : ''
+                                  }`}
+                                />
                               </Button>
                               <Button
                                 variant="ghost"
