@@ -108,6 +108,41 @@ export default function Account() {
     setShowDeleteConfirm(null);
   };
 
+  // Save account holder as primary profile
+  const saveAccountHolderProfile = () => {
+    const accountProfile = {
+      id: 'account_holder_primary',
+      firstName: profileData.firstName,
+      lastName: profileData.lastName,
+      gender: 'Male', // Default, can be updated
+      type: 'Adult',
+      title: 'Mr',
+      nationality: 'Indian',
+      profileName: `${profileData.firstName} ${profileData.lastName}`,
+      isAccountHolder: true,
+      email: profileData.email,
+      phone: profileData.phone,
+      savedAt: new Date().toISOString(),
+      mealPreference: 'Veg',
+      middleName: '',
+      dateOfBirth: '',
+      passportNumber: '',
+      passportIssueDate: '',
+      passportExpiryDate: '',
+      panCardNumber: '',
+      address: '',
+      pincode: '',
+    };
+
+    // Check if account holder profile already exists
+    const existingAccountProfile = savedProfiles.find(p => p.isAccountHolder);
+    if (!existingAccountProfile) {
+      const updatedProfiles = [accountProfile, ...savedProfiles];
+      setSavedProfiles(updatedProfiles);
+      localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
+    }
+  };
+
   // Payment methods (mock data)
   const [paymentMethods] = useState([
     {
