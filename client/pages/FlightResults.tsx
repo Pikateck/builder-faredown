@@ -2490,7 +2490,9 @@ export default function FlightResults() {
                         </div>
 
                         <div className="mt-4 text-sm text-gray-600">
-                          {flight.airline}
+                          {flight.returnAirline && flight.returnAirline !== flight.airline
+                            ? `${flight.airline}, ${flight.returnAirline}`
+                            : flight.airline}
                         </div>
 
                       </div>
