@@ -216,7 +216,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
     }, 0);
   };
 
-  const renderFlightSegment = (flightLeg, flightTitle, isExpanded) => (
+  const renderFlightSegment = (flightLeg, flightTitle, isExpanded, flightData, fareData) => (
     <div className="border border-[#f2f6fa] rounded-lg">
       <div
         className={`p-4 cursor-pointer ${!isExpanded ? "border-b border-[#f2f6fa] bg-gray-50" : "border-b border-[#f2f6fa]"}`}
@@ -231,9 +231,9 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
               {flightTitle}
             </h3>
             <p className="text-sm text-[#666]">
-              {selectedFlight?.duration || "3h 15m"} •{" "}
-              {selectedFlight?.airline || "Airlines"} •{" "}
-              {selectedFareType?.name || "Economy"}
+              {flightData?.duration || "3h 15m"} •{" "}
+              {flightData?.airline || "Airlines"} •{" "}
+              {fareData?.name || "Economy"}
             </p>
           </div>
           <ChevronDown
