@@ -2330,7 +2330,7 @@ export default function FlightResults() {
                   )}
                 </div>
 
-                {/* DESKTOP CARD DESIGN (���769px) - Original Enhanced */}
+                {/* DESKTOP CARD DESIGN (≥769px) - Original Enhanced */}
                 <div className="hidden md:block bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                   {/* Green Upgrade Header */}
                   <div className="bg-green-50 px-4 py-2 border-b border-green-200">
@@ -2639,14 +2639,6 @@ export default function FlightResults() {
                                     expandedFlightDetails[`${flight.id}-${fareType.id}`] ? 'rotate-180' : ''
                                   }`}
                                 />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                onClick={() => handleFareRulesToggle(flight.id, fareType.id)}
-                                className="w-full text-[#003580] hover:bg-[#003580]/10 text-xs py-1.5"
-                              >
-                                <Info className="w-3 h-3 mr-1" />
-                                View Fare Rules
                               </Button>
                             </div>
                           </div>
