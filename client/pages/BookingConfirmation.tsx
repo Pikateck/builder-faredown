@@ -105,8 +105,42 @@ export default function BookingConfirmation() {
     } else if (savedFlightBooking && !isHotelFlow) {
       // Only fallback to flight booking if it's not a hotel flow
       console.log("✈️ Using saved flight booking data");
-      setBooking(JSON.parse(savedFlightBooking));
+      const flightBookingData = JSON.parse(savedFlightBooking);
+      setBooking(flightBookingData);
       setBookingType("flight");
+
+      // Save to faredownBookings array for My Bookings display
+      const existingBookings = JSON.parse(localStorage.getItem("faredownBookings") || "[]");
+      const bookingExists = existingBookings.some(b => b.id === flightBookingData.id);
+
+      if (!bookingExists) {
+        const formattedBooking = {
+          id: flightBookingData.id,
+          type: "flight",
+          bookingDetails: {
+            bookingRef: flightBookingData.id,
+            bookingDate: new Date().toISOString(),
+            passengers: flightBookingData.passengers || [],
+            contactDetails: {
+              email: "user@example.com",
+              phone: "+91 9876543210",
+              countryCode: "+91"
+            }
+          },
+          flightDetails: {
+            airline: flightBookingData.flights?.[0]?.airline || "Airlines",
+            flightNumber: flightBookingData.flights?.[0]?.flightNumber || "FL-001",
+            route: "Mumbai ⇄ Dubai",
+            departureDate: flightBookingData.flights?.[0]?.date || "Select date",
+            returnDate: flightBookingData.flights?.[1]?.date || null,
+            class: "Economy"
+          },
+          totalAmount: flightBookingData.total || 0
+        };
+
+        existingBookings.push(formattedBooking);
+        localStorage.setItem("faredownBookings", JSON.stringify(existingBookings));
+      }
     } else {
       // Create mock booking data from URL params for demo
       const hotelId = searchParams.get("hotelId");
