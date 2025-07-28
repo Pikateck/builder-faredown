@@ -2311,10 +2311,15 @@ export default function FlightResults() {
                                 </Button>
                                 <Button
                                   size="sm"
-                                  className="bg-[#003580] text-xs"
-                                  onClick={() => handleBooking(flight, fareType)}
+                                  className="bg-[#003580] text-xs flex items-center justify-center"
+                                  onClick={() => handleToggleFlightDetails(flight.id, fareType.id)}
                                 >
-                                  Book
+                                  View Details
+                                  <ChevronDown
+                                    className={`w-3 h-3 ml-1 transition-transform duration-200 ${
+                                      expandedFlightDetails[`${flight.id}-${fareType.id}`] ? 'rotate-180' : ''
+                                    }`}
+                                  />
                                 </Button>
                               </div>
                               <Button
