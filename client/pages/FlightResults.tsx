@@ -3119,7 +3119,7 @@ export default function FlightResults() {
       {/* Mobile Bottom Padding */}
       <div className="h-20 md:h-0"></div>
 
-      {/* Mobile Navigation Bottom Bar (���768px) */}
+      {/* Mobile Navigation Bottom Bar (≤768px) */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-40">
         <div className="grid grid-cols-4 h-16">
           <Link
