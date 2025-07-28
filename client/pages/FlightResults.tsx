@@ -1610,7 +1610,7 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {city} �� {data.airport}
+                              {city} • {data.airport}
                             </div>
                             <div className="text-xs text-gray-500">
                               {data.fullName}
@@ -2899,7 +2899,7 @@ export default function FlightResults() {
                                         <Plane className="w-5 h-5 mr-3 text-gray-600" />
                                         {flight.airline || "Emirates"} | {flight.departureCode || "BOM"} - {flight.arrivalCode || "DXB"}
                                       </h5>
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
                                         <div className="space-y-3">
                                           <p className="font-semibold text-gray-800 mb-2">Cancellation fee</p>
                                           <div className="bg-gray-50 rounded-lg p-3 space-y-2">
@@ -2950,7 +2950,7 @@ export default function FlightResults() {
                                         <Plane className="w-5 h-5 mr-3 text-gray-600" />
                                         {flight.returnAirline || "Indigo"} | {flight.arrivalCode || "DXB"} - {flight.departureCode || "BOM"}
                                       </h5>
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
                                         <div className="space-y-3">
                                           <p className="font-semibold text-gray-800 mb-2">Cancellation fee</p>
                                           <div className="bg-gray-50 rounded-lg p-3 space-y-2">
