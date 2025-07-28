@@ -572,6 +572,19 @@ export default function FlightResults() {
     });
   };
 
+  // Handle aircraft type filter selection
+  const handleAircraftTypeFilter = (aircraftType: string, isChecked: boolean) => {
+    setSelectedAircraftTypes((prev) => {
+      const newSelected = new Set(prev);
+      if (isChecked) {
+        newSelected.add(aircraftType);
+      } else {
+        newSelected.delete(aircraftType);
+      }
+      return newSelected;
+    });
+  };
+
   // Reset filters function
   const resetAllFilters = () => {
     setSelectedAirlines(new Set(availableAirlines));
@@ -1170,7 +1183,7 @@ export default function FlightResults() {
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
-                      { code: "ja", name: "日本語", flag: "🇯🇵" },
+                      { code: "ja", name: "日本語", flag: "��🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨��" },
                     ].map((language) => (
