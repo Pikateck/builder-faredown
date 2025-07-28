@@ -52,7 +52,7 @@ const formatCurrency = (amount: number) => {
 };
 
 // Seat Map Component
-const SeatMap = ({ travellers, seatSelections, setSeatSelections }) => {
+const SeatMap = ({ travellers, seatSelections, setSeatSelections, selectedFlight, selectedFareType }) => {
   // Use the shared seat selections from parent component
   const selectedSeats = seatSelections;
   const setSelectedSeats = setSeatSelections;
@@ -1815,7 +1815,7 @@ export default function BookingFlow() {
                                   5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
-                                  10kg - ₹ 2,800
+                                  10kg - ��� 2,800
                                 </SelectItem>
                                 <SelectItem value="15kg">
                                   15kg - ₹ 4,200
