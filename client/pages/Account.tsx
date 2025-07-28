@@ -216,7 +216,9 @@ export default function Account() {
                       </div>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Plane className="w-4 h-4" />
-                        <span>Emirates EK 508</span>
+                        <span>
+                          {booking.flightDetails?.airline || "Airlines"} {booking.flightDetails?.flightNumber || "FL-001"}
+                        </span>
                       </div>
                     </div>
 
