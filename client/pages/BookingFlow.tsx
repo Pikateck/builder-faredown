@@ -38,6 +38,12 @@ import {
   Plus,
   Minus,
   Plane,
+  Edit3,
+  Clock,
+  MapPin,
+  Info,
+  AlertTriangle,
+  FileText,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -45,6 +51,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+// Import the price in words utility
+import { formatPriceInWords } from "@/lib/numberToWords";
 
 // Utility function to format currency
 const formatCurrency = (amount: number) => {
