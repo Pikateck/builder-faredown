@@ -1431,12 +1431,64 @@ export default function BookingFlow() {
     }
   };
 
+  // Auto-save profile function
+  const autoSaveProfile = (travellerData) => {
+    // Only save if essential fields are filled
+    if (travellerData.firstName && travellerData.lastName && travellerData.gender) {
+      const profileId = `profile_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const profile = {
+        id: profileId,
+        ...travellerData,
+        savedAt: new Date().toISOString(),
+        profileName: `${travellerData.firstName} ${travellerData.lastName}`,
+      };
+
+      // Check if similar profile already exists (avoid duplicates)
+      const existingProfile = savedProfiles.find(p =>
+        p.firstName === travellerData.firstName &&
+        p.lastName === travellerData.lastName &&
+        p.passportNumber === travellerData.passportNumber
+      );
+
+      if (!existingProfile) {
+        const updatedProfiles = [...savedProfiles, profile];
+        setSavedProfiles(updatedProfiles);
+        localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
+        console.log("Profile auto-saved:", profile.profileName);
+      }
+    }
+  };
+
+  // Load profile data into traveller
+  const loadProfileIntoTraveller = (profileId) => {
+    const profile = savedProfiles.find(p => p.id === profileId);
+    if (profile && selectedTraveller) {
+      const updatedTravellers = travellers.map((t) =>
+        t.id === selectedTraveller ? {
+          ...t,
+          ...profile,
+          id: t.id, // Keep original traveller ID
+          type: t.type // Keep original traveller type
+        } : t
+      );
+      setTravellers(updatedTravellers);
+      console.log("Profile loaded:", profile.profileName);
+    }
+  };
+
   const handleTravellerSubmit = () => {
+    // Auto-save the current traveller as a profile
+    const currentTraveller = travellers.find(t => t.id === selectedTraveller);
+    if (currentTraveller) {
+      autoSaveProfile(currentTraveller);
+    }
+
     // The traveller data is already updated in real-time through the form controls
     console.log("Saving traveller data:", travellers);
     // Just close the modal
     setShowTravellerDetails(false);
     setSelectedTraveller(null);
+    setSelectedProfileId(""); // Reset profile selection
   };
 
   return (
