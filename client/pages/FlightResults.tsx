@@ -2604,6 +2604,132 @@ export default function FlightResults() {
                     </div>
                   )}
                 </div>
+
+                {/* Fare Rules Section - Appears when View Fare Rules is clicked */}
+                {Object.keys(showFareRules).some(key =>
+                  key.startsWith(flight.id) && showFareRules[key]
+                ) && (
+                  <div className="mt-4 mx-4 md:mx-0">
+                    <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="font-semibold text-gray-900 flex items-center">
+                          <Info className="w-5 h-5 mr-2 text-[#003580]" />
+                          Fare Rules - {flight.airline} Flight
+                        </h4>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            const keysToClose = Object.keys(showFareRules).filter(key =>
+                              key.startsWith(flight.id)
+                            );
+                            setShowFareRules(prev => {
+                              const newState = { ...prev };
+                              keysToClose.forEach(key => {
+                                newState[key] = false;
+                              });
+                              return newState;
+                            });
+                          }}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+
+                      <div className="space-y-4">
+                        {/* Outbound Flight Rules */}
+                        <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                          <h5 className="font-medium text-gray-900 mb-3">
+                            Outbound: {flight.departureCode} → {flight.arrivalCode}
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Cancellation</p>
+                              <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
+                              <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Date Change</p>
+                              <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
+                              <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Refundability</p>
+                              <p className="text-gray-900">
+                                {flight.refundability === "Refundable" ? "Fully refundable" : "Partially refundable"}
+                              </p>
+                              <p className="text-xs text-[#666] mt-1">
+                                {flight.refundability === "Refundable"
+                                  ? "Full refund minus service fee"
+                                  : "Taxes and fees refundable only"}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Baggage</p>
+                              <p className="text-gray-900">25kg checked + 7kg cabin bag</p>
+                              <p className="text-xs text-[#666] mt-1">Additional baggage chargeable</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Return Flight Rules (if round trip) */}
+                        {tripType === "round-trip" && (
+                          <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                            <h5 className="font-medium text-gray-900 mb-3">
+                              Return: {flight.arrivalCode} → {flight.departureCode}
+                            </h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Cancellation</p>
+                                <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
+                                <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Date Change</p>
+                                <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
+                                <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Refundability</p>
+                                <p className="text-gray-900">
+                                  {flight.refundability === "Refundable" ? "Fully refundable" : "Partially refundable"}
+                                </p>
+                                <p className="text-xs text-[#666] mt-1">
+                                  {flight.refundability === "Refundable"
+                                    ? "Full refund minus service fee"
+                                    : "Taxes and fees refundable only"}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Baggage</p>
+                                <p className="text-gray-900">25kg checked + 7kg cabin bag</p>
+                                <p className="text-xs text-[#666] mt-1">Additional baggage chargeable</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Important Terms */}
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                          <div className="flex items-start">
+                            <Info className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
+                            <div>
+                              <h6 className="font-medium text-yellow-800 mb-2">Important Terms</h6>
+                              <ul className="text-sm text-yellow-700 space-y-1">
+                                <li>• All cancellation and change fees are per passenger</li>
+                                <li>• Name changes not allowed after booking</li>
+                                <li>• Infant fares have different rules</li>
+                                <li>• Group bookings may have different terms</li>
+                                <li>• Check-in required 2 hours before departure</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
