@@ -827,7 +827,7 @@ export default function BookingConfirmation() {
                           <li>• Check-in must be completed 2 hours before domestic flight departure</li>
                           <li>• Valid government-issued photo ID required for travel</li>
                           <li>• All fees mentioned are per passenger and inclusive of applicable taxes</li>
-                          <li>��� Cancellation/change requests subject to airline approval</li>
+                          <li>• Cancellation/change requests subject to airline approval</li>
                           <li>• Infant fares (below 2 years) have separate terms and conditions</li>
                           <li>• No-show will result in forfeiture of entire ticket value</li>
                           <li>• Group bookings (9+ passengers) may have different terms</li>
@@ -1316,7 +1316,7 @@ export default function BookingConfirmation() {
           {booking.bargained && (
             <div className="mt-4">
               <Badge className="bg-green-100 text-green-800 px-4 py-2">
-                🎉 You saved ₹
+                You saved ₹
                 {(booking.originalPrice - booking.total).toLocaleString()} with
                 bargaining!
               </Badge>
