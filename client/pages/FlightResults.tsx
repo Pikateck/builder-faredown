@@ -2557,6 +2557,19 @@ export default function FlightResults() {
                           >
                             Book Now
                           </Button>
+                          <Button
+                            onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
+                            variant="outline"
+                            className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 text-xs py-1.5 flex items-center justify-center"
+                          >
+                            <Info className="w-3 h-3 mr-1" />
+                            View Details
+                            <ChevronDown
+                              className={`w-3 h-3 ml-1 transition-transform duration-200 ${
+                                expandedFlightDetails[`${flight.id}-${flight.fareTypes[0].id}`] ? 'rotate-180' : ''
+                              }`}
+                            />
+                          </Button>
                         </div>
                       </div>
                     </div>
