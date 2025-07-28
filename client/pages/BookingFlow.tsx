@@ -1066,9 +1066,16 @@ export default function BookingFlow() {
     },
     {
       id: 4,
-      label: "Payment",
+      label: "Preview",
       icon: "4",
       active: currentStep === 4,
+      completed: currentStep > 4,
+    },
+    {
+      id: 5,
+      label: "Payment",
+      icon: "5",
+      active: currentStep === 5,
       completed: false,
     },
   ];
