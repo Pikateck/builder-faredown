@@ -1141,9 +1141,9 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "ह��न्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "����어", flag: "🇰🇷" },
+                      { code: "ko", name: "한��어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -2684,7 +2684,7 @@ export default function FlightResults() {
                                   }}
                                   className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
                                     currentTab === 'fare-rules'
-                                      ? 'border-[#003580] text-[#003580] bg-blue-50'
+                                      ? 'border-gray-800 text-gray-800 bg-gray-50'
                                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                                   }`}
                                 >
