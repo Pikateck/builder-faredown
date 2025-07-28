@@ -398,7 +398,7 @@ export default function BookingConfirmation() {
           </div>
           <div className="bg-blue-50 p-4 rounded-lg mb-4">
             <p className="text-sm text-blue-700">
-              📧 We'll send your{" "}
+              We'll send your{" "}
               {bookingType === "flight" ? "e-ticket" : "booking voucher"} to
               this email address.
             </p>
@@ -827,7 +827,7 @@ export default function BookingConfirmation() {
                           <li>• Check-in must be completed 2 hours before domestic flight departure</li>
                           <li>• Valid government-issued photo ID required for travel</li>
                           <li>• All fees mentioned are per passenger and inclusive of applicable taxes</li>
-                          <li>• Cancellation/change requests subject to airline approval</li>
+                          <li>��� Cancellation/change requests subject to airline approval</li>
                           <li>• Infant fares (below 2 years) have separate terms and conditions</li>
                           <li>• No-show will result in forfeiture of entire ticket value</li>
                           <li>• Group bookings (9+ passengers) may have different terms</li>
