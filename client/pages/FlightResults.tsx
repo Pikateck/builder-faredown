@@ -803,6 +803,17 @@ export default function FlightResults() {
     {} as Record<string, number>,
   );
 
+  const aircraftTypeCounts = availableAircraftTypes.reduce(
+    (acc, aircraftType) => {
+      const count = flightData.filter(
+        (flight) => flight.aircraft === aircraftType,
+      ).length;
+      acc[aircraftType] = count > 0 ? count : Math.floor(Math.random() * 8) + 1; // Random count for demo aircraft types
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
   // Filter flights based on selected airlines and fare type with sorting and pricing logic
   const filteredFlights = flightData
     .filter((flight) => {
