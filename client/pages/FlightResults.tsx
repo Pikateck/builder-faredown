@@ -215,6 +215,7 @@ const flightData = [
     returnLogo:
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Airbus A321",
+    returnAircraft: "Airbus A321",
     flightType: "1 Stop",
     stops: 1,
     refundability: "Refundable",
