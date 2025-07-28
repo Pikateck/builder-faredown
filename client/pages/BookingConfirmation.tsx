@@ -365,19 +365,7 @@ export default function BookingConfirmation() {
     }
   };
 
-  const handleViewMyTrips = () => {
-    // Save booking to trips and navigate
-    const existingTrips = JSON.parse(localStorage.getItem("myTrips") || "[]");
-    const tripData = {
-      ...booking,
-      bookingType,
-      bookingDate: new Date().toISOString(),
-    };
-
-    const updatedTrips = [tripData, ...existingTrips];
-    localStorage.setItem("myTrips", JSON.stringify(updatedTrips));
-    navigate("/my-trips");
-  };
+  // Removed handleViewMyTrips - now using Account bookings tab
 
   // Email Modal Component
   const EmailModal = () => (
