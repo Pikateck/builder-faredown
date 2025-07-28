@@ -2353,21 +2353,21 @@ export default function FlightResults() {
                       </div>
                     </div>
 
-                    {/* Action Buttons - Mobile Consistent */}
-                    <div className="grid grid-cols-2 gap-2">
+                    {/* Action Buttons - Hotel Section Style Mobile */}
+                    <div className="flex gap-2 mt-3">
                       <Button
-                        size="sm"
-                        className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation py-2 text-xs h-9"
+                        className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm sm:text-base"
                         onClick={() =>
                           handleBargain(flight, flight.fareTypes[0])
                         }
                       >
-                        Bargain
+                        <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                        <span className="hidden sm:inline">Bargain</span>
                       </Button>
                       <Button
                         onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                        size="sm"
-                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-2 text-xs h-9"
+                        variant="outline"
+                        className="flex-1 sm:flex-none touch-manipulation text-sm"
                       >
                         View Details
                       </Button>
