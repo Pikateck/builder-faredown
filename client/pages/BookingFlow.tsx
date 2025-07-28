@@ -2711,7 +2711,7 @@ export default function BookingFlow() {
                                       {traveller.title} {traveller.firstName} {traveller.lastName}
                                     </p>
                                     <p className="text-sm text-[#666]">
-                                      {traveller.type} • {traveller.gender || "Not specified"}
+                                      {traveller.type} ��� {traveller.gender || "Not specified"}
                                     </p>
                                   </div>
                                 </div>
@@ -3416,13 +3416,35 @@ export default function BookingFlow() {
                         }
                       }}
                     >
-                      <SelectTrigger className="flex-1">
-                        <SelectValue placeholder="Select a saved profile" />
+                      <SelectTrigger className="flex-1 bg-white">
+                        <SelectValue placeholder="🔍 Choose from saved travellers..." />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="max-w-lg">
                         {savedProfiles.map((profile) => (
-                          <SelectItem key={profile.id} value={profile.id}>
-                            {profile.profileName}
+                          <SelectItem key={profile.id} value={profile.id} className="p-3">
+                            <div className="flex items-center space-x-3 w-full">
+                              <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                                <User className="w-4 h-4 text-blue-700" />
+                              </div>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900">
+                                  {profile.profileName}
+                                </div>
+                                <div className="text-xs text-gray-600 flex items-center space-x-2">
+                                  <span className="bg-gray-100 px-2 py-0.5 rounded">
+                                    {profile.type || 'Adult'}
+                                  </span>
+                                  <span>•</span>
+                                  <span>{profile.gender}</span>
+                                  {profile.nationality && (
+                                    <>
+                                      <span>•</span>
+                                      <span>{profile.nationality}</span>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
