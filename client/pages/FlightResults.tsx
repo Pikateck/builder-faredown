@@ -2572,10 +2572,11 @@ export default function FlightResults() {
                           </div>
                         </div>
 
-                        {/* Baggage Info */}
+                        {/* Baggage Info with Hover Indicator */}
                         <div className="flex items-center justify-center mb-2">
-                          <div className="relative group">
+                          <div className="relative group flex items-center space-x-1">
                             <Luggage className="w-5 h-5 text-green-600 cursor-help" />
+                            <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
                             {/* Baggage Tooltip */}
                             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
                               <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
@@ -2955,7 +2956,7 @@ export default function FlightResults() {
                                   }}
                                   className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
                                 >
-                                  Book Now • {formatPrice(flight.fareTypes[0]?.price || 0)}
+                                  Book Now �� {formatPrice(flight.fareTypes[0]?.price || 0)}
                                 </Button>
                                   </div>
                                 </div>
