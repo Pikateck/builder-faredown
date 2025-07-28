@@ -1496,7 +1496,7 @@ export default function BookingConfirmation() {
                 <>
                   {/* Flight Travel Details */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                    <div className="p-3 border border-gray-200 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Departure</p>
                       <p className="font-bold">
                         {formatDate(booking.flights?.[0]?.date || booking.departureDate || new Date().toISOString())}
@@ -1505,7 +1505,7 @@ export default function BookingConfirmation() {
                         {booking.flights?.[0]?.departureTime || "10:15"} - {booking.flights?.[0]?.from || "BOM"}
                       </p>
                     </div>
-                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                    <div className="p-3 border border-gray-200 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Arrival</p>
                       <p className="font-bold">
                         {formatDate(booking.flights?.[0]?.arrivalDate || booking.flights?.[0]?.date || new Date().toISOString())}
