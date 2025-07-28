@@ -2885,9 +2885,9 @@ export default function FlightResults() {
                               {currentTab === 'fare-rules' && (
                                 <div className="space-y-6">
                                   <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                    <FileText className="w-5 h-5 mr-2 text-[#003580]" />
-                                    Standard fare (Price per traveller)
-                                  </h4>
+                                  <FileText className="w-5 h-5 mr-2 text-gray-700" />
+                                  Standard fare (Price per traveller)
+                                </h4>
 
                                   {/* Fare Rules Grid */}
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
