@@ -2804,8 +2804,10 @@ export default function BookingFlow() {
                     onClick={handleNextStep}
                     className="bg-[#003580] hover:bg-[#009fe3] text-white px-8 w-full sm:w-auto"
                   >
-                    {currentStep === 4
+                    {currentStep === 5
                       ? `Pay ${formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}`
+                      : currentStep === 4
+                      ? "Proceed to Payment"
                       : "Next"}
                   </Button>
                 </div>
