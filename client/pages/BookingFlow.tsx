@@ -1815,7 +1815,7 @@ export default function BookingFlow() {
                                   5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
-                                  10kg - ��� 2,800
+                                  10kg - ₹ 2,800
                                 </SelectItem>
                                 <SelectItem value="15kg">
                                   15kg - ₹ 4,200
@@ -2433,6 +2433,8 @@ export default function BookingFlow() {
                     travellers={travellers}
                     seatSelections={seatSelections}
                     setSeatSelections={setSeatSelections}
+                    selectedFlight={selectedFlight}
+                    selectedFareType={selectedFareType}
                   />
                 </div>
               )}
