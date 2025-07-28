@@ -130,6 +130,7 @@ const flightData = [
     returnLogo:
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
     aircraft: "Boeing 777",
+    returnAircraft: "Boeing 737-800",
     flightType: "Direct",
     stops: 0,
     refundability: "Refundable",
@@ -1159,7 +1160,7 @@ export default function FlightResults() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "🇬🇧" },
+                      { code: "en", name: "English", flag: "����🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
