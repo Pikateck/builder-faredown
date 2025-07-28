@@ -1220,7 +1220,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮��" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हिन्द��", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨��" },
@@ -2355,9 +2355,8 @@ export default function FlightResults() {
                     {/* Action Buttons - Mobile Consistent */}
                     <div className="grid grid-cols-2 gap-2">
                       <Button
-                        variant="outline"
                         size="sm"
-                        className="bg-white border-2 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white font-semibold py-2 text-xs h-9"
+                        className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation py-2 text-xs h-9"
                         onClick={() =>
                           handleBargain(flight, flight.fareTypes[0])
                         }
