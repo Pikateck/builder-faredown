@@ -1141,7 +1141,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हि���्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -2712,7 +2712,7 @@ export default function FlightResults() {
                                   <div>
                                     {/* Header */}
                                     <div className="flex items-center mb-6">
-                                      <Plane className="w-5 h-5 mr-2 text-[#003580]" />
+                                      <Plane className="w-5 h-5 mr-2 text-gray-700" />
                                       <h4 className="text-lg font-semibold text-gray-900">
                                         Outbound • {departureDate ? formatDisplayDate(departureDate, "eee, MMM d") : "Tue, Jul 29"}
                                       </h4>
