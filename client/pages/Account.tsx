@@ -536,6 +536,83 @@ Please keep this ticket for your records.
           </div>
         </div>
       </Card>
+
+      {/* Saved Traveller Profiles */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Saved Traveller Profiles
+          </h3>
+          <Badge variant="secondary">{savedProfiles.length} profiles</Badge>
+        </div>
+
+        {savedProfiles.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <User className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+            <p>No saved profiles yet</p>
+            <p className="text-sm">Profiles will be saved automatically when you complete bookings</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {savedProfiles.map((profile) => (
+              <div
+                key={profile.id}
+                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h4 className="font-medium text-gray-900">
+                      {profile.profileName}
+                    </h4>
+                    <p className="text-sm text-gray-600">
+                      {profile.type || 'Adult'} • {profile.gender}
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowDeleteConfirm(profile.id)}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                <div className="space-y-2 text-sm">
+                  {profile.dateOfBirth && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Date of Birth:</span>
+                      <span>{new Date(profile.dateOfBirth).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {profile.nationality && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Nationality:</span>
+                      <span>{profile.nationality}</span>
+                    </div>
+                  )}
+                  {profile.passportNumber && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Passport:</span>
+                      <span>***{profile.passportNumber.slice(-4)}</span>
+                    </div>
+                  )}
+                  {profile.mealPreference && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Meal Pref:</span>
+                      <span>{profile.mealPreference}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-3 text-xs text-gray-500">
+                  Saved: {new Date(profile.savedAt).toLocaleDateString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
     </div>
   );
 
