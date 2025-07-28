@@ -523,6 +523,7 @@ export default function FlightResults() {
   ]);
   const [maxDuration, setMaxDuration] = useState<number>(24);
   const [hoveredAirline, setHoveredAirline] = useState<string | null>(null);
+  const [hoveredAircraftType, setHoveredAircraftType] = useState<string | null>(null);
 
   // Exchange rates relative to INR (base currency)
   const exchangeRates = {
