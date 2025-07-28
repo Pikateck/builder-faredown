@@ -2493,84 +2493,84 @@ export default function FlightResults() {
 
                       </div>
 
-                      {/* Right Side - Pricing */}
+                      {/* Right Side - Pricing - Compact Layout */}
                       <div className="text-center ml-8">
-                        <div className="mb-2">
+                        {/* Fare Type and Price in one line */}
+                        <div className="mb-1">
                           <span className="text-sm font-medium text-gray-900">
                             {flight.fareTypes[0].name}
                           </span>
-                        </div>
-                        <div className="flex items-center justify-center space-x-1 mb-3">
-                          <Luggage className="w-4 h-4 text-green-600" />
-                          <Shield className="w-4 h-4 text-green-600" />
-                        </div>
-                        <div className="relative">
-                          <div className="flex items-center justify-center space-x-2 mb-1">
-                            <div className="text-xl font-bold text-gray-900">
-                              {formatPrice(flight.fareTypes[0].price)}
-                            </div>
-                            <button
-                              onClick={() =>
-                                setExpandedTicketOptions(
-                                  expandedTicketOptions ===
-                                    `tooltip-${flight.id}`
-                                    ? null
-                                    : `tooltip-${flight.id}`,
-                                )
-                              }
-                              className="text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                              <Info className="w-4 h-4" />
-                            </button>
+                          <div className="text-xl font-bold text-gray-900 mt-1">
+                            {formatPrice(flight.fareTypes[0].price)}
                           </div>
-                          {/* Fare Breakdown Tooltip */}
-                          {expandedTicketOptions === `tooltip-${flight.id}` && (
-                            <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 z-50">
-                              <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
-                                <div className="text-center font-medium mb-2">
-                                  Fare breakdown
-                                </div>
-                                <div className="space-y-1">
-                                  <div className="flex justify-between">
-                                    <span>Base fare:</span>
-                                    <span>
-                                      {formatPrice(
-                                        Math.round(
-                                          flight.fareTypes[0].price * 0.75,
-                                        ),
-                                      )}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between">
-                                    <span>Taxes & fees:</span>
-                                    <span>
-                                      {formatPrice(
-                                        Math.round(
-                                          flight.fareTypes[0].price * 0.25,
-                                        ),
-                                      )}
-                                    </span>
-                                  </div>
-                                  <div className="border-t border-gray-600 pt-1 mt-1">
-                                    <div className="flex justify-between font-medium">
-                                      <span>Total:</span>
-                                      <span>
-                                        {formatPrice(flight.fareTypes[0].price)}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                {/* Tooltip arrow */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                        </div>
+
+                        {/* Compact info row */}
+                        <div className="flex items-center justify-center space-x-2 mb-2">
+                          <Luggage className="w-3 h-3 text-green-600" />
+                          <Shield className="w-3 h-3 text-green-600" />
+                          <button
+                            onClick={() =>
+                              setExpandedTicketOptions(
+                                expandedTicketOptions ===
+                                  `tooltip-${flight.id}`
+                                  ? null
+                                  : `tooltip-${flight.id}`,
+                              )
+                            }
+                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                          >
+                            <Info className="w-3 h-3" />
+                          </button>
+                        </div>
+
+                        {/* Fare Breakdown Tooltip */}
+                        {expandedTicketOptions === `tooltip-${flight.id}` && (
+                          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 z-50">
+                            <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
+                              <div className="text-center font-medium mb-2">
+                                Fare breakdown
                               </div>
+                              <div className="space-y-1">
+                                <div className="flex justify-between">
+                                  <span>Base fare:</span>
+                                  <span>
+                                    {formatPrice(
+                                      Math.round(
+                                        flight.fareTypes[0].price * 0.75,
+                                      ),
+                                    )}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Taxes & fees:</span>
+                                  <span>
+                                    {formatPrice(
+                                      Math.round(
+                                        flight.fareTypes[0].price * 0.25,
+                                      ),
+                                    )}
+                                  </span>
+                                </div>
+                                <div className="border-t border-gray-600 pt-1 mt-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>Total:</span>
+                                    <span>
+                                      {formatPrice(flight.fareTypes[0].price)}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              {/* Tooltip arrow */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                             </div>
-                          )}
-                        </div>
-                        <div className="text-xs text-gray-600 mb-1">
-                          All-inclusive price
-                        </div>
+                          </div>
+                        )}
+
+                        {/* Compact text info */}
+                        <div className="text-xs text-gray-600 mb-1">All-inclusive price</div>
                         <div
-                          className={`text-xs mb-4 font-medium ${
+                          className={`text-xs mb-2 font-medium ${
                             flight.fareTypes[0].refundability === "Refundable"
                               ? "text-green-600"
                               : "text-red-600"
@@ -2578,19 +2578,23 @@ export default function FlightResults() {
                         >
                           {flight.fareTypes[0].refundability}
                         </div>
-                        <div className="space-y-2 w-32">
+
+                        {/* Side-by-side buttons - Compact */}
+                        <div className="flex gap-2 w-40">
                           <Button
                             onClick={() =>
                               handleBargain(flight, flight.fareTypes[0])
                             }
                             variant="outline"
-                            className="w-full border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white"
+                            size="sm"
+                            className="flex-1 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white text-xs py-1 h-8"
                           >
                             Bargain
                           </Button>
                           <Button
                             onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                            className="w-full bg-[#003580] hover:bg-[#0071c2] text-white font-semibold"
+                            size="sm"
+                            className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-xs py-1 h-8"
                           >
                             View Details
                           </Button>
