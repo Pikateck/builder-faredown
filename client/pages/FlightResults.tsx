@@ -2352,20 +2352,22 @@ export default function FlightResults() {
                       </div>
                     </div>
 
-                    {/* Action Buttons - Mobile */}
-                    <div className="grid grid-cols-2 gap-3">
+                    {/* Action Buttons - Mobile Compact */}
+                    <div className="grid grid-cols-2 gap-2">
                       <Button
                         variant="outline"
-                        className="bg-white border-2 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white font-semibold py-3 text-sm"
+                        size="sm"
+                        className="bg-white border-2 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white font-semibold py-2 text-xs h-8"
                         onClick={() =>
                           handleBargain(flight, flight.fareTypes[0])
                         }
                       >
-                        🤝 Bargain
+                        Bargain
                       </Button>
                       <Button
                         onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 text-sm"
+                        size="sm"
+                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-2 text-xs h-8"
                       >
                         View Details
                       </Button>
