@@ -1517,8 +1517,8 @@ export default function BookingConfirmation() {
                   </div>
                   {booking.flights?.[1] && (
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-blue-50 p-3 rounded-lg text-center">
-                        <p className="text-sm text-blue-600">Return Departure</p>
+                      <div className="p-3 border border-gray-200 rounded-lg text-center">
+                        <p className="text-sm text-gray-600">Return Departure</p>
                         <p className="font-bold">
                           {formatDate(booking.flights[1].date || new Date().toISOString())}
                         </p>
@@ -1526,8 +1526,8 @@ export default function BookingConfirmation() {
                           {booking.flights[1].departureTime || "14:00"} - {booking.flights[1].from || "DXB"}
                         </p>
                       </div>
-                      <div className="bg-blue-50 p-3 rounded-lg text-center">
-                        <p className="text-sm text-blue-600">Return Arrival</p>
+                      <div className="p-3 border border-gray-200 rounded-lg text-center">
+                        <p className="text-sm text-gray-600">Return Arrival</p>
                         <p className="font-bold">
                           {formatDate(booking.flights[1].arrivalDate || booking.flights[1].date || new Date().toISOString())}
                         </p>
