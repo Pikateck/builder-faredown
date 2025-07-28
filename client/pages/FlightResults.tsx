@@ -2587,9 +2587,8 @@ export default function FlightResults() {
                             onClick={() =>
                               handleBargain(flight, flight.fareTypes[0])
                             }
-                            variant="outline"
                             size="sm"
-                            className="flex-1 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white font-semibold text-xs py-2 h-9"
+                            className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-xs py-2 h-9"
                           >
                             Bargain
                           </Button>
