@@ -607,6 +607,16 @@ export default function FlightResults() {
     setSelectedAirlines(new Set(availableAirlines));
   };
 
+  // Function to handle "Only this aircraft type" selection
+  const handleOnlyThisAircraftType = (aircraftType: string) => {
+    setSelectedAircraftTypes(new Set([aircraftType]));
+  };
+
+  // Function to reset aircraft type selection (select all)
+  const resetAircraftTypeSelection = () => {
+    setSelectedAircraftTypes(new Set(availableAircraftTypes));
+  };
+
   // Additional helper functions
   const handleStopsFilter = (stops: string) => {
     setSelectedStops(stops);
