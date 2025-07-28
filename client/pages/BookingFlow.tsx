@@ -2464,54 +2464,279 @@ export default function BookingFlow() {
                   <h2 className="text-xl font-bold text-gray-900 mb-2">
                     Review Your Booking
                   </h2>
-                  <p className="text-gray-600 mb-6">
-                    Please review all details carefully before proceeding to payment.
+                  <p className="text-[#666] text-sm mb-6">
+                    Please review all details carefully before proceeding to payment
                   </p>
 
-                  {/* Warning Box */}
-                  <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="ml-3">
-                        <h3 className="text-sm font-medium text-red-800">
-                          Important Notice
-                        </h3>
-                        <p className="mt-2 text-sm text-red-700">
-                          <strong>Once names are entered and confirmed, they cannot be changed.</strong>
-                          Please verify all passenger names match exactly with government-issued ID documents.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Booking Summary */}
                   <div className="space-y-6">
-                    {/* Flight Details */}
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <h3 className="font-semibold text-gray-900 mb-3">Flight Details</h3>
-                      <div className="space-y-2">
-                        <p><strong>Airline:</strong> {selectedFlight?.airline || "Airlines"}</p>
-                        <p><strong>Route:</strong> {formatDisplayDate(departureDate, "MMM d, yyyy")} • Mumbai → Dubai</p>
-                        {tripType === "round-trip" && returnDate && (
-                          <p><strong>Return:</strong> {formatDisplayDate(returnDate, "MMM d, yyyy")} • Dubai → Mumbai</p>
-                        )}
-                        <p><strong>Passengers:</strong> {travellers.length} traveller(s)</p>
+                    {/* Important Notice */}
+                    <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <AlertTriangle className="w-5 h-5 text-red-400" />
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-red-700 font-medium">
+                            Important Notice
+                          </p>
+                          <p className="mt-2 text-sm text-red-700">
+                            <strong>Once names are entered and confirmed, they cannot be changed.</strong> Please ensure all passenger names exactly match their government-issued photo ID documents.
+                          </p>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Passenger Details */}
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <h3 className="font-semibold text-gray-900 mb-3">Passenger Details</h3>
-                      <div className="space-y-2">
+                    {/* Comprehensive Flight Details */}
+                    <div className="bg-white border border-[#f2f6fa] rounded-lg p-4 md:p-6">
+                      <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+                        <Plane className="w-5 h-5 mr-2 text-[#003580]" />
+                        Flight Details
+                      </h3>
+
+                      {/* Outbound Flight */}
+                      <div className="mb-6">
+                        <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                          <div className="flex items-center justify-between mb-3">
+                            <h4 className="font-medium text-gray-900 text-lg">Outbound Flight</h4>
+                            <span className="text-sm px-2 py-1 bg-[#003580] text-white rounded">
+                              {selectedFlight?.airline || "Airlines"}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-3">
+                              <div className="flex items-center">
+                                <div className="w-2 h-2 bg-[#009fe3] rounded-full mr-3"></div>
+                                <div>
+                                  <p className="text-sm text-[#666]">Flight Number</p>
+                                  <p className="font-medium">{selectedFlight?.flightNumber || "FL 507"}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center">
+                                <MapPin className="w-4 h-4 text-[#666] mr-3" />
+                                <div>
+                                  <p className="text-sm text-[#666]">Route</p>
+                                  <p className="font-medium">{selectedFlight?.from || "Mumbai"} → {selectedFlight?.to || "Dubai"}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center">
+                                <Clock className="w-4 h-4 text-[#666] mr-3" />
+                                <div>
+                                  <p className="text-sm text-[#666]">Duration</p>
+                                  <p className="font-medium">{selectedFlight?.duration || "3h 15m"}</p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="space-y-3">
+                              <div>
+                                <p className="text-sm text-[#666]">Departure</p>
+                                <p className="font-medium">{selectedFlight?.departureTime || "14:35"}</p>
+                                <p className="text-xs text-[#666]">{departureDate ? formatDisplayDate(departureDate, "eee, MMM d, yyyy") : "Select date"}</p>
+                              </div>
+
+                              <div>
+                                <p className="text-sm text-[#666]">Arrival</p>
+                                <p className="font-medium">{selectedFlight?.arrivalTime || "17:50"}</p>
+                                <p className="text-xs text-[#666]">Terminal {selectedFlight?.arrivalTerminal || "3"}</p>
+                              </div>
+
+                              <div>
+                                <p className="text-sm text-[#666]">Aircraft</p>
+                                <p className="font-medium">{selectedFlight?.aircraft || "Boeing 777-300ER"}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Return Flight (if round trip) */}
+                      {tripType === "round-trip" && returnDate && (
+                        <div className="mb-4">
+                          <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-medium text-gray-900 text-lg">Return Flight</h4>
+                              <span className="text-sm px-2 py-1 bg-[#003580] text-white rounded">
+                                {selectedFlight?.airline || "Airlines"}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-3">
+                                <div className="flex items-center">
+                                  <div className="w-2 h-2 bg-[#009fe3] rounded-full mr-3"></div>
+                                  <div>
+                                    <p className="text-sm text-[#666]">Flight Number</p>
+                                    <p className="font-medium">{selectedFlight?.returnFlightNumber || "FL 508"}</p>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center">
+                                  <MapPin className="w-4 h-4 text-[#666] mr-3" />
+                                  <div>
+                                    <p className="text-sm text-[#666]">Route</p>
+                                    <p className="font-medium">{selectedFlight?.to || "Dubai"} → {selectedFlight?.from || "Mumbai"}</p>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center">
+                                  <Clock className="w-4 h-4 text-[#666] mr-3" />
+                                  <div>
+                                    <p className="text-sm text-[#666]">Duration</p>
+                                    <p className="font-medium">{selectedFlight?.returnDuration || "3h 20m"}</p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="space-y-3">
+                                <div>
+                                  <p className="text-sm text-[#666]">Departure</p>
+                                  <p className="font-medium">{selectedFlight?.returnDepartureTime || "08:45"}</p>
+                                  <p className="text-xs text-[#666]">{formatDisplayDate(returnDate, "eee, MMM d, yyyy")}</p>
+                                </div>
+
+                                <div>
+                                  <p className="text-sm text-[#666]">Arrival</p>
+                                  <p className="font-medium">{selectedFlight?.returnArrivalTime || "14:05"}</p>
+                                  <p className="text-xs text-[#666]">Terminal {selectedFlight?.returnArrivalTerminal || "2"}</p>
+                                </div>
+
+                                <div>
+                                  <p className="text-sm text-[#666]">Aircraft</p>
+                                  <p className="font-medium">{selectedFlight?.returnAircraft || "Boeing 777-300ER"}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Passenger Details with Edit Options */}
+                    <div className="bg-white border border-[#f2f6fa] rounded-lg p-4 md:p-6">
+                      <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+                        <User className="w-5 h-5 mr-2 text-[#003580]" />
+                        Passenger Details
+                      </h3>
+                      <div className="space-y-4">
                         {travellers.map((traveller, index) => (
-                          <p key={index}>
-                            <strong>{traveller.type}:</strong> {traveller.firstName} {traveller.lastName}
-                          </p>
+                          <div key={index} className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
+                                    <span className="text-white text-sm font-bold">{index + 1}</span>
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-gray-900">
+                                      {traveller.title} {traveller.firstName} {traveller.lastName}
+                                    </p>
+                                    <p className="text-sm text-[#666]">
+                                      {traveller.type} • {traveller.gender || "Not specified"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedTraveller(traveller.id);
+                                  setShowTravellerDetails(true);
+                                }}
+                                className="flex items-center text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white transition-colors"
+                              >
+                                <Edit3 className="w-4 h-4 mr-1" />
+                                Edit
+                              </Button>
+                            </div>
+                          </div>
                         ))}
+                      </div>
+                    </div>
+
+                    {/* Mini Fare Rules Section */}
+                    <div className="bg-white border border-[#f2f6fa] rounded-lg p-4 md:p-6">
+                      <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+                        <FileText className="w-5 h-5 mr-2 text-[#003580]" />
+                        Fare Rules & Important Information
+                      </h3>
+
+                      <div className="space-y-4">
+                        {/* Outbound Flight Fare Rules */}
+                        <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                          <h4 className="font-medium text-gray-900 mb-3">Outbound: {selectedFlight?.from || "Mumbai"} → {selectedFlight?.to || "Dubai"}</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Cancellation</p>
+                              <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
+                              <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Date Change</p>
+                              <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
+                              <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Refundability</p>
+                              <p className="text-gray-900">Partially refundable</p>
+                              <p className="text-xs text-[#666] mt-1">Taxes and fees refundable</p>
+                            </div>
+                            <div>
+                              <p className="font-medium text-[#666] mb-1">Baggage</p>
+                              <p className="text-gray-900">25kg checked + 7kg cabin bag</p>
+                              <p className="text-xs text-[#666] mt-1">Additional baggage chargeable</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Return Flight Fare Rules (if applicable) */}
+                        {tripType === "round-trip" && returnDate && (
+                          <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
+                            <h4 className="font-medium text-gray-900 mb-3">Return: {selectedFlight?.to || "Dubai"} → {selectedFlight?.from || "Mumbai"}</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Cancellation</p>
+                                <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
+                                <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Date Change</p>
+                                <p className="text-gray-900">Allowed with fee: ₹2,500 per passenger</p>
+                                <p className="text-xs text-[#666] mt-1">Subject to fare difference</p>
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Refundability</p>
+                                <p className="text-gray-900">Partially refundable</p>
+                                <p className="text-xs text-[#666] mt-1">Taxes and fees refundable</p>
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#666] mb-1">Baggage</p>
+                                <p className="text-gray-900">25kg checked + 7kg cabin bag</p>
+                                <p className="text-xs text-[#666] mt-1">Additional baggage chargeable</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Important Information */}
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                          <div className="flex items-start">
+                            <Info className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
+                            <div>
+                              <h5 className="font-medium text-yellow-800 mb-2">Important Information</h5>
+                              <ul className="text-sm text-yellow-700 space-y-1">
+                                <li>• Check-in opens 2 hours before departure</li>
+                                <li>• Carry valid government-issued photo ID</li>
+                                <li>• Arrive at airport 2 hours before domestic flights</li>
+                                <li>• Name changes not allowed after booking confirmation</li>
+                                <li>• Seat selection included for standard economy seats</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -2519,35 +2744,50 @@ export default function BookingFlow() {
                     {(Object.keys(seatSelections).some(flight => Object.keys(seatSelections[flight]).length > 0) ||
                       selectedMealIds.length > 0 ||
                       selectedBaggage.outbound.weight || selectedBaggage.return.weight) && (
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <h3 className="font-semibold text-gray-900 mb-3">Selected Extras</h3>
-                        <div className="space-y-2">
+                      <div className="bg-white border border-[#f2f6fa] rounded-lg p-4 md:p-6">
+                        <h3 className="font-semibold text-gray-900 mb-4">Selected Extras</h3>
+                        <div className="space-y-3">
                           {Object.keys(seatSelections).map(flight =>
                             Object.keys(seatSelections[flight]).length > 0 && (
-                              <p key={flight}>
-                                <strong>Seats ({flight}):</strong> {Object.keys(seatSelections[flight]).join(", ")}
-                              </p>
+                              <div key={flight} className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]">
+                                <p className="font-medium text-gray-900">Seats ({flight}):</p>
+                                <p className="text-sm text-[#666]">{Object.keys(seatSelections[flight]).join(", ")}</p>
+                              </div>
                             )
                           )}
                           {selectedMealIds.length > 0 && (
-                            <p><strong>Meals:</strong> {selectedMealIds.length} meal(s) selected</p>
+                            <div className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]">
+                              <p className="font-medium text-gray-900">Meals:</p>
+                              <p className="text-sm text-[#666]">{selectedMealIds.length} meal(s) selected</p>
+                            </div>
                           )}
                           {(selectedBaggage.outbound.weight || selectedBaggage.return.weight) && (
-                            <p><strong>Extra Baggage:</strong>
-                              {selectedBaggage.outbound.weight && ` ${selectedBaggage.outbound.weight} (Outbound)`}
-                              {selectedBaggage.return.weight && ` ${selectedBaggage.return.weight} (Return)`}
-                            </p>
+                            <div className="bg-[#f8fafc] rounded-lg p-3 border border-[#e2e8f0]">
+                              <p className="font-medium text-gray-900">Extra Baggage:</p>
+                              <p className="text-sm text-[#666]">
+                                {selectedBaggage.outbound.weight && ` ${selectedBaggage.outbound.weight} (Outbound)`}
+                                {selectedBaggage.return.weight && ` ${selectedBaggage.return.weight} (Return)`}
+                              </p>
+                            </div>
                           )}
                         </div>
                       </div>
                     )}
 
-                    {/* Total Price */}
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <h3 className="font-semibold text-gray-900 mb-2">Total Amount</h3>
-                      <p className="text-2xl font-bold text-blue-600">
-                        {formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}
-                      </p>
+                    {/* Total Price with Words */}
+                    <div className="bg-[#003580] text-white rounded-lg p-6">
+                      <h3 className="font-semibold mb-4 text-lg">Total Amount</h3>
+                      <div className="space-y-2">
+                        <p className="text-3xl font-bold">
+                          {formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}
+                        </p>
+                        <p className="text-sm text-blue-100 capitalize">
+                          {formatPriceInWords(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())} only
+                        </p>
+                        <p className="text-xs text-blue-200 mt-3">
+                          ✓ All taxes and fees included • No hidden charges
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
