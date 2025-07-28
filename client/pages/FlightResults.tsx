@@ -2797,7 +2797,7 @@ export default function FlightResults() {
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
                                           <div>
                                             <p className="text-gray-500 mb-1">Aircraft</p>
-                                            <p className="font-medium text-gray-900">A21H</p>
+                                            <p className="font-medium text-gray-900">{flight.returnAircraft || flight.aircraft}</p>
                                           </div>
                                           <div>
                                             <p className="text-gray-500 mb-1">Layover</p>
