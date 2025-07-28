@@ -2711,7 +2711,7 @@ export default function BookingFlow() {
                                       {traveller.title} {traveller.firstName} {traveller.lastName}
                                     </p>
                                     <p className="text-sm text-[#666]">
-                                      {traveller.type} ��� {traveller.gender || "Not specified"}
+                                      {traveller.type} • {traveller.gender || "Not specified"}
                                     </p>
                                   </div>
                                 </div>
@@ -3400,12 +3400,18 @@ export default function BookingFlow() {
 
           {selectedTraveller && (
             <div className="space-y-4">
-              {/* Profile Selector */}
+              {/* Enhanced Profile Selector */}
               {savedProfiles.length > 0 && (
-                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                  <label className="block text-sm font-medium text-blue-800 mb-2">
-                    Load from Saved Profile
-                  </label>
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
+                  <div className="flex items-center mb-2">
+                    <User className="w-5 h-5 text-blue-600 mr-2" />
+                    <label className="block text-sm font-semibold text-blue-900">
+                      Quick Fill from Saved Profile
+                    </label>
+                  </div>
+                  <p className="text-xs text-blue-700 mb-3">
+                    Select a previously saved traveller to auto-fill all details
+                  </p>
                   <div className="flex space-x-2">
                     <Select
                       value={selectedProfileId}
