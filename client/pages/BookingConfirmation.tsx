@@ -1489,36 +1489,99 @@ export default function BookingConfirmation() {
               </h2>
             </div>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <p className="text-sm text-gray-600">Check-in</p>
-                  <p className="font-bold">
-                    {" "}
-                    {formatDate(booking.checkIn || new Date().toISOString())}
-                  </p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <p className="text-sm text-gray-600">Check-out</p>
-                  <p className="font-bold">
-                    {" "}
-                    {formatDate(booking.checkOut || new Date().toISOString())}
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-3 text-center">
-                <div>
-                  <p className="text-lg font-bold">{booking.nights || 1}</p>
-                  <p className="text-xs text-gray-600">nights</p>
-                </div>
-                <div>
-                  <p className="text-lg font-bold">{booking.guests || 1}</p>
-                  <p className="text-xs text-gray-600">guests</p>
-                </div>
-                <div>
-                  <p className="text-lg font-bold">{booking.rooms || 1}</p>
-                  <p className="text-xs text-gray-600">room</p>
-                </div>
-              </div>
+              {bookingType === "flight" ? (
+                <>
+                  {/* Flight Travel Details */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <p className="text-sm text-gray-600">Departure</p>
+                      <p className="font-bold">
+                        {formatDate(booking.flights?.[0]?.date || booking.departureDate || new Date().toISOString())}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {booking.flights?.[0]?.departureTime || "10:15"} - {booking.flights?.[0]?.from || "BOM"}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <p className="text-sm text-gray-600">Arrival</p>
+                      <p className="font-bold">
+                        {formatDate(booking.flights?.[0]?.arrivalDate || booking.flights?.[0]?.date || new Date().toISOString())}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {booking.flights?.[0]?.arrivalTime || "12:30"} - {booking.flights?.[0]?.to || "DXB"}
+                      </p>
+                    </div>
+                  </div>
+                  {booking.flights?.[1] && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-blue-50 p-3 rounded-lg text-center">
+                        <p className="text-sm text-blue-600">Return Departure</p>
+                        <p className="font-bold">
+                          {formatDate(booking.flights[1].date || new Date().toISOString())}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {booking.flights[1].departureTime || "14:00"} - {booking.flights[1].from || "DXB"}
+                        </p>
+                      </div>
+                      <div className="bg-blue-50 p-3 rounded-lg text-center">
+                        <p className="text-sm text-blue-600">Return Arrival</p>
+                        <p className="font-bold">
+                          {formatDate(booking.flights[1].arrivalDate || booking.flights[1].date || new Date().toISOString())}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {booking.flights[1].arrivalTime || "19:30"} - {booking.flights[1].to || "BOM"}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <p className="text-lg font-bold">{booking.passengers?.adults || booking.adults || 1}</p>
+                      <p className="text-xs text-gray-600">adults</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">{booking.passengers?.children || booking.children || 0}</p>
+                      <p className="text-xs text-gray-600">children</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">{booking.flightClass || "Economy"}</p>
+                      <p className="text-xs text-gray-600">class</p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Hotel Travel Details */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <p className="text-sm text-gray-600">Check-in</p>
+                      <p className="font-bold">
+                        {formatDate(booking.checkIn || new Date().toISOString())}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <p className="text-sm text-gray-600">Check-out</p>
+                      <p className="font-bold">
+                        {formatDate(booking.checkOut || new Date().toISOString())}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <p className="text-lg font-bold">{booking.nights || 1}</p>
+                      <p className="text-xs text-gray-600">nights</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">{booking.guests || 1}</p>
+                      <p className="text-xs text-gray-600">guests</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">{booking.rooms || 1}</p>
+                      <p className="text-xs text-gray-600">room</p>
+                    </div>
+                  </div>
+                </>
+              )}
               <div className="bg-blue-50 p-3 rounded-lg">
                 <div className="flex items-center mb-2">
                   <CreditCard className="w-4 h-4 text-blue-700 mr-2" />
