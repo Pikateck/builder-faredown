@@ -1854,7 +1854,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-4 h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className={`w-4 h-4 ${selectedStops === option.value ? "bg-[#febb02]" : "bg-white border border-gray-400"}`}
                         />
                       </div>
                       {option.label}
