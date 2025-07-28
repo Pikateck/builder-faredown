@@ -1458,10 +1458,23 @@ export default function BookingConfirmation() {
             Important Information
           </h3>
           <ul className="text-blue-700 space-y-2 text-sm">
-            <li>• Please carry a valid photo ID for check-in verification</li>
-            <li>• Check-in time: 3:00 PM | Check-out time: 12:00 PM</li>
-            <li>��� Contact the hotel directly for any special requests</li>
-            <li>• Present your booking confirmation at the reception</li>
+            {bookingType === "flight" ? (
+              <>
+                <li>• Please carry a valid government-issued photo ID for check-in</li>
+                <li>• Arrive at airport 2 hours before domestic flights, 3 hours before international flights</li>
+                <li>• Check-in opens 48 hours before departure for most airlines</li>
+                <li>• Baggage restrictions apply as per airline policy</li>
+                <li>• Contact airline directly for seat preferences and special assistance</li>
+                <li>• Present your e-ticket and booking confirmation at the airport</li>
+              </>
+            ) : (
+              <>
+                <li>• Please carry a valid photo ID for check-in verification</li>
+                <li>• Check-in time: 3:00 PM | Check-out time: 12:00 PM</li>
+                <li>• Contact the hotel directly for any special requests</li>
+                <li>• Present your booking confirmation at the reception</li>
+              </>
+            )}
           </ul>
         </div>
 
