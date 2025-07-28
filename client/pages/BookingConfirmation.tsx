@@ -1737,7 +1737,7 @@ export default function BookingConfirmation() {
               <>
                 <li>• Please carry a valid government-issued photo ID for check-in</li>
                 <li>• Arrive at airport 2 hours before domestic flights, 3 hours before international flights</li>
-                <li>�� Check-in opens 48 hours before departure for most airlines</li>
+                <li>• Check-in opens 48 hours before departure for most airlines</li>
                 <li>• Baggage restrictions apply as per airline policy</li>
                 <li>• Contact airline directly for seat preferences and special assistance</li>
                 <li>• Present your e-ticket and booking confirmation at the airport</li>
