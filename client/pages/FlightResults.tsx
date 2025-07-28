@@ -1874,7 +1874,7 @@ export default function FlightResults() {
                   </div>
                   <button
                     onClick={resetAirlineSelection}
-                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                    className="text-xs text-orange-600 hover:text-orange-800 font-medium"
                   >
                     Reset
                   </button>
