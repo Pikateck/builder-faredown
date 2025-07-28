@@ -1609,31 +1609,78 @@ export default function BookingConfirmation() {
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">
-                Primary Guest
+                {bookingType === "flight" ? "Primary Passenger" : "Primary Guest"}
               </h3>
               <div className="space-y-1 text-sm">
                 <p>
                   <span className="text-gray-600">Name:</span>{" "}
-                  {booking.guest?.firstName || "Guest"}{" "}
-                  {booking.guest?.lastName || "Name"}
+                  {bookingType === "flight"
+                    ? (booking.passengers?.[0]?.firstName || booking.contactDetails?.firstName || booking.guest?.firstName || "John")
+                    : (booking.guest?.firstName || "Guest")}{" "}
+                  {bookingType === "flight"
+                    ? (booking.passengers?.[0]?.lastName || booking.contactDetails?.lastName || booking.guest?.lastName || "Doe")
+                    : (booking.guest?.lastName || "Name")}
                 </p>
                 <p>
                   <span className="text-gray-600">Email:</span>{" "}
-                  {booking.guest?.email || "email@example.com"}
+                  {bookingType === "flight"
+                    ? (booking.contactDetails?.email || booking.guest?.email || "john.doe@example.com")
+                    : (booking.guest?.email || "email@example.com")}
                 </p>
                 <p>
                   <span className="text-gray-600">Phone:</span>{" "}
-                  {booking.guest?.phone || "Phone Number"}
+                  {bookingType === "flight"
+                    ? (booking.contactDetails?.phone || booking.guest?.phone || "+91 9876543210")
+                    : (booking.guest?.phone || "Phone Number")}
                 </p>
+                {bookingType === "flight" && booking.passengers && booking.passengers.length > 1 && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="font-medium text-gray-700 mb-2">Additional Passengers:</p>
+                    {booking.passengers.slice(1).map((passenger, index) => (
+                      <p key={index} className="text-sm text-gray-600">
+                        {passenger.firstName} {passenger.lastName}
+                        {passenger.age && ` (Age: ${passenger.age})`}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">
-                Special Requests
+                {bookingType === "flight" ? "Flight Information" : "Special Requests"}
               </h3>
-              <p className="text-sm text-gray-600">
-                {booking.specialRequests || "None"}
-              </p>
+              {bookingType === "flight" ? (
+                <div className="space-y-2 text-sm">
+                  <p>
+                    <span className="text-gray-600">Airline:</span>{" "}
+                    {booking.flights?.[0]?.airline || "Indigo"}
+                  </p>
+                  <p>
+                    <span className="text-gray-600">Flight Number:</span>{" "}
+                    {booking.flights?.[0]?.flightNumber || "6E 1406"}
+                  </p>
+                  <p>
+                    <span className="text-gray-600">Aircraft:</span>{" "}
+                    {booking.flights?.[0]?.aircraft || "Airbus A321"}
+                  </p>
+                  <p>
+                    <span className="text-gray-600">Route:</span>{" "}
+                    {booking.flights?.[0]?.from || "BOM"} → {booking.flights?.[0]?.to || "DXB"}
+                  </p>
+                  {booking.flights?.[1] && (
+                    <p>
+                      <span className="text-gray-600">Return:</span>{" "}
+                      {booking.flights[1].flightNumber || "6E 1408"} |
+                      {booking.flights[1].from || "DXB"} → {booking.flights[1].to || "BOM"}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600">
+                  {booking.specialRequests || "None"}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -1687,7 +1734,7 @@ export default function BookingConfirmation() {
               <>
                 <li>• Please carry a valid government-issued photo ID for check-in</li>
                 <li>• Arrive at airport 2 hours before domestic flights, 3 hours before international flights</li>
-                <li>• Check-in opens 48 hours before departure for most airlines</li>
+                <li>�� Check-in opens 48 hours before departure for most airlines</li>
                 <li>• Baggage restrictions apply as per airline policy</li>
                 <li>• Contact airline directly for seat preferences and special assistance</li>
                 <li>• Present your e-ticket and booking confirmation at the airport</li>
