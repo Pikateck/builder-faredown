@@ -2526,37 +2526,34 @@ export default function FlightResults() {
                         {/* Fare Breakdown Tooltip - Positioned next to price */}
                         {expandedTicketOptions === `tooltip-${flight.id}` && (
                           <div className="absolute right-0 top-full mt-2 z-50">
-                            <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
-                              <div className="text-center font-medium mb-2">
-                                Fare breakdown
+                            <div className="bg-gray-900 text-white text-sm rounded-lg p-4 shadow-lg min-w-[220px]">
+                              <div className="text-center font-semibold mb-3 text-white">
+                                Fare Breakdown
                               </div>
-                              <div className="space-y-1">
-                                <div className="flex justify-between">
-                                  <span>Base fare:</span>
-                                  <span>
-                                    {formatPrice(
-                                      Math.round(
-                                        flight.fareTypes[0].price * 0.75,
-                                      ),
-                                    )}
+                              <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-gray-300">Base fare:</span>
+                                  <span className="font-medium text-white">
+                                    {formatPrice(Math.round(flight.fareTypes[0].price * 0.75))}
                                   </span>
                                 </div>
-                                <div className="flex justify-between">
-                                  <span>Taxes & fees:</span>
-                                  <span>
-                                    {formatPrice(
-                                      Math.round(
-                                        flight.fareTypes[0].price * 0.25,
-                                      ),
-                                    )}
+                                <div className="flex justify-between items-center">
+                                  <span className="text-gray-300">Taxes & fees:</span>
+                                  <span className="font-medium text-white">
+                                    {formatPrice(Math.round(flight.fareTypes[0].price * 0.25))}
                                   </span>
                                 </div>
-                                <div className="border-t border-gray-600 pt-1 mt-1">
-                                  <div className="flex justify-between font-medium">
-                                    <span>Total:</span>
-                                    <span>
+                                <div className="border-t border-gray-600 pt-2 mt-2">
+                                  <div className="flex justify-between items-center">
+                                    <span className="font-semibold text-white">Total:</span>
+                                    <span className="font-bold text-lg text-white">
                                       {formatPrice(flight.fareTypes[0].price)}
                                     </span>
+                                  </div>
+                                </div>
+                                <div className="mt-3 pt-2 border-t border-gray-600">
+                                  <div className="text-xs text-gray-400 text-center">
+                                    All taxes and fees included
                                   </div>
                                 </div>
                               </div>
