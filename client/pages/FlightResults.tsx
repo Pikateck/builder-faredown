@@ -1257,7 +1257,7 @@ export default function FlightResults() {
                       USD: { symbol: "$", name: "US Dollar" },
                       EUR: { symbol: "€", name: "Euro" },
                       GBP: { symbol: "£", name: "British Pound" },
-                      INR: { symbol: "��", name: "Indian Rupee" },
+                      INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "���", name: "Saudi Riyal" },
                       JPY: { symbol: "¥", name: "Japanese Yen" },
