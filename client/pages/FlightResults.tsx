@@ -2213,8 +2213,15 @@ export default function FlightResults() {
                       </Button>
                     </div>
 
-                    {/* View Details Link - Mobile */}
-                    <div className="text-center mt-3">
+                    {/* View Details Links - Mobile */}
+                    <div className="flex justify-center space-x-4 mt-3">
+                      <button
+                        onClick={() => handleViewFlightDetails(flight)}
+                        className="text-[#003580] text-sm font-medium flex items-center"
+                      >
+                        <Info className="w-3 h-3 mr-1" />
+                        View Details
+                      </button>
                       <button
                         onClick={() =>
                           setExpandedTicketOptions(
