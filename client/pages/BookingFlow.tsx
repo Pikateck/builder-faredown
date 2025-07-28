@@ -703,7 +703,7 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections, selectedFlight
         {/* Dubai-Mumbai Summary */}
         <div>
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Dubai → Mumbai
+            Dubai ��� Mumbai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -2508,7 +2508,7 @@ export default function BookingFlow() {
 
                     {/* Selected Extras */}
                     {(Object.keys(seatSelections).some(flight => Object.keys(seatSelections[flight]).length > 0) ||
-                      Object.keys(selectedMeals).length > 0 ||
+                      selectedMealIds.length > 0 ||
                       extraBaggage > 0) && (
                       <div className="bg-gray-50 rounded-lg p-4">
                         <h3 className="font-semibold text-gray-900 mb-3">Selected Extras</h3>
