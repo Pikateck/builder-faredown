@@ -308,6 +308,10 @@ export default function FlightResults() {
   const [showFlightDetails, setShowFlightDetails] = useState(false);
   const [selectedFlightForDetails, setSelectedFlightForDetails] = useState<(typeof flightData)[0] | null>(null);
 
+  // Tabbed flight details states
+  const [expandedFlightDetails, setExpandedFlightDetails] = useState<{ [key: string]: boolean }>({});
+  const [activeDetailTab, setActiveDetailTab] = useState<{ [key: string]: 'itinerary' | 'fare-rules' }>({});
+
   // Bargain states
   const [showBargainModal, setShowBargainModal] = useState(false);
   const [bargainFlight, setBargainFlight] = useState<
