@@ -814,7 +814,7 @@ export default function FlightResults() {
     {} as Record<string, number>,
   );
 
-  // Filter flights based on selected airlines and fare type with sorting and pricing logic
+  // Filter flights based on selected airlines, aircraft types and fare type with sorting and pricing logic
   const filteredFlights = flightData
     .filter((flight) => {
       // Filter by airlines
@@ -822,6 +822,12 @@ export default function FlightResults() {
         selectedAirlines.size === 0 ||
         selectedAirlines.size === availableAirlines.length ||
         selectedAirlines.has(flight.airline);
+
+      // Filter by aircraft types
+      const aircraftTypeMatch =
+        selectedAircraftTypes.size === 0 ||
+        selectedAircraftTypes.size === availableAircraftTypes.length ||
+        selectedAircraftTypes.has(flight.aircraft);
 
       // Filter by fare type
       const fareTypeMatch =
@@ -831,7 +837,7 @@ export default function FlightResults() {
         (selectedFareType === "non-refundable" &&
           flight.refundability === "Non-Refundable");
 
-      return airlineMatch && fareTypeMatch;
+      return airlineMatch && aircraftTypeMatch && fareTypeMatch;
     })
     .map((flight) => ({
       ...flight,
@@ -1201,7 +1207,7 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "🇮🇹" },
+                      { code: "it", name: "Italiano", flag: "🇮��" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
