@@ -881,7 +881,7 @@ export default function BookingFlow() {
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
-    symbol: "₹",
+    symbol: "���",
     name: "Indian Rupee",
   });
 
@@ -1237,7 +1237,7 @@ export default function BookingFlow() {
       setCurrentStep(currentStep + 1);
       // Scroll to top of page when navigating between steps
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
+    } else if (currentStep === 5) {
       console.log("Final step reached, processing payment and booking");
       handleCompleteBooking();
     }
