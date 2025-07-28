@@ -841,15 +841,6 @@ export default function BookingFlow() {
         middleName: "",
         lastName: "",
         gender: "",
-        dateOfBirth: "",
-        passportNumber: "",
-        passportIssueDate: "",
-        passportExpiryDate: "",
-        panCardNumber: "",
-        nationality: "",
-        address: "",
-        pincode: "",
-        mealPreference: "Veg",
       });
     }
 
@@ -864,15 +855,6 @@ export default function BookingFlow() {
         lastName: "",
         gender: "",
         age: "",
-        dateOfBirth: "",
-        passportNumber: "",
-        passportIssueDate: "",
-        passportExpiryDate: "",
-        panCardNumber: "",
-        nationality: "",
-        address: "",
-        pincode: "",
-        mealPreference: "Veg",
       });
     }
 
@@ -905,18 +887,10 @@ export default function BookingFlow() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userName, setUserName] = useState("Zubin Aibara");
 
-  // Customer profile states
-  const [savedProfiles, setSavedProfiles] = useState(() => {
-    const saved = localStorage.getItem("customer_profiles");
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [showProfileSelector, setShowProfileSelector] = useState(false);
-  const [selectedProfileId, setSelectedProfileId] = useState("");
-
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
-    symbol: "�����",
+    symbol: "���",
     name: "Indian Rupee",
   });
 
@@ -1011,7 +985,7 @@ export default function BookingFlow() {
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
-    { name: "Ivory Coast", code: "+225", flag: "🇨����" },
+    { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
@@ -1432,56 +1406,7 @@ export default function BookingFlow() {
     }
   };
 
-  // Auto-save profile function
-  const autoSaveProfile = (travellerData) => {
-    // Only save if essential fields are filled
-    if (travellerData.firstName && travellerData.lastName && travellerData.gender) {
-      const profileId = `profile_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const profile = {
-        id: profileId,
-        ...travellerData,
-        savedAt: new Date().toISOString(),
-        profileName: `${travellerData.firstName} ${travellerData.lastName}`,
-      };
-
-      // Check if similar profile already exists
-      const existingProfile = savedProfiles.find(p =>
-        p.firstName === travellerData.firstName &&
-        p.lastName === travellerData.lastName &&
-        p.passportNumber === travellerData.passportNumber
-      );
-
-      if (!existingProfile) {
-        const updatedProfiles = [...savedProfiles, profile];
-        setSavedProfiles(updatedProfiles);
-        localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
-      }
-    }
-  };
-
-  // Load profile data into traveller
-  const loadProfileIntoTraveller = (profileId) => {
-    const profile = savedProfiles.find(p => p.id === profileId);
-    if (profile && selectedTraveller) {
-      const updatedTravellers = travellers.map((t) =>
-        t.id === selectedTraveller ? {
-          ...t,
-          ...profile,
-          id: t.id, // Keep original traveller ID
-          type: t.type // Keep original traveller type
-        } : t
-      );
-      setTravellers(updatedTravellers);
-    }
-  };
-
   const handleTravellerSubmit = () => {
-    // Auto-save the current traveller as a profile
-    const currentTraveller = travellers.find(t => t.id === selectedTraveller);
-    if (currentTraveller) {
-      autoSaveProfile(currentTraveller);
-    }
-
     // The traveller data is already updated in real-time through the form controls
     console.log("Saving traveller data:", travellers);
     // Just close the modal
