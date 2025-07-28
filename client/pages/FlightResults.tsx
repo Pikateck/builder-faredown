@@ -2892,24 +2892,24 @@ export default function FlightResults() {
                                   {/* Fare Rules Grid */}
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Cancellation */}
-                                    <div className="bg-red-50 rounded-lg p-4">
-                                      <h5 className="font-semibold text-red-800 mb-3">Cancellation fee</h5>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between">
-                                          <span className="text-red-700">Airline fee:</span>
-                                          <span className="font-medium">₹11,504</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <span className="text-red-700">Clearing fee:</span>
-                                          <span className="font-medium">₹500</span>
-                                        </div>
+                                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                    <h5 className="font-semibold text-gray-800 mb-3">Cancellation fee</h5>
+                                    <div className="space-y-2 text-sm">
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-700">Airline fee:</span>
+                                        <span className="font-medium">��11,504</span>
                                       </div>
-                                      <p className="text-xs text-red-600 mt-3">
-                                        Cancellation/Flight change charges are indicated per traveller.
-                                        Clearing will stop accepting cancellation/change request 4- 72 hours before departure of the flight,
-                                        depending on the airline.
-                                      </p>
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-700">Clearing fee:</span>
+                                        <span className="font-medium">₹500</span>
+                                      </div>
                                     </div>
+                                    <p className="text-xs text-gray-600 mt-3">
+                                      Cancellation/Flight change charges are indicated per traveller.
+                                      Clearing will stop accepting cancellation/change request 4- 72 hours before departure of the flight,
+                                      depending on the airline.
+                                    </p>
+                                  </div>
 
                                     {/* Date Change */}
                                     <div className="bg-yellow-50 rounded-lg p-4">
