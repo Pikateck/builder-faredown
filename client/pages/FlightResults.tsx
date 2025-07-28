@@ -1144,7 +1144,7 @@ export default function FlightResults() {
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
-                      { code: "zh", name: "中文", flag: "🇨🇳" },
+                      { code: "zh", name: "中文", flag: "🇨��" },
                     ].map((language) => (
                       <DropdownMenuItem
                         key={language.code}
@@ -2240,15 +2240,25 @@ export default function FlightResults() {
                       </Button>
                     </div>
 
-                    {/* View Details Links - Mobile */}
-                    <div className="flex justify-center space-x-4 mt-3">
-                      <button
-                        onClick={() => handleViewFlightDetails(flight)}
-                        className="text-[#003580] text-sm font-medium flex items-center"
+                    {/* View Details Button - Mobile */}
+                    <div className="mt-3">
+                      <Button
+                        onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
+                        variant="outline"
+                        className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 text-sm py-2 flex items-center justify-center"
                       >
                         <Info className="w-3 h-3 mr-1" />
                         View Details
-                      </button>
+                        <ChevronDown
+                          className={`w-3 h-3 ml-1 transition-transform duration-200 ${
+                            expandedFlightDetails[`${flight.id}-${flight.fareTypes[0].id}`] ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </Button>
+                    </div>
+
+                    {/* Explore Ticket Options - Mobile */}
+                    <div className="flex justify-center mt-3">
                       <button
                         onClick={() =>
                           setExpandedTicketOptions(
@@ -3062,7 +3072,7 @@ export default function FlightResults() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                               <div>
                                 <p className="font-medium text-[#666] mb-1">Cancellation</p>
-                                <p className="text-gray-900">Allowed with fee: ₹3,500 per passenger</p>
+                                <p className="text-gray-900">Allowed with fee: ��3,500 per passenger</p>
                                 <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
                               </div>
                               <div>
