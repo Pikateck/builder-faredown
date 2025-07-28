@@ -1754,7 +1754,7 @@ export default function FlightResults() {
                           disabled={travelers.children <= 0}
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                         >
-                          ��
+                          −
                         </button>
                         <span className="w-8 text-center font-medium text-gray-900">
                           {travelers.children}
@@ -2581,21 +2581,21 @@ export default function FlightResults() {
                           {flight.fareTypes[0].refundability}
                         </div>
 
-                        {/* Side-by-side buttons - Consistent Styling */}
-                        <div className="flex gap-2 w-40">
+                        {/* Side-by-side buttons - Hotel Section Style */}
+                        <div className="flex gap-2 mt-3">
                           <Button
                             onClick={() =>
                               handleBargain(flight, flight.fareTypes[0])
                             }
-                            size="sm"
-                            className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-xs py-2 h-9"
+                            className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm"
                           >
+                            <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                             Bargain
                           </Button>
                           <Button
                             onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                            size="sm"
-                            className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-xs py-2 h-9"
+                            variant="outline"
+                            className="flex-1 touch-manipulation text-sm"
                           >
                             View Details
                           </Button>
