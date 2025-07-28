@@ -1129,6 +1129,11 @@ export default function FlightResults() {
                     selectedAirlines.size > 0
                   )
                     count++;
+                  if (
+                    selectedAircraftTypes.size < availableAircraftTypes.length &&
+                    selectedAircraftTypes.size > 0
+                  )
+                    count++;
                   if (selectedFareType !== "all") count++;
                   if (priceRange[0] > 0 || priceRange[1] < 100000) count++;
                   return (
