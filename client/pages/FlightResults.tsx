@@ -2322,15 +2322,6 @@ export default function FlightResults() {
                                   />
                                 </Button>
                               </div>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="w-full text-xs text-[#003580] p-1"
-                                onClick={() => handleFareRulesToggle(flight.id, fareType.id)}
-                              >
-                                <Info className="w-3 h-3 mr-1" />
-                                View Fare Rules
-                              </Button>
                             </div>
                           </div>
                         ))}
@@ -2339,7 +2330,7 @@ export default function FlightResults() {
                   )}
                 </div>
 
-                {/* DESKTOP CARD DESIGN (≥769px) - Original Enhanced */}
+                {/* DESKTOP CARD DESIGN (���769px) - Original Enhanced */}
                 <div className="hidden md:block bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                   {/* Green Upgrade Header */}
                   <div className="bg-green-50 px-4 py-2 border-b border-green-200">
