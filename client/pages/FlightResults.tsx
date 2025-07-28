@@ -2528,9 +2528,9 @@ export default function FlightResults() {
                           <Shield className="w-5 h-5 text-green-600" />
                         </div>
 
-                        {/* Fare Breakdown Tooltip */}
+                        {/* Fare Breakdown Tooltip - Positioned next to price */}
                         {expandedTicketOptions === `tooltip-${flight.id}` && (
-                          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 z-50">
+                          <div className="absolute right-0 top-full mt-2 z-50">
                             <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
                               <div className="text-center font-medium mb-2">
                                 Fare breakdown
