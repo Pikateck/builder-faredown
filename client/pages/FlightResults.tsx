@@ -1910,6 +1910,60 @@ export default function FlightResults() {
                 ))}
               </div>
 
+              {/* Aircraft Type Filter */}
+              <div className="space-y-1 mt-4">
+                <div className="border-b border-gray-200 pb-1 flex items-center justify-between">
+                  <div className="text-sm font-semibold text-gray-900">
+                    Aircraft Type
+                  </div>
+                  <button
+                    onClick={resetAircraftTypeSelection}
+                    className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Reset
+                  </button>
+                </div>
+                {availableAircraftTypes.map((aircraftType) => (
+                  <div
+                    key={aircraftType}
+                    className="flex items-center justify-between py-0.5 min-h-[24px] group relative pr-1"
+                    onMouseEnter={() => setHoveredAircraftType(aircraftType)}
+                    onMouseLeave={() => setHoveredAircraftType(null)}
+                  >
+                    <label className="text-sm text-gray-700 cursor-pointer flex-1 leading-tight flex items-center">
+                      <div className="w-4 h-4 flex items-center justify-center mr-2">
+                        <input
+                          type="checkbox"
+                          checked={selectedAircraftTypes.has(aircraftType)}
+                          onChange={(e) =>
+                            handleAircraftTypeFilter(aircraftType, e.target.checked)
+                          }
+                          className={`w-4 h-4 ${selectedAircraftTypes.has(aircraftType) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                        />
+                      </div>
+                      <span
+                        className={`transition-colors ${hoveredAircraftType === aircraftType ? "text-blue-600 font-medium" : "text-gray-700"}`}
+                      >
+                        {aircraftType}
+                      </span>
+                    </label>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500 ml-2 mr-1">
+                        {aircraftTypeCounts[aircraftType]}
+                      </span>
+                      {hoveredAircraftType === aircraftType && (
+                        <button
+                          onClick={() => handleOnlyThisAircraftType(aircraftType)}
+                          className="text-xs text-blue-600 font-medium whitespace-nowrap hover:text-blue-800 transition-colors"
+                        >
+                          Only this type
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               {/* Flight Times */}
               <div className="space-y-1 mt-4">
                 <div className="border-b border-gray-200 pb-1">
