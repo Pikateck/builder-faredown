@@ -589,6 +589,32 @@ export default function FlightResults() {
     setShowFlightDetails(true);
   };
 
+  // Handle tabbed flight details toggle
+  const handleToggleFlightDetails = (flightId: string, fareTypeId: string) => {
+    const detailKey = `${flightId}-${fareTypeId}`;
+    setExpandedFlightDetails(prev => ({
+      ...prev,
+      [detailKey]: !prev[detailKey]
+    }));
+
+    // Set default active tab to itinerary
+    if (!expandedFlightDetails[detailKey]) {
+      setActiveDetailTab(prev => ({
+        ...prev,
+        [detailKey]: 'itinerary'
+      }));
+    }
+  };
+
+  // Handle tab change
+  const handleTabChange = (flightId: string, fareTypeId: string, tab: 'itinerary' | 'fare-rules') => {
+    const detailKey = `${flightId}-${fareTypeId}`;
+    setActiveDetailTab(prev => ({
+      ...prev,
+      [detailKey]: tab
+    }));
+  };
+
   // Calendar helper functions (restored)
   const getMonthName = (month: number) => {
     const months = [
@@ -1113,7 +1139,7 @@ export default function FlightResults() {
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
-                      { code: "ar", name: "العربية", flag: "🇸🇦" },
+                      { code: "ar", name: "العربية", flag: "🇸���" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
