@@ -81,7 +81,7 @@ export default function BookingConfirmation() {
 
     // If URL clearly indicates hotel booking, prioritize hotel flow
     if (isHotelFlow && !isFlightFlow) {
-      console.log("🏨 Hotel flow detected - skipping flight data");
+      console.log("�� Hotel flow detected - skipping flight data");
       // Skip flight data check and go directly to hotel logic below
     } else if (savedFlightBooking && !isHotelFlow) {
       const flightData = JSON.parse(savedFlightBooking);
@@ -1381,7 +1381,7 @@ export default function BookingConfirmation() {
                         {booking.flights?.[0]?.airline || "Airlines"}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Flight {booking.flight?.flightNumber || "EK-215"}
+                        Flight {booking.flight?.flightNumber || "6E-1406"}
                       </p>
                     </div>
                     <div className="text-right">
