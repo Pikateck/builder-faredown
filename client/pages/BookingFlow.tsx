@@ -905,6 +905,13 @@ export default function BookingFlow() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userName, setUserName] = useState("Zubin Aibara");
 
+  // Customer profile management states
+  const [savedProfiles, setSavedProfiles] = useState(() => {
+    const saved = localStorage.getItem("customer_profiles");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedProfileId, setSelectedProfileId] = useState("");
+
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
