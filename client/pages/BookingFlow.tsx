@@ -977,7 +977,7 @@ export default function BookingFlow() {
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
-    { name: "Jamaica", code: "+1", flag: "🇯🇲" },
+    { name: "Jamaica", code: "+1", flag: "��🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
 
@@ -2509,7 +2509,7 @@ export default function BookingFlow() {
                     {/* Selected Extras */}
                     {(Object.keys(seatSelections).some(flight => Object.keys(seatSelections[flight]).length > 0) ||
                       selectedMealIds.length > 0 ||
-                      extraBaggage > 0) && (
+                      selectedBaggage.outbound.weight || selectedBaggage.return.weight) && (
                       <div className="bg-gray-50 rounded-lg p-4">
                         <h3 className="font-semibold text-gray-900 mb-3">Selected Extras</h3>
                         <div className="space-y-2">
