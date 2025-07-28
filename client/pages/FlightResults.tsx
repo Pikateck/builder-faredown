@@ -2870,17 +2870,17 @@ export default function FlightResults() {
                                   </h4>
 
                                   {/* Sector-Specific Fare Rules */}
-                                  <div className="space-y-4">
+                                  <div className="space-y-6">
                                     {/* First Sector Rules - Outbound */}
-                                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                                      <h5 className="font-medium text-blue-900 mb-3 flex items-center">
-                                        <Plane className="w-4 h-4 mr-2" />
+                                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                      <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
+                                        <Plane className="w-5 h-5 mr-3 text-gray-600" />
                                         {flight.airline || "Emirates"} | {flight.departureCode || "BOM"} - {flight.arrivalCode || "DXB"}
                                       </h5>
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                          <p className="font-medium text-blue-700 mb-1">Cancellation fee</p>
-                                          <div className="space-y-1">
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Cancellation fee</p>
+                                          <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                                             <div className="flex justify-between">
                                               <span className="text-gray-600">Airline fee:</span>
                                               <span className="text-gray-900 font-medium">₹0</span>
@@ -2890,11 +2890,11 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
-                                          <p className="text-xs text-blue-600 mt-2">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
+                                          <p className="text-xs text-gray-500 leading-relaxed">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
                                         </div>
-                                        <div>
-                                          <p className="font-medium text-blue-700 mb-1">Date change fee</p>
-                                          <div className="space-y-1">
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Date change fee</p>
+                                          <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                                             <div className="flex justify-between">
                                               <span className="text-gray-600">Airline fee:</span>
                                               <span className="text-gray-900 font-medium">₹0</span>
@@ -2904,17 +2904,17 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
-                                          <p className="text-xs text-blue-600 mt-2">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
+                                          <p className="text-xs text-gray-500 leading-relaxed">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
                                         </div>
-                                        <div>
-                                          <p className="font-medium text-blue-700 mb-1">Baggage Information:</p>
-                                          <div className="space-y-1">
-                                            <p className="text-gray-900">Check-in: 1 x 25 kg / Adult - Cabin: 1 x 7 kg / Adult</p>
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Baggage Information:</p>
+                                          <div className="bg-gray-50 rounded-lg p-3">
+                                            <p className="text-gray-900 font-medium">Check-in: 1 x 25 kg / Adult - Cabin: 1 x 7 kg / Adult</p>
                                           </div>
                                         </div>
-                                        <div>
-                                          <p className="font-medium text-blue-700 mb-1">Important:</p>
-                                          <div className="text-xs text-gray-700 space-y-1">
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Important:</p>
+                                          <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                             <p>• Direct flights are usually cheaper than refundable flights. However, you may have to pay a large fee to cancel or change your flight.</p>
                                             <p>• Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
                                           </div>
@@ -2923,15 +2923,15 @@ export default function FlightResults() {
                                     </div>
 
                                     {/* Second Sector Rules - Return */}
-                                    <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-                                      <h5 className="font-medium text-red-900 mb-3 flex items-center">
-                                        <Plane className="w-4 h-4 mr-2" />
+                                    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                      <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
+                                        <Plane className="w-5 h-5 mr-3 text-gray-600" />
                                         {flight.returnAirline || "Indigo"} | {flight.arrivalCode || "DXB"} - {flight.departureCode || "BOM"}
                                       </h5>
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                          <p className="font-medium text-red-700 mb-1">Cancellation fee</p>
-                                          <div className="space-y-1">
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Cancellation fee</p>
+                                          <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                                             <div className="flex justify-between">
                                               <span className="text-gray-600">Airline fee:</span>
                                               <span className="text-gray-900 font-medium">₹0</span>
@@ -2941,11 +2941,11 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
-                                          <p className="text-xs text-red-600 mt-2">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
+                                          <p className="text-xs text-gray-500 leading-relaxed">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
                                         </div>
-                                        <div>
-                                          <p className="font-medium text-red-700 mb-1">Date change fee</p>
-                                          <div className="space-y-1">
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Date change fee</p>
+                                          <div className="bg-gray-50 rounded-lg p-3 space-y-2">
                                             <div className="flex justify-between">
                                               <span className="text-gray-600">Airline fee:</span>
                                               <span className="text-gray-900 font-medium">₹0</span>
@@ -2955,17 +2955,17 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
-                                          <p className="text-xs text-red-600 mt-2">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
+                                          <p className="text-xs text-gray-500 leading-relaxed">Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
                                         </div>
-                                        <div>
-                                          <p className="font-medium text-red-700 mb-1">Baggage Information:</p>
-                                          <div className="space-y-1">
-                                            <p className="text-gray-900">Check-in: 1 x 15 kg / Adult - Cabin: 1 x 7 kg / Adult</p>
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Baggage Information:</p>
+                                          <div className="bg-gray-50 rounded-lg p-3">
+                                            <p className="text-gray-900 font-medium">Check-in: 1 x 15 kg / Adult - Cabin: 1 x 7 kg / Adult</p>
                                           </div>
                                         </div>
-                                        <div>
-                                          <p className="font-medium text-red-700 mb-1">Important:</p>
-                                          <div className="text-xs text-gray-700 space-y-1">
+                                        <div className="space-y-3">
+                                          <p className="font-semibold text-gray-800 mb-2">Important:</p>
+                                          <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                             <p>• Direct flights are usually cheaper than refundable flights. However, you may have to pay a large fee to cancel or change your flight.</p>
                                             <p>• Cancellation/Flight change charges are indicated per traveller. Clearing will stop accepting cancellation/change request if 72 hours before departure of the flight, depending on the airline.</p>
                                           </div>
@@ -3255,7 +3255,7 @@ export default function FlightResults() {
                             <div>
                               <h6 className="font-medium text-yellow-800 mb-2">Important Terms</h6>
                               <ul className="text-sm text-yellow-700 space-y-1">
-                                <li>�� All cancellation and change fees are per passenger</li>
+                                <li>• All cancellation and change fees are per passenger</li>
                                 <li>• Name changes not allowed after booking</li>
                                 <li>• Infant fares have different rules</li>
                                 <li>• Group bookings may have different terms</li>
