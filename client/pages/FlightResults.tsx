@@ -2581,7 +2581,7 @@ export default function FlightResults() {
                           {flight.fareTypes[0].refundability}
                         </div>
 
-                        {/* Side-by-side buttons - Compact */}
+                        {/* Side-by-side buttons - Consistent Styling */}
                         <div className="flex gap-2 w-40">
                           <Button
                             onClick={() =>
@@ -2589,14 +2589,14 @@ export default function FlightResults() {
                             }
                             variant="outline"
                             size="sm"
-                            className="flex-1 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white text-xs py-1 h-8"
+                            className="flex-1 border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white font-semibold text-xs py-2 h-9"
                           >
                             Bargain
                           </Button>
                           <Button
                             onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
                             size="sm"
-                            className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-xs py-1 h-8"
+                            className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-xs py-2 h-9"
                           >
                             View Details
                           </Button>
