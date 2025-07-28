@@ -2886,7 +2886,7 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹0</span>
                                             </div>
                                             <div className="flex justify-between">
-                                              <span className="text-gray-600">Clearing fee:</span>
+                                              <span className="text-gray-600">Faredown Fee:</span>
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
@@ -2900,7 +2900,7 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹0</span>
                                             </div>
                                             <div className="flex justify-between">
-                                              <span className="text-gray-600">Clearing fee:</span>
+                                              <span className="text-gray-600">Faredown Fee:</span>
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
@@ -2937,7 +2937,7 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹0</span>
                                             </div>
                                             <div className="flex justify-between">
-                                              <span className="text-gray-600">Clearing fee:</span>
+                                              <span className="text-gray-600">Faredown Fee:</span>
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
@@ -2951,7 +2951,7 @@ export default function FlightResults() {
                                               <span className="text-gray-900 font-medium">₹0</span>
                                             </div>
                                             <div className="flex justify-between">
-                                              <span className="text-gray-600">Clearing fee:</span>
+                                              <span className="text-gray-600">Faredown Fee:</span>
                                               <span className="text-gray-900 font-medium">₹500</span>
                                             </div>
                                           </div>
@@ -3051,7 +3051,7 @@ export default function FlightResults() {
                                       <span className="text-gray-900 font-medium">₹0</span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="text-gray-600">Clearing fee:</span>
+                                      <span className="text-gray-600">Faredown Fee:</span>
                                       <span className="text-gray-900 font-medium">₹500</span>
                                     </div>
                                   </div>
@@ -3065,7 +3065,7 @@ export default function FlightResults() {
                                       <span className="text-gray-900 font-medium">₹0</span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="text-gray-600">Clearing fee:</span>
+                                      <span className="text-gray-600">Faredown Fee:</span>
                                       <span className="text-gray-900 font-medium">₹500</span>
                                     </div>
                                   </div>
@@ -3103,7 +3103,7 @@ export default function FlightResults() {
                                         <span className="text-gray-900 font-medium">₹0</span>
                                       </div>
                                       <div className="flex justify-between">
-                                        <span className="text-gray-600">Clearing fee:</span>
+                                        <span className="text-gray-600">Faredown Fee:</span>
                                         <span className="text-gray-900 font-medium">₹500</span>
                                       </div>
                                     </div>
@@ -3117,7 +3117,7 @@ export default function FlightResults() {
                                         <span className="text-gray-900 font-medium">₹0</span>
                                       </div>
                                       <div className="flex justify-between">
-                                        <span className="text-gray-600">Clearing fee:</span>
+                                        <span className="text-gray-600">Faredown Fee:</span>
                                         <span className="text-gray-900 font-medium">₹500</span>
                                       </div>
                                     </div>
@@ -3157,7 +3157,7 @@ export default function FlightResults() {
                                       <span className="text-gray-900 font-medium">₹0</span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="text-gray-600">Clearing fee:</span>
+                                      <span className="text-gray-600">Faredown Fee:</span>
                                       <span className="text-gray-900 font-medium">₹500</span>
                                     </div>
                                   </div>
@@ -3171,7 +3171,7 @@ export default function FlightResults() {
                                       <span className="text-gray-900 font-medium">₹0</span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="text-gray-600">Clearing fee:</span>
+                                      <span className="text-gray-600">Faredown Fee:</span>
                                       <span className="text-gray-900 font-medium">₹500</span>
                                     </div>
                                   </div>
@@ -3209,7 +3209,7 @@ export default function FlightResults() {
                                         <span className="text-gray-900 font-medium">₹0</span>
                                       </div>
                                       <div className="flex justify-between">
-                                        <span className="text-gray-600">Clearing fee:</span>
+                                        <span className="text-gray-600">Faredown Fee:</span>
                                         <span className="text-gray-900 font-medium">₹500</span>
                                       </div>
                                     </div>
@@ -3223,7 +3223,7 @@ export default function FlightResults() {
                                         <span className="text-gray-900 font-medium">₹0</span>
                                       </div>
                                       <div className="flex justify-between">
-                                        <span className="text-gray-600">Clearing fee:</span>
+                                        <span className="text-gray-600">Faredown Fee:</span>
                                         <span className="text-gray-900 font-medium">₹500</span>
                                       </div>
                                     </div>
@@ -4584,7 +4584,7 @@ export default function FlightResults() {
                           <p className="text-red-600">₹3,500 per passenger</p>
                         </div>
                         <div>
-                          <span className="text-red-700 font-medium">Clearing fee:</span>
+                          <span className="text-red-700 font-medium">Faredown Fee:</span>
                           <p className="text-red-600">₹500 per passenger</p>
                         </div>
                         <p className="text-xs text-red-600 mt-2">
@@ -4605,7 +4605,7 @@ export default function FlightResults() {
                           <p className="text-yellow-600">₹2,314 per passenger</p>
                         </div>
                         <div>
-                          <span className="text-yellow-700 font-medium">Clearing fee:</span>
+                          <span className="text-yellow-700 font-medium">Faredown Fee:</span>
                           <p className="text-yellow-600">₹500 per passenger</p>
                         </div>
                         <p className="text-xs text-yellow-600 mt-2">
