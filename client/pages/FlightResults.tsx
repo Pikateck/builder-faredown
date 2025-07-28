@@ -1141,7 +1141,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "ह��न्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한��어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -2867,16 +2867,16 @@ export default function FlightResults() {
                                   {/* Book Now Button */}
                                   <div className="pt-6">
                                     <Button
-                                      onClick={() => {
-                                        // Find the fare type for this detail key
-                                        const [flightId, fareTypeId] = detailKey.split('-');
-                                        const fareType = flight.fareTypes.find(ft => ft.id === fareTypeId) || flight.fareTypes[0];
-                                        handleBooking(flight, fareType);
-                                      }}
-                                      className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-base font-semibold rounded-lg"
-                                    >
-                                      Book Now • {formatPrice(flight.fareTypes[0]?.price || 0)}
-                                    </Button>
+                                    onClick={() => {
+                                      // Find the fare type for this detail key
+                                      const [flightId, fareTypeId] = detailKey.split('-');
+                                      const fareType = flight.fareTypes.find(ft => ft.id === fareTypeId) || flight.fareTypes[0];
+                                      handleBooking(flight, fareType);
+                                    }}
+                                    className="w-full bg-gray-800 hover:bg-gray-700 text-white py-4 text-base font-semibold rounded-lg"
+                                  >
+                                    Book Now • {formatPrice(flight.fareTypes[0]?.price || 0)}
+                                  </Button>
                                   </div>
                                 </div>
                               )}
