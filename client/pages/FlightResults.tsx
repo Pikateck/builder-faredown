@@ -2510,65 +2510,55 @@ export default function FlightResults() {
                             <div className="text-xl font-bold text-gray-900">
                               {formatPrice(flight.fareTypes[0].price)}
                             </div>
-                            <button
-                              onClick={() =>
-                                setExpandedTicketOptions(
-                                  expandedTicketOptions ===
-                                    `tooltip-${flight.id}`
-                                    ? null
-                                    : `tooltip-${flight.id}`,
-                                )
-                              }
-                              className="text-gray-400 hover:text-gray-600 transition-colors relative"
-                            >
-                              <Info className="w-4 h-4" />
+                            <div className="relative group">
+                              <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
+                                <Info className="w-4 h-4" />
+                              </button>
 
-                              {/* Fare Breakdown Tooltip - Positioned next to info icon */}
-                              {expandedTicketOptions === `tooltip-${flight.id}` && (
-                                <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50">
-                                  <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
-                                    <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
-                                      Fare Breakdown
-                                    </div>
-                                    <div className="space-y-2">
-                                      <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">Base fare:</span>
-                                        <span className="font-medium text-gray-900">
-                                          {formatPrice(
-                                            Math.round(
-                                              flight.fareTypes[0].price * 0.75,
-                                            ),
-                                          )}
-                                        </span>
-                                      </div>
-                                      <div className="flex justify-between items-center">
-                                        <span className="text-gray-600">Taxes & fees:</span>
-                                        <span className="font-medium text-gray-900">
-                                          {formatPrice(
-                                            Math.round(
-                                              flight.fareTypes[0].price * 0.25,
-                                            ),
-                                          )}
-                                        </span>
-                                      </div>
-                                      <div className="border-t border-gray-200 pt-2 mt-2">
-                                        <div className="flex justify-between items-center">
-                                          <span className="font-semibold text-gray-900">Total:</span>
-                                          <span className="font-bold text-lg text-blue-600">
-                                            {formatPrice(flight.fareTypes[0].price)}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="mt-3 pt-2 border-t border-gray-100">
-                                      <p className="text-xs text-gray-500 text-center">All taxes and fees included</p>
-                                    </div>
-                                    {/* Tooltip arrow pointing to info icon */}
-                                    <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
+                              {/* Fare Breakdown Tooltip - Shows on hover */}
+                              <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                                  <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
+                                    Fare Breakdown
                                   </div>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-gray-600">Base fare:</span>
+                                      <span className="font-medium text-gray-900">
+                                        {formatPrice(
+                                          Math.round(
+                                            flight.fareTypes[0].price * 0.75,
+                                          ),
+                                        )}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-gray-600">Taxes & fees:</span>
+                                      <span className="font-medium text-gray-900">
+                                        {formatPrice(
+                                          Math.round(
+                                            flight.fareTypes[0].price * 0.25,
+                                          ),
+                                        )}
+                                      </span>
+                                    </div>
+                                    <div className="border-t border-gray-200 pt-2 mt-2">
+                                      <div className="flex justify-between items-center">
+                                        <span className="font-semibold text-gray-900">Total:</span>
+                                        <span className="font-bold text-lg text-blue-600">
+                                          {formatPrice(flight.fareTypes[0].price)}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="mt-3 pt-2 border-t border-gray-100">
+                                    <p className="text-xs text-gray-500 text-center">All taxes and fees included</p>
+                                  </div>
+                                  {/* Tooltip arrow pointing to info icon */}
+                                  <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
                                 </div>
-                              )}
-                            </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -3498,7 +3488,7 @@ export default function FlightResults() {
                 {/* Quick Time Slots */}
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
-                    { label: "Morning", range: [6, 12], icon: "☀️" },
+                    { label: "Morning", range: [6, 12], icon: "☀��" },
                     { label: "Afternoon", range: [12, 18], icon: "☀️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
