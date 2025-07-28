@@ -2672,6 +2672,7 @@ export default function FlightResults() {
                                         <div>
                                           <p className="font-semibold text-gray-900 text-base">{flight.airline}</p>
                                           <p className="text-sm text-gray-600">{flight.flightNumber}</p>
+                                          <p className="text-xs text-gray-500">Aircraft: {flight.aircraft}</p>
                                         </div>
                                       </div>
 
