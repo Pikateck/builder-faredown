@@ -4462,55 +4462,7 @@ export default function FlightResults() {
                   </div>
                 </div>
 
-                {/* Available Fare Types */}
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <CreditCard className="w-5 h-5 mr-2 text-[#003580]" />
-                    Available Fare Options
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {selectedFlightForDetails.fareTypes.map((fareType, index) => (
-                      <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-[#003580] transition-colors">
-                        <div className="text-center">
-                          <h5 className="font-semibold text-gray-900 mb-2">{fareType.name}</h5>
-                          <div className="text-2xl font-bold text-[#003580] mb-3">
-                            {formatPrice(fareType.price)}
-                          </div>
-                          <div className="space-y-2 text-sm text-gray-600 mb-4">
-                            <div className="flex items-center justify-center space-x-2">
-                              <Luggage className="w-4 h-4" />
-                              <span>{fareType.baggage}</span>
-                            </div>
-                            <div className={`font-medium ${fareType.refundability === "Refundable" ? "text-green-600" : "text-red-600"}`}>
-                              {fareType.refundability}
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Button
-                              variant="outline"
-                              className="w-full border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white"
-                              onClick={() => {
-                                setShowFlightDetails(false);
-                                handleBargain(selectedFlightForDetails, fareType);
-                              }}
-                            >
-                              Bargain
-                            </Button>
-                            <Button
-                              className="w-full bg-[#003580] hover:bg-[#0071c2]"
-                              onClick={() => {
-                                setShowFlightDetails(false);
-                                handleBooking(selectedFlightForDetails, fareType);
-                              }}
-                            >
-                              Book Now
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
               </div>
             </div>
           )}
