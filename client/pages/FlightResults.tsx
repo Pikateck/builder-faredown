@@ -2497,13 +2497,28 @@ export default function FlightResults() {
 
                       {/* Right Side - Pricing - Compact Layout */}
                       <div className="text-center ml-8">
-                        {/* Fare Type and Price in one line */}
-                        <div className="mb-1">
+                        {/* Fare Type and Price with Info Button */}
+                        <div className="mb-1 relative">
                           <span className="text-sm font-medium text-gray-900">
                             {flight.fareTypes[0].name}
                           </span>
-                          <div className="text-xl font-bold text-gray-900 mt-1">
-                            {formatPrice(flight.fareTypes[0].price)}
+                          <div className="flex items-center justify-center space-x-2 mt-1">
+                            <div className="text-xl font-bold text-gray-900">
+                              {formatPrice(flight.fareTypes[0].price)}
+                            </div>
+                            <button
+                              onClick={() =>
+                                setExpandedTicketOptions(
+                                  expandedTicketOptions ===
+                                    `tooltip-${flight.id}`
+                                    ? null
+                                    : `tooltip-${flight.id}`,
+                                )
+                              }
+                              className="text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                              <Info className="w-4 h-4" />
+                            </button>
                           </div>
                         </div>
 
