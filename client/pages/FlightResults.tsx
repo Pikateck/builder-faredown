@@ -303,6 +303,10 @@ export default function FlightResults() {
   const [showFareRules, setShowFareRules] = useState<{ [key: string]: boolean }>({});
   const [fareRulesFlightId, setFareRulesFlightId] = useState<string | null>(null);
 
+  // Flight details modal states
+  const [showFlightDetails, setShowFlightDetails] = useState(false);
+  const [selectedFlightForDetails, setSelectedFlightForDetails] = useState<(typeof flightData)[0] | null>(null);
+
   // Bargain states
   const [showBargainModal, setShowBargainModal] = useState(false);
   const [bargainFlight, setBargainFlight] = useState<
