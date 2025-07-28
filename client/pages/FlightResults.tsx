@@ -1500,7 +1500,7 @@ export default function FlightResults() {
               >
                 <Plane className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
-                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                  <div className="bg-[#febb02] text-black px-2 py-1 rounded text-xs font-bold">
                     {cityData[selectedFromCity]?.code || "BOM"}
                   </div>
                   <span className="text-sm text-gray-700 font-medium truncate">
