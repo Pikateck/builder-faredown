@@ -1472,9 +1472,9 @@ export default function FlightResults() {
                             setSelectedClass(classType);
                             setShowClassDropdown(false);
                           }}
-                          className={`w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors ${
+                          className={`w-full text-left px-3 py-2 hover:bg-orange-50 rounded text-sm transition-colors ${
                             selectedClass === classType
-                              ? "bg-blue-100 text-blue-700 font-medium"
+                              ? "bg-orange-100 text-orange-700 font-medium"
                               : "text-gray-900"
                           }`}
                         >
