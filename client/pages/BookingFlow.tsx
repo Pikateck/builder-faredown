@@ -3478,6 +3478,7 @@ export default function BookingFlow() {
                 </div>
               )}
 
+              {/* Manual Entry Fields */}
               <div>
                 <label className="block text-sm font-medium text-[#666] mb-1">
                   Title
