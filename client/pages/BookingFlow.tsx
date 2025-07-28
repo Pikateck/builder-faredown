@@ -2453,6 +2453,97 @@ export default function BookingFlow() {
               {currentStep === 4 && (
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 mb-2">
+                    Review Your Booking
+                  </h2>
+                  <p className="text-gray-600 mb-6">
+                    Please review all details carefully before proceeding to payment.
+                  </p>
+
+                  {/* Warning Box */}
+                  <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-red-800">
+                          Important Notice
+                        </h3>
+                        <p className="mt-2 text-sm text-red-700">
+                          <strong>Once names are entered and confirmed, they cannot be changed.</strong>
+                          Please verify all passenger names match exactly with government-issued ID documents.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Booking Summary */}
+                  <div className="space-y-6">
+                    {/* Flight Details */}
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h3 className="font-semibold text-gray-900 mb-3">Flight Details</h3>
+                      <div className="space-y-2">
+                        <p><strong>Airline:</strong> {selectedFlight?.airline || "Airlines"}</p>
+                        <p><strong>Route:</strong> {formatDisplayDate(departureDate, "MMM d, yyyy")} • Mumbai → Dubai</p>
+                        {tripType === "round-trip" && returnDate && (
+                          <p><strong>Return:</strong> {formatDisplayDate(returnDate, "MMM d, yyyy")} • Dubai → Mumbai</p>
+                        )}
+                        <p><strong>Passengers:</strong> {travellers.length} traveller(s)</p>
+                      </div>
+                    </div>
+
+                    {/* Passenger Details */}
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h3 className="font-semibold text-gray-900 mb-3">Passenger Details</h3>
+                      <div className="space-y-2">
+                        {travellers.map((traveller, index) => (
+                          <p key={index}>
+                            <strong>{traveller.type}:</strong> {traveller.firstName} {traveller.lastName}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Selected Extras */}
+                    {(Object.keys(seatSelections).some(flight => Object.keys(seatSelections[flight]).length > 0) ||
+                      Object.keys(selectedMeals).length > 0 ||
+                      extraBaggage > 0) && (
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <h3 className="font-semibold text-gray-900 mb-3">Selected Extras</h3>
+                        <div className="space-y-2">
+                          {Object.keys(seatSelections).map(flight =>
+                            Object.keys(seatSelections[flight]).length > 0 && (
+                              <p key={flight}>
+                                <strong>Seats ({flight}):</strong> {Object.keys(seatSelections[flight]).join(", ")}
+                              </p>
+                            )
+                          )}
+                          {Object.keys(selectedMeals).length > 0 && (
+                            <p><strong>Meals:</strong> {Object.keys(selectedMeals).length} meal(s) selected</p>
+                          )}
+                          {extraBaggage > 0 && (
+                            <p><strong>Extra Baggage:</strong> {extraBaggage}kg</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Total Price */}
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <h3 className="font-semibold text-gray-900 mb-2">Total Amount</h3>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 5 && (
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">
                     Payment Details
                   </h2>
                   <p className="text-[#666] text-sm mb-6">
