@@ -2824,8 +2824,8 @@ export default function FlightResults() {
                                     </div>
                                   )}
 
-                                  {/* Book Now Button */}
-                                  <div className="pt-6">
+                                  {/* Book Now Button - Prominent & Intuitive */}
+                                  <div className="border-t border-gray-200 pt-4 mt-6">
                                     <Button
                                     onClick={() => {
                                       // Find the fare type for this detail key
@@ -2833,7 +2833,7 @@ export default function FlightResults() {
                                       const fareType = flight.fareTypes.find(ft => ft.id === fareTypeId) || flight.fareTypes[0];
                                       handleBooking(flight, fareType);
                                     }}
-                                    className="w-full bg-gray-800 hover:bg-gray-700 text-white py-4 text-base font-semibold rounded-lg"
+                                    className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
                                   >
                                     Book Now • {formatPrice(flight.fareTypes[0]?.price || 0)}
                                   </Button>
