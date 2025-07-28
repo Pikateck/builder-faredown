@@ -1218,7 +1218,7 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "���🇹" },
+                      { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
@@ -3053,7 +3053,7 @@ export default function FlightResults() {
                               <div className="bg-red-50 rounded-lg p-4 border border-red-200 mt-4">
                                 <h5 className="font-medium text-red-900 mb-3 flex items-center">
                                   <Plane className="w-4 h-4 mr-2" />
-                                  {flight.returnAirline} | {flight.arrivalCode} - {flight.departureCode}
+                                  {flight.returnAirline || "Indigo"} | {flight.arrivalCode || "DXB"} - {flight.departureCode || "BOM"}
                                 </h5>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                   <div>
