@@ -847,10 +847,10 @@ export default function BookingConfirmation() {
                       <div className="flex-1">
                         <h5 className="font-semibold text-blue-800 mb-2">For Cancellations, Changes & Support</h5>
                         <div className="text-sm text-blue-700 space-y-1">
-                          <p>📞 Customer Support: +91-80-4728-2525</p>
-                          <p>📧 Email: support@faredown.com</p>
-                          <p>🕐 Available: 24/7 for booking assistance</p>
-                          <p>📱 WhatsApp: +91-80-4728-2525</p>
+                          <p>Customer Support: +91-80-4728-2525</p>
+                          <p>Email: support@faredown.com</p>
+                          <p>Available: 24/7 for booking assistance</p>
+                          <p>WhatsApp: +91-80-4728-2525</p>
                         </div>
                       </div>
                     </div>
