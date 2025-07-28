@@ -2707,141 +2707,165 @@ export default function FlightResults() {
                             <div key={detailKey}>
                               {/* Itinerary Tab Content */}
                               {currentTab === 'itinerary' && (
-                                <div className="space-y-6">
+                                <div className="space-y-8">
                                   {/* Outbound Flight */}
                                   <div>
-                                    <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    {/* Header */}
+                                    <div className="flex items-center mb-6">
                                       <Plane className="w-5 h-5 mr-2 text-[#003580]" />
-                                      Outbound • {departureDate ? formatDisplayDate(departureDate, "eee, MMM d") : "Select date"}
-                                    </h4>
+                                      <h4 className="text-lg font-semibold text-gray-900">
+                                        Outbound • {departureDate ? formatDisplayDate(departureDate, "eee, MMM d") : "Tue, Jul 29"}
+                                      </h4>
+                                    </div>
 
-                                    <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                                      <div className="flex items-center space-x-4 mb-3">
+                                    {/* Flight Card */}
+                                    <div className="bg-white border border-gray-200 rounded-lg p-6">
+                                      {/* Airline Info */}
+                                      <div className="flex items-center mb-6">
                                         <img
                                           src={flight.logo}
                                           alt={flight.airline}
-                                          className="w-8 h-6 object-contain"
+                                          className="w-10 h-8 object-contain mr-3"
                                         />
                                         <div>
-                                          <p className="font-semibold text-gray-900">{flight.airline}</p>
+                                          <p className="font-semibold text-gray-900 text-base">{flight.airline}</p>
                                           <p className="text-sm text-gray-600">{flight.flightNumber}</p>
                                         </div>
                                       </div>
-                                    </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                      {/* Departure */}
-                                      <div className="text-center">
-                                        <div className="text-2xl font-bold text-gray-900 mb-1">{flight.departureTime}</div>
-                                        <div className="text-sm font-medium text-gray-700">{flight.departureCode}</div>
-                                        <div className="text-xs text-gray-500">{flight.departureCity}</div>
-                                        <div className="text-xs text-gray-500 mt-1">Terminal {flight.departureTerminal || "1"}</div>
-                                      </div>
-
-                                      {/* Flight Path */}
-                                      <div className="flex flex-col items-center justify-center">
-                                        <div className="w-full flex items-center justify-center mb-2">
-                                          <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
-                                          <div className="flex-1 h-px bg-gray-300 mx-2"></div>
-                                          <div className="bg-[#003580] text-white text-xs px-2 py-1 rounded font-medium">
-                                            {flight.flightType}
-                                          </div>
-                                          <div className="flex-1 h-px bg-gray-300 mx-2"></div>
-                                          <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                                      {/* Flight Timeline */}
+                                      <div className="flex items-center justify-between mb-6">
+                                        {/* Departure */}
+                                        <div className="text-center">
+                                          <div className="text-3xl font-bold text-gray-900 mb-1">{flight.departureTime}</div>
+                                          <div className="text-sm font-semibold text-gray-700 mb-1">{flight.departureCode}</div>
+                                          <div className="text-xs text-gray-500">{flight.departureCity}</div>
                                         </div>
-                                        <div className="text-sm text-gray-600">{flight.duration}</div>
-                                        <div className="text-xs text-gray-500">{flight.stops}</div>
+
+                                        {/* Connection Line */}
+                                        <div className="flex-1 flex items-center mx-8">
+                                          <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                          <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
+                                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                              <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded font-medium">
+                                                Stop
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                        </div>
+
+                                        {/* Arrival */}
+                                        <div className="text-center">
+                                          <div className="text-3xl font-bold text-gray-900 mb-1">{flight.arrivalTime}</div>
+                                          <div className="text-sm font-semibold text-gray-700 mb-1">{flight.arrivalCode}</div>
+                                          <div className="text-xs text-gray-500">{flight.arrivalCity}</div>
+                                        </div>
                                       </div>
 
-                                      {/* Arrival */}
-                                      <div className="text-center">
-                                        <div className="text-2xl font-bold text-gray-900 mb-1">{flight.arrivalTime}</div>
-                                        <div className="text-sm font-medium text-gray-700">{flight.arrivalCode}</div>
-                                        <div className="text-xs text-gray-500">{flight.arrivalCity}</div>
-                                        <div className="text-xs text-gray-500 mt-1">Terminal {flight.arrivalTerminal || "3"}</div>
-                                      </div>
-                                    </div>
-
-                                    {/* Flight Details */}
-                                    <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                      <div>
-                                        <span className="text-gray-600">Aircraft:</span>
-                                        <p className="font-medium">{flight.aircraft || "Boeing 777-300ER"}</p>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-600">Distance:</span>
-                                        <p className="font-medium">{flight.distance || "1,940 km"}</p>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-600">Flight Time:</span>
-                                        <p className="font-medium">{flight.duration}</p>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-600">Operated by:</span>
-                                        <p className="font-medium">{flight.airline}</p>
+                                      {/* Flight Details Grid */}
+                                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
+                                        <div>
+                                          <p className="text-gray-500 mb-1">Aircraft</p>
+                                          <p className="font-medium text-gray-900">A21H</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-500 mb-1">Layover</p>
+                                          <p className="font-medium text-gray-900">2h 5m</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-500 mb-1">Flight time</p>
+                                          <p className="font-medium text-gray-900">{flight.duration}</p>
+                                        </div>
+                                        <div>
+                                          <p className="text-gray-500 mb-1">Operated by</p>
+                                          <p className="font-medium text-gray-900">{flight.airline}</p>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
 
                                   {/* Return Flight (if round trip) */}
                                   {tripType === "round-trip" && (
-                                    <div className="border-t border-gray-200 pt-6">
-                                      <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                    <div>
+                                      {/* Header */}
+                                      <div className="flex items-center mb-6">
                                         <Plane className="w-5 h-5 mr-2 text-[#003580] rotate-180" />
-                                        Return • {returnDate ? formatDisplayDate(returnDate, "eee, MMM d") : "Select date"}
-                                      </h4>
+                                        <h4 className="text-lg font-semibold text-gray-900">
+                                          Return • {returnDate ? formatDisplayDate(returnDate, "eee, MMM d") : "Fri, Aug 1"}
+                                        </h4>
+                                      </div>
 
-                                      <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                                        <div className="flex items-center space-x-4 mb-3">
+                                      {/* Flight Card */}
+                                      <div className="bg-white border border-gray-200 rounded-lg p-6">
+                                        {/* Airline Info */}
+                                        <div className="flex items-center mb-6">
                                           <img
                                             src={flight.returnLogo || flight.logo}
                                             alt={flight.returnAirline || flight.airline}
-                                            className="w-8 h-6 object-contain"
+                                            className="w-10 h-8 object-contain mr-3"
                                           />
                                           <div>
-                                            <p className="font-semibold text-gray-900">{flight.returnAirline || flight.airline}</p>
-                                            <p className="text-sm text-gray-600">{flight.returnFlightNumber || "FL 508"}</p>
+                                            <p className="font-semibold text-gray-900 text-base">{flight.returnAirline || flight.airline}</p>
+                                            <p className="text-sm text-gray-600">{flight.returnFlightNumber || "6E 1366"}</p>
                                           </div>
                                         </div>
-                                      </div>
 
-                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        {/* Return Departure */}
-                                        <div className="text-center">
-                                          <div className="text-2xl font-bold text-gray-900 mb-1">{flight.returnDepartureTime || "08:45"}</div>
-                                          <div className="text-sm font-medium text-gray-700">{flight.arrivalCode}</div>
-                                          <div className="text-xs text-gray-500">{flight.arrivalCity}</div>
-                                          <div className="text-xs text-gray-500 mt-1">Terminal {flight.returnDepartureTerminal || "3"}</div>
-                                        </div>
+                                        {/* Flight Timeline */}
+                                        <div className="flex items-center justify-between mb-6">
+                                          {/* Departure */}
+                                          <div className="text-center">
+                                            <div className="text-3xl font-bold text-gray-900 mb-1">{flight.returnDepartureTime || "14:00"}</div>
+                                            <div className="text-sm font-semibold text-gray-700 mb-1">{flight.arrivalCode}</div>
+                                            <div className="text-xs text-gray-500">{flight.arrivalCity}</div>
+                                          </div>
 
-                                        {/* Return Flight Path */}
-                                        <div className="flex flex-col items-center justify-center">
-                                          <div className="w-full flex items-center justify-center mb-2">
-                                            <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
-                                            <div className="flex-1 h-px bg-gray-300 mx-2"></div>
-                                            <div className="bg-[#003580] text-white text-xs px-2 py-1 rounded font-medium">
-                                              {flight.returnFlightType || flight.flightType}
+                                          {/* Connection Line */}
+                                          <div className="flex-1 flex items-center mx-8">
+                                            <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                            <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
+                                              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded font-medium">
+                                                  Stop
+                                                </div>
+                                              </div>
                                             </div>
-                                            <div className="flex-1 h-px bg-gray-300 mx-2"></div>
-                                            <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                                            <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
                                           </div>
-                                          <div className="text-sm text-gray-600">{flight.returnDuration || "3h 20m"}</div>
-                                          <div className="text-xs text-gray-500">{flight.returnStops || "Non-stop"}</div>
+
+                                          {/* Arrival */}
+                                          <div className="text-center">
+                                            <div className="text-3xl font-bold text-gray-900 mb-1">{flight.returnArrivalTime || "19:30"}</div>
+                                            <div className="text-sm font-semibold text-gray-700 mb-1">{flight.departureCode}</div>
+                                            <div className="text-xs text-gray-500">{flight.departureCity}</div>
+                                          </div>
                                         </div>
 
-                                        {/* Return Arrival */}
-                                        <div className="text-center">
-                                          <div className="text-2xl font-bold text-gray-900 mb-1">{flight.returnArrivalTime || "14:05"}</div>
-                                          <div className="text-sm font-medium text-gray-700">{flight.departureCode}</div>
-                                          <div className="text-xs text-gray-500">{flight.departureCity}</div>
-                                          <div className="text-xs text-gray-500 mt-1">Terminal {flight.returnArrivalTerminal || "2"}</div>
+                                        {/* Flight Details Grid */}
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
+                                          <div>
+                                            <p className="text-gray-500 mb-1">Aircraft</p>
+                                            <p className="font-medium text-gray-900">A21H</p>
+                                          </div>
+                                          <div>
+                                            <p className="text-gray-500 mb-1">Layover</p>
+                                            <p className="font-medium text-gray-900">2h 5m</p>
+                                          </div>
+                                          <div>
+                                            <p className="text-gray-500 mb-1">Flight time</p>
+                                            <p className="font-medium text-gray-900">{flight.returnDuration || "5h 30m"}</p>
+                                          </div>
+                                          <div>
+                                            <p className="text-gray-500 mb-1">Operated by</p>
+                                            <p className="font-medium text-gray-900">{flight.returnAirline || flight.airline}</p>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   )}
 
                                   {/* Book Now Button */}
-                                  <div className="border-t border-gray-200 pt-6">
+                                  <div className="pt-6">
                                     <Button
                                       onClick={() => {
                                         // Find the fare type for this detail key
@@ -2849,9 +2873,9 @@ export default function FlightResults() {
                                         const fareType = flight.fareTypes.find(ft => ft.id === fareTypeId) || flight.fareTypes[0];
                                         handleBooking(flight, fareType);
                                       }}
-                                      className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-3 text-base font-semibold"
+                                      className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-base font-semibold rounded-lg"
                                     >
-                                      Book Now - {formatPrice(flight.fareTypes[0]?.price || 0)}
+                                      Book Now • {formatPrice(flight.fareTypes[0]?.price || 0)}
                                     </Button>
                                   </div>
                                 </div>
