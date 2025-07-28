@@ -1259,7 +1259,7 @@ export default function FlightResults() {
                       GBP: { symbol: "£", name: "British Pound" },
                       INR: { symbol: "��", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
-                      SAR: { symbol: "�����", name: "Saudi Riyal" },
+                      SAR: { symbol: "���", name: "Saudi Riyal" },
                       JPY: { symbol: "¥", name: "Japanese Yen" },
                       CNY: { symbol: "¥", name: "Chinese Yuan" },
                       SGD: { symbol: "S$", name: "Singapore Dollar" },
@@ -2571,48 +2571,7 @@ export default function FlightResults() {
                           <Shield className="w-5 h-5 text-green-600" />
                         </div>
 
-                        {/* Fare Breakdown Tooltip - Positioned next to price */}
-                        {expandedTicketOptions === `tooltip-${flight.id}` && (
-                          <div className="absolute right-0 top-full mt-2 z-50">
-                            <div className="bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg min-w-[200px]">
-                              <div className="text-center font-medium mb-2">
-                                Fare breakdown
-                              </div>
-                              <div className="space-y-1">
-                                <div className="flex justify-between">
-                                  <span>Base fare:</span>
-                                  <span>
-                                    {formatPrice(
-                                      Math.round(
-                                        flight.fareTypes[0].price * 0.75,
-                                      ),
-                                    )}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span>Taxes & fees:</span>
-                                  <span>
-                                    {formatPrice(
-                                      Math.round(
-                                        flight.fareTypes[0].price * 0.25,
-                                      ),
-                                    )}
-                                  </span>
-                                </div>
-                                <div className="border-t border-gray-600 pt-1 mt-1">
-                                  <div className="flex justify-between font-medium">
-                                    <span>Total:</span>
-                                    <span>
-                                      {formatPrice(flight.fareTypes[0].price)}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                              {/* Tooltip arrow */}
-                              <div className="absolute bottom-full right-4 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-900"></div>
-                            </div>
-                          </div>
-                        )}
+
 
                         {/* Compact text info */}
                         <div className="text-xs text-gray-600 mb-1">All-inclusive price</div>
