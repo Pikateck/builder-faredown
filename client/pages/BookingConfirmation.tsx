@@ -1438,7 +1438,18 @@ export default function BookingConfirmation() {
           <h3 className="font-bold text-yellow-800 mb-3">
             Cancellation Policy
           </h3>
-          <p className="text-yellow-700 text-sm">{booking.cancellation}</p>
+          <div className="text-yellow-700 text-sm space-y-2">
+            {bookingType === "flight" ? (
+              <>
+                <p>• <strong>Free cancellation:</strong> Cancel up to 24 hours before departure for domestic flights, 48 hours for international flights</p>
+                <p>• <strong>Partial cancellation:</strong> Cancellation fees may apply as per airline policy</p>
+                <p>• <strong>No-show policy:</strong> No refund for no-shows or missed flights</p>
+                <p>• <strong>Name changes:</strong> Name corrections may incur additional charges</p>
+              </>
+            ) : (
+              <p>{booking.cancellation || "Cancellation terms as per provider policy"}</p>
+            )}
+          </div>
         </div>
 
         {/* Important Information */}
