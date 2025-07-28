@@ -570,6 +570,15 @@ export default function FlightResults() {
     setSelectedFareType(fareType);
   };
 
+  // Handle fare rules toggle
+  const handleFareRulesToggle = (flightId: string, fareTypeId: string) => {
+    const ruleKey = `${flightId}-${fareTypeId}`;
+    setShowFareRules(prev => ({
+      ...prev,
+      [ruleKey]: !prev[ruleKey]
+    }));
+  };
+
   // Calendar helper functions (restored)
   const getMonthName = (month: number) => {
     const months = [
