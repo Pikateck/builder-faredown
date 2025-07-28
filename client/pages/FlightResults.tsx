@@ -83,8 +83,8 @@ const flightData = [
     logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
     returnLogo:
       "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
-    aircraft: "Boeing 777",
-    returnAircraft: "Boeing 777",
+    aircraft: "Boeing 777-300ER",
+    returnAircraft: "Boeing 777-200LR",
     flightType: "Direct",
     stops: 0,
     refundability: "Refundable",
