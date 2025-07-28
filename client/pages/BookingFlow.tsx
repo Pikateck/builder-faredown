@@ -633,11 +633,15 @@ const SeatMap = ({ travellers, seatSelections, setSeatSelections, selectedFlight
           "Mumbai-Dubai",
           "Mumbai → Dubai",
           expandedFlight === "Mumbai-Dubai",
+          selectedFlight,
+          selectedFareType,
         )}
         {renderFlightSegment(
           "Dubai-Mumbai",
           "Dubai → Mumbai",
           expandedFlight === "Dubai-Mumbai",
+          selectedFlight,
+          selectedFareType,
         )}
       </div>
 
