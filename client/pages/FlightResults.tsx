@@ -3841,6 +3841,331 @@ export default function FlightResults() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Flight Details Modal */}
+      <Dialog open={showFlightDetails} onOpenChange={setShowFlightDetails}>
+        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-4xl md:h-auto md:rounded-lg">
+          <DialogHeader className="border-b border-gray-200 pb-4">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-xl font-semibold text-gray-900 flex items-center">
+                <Plane className="w-6 h-6 mr-2 text-[#003580]" />
+                Flight Details & Fare Rules
+              </DialogTitle>
+              <button
+                onClick={() => setShowFlightDetails(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </DialogHeader>
+
+          {selectedFlightForDetails && (
+            <div className="max-h-[80vh] overflow-y-auto">
+              <div className="space-y-6 p-6">
+                {/* Flight Overview */}
+                <div className="bg-[#003580] text-white rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                        <img
+                          src={selectedFlightForDetails.logo}
+                          alt={selectedFlightForDetails.airline}
+                          className="w-8 h-6 object-contain"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold">{selectedFlightForDetails.airline}</h3>
+                        <p className="text-blue-100">{selectedFlightForDetails.flightNumber}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-blue-100 text-sm">Starting from</p>
+                      <p className="text-2xl font-bold">{formatPrice(selectedFlightForDetails.fareTypes[0]?.price || 0)}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Flight Itinerary */}
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <Clock className="w-5 h-5 mr-2 text-[#003580]" />
+                    Flight Itinerary
+                  </h4>
+
+                  {/* Outbound Flight */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h5 className="font-medium text-gray-900">
+                        Outbound • {departureDate ? formatDisplayDate(departureDate, "eee, MMM d, yyyy") : "Select date"}
+                      </h5>
+                      <span className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded">
+                        {selectedFlightForDetails.flightType}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-900">{selectedFlightForDetails.departureTime}</div>
+                        <div className="text-sm text-gray-600">{selectedFlightForDetails.departureCode}</div>
+                        <div className="text-xs text-gray-500">{selectedFlightForDetails.departureCity}</div>
+                        <div className="text-xs text-gray-500">Terminal {selectedFlightForDetails.departureTerminal || "1"}</div>
+                      </div>
+
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="w-full flex items-center">
+                          <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                          <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                          <Plane className="w-4 h-4 text-[#003580]" />
+                          <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                          <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                        </div>
+                        <div className="text-sm text-gray-600 mt-2">{selectedFlightForDetails.duration}</div>
+                        <div className="text-xs text-gray-500">{selectedFlightForDetails.stops} stops</div>
+                      </div>
+
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-900">{selectedFlightForDetails.arrivalTime}</div>
+                        <div className="text-sm text-gray-600">{selectedFlightForDetails.arrivalCode}</div>
+                        <div className="text-xs text-gray-500">{selectedFlightForDetails.arrivalCity}</div>
+                        <div className="text-xs text-gray-500">Terminal {selectedFlightForDetails.arrivalTerminal || "3"}</div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-600">Aircraft:</span>
+                          <p className="font-medium">{selectedFlightForDetails.aircraft || "Boeing 777-300ER"}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Flight Time:</span>
+                          <p className="font-medium">{selectedFlightForDetails.duration}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Distance:</span>
+                          <p className="font-medium">{selectedFlightForDetails.distance || "1,940 km"}</p>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Operated by:</span>
+                          <p className="font-medium">{selectedFlightForDetails.airline}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Return Flight (if round trip) */}
+                  {tripType === "round-trip" && (
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h5 className="font-medium text-gray-900">
+                          Return • {returnDate ? formatDisplayDate(returnDate, "eee, MMM d, yyyy") : "Select date"}
+                        </h5>
+                        <span className="text-sm px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                          {selectedFlightForDetails.flightType}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-900">{selectedFlightForDetails.returnDepartureTime || "08:45"}</div>
+                          <div className="text-sm text-gray-600">{selectedFlightForDetails.arrivalCode}</div>
+                          <div className="text-xs text-gray-500">{selectedFlightForDetails.arrivalCity}</div>
+                          <div className="text-xs text-gray-500">Terminal {selectedFlightForDetails.returnDepartureTerminal || "3"}</div>
+                        </div>
+
+                        <div className="flex flex-col items-center justify-center">
+                          <div className="w-full flex items-center">
+                            <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                            <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                            <Plane className="w-4 h-4 text-[#003580] rotate-180" />
+                            <div className="flex-1 h-px bg-gray-300 mx-2"></div>
+                            <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
+                          </div>
+                          <div className="text-sm text-gray-600 mt-2">{selectedFlightForDetails.returnDuration || "3h 20m"}</div>
+                          <div className="text-xs text-gray-500">{selectedFlightForDetails.returnStops || "Non-stop"}</div>
+                        </div>
+
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-900">{selectedFlightForDetails.returnArrivalTime || "14:05"}</div>
+                          <div className="text-sm text-gray-600">{selectedFlightForDetails.departureCode}</div>
+                          <div className="text-xs text-gray-500">{selectedFlightForDetails.departureCity}</div>
+                          <div className="text-xs text-gray-500">Terminal {selectedFlightForDetails.returnArrivalTerminal || "2"}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Comprehensive Fare Rules */}
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <FileText className="w-5 h-5 mr-2 text-[#003580]" />
+                    Fare Rules & Policies
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Baggage Information */}
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <h5 className="font-semibold text-blue-800 mb-3 flex items-center">
+                        <Luggage className="w-4 h-4 mr-2" />
+                        Baggage Information
+                      </h5>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-blue-700">Check-in:</span>
+                          <span className="font-medium">1 × 23 kg / Adult</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-blue-700">Cabin:</span>
+                          <span className="font-medium">1 × 7 kg / Adult</span>
+                        </div>
+                        <p className="text-xs text-blue-600 mt-2">
+                          Additional baggage charges apply for excess weight
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Cancellation Policy */}
+                    <div className="bg-red-50 rounded-lg p-4">
+                      <h5 className="font-semibold text-red-800 mb-3 flex items-center">
+                        <XCircle className="w-4 h-4 mr-2" />
+                        Cancellation Policy
+                      </h5>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="text-red-700 font-medium">Airline fee:</span>
+                          <p className="text-red-600">₹3,500 per passenger</p>
+                        </div>
+                        <div>
+                          <span className="text-red-700 font-medium">Clearing fee:</span>
+                          <p className="text-red-600">₹500 per passenger</p>
+                        </div>
+                        <p className="text-xs text-red-600 mt-2">
+                          Cancellation charges are indicated per traveller. 24 hours before departure of the flight.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Date Change Policy */}
+                    <div className="bg-yellow-50 rounded-lg p-4">
+                      <h5 className="font-semibold text-yellow-800 mb-3 flex items-center">
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        Date Change Policy
+                      </h5>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="text-yellow-700 font-medium">Airline fee:</span>
+                          <p className="text-yellow-600">₹2,314 per passenger</p>
+                        </div>
+                        <div>
+                          <span className="text-yellow-700 font-medium">Clearing fee:</span>
+                          <p className="text-yellow-600">₹500 per passenger</p>
+                        </div>
+                        <p className="text-xs text-yellow-600 mt-2">
+                          Date change charges are indicated per traveller. Subject to seat availability.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Refund Policy */}
+                    <div className="bg-green-50 rounded-lg p-4">
+                      <h5 className="font-semibold text-green-800 mb-3 flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Refund Policy
+                      </h5>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-green-700">Status:</span>
+                          <span className={`font-medium ${selectedFlightForDetails.refundability === "Refundable" ? "text-green-600" : "text-red-600"}`}>
+                            {selectedFlightForDetails.refundability}
+                          </span>
+                        </div>
+                        {selectedFlightForDetails.refundability === "Refundable" ? (
+                          <p className="text-xs text-green-600">
+                            Full refund available minus airline and service charges
+                          </p>
+                        ) : (
+                          <p className="text-xs text-red-600">
+                            Only taxes and fees are refundable as per airline policy
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Important Terms */}
+                  <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                    <h5 className="font-semibold text-gray-800 mb-3 flex items-center">
+                      <Info className="w-4 h-4 mr-2" />
+                      Important Terms & Conditions
+                    </h5>
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      <li>• Passenger names cannot be changed after booking</li>
+                      <li>• Check-in must be completed 2 hours before departure</li>
+                      <li>• Valid government-issued photo ID required</li>
+                      <li>• All fees are per passenger and include applicable taxes</li>
+                      <li>• No-show will result in forfeiture of entire ticket value</li>
+                      <li>• Infant fares (below 2 years) have separate terms</li>
+                      <li>• Group bookings may have different cancellation terms</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Available Fare Types */}
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                    <CreditCard className="w-5 h-5 mr-2 text-[#003580]" />
+                    Available Fare Options
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {selectedFlightForDetails.fareTypes.map((fareType, index) => (
+                      <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-[#003580] transition-colors">
+                        <div className="text-center">
+                          <h5 className="font-semibold text-gray-900 mb-2">{fareType.name}</h5>
+                          <div className="text-2xl font-bold text-[#003580] mb-3">
+                            {formatPrice(fareType.price)}
+                          </div>
+                          <div className="space-y-2 text-sm text-gray-600 mb-4">
+                            <div className="flex items-center justify-center space-x-2">
+                              <Luggage className="w-4 h-4" />
+                              <span>{fareType.baggage}</span>
+                            </div>
+                            <div className={`font-medium ${fareType.refundability === "Refundable" ? "text-green-600" : "text-red-600"}`}>
+                              {fareType.refundability}
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Button
+                              variant="outline"
+                              className="w-full border-[#febb02] text-[#febb02] hover:bg-[#febb02] hover:text-white"
+                              onClick={() => {
+                                setShowFlightDetails(false);
+                                handleBargain(selectedFlightForDetails, fareType);
+                              }}
+                            >
+                              Bargain
+                            </Button>
+                            <Button
+                              className="w-full bg-[#003580] hover:bg-[#0071c2]"
+                              onClick={() => {
+                                setShowFlightDetails(false);
+                                handleBooking(selectedFlightForDetails, fareType);
+                              }}
+                            >
+                              Book Now
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
