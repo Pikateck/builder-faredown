@@ -2256,21 +2256,32 @@ export default function FlightResults() {
                             >
                               {fareType.refundability}
                             </div>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-2 gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-xs"
+                                  onClick={() => handleBargain(flight, fareType)}
+                                >
+                                  Bargain
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  className="bg-[#003580] text-xs"
+                                  onClick={() => handleBooking(flight, fareType)}
+                                >
+                                  Book
+                                </Button>
+                              </div>
                               <Button
-                                variant="outline"
+                                variant="ghost"
                                 size="sm"
-                                className="text-xs"
-                                onClick={() => handleBargain(flight, fareType)}
+                                className="w-full text-xs text-[#003580] p-1"
+                                onClick={() => handleFareRulesToggle(flight.id, fareType.id)}
                               >
-                                Bargain
-                              </Button>
-                              <Button
-                                size="sm"
-                                className="bg-[#003580] text-xs"
-                                onClick={() => handleBooking(flight, fareType)}
-                              >
-                                Book
+                                <Info className="w-3 h-3 mr-1" />
+                                View Fare Rules
                               </Button>
                             </div>
                           </div>
