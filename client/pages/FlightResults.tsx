@@ -2232,15 +2232,9 @@ export default function FlightResults() {
                       </Button>
                       <Button
                         onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 text-sm flex items-center justify-center"
+                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 text-sm"
                       >
-                        <Info className="w-4 h-4 mr-1" />
                         View Details
-                        <ChevronDown
-                          className={`w-4 h-4 ml-1 transition-transform duration-200 ${
-                            expandedFlightDetails[`${flight.id}-${flight.fareTypes[0].id}`] ? 'rotate-180' : ''
-                          }`}
-                        />
                       </Button>
                     </div>
 
