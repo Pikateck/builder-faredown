@@ -1298,9 +1298,9 @@ export default function BookingConfirmation() {
 
       <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Success Message */}
-        <div className="bg-white rounded-lg border border-green-200 p-8 mb-8 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+        <div className="bg-white rounded-lg border border-gray-200 p-8 mb-8 text-center">
+          <div className="w-16 h-16 border border-gray-300 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-8 h-8 text-gray-600" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Booking Confirmed!
@@ -1310,12 +1310,12 @@ export default function BookingConfirmation() {
             {bookingType === "flight" ? "ticket" : "reservation"} has been
             successfully confirmed. Here are your booking details:
           </p>
-          <div className="bg-blue-700 text-white px-6 py-3 rounded-lg inline-block">
+          <div className="border border-gray-300 text-gray-900 px-6 py-3 rounded-lg inline-block">
             <span className="text-lg font-bold">Booking ID: {booking.id}</span>
           </div>
           {booking.bargained && (
             <div className="mt-4">
-              <Badge className="bg-green-100 text-green-800 px-4 py-2">
+              <Badge className="bg-gray-100 text-gray-800 px-4 py-2">
                 You saved ₹
                 {(booking.originalPrice - booking.total).toLocaleString()} with
                 bargaining!
@@ -1709,11 +1709,11 @@ export default function BookingConfirmation() {
         </div>
 
         {/* Cancellation Policy */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-8">
-          <h3 className="font-bold text-yellow-800 mb-3">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
+          <h3 className="font-bold text-gray-900 mb-3">
             Cancellation Policy
           </h3>
-          <div className="text-yellow-700 text-sm space-y-2">
+          <div className="text-gray-700 text-sm space-y-2">
             {bookingType === "flight" ? (
               <>
                 <p>• <strong>Free cancellation:</strong> Cancel up to 24 hours before departure for domestic flights, 48 hours for international flights</p>
@@ -1728,11 +1728,11 @@ export default function BookingConfirmation() {
         </div>
 
         {/* Important Information */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-          <h3 className="font-bold text-blue-800 mb-3">
+        <div className="bg-white border border-gray-200 rounded-lg p-6 mt-8">
+          <h3 className="font-bold text-gray-900 mb-3">
             Important Information
           </h3>
-          <ul className="text-blue-700 space-y-2 text-sm">
+          <ul className="text-gray-700 space-y-2 text-sm">
             {bookingType === "flight" ? (
               <>
                 <li>• Please carry a valid government-issued photo ID for check-in</li>
