@@ -2761,7 +2761,7 @@ export default function FlightResults() {
                                           <div>
                                             <p className="font-semibold text-gray-900 text-base">{flight.returnAirline || flight.airline}</p>
                                             <p className="text-sm text-gray-600">{flight.returnFlightNumber || "6E 1366"}</p>
-                                            <p className="text-xs text-gray-500">Aircraft: {flight.returnAircraft || flight.aircraft}</p>
+
                                           </div>
                                         </div>
 
