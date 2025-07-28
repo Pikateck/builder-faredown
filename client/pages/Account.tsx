@@ -547,34 +547,103 @@ Please keep this ticket for your records.
 
       {/* Saved Traveller Profiles */}
       <Card className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Saved Traveller Profiles
-          </h3>
-          <Badge variant="secondary">{savedProfiles.length} profiles</Badge>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Saved Traveller Profiles
+            </h3>
+            <p className="text-sm text-gray-600 mt-1">
+              Manage your saved traveller information for faster bookings
+            </p>
+          </div>
+          <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+            {savedProfiles.length + 1} profiles
+          </Badge>
         </div>
 
-        {savedProfiles.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <User className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-            <p>No saved profiles yet</p>
-            <p className="text-sm">Profiles will be saved automatically when you complete bookings</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Main Account Holder Profile */}
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border-2 border-blue-200 relative overflow-hidden">
+            <div className="absolute top-2 right-2">
+              <Badge className="bg-blue-600 text-white text-xs">Primary</Badge>
+            </div>
+
+            <div className="flex items-start space-x-4 mb-4">
+              <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center">
+                <User className="w-7 h-7 text-white" />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-lg font-semibold text-gray-900">
+                  {profileData.firstName} {profileData.lastName}
+                </h4>
+                <p className="text-sm text-blue-700 font-medium">
+                  Account Holder • Adult
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="bg-white/70 rounded-lg p-3">
+                <div className="flex items-center mb-1">
+                  <Mail className="w-4 h-4 text-blue-600 mr-2" />
+                  <span className="text-gray-600 font-medium">Email</span>
+                </div>
+                <p className="text-gray-900 truncate">{profileData.email}</p>
+              </div>
+
+              <div className="bg-white/70 rounded-lg p-3">
+                <div className="flex items-center mb-1">
+                  <Phone className="w-4 h-4 text-blue-600 mr-2" />
+                  <span className="text-gray-600 font-medium">Phone</span>
+                </div>
+                <p className="text-gray-900">{profileData.phone}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 text-xs text-blue-700 bg-white/50 rounded-lg p-2">
+              <div className="flex items-center">
+                <CheckCircle className="w-3 h-3 mr-1" />
+                Primary profile used for contact and billing
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {savedProfiles.map((profile) => (
+
+          {/* Saved Traveller Profiles */}
+          {savedProfiles.length === 0 ? (
+            <div className="bg-gray-50 rounded-xl p-6 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-center min-h-[280px]">
+              <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                <Plus className="w-8 h-8 text-gray-400" />
+              </div>
+              <h4 className="text-lg font-medium text-gray-900 mb-2">No Additional Profiles</h4>
+              <p className="text-sm text-gray-600 mb-4 max-w-sm">
+                Additional traveller profiles will appear here when you complete bookings with different passenger details
+              </p>
+              <div className="bg-blue-50 rounded-lg p-3 text-xs text-blue-700">
+                💡 Tip: Profiles are automatically saved during the booking process
+              </div>
+            </div>
+          ) : (
+            savedProfiles.map((profile) => (
               <div
                 key={profile.id}
-                className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      {profile.profileName}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {profile.type || 'Adult'} • {profile.gender}
-                    </p>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
+                      <User className="w-6 h-6 text-green-700" />
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900">
+                        {profile.profileName}
+                      </h4>
+                      <p className="text-sm text-gray-600 flex items-center">
+                        <Badge variant="outline" className="mr-2 text-xs">
+                          {profile.type || 'Adult'}
+                        </Badge>
+                        {profile.gender}
+                      </p>
+                    </div>
                   </div>
                   <Button
                     variant="ghost"
@@ -586,40 +655,87 @@ Please keep this ticket for your records.
                   </Button>
                 </div>
 
-                <div className="space-y-2 text-sm">
+                <div className="grid grid-cols-1 gap-3 text-sm">
                   {profile.dateOfBirth && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Date of Birth:</span>
-                      <span>{new Date(profile.dateOfBirth).toLocaleDateString()}</span>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-gray-600">Date of Birth</span>
+                        </div>
+                        <span className="font-medium text-gray-900">
+                          {new Date(profile.dateOfBirth).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
                   )}
-                  {profile.nationality && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Nationality:</span>
-                      <span>{profile.nationality}</span>
-                    </div>
-                  )}
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {profile.nationality && (
+                      <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-center mb-1">
+                          <MapPin className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-gray-600 text-xs">Nationality</span>
+                        </div>
+                        <p className="font-medium text-gray-900">{profile.nationality}</p>
+                      </div>
+                    )}
+
+                    {profile.mealPreference && (
+                      <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-center mb-1">
+                          <Gift className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-gray-600 text-xs">Meal Pref</span>
+                        </div>
+                        <p className="font-medium text-gray-900">{profile.mealPreference}</p>
+                      </div>
+                    )}
+                  </div>
+
                   {profile.passportNumber && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Passport:</span>
-                      <span>***{profile.passportNumber.slice(-4)}</span>
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-gray-600">Passport</span>
+                        </div>
+                        <span className="font-medium text-gray-900 font-mono">
+                          ***{profile.passportNumber.slice(-4)}
+                        </span>
+                      </div>
                     </div>
                   )}
-                  {profile.mealPreference && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Meal Pref:</span>
-                      <span>{profile.mealPreference}</span>
+
+                  {profile.panCardNumber && (
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <CreditCard className="w-4 h-4 text-gray-500 mr-2" />
+                          <span className="text-gray-600">PAN Card</span>
+                        </div>
+                        <span className="font-medium text-gray-900 font-mono">
+                          ***{profile.panCardNumber?.slice(-4) || 'Not provided'}
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-3 text-xs text-gray-500">
-                  Saved: {new Date(profile.savedAt).toLocaleDateString()}
+                <div className="mt-4 pt-3 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Clock className="w-3 h-3 mr-1" />
+                      Saved: {new Date(profile.savedAt).toLocaleDateString()}
+                    </div>
+                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                      Ready to use
+                    </Badge>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </Card>
     </div>
   );
