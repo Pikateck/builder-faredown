@@ -977,7 +977,7 @@ export default function BookingFlow() {
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
-    { name: "Jamaica", code: "+1", flag: "��🇲" },
+    { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
 
@@ -2523,8 +2523,11 @@ export default function BookingFlow() {
                           {selectedMealIds.length > 0 && (
                             <p><strong>Meals:</strong> {selectedMealIds.length} meal(s) selected</p>
                           )}
-                          {extraBaggage > 0 && (
-                            <p><strong>Extra Baggage:</strong> {extraBaggage}kg</p>
+                          {(selectedBaggage.outbound.weight || selectedBaggage.return.weight) && (
+                            <p><strong>Extra Baggage:</strong>
+                              {selectedBaggage.outbound.weight && ` ${selectedBaggage.outbound.weight} (Outbound)`}
+                              {selectedBaggage.return.weight && ` ${selectedBaggage.return.weight} (Return)`}
+                            </p>
                           )}
                         </div>
                       </div>
