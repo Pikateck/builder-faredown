@@ -2586,6 +2586,13 @@ export default function FlightResults() {
                         {/* Side-by-side buttons - Hotel Section Style */}
                         <div className="flex gap-2 mt-3">
                           <Button
+                            onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
+                            variant="outline"
+                            className="flex-1 touch-manipulation text-sm"
+                          >
+                            View Details
+                          </Button>
+                          <Button
                             onClick={() =>
                               handleBargain(flight, flight.fareTypes[0])
                             }
@@ -2593,13 +2600,6 @@ export default function FlightResults() {
                           >
                             <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                             Bargain
-                          </Button>
-                          <Button
-                            onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                            variant="outline"
-                            className="flex-1 touch-manipulation text-sm"
-                          >
-                            View Details
                           </Button>
                         </div>
                       </div>
