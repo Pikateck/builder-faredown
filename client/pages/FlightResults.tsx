@@ -1177,7 +1177,7 @@ export default function FlightResults() {
                       USD: { symbol: "$", name: "US Dollar" },
                       EUR: { symbol: "€", name: "Euro" },
                       GBP: { symbol: "£", name: "British Pound" },
-                      INR: { symbol: "₹", name: "Indian Rupee" },
+                      INR: { symbol: "��", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "���", name: "Saudi Riyal" },
                       JPY: { symbol: "¥", name: "Japanese Yen" },
@@ -2231,26 +2231,13 @@ export default function FlightResults() {
                         🤝 Bargain
                       </Button>
                       <Button
-                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 text-sm"
-                        onClick={() =>
-                          handleBooking(flight, flight.fareTypes[0])
-                        }
-                      >
-                        Book Now
-                      </Button>
-                    </div>
-
-                    {/* View Details Button - Mobile */}
-                    <div className="mt-3">
-                      <Button
                         onClick={() => handleToggleFlightDetails(flight.id, flight.fareTypes[0].id)}
-                        variant="outline"
-                        className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 text-sm py-2 flex items-center justify-center"
+                        className="bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 text-sm flex items-center justify-center"
                       >
-                        <Info className="w-3 h-3 mr-1" />
+                        <Info className="w-4 h-4 mr-1" />
                         View Details
                         <ChevronDown
-                          className={`w-3 h-3 ml-1 transition-transform duration-200 ${
+                          className={`w-4 h-4 ml-1 transition-transform duration-200 ${
                             expandedFlightDetails[`${flight.id}-${flight.fareTypes[0].id}`] ? 'rotate-180' : ''
                           }`}
                         />
@@ -2301,7 +2288,7 @@ export default function FlightResults() {
                                   {flight.departureTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.departureCode} ��{" "}
+                                  {flight.departureCode} •{" "}
                                   {departureDate
                                     ? formatDisplayDate(departureDate, "MMM d")
                                     : "Select date"}
