@@ -1787,7 +1787,7 @@ export default function FlightResults() {
             </div>
 
             <div className="w-full lg:w-auto lg:min-w-[120px]">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
+              <Button className="bg-[#febb02] hover:bg-[#e6a602] text-black px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
                 Search
               </Button>
             </div>
@@ -3009,7 +3009,7 @@ export default function FlightResults() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                               <div>
                                 <p className="font-medium text-[#666] mb-1">Cancellation</p>
-                                <p className="text-gray-900">Allowed with fee: ��3,500 per passenger</p>
+                                <p className="text-gray-900">Allowed with fee: ����3,500 per passenger</p>
                                 <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
                               </div>
                               <div>
