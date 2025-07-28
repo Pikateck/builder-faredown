@@ -3280,6 +3280,38 @@ export default function FlightResults() {
                 </div>
               </div>
 
+              {/* Aircraft Type Filter */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                  Aircraft Type
+                </h3>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {availableAircraftTypes.map((aircraftType) => (
+                    <label
+                      key={aircraftType}
+                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedAircraftTypes.has(aircraftType)}
+                          onChange={(e) =>
+                            handleAircraftTypeFilter(aircraftType, e.target.checked)
+                          }
+                          className="w-4 h-4 text-[#003580] rounded"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {aircraftType}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                        {aircraftTypeCounts[aircraftType]}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
               {/* Fare Type Filter */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-2">
