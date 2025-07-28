@@ -2791,7 +2791,7 @@ export default function BookingFlow() {
                   Back
                 </Button>
                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
-                  {currentStep < 4 && (
+                  {currentStep < 5 && (
                     <Button
                       variant="outline"
                       onClick={handleNextStep}
