@@ -3400,6 +3400,44 @@ export default function BookingFlow() {
 
           {selectedTraveller && (
             <div className="space-y-4">
+              {/* Profile Selector */}
+              {savedProfiles.length > 0 && (
+                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                  <label className="block text-sm font-medium text-blue-800 mb-2">
+                    Load from Saved Profile
+                  </label>
+                  <div className="flex space-x-2">
+                    <Select
+                      value={selectedProfileId}
+                      onValueChange={(value) => {
+                        setSelectedProfileId(value);
+                        if (value) {
+                          loadProfileIntoTraveller(value);
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="flex-1">
+                        <SelectValue placeholder="Select a saved profile" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {savedProfiles.map((profile) => (
+                          <SelectItem key={profile.id} value={profile.id}>
+                            {profile.profileName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedProfileId("")}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-[#666] mb-1">
                   Title
