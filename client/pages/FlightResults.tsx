@@ -1810,7 +1810,7 @@ export default function FlightResults() {
             <div className="mt-3 pt-2 border-t border-gray-200">
               <button
                 onClick={resetAllFilters}
-                className="w-full text-blue-600 border border-blue-600 hover:bg-blue-50 text-sm h-8 rounded font-medium"
+                className="w-full text-gray-600 border border-gray-600 hover:bg-gray-50 text-sm h-8 rounded font-medium"
               >
                 Clear all filters
               </button>
@@ -3009,7 +3009,7 @@ export default function FlightResults() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                               <div>
                                 <p className="font-medium text-[#666] mb-1">Cancellation</p>
-                                <p className="text-gray-900">Allowed with fee: ����3,500 per passenger</p>
+                                <p className="text-gray-900">Allowed with fee: ��3,500 per passenger</p>
                                 <p className="text-xs text-[#666] mt-1">24 hours before departure</p>
                               </div>
                               <div>
