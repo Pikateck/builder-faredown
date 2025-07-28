@@ -2576,14 +2576,7 @@ export default function FlightResults() {
 
                     {/* Explore Options */}
                     <div className="border-t border-gray-200 bg-gray-50 py-2 mt-4 -mx-6 -mb-6 rounded-b-lg">
-                      <div className="flex justify-center space-x-6">
-                        <button
-                          onClick={() => handleViewFlightDetails(flight)}
-                          className="text-[#003580] text-sm font-medium hover:text-[#0071c2] transition-colors flex items-center py-1 px-2 rounded hover:bg-blue-50"
-                        >
-                          <Info className="w-4 h-4 mr-1" />
-                          View Details
-                        </button>
+                      <div className="flex justify-center">
                         <button
                           onClick={() =>
                             setExpandedTicketOptions(
