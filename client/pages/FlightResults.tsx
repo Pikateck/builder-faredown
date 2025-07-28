@@ -1432,7 +1432,7 @@ export default function FlightResults() {
                     className={cn(
                       "w-3 h-3 rounded-full border-2",
                       tripType === "multi-city"
-                        ? "bg-blue-600 border-white ring-1 ring-blue-600"
+                        ? "bg-[#febb02] border-white ring-1 ring-[#febb02]"
                         : "border-gray-300",
                     )}
                   ></div>
