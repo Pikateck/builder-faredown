@@ -343,7 +343,7 @@ Date: ${formatDate(booking.bookingDetails.bookingDate)}
 
 Flight Details:
 Mumbai → Dubai
-Emirates EK 508
+${booking.flightDetails?.airline || "Airlines"} ${booking.flightDetails?.flightNumber || "FL-001"}
 Sat, Aug 3 • 10:15 - 13:45
 
 Passenger: ${booking.bookingDetails.passengers[0]?.firstName} ${booking.bookingDetails.passengers[0]?.lastName}
