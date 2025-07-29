@@ -2254,7 +2254,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🏡</span> Balcony
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🚿</span> Shower
+                        <span className="mr-2">���</span> Shower
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">📺</span> Flat-screen TV
@@ -2613,7 +2613,7 @@ export default function HotelDetails() {
                           </p>
                           <div className="flex items-center gap-4 text-xs">
                             <button className="text-blue-600 hover:underline">
-                              👍 Helpful ({review.helpful})
+                              Helpful ({review.helpful})
                             </button>
                             <button className="text-gray-500 hover:underline">
                               Not helpful
