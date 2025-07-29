@@ -346,16 +346,15 @@ export function HotelCard({
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className="flex-1 touch-manipulation text-sm"
+                  className="flex-1 py-3 text-sm font-semibold border-blue-600 text-blue-600 hover:bg-blue-50"
                   onClick={handleViewDetails}
                 >
-                  View Details
+                  View
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm"
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm"
                 >
-                  <TrendingDown className="w-4 h-4 mr-1" />
                   Bargain
                 </Button>
               </div>
