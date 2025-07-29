@@ -440,7 +440,7 @@ export function HotelCard({
           </div>
 
           {/* Hotel Details - Mobile */}
-          <CardContent className="p-4">
+          <CardContent className="p-4 space-y-3">
             <div className="flex items-start justify-between mb-2">
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
