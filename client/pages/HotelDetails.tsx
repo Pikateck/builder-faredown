@@ -197,6 +197,7 @@ export default function HotelDetails() {
     totalNights: totalNights,
     rooms: parseInt(roomsParam || "1"),
     adults: parseInt(adultsParam || "2"),
+    roomTypes: [], // Will be populated below
   };
 
   const calculateTotalPrice = (roomPricePerNight: number) => {
