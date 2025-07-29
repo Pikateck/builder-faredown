@@ -266,7 +266,7 @@ export default function HotelResults() {
   const getMockHotels = (): Hotel[] => [
     {
       id: 1,
-      name: "Grand Plaza Hotel",
+      name: "Grand Plaza Hotel Dubai",
       location: `${destination || "Dubai, UAE"}`,
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
