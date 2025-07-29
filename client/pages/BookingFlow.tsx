@@ -1019,7 +1019,7 @@ export default function BookingFlow() {
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
     { name: "Hungary", code: "+36", flag: "🇭🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
-    { name: "India", code: "+91", flag: "🇮🇳" },
+    { name: "India", code: "+91", flag: "🇮����" },
     { name: "Indonesia", code: "+62", flag: "����🇩" },
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
@@ -3613,7 +3613,7 @@ export default function BookingFlow() {
           </DialogHeader>
 
           {selectedTraveller && (
-            <div className="space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto pr-2">
+            <div className="space-y-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2">
               {/* Enhanced Profile Selector */}
               {savedProfiles.length > 0 && (
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
