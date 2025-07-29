@@ -267,10 +267,7 @@ export function MobileDatePicker({
               WebkitUserSelect: "none",
               userSelect: "none"
             }}
-            disabled={
-              !selectedDepartureDate ||
-              (tripType === "round-trip" && !selectedReturnDate)
-            }
+
           >
             Done
           </Button>
