@@ -821,24 +821,16 @@ export default function Hotels() {
                         </button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
-                        <BookingCalendar
-                          initialRange={{
-                            startDate: departureDate || new Date(),
-                            endDate:
-                              returnDate ||
-                              addDays(departureDate || new Date(), 7),
-                          }}
-                          onChange={(range) => {
-                            console.log(
-                              "Hotel calendar range selected:",
-                              range,
-                            );
-                            setDepartureDate(range.startDate);
-                            setReturnDate(range.endDate);
+                        <SimpleCalendar
+                          onDateSelect={(checkIn, checkOut) => {
+                            console.log("Desktop hotel dates selected:", { checkIn, checkOut });
+                            setDepartureDate(checkIn);
+                            setReturnDate(checkOut);
+                            setShowCalendar(false);
                           }}
                           onClose={() => setShowCalendar(false)}
-                          className="w-full"
-                          bookingType="hotel"
+                          initialCheckIn={departureDate || undefined}
+                          initialCheckOut={returnDate || undefined}
                         />
                       </PopoverContent>
                     </Popover>
