@@ -90,6 +90,10 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
     return isSameDay(date, selectedDate);
   };
 
+  const isToday = (date: Date) => {
+    return isSameDay(date, new Date());
+  };
+
   const isDateInRange = (date: Date) => {
     if (!isRange || !selectedDate || !endDate) return false;
     return (
@@ -246,7 +250,7 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
                 <button
                   onClick={() => handleDateClick(date)}
                   disabled={isDateDisabled(date)}
-                  className={`w-full h-full flex items-center justify-center text-sm rounded-lg transition-all font-medium touch-manipulation ${
+                  className={`w-full h-full flex items-center justify-center text-sm rounded-lg transition-all font-medium touch-manipulation relative ${
                     isDateDisabled(date)
                       ? "text-gray-300 cursor-not-allowed"
                       : isRangeStart(date) || isRangeEnd(date)
@@ -255,10 +259,15 @@ const MobileCalendar: React.FC<MobileCalendarProps> = ({
                           ? "bg-blue-100 text-blue-700"
                           : isDateSelected(date)
                             ? "bg-blue-600 text-white shadow-md"
-                            : "text-gray-700 hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100"
+                            : isToday(date)
+                              ? "text-blue-600 font-bold bg-blue-50 border-2 border-blue-600 hover:bg-blue-100"
+                              : "text-gray-700 hover:bg-blue-50 hover:text-blue-600 active:bg-blue-100"
                   }`}
                 >
                   {date.getDate()}
+                  {isToday(date) && !isDateSelected(date) && (
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"></div>
+                  )}
                 </button>
               ) : (
                 <div className="w-full h-full" />
