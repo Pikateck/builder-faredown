@@ -567,7 +567,7 @@ export function HotelCard({
         </div>
 
         {/* Hotel Details */}
-        <CardContent className="flex-1 p-3 sm:p-4 md:p-6">
+        <CardContent className="flex-1 p-4 md:p-6 flex flex-col space-y-4">
           <div className="mb-3 sm:mb-4">
             <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 group-hover:text-[#003580] transition-colors line-clamp-2">
               {hotel.name}
