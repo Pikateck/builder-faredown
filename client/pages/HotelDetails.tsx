@@ -2279,7 +2279,7 @@ export default function HotelDetails() {
                 {/* Swimming Pools Section */}
                 <div className="mt-8 bg-gradient-to-r from-blue-100 to-cyan-100 border border-blue-300 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">���‍♂️</span>
+                    <span className="text-4xl mr-4">🏊‍♂️</span>
                     <div>
                       <h3 className="font-bold text-2xl text-blue-900">
                         2 Swimming Pools
@@ -2512,7 +2512,8 @@ export default function HotelDetails() {
                     onClick={() => setIsWriteReviewModalOpen(true)}
                     className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm"
                   >
-                    📝 Write a review
+                    <MessageSquare className="w-4 h-4 mr-1" />
+                    Write a review
                   </Button>
                 </div>
 
@@ -2570,7 +2571,7 @@ export default function HotelDetails() {
                       type: "Family",
                       title: "We are happy",
                       review:
-                        "It's my pleasure to be thankful for the polite service and see my birthday �� Thanks for making it special for me",
+                        "It's my pleasure to be thankful for the polite service and see my birthday 🎂 Thanks for making it special for me",
                       helpful: 0,
                       avatar: "M",
                     },
