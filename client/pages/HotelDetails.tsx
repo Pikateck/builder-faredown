@@ -1107,7 +1107,7 @@ export default function HotelDetails() {
                           </div>
                           <button
                             onClick={() => setIsWriteReviewModalOpen(true)}
-                            className="ml-4 text-blue-600 text-sm hover:underline"
+                            className="ml-4 text-blue-600 text-sm hover:underline flex items-center"
                           >
                             <MessageSquare className="w-4 h-4 mr-1" />
                             Write a review
@@ -2243,7 +2243,7 @@ export default function HotelDetails() {
                         <span className="mr-2">☕</span> Tea & coffee facilities
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">������</span> Carpeted floors
+                        <span className="mr-2">����</span> Carpeted floors
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">❄️</span> Air conditioning
