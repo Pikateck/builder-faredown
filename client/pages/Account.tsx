@@ -742,80 +742,225 @@ Please keep this ticket for your records.
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 text-sm">
-                  {profile.dateOfBirth && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <Calendar className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600">Date of Birth</span>
+{editingProfileId === profile.id ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">Title</Label>
+                        <Select
+                          value={editingProfileData.title || ""}
+                          onValueChange={(value) =>
+                            setEditingProfileData({ ...editingProfileData, title: value })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select title" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Mr">Mr</SelectItem>
+                            <SelectItem value="Mrs">Mrs</SelectItem>
+                            <SelectItem value="Ms">Ms</SelectItem>
+                            <SelectItem value="Dr">Dr</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700">First Name</Label>
+                          <Input
+                            value={editingProfileData.firstName || ""}
+                            onChange={(e) =>
+                              setEditingProfileData({ ...editingProfileData, firstName: e.target.value })
+                            }
+                            placeholder="First name"
+                          />
                         </div>
-                        <span className="font-medium text-gray-900">
-                          {new Date(profile.dateOfBirth).toLocaleDateString()}
-                        </span>
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700">Last Name</Label>
+                          <Input
+                            value={editingProfileData.lastName || ""}
+                            onChange={(e) =>
+                              setEditingProfileData({ ...editingProfileData, lastName: e.target.value })
+                            }
+                            placeholder="Last name"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">Date of Birth</Label>
+                        <Input
+                          type="date"
+                          value={editingProfileData.dateOfBirth || ""}
+                          onChange={(e) =>
+                            setEditingProfileData({ ...editingProfileData, dateOfBirth: e.target.value })
+                          }
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700">Gender</Label>
+                          <Select
+                            value={editingProfileData.gender || ""}
+                            onValueChange={(value) =>
+                              setEditingProfileData({ ...editingProfileData, gender: value })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select gender" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Male">Male</SelectItem>
+                              <SelectItem value="Female">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700">Nationality</Label>
+                          <Input
+                            value={editingProfileData.nationality || ""}
+                            onChange={(e) =>
+                              setEditingProfileData({ ...editingProfileData, nationality: e.target.value })
+                            }
+                            placeholder="Nationality"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">Passport Number</Label>
+                        <Input
+                          value={editingProfileData.passportNumber || ""}
+                          onChange={(e) =>
+                            setEditingProfileData({ ...editingProfileData, passportNumber: e.target.value })
+                          }
+                          placeholder="Passport number"
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">PAN Card Number</Label>
+                        <Input
+                          value={editingProfileData.panCardNumber || ""}
+                          onChange={(e) =>
+                            setEditingProfileData({ ...editingProfileData, panCardNumber: e.target.value })
+                          }
+                          placeholder="PAN card number"
+                        />
+                      </div>
+
+                      <div>
+                        <Label className="text-sm font-medium text-gray-700">Meal Preference</Label>
+                        <Select
+                          value={editingProfileData.mealPreference || ""}
+                          onValueChange={(value) =>
+                            setEditingProfileData({ ...editingProfileData, mealPreference: value })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select meal preference" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Veg">Vegetarian</SelectItem>
+                            <SelectItem value="Non-Veg">Non-Vegetarian</SelectItem>
+                            <SelectItem value="Vegan">Vegan</SelectItem>
+                            <SelectItem value="Kosher">Kosher</SelectItem>
+                            <SelectItem value="Halal">Halal</SelectItem>
+                            <SelectItem value="No Preference">No Preference</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
-                  )}
 
-                  <div className="grid grid-cols-2 gap-3">
-                    {profile.nationality && (
+                    <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                      <Button variant="outline" onClick={cancelEditingProfile} size="sm">
+                        <X className="w-4 h-4 mr-2" />
+                        Cancel
+                      </Button>
+                      <Button onClick={saveEditedProfile} size="sm" className="bg-blue-600 hover:bg-blue-700">
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Changes
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-3 text-sm">
+                    {profile.dateOfBirth && (
                       <div className="bg-gray-50 rounded-lg p-3">
-                        <div className="flex items-center mb-1">
-                          <MapPin className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600 text-xs">
-                            Nationality
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 text-gray-500 mr-2" />
+                            <span className="text-gray-600">Date of Birth</span>
+                          </div>
+                          <span className="font-medium text-gray-900">
+                            {new Date(profile.dateOfBirth).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="font-medium text-gray-900">
-                          {profile.nationality}
-                        </p>
                       </div>
                     )}
 
-                    {profile.mealPreference && (
+                    <div className="grid grid-cols-2 gap-3">
+                      {profile.nationality && (
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <div className="flex items-center mb-1">
+                            <MapPin className="w-4 h-4 text-gray-500 mr-2" />
+                            <span className="text-gray-600 text-xs">
+                              Nationality
+                            </span>
+                          </div>
+                          <p className="font-medium text-gray-900">
+                            {profile.nationality}
+                          </p>
+                        </div>
+                      )}
+
+                      {profile.mealPreference && (
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <div className="flex items-center mb-1">
+                            <Gift className="w-4 h-4 text-gray-500 mr-2" />
+                            <span className="text-gray-600 text-xs">
+                              Meal Pref
+                            </span>
+                          </div>
+                          <p className="font-medium text-gray-900">
+                            {profile.mealPreference}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {profile.passportNumber && (
                       <div className="bg-gray-50 rounded-lg p-3">
-                        <div className="flex items-center mb-1">
-                          <Gift className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600 text-xs">
-                            Meal Pref
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                            <span className="text-gray-600">Passport</span>
+                          </div>
+                          <span className="font-medium text-gray-900 font-mono">
+                            ***{profile.passportNumber.slice(-4)}
                           </span>
                         </div>
-                        <p className="font-medium text-gray-900">
-                          {profile.mealPreference}
-                        </p>
+                      </div>
+                    )}
+
+                    {profile.panCardNumber && (
+                      <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <CreditCard className="w-4 h-4 text-gray-500 mr-2" />
+                            <span className="text-gray-600">PAN Card</span>
+                          </div>
+                          <span className="font-medium text-gray-900 font-mono">
+                            ***
+                            {profile.panCardNumber?.slice(-4) || "Not provided"}
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>
-
-                  {profile.passportNumber && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600">Passport</span>
-                        </div>
-                        <span className="font-medium text-gray-900 font-mono">
-                          ***{profile.passportNumber.slice(-4)}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {profile.panCardNumber && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <CreditCard className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-gray-600">PAN Card</span>
-                        </div>
-                        <span className="font-medium text-gray-900 font-mono">
-                          ***
-                          {profile.panCardNumber?.slice(-4) || "Not provided"}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                )}
 
                 <div className="mt-4 pt-3 border-t border-gray-100">
                   <div className="flex items-center justify-between">
