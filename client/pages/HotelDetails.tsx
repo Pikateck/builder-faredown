@@ -2468,7 +2468,9 @@ export default function HotelDetails() {
                   {/* Languages Spoken */}
                   <div className="bg-teal-50 border border-teal-200 rounded-lg p-5">
                     <div className="flex items-center mb-4">
-                      <span className="text-2xl mr-3">🗣️</span>
+                      <div className="w-12 h-12 bg-teal-600 rounded-2xl flex items-center justify-center mr-3">
+                        <Languages className="w-6 h-6 text-white" />
+                      </div>
                       <h3 className="font-bold text-lg text-teal-900">
                         Languages Spoken
                       </h3>
