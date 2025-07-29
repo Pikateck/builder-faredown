@@ -200,11 +200,11 @@ export function HotelCard({
 
   if (viewMode === "grid") {
     return (
-      <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 border-0 shadow-lg group touch-manipulation">
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group">
         {/* Grid View - Vertical Layout */}
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full">
           {/* Image Gallery */}
-          <div className="relative w-full h-40 sm:h-48 md:h-56 flex-shrink-0">
+          <div className="relative w-full h-48 flex-shrink-0">
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
