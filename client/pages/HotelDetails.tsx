@@ -2905,7 +2905,8 @@ export default function HotelDetails() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">
-              📝 Write a review for {hotel.name}
+              <MessageSquare className="w-5 h-5 mr-2 inline" />
+              Write a review for {hotel.name}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-6">
