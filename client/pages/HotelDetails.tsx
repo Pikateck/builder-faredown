@@ -2275,7 +2275,9 @@ export default function HotelDetails() {
                 {/* Swimming Pools Section */}
                 <div className="mt-8 bg-gradient-to-r from-blue-100 to-cyan-100 border border-blue-300 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">🏊‍♂️</span>
+                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mr-4">
+                      <Waves className="w-8 h-8 text-white" />
+                    </div>
                     <div>
                       <h3 className="font-bold text-2xl text-blue-900">
                         2 Swimming Pools
