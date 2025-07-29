@@ -479,15 +479,15 @@ export default function HotelDetails() {
 
           {/* Mobile Tabs */}
           <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
-            <div className="flex overflow-x-auto scrollbar-hide px-4">
+            <div className="flex overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${
+                  className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                     activeTab === tab.id
                       ? "border-[#003580] text-[#003580]"
-                      : "border-transparent text-gray-500"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
                   }`}
                 >
                   {tab.label}
