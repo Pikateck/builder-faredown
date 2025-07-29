@@ -61,7 +61,8 @@ export default function Hotels() {
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
   const [selectedToCity, setSelectedToCity] = useState("Dubai");
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showMobileCalendar, setShowMobileCalendar] = useState(false);
+  const [showDesktopCalendar, setShowDesktopCalendar] = useState(false);
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showTravelers, setShowTravelers] = useState(false);
