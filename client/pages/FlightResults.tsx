@@ -4490,7 +4490,7 @@ export default function FlightResults() {
 
                   {/* AI Interface */}
                   <div className="space-y-4">
-                    <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-[#003580]/5 to-[#0071c2]/5 rounded-xl border border-[#003580]/10">
+                    <div className="flex items-center space-x-3 md:space-x-4 p-3 md:p-4 bg-gradient-to-r from-[#003580]/5 to-[#0071c2]/5 rounded-xl border border-[#003580]/10">
                       <div className="w-12 h-12 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
                         <span className="text-white font-bold text-sm">AI</span>
                       </div>
