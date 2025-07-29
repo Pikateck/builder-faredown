@@ -152,6 +152,25 @@ export function MobileDatePicker({
     }
   };
 
+  const handleDoneClick = () => {
+    console.log("=== MOBILE DATE PICKER DONE CLICKED ===");
+    console.log("selectedDepartureDate:", selectedDepartureDate);
+    console.log("selectedReturnDate:", selectedReturnDate);
+    console.log("tripType:", tripType);
+
+    // Ensure dates are saved before closing
+    setSelectedDepartureDate(selectedDepartureDate);
+    if (tripType === "round-trip") {
+      setSelectedReturnDate(selectedReturnDate);
+    } else {
+      setSelectedReturnDate(null);
+    }
+
+    // Close the modal
+    console.log("Closing mobile date picker");
+    onClose();
+  };
+
   return (
     <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
       <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
