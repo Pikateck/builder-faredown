@@ -55,7 +55,17 @@ export function MobileNavBar({
     if (onBack) {
       onBack();
     } else {
-      navigate(-1);
+      // Fallback navigation to hotels results if browser back fails
+      try {
+        if (window.history.length > 1) {
+          navigate(-1);
+        } else {
+          navigate('/hotels/results');
+        }
+      } catch (error) {
+        console.error('Navigation error:', error);
+        navigate('/hotels/results');
+      }
     }
   };
 
