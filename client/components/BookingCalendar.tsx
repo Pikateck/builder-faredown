@@ -343,14 +343,8 @@ export function BookingCalendar({
             moveRangeOnFirstSelection={false}
             retainEndDateOnFirstSelection={false}
             minDate={new Date()}
-            maxDate={addDays(new Date(), 365)}
             showMonthAndYearPickers={false}
             showMonthArrow={true}
-            showDateDisplay={false}
-            showPreview={true}
-            editableDateInputs={false}
-            disabledDates={[]}
-            dateDisplayFormat="MMM d, yyyy"
           />
         </div>
 
