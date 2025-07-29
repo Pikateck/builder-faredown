@@ -30,6 +30,8 @@ export function BookingCalendar({
     const startDate = initialRange?.startDate || new Date();
     const endDate = initialRange?.endDate || addDays(startDate, 3);
 
+    console.log("Initial calendar range:", { startDate, endDate, bookingType });
+
     return [{
       startDate,
       endDate,
