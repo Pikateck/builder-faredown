@@ -621,11 +621,11 @@ export function HotelCard({
             {hotel.amenities.slice(0, 4).map((amenity) => (
               <div
                 key={amenity}
-                className="flex items-center space-x-1 text-gray-600 flex-shrink-0"
+                className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-full border border-blue-100 hover:border-blue-200 transition-all duration-200 flex-shrink-0 shadow-sm"
                 title={amenity}
               >
                 {getAmenityIcon(amenity)}
-                <span className="text-xs hidden sm:inline whitespace-nowrap">
+                <span className="text-xs hidden sm:inline whitespace-nowrap text-gray-700 font-medium">
                   {amenity}
                 </span>
               </div>
