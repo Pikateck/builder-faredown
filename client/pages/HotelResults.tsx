@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
+import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 
 // Use the Hotel type from hotelsService for consistency
 interface Hotel extends HotelType {
