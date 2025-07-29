@@ -720,14 +720,26 @@ Please keep this ticket for your records.
                       </p>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowDeleteConfirm(profile.id)}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => startEditingProfile(profile)}
+                      className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                      title="Edit Profile"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowDeleteConfirm(profile.id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      title="Delete Profile"
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 text-sm">
