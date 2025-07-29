@@ -2539,6 +2539,13 @@ export default function Index() {
         setTravelers={setTravelers}
       />
 
+      <MobileClassDropdown
+        isOpen={showClassDropdown}
+        onClose={() => setShowClassDropdown(false)}
+        selectedClass={selectedClass}
+        onSelectClass={setSelectedClass}
+      />
+
       {/* Sign In Modal */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
         <DialogContent className="max-w-md">
