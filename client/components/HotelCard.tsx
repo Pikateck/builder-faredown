@@ -367,20 +367,155 @@ export function HotelCard({
     );
   }
 
-  // List View - Horizontal Layout (existing design)
+  // Mobile-First List View - Optimized for app-like experience
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 border-0 shadow-lg group touch-manipulation">
-      <div className="flex flex-col sm:flex-row">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 border-0 shadow-md group touch-manipulation mx-1">
+      {/* Mobile-First Design */}
+      <div className="block sm:hidden">
+        {/* Mobile Layout - Stacked */}
+        <div className="relative">
+          {/* Hotel Image - Full Width */}
+          <div className="relative w-full h-44 flex-shrink-0">
+            <img
+              src={images[currentImageIndex]}
+              alt={hotel.name}
+              className="w-full h-full object-cover"
+            />
+
+            {/* Image Navigation for Mobile */}
+            {images.length > 1 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-8 h-8 p-0 backdrop-blur-sm"
+                  onClick={prevImage}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-8 h-8 p-0 backdrop-blur-sm"
+                  onClick={nextImage}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+
+                {/* Image Dots */}
+                <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                        index === currentImageIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                      onClick={() => setCurrentImageIndex(index)}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* Like Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`absolute top-3 right-3 w-8 h-8 p-0 backdrop-blur-sm ${
+                isLiked
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-black/40 hover:bg-black/60 text-white"
+              }`}
+              onClick={() => setIsLiked(!isLiked)}
+            >
+              <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+            </Button>
+
+            {/* Price Badge */}
+            <div className="absolute bottom-3 right-3 bg-white rounded-lg px-2 py-1 shadow-lg">
+              <div className="text-sm font-bold text-[#003580]">
+                {formatPrice(totalPriceInclusiveTaxes)}
+              </div>
+            </div>
+          </div>
+
+          {/* Hotel Details - Mobile */}
+          <CardContent className="p-4">
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
+                  {hotel.name}
+                </h3>
+                <div className="flex items-center text-gray-600 mb-1">
+                  <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+                  <span className="text-sm truncate">{hotelLocation}</span>
+                </div>
+              </div>
+              <div className="flex items-center ml-2">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
+                <span className="text-sm font-medium">{hotel.rating}</span>
+              </div>
+            </div>
+
+            {/* Features - Mobile */}
+            {hotel.features && hotel.features.length > 0 && (
+              <div className="flex flex-wrap gap-1 mb-3">
+                {hotel.features.slice(0, 3).map((feature) => (
+                  <Badge key={feature} variant="secondary" className="text-xs px-2 py-1">
+                    {feature}
+                  </Badge>
+                ))}
+                {hotel.features.length > 3 && (
+                  <Badge variant="secondary" className="text-xs px-2 py-1">
+                    +{hotel.features.length - 3}
+                  </Badge>
+                )}
+              </div>
+            )}
+
+            {/* Pricing and Actions - Mobile */}
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <div className="text-xs text-gray-500 mb-1">
+                  {formatPrice(perNightInclusiveTaxes)} per night • {totalNights} nights
+                </div>
+                <div className="text-xs text-gray-400">incl. taxes & fees</div>
+              </div>
+              <div className="flex space-x-2 ml-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="px-4 py-2 text-xs"
+                  onClick={handleViewDetails}
+                >
+                  View
+                </Button>
+                <Button
+                  onClick={() => onBargainClick(hotel, searchParams)}
+                  size="sm"
+                  className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold px-4 py-2 text-xs"
+                >
+                  <TrendingDown className="w-3 h-3 mr-1" />
+                  Bargain
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </div>
+      </div>
+
+      {/* Desktop/Tablet Layout */}
+      <div className="hidden sm:flex flex-col sm:flex-row">
         {/* Image Gallery */}
         <div className="relative sm:w-64 md:w-80 h-48 sm:h-64 md:h-80 flex-shrink-0">
           <img
-            src={hotel.images[currentImageIndex]}
+            src={images[currentImageIndex]}
             alt={hotel.name}
             className="w-full h-full object-cover"
           />
 
           {/* Image Navigation */}
-          {hotel.images.length > 1 && (
+          {images.length > 1 && (
             <>
               <Button
                 variant="ghost"
