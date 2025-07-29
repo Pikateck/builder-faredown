@@ -993,7 +993,7 @@ export default function HotelDetails() {
 
                       {/* Price Summary Box */}
                       <div className="lg:col-span-1">
-                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                           <div className="text-sm font-medium text-gray-700 mb-2">
                             Cheapest Room in This Listing
                           </div>
