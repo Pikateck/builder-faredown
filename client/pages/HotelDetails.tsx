@@ -91,6 +91,8 @@ import {
   X,
   ChevronLeft,
 } from "lucide-react";
+import { MobileNavBar } from "@/components/mobile/MobileNavBar";
+import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 
 export default function HotelDetails() {
   const { hotelId } = useParams();
