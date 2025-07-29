@@ -2254,7 +2254,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🏡</span> Balcony
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">���</span> Shower
+                        <span className="mr-2">🚿</span> Shower
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">📺</span> Flat-screen TV
@@ -2654,7 +2654,8 @@ export default function HotelDetails() {
                   {/* Street View Label Overlay */}
                   <div className="absolute top-4 left-4">
                     <div className="bg-black bg-opacity-75 text-white px-3 py-1 rounded text-sm">
-                      📍 Street View: Grand Hyatt Dubai
+                      <MapPin className="w-4 h-4 mr-1 inline" />
+                      Street View: Grand Hyatt Dubai
                     </div>
                   </div>
 
