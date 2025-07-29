@@ -2421,8 +2421,8 @@ export default function BookingFlow() {
                               type="checkbox"
                               className={`w-4 h-4 ${selectedOtherOptions.includes(option.id) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                               checked={selectedOtherOptions.includes(option.id)}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
+                              onChange={(e) => {
+                                if (e.target.checked) {
                                   setSelectedOtherOptions((prev) => [
                                     ...prev,
                                     option.id,
