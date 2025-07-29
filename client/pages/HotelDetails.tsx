@@ -533,17 +533,17 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Mobile Tabs */}
-          <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
-            <div className="flex overflow-x-auto scrollbar-hide">
+          {/* Premium Mobile Tabs */}
+          <div className="bg-gradient-to-r from-white via-blue-50/50 to-white border-b border-blue-100 sticky top-0 z-10 backdrop-blur-lg shadow-sm">
+            <div className="flex overflow-x-auto scrollbar-hide px-2">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
+                  className={`flex-shrink-0 px-4 py-3 mx-1 text-sm font-semibold whitespace-nowrap transition-all duration-300 rounded-lg ${
                     activeTab === tab.id
-                      ? "border-[#003580] text-[#003580]"
-                      : "border-transparent text-gray-500 hover:text-gray-700"
+                      ? "bg-gradient-to-r from-[#003580] to-blue-600 text-white shadow-lg transform scale-105"
+                      : "text-gray-600 hover:text-[#003580] hover:bg-blue-50/50"
                   }`}
                 >
                   {tab.label}
@@ -2346,7 +2346,7 @@ export default function HotelDetails() {
                         { icon: "🔥", text: "Fire extinguishers" },
                         { icon: "📹", text: "CCTV surveillance" },
                         { icon: "🚨", text: "Smoke alarms" },
-                        { icon: "����", text: "Security alarm" },
+                        { icon: "�����", text: "Security alarm" },
                         { icon: "🔑", text: "Key card access" },
                         { icon: "🔐", text: "In-room safe" },
                         { icon: "👮", text: "24-hour security" },
