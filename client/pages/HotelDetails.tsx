@@ -575,9 +575,9 @@ export default function HotelDetails() {
                             </div>
                             <div className="text-right ml-4">
                               <div className="text-lg font-bold text-gray-900">
-                                ₹{room.pricePerNight.toLocaleString()}
+                                ₹{calculateTotalPrice(room.pricePerNight).toLocaleString()}
                               </div>
-                              <div className="text-xs text-gray-500">per night</div>
+                              <div className="text-xs text-gray-500">₹{room.pricePerNight.toLocaleString()} per room per night</div>
                             </div>
                           </div>
 
