@@ -3060,7 +3060,7 @@ export default function HotelDetails() {
                 className="flex-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
                 <span className="flex items-center justify-center">
-                  <span className="text-lg mr-2">⭐</span>
+                  <Star className="w-5 h-5 mr-2 fill-current" />
                   <span>Reserve</span>
                 </span>
               </Button>
