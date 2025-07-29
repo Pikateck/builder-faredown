@@ -2417,8 +2417,9 @@ export default function BookingFlow() {
                             key={option.id}
                             className="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-[#f2f6fa]"
                           >
-                            <Checkbox
-                              className="w-4 h-4"
+                            <input
+                              type="checkbox"
+                              className={`w-4 h-4 ${selectedOtherOptions.includes(option.id) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                               checked={selectedOtherOptions.includes(option.id)}
                               onCheckedChange={(checked) => {
                                 if (checked) {
