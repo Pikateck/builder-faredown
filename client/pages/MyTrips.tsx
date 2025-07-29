@@ -178,19 +178,99 @@ export default function MyTrips() {
     }
 
     if (searchTerm) {
-      filtered = filtered.filter(
-        (trip) =>
-          trip.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          trip.hotel?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          trip.flights?.some(
-            (flight: any) =>
-              flight.airline
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase()) ||
-              flight.from?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              flight.to?.toLowerCase().includes(searchTerm.toLowerCase()),
-          ),
-      );
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter((trip) => {
+        // Search by booking ID
+        if (trip.id.toLowerCase().includes(searchLower)) return true;
+
+        // Search by booking type
+        if (trip.bookingType.toLowerCase().includes(searchLower)) return true;
+
+        // Search by dates (multiple formats)
+        const bookingDate = new Date(trip.bookingDate);
+        const bookingDateStr = bookingDate.toLocaleDateString();
+        const bookingDateISO = trip.bookingDate;
+        const bookingDateFormatted = formatDate(trip.bookingDate);
+
+        if (bookingDateStr.includes(searchLower) ||
+            bookingDateISO.includes(searchLower) ||
+            bookingDateFormatted.toLowerCase().includes(searchLower)) return true;
+
+        // Search by total amount
+        if (trip.total?.toString().includes(searchLower)) return true;
+
+        // Hotel-specific searches
+        if (trip.bookingType === "hotel" && trip.hotel) {
+          // Hotel name
+          if (trip.hotel.name?.toLowerCase().includes(searchLower)) return true;
+
+          // Hotel location
+          if (trip.hotel.location?.toLowerCase().includes(searchLower)) return true;
+
+          // Room type
+          if (trip.room?.type?.toLowerCase().includes(searchLower)) return true;
+          if (trip.room?.name?.toLowerCase().includes(searchLower)) return true;
+
+          // Check-in/Check-out dates
+          if (trip.checkIn) {
+            const checkInDate = new Date(trip.checkIn);
+            const checkInStr = checkInDate.toLocaleDateString();
+            const checkInFormatted = formatDate(trip.checkIn);
+            if (checkInStr.includes(searchLower) || checkInFormatted.toLowerCase().includes(searchLower)) return true;
+          }
+
+          if (trip.checkOut) {
+            const checkOutDate = new Date(trip.checkOut);
+            const checkOutStr = checkOutDate.toLocaleDateString();
+            const checkOutFormatted = formatDate(trip.checkOut);
+            if (checkOutStr.includes(searchLower) || checkOutFormatted.toLowerCase().includes(searchLower)) return true;
+          }
+
+          // Guest information
+          if (trip.guest?.firstName?.toLowerCase().includes(searchLower)) return true;
+          if (trip.guest?.lastName?.toLowerCase().includes(searchLower)) return true;
+          if (trip.guest?.email?.toLowerCase().includes(searchLower)) return true;
+
+          // Payment method and status
+          if (trip.paymentMethod?.toLowerCase().includes(searchLower)) return true;
+          if (trip.paymentStatus?.toLowerCase().includes(searchLower)) return true;
+        }
+
+        // Flight-specific searches
+        if (trip.bookingType === "flight" && trip.flights) {
+          return trip.flights.some((flight: any) => {
+            // Airline name and flight number
+            if (flight.airline?.toLowerCase().includes(searchLower)) return true;
+            if (flight.flightNumber?.toLowerCase().includes(searchLower)) return true;
+
+            // Airports (from/to)
+            if (flight.from?.toLowerCase().includes(searchLower)) return true;
+            if (flight.to?.toLowerCase().includes(searchLower)) return true;
+
+            // Flight date and time
+            if (flight.date?.toLowerCase().includes(searchLower)) return true;
+            if (flight.time?.toLowerCase().includes(searchLower)) return true;
+
+            // Departure and arrival times
+            if (flight.departure?.toLowerCase().includes(searchLower)) return true;
+            if (flight.arrival?.toLowerCase().includes(searchLower)) return true;
+
+            return false;
+          });
+        }
+
+        // Passenger information for flights
+        if (trip.passengers) {
+          return trip.passengers.some((passenger: any) => {
+            if (passenger.firstName?.toLowerCase().includes(searchLower)) return true;
+            if (passenger.lastName?.toLowerCase().includes(searchLower)) return true;
+            if (passenger.email?.toLowerCase().includes(searchLower)) return true;
+            return false;
+          });
+        }
+
+        return false;
+      });
       console.log(`Filtered by search "${searchTerm}":`, filtered);
     }
 
