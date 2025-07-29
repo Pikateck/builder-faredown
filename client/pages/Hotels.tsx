@@ -216,7 +216,7 @@ export default function Hotels() {
             {/* Hotel Search Form */}
             <div className="space-y-4">
               {/* Destination */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 shadow-sm relative">
                 <button
                   onClick={() => setShowFromCities(!showFromCities)}
                   className="w-full text-left"
@@ -236,34 +236,41 @@ export default function Hotels() {
                 </button>
 
                 {showFromCities && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-3 z-50 mt-1 max-h-60 overflow-y-auto">
-                    <div className="space-y-1">
-                      {Object.entries(cityData).map(([city, data]) => (
-                        <button
-                          key={city}
-                          onClick={() => {
-                            setSelectedFromCity(city);
-                            setShowFromCities(false);
-                          }}
-                          className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                              <Hotel className="w-4 h-4 text-blue-600" />
-                            </div>
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {city}
+                  <>
+                    {/* Backdrop to close dropdown */}
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowFromCities(false)}
+                    />
+                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-3 z-50 mt-1 max-h-60 overflow-y-auto">
+                      <div className="space-y-1">
+                        {Object.entries(cityData).map(([city, data]) => (
+                          <button
+                            key={city}
+                            onClick={() => {
+                              setSelectedFromCity(city);
+                              setShowFromCities(false);
+                            }}
+                            className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <Hotel className="w-4 h-4 text-blue-600" />
                               </div>
-                              <div className="text-xs text-gray-500">
-                                {data.fullName}
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  {city}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {data.fullName}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </button>
-                      ))}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
 
@@ -644,7 +651,7 @@ export default function Hotels() {
                     {showCurrencyDropdown && (
                       <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
                         {[
-                          { code: "INR", symbol: "��", name: "Indian Rupee" },
+                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
                           {
                             code: "AED",
                             symbol: "د.إ",
