@@ -222,7 +222,7 @@ export function MobileDatePicker({
                 ),
             }}
             onChange={handleCalendarChange}
-            onClose={() => {}} // Don't auto-close on selection for mobile
+            // Remove onClose prop to hide the X button in mobile view
             className="w-full"
             bookingType="flight"
           />
@@ -230,28 +230,35 @@ export function MobileDatePicker({
 
         <div className="space-y-3">
           <Button
-            onClick={() => {
-              console.log("Done button clicked - Mobile Date Picker");
+            onClick={(e) => {
+              console.log("=== DONE BUTTON CLICKED ===");
+              console.log("Event:", e);
               console.log("selectedDepartureDate:", selectedDepartureDate);
               console.log("selectedReturnDate:", selectedReturnDate);
               console.log("tripType:", tripType);
+              console.log("onClose function:", onClose);
 
-              // Ensure dates are saved and modal is closed
-              console.log("Saving departure date:", selectedDepartureDate);
-              setSelectedDepartureDate(selectedDepartureDate);
+              try {
+                // Ensure dates are saved and modal is closed
+                console.log("Saving departure date:", selectedDepartureDate);
+                setSelectedDepartureDate(selectedDepartureDate);
 
-              if (tripType === "round-trip") {
-                console.log("Saving return date:", selectedReturnDate);
-                setSelectedReturnDate(selectedReturnDate);
-              } else {
-                // One-way trip - clear return date
-                console.log("One-way trip - clearing return date");
-                setSelectedReturnDate(null);
+                if (tripType === "round-trip") {
+                  console.log("Saving return date:", selectedReturnDate);
+                  setSelectedReturnDate(selectedReturnDate);
+                } else {
+                  // One-way trip - clear return date
+                  console.log("One-way trip - clearing return date");
+                  setSelectedReturnDate(null);
+                }
+
+                // Always close the modal
+                console.log("About to call onClose...");
+                onClose();
+                console.log("onClose called successfully");
+              } catch (error) {
+                console.error("Error in Done button click:", error);
               }
-
-              // Always close the modal
-              console.log("Closing mobile date picker");
-              onClose();
             }}
             onTouchStart={(e) => {
               console.log("Touch start on Done button");
