@@ -103,7 +103,14 @@ export default function Account() {
   // Saved profiles management
   const [savedProfiles, setSavedProfiles] = useState(() => {
     const saved = localStorage.getItem("customer_profiles");
-    return saved ? JSON.parse(saved) : [];
+    const profiles = saved ? JSON.parse(saved) : [];
+
+    // Ensure all profiles have unique IDs and remove any duplicates
+    const uniqueProfiles = profiles.filter((profile, index, self) =>
+      index === self.findIndex(p => p.id === profile.id)
+    );
+
+    return uniqueProfiles;
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [editingProfileId, setEditingProfileId] = useState(null);
