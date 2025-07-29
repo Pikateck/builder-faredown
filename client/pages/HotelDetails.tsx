@@ -3046,27 +3046,30 @@ export default function HotelDetails() {
         </DialogContent>
       </Dialog>
 
-      {/* Mobile Bottom Action Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+      {/* Premium Mobile Bottom Action Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-white/95 backdrop-blur-xl border-t border-gray-200/50 z-50 shadow-2xl">
         {selectedRoomType ? (
-          /* Room Selected - Show Reserve & Bargain */
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <div className="text-sm font-medium text-gray-900">
-                  {selectedRoomType.name}
+          /* Room Selected - Premium Design */
+          <div className="p-5">
+            <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border border-blue-200 rounded-2xl p-4 mb-4 shadow-inner">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="text-sm font-bold text-gray-900 mb-1">
+                    {selectedRoomType.name}
+                  </div>
+                  <div className="text-xs text-gray-600 font-medium">
+                    ₹{selectedRoomType.pricePerNight.toLocaleString()} per night
+                  </div>
                 </div>
-                <div className="text-xs text-gray-500">
-                  ₹{selectedRoomType.pricePerNight.toLocaleString()} per night
+                <div className="text-right">
+                  <div className="text-xl font-bold bg-gradient-to-r from-[#003580] to-blue-600 bg-clip-text text-transparent">
+                    ₹{calculateTotalPrice(selectedRoomType.pricePerNight).toLocaleString()}
+                  </div>
+                  <div className="text-xs text-gray-500 font-medium">total price</div>
                 </div>
-              </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-[#003580]">
-                  ₹{calculateTotalPrice(selectedRoomType.pricePerNight).toLocaleString()}
-                </div>
-                <div className="text-xs text-gray-500">total price</div>
               </div>
             </div>
+
             <div className="flex gap-3">
               <Button
                 onClick={() => {
@@ -3075,10 +3078,12 @@ export default function HotelDetails() {
                     navigator.vibrate(50);
                   }
                 }}
-                variant="outline"
-                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold transition-all duration-200"
+                className="flex-1 bg-gradient-to-r from-purple-600 via-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-4 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
-                💰 Bargain
+                <span className="flex items-center justify-center">
+                  <span className="text-lg mr-2">💎</span>
+                  <span>Bargain</span>
+                </span>
               </Button>
               <Button
                 onClick={() => {
@@ -3087,30 +3092,36 @@ export default function HotelDetails() {
                     navigator.vibrate(100);
                   }
                 }}
-                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold transition-all duration-200"
+                className="flex-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
-                ✅ Reserve
+                <span className="flex items-center justify-center">
+                  <span className="text-lg mr-2">⭐</span>
+                  <span>Reserve</span>
+                </span>
               </Button>
             </div>
           </div>
         ) : (
-          /* No Room Selected - Show starting price */
-          <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100">
+          /* No Room Selected - Elegant Prompt */
+          <div className="p-5 bg-gradient-to-r from-indigo-50 via-blue-50 to-purple-50">
             <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs text-gray-600">Starting from</div>
-                <div className="text-lg font-bold text-[#003580]">
+              <div className="flex-1">
+                <div className="text-xs text-gray-600 font-medium mb-1">Starting from</div>
+                <div className="text-2xl font-bold bg-gradient-to-r from-[#003580] to-blue-600 bg-clip-text text-transparent">
                   ₹{lowestPrice}
                 </div>
                 <div className="text-xs text-gray-500">per night</div>
               </div>
               <div className="text-center">
-                <div className="text-xs text-gray-600 mb-1">👆 Select a room above</div>
+                <div className="text-xs text-gray-600 mb-2 font-medium">👆 Choose your room first</div>
                 <Button
                   disabled
-                  className="bg-gray-300 text-gray-500 cursor-not-allowed px-6 text-sm"
+                  className="bg-gradient-to-r from-gray-300 to-gray-400 text-gray-600 cursor-not-allowed px-8 py-3 font-bold rounded-xl shadow-lg"
                 >
-                  Choose Room
+                  <span className="flex items-center">
+                    <span className="mr-2">🏨</span>
+                    Select Room
+                  </span>
                 </Button>
               </div>
             </div>
