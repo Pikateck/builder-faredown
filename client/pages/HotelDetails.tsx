@@ -2479,7 +2479,7 @@ export default function HotelDetails() {
                       {[
                         { icon: "🇺🇸", text: "English" },
                         { icon: "🇦🇪", text: "Arabic" },
-                        { icon: "🇩����", text: "German" },
+                        { icon: "🇩🇪", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
                         { icon: "🇮🇳", text: "Hindi" },
