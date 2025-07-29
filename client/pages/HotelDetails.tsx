@@ -447,17 +447,35 @@ export default function HotelDetails() {
 
         {/* Mobile Content */}
         <div className="pb-24">
-          {/* Hero Image - Full Width Responsive */}
-          <div className="relative w-full h-64 overflow-hidden">
+          {/* Hero Image - Premium Design */}
+          <div className="relative w-full h-72 overflow-hidden">
             <img
               src={hotel.image}
               alt={hotel.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               loading="lazy"
             />
-            <div className="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm">
-              <Star className="w-3 h-3 fill-current inline mr-1" />
-              {hotel.rating} • {hotel.reviews} reviews
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+            {/* Premium Rating Badge */}
+            <div className="absolute bottom-6 left-6 bg-gradient-to-r from-amber-400/90 to-orange-500/90 backdrop-blur-md text-white px-4 py-2 rounded-2xl shadow-xl border border-white/20">
+              <div className="flex items-center space-x-2">
+                <Star className="w-4 h-4 fill-current text-yellow-200" />
+                <span className="font-bold text-sm">{hotel.rating}</span>
+                <span className="text-xs opacity-90">•</span>
+                <span className="text-xs font-medium opacity-90">{hotel.reviews} reviews</span>
+              </div>
+            </div>
+
+            {/* Premium Verified Badge */}
+            <div className="absolute top-6 left-6 bg-emerald-500/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border border-white/20">
+              ✓ Verified Property
+            </div>
+
+            {/* Luxury Category Badge */}
+            <div className="absolute top-6 right-6 bg-gradient-to-r from-purple-600/90 to-indigo-600/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border border-white/20">
+              ⭐ 5-Star Luxury
             </div>
           </div>
 
@@ -2103,7 +2121,7 @@ export default function HotelDetails() {
                         <span className="mr-2">❄️</span> Air conditioning
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🛋�����</span> Living room
+                        <span className="mr-2">🛋���</span> Living room
                       </li>
                     </ul>
                     <ul className="space-y-2 text-sm text-gray-700">
