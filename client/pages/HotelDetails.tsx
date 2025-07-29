@@ -415,34 +415,100 @@ export default function HotelDetails() {
   return (
     <div className="min-h-screen bg-gray-50">
       <style>{sliderStyles}</style>
-      <Header />
 
-      {/* Mobile Header Bar */}
-      <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-[64px] z-40">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+      {/* Mobile-First Header */}
+      <div className="md:hidden">
+        {/* Mobile App-like Header */}
+        <div className="bg-[#003580] text-white">
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20 p-2 mr-3"
+                onClick={() => navigate(-1)}
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="font-semibold text-lg line-clamp-1">
+                  {hotel.name}
+                </h1>
+                <div className="flex items-center text-blue-200">
+                  <Star className="w-3 h-3 fill-current mr-1" />
+                  <span className="text-xs">{hotel.rating} • {hotel.reviews} reviews</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20 p-2"
+                onClick={() => setIsSaved(!isSaved)}
+              >
+                <Bookmark className={`w-5 h-5 ${isSaved ? "fill-current" : ""}`} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20 p-2"
+                onClick={() => setIsShareModalOpen(true)}
+              >
+                <Share2 className="w-5 h-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Quick Info Bar */}
+        <div className="bg-white border-b border-gray-200 p-3">
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center text-gray-600">
+              <MapPin className="w-4 h-4 mr-1" />
+              <span className="truncate">{hotel.location}</span>
+            </div>
+            <div className="text-right">
+              <div className="font-semibold text-[#003580]">
+                ₹{lowestPrice}+
+              </div>
+              <div className="text-xs text-gray-500">per night</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Header */}
+      <div className="hidden md:block">
+        <Header />
+
+        {/* Desktop Mobile Header Bar */}
+        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-[64px] z-40">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileFilterOpen(true)}
+                className="flex items-center gap-2 px-3 py-2"
+              >
+                <Filter className="w-4 h-4" />
+                <span className="text-sm font-medium">Filters</span>
+              </Button>
+              <div className="h-4 w-px bg-gray-300"></div>
+              <span className="text-sm text-gray-600">
+                ₹{lowestPrice}+ per night
+              </span>
+            </div>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsMobileFilterOpen(true)}
-              className="flex items-center gap-2 px-3 py-2"
+              className="flex items-center gap-1 px-3 py-2"
             >
-              <Filter className="w-4 h-4" />
-              <span className="text-sm font-medium">Filters</span>
+              <MapPin className="w-4 h-4" />
+              <span className="text-sm font-medium">Map</span>
             </Button>
-            <div className="h-4 w-px bg-gray-300"></div>
-            <span className="text-sm text-gray-600">
-              ₹{lowestPrice}+ per night
-            </span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-1 px-3 py-2"
-          >
-            <MapPin className="w-4 h-4" />
-            <span className="text-sm font-medium">Map</span>
-          </Button>
         </div>
       </div>
 
