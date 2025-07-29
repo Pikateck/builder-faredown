@@ -2949,17 +2949,6 @@ export default function HotelDetails() {
             <div className="flex gap-3">
               <Button
                 onClick={() => {
-                  handleBargainClick(selectedRoomType);
-                  if (navigator.vibrate) {
-                    navigator.vibrate(50);
-                  }
-                }}
-                className="flex-1 bg-white border border-blue-600 text-blue-600 font-semibold py-3"
-              >
-                Bargain
-              </Button>
-              <Button
-                onClick={() => {
                   handleBooking(selectedRoomType);
                   if (navigator.vibrate) {
                     navigator.vibrate(100);
@@ -2968,6 +2957,17 @@ export default function HotelDetails() {
                 className="flex-1 bg-blue-600 text-white font-semibold py-3"
               >
                 Reserve
+              </Button>
+              <Button
+                onClick={() => {
+                  handleBargainClick(selectedRoomType);
+                  if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                  }
+                }}
+                className="flex-1 bg-white border border-blue-600 text-blue-600 font-semibold py-3"
+              >
+                Bargain
               </Button>
             </div>
           </div>
