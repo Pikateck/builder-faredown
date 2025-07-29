@@ -470,12 +470,18 @@ export default function HotelDetails() {
 
             {/* Premium Verified Badge */}
             <div className="absolute top-6 left-6 bg-emerald-500/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border border-white/20">
-              ✓ Verified Property
+              <div className="flex items-center space-x-1">
+                <CheckCircle className="w-3 h-3" />
+                <span>Verified Property</span>
+              </div>
             </div>
 
             {/* Luxury Category Badge */}
             <div className="absolute top-6 right-6 bg-gradient-to-r from-purple-600/90 to-indigo-600/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border border-white/20">
-              ⭐ 5-Star Luxury
+              <div className="flex items-center space-x-1">
+                <Star className="w-3 h-3 fill-current" />
+                <span>5-Star Luxury</span>
+              </div>
             </div>
           </div>
 
@@ -513,21 +519,24 @@ export default function HotelDetails() {
               {/* Premium Features Row */}
               <div className="flex items-center justify-between pt-2">
                 <div className="flex space-x-4">
-                  <div className="flex items-center space-x-1 text-xs">
-                    <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">📶</span>
+                  <div className="flex items-center space-x-2 text-xs">
+                    <div className="w-5 h-5 bg-blue-600 rounded-lg flex items-center justify-center">
+                      <Wifi className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-600 font-medium">Free WiFi</span>
+                    <span className="text-gray-700 font-medium">Free WiFi</span>
                   </div>
-                  <div className="flex items-center space-x-1 text-xs">
-                    <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">🅿️</span>
+                  <div className="flex items-center space-x-2 text-xs">
+                    <div className="w-5 h-5 bg-green-600 rounded-lg flex items-center justify-center">
+                      <Car className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-600 font-medium">Free Parking</span>
+                    <span className="text-gray-700 font-medium">Free Parking</span>
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200 px-3 py-1 rounded-full">
-                  <span className="text-amber-700 text-xs font-bold">🔥 Hot Deal</span>
+                <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 px-3 py-1 rounded-full">
+                  <div className="flex items-center space-x-1">
+                    <Flame className="w-3 h-3 text-red-600" />
+                    <span className="text-red-700 text-xs font-bold">Hot Deal</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -563,7 +572,10 @@ export default function HotelDetails() {
                       Choose your sanctuary
                     </h2>
                     <div className="bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 px-3 py-1 rounded-full">
-                      <span className="text-purple-700 text-xs font-bold">✨ Best Selection</span>
+                      <div className="flex items-center space-x-1">
+                        <Sparkles className="w-3 h-3 text-purple-700" />
+                        <span className="text-purple-700 text-xs font-bold">Best Selection</span>
+                      </div>
                     </div>
                   </div>
 
@@ -580,12 +592,18 @@ export default function HotelDetails() {
                         {/* Premium Status Badge */}
                         {index === 0 && (
                           <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
-                            🏆 Best Value
+                            <div className="flex items-center space-x-1">
+                              <CheckCircle className="w-3 h-3" />
+                              <span>Best Value</span>
+                            </div>
                           </div>
                         )}
                         {index === 1 && (
                           <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
-                            ⭐ Popular
+                            <div className="flex items-center space-x-1">
+                              <Star className="w-3 h-3 fill-current" />
+                              <span>Popular</span>
+                            </div>
                           </div>
                         )}
 
@@ -653,7 +671,10 @@ export default function HotelDetails() {
                     Visual Experience
                   </h2>
                   <div className="bg-gradient-to-r from-pink-100 to-rose-100 border border-pink-200 px-3 py-1 rounded-full">
-                    <span className="text-pink-700 text-xs font-bold">📸 Premium Gallery</span>
+                    <div className="flex items-center space-x-1">
+                      <Camera className="w-3 h-3 text-pink-700" />
+                      <span className="text-pink-700 text-xs font-bold">Premium Gallery</span>
+                    </div>
                   </div>
                 </div>
 
@@ -678,9 +699,17 @@ export default function HotelDetails() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="text-xs font-semibold text-gray-800">
-                          {idx === 0 ? "🏨 Lobby" : idx === 1 ? "🛏️ Room" : idx === 2 ? "🏊 Pool" : idx === 3 ? "🍽️ Restaurant" : idx === 4 ? "🌅 View" : "✨ Amenity"}
-                        </span>
+                        <div className="flex items-center space-x-1">
+                          {idx === 0 && <Building2 className="w-3 h-3 text-gray-700" />}
+                          {idx === 1 && <Home className="w-3 h-3 text-gray-700" />}
+                          {idx === 2 && <Waves className="w-3 h-3 text-gray-700" />}
+                          {idx === 3 && <Utensils className="w-3 h-3 text-gray-700" />}
+                          {idx === 4 && <Star className="w-3 h-3 text-gray-700" />}
+                          {idx === 5 && <Sparkles className="w-3 h-3 text-gray-700" />}
+                          <span className="text-xs font-semibold text-gray-700">
+                            {idx === 0 ? "Lobby" : idx === 1 ? "Room" : idx === 2 ? "Pool" : idx === 3 ? "Restaurant" : idx === 4 ? "View" : "Amenity"}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -695,24 +724,27 @@ export default function HotelDetails() {
                     Luxury Amenities
                   </h2>
                   <div className="bg-gradient-to-r from-emerald-100 to-teal-100 border border-emerald-200 px-3 py-1 rounded-full">
-                    <span className="text-emerald-700 text-xs font-bold">🌟 Premium Services</span>
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-3 h-3 text-emerald-700" />
+                      <span className="text-emerald-700 text-xs font-bold">Premium Services</span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3">
                   {[
-                    { icon: "🏊‍♂️", name: "Infinity Pool", category: "Recreation", color: "from-blue-500 to-cyan-500" },
-                    { icon: "💪", name: "24/7 Fitness Center", category: "Wellness", color: "from-green-500 to-emerald-500" },
-                    { icon: "📶", name: "High-Speed WiFi", category: "Technology", color: "from-purple-500 to-indigo-500" },
-                    { icon: "🍽️", name: "Fine Dining Restaurant", category: "Dining", color: "from-amber-500 to-orange-500" },
-                    { icon: "🛎️", name: "24/7 Room Service", category: "Service", color: "from-pink-500 to-rose-500" },
-                    { icon: "🚗", name: "Valet Parking", category: "Convenience", color: "from-gray-500 to-slate-500" },
-                    { icon: "💆‍♀️", name: "Luxury Spa", category: "Wellness", color: "from-violet-500 to-purple-500" },
-                    { icon: "💼", name: "Business Lounge", category: "Business", color: "from-blue-600 to-indigo-600" },
-                    { icon: "🧺", name: "Same-Day Laundry", category: "Service", color: "from-teal-500 to-cyan-500" },
-                    { icon: "🏪", name: "Designer Boutique", category: "Shopping", color: "from-red-500 to-pink-500" },
-                    { icon: "👶", name: "Premium Childcare", category: "Family", color: "from-yellow-500 to-amber-500" },
-                    { icon: "♿", name: "Full Accessibility", category: "Accessibility", color: "from-emerald-600 to-green-600" },
+                    { icon: Waves, name: "Infinity Pool", category: "Recreation", color: "from-blue-500 to-cyan-500" },
+                    { icon: Dumbbell, name: "24/7 Fitness Center", category: "Wellness", color: "from-green-500 to-emerald-500" },
+                    { icon: Wifi, name: "High-Speed WiFi", category: "Technology", color: "from-purple-500 to-indigo-500" },
+                    { icon: Utensils, name: "Fine Dining Restaurant", category: "Dining", color: "from-amber-500 to-orange-500" },
+                    { icon: Bell, name: "24/7 Room Service", category: "Service", color: "from-pink-500 to-rose-500" },
+                    { icon: Car, name: "Valet Parking", category: "Convenience", color: "from-gray-500 to-slate-500" },
+                    { icon: Sparkles, name: "Luxury Spa", category: "Wellness", color: "from-violet-500 to-purple-500" },
+                    { icon: Briefcase, name: "Business Lounge", category: "Business", color: "from-blue-600 to-indigo-600" },
+                    { icon: Shirt, name: "Same-Day Laundry", category: "Service", color: "from-teal-500 to-cyan-500" },
+                    { icon: Building2, name: "Designer Boutique", category: "Shopping", color: "from-red-500 to-pink-500" },
+                    { icon: Baby, name: "Premium Childcare", category: "Family", color: "from-yellow-500 to-amber-500" },
+                    { icon: Accessibility, name: "Full Accessibility", category: "Accessibility", color: "from-emerald-600 to-green-600" },
                   ].map((amenity, idx) => (
                     <div
                       key={idx}
@@ -720,7 +752,7 @@ export default function HotelDetails() {
                     >
                       <div className="flex items-center space-x-4">
                         <div className={`w-12 h-12 bg-gradient-to-r ${amenity.color} rounded-2xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
-                          <span className="text-white text-xl filter drop-shadow-sm">{amenity.icon}</span>
+                          <amenity.icon className="w-6 h-6 text-white filter drop-shadow-sm" />
                         </div>
                         <div className="flex-1">
                           <span className="text-lg font-bold text-gray-900 group-hover:text-blue-800 transition-colors">
