@@ -262,7 +262,7 @@ export function HotelCard({
           </div>
 
           {/* Hotel Details */}
-          <CardContent className="p-4 flex-1 flex flex-col">
+          <CardContent className="p-4 flex-1 flex flex-col space-y-3">
             <div className="flex-1">
               <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#003580] transition-colors line-clamp-2">
                 {hotel.name}
