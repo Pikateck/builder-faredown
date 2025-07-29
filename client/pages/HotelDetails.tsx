@@ -439,14 +439,14 @@ export default function HotelDetails() {
         {/* Mobile Content */}
         <div className="pb-24">
           {/* Hero Image - Full Width Responsive */}
-          <div className="relative w-full">
+          <div className="relative w-full h-64 overflow-hidden">
             <img
               src={hotel.image}
               alt={hotel.name}
-              className="w-full h-64 object-cover"
-              style={{ objectPosition: 'center' }}
+              className="w-full h-full object-cover"
+              loading="lazy"
             />
-            <div className="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-medium">
+            <div className="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm">
               <Star className="w-3 h-3 fill-current inline mr-1" />
               {hotel.rating} • {hotel.reviews} reviews
             </div>
