@@ -3779,8 +3779,8 @@ export default function BookingFlow() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#666] mb-1">
-                  Last Name
+                <label className="block text-sm font-bold text-red-700 mb-1">
+                  Last Name *
                 </label>
                 <Input
                   value={
