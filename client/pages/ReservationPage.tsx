@@ -396,6 +396,11 @@ export default function ReservationPage() {
                 {/* Step 1: Guest Details */}
                 {currentStep === 1 && (
                   <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                      <p className="text-sm text-blue-700">
+                        <strong>Primary Guest Information:</strong> Enter details for the main guest who will be checking in. Additional guest details can be provided during check-in at the hotel.
+                      </p>
+                    </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="firstName">First Name *</Label>
