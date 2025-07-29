@@ -164,7 +164,7 @@ export default function Hotels() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/settings" className="flex items-center">
+                    <Link to="/account?tab=settings" className="flex items-center">
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
                     </Link>
