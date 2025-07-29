@@ -552,69 +552,93 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Mobile Content Sections */}
-          <div className="p-4">
+          {/* Premium Mobile Content Sections */}
+          <div className="p-6 bg-gradient-to-b from-gray-50/50 to-white">
             {activeTab === "overview" && (
-              <div className="space-y-4">
-                {/* Room Selection */}
+              <div className="space-y-6">
+                {/* Premium Room Selection */}
                 <div>
-                  <h2 className="text-lg font-bold mb-3">Choose your room</h2>
-                  <div className="space-y-3">
-                    {hotel.roomTypes.map((room) => (
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                      Choose your sanctuary
+                    </h2>
+                    <div className="bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 px-3 py-1 rounded-full">
+                      <span className="text-purple-700 text-xs font-bold">✨ Best Selection</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {hotel.roomTypes.map((room, index) => (
                       <div
                         key={room.id}
-                        className={`border rounded-lg p-4 transition-all ${
+                        className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
                           selectedRoomType?.id === room.id
-                            ? "border-[#003580] bg-blue-50"
-                            : "border-gray-200"
+                            ? "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border-2 border-indigo-300 shadow-xl transform scale-[1.02]"
+                            : "bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg hover:shadow-xl hover:border-gray-300"
                         }`}
                       >
-                        <div className="flex justify-between items-start mb-2">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900">{room.name}</h3>
-                            <p className="text-sm text-gray-600">{room.type}</p>
+                        {/* Premium Status Badge */}
+                        {index === 0 && (
+                          <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
+                            🏆 Best Value
                           </div>
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-[#003580]">
-                              ₹{room.pricePerNight.toLocaleString()}
+                        )}
+                        {index === 1 && (
+                          <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
+                            ⭐ Popular
+                          </div>
+                        )}
+
+                        <div className="p-5">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex-1">
+                              <h3 className="font-bold text-gray-900 text-lg mb-1">{room.name}</h3>
+                              <p className="text-sm text-gray-600 font-medium">{room.type}</p>
                             </div>
-                            <div className="text-xs text-gray-500">per night</div>
+                            <div className="text-right ml-4">
+                              <div className="text-xl font-bold bg-gradient-to-r from-[#003580] to-blue-600 bg-clip-text text-transparent">
+                                ₹{room.pricePerNight.toLocaleString()}
+                              </div>
+                              <div className="text-xs text-gray-500 font-medium">per night</div>
+                            </div>
                           </div>
-                        </div>
 
-                        {/* Room Features */}
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {room.features?.slice(0, 3).map((feature, idx) => (
-                            <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">
-                              {feature}
-                            </span>
-                          ))}
-                        </div>
+                          {/* Premium Room Features */}
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {room.features?.slice(0, 3).map((feature, idx) => (
+                              <span
+                                key={idx}
+                                className="text-xs bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 px-3 py-1 rounded-full font-medium border border-blue-200"
+                              >
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
 
-                        {/* Select Button */}
-                        <Button
-                          onClick={() => {
-                            setSelectedRoomType(room);
-                            // Native-like haptic feedback for mobile
-                            if (navigator.vibrate) {
-                              navigator.vibrate(50);
-                            }
-                          }}
-                          className={`w-full transition-all duration-200 ${
-                            selectedRoomType?.id === room.id
-                              ? "bg-[#003580] text-white shadow-lg"
-                              : "bg-white border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white"
-                          }`}
-                        >
-                          {selectedRoomType?.id === room.id ? (
-                            <span className="flex items-center justify-center">
-                              <CheckCircle className="w-4 h-4 mr-2" />
-                              Selected
-                            </span>
-                          ) : (
-                            "Select Room"
-                          )}
-                        </Button>
+                          {/* Luxury Select Button */}
+                          <Button
+                            onClick={() => {
+                              setSelectedRoomType(room);
+                              if (navigator.vibrate) {
+                                navigator.vibrate(50);
+                              }
+                            }}
+                            className={`w-full transition-all duration-300 font-bold py-3 text-sm ${
+                              selectedRoomType?.id === room.id
+                                ? "bg-gradient-to-r from-[#003580] via-blue-600 to-indigo-600 text-white shadow-2xl transform scale-105"
+                                : "bg-gradient-to-r from-white to-blue-50 border-2 border-[#003580] text-[#003580] hover:from-[#003580] hover:to-blue-600 hover:text-white hover:shadow-xl"
+                            }`}
+                          >
+                            {selectedRoomType?.id === room.id ? (
+                              <span className="flex items-center justify-center">
+                                <CheckCircle className="w-5 h-5 mr-2" />
+                                <span className="text-base">Selected ✨</span>
+                              </span>
+                            ) : (
+                              <span className="text-base">Select This Room</span>
+                            )}
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -2346,7 +2370,7 @@ export default function HotelDetails() {
                         { icon: "🔥", text: "Fire extinguishers" },
                         { icon: "📹", text: "CCTV surveillance" },
                         { icon: "🚨", text: "Smoke alarms" },
-                        { icon: "�����", text: "Security alarm" },
+                        { icon: "����", text: "Security alarm" },
                         { icon: "🔑", text: "Key card access" },
                         { icon: "🔐", text: "In-room safe" },
                         { icon: "👮", text: "24-hour security" },
