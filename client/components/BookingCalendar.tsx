@@ -351,9 +351,10 @@ export function BookingCalendar({
             showSelectionPreview={true}
             moveRangeOnFirstSelection={false}
             retainEndDateOnFirstSelection={false}
-            minDate={new Date()}
             showMonthAndYearPickers={false}
             showMonthArrow={true}
+            staticRanges={[]}
+            inputRanges={[]}
           />
         </div>
 
