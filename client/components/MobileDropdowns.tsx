@@ -262,6 +262,72 @@ interface MobileTravelersProps {
   >;
 }
 
+interface MobileClassDropdownProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedClass: string;
+  onSelectClass: (classType: string) => void;
+}
+
+export function MobileClassDropdown({
+  isOpen,
+  onClose,
+  selectedClass,
+  onSelectClass,
+}: MobileClassDropdownProps) {
+  if (!isOpen) return null;
+
+  const classOptions = [
+    { value: "Economy", description: "Standard service" },
+    { value: "Premium Economy", description: "Enhanced comfort" },
+    { value: "Business", description: "Premium service" },
+    { value: "First Class", description: "Luxury experience" },
+  ];
+
+  return (
+    <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
+      <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-gray-900">Travel Class</h2>
+        <button
+          onClick={onClose}
+          className="p-2 text-gray-500 hover:text-gray-700 touch-manipulation"
+        >
+          <X className="w-6 h-6" />
+        </button>
+      </div>
+      <div className="p-4 space-y-3">
+        {classOptions.map((option) => (
+          <button
+            key={option.value}
+            onClick={() => {
+              onSelectClass(option.value);
+              onClose();
+            }}
+            className={cn(
+              "w-full text-left px-4 py-4 hover:bg-gray-50 rounded-lg border touch-manipulation",
+              selectedClass === option.value
+                ? "border-blue-500 bg-blue-50"
+                : "border-gray-100",
+            )}
+          >
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <Users className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <div className="text-base font-medium text-gray-900">
+                  {option.value}
+                </div>
+                <div className="text-sm text-gray-500">{option.description}</div>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function MobileTravelers({
   isOpen,
   onClose,
