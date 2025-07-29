@@ -689,26 +689,51 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "amenities" && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-bold">Hotel Amenities</h2>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                    Luxury Amenities
+                  </h2>
+                  <div className="bg-gradient-to-r from-emerald-100 to-teal-100 border border-emerald-200 px-3 py-1 rounded-full">
+                    <span className="text-emerald-700 text-xs font-bold">🌟 Premium Services</span>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 gap-3">
                   {[
-                    { icon: "🏊‍♂️", name: "Swimming Pool" },
-                    { icon: "💪", name: "Fitness Center" },
-                    { icon: "📶", name: "Free WiFi" },
-                    { icon: "🍽️", name: "Restaurant" },
-                    { icon: "🛎️", name: "Room Service" },
-                    { icon: "🚗", name: "Parking" },
-                    { icon: "💆‍♀️", name: "Spa" },
-                    { icon: "💼", name: "Business Center" },
-                    { icon: "🧺", name: "Laundry Service" },
-                    { icon: "🏪", name: "Gift Shop" },
-                    { icon: "👶", name: "Babysitting" },
-                    { icon: "♿", name: "Wheelchair Accessible" },
+                    { icon: "🏊‍♂️", name: "Infinity Pool", category: "Recreation", color: "from-blue-500 to-cyan-500" },
+                    { icon: "💪", name: "24/7 Fitness Center", category: "Wellness", color: "from-green-500 to-emerald-500" },
+                    { icon: "📶", name: "High-Speed WiFi", category: "Technology", color: "from-purple-500 to-indigo-500" },
+                    { icon: "🍽️", name: "Fine Dining Restaurant", category: "Dining", color: "from-amber-500 to-orange-500" },
+                    { icon: "🛎️", name: "24/7 Room Service", category: "Service", color: "from-pink-500 to-rose-500" },
+                    { icon: "🚗", name: "Valet Parking", category: "Convenience", color: "from-gray-500 to-slate-500" },
+                    { icon: "💆‍♀️", name: "Luxury Spa", category: "Wellness", color: "from-violet-500 to-purple-500" },
+                    { icon: "💼", name: "Business Lounge", category: "Business", color: "from-blue-600 to-indigo-600" },
+                    { icon: "🧺", name: "Same-Day Laundry", category: "Service", color: "from-teal-500 to-cyan-500" },
+                    { icon: "🏪", name: "Designer Boutique", category: "Shopping", color: "from-red-500 to-pink-500" },
+                    { icon: "👶", name: "Premium Childcare", category: "Family", color: "from-yellow-500 to-amber-500" },
+                    { icon: "♿", name: "Full Accessibility", category: "Accessibility", color: "from-emerald-600 to-green-600" },
                   ].map((amenity, idx) => (
-                    <div key={idx} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <span className="text-xl">{amenity.icon}</span>
-                      <span className="text-sm font-medium">{amenity.name}</span>
+                    <div
+                      key={idx}
+                      className="group relative overflow-hidden bg-gradient-to-r from-white to-gray-50 hover:from-blue-50 hover:to-indigo-50 border border-gray-200 hover:border-blue-300 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all duration-300"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-12 h-12 bg-gradient-to-r ${amenity.color} rounded-2xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
+                          <span className="text-white text-xl filter drop-shadow-sm">{amenity.icon}</span>
+                        </div>
+                        <div className="flex-1">
+                          <span className="text-lg font-bold text-gray-900 group-hover:text-blue-800 transition-colors">
+                            {amenity.name}
+                          </span>
+                          <div className="text-xs text-gray-500 font-medium mt-1">
+                            {amenity.category}
+                          </div>
+                        </div>
+                        <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                          <CheckCircle className="w-4 h-4 text-white" />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
