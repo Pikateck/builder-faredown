@@ -3800,6 +3800,8 @@ export default function BookingFlow() {
                     setTravellers(updatedTravellers);
                   }}
                   placeholder="Enter last name"
+                  className="border-red-300 focus:border-red-500"
+                  required
                 />
               </div>
 
