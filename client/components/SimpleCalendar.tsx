@@ -142,40 +142,40 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg max-w-md w-full">
+    <div className="bg-white rounded-lg shadow-lg w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
       {renderHeader()}
       {renderDays()}
       {renderCells()}
-      
-      <div className="p-4 border-t">
-        <div className="mb-4 text-sm">
+
+      <div className="p-3 sm:p-4 border-t">
+        <div className="mb-3 sm:mb-4 text-xs sm:text-sm">
           {checkIn && (
-            <div>
+            <div className="mb-1">
               <span className="font-medium">Check-in: </span>
-              {format(checkIn, "MMM d, yyyy")}
+              <span className="text-blue-600">{format(checkIn, "MMM d, yyyy")}</span>
             </div>
           )}
           {checkOut && (
-            <div>
+            <div className="mb-1">
               <span className="font-medium">Check-out: </span>
-              {format(checkOut, "MMM d, yyyy")}
+              <span className="text-blue-600">{format(checkOut, "MMM d, yyyy")}</span>
             </div>
           )}
           {checkIn && checkOut && (
-            <div className="text-blue-600">
+            <div className="text-blue-600 font-semibold">
               {Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24))} night(s)
             </div>
           )}
         </div>
-        
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={onClose} className="flex-1">
+
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+          <Button variant="outline" onClick={onClose} className="flex-1 text-sm sm:text-base">
             Cancel
           </Button>
-          <Button 
-            onClick={handleDone} 
+          <Button
+            onClick={handleDone}
             disabled={!checkIn}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base"
           >
             Done
           </Button>
