@@ -369,13 +369,13 @@ export function HotelCard({
 
   // Mobile-First List View - Optimized for app-like experience
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 border-0 shadow-md group touch-manipulation mx-1">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
       {/* Mobile-First Design */}
       <div className="block sm:hidden">
         {/* Mobile Layout - Stacked */}
-        <div className="relative">
+        <div className="flex flex-col">
           {/* Hotel Image - Full Width */}
-          <div className="relative w-full h-44 flex-shrink-0">
+          <div className="relative w-full h-48 flex-shrink-0">
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
