@@ -2436,7 +2436,9 @@ export default function HotelDetails() {
                   {/* Safety & Security */}
                   <div className="bg-red-50 border border-red-200 rounded-lg p-5">
                     <div className="flex items-center mb-4">
-                      <span className="text-2xl mr-3">🔒</span>
+                      <div className="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center mr-3">
+                        <Shield className="w-6 h-6 text-white" />
+                      </div>
                       <h3 className="font-bold text-lg text-red-900">
                         Safety & Security
                       </h3>
@@ -2736,7 +2738,7 @@ export default function HotelDetails() {
                         </div>
                       </div>
                       <div className="absolute top-2 right-2 bg-white rounded px-2 py-1 text-xs shadow">
-                        ���� {hotel.name}
+                        📍 {hotel.name}
                       </div>
                     </div>
                   </div>
