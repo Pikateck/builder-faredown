@@ -1123,81 +1123,22 @@ export default function Index() {
                       <ChevronDown className="w-4 h-4" />
                     </button>
                     {showCurrencyDropdown && (
-                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
-                        {[
-                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                          {
-                            code: "AED",
-                            symbol: "د.إ",
-                            name: "United Arab Emirates Dirham",
-                          },
-                          { code: "USD", symbol: "$", name: "US Dollar" },
-                          {
-                            code: "GBP",
-                            symbol: "£",
-                            name: "Great Britain Pound",
-                          },
-                          {
-                            code: "SGD",
-                            symbol: "S$",
-                            name: "Singapore Dollar",
-                          },
-                          { code: "EUR", symbol: "€", name: "Euro" },
-                          { code: "THB", symbol: "฿", name: "Thai Baht" },
-                          {
-                            code: "CAD",
-                            symbol: "C$",
-                            name: "Canadian Dollar",
-                          },
-                          { code: "RUB", symbol: "₽", name: "Russian Ruble" },
-                          {
-                            code: "NZD",
-                            symbol: "NZ$",
-                            name: "New Zealand Dollar",
-                          },
-                          { code: "KRW", symbol: "₩", name: "Korean Won" },
-                          {
-                            code: "HKD",
-                            symbol: "HK$",
-                            name: "Hong Kong Dollar",
-                          },
-                          { code: "KWD", symbol: "د.ك", name: "Kuwaiti Dinar" },
-                          { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
-                          { code: "QAR", symbol: "ر.ق", name: "Qatari Riyal" },
-                          { code: "DKK", symbol: "kr", name: "Danish Krone" },
-                          {
-                            code: "BHD",
-                            symbol: ".د.ب",
-                            name: "Bahraini Dinar",
-                          },
-                          {
-                            code: "ZAR",
-                            symbol: "R",
-                            name: "South African Rand",
-                          },
-                          { code: "JPY", symbol: "¥", name: "Japanese Yen" },
-                          { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-                          {
-                            code: "AUD",
-                            symbol: "A$",
-                            name: "Australian Dollar",
-                          },
-                          { code: "OMR", symbol: "ر.ع.", name: "Omani Rial" },
-                          {
-                            code: "MYR",
-                            symbol: "RM",
-                            name: "Malaysian Ringgit",
-                          },
-                        ].map((currency) => (
+                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
+                        {currencies.map((currency) => (
                           <button
                             key={currency.code}
                             onClick={() => {
-                              setSelectedCurrency(currency);
+                              setCurrency(currency);
                               setShowCurrencyDropdown(false);
                             }}
-                            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
+                              selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600" : "text-gray-900"
+                            }`}
                           >
-                            <span>{currency.name}</span>
+                            <div className="flex items-center space-x-2">
+                              <span>{currency.flag}</span>
+                              <span>{currency.name}</span>
+                            </div>
                             <span className="font-medium">
                               {currency.symbol} {currency.code}
                             </span>
