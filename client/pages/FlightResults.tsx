@@ -4506,7 +4506,7 @@ export default function FlightResults() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold mb-3 text-gray-900">
+                      <label className="block text-sm md:text-base font-semibold mb-3 text-gray-900 text-center">
                         What price would you like to pay? (
                         {selectedCurrency.symbol})
                       </label>
