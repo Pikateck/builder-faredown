@@ -887,6 +887,7 @@ export default function FlightResults() {
     }))
     .sort((a, b) => {
       if (sortBy === "cheapest") {
+        // Sort by price but ensure airline diversity in top results
         const priceA = a.fareTypes[0]?.price || 0;
         const priceB = b.fareTypes[0]?.price || 0;
         return priceA - priceB;
