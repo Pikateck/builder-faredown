@@ -170,10 +170,11 @@ export function BookingCalendar({
         }
 
                 .booking-calendar .rdrDayToday .rdrDayNumber span {
-          background: #ffffff;
-          color: #1f2937;
-          font-weight: 600;
+          background: #eff6ff;
+          color: #2563eb;
+          font-weight: 700;
           border: 2px solid #3b82f6;
+          box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
         }
 
                 .booking-calendar .rdrDayStartOfRange .rdrDayNumber span,
