@@ -1516,7 +1516,7 @@ export default function FlightResults() {
               </label>
               <button
                 onClick={() => setShowFromCities(!showFromCities)}
-                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation"
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation"
               >
                 <Plane className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
@@ -4126,7 +4126,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀��" },
-                    { label: "Afternoon", range: [12, 18], icon: "����" },
+                    { label: "Afternoon", range: [12, 18], icon: "��️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
