@@ -530,76 +530,62 @@ export default function HotelDetails() {
           {/* Clean Mobile Content Sections */}
           <div className="p-4 bg-gray-50">
             {activeTab === "overview" && (
-              <div className="space-y-6">
-                {/* Premium Room Selection */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                      Choose your sanctuary
-                    </h2>
-                    <div className="bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 px-3 py-1 rounded-full">
-                      <div className="flex items-center space-x-1">
-                        <Sparkles className="w-3 h-3 text-purple-700" />
-                        <span className="text-purple-700 text-xs font-bold">Best Selection</span>
-                      </div>
-                    </div>
-                  </div>
+              <div className="space-y-4">
+                {/* Simple Room Selection */}
+                <div className="bg-white rounded-lg p-4">
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                    Choose your room
+                  </h2>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {hotel.roomTypes.map((room, index) => (
                       <div
                         key={room.id}
-                        className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
+                        className={`border rounded-lg overflow-hidden ${
                           selectedRoomType?.id === room.id
-                            ? "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border-2 border-indigo-300 shadow-xl transform scale-[1.02]"
-                            : "bg-gradient-to-br from-white to-gray-50 border border-gray-200 shadow-lg hover:shadow-xl hover:border-gray-300"
+                            ? "border-blue-600 bg-blue-50"
+                            : "border-gray-200 bg-white"
                         }`}
                       >
-                        {/* Premium Status Badge */}
+                        {/* Simple Status Badge */}
                         {index === 0 && (
-                          <div className="absolute top-0 right-0 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
-                            <div className="flex items-center space-x-1">
-                              <CheckCircle className="w-3 h-3" />
-                              <span>Best Value</span>
-                            </div>
+                          <div className="bg-green-600 text-white px-3 py-1 text-xs font-medium">
+                            Best Value
                           </div>
                         )}
                         {index === 1 && (
-                          <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 text-xs font-bold rounded-bl-xl">
-                            <div className="flex items-center space-x-1">
-                              <Star className="w-3 h-3 fill-current" />
-                              <span>Popular</span>
-                            </div>
+                          <div className="bg-orange-500 text-white px-3 py-1 text-xs font-medium">
+                            Popular
                           </div>
                         )}
 
-                        <div className="p-5">
+                        <div className="p-4">
                           <div className="flex justify-between items-start mb-3">
                             <div className="flex-1">
-                              <h3 className="font-bold text-gray-900 text-lg mb-1">{room.name}</h3>
-                              <p className="text-sm text-gray-600 font-medium">{room.type}</p>
+                              <h3 className="font-semibold text-gray-900 mb-1">{room.name}</h3>
+                              <p className="text-sm text-gray-600">{room.type}</p>
                             </div>
                             <div className="text-right ml-4">
-                              <div className="text-xl font-bold bg-gradient-to-r from-[#003580] to-blue-600 bg-clip-text text-transparent">
+                              <div className="text-lg font-bold text-gray-900">
                                 ₹{room.pricePerNight.toLocaleString()}
                               </div>
-                              <div className="text-xs text-gray-500 font-medium">per night</div>
+                              <div className="text-xs text-gray-500">per night</div>
                             </div>
                           </div>
 
-                          {/* Premium Room Features */}
+                          {/* Simple Room Features */}
                           <div className="flex flex-wrap gap-2 mb-4">
                             {room.features?.slice(0, 3).map((feature, idx) => (
                               <span
                                 key={idx}
-                                className="text-xs bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 px-3 py-1 rounded-full font-medium border border-blue-200"
+                                className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
                               >
                                 {feature}
                               </span>
                             ))}
                           </div>
 
-                          {/* Luxury Select Button */}
+                          {/* Simple Select Button */}
                           <Button
                             onClick={() => {
                               setSelectedRoomType(room);
@@ -607,19 +593,19 @@ export default function HotelDetails() {
                                 navigator.vibrate(50);
                               }
                             }}
-                            className={`w-full transition-all duration-300 font-bold py-3 text-sm ${
+                            className={`w-full font-medium py-3 text-sm ${
                               selectedRoomType?.id === room.id
-                                ? "bg-gradient-to-r from-[#003580] via-blue-600 to-indigo-600 text-white shadow-2xl transform scale-105"
-                                : "bg-gradient-to-r from-white to-blue-50 border-2 border-[#003580] text-[#003580] hover:from-[#003580] hover:to-blue-600 hover:text-white hover:shadow-xl"
+                                ? "bg-blue-600 text-white"
+                                : "bg-white border border-blue-600 text-blue-600 hover:bg-blue-50"
                             }`}
                           >
                             {selectedRoomType?.id === room.id ? (
                               <span className="flex items-center justify-center">
-                                <CheckCircle className="w-5 h-5 mr-2" />
-                                <span className="text-base">Selected ✨</span>
+                                <CheckCircle className="w-4 h-4 mr-2" />
+                                Selected
                               </span>
                             ) : (
-                              <span className="text-base">Select This Room</span>
+                              "Select This Room"
                             )}
                           </Button>
                         </div>
@@ -2104,7 +2090,7 @@ export default function HotelDetails() {
                         Near shopping malls
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🚇</span> Metro station nearby
+                        <span className="mr-2">��</span> Metro station nearby
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">✈️</span> Airport transfer
