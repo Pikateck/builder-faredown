@@ -1078,75 +1078,9 @@ export default function HotelDetails() {
                     </div>
                   </div>
 
-                  {/* Hotel Info Section */}
-                  <div className="p-4">
+                  {/* Simplified Hotel Info Section for Desktop */}
+                  <div className="p-4 hidden md:block">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                      {/* Hotel Details */}
-                      <div className="lg:col-span-2">
-                        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                          {hotel.name}
-                        </h1>
-                        <div className="flex items-center mb-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 ${
-                                  i < Math.floor(hotel.rating)
-                                    ? "text-yellow-400 fill-current"
-                                    : "text-gray-300"
-                                }`}
-                              />
-                            ))}
-                            <span className="ml-1 font-semibold text-sm">
-                              {hotel.rating}
-                            </span>
-                            <span className="ml-1 text-sm text-gray-600">
-                              ({hotel.reviews} reviews)
-                            </span>
-                          </div>
-                          <button
-                            onClick={() => setIsWriteReviewModalOpen(true)}
-                            className="ml-4 text-blue-600 text-sm hover:underline flex items-center"
-                          >
-                            <MessageSquare className="w-4 h-4 mr-1" />
-                            Write a review
-                          </button>
-                        </div>
-                        <div className="flex items-center text-gray-600 mb-4">
-                          <MapPin className="w-4 h-4 mr-2" />
-                          <span className="text-sm">{hotel.location}</span>
-                        </div>
-
-                        {/* Booking Details */}
-                        <div className="grid grid-cols-3 gap-3 mb-4">
-                          <div className="bg-gray-50 rounded-lg p-3 text-center">
-                            <div className="text-xs text-gray-600">
-                              Check-in
-                            </div>
-                            <div className="font-semibold text-sm">
-                              {formatDate(hotel.checkIn)}
-                            </div>
-                          </div>
-                          <div className="bg-gray-50 rounded-lg p-3 text-center">
-                            <div className="text-xs text-gray-600">
-                              Check-out
-                            </div>
-                            <div className="font-semibold text-sm">
-                              {formatDate(hotel.checkOut)}
-                            </div>
-                          </div>
-                          <div className="bg-gray-50 rounded-lg p-3 text-center">
-                            <div className="text-xs text-gray-600">Total</div>
-                            <div className="font-semibold text-sm">
-                              {hotel.totalNights} nights
-                            </div>
-                            <div className="text-xs text-gray-600">
-                              {hotel.rooms} room, {hotel.adults} adults
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                       {/* Price Summary Box */}
                       <div className="lg:col-span-1">
@@ -2135,7 +2069,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🎮</span> Nightclub/DJ
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🎪</span> Children's playground
+                        <span className="mr-2">���</span> Children's playground
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🏸</span> Tennis court
