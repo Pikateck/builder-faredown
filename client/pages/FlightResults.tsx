@@ -3084,7 +3084,7 @@ export default function FlightResults() {
                                                   Airline fee:
                                                 </span>
                                                 <span className="text-gray-900 font-medium">
-                                                  ���0
+                                                  ₹0
                                                 </span>
                                               </div>
                                               <div className="flex justify-between">
@@ -4566,8 +4566,8 @@ export default function FlightResults() {
                               : "border-[#003580]/20"
                           }`}
                         />
-                        <div className="absolute inset-y-0 left-4 flex items-center">
-                          <span className="text-[#003580] text-xl font-semibold">
+                        <div className="absolute inset-y-0 left-3 md:left-4 flex items-center">
+                          <span className="text-[#003580] text-lg md:text-xl font-semibold">
                             {selectedCurrency.symbol}
                           </span>
                         </div>
