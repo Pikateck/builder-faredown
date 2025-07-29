@@ -1936,7 +1936,7 @@ export default function HotelDetails() {
                       { icon: "💆‍♀️", text: "Head massage" },
                       { icon: "👐", text: "Hand massage" },
                       { icon: "💑", text: "Couples massage" },
-                      { icon: "🦶", text: "Foot massage" },
+                      { icon: "����", text: "Foot massage" },
                       { icon: "₹", text: "Back massage" },
                       { icon: "✨", text: "Beauty services" },
                       { icon: "��️", text: "Sun loungers" },
@@ -2639,38 +2639,24 @@ export default function HotelDetails() {
       </Dialog>
 
       {/* Mobile Bottom Action Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
-        <div className="flex items-center justify-between">
-          <div className="flex-1 pr-4">
-            <div className="text-xs text-gray-500">Starting from</div>
-            <div className="text-lg font-bold text-[#003580]">
-              ₹{lowestPrice}
-            </div>
-            <div className="text-xs text-gray-500">per night</div>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-4"
-              onClick={() => setIsSaved(!isSaved)}
-            >
-              <Bookmark className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />
-            </Button>
-            <Button
-              onClick={() => {
-                const firstRoom = hotel.roomTypes[0];
-                if (firstRoom) {
-                  handleBooking(firstRoom);
-                }
-              }}
-              className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold px-6"
-            >
-              Reserve
-            </Button>
-          </div>
-        </div>
-      </div>
+      <MobileBottomBar
+        price={lowestPrice}
+        priceLabel="per night"
+        primaryAction={{
+          label: "Reserve",
+          onClick: () => {
+            const firstRoom = hotel.roomTypes[0];
+            if (firstRoom) {
+              handleBooking(firstRoom);
+            }
+          },
+        }}
+        secondaryAction={{
+          label: "",
+          icon: <Bookmark className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />,
+          onClick: () => setIsSaved(!isSaved),
+        }}
+      />
     </div>
   );
 }
