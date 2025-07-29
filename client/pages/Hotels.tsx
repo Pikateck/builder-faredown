@@ -61,8 +61,13 @@ export default function Hotels() {
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showTravelers, setShowTravelers] = useState(false);
-  const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [travelers, setTravelers] = useState({
+    adults: 1,
+    children: 0,
+    childAges: [] as number[]
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [userName] = useState("Zubin Aibara");
 
   // City data for hotels
   const cityData = {
