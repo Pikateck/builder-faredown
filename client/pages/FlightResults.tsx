@@ -3403,7 +3403,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ���0
+                                        ₹0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
@@ -4458,7 +4458,7 @@ export default function FlightResults() {
               {bargainStep === "input" && (
                 <>
                   {/* Flight Info */}
-                  <div className="bg-white rounded-xl p-4 md:p-6 border border-[#003580]/10 shadow-sm">
+                  <div className="bg-white rounded-xl p-3 md:p-6 border border-[#003580]/10 shadow-sm">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-12 bg-[#003580]/10 rounded-lg flex items-center justify-center">
