@@ -222,72 +222,13 @@ export function MobileDatePicker({
                 ),
             }}
             onChange={handleCalendarChange}
-            // Remove onClose prop to hide the X button in mobile view
+            onClose={onClose} // Use BookingCalendar's Done button
             className="w-full"
             bookingType="flight"
           />
         </div>
 
-        <div className="space-y-3">
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              console.log("=== DONE BUTTON CLICKED ===");
-              console.log("Event:", e);
-              console.log("selectedDepartureDate:", selectedDepartureDate);
-              console.log("selectedReturnDate:", selectedReturnDate);
-              console.log("tripType:", tripType);
-              console.log("onClose function:", onClose);
-
-              try {
-                // Ensure dates are saved and modal is closed
-                console.log("Saving departure date:", selectedDepartureDate);
-                setSelectedDepartureDate(selectedDepartureDate);
-
-                if (tripType === "round-trip") {
-                  console.log("Saving return date:", selectedReturnDate);
-                  setSelectedReturnDate(selectedReturnDate);
-                } else {
-                  // One-way trip - clear return date
-                  console.log("One-way trip - clearing return date");
-                  setSelectedReturnDate(null);
-                }
-
-                // Always close the modal
-                console.log("About to call onClose...");
-                onClose();
-                console.log("onClose called successfully");
-              } catch (error) {
-                console.error("Error in Done button click:", error);
-              }
-            }}
-            onTouchStart={(e) => {
-              console.log("Touch start on Done button");
-              // Don't preventDefault to allow onClick to fire
-            }}
-            onTouchEnd={(e) => {
-              console.log("Touch end on Done button");
-              // Don't preventDefault to allow onClick to fire
-            }}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation relative z-10 min-h-[48px] active:bg-blue-800"
-            style={{
-              WebkitTapHighlightColor: "transparent",
-              WebkitUserSelect: "none",
-              userSelect: "none"
-            }}
-
-          >
-            Done
-          </Button>
-          {tripType === "round-trip" &&
-            selectedDepartureDate &&
-            !selectedReturnDate && (
-              <p className="text-sm text-gray-500 text-center">
-                Please select a return date
-              </p>
-            )}
-        </div>
+        {/* BookingCalendar has its own Done button - no need for duplicate */}
       </div>
     </div>
   );
