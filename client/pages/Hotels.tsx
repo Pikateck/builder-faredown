@@ -338,16 +338,16 @@ export default function Hotels() {
                 </button>
 
                 {showTravelers && (
-                  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-auto p-6">
-                      <div className="space-y-6">
+                  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
+                    <div className="bg-white rounded-lg w-full max-w-sm sm:max-w-md max-h-[90vh] overflow-auto p-4 sm:p-6">
+                      <div className="space-y-4 sm:space-y-6">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-semibold">Select guests</h3>
+                          <h3 className="text-base sm:text-lg font-semibold">Select guests</h3>
                           <button
                             onClick={() => setShowTravelers(false)}
-                            className="p-2 hover:bg-gray-100 rounded-full"
+                            className="p-2 hover:bg-gray-100 rounded-full touch-manipulation"
                           >
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4 sm:w-5 sm:h-5" />
                           </button>
                         </div>
 
