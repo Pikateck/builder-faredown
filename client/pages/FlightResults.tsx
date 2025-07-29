@@ -3403,7 +3403,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ₹0
+                                        ���0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
@@ -4454,7 +4454,7 @@ export default function FlightResults() {
           </DialogHeader>
 
           {bargainFlight && bargainFareType && (
-            <div className="space-y-6 p-4 md:p-6">
+            <div className="space-y-4 md:space-y-6 p-3 md:p-6">
               {bargainStep === "input" && (
                 <>
                   {/* Flight Info */}
