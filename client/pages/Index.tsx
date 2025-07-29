@@ -936,6 +936,62 @@ export default function Index() {
           </div>
         </div>
 
+        {/* Sample Flight Prices with Currency Conversion */}
+        <div className="bg-[#003580] py-6">
+          <div className="px-4">
+            <h2 className="text-white text-lg font-semibold mb-4 text-center">
+              Sample Flight Prices in {selectedCurrency.name}
+            </h2>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="bg-white rounded-xl p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-sm text-gray-900">Mumbai → Dubai</h3>
+                    <p className="text-xs text-gray-500">Emirates • Non-stop • 3h 30m</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-[#003580]">
+                      {selectedCurrency.symbol}{(15500 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                    </div>
+                    <div className="text-xs text-gray-500">per person</div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-sm text-gray-900">Delhi → Singapore</h3>
+                    <p className="text-xs text-gray-500">Air India • 1 stop • 8h 45m</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-[#003580]">
+                      {selectedCurrency.symbol}{(22800 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                    </div>
+                    <div className="text-xs text-gray-500">per person</div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-sm text-gray-900">Mumbai → London</h3>
+                    <p className="text-xs text-gray-500">British Airways • Non-stop • 9h 25m</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-[#003580]">
+                      {selectedCurrency.symbol}{(45200 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                    </div>
+                    <div className="text-xs text-gray-500">per person</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p className="text-center text-xs text-blue-200 mt-3">
+              ✨ Prices automatically convert to your selected currency
+            </p>
+          </div>
+        </div>
+
         {/* Mobile Features Section */}
         <div className="bg-gray-50 py-8">
           <div className="px-4">
