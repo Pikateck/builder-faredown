@@ -380,7 +380,7 @@ const SeatMap = ({
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
+                    <input type="checkbox" className="w-4 h-4 bg-white border border-gray-400 mr-2" />
                     <span>Unavailable</span>
                   </div>
                   <div className="w-3 h-3 bg-gray-300 rounded"></div>
