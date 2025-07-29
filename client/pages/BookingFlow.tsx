@@ -2324,8 +2324,9 @@ export default function BookingFlow() {
                               : "bg-white border-[#f2f6fa] hover:border-[#003580] hover:shadow-sm"
                           }`}
                         >
-                          <Checkbox
-                            className="w-4 h-4"
+                          <input
+                            type="checkbox"
+                            className={`w-4 h-4 ${selectedOtherOptions.length === 6 ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                             checked={selectedOtherOptions.length === 6}
                             onCheckedChange={(checked) => {
                               if (checked) {
