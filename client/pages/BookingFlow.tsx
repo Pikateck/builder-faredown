@@ -366,7 +366,7 @@ const SeatMap = ({
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input type="checkbox" className="mr-2" defaultChecked />
+                    <input type="checkbox" className="w-4 h-4 bg-blue-600 mr-2" defaultChecked />
                     <span>Economy Plus</span>
                   </div>
                   <div className="w-3 h-3 bg-[#009fe3] rounded"></div>
@@ -515,7 +515,7 @@ const SeatMap = ({
                                 {selectedSeats[flightLeg][seat.id]
                                   ? "✓"
                                   : seat.available
-                                    ? "₹"
+                                    ? "���"
                                     : "×"}
                               </button>
                             );
