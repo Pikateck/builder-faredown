@@ -298,22 +298,16 @@ export default function Hotels() {
 
                 {showCalendar && (
                   <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-auto">
-                      <BookingCalendar
-                        initialRange={{
-                          startDate: departureDate || new Date(),
-                          endDate: returnDate || addDays(departureDate || new Date(), 7),
-                        }}
-                        onChange={(range) => {
-                          console.log("Mobile hotel calendar range selected:", range);
-                          setDepartureDate(range.startDate);
-                          setReturnDate(range.endDate);
-                        }}
-                        onClose={() => setShowCalendar(false)}
-                        className="w-full"
-                        bookingType="hotel"
-                      />
-                    </div>
+                    <SimpleCalendar
+                      onDateSelect={(checkIn, checkOut) => {
+                        console.log("Hotel dates selected:", { checkIn, checkOut });
+                        setDepartureDate(checkIn);
+                        setReturnDate(checkOut);
+                      }}
+                      onClose={() => setShowCalendar(false)}
+                      initialCheckIn={departureDate || undefined}
+                      initialCheckOut={returnDate || undefined}
+                    />
                   </div>
                 )}
               </div>
