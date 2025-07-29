@@ -231,6 +231,15 @@ export function MobileDatePicker({
               console.log("selectedDepartureDate:", selectedDepartureDate);
               console.log("selectedReturnDate:", selectedReturnDate);
               console.log("tripType:", tripType);
+
+              // Ensure the dates are properly set in the parent before closing
+              if (selectedDepartureDate) {
+                setSelectedDepartureDate(selectedDepartureDate);
+              }
+              if (selectedReturnDate && tripType === "round-trip") {
+                setSelectedReturnDate(selectedReturnDate);
+              }
+
               onClose();
             }}
             onTouchStart={() => console.log("Touch start on Done button")}
