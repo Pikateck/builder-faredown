@@ -301,7 +301,7 @@ export default function HotelResults() {
     },
     {
       id: 2,
-      name: "Ocean View Resort",
+      name: "Ocean View Resort Dubai",
       location: `${destination || "Dubai, UAE"}`,
       images: [
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
