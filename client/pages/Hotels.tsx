@@ -110,51 +110,120 @@ export default function Hotels() {
       {/* Mobile Layout (≤768px) */}
       <div className="block md:hidden">
         {/* Mobile Header */}
-        <header className="text-white" style={{ backgroundColor: "#003580" }}>
-          <div className="px-4 py-3">
+        <header className="text-white sticky top-0 z-40" style={{ backgroundColor: "#003580" }}>
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2">
-                <span className="text-lg font-bold tracking-tight">
+                <span className="text-lg sm:text-xl font-bold tracking-tight">
                   faredown.com
                 </span>
               </Link>
 
-              {/* Currency Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1 text-sm"
+              {/* Centered Navigation */}
+              <nav className="flex items-center space-x-6 text-sm font-medium">
+                <Link
+                  to="/"
+                  className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4"
                 >
-                  <span>{selectedCurrency.symbol} {selectedCurrency.code}</span>
-                  <ChevronDown className="w-4 h-4" />
+                  <span>Flights</span>
+                </Link>
+                <button className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4 border-b-2 border-white">
+                  <span>Hotels</span>
                 </button>
-                {showCurrencyDropdown && (
-                  <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
-                    {[
-                      { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                      { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                      { code: "USD", symbol: "$", name: "US Dollar" },
-                      { code: "GBP", symbol: "£", name: "British Pound" },
-                      { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
-                      { code: "EUR", symbol: "€", name: "Euro" },
-                    ].map((currency) => (
-                      <button
-                        key={currency.code}
-                        onClick={() => {
-                          setSelectedCurrency(currency);
-                          setShowCurrencyDropdown(false);
-                        }}
-                        className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
-                      >
-                        <span>{currency.name}</span>
-                        <span className="font-medium">
-                          {currency.symbol} {currency.code}
-                        </span>
-                      </button>
-                    ))}
+              </nav>
+
+              <div className="flex items-center space-x-2 md:space-x-6">
+                {/* Language and Currency */}
+                <div className="flex items-center space-x-4 text-sm">
+                  <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
+                    <span>English (UK)</span>
+                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                      className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
+                    >
+                      <span>{selectedCurrency.symbol} {selectedCurrency.code}</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showCurrencyDropdown && (
+                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
+                        {[
+                          { code: "USD", symbol: "$", name: "US Dollar" },
+                          { code: "EUR", symbol: "€", name: "Euro" },
+                          { code: "GBP", symbol: "£", name: "British Pound" },
+                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
+                          { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+                        ].map((currency) => (
+                          <button
+                            key={currency.code}
+                            onClick={() => {
+                              setSelectedCurrency(currency);
+                              setShowCurrencyDropdown(false);
+                            }}
+                            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
+                          >
+                            <span>{currency.name}</span>
+                            <span className="font-medium">
+                              {currency.symbol} {currency.code}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  {isLoggedIn ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
+                        <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-bold text-black">
+                            {userName.charAt(0)}
+                          </span>
+                        </div>
+                        <span className="text-sm text-white hidden sm:inline">
+                          {userName}
+                        </span>
+                        <span className="text-xs text-yellow-300 hidden md:inline">
+                          Loyalty Level 1
+                        </span>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48">
+                        <DropdownMenuItem>
+                          <Link to="/account" className="flex items-center">
+                            <User className="w-4 h-4 mr-2" />
+                            My account
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/my-trips" className="flex items-center">
+                            <Hotel className="w-4 h-4 mr-2" />
+                            Bookings & Trips
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="bg-white text-blue-700 border-white hover:bg-gray-100 rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
+                      >
+                        Register
+                      </Button>
+                      <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-800 text-white rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
+                      >
+                        Sign in
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
