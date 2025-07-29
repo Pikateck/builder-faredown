@@ -2433,7 +2433,7 @@ export default function BookingFlow() {
                             <div className="flex items-center space-x-3 w-full">
                               <div className="w-8 h-8 bg-[#f2f6fa] rounded-full flex items-center justify-center">
                                 <span className="text-[#003580] text-sm">
-                                  •
+                                  ��
                                 </span>
                               </div>
                               <div className="flex-1">
@@ -3731,8 +3731,8 @@ export default function BookingFlow() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#666] mb-1">
-                  First Name
+                <label className="block text-sm font-bold text-red-700 mb-1">
+                  First Name *
                 </label>
                 <Input
                   value={
