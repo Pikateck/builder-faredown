@@ -513,6 +513,60 @@ export default function Hotels() {
               </Button>
             </div>
 
+            {/* Sample Hotel Prices with Currency Conversion */}
+            <div className="mt-8">
+              <h2 className="text-white text-lg font-semibold mb-4 text-center">
+                Sample Hotel Prices in {selectedCurrency.name}
+              </h2>
+              <div className="grid grid-cols-1 gap-3">
+                <div className="bg-white rounded-xl p-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-sm text-gray-900">Luxury Resort Dubai</h3>
+                      <p className="text-xs text-gray-500">5★ • Pool • Spa</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-[#003580]">
+                        {selectedCurrency.symbol}{(8500 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                      </div>
+                      <div className="text-xs text-gray-500">per night</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl p-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-sm text-gray-900">Business Hotel Mumbai</h3>
+                      <p className="text-xs text-gray-500">4★ • WiFi • Breakfast</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-[#003580]">
+                        {selectedCurrency.symbol}{(3200 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                      </div>
+                      <div className="text-xs text-gray-500">per night</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl p-4 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-sm text-gray-900">Budget Inn Delhi</h3>
+                      <p className="text-xs text-gray-500">3★ • AC • Clean</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-[#003580]">
+                        {selectedCurrency.symbol}{(1800 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                      </div>
+                      <div className="text-xs text-gray-500">per night</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="text-center text-xs text-blue-200 mt-3">
+                ✨ Prices automatically convert to your selected currency
+              </p>
+            </div>
+
             {/* Why Faredown Section */}
             <div className="mt-8">
               <h2 className="text-white text-lg font-semibold mb-4 text-center">
