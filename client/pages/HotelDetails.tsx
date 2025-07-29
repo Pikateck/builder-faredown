@@ -479,27 +479,56 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Hotel Info */}
-          <div className="p-4 border-b border-gray-100">
-            <h1 className="text-xl font-bold text-gray-900 mb-2">{hotel.name}</h1>
-            <div className="flex items-center text-gray-600 mb-3">
-              <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
-              <span className="text-sm">{hotel.location}</span>
-            </div>
+          {/* Hotel Info - Premium Design */}
+          <div className="p-6 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 border-b border-indigo-100/50">
+            <div className="space-y-4">
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
+                  {hotel.name}
+                </h1>
+                <div className="flex items-center text-gray-600 mb-4">
+                  <div className="w-5 h-5 bg-gradient-to-r from-red-400 to-pink-500 rounded-full flex items-center justify-center mr-2">
+                    <MapPin className="w-3 h-3 text-white" />
+                  </div>
+                  <span className="text-sm font-medium">{hotel.location}</span>
+                </div>
+              </div>
 
-            {/* Dates and Guests */}
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="bg-gray-50 rounded-lg p-2 text-center">
-                <div className="text-gray-500">Check-in</div>
-                <div className="font-semibold">{formatDate(hotel.checkIn)}</div>
+              {/* Premium Booking Details */}
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-xl p-3 text-center shadow-sm">
+                  <div className="text-xs text-blue-600 font-semibold mb-1">Check-in</div>
+                  <div className="font-bold text-gray-800 text-sm">{formatDate(hotel.checkIn)}</div>
+                </div>
+                <div className="bg-gradient-to-br from-white to-purple-50 border border-purple-100 rounded-xl p-3 text-center shadow-sm">
+                  <div className="text-xs text-purple-600 font-semibold mb-1">Check-out</div>
+                  <div className="font-bold text-gray-800 text-sm">{formatDate(hotel.checkOut)}</div>
+                </div>
+                <div className="bg-gradient-to-br from-white to-emerald-50 border border-emerald-100 rounded-xl p-3 text-center shadow-sm">
+                  <div className="text-xs text-emerald-600 font-semibold mb-1">Nights</div>
+                  <div className="font-bold text-gray-800 text-sm">{hotel.totalNights}</div>
+                </div>
               </div>
-              <div className="bg-gray-50 rounded-lg p-2 text-center">
-                <div className="text-gray-500">Check-out</div>
-                <div className="font-semibold">{formatDate(hotel.checkOut)}</div>
-              </div>
-              <div className="bg-gray-50 rounded-lg p-2 text-center">
-                <div className="text-gray-500">Nights</div>
-                <div className="font-semibold">{hotel.totalNights}</div>
+
+              {/* Premium Features Row */}
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex space-x-4">
+                  <div className="flex items-center space-x-1 text-xs">
+                    <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">📶</span>
+                    </div>
+                    <span className="text-gray-600 font-medium">Free WiFi</span>
+                  </div>
+                  <div className="flex items-center space-x-1 text-xs">
+                    <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">🅿️</span>
+                    </div>
+                    <span className="text-gray-600 font-medium">Free Parking</span>
+                  </div>
+                </div>
+                <div className="bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200 px-3 py-1 rounded-full">
+                  <span className="text-amber-700 text-xs font-bold">🔥 Hot Deal</span>
+                </div>
               </div>
             </div>
           </div>
