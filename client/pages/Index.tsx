@@ -11,6 +11,7 @@ import {
   MobileCityDropdown,
   MobileDatePicker,
   MobileTravelers,
+  MobileClassDropdown,
 } from "@/components/MobileDropdowns";
 import {
   formatDateToDDMMMYYYY,
