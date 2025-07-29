@@ -2780,24 +2780,63 @@ export default function HotelDetails() {
       </Dialog>
 
       {/* Mobile Bottom Action Bar */}
-      <MobileBottomBar
-        price={lowestPrice}
-        priceLabel="per night"
-        primaryAction={{
-          label: "Reserve",
-          onClick: () => {
-            const firstRoom = hotel.roomTypes[0];
-            if (firstRoom) {
-              handleBooking(firstRoom);
-            }
-          },
-        }}
-        secondaryAction={{
-          label: "",
-          icon: <Bookmark className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />,
-          onClick: () => setIsSaved(!isSaved),
-        }}
-      />
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+        {selectedRoomType ? (
+          /* Room Selected - Show Reserve & Bargain */
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <div className="text-sm font-medium text-gray-900">
+                  {selectedRoomType.name}
+                </div>
+                <div className="text-xs text-gray-500">
+                  ₹{selectedRoomType.pricePerNight.toLocaleString()} per night
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-[#003580]">
+                  ₹{calculateTotalPrice(selectedRoomType.pricePerNight).toLocaleString()}
+                </div>
+                <div className="text-xs text-gray-500">total price</div>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => handleBargainClick(selectedRoomType)}
+                variant="outline"
+                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold"
+              >
+                Bargain
+              </Button>
+              <Button
+                onClick={() => handleBooking(selectedRoomType)}
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold"
+              >
+                Reserve
+              </Button>
+            </div>
+          </div>
+        ) : (
+          /* No Room Selected - Show starting price */
+          <div className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-xs text-gray-500">Starting from</div>
+                <div className="text-lg font-bold text-[#003580]">
+                  ₹{lowestPrice}
+                </div>
+                <div className="text-xs text-gray-500">per night</div>
+              </div>
+              <Button
+                disabled
+                className="bg-gray-300 text-gray-500 cursor-not-allowed px-8"
+              >
+                Select Room First
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
