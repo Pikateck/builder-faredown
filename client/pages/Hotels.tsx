@@ -308,7 +308,7 @@ export default function Hotels() {
               {/* Check-in / Check-out */}
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
-                  onClick={() => setShowCalendar(!showCalendar)}
+                  onClick={() => setShowMobileCalendar(!showMobileCalendar)}
                   className="w-full text-left"
                 >
                   <div className="text-xs text-gray-500 mb-1">Check-in / Check-out</div>
@@ -327,17 +327,17 @@ export default function Hotels() {
                   </div>
                 </button>
 
-                {showCalendar && (
+                {showMobileCalendar && (
                   <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
                     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg max-h-[90vh] overflow-auto">
                       <SimpleCalendar
                         onDateSelect={(checkIn, checkOut) => {
-                          console.log("Hotel dates selected:", { checkIn, checkOut });
+                          console.log("Mobile hotel dates selected:", { checkIn, checkOut });
                           setDepartureDate(checkIn);
                           setReturnDate(checkOut);
-                          setShowCalendar(false); // Close calendar after selection
+                          setShowMobileCalendar(false); // Close calendar after selection
                         }}
-                        onClose={() => setShowCalendar(false)}
+                        onClose={() => setShowMobileCalendar(false)}
                         initialCheckIn={departureDate || undefined}
                         initialCheckOut={returnDate || undefined}
                       />
