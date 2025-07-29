@@ -887,7 +887,6 @@ export default function FlightResults() {
     }))
     .sort((a, b) => {
       if (sortBy === "cheapest") {
-        // Sort by price but ensure airline diversity in top results
         const priceA = a.fareTypes[0]?.price || 0;
         const priceB = b.fareTypes[0]?.price || 0;
         return priceA - priceB;
@@ -1245,7 +1244,7 @@ export default function FlightResults() {
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
-                      { code: "zh", name: "中文", flag: "🇨🇳" },
+                      { code: "zh", name: "中文", flag: "��🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
                         key={language.code}
@@ -4127,7 +4126,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀��" },
-                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
+                    { label: "Afternoon", range: [12, 18], icon: "��️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
