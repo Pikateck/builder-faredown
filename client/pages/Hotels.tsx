@@ -123,12 +123,66 @@ export default function Hotels() {
               faredown.com
             </Link>
             <div className="flex items-center space-x-3">
-              <Button
-                size="sm"
-                className="text-xs px-3 py-1.5 bg-[#febb02] text-[#003580] hover:bg-[#d19900] font-medium rounded"
-              >
-                Sign in
-              </Button>
+              {/* Hamburger Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="p-2 hover:bg-white/10 rounded">
+                  <div className="w-5 h-5 flex flex-col justify-between">
+                    <div className="w-full h-0.5 bg-white"></div>
+                    <div className="w-full h-0.5 bg-white"></div>
+                    <div className="w-full h-0.5 bg-white"></div>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem>
+                    <Link to="/" className="flex items-center">
+                      <Plane className="w-4 h-4 mr-2" />
+                      Flights
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/hotels" className="flex items-center">
+                      <Hotel className="w-4 h-4 mr-2" />
+                      Hotels
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/account" className="flex items-center">
+                      <User className="w-4 h-4 mr-2" />
+                      My Account
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/saved" className="flex items-center">
+                      <Heart className="w-4 h-4 mr-2" />
+                      Saved
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/help" className="flex items-center">
+                      <Headphones className="w-4 h-4 mr-2" />
+                      Help & Support
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/settings" className="flex items-center">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <div className="flex items-center">
+                      <User className="w-4 h-4 mr-2" />
+                      Zubin Aibara
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <button className="flex items-center text-red-600">
+                      <ArrowRight className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
