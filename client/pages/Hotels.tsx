@@ -322,7 +322,8 @@ export default function Hotels() {
                       }}
                       onChange={(range) => {
                         console.log("Mobile hotel calendar range selected:", range);
-                        setShowCalendar(false);
+                        setDepartureDate(range.startDate);
+                        setReturnDate(range.endDate);
                       }}
                       onClose={() => setShowCalendar(false)}
                       className="w-full"
