@@ -443,6 +443,14 @@ export default function HotelDetails() {
           isBookmarked={isSaved}
           onBookmarkToggle={() => setIsSaved(!isSaved)}
           onShareClick={() => setIsShareModalOpen(true)}
+          onBack={() => {
+            // Try to go back in history, or navigate to hotel results
+            if (window.history.length > 1) {
+              navigate(-1);
+            } else {
+              navigate('/hotels');
+            }
+          }}
         />
 
         {/* Mobile Content */}
