@@ -2060,7 +2060,7 @@ export default function HotelDetails() {
                         Near shopping malls
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">��</span> Metro station nearby
+                        <span className="mr-2">🚇</span> Metro station nearby
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">✈️</span> Airport transfer
@@ -2114,7 +2114,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🚿</span> Shower
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">📺</span> Flat-screen TV
+                        <span className="mr-2">����</span> Flat-screen TV
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🔐</span> Safe
@@ -2956,17 +2956,27 @@ export default function HotelDetails() {
             </div>
             <div className="flex gap-3">
               <Button
-                onClick={() => handleBargainClick(selectedRoomType)}
+                onClick={() => {
+                  handleBargainClick(selectedRoomType);
+                  if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                  }
+                }}
                 variant="outline"
-                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold"
+                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold transition-all duration-200"
               >
-                Bargain
+                💰 Bargain
               </Button>
               <Button
-                onClick={() => handleBooking(selectedRoomType)}
-                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold"
+                onClick={() => {
+                  handleBooking(selectedRoomType);
+                  if (navigator.vibrate) {
+                    navigator.vibrate(100);
+                  }
+                }}
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold transition-all duration-200"
               >
-                Reserve
+                ✅ Reserve
               </Button>
             </div>
           </div>
