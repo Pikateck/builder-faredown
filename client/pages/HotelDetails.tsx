@@ -1212,7 +1212,7 @@ export default function HotelDetails() {
 
                               {/* Pricing and Actions */}
                               <div className="lg:col-span-3 mt-4 lg:mt-0">
-                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                                   <div className="text-2xl font-bold text-gray-900 mb-1">
                                     ₹
                                     {calculateTotalPrice(
@@ -2117,7 +2117,7 @@ export default function HotelDetails() {
                 </div>
 
                 {/* Swimming Pools Section */}
-                <div className="mt-8 bg-gradient-to-r from-blue-100 to-cyan-100 border border-blue-300 rounded-lg p-6">
+                <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex items-center mb-6">
                     <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mr-4">
                       <Waves className="w-8 h-8 text-white" />
@@ -2198,7 +2198,7 @@ export default function HotelDetails() {
                 </div>
 
                 {/* Wellness & Spa Section */}
-                <div className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-300 rounded-lg p-6">
+                <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex items-center mb-6">
                     <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mr-4">
                       <Sparkles className="w-8 h-8 text-white" />
@@ -2289,7 +2289,7 @@ export default function HotelDetails() {
                     </div>
                     <ul className="space-y-2 text-sm">
                       {[
-                        { icon: "🔥", text: "Fire extinguishers" },
+                        { icon: "���", text: "Fire extinguishers" },
                         { icon: "📹", text: "CCTV surveillance" },
                         { icon: "🚨", text: "Smoke alarms" },
                         { icon: "🔔", text: "Security alarm" },
