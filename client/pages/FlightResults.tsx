@@ -4126,7 +4126,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀��" },
-                    { label: "Afternoon", range: [12, 18], icon: "��️" },
+                    { label: "Afternoon", range: [12, 18], icon: "����" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
@@ -4328,7 +4328,7 @@ export default function FlightResults() {
                 Clear all
               </Button>
               <Button
-                className="flex-1 h-12 bg-[#003580] hover:bg-[#0071c2] font-semibold text-white"
+                className="flex-1 h-10 bg-[#003580] hover:bg-[#0071c2] font-medium text-white text-sm"
                 onClick={() => setShowMobileFilters(false)}
               >
                 Show {filteredFlights.length} results
