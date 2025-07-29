@@ -276,7 +276,7 @@ export function MobileFilters({ isOpen, onClose }: MobileFiltersProps) {
             Clear All
           </Button>
           <Button
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 touch-manipulation"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 text-sm font-medium touch-manipulation"
             onClick={onClose}
           >
             Apply Filters
