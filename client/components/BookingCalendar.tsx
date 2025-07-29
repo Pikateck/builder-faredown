@@ -273,30 +273,7 @@ export function BookingCalendar({
       `}</style>
 
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg max-w-full h-auto">
-        {/* Header with selected dates and close button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <CalendarIcon className="w-5 h-5 text-gray-600" />
-            <div>
-              <div className="font-medium text-gray-900">
-                {formatSelectionText()}
-              </div>
-              {getTotalNights() > 0 && (
-                <div className="text-sm text-gray-600">
-                  {getTotalNights()} night{getTotalNights() !== 1 ? "s" : ""}
-                </div>
-              )}
-            </div>
-          </div>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-        </div>
+        {/* Removed duplicate header - dates already shown in mobile picker */}
 
         {/* Quick action buttons - Booking.com style */}
         <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
@@ -351,24 +328,8 @@ export function BookingCalendar({
 
         {/* Footer with confirm button - Booking.com style */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 p-4 border-t border-gray-200">
-          <div className="text-sm text-gray-600">
-            {selection[0].startDate && selection[0].endDate && (
-              <div className="space-y-1">
-                <div>
-                  {bookingType === "flight" ? "Departure Date" : "Check-in"}:{" "}
-                  <span className="font-medium text-gray-900">
-                    {format(selection[0].startDate, "EEE, MMM d")}
-                  </span>
-                </div>
-                <div>
-                  {bookingType === "flight" ? "Arrival Date" : "Check-out"}:{" "}
-                  <span className="font-medium text-gray-900">
-                    {format(selection[0].endDate, "EEE, MMM d")}
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Removed duplicate date display */}
+          <div></div>
           <div className="flex gap-2 w-full sm:w-auto">
             <button
               onClick={() => {
