@@ -1244,7 +1244,7 @@ export default function FlightResults() {
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
-                      { code: "zh", name: "中文", flag: "��🇳" },
+                      { code: "zh", name: "中文", flag: "����🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
                         key={language.code}
@@ -2434,7 +2434,7 @@ export default function FlightResults() {
                         }
                       >
                         <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                        <span className="hidden sm:inline">Bargain</span>
+                        <span>Bargain</span>
                       </Button>
                     </div>
                   </div>
