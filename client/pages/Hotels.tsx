@@ -349,7 +349,7 @@ export default function Hotels() {
                 </button>
 
                 {showTravelers && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-xl p-4 z-50 mt-1">
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-xl p-4 z-50 mt-1 max-h-80 overflow-y-auto">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
@@ -394,10 +394,15 @@ export default function Hotels() {
                         <div className="flex items-center space-x-3">
                           <button
                             onClick={() =>
-                              setTravelers((prev) => ({
-                                ...prev,
-                                children: Math.max(0, prev.children - 1),
-                              }))
+                              setTravelers((prev) => {
+                                const newChildren = Math.max(0, prev.children - 1);
+                                const newChildAges = prev.childAges.slice(0, newChildren);
+                                return {
+                                  ...prev,
+                                  children: newChildren,
+                                  childAges: newChildAges,
+                                };
+                              })
                             }
                             disabled={travelers.children <= 0}
                             className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
@@ -412,6 +417,7 @@ export default function Hotels() {
                               setTravelers((prev) => ({
                                 ...prev,
                                 children: prev.children + 1,
+                                childAges: [...prev.childAges, 5], // Default age 5
                               }))
                             }
                             className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
@@ -420,6 +426,35 @@ export default function Hotels() {
                           </button>
                         </div>
                       </div>
+
+                      {/* Children Ages */}
+                      {travelers.children > 0 && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium text-gray-700">Children's Ages</div>
+                          {Array.from({ length: travelers.children }).map((_, index) => (
+                            <div key={index} className="flex items-center justify-between">
+                              <span className="text-sm text-gray-600">Child {index + 1}</span>
+                              <select
+                                value={travelers.childAges[index] || 5}
+                                onChange={(e) =>
+                                  setTravelers((prev) => {
+                                    const newChildAges = [...prev.childAges];
+                                    newChildAges[index] = parseInt(e.target.value);
+                                    return { ...prev, childAges: newChildAges };
+                                  })
+                                }
+                                className="border border-gray-300 rounded px-2 py-1 text-sm"
+                              >
+                                {Array.from({ length: 18 }, (_, i) => (
+                                  <option key={i} value={i}>
+                                    {i} {i === 1 ? "year" : "years"}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          ))}
+                        </div>
+                      )}
 
                       <Button
                         onClick={() => setShowTravelers(false)}
