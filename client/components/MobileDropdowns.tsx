@@ -255,11 +255,11 @@ export function MobileDatePicker({
             }}
             onTouchStart={(e) => {
               console.log("Touch start on Done button");
-              e.preventDefault();
+              // Don't preventDefault to allow onClick to fire
             }}
             onTouchEnd={(e) => {
               console.log("Touch end on Done button");
-              e.preventDefault();
+              // Don't preventDefault to allow onClick to fire
             }}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation relative z-10 min-h-[48px] active:bg-blue-800"
             style={{
