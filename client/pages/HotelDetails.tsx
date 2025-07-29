@@ -1347,9 +1347,7 @@ export default function HotelDetails() {
                                           key={idx}
                                           className="flex items-start"
                                         >
-                                          <span className="text-green-600 mr-2 mt-0.5">
-                                            ✓
-                                          </span>
+                                          <CheckCircle className="w-4 h-4 text-green-600 mr-2 mt-0.5" />
                                           <span className="text-gray-700">
                                             {feature}
                                           </span>
@@ -2303,7 +2301,7 @@ export default function HotelDetails() {
                         </li>
                         <li className="flex items-center">
                           <span className="text-green-600 mr-2 font-bold">
-                            ✓
+                            ���
                           </span>{" "}
                           All ages welcome
                         </li>
