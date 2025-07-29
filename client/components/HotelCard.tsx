@@ -483,7 +483,7 @@ export function HotelCard({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="px-4 py-2 text-xs"
+                  className="px-4 py-2 text-xs font-semibold border-blue-600 text-blue-600"
                   onClick={handleViewDetails}
                 >
                   View
@@ -491,9 +491,8 @@ export function HotelCard({
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
                   size="sm"
-                  className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold px-4 py-2 text-xs"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 text-xs"
                 >
-                  <TrendingDown className="w-3 h-3 mr-1" />
                   Bargain
                 </Button>
               </div>
