@@ -169,6 +169,36 @@ export default function Hotels() {
                       Settings
                     </Link>
                   </DropdownMenuItem>
+
+                  {/* Currency Selection */}
+                  <div className="px-2 py-1">
+                    <div className="text-xs font-medium text-gray-500 px-2 py-1">Currency</div>
+                    <div className="space-y-1">
+                      {[
+                        { code: "USD", symbol: "$", name: "US Dollar" },
+                        { code: "EUR", symbol: "€", name: "Euro" },
+                        { code: "GBP", symbol: "£", name: "British Pound" },
+                        { code: "INR", symbol: "₹", name: "Indian Rupee" },
+                        { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+                      ].map((currency) => (
+                        <button
+                          key={currency.code}
+                          onClick={() => {
+                            setSelectedCurrency(currency);
+                          }}
+                          className={`w-full text-left px-2 py-1 hover:bg-gray-100 rounded text-sm flex items-center justify-between ${
+                            selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600" : "text-gray-900"
+                          }`}
+                        >
+                          <span>{currency.name}</span>
+                          <span className="font-medium">
+                            {currency.symbol} {currency.code}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <DropdownMenuItem>
                     <div className="flex items-center">
                       <User className="w-4 h-4 mr-2" />
