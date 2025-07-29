@@ -452,7 +452,7 @@ export default function BookingConfirmation() {
     </div>
   );
 
-  if (!booking) {
+  if (!booking || typeof booking !== 'object') {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
