@@ -357,11 +357,7 @@ export default function Index() {
     }
   };
 
-  const [selectedCurrency, setSelectedCurrency] = useState({
-    code: "INR",
-    symbol: "₹",
-    name: "Indian Rupee",
-  });
+
 
   // City data mapping
   const cityData = {
