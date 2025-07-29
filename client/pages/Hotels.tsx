@@ -334,6 +334,7 @@ export default function Hotels() {
                           console.log("Hotel dates selected:", { checkIn, checkOut });
                           setDepartureDate(checkIn);
                           setReturnDate(checkOut);
+                          setShowCalendar(false); // Close calendar after selection
                         }}
                         onClose={() => setShowCalendar(false)}
                         initialCheckIn={departureDate || undefined}
