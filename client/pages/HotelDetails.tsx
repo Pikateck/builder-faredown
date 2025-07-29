@@ -2356,7 +2356,9 @@ export default function HotelDetails() {
                 {/* Wellness & Spa Section */}
                 <div className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-300 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">��‍♀️</span>
+                    <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mr-4">
+                      <Sparkles className="w-8 h-8 text-white" />
+                    </div>
                     <div>
                       <h3 className="font-bold text-2xl text-green-900">
                         Wellness & Spa
@@ -2734,7 +2736,7 @@ export default function HotelDetails() {
                         </div>
                       </div>
                       <div className="absolute top-2 right-2 bg-white rounded px-2 py-1 text-xs shadow">
-                        📍 {hotel.name}
+                        ���� {hotel.name}
                       </div>
                     </div>
                   </div>
