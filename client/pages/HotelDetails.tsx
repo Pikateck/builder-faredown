@@ -2100,7 +2100,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛎️</span> Concierge service
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🧳</span> Luggage storage
+                        <span className="mr-2">���</span> Luggage storage
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">💼</span> Business centre
@@ -2351,7 +2351,7 @@ export default function HotelDetails() {
                         { icon: "☕", text: "Coffee house on site" },
                         { icon: "🍷", text: "Wine/champagne" },
                         { icon: "🥃", text: "Bar" },
-                        { icon: "🏨", text: "Room service" },
+                        { icon: "🛎️", text: "Room service" },
                         { icon: '₹ text: "Fresh fruits' },
                         { icon: "🧒", text: "Kid-friendly buffet" },
                         { icon: "🥗", text: "Special diet menus" },
@@ -2384,7 +2384,7 @@ export default function HotelDetails() {
                         { icon: "🚨", text: "Smoke alarms" },
                         { icon: "🔔", text: "Security alarm" },
                         { icon: "🔑", text: "Key card access" },
-                        { icon: "🔐", text: "In-room safe" },
+                        { icon: "����", text: "In-room safe" },
                         { icon: "👮", text: "24-hour security" },
                         { icon: "🚪", text: "Secure access" },
                       ].map((item, idx) => (
