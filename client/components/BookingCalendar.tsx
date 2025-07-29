@@ -64,19 +64,26 @@ export function BookingCalendar({
   }, [initialRange]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
+    console.log("Calendar selection changed:", ranges);
     const range = ranges.selection;
-    if (range.startDate) {
-      setSelection([{
+
+    if (range && range.startDate) {
+      const newSelection = [{
         startDate: range.startDate,
         endDate: range.endDate || range.startDate,
         key: "selection",
-      }]);
+      }];
 
-      // Call onChange even if we only have startDate
-      onChange?.({
-        startDate: range.startDate,
-        endDate: range.endDate || range.startDate,
-      });
+      console.log("Setting new selection:", newSelection);
+      setSelection(newSelection);
+
+      // Call onChange
+      if (onChange) {
+        onChange({
+          startDate: range.startDate,
+          endDate: range.endDate || range.startDate,
+        });
+      }
     }
   };
 
