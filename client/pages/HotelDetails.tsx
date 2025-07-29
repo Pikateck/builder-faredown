@@ -538,13 +538,20 @@ export default function HotelDetails() {
                         {/* Select Button */}
                         <Button
                           onClick={() => setSelectedRoomType(room)}
-                          className={`w-full ${
+                          className={`w-full transition-all duration-200 ${
                             selectedRoomType?.id === room.id
-                              ? "bg-[#003580] text-white"
-                              : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                              ? "bg-[#003580] text-white shadow-lg"
+                              : "bg-white border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white"
                           }`}
                         >
-                          {selectedRoomType?.id === room.id ? "Selected" : "Select Room"}
+                          {selectedRoomType?.id === room.id ? (
+                            <span className="flex items-center justify-center">
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              Selected
+                            </span>
+                          ) : (
+                            "Select Room"
+                          )}
                         </Button>
                       </div>
                     ))}
