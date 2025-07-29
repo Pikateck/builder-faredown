@@ -531,7 +531,7 @@ export default function ReservationPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="specialRequests">Special Requests</Label>
+                      <Label htmlFor="specialRequests">Special Requests <span className="text-gray-500 text-sm">(Optional)</span></Label>
                       <textarea
                         id="specialRequests"
                         className="w-full p-3 border border-gray-300 rounded-md resize-none h-24"
@@ -542,7 +542,7 @@ export default function ReservationPage() {
                             specialRequests: e.target.value,
                           }))
                         }
-                        placeholder="e.g., High floor room, late check-in, anniversary celebration setup..."
+                        placeholder="e.g., High floor room, late check-in, anniversary celebration setup (Optional)"
                       />
                     </div>
                   </div>
