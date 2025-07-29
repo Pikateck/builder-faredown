@@ -444,21 +444,8 @@ export default function HotelDetails() {
           onBookmarkToggle={() => setIsSaved(!isSaved)}
           onShareClick={() => setIsShareModalOpen(true)}
           onBack={() => {
-            console.log('Back button clicked');
-            try {
-              // Check if we can go back in browser history
-              if (window.history.length > 1) {
-                console.log('Navigating back in history');
-                navigate(-1);
-              } else {
-                console.log('No history, navigating to hotels page');
-                navigate('/hotels');
-              }
-            } catch (error) {
-              console.error('Navigation error:', error);
-              // Fallback to hotels page
-              navigate('/hotels');
-            }
+            console.log('Back button clicked - navigating to hotels');
+            navigate('/hotels');
           }}
         />
 
