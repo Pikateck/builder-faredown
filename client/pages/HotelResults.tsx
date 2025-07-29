@@ -302,7 +302,7 @@ export default function HotelResults() {
     {
       id: 2,
       name: "Ocean View Resort",
-      location: `${destination || "Miami, FL"}`,
+      location: `${destination || "Dubai, UAE"}`,
       images: [
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
