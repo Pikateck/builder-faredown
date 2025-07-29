@@ -2077,7 +2077,7 @@ export default function BookingFlow() {
                               <div className="flex items-center space-x-3">
                                 <input
                                   type="checkbox"
-                                  className="w-4 h-4"
+                                  className={`w-4 h-4 ${selectedMealIds.includes(meal.id) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                                   checked={selectedMealIds.includes(meal.id)}
                                   onChange={(e) => {
                                     if (e.target.checked) {
