@@ -1173,8 +1173,9 @@ export default function HotelDetails() {
                             {" per night x "}
                             {hotel.totalNights} nights)
                           </div>
-                          <div className="text-xs text-emerald-600 font-medium mb-3">
-                            ★ Best value room available
+                          <div className="flex items-center text-xs text-emerald-600 font-medium mb-3">
+                            <Star className="w-3 h-3 fill-current mr-1" />
+                            <span>Best value room available</span>
                           </div>
                           <Button
                             className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 px-4 rounded-lg text-sm mb-3"
@@ -2278,7 +2279,7 @@ export default function HotelDetails() {
                 {/* Swimming Pools Section */}
                 <div className="mt-8 bg-gradient-to-r from-blue-100 to-cyan-100 border border-blue-300 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <span className="text-4xl mr-4">🏊‍♂️</span>
+                    <span className="text-4xl mr-4">���‍♂️</span>
                     <div>
                       <h3 className="font-bold text-2xl text-blue-900">
                         2 Swimming Pools
@@ -2569,7 +2570,7 @@ export default function HotelDetails() {
                       type: "Family",
                       title: "We are happy",
                       review:
-                        "It's my pleasure to be thankful for the polite service and see my birthday 🎂 Thanks for making it special for me",
+                        "It's my pleasure to be thankful for the polite service and see my birthday �� Thanks for making it special for me",
                       helpful: 0,
                       avatar: "M",
                     },
