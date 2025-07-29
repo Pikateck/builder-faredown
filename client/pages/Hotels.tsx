@@ -193,18 +193,7 @@ export default function Hotels() {
           style={{ backgroundColor: "#003580" }}
         >
           <div className="px-4">
-            {/* Search tabs */}
-            <div className="flex mb-6">
-              <Link
-                to="/"
-                className="flex-1 py-3 px-4 bg-white/10 rounded-l-xl text-white text-center text-sm font-medium hover:bg-white/20 transition-colors"
-              >
-                Flights
-              </Link>
-              <button className="flex-1 py-3 px-4 bg-white rounded-r-xl text-[#003580] text-center text-sm font-medium shadow-lg">
-                Hotels
-              </button>
-            </div>
+
 
             {/* Upgrade Message */}
             <div className="bg-white rounded-xl p-4 mb-6 shadow-lg">
