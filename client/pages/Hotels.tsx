@@ -40,6 +40,8 @@ export default function Hotels() {
   const {
     departureDate,
     returnDate,
+    setDepartureDate,
+    setReturnDate,
     tripType,
     setTripType,
     formatDisplayDate,
