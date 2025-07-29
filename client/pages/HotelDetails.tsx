@@ -2904,8 +2904,8 @@ export default function HotelDetails() {
       >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">
-              <MessageSquare className="w-5 h-5 mr-2 inline" />
+            <DialogTitle className="text-xl font-bold flex items-center">
+              <MessageSquare className="w-5 h-5 mr-2" />
               Write a review for {hotel.name}
             </DialogTitle>
           </DialogHeader>
