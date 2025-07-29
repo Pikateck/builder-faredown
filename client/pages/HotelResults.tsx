@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
