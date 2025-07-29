@@ -205,32 +205,10 @@ export default function Hotels() {
                   <h3 className="font-semibold text-gray-900 text-sm mb-1">
                     Upgrade. Bargain. Book.
                   </h3>
-                  <p className="text-xs text-gray-600 mb-3">
+                  <p className="text-xs text-gray-600">
                     Control your price for flights & hotels — with live AI
                     bargaining.
                   </p>
-                  <div className="flex space-x-2">
-                    <Button
-                      size="sm"
-                      className="bg-[#003580] hover:bg-[#002347] text-white text-xs px-3 py-1.5 rounded"
-                    >
-                      Round trip
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white text-xs px-3 py-1.5 rounded"
-                    >
-                      One way
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white text-xs px-3 py-1.5 rounded"
-                    >
-                      Multi-city
-                    </Button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -666,7 +644,7 @@ export default function Hotels() {
                     {showCurrencyDropdown && (
                       <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
                         {[
-                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
+                          { code: "INR", symbol: "��", name: "Indian Rupee" },
                           {
                             code: "AED",
                             symbol: "د.إ",
