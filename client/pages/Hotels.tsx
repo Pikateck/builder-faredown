@@ -351,13 +351,13 @@ export default function Hotels() {
                           </button>
                         </div>
 
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between py-2">
+                        <div className="space-y-3 sm:space-y-4">
+                          <div className="flex items-center justify-between py-2 sm:py-3">
                             <div>
-                              <div className="font-medium text-gray-900">Adults</div>
-                              <div className="text-sm text-gray-500">Age 18+</div>
+                              <div className="font-medium text-gray-900 text-sm sm:text-base">Adults</div>
+                              <div className="text-xs sm:text-sm text-gray-500">Age 18+</div>
                             </div>
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-3 sm:space-x-4">
                               <button
                                 onClick={() =>
                                   setTravelers((prev) => ({
@@ -366,11 +366,11 @@ export default function Hotels() {
                                   }))
                                 }
                                 disabled={travelers.adults <= 1}
-                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-[#003580] font-bold"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-[#003580] font-bold touch-manipulation text-sm sm:text-base"
                               >
                                 −
                               </button>
-                              <span className="w-8 text-center font-medium text-gray-900">
+                              <span className="w-8 sm:w-10 text-center font-medium text-gray-900 text-sm sm:text-base">
                                 {travelers.adults}
                               </span>
                               <button
@@ -380,19 +380,19 @@ export default function Hotels() {
                                     adults: prev.adults + 1,
                                   }))
                                 }
-                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 text-[#003580] font-bold"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 text-[#003580] font-bold touch-manipulation text-sm sm:text-base"
                               >
                                 +
                               </button>
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between py-2">
+                          <div className="flex items-center justify-between py-2 sm:py-3">
                             <div>
-                              <div className="font-medium text-gray-900">Children</div>
-                              <div className="text-sm text-gray-500">Age 0-17</div>
+                              <div className="font-medium text-gray-900 text-sm sm:text-base">Children</div>
+                              <div className="text-xs sm:text-sm text-gray-500">Age 0-17</div>
                             </div>
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-3 sm:space-x-4">
                               <button
                                 onClick={() =>
                                   setTravelers((prev) => {
@@ -406,11 +406,11 @@ export default function Hotels() {
                                   })
                                 }
                                 disabled={travelers.children <= 0}
-                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-[#003580] font-bold"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-[#003580] font-bold touch-manipulation text-sm sm:text-base"
                               >
                                 −
                               </button>
-                              <span className="w-8 text-center font-medium text-gray-900">
+                              <span className="w-8 sm:w-10 text-center font-medium text-gray-900 text-sm sm:text-base">
                                 {travelers.children}
                               </span>
                               <button
@@ -421,7 +421,7 @@ export default function Hotels() {
                                     childAges: [...prev.childAges, 5],
                                   }))
                                 }
-                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 text-[#003580] font-bold"
+                                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 text-[#003580] font-bold touch-manipulation text-sm sm:text-base"
                               >
                                 +
                               </button>
@@ -430,11 +430,11 @@ export default function Hotels() {
 
                           {/* Children Ages */}
                           {travelers.children > 0 && (
-                            <div className="space-y-3">
-                              <div className="text-sm font-medium text-gray-700">Children's Ages</div>
+                            <div className="space-y-2 sm:space-y-3">
+                              <div className="text-xs sm:text-sm font-medium text-gray-700">Children's Ages</div>
                               {Array.from({ length: travelers.children }).map((_, index) => (
-                                <div key={index} className="flex items-center justify-between">
-                                  <span className="text-sm text-gray-600">Child {index + 1}</span>
+                                <div key={index} className="flex items-center justify-between py-1">
+                                  <span className="text-xs sm:text-sm text-gray-600">Child {index + 1}</span>
                                   <select
                                     value={travelers.childAges[index] || 5}
                                     onChange={(e) =>
@@ -444,7 +444,7 @@ export default function Hotels() {
                                         return { ...prev, childAges: newChildAges };
                                       })
                                     }
-                                    className="border border-gray-300 rounded px-3 py-1 text-sm"
+                                    className="border border-gray-300 rounded px-2 sm:px-3 py-1 text-xs sm:text-sm min-w-[80px] touch-manipulation"
                                   >
                                     {Array.from({ length: 18 }, (_, i) => (
                                       <option key={i} value={i}>
