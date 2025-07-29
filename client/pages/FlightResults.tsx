@@ -4582,7 +4582,7 @@ export default function FlightResults() {
                     <Button
                       onClick={startBargaining}
                       disabled={!bargainPrice || parseInt(bargainPrice) <= 0}
-                      className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-6 text-lg font-semibold rounded-xl disabled:bg-gray-400 shadow-lg"
+                      className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-4 md:py-6 text-base md:text-lg font-semibold rounded-xl disabled:bg-gray-400 shadow-lg touch-manipulation"
                     >
                       Start AI Negotiation
                     </Button>
