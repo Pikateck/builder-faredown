@@ -624,8 +624,63 @@ export default function HotelDetails() {
                 <div className="bg-[#003580] text-white rounded-lg p-4 text-center">
                   <div className="text-3xl font-bold">{hotel.rating}</div>
                   <div className="text-sm opacity-90">Based on {hotel.reviews} reviews</div>
+                  <div className="flex justify-center mt-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < Math.floor(hotel.rating)
+                            ? "text-yellow-400 fill-current"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
-                {/* Add review items here */}
+
+                {/* Recent Reviews */}
+                <div className="space-y-3">
+                  {[
+                    {
+                      name: "Sarah M.",
+                      date: "2 days ago",
+                      rating: 5,
+                      comment: "Excellent service and beautiful rooms. The staff was incredibly helpful!"
+                    },
+                    {
+                      name: "John D.",
+                      date: "1 week ago",
+                      rating: 4,
+                      comment: "Great location and amenities. Pool area was fantastic."
+                    },
+                    {
+                      name: "Emily R.",
+                      date: "2 weeks ago",
+                      rating: 5,
+                      comment: "Perfect for business travel. Clean, modern, and professional."
+                    }
+                  ].map((review, idx) => (
+                    <div key={idx} className="bg-gray-50 rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-sm">{review.name}</span>
+                        <span className="text-xs text-gray-500">{review.date}</span>
+                      </div>
+                      <div className="flex items-center mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${
+                              i < review.rating
+                                ? "text-yellow-400 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-sm text-gray-700">{review.comment}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
