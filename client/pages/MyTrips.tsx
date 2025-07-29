@@ -405,11 +405,19 @@ export default function MyTrips() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" variant="outline">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => handleViewDetails(trip)}
+          >
             <Eye className="w-4 h-4 mr-1" />
             View Details
           </Button>
-          <Button size="sm" variant="outline">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => handleDownload(trip)}
+          >
             <Download className="w-4 h-4 mr-1" />
             Download
           </Button>
