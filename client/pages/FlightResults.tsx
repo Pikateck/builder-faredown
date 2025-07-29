@@ -3381,7 +3381,7 @@ export default function FlightResults() {
                                         Faredown Fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ��500
+                                        ₹500
                                       </span>
                                     </div>
                                   </div>
@@ -4319,7 +4319,7 @@ export default function FlightResults() {
             <div className="flex space-x-3">
               <Button
                 variant="outline"
-                className="flex-1 h-12 font-medium border-gray-300 text-gray-700"
+                className="flex-1 h-10 font-medium border-gray-300 text-gray-700 text-sm"
                 onClick={() => {
                   resetAllFilters();
                   setShowMobileFilters(false);
