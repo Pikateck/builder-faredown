@@ -297,20 +297,22 @@ export default function Hotels() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Check-in / Check-out
                 </label>
-                <Popover open={showCalendar} onOpenChange={setShowCalendar}>
-                  <PopoverTrigger asChild>
-                    <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500">
-                      <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-700 font-medium">
-                        {departureDate
-                          ? `${formatDisplayDate(departureDate)} - ${
-                              returnDate ? formatDisplayDate(returnDate) : "Check-out"
-                            }`
-                          : "Select dates"}
-                      </span>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="center">
+                <button
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500"
+                >
+                  <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-sm text-gray-700 font-medium">
+                    {departureDate
+                      ? `${formatDisplayDate(departureDate)} - ${
+                          returnDate ? formatDisplayDate(returnDate) : "Check-out"
+                        }`
+                      : "Select dates"}
+                  </span>
+                </button>
+
+                {showCalendar && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-1">
                     <BookingCalendar
                       initialRange={{
                         startDate: departureDate || new Date(),
@@ -318,13 +320,14 @@ export default function Hotels() {
                       }}
                       onChange={(range) => {
                         console.log("Mobile hotel calendar range selected:", range);
+                        setShowCalendar(false);
                       }}
                       onClose={() => setShowCalendar(false)}
                       className="w-full"
                       bookingType="hotel"
                     />
-                  </PopoverContent>
-                </Popover>
+                  </div>
+                )}
               </div>
 
               {/* Guests */}
