@@ -113,21 +113,25 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
         const isInRange = checkIn && checkOut && day >= checkIn && day <= checkOut;
 
         days.push(
-          <div
+          <button
             className={`
-              p-2 text-center cursor-pointer h-10 flex items-center justify-center text-sm
+              p-2 sm:p-3 text-center cursor-pointer h-10 sm:h-12 flex items-center justify-center text-sm sm:text-base
+              transition-colors duration-150 touch-manipulation min-h-[40px] sm:min-h-[48px]
               ${!isCurrentMonth ? "text-gray-300" : ""}
               ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
-              ${isDayToday ? "font-bold text-blue-600" : ""}
-              ${isCheckInDate || isCheckOutDate ? "bg-blue-600 text-white rounded" : ""}
+              ${isDayToday ? "font-bold text-blue-600 bg-blue-50" : ""}
+              ${isCheckInDate || isCheckOutDate ? "bg-blue-600 text-white font-semibold shadow-md" : ""}
               ${isInRange && !isCheckInDate && !isCheckOutDate ? "bg-blue-100 text-blue-800" : ""}
-              ${!isPastDate && isCurrentMonth && !isCheckInDate && !isCheckOutDate ? "hover:bg-gray-100" : ""}
+              ${!isPastDate && isCurrentMonth && !isCheckInDate && !isCheckOutDate && !isDayToday ? "hover:bg-gray-100 active:bg-gray-200" : ""}
+              disabled:cursor-not-allowed
             `}
             key={day.toString()}
             onClick={() => onDateClick(cloneDay)}
+            disabled={isPastDate || !isCurrentMonth}
+            type="button"
           >
             <span>{formattedDate}</span>
-          </div>
+          </button>
         );
         day = addDays(day, 1);
       }
