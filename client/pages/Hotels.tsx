@@ -50,14 +50,11 @@ export default function Hotels() {
     formatDisplayDate,
   } = useDateContext();
 
+  const { selectedCurrency, currencies, setCurrency } = useCurrency();
+
   // State for hotel search functionality
   const [activeTab, setActiveTab] = useState("hotels");
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState({
-    code: "INR",
-    symbol: "₹",
-    name: "Indian Rupee",
-  });
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
