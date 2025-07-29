@@ -273,7 +273,7 @@ export default function HotelResults() {
       rating: 4.8,
       reviews: 1234,
       originalPrice: 8500, // ₹8,500 per night
-      currentPrice: 6750, // ₹6,750 per night
+      currentPrice: 6750, // ���6,750 per night
       description:
         "Experience luxury in the heart of the city with stunning views, world-class amenities, and exceptional service.",
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
@@ -443,33 +443,120 @@ export default function HotelResults() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      {/* Mobile-First Layout */}
+      <div className="md:hidden">
+        {/* Mobile App-like Header */}
+        <div className="bg-[#003580] text-white">
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20 p-2 mr-3"
+                onClick={() => navigate(-1)}
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="font-semibold text-lg">
+                  {searchParams.get("destinationName") || destination || "Dubai"}
+                </h1>
+                <p className="text-xs text-blue-200">
+                  {filteredAndSortedHotels.length} hotels found
+                </p>
+              </div>
+            </div>
+            {isLiveData && (
+              <div className="flex items-center gap-1 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                LIVE
+              </div>
+            )}
+          </div>
+        </div>
 
-      {/* Hotel Search Bar - Booking.com style */}
-      <div className="bg-[#003580] py-2 sm:py-4">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
-          <BookingSearchForm />
+        {/* Mobile Filter Bar */}
+        <div className="bg-white border-b border-gray-200 p-3">
+          <div className="flex gap-2 overflow-x-auto">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2 whitespace-nowrap min-w-fit">
+                  <SlidersHorizontal className="w-4 h-4" />
+                  Filters
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="h-[80vh]">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center text-base">
+                    <Filter className="w-5 h-5 mr-2 text-[#003580]" />
+                    Filter Hotels
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 overflow-y-auto">
+                  <EnhancedFilters
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
+                    selectedAmenities={selectedAmenities}
+                    setSelectedAmenities={setSelectedAmenities}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    onClearFilters={handleClearFilters}
+                  />
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-auto min-w-[120px] h-8">
+                <SelectValue placeholder="Sort" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recommended">Top picks</SelectItem>
+                <SelectItem value="price-low">Price: Low-High</SelectItem>
+                <SelectItem value="price-high">Price: High-Low</SelectItem>
+                <SelectItem value="rating">Best rated</SelectItem>
+                <SelectItem value="stars-high">Star rating</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button variant="outline" size="sm" className="whitespace-nowrap">
+              <MapPin className="w-4 h-4 mr-1" />
+              Map
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Breadcrumb */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
-          <div className="flex items-center text-sm text-gray-600">
-            <span>🌍 Global</span>
-            <span className="mx-2">›</span>
-            <span>
-              {searchParams.get("destinationName") || destination || "Dubai"}
-            </span>
-            <span className="mx-2">›</span>
-            <span className="text-gray-900 font-medium">
-              {isLiveData ? "Live Results" : "Search Results"}
-            </span>
-            {isLiveData && (
-              <span className="ml-2 text-red-600 text-xs font-medium">
-                🔴 LIVE
+      {/* Desktop Layout */}
+      <div className="hidden md:block">
+        <Header />
+
+        {/* Hotel Search Bar - Booking.com style */}
+        <div className="bg-[#003580] py-2 sm:py-4">
+          <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
+            <BookingSearchForm />
+          </div>
+        </div>
+
+        {/* Breadcrumb */}
+        <div className="bg-gray-50 border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
+            <div className="flex items-center text-sm text-gray-600">
+              <span>🌍 Global</span>
+              <span className="mx-2">›</span>
+              <span>
+                {searchParams.get("destinationName") || destination || "Dubai"}
               </span>
-            )}
+              <span className="mx-2">›</span>
+              <span className="text-gray-900 font-medium">
+                {isLiveData ? "Live Results" : "Search Results"}
+              </span>
+              {isLiveData && (
+                <span className="ml-2 text-red-600 text-xs font-medium">
+                  🔴 LIVE
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
