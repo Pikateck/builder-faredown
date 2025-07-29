@@ -241,7 +241,7 @@ export function MobileDatePicker({
                 ),
             }}
             onChange={handleCalendarChange}
-            onClose={onClose} // Use BookingCalendar's Done button
+            onClose={handleDoneClick} // Use custom handler for Done button
             className="w-full"
             bookingType="flight"
           />
