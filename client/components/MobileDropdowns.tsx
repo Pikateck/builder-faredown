@@ -236,30 +236,22 @@ export function MobileDatePicker({
               console.log("selectedReturnDate:", selectedReturnDate);
               console.log("tripType:", tripType);
 
-              // Validate and save dates before closing
-              if (selectedDepartureDate) {
-                console.log("Saving departure date:", selectedDepartureDate);
-                setSelectedDepartureDate(selectedDepartureDate);
+              // Ensure dates are saved and modal is closed
+              console.log("Saving departure date:", selectedDepartureDate);
+              setSelectedDepartureDate(selectedDepartureDate);
 
-                if (tripType === "round-trip") {
-                  if (selectedReturnDate) {
-                    console.log("Saving return date:", selectedReturnDate);
-                    setSelectedReturnDate(selectedReturnDate);
-                  } else {
-                    console.warn("Round-trip selected but no return date");
-                  }
-                } else {
-                  // One-way trip - clear return date
-                  console.log("One-way trip - clearing return date");
-                  setSelectedReturnDate(null);
-                }
-
-                // Close the modal
-                console.log("Closing mobile date picker");
-                onClose();
+              if (tripType === "round-trip") {
+                console.log("Saving return date:", selectedReturnDate);
+                setSelectedReturnDate(selectedReturnDate);
               } else {
-                console.error("No departure date selected");
+                // One-way trip - clear return date
+                console.log("One-way trip - clearing return date");
+                setSelectedReturnDate(null);
               }
+
+              // Always close the modal
+              console.log("Closing mobile date picker");
+              onClose();
             }}
             onTouchStart={(e) => {
               console.log("Touch start on Done button");
