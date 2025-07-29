@@ -2978,9 +2978,10 @@ export default function HotelDetails() {
               <div className="flex-1">
                 <div className="text-xs text-gray-500 mb-1">Starting from</div>
                 <div className="text-lg font-bold text-gray-900">
-                  ₹{lowestPrice}
+                  ₹{calculateTotalPrice(lowestPrice).toLocaleString()}
                 </div>
-                <div className="text-xs text-gray-500">per night</div>
+                <div className="text-xs text-gray-600 font-medium">Total Price (All Inclusive)</div>
+                <div className="text-xs text-gray-500">₹{lowestPrice.toLocaleString()} per room per night</div>
               </div>
               <div>
                 <Button
