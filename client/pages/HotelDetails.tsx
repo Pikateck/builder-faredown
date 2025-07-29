@@ -2478,7 +2478,7 @@ export default function HotelDetails() {
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       {[
                         { icon: "🇺🇸", text: "English" },
-                        { icon: "������", text: "Arabic" },
+                        { icon: "🇦🇪", text: "Arabic" },
                         { icon: "🇩����", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
