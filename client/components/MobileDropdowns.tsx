@@ -231,6 +231,8 @@ export function MobileDatePicker({
         <div className="space-y-3">
           <Button
             onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
               console.log("=== DONE BUTTON CLICKED ===");
               console.log("Event:", e);
               console.log("selectedDepartureDate:", selectedDepartureDate);
