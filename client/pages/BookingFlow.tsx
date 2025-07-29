@@ -3601,7 +3601,7 @@ export default function BookingFlow() {
         open={showTravellerDetails}
         onOpenChange={setShowTravellerDetails}
       >
-        <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {selectedTraveller
