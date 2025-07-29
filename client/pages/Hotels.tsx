@@ -150,6 +150,38 @@ export default function Hotels() {
                       My Account
                     </Link>
                   </DropdownMenuItem>
+
+                  {/* Currency Selection Tab */}
+                  <div className="border-t border-gray-200 my-1"></div>
+                  <div className="px-2 py-2">
+                    <div className="text-xs font-semibold text-gray-700 px-2 py-1 mb-2 flex items-center">
+                      <DollarSign className="w-3 h-3 mr-2" />
+                      Currency
+                    </div>
+                    <div className="space-y-1 max-h-32 overflow-y-auto">
+                      {currencies.map((currency) => (
+                        <button
+                          key={currency.code}
+                          onClick={() => {
+                            setCurrency(currency);
+                          }}
+                          className={`w-full text-left px-2 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
+                            selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600 border border-blue-200" : "text-gray-900"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <span className="text-base">{currency.flag}</span>
+                            <span className="font-medium">{currency.name}</span>
+                          </div>
+                          <span className="font-semibold text-xs">
+                            {currency.symbol} {currency.code}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="border-t border-gray-200 my-1"></div>
+
                   <DropdownMenuItem>
                     <Link to="/saved" className="flex items-center">
                       <Heart className="w-4 h-4 mr-2" />
@@ -168,35 +200,6 @@ export default function Hotels() {
                       Settings
                     </Link>
                   </DropdownMenuItem>
-
-                  {/* Currency Selection */}
-                  <div className="px-2 py-1">
-                    <div className="text-xs font-medium text-gray-500 px-2 py-1">Currency</div>
-                    <div className="space-y-1">
-                      {[
-                        { code: "USD", symbol: "$", name: "US Dollar" },
-                        { code: "EUR", symbol: "€", name: "Euro" },
-                        { code: "GBP", symbol: "£", name: "British Pound" },
-                        { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                        { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                      ].map((currency) => (
-                        <button
-                          key={currency.code}
-                          onClick={() => {
-                            setSelectedCurrency(currency);
-                          }}
-                          className={`w-full text-left px-2 py-1 hover:bg-gray-100 rounded text-sm flex items-center justify-between ${
-                            selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600" : "text-gray-900"
-                          }`}
-                        >
-                          <span>{currency.name}</span>
-                          <span className="font-medium">
-                            {currency.symbol} {currency.code}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
 
                   <DropdownMenuItem>
                     <div className="flex items-center">
