@@ -647,9 +647,17 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "gallery" && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-bold">Hotel Gallery</h2>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                    Visual Experience
+                  </h2>
+                  <div className="bg-gradient-to-r from-pink-100 to-rose-100 border border-pink-200 px-3 py-1 rounded-full">
+                    <span className="text-pink-700 text-xs font-bold">📸 Premium Gallery</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
                   {[
                     "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
                     "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop",
@@ -658,13 +666,22 @@ export default function HotelDetails() {
                     "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=400&h=300&fit=crop",
                     "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=400&h=300&fit=crop",
                   ].map((image, idx) => (
-                    <div key={idx} className="aspect-video overflow-hidden rounded-lg">
+                    <div
+                      key={idx}
+                      className="relative aspect-video overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group"
+                    >
                       <img
                         src={image}
                         alt={`Hotel image ${idx + 1}`}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         loading="lazy"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span className="text-xs font-semibold text-gray-800">
+                          {idx === 0 ? "🏨 Lobby" : idx === 1 ? "🛏️ Room" : idx === 2 ? "🏊 Pool" : idx === 3 ? "🍽️ Restaurant" : idx === 4 ? "🌅 View" : "✨ Amenity"}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>
