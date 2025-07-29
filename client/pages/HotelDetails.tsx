@@ -617,18 +617,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "gallery" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                    Visual Experience
-                  </h2>
-                  <div className="bg-gradient-to-r from-pink-100 to-rose-100 border border-pink-200 px-3 py-1 rounded-full">
-                    <div className="flex items-center space-x-1">
-                      <Camera className="w-3 h-3 text-pink-700" />
-                      <span className="text-pink-700 text-xs font-bold">Premium Gallery</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="bg-white rounded-lg p-4">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  Photos
+                </h2>
 
                 <div className="grid grid-cols-2 gap-3">
                   {[
@@ -641,28 +633,14 @@ export default function HotelDetails() {
                   ].map((image, idx) => (
                     <div
                       key={idx}
-                      className="relative aspect-video overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 group"
+                      className="aspect-video overflow-hidden rounded-lg"
                     >
                       <img
                         src={image}
                         alt={`Hotel image ${idx + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="flex items-center space-x-1">
-                          {idx === 0 && <Building2 className="w-3 h-3 text-gray-700" />}
-                          {idx === 1 && <Home className="w-3 h-3 text-gray-700" />}
-                          {idx === 2 && <Waves className="w-3 h-3 text-gray-700" />}
-                          {idx === 3 && <Utensils className="w-3 h-3 text-gray-700" />}
-                          {idx === 4 && <Star className="w-3 h-3 text-gray-700" />}
-                          {idx === 5 && <Sparkles className="w-3 h-3 text-gray-700" />}
-                          <span className="text-xs font-semibold text-gray-700">
-                            {idx === 0 ? "Lobby" : idx === 1 ? "Room" : idx === 2 ? "Pool" : idx === 3 ? "Restaurant" : idx === 4 ? "View" : "Amenity"}
-                          </span>
-                        </div>
-                      </div>
                     </div>
                   ))}
                 </div>
@@ -670,53 +648,36 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "amenities" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                    Luxury Amenities
-                  </h2>
-                  <div className="bg-gradient-to-r from-emerald-100 to-teal-100 border border-emerald-200 px-3 py-1 rounded-full">
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-3 h-3 text-emerald-700" />
-                      <span className="text-emerald-700 text-xs font-bold">Premium Services</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="bg-white rounded-lg p-4">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  Amenities
+                </h2>
 
                 <div className="grid grid-cols-1 gap-3">
                   {[
-                    { icon: Waves, name: "Infinity Pool", category: "Recreation", color: "from-blue-500 to-cyan-500" },
-                    { icon: Dumbbell, name: "24/7 Fitness Center", category: "Wellness", color: "from-green-500 to-emerald-500" },
-                    { icon: Wifi, name: "High-Speed WiFi", category: "Technology", color: "from-purple-500 to-indigo-500" },
-                    { icon: Utensils, name: "Fine Dining Restaurant", category: "Dining", color: "from-amber-500 to-orange-500" },
-                    { icon: Bell, name: "24/7 Room Service", category: "Service", color: "from-pink-500 to-rose-500" },
-                    { icon: Car, name: "Valet Parking", category: "Convenience", color: "from-gray-500 to-slate-500" },
-                    { icon: Sparkles, name: "Luxury Spa", category: "Wellness", color: "from-violet-500 to-purple-500" },
-                    { icon: Briefcase, name: "Business Lounge", category: "Business", color: "from-blue-600 to-indigo-600" },
-                    { icon: Shirt, name: "Same-Day Laundry", category: "Service", color: "from-teal-500 to-cyan-500" },
-                    { icon: Building2, name: "Designer Boutique", category: "Shopping", color: "from-red-500 to-pink-500" },
-                    { icon: Baby, name: "Premium Childcare", category: "Family", color: "from-yellow-500 to-amber-500" },
-                    { icon: Accessibility, name: "Full Accessibility", category: "Accessibility", color: "from-emerald-600 to-green-600" },
+                    { icon: Waves, name: "Swimming Pool" },
+                    { icon: Dumbbell, name: "Fitness Center" },
+                    { icon: Wifi, name: "Free WiFi" },
+                    { icon: Utensils, name: "Restaurant" },
+                    { icon: Bell, name: "Room Service" },
+                    { icon: Car, name: "Parking" },
+                    { icon: Sparkles, name: "Spa" },
+                    { icon: Briefcase, name: "Business Center" },
+                    { icon: Shirt, name: "Laundry" },
+                    { icon: Building2, name: "Concierge" },
+                    { icon: Baby, name: "Childcare" },
+                    { icon: Accessibility, name: "Accessibility" },
                   ].map((amenity, idx) => (
                     <div
                       key={idx}
-                      className="group relative overflow-hidden bg-gradient-to-r from-white to-gray-50 hover:from-blue-50 hover:to-indigo-50 border border-gray-200 hover:border-blue-300 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all duration-300"
+                      className="flex items-center space-x-3 py-3 border-b border-gray-100 last:border-b-0"
                     >
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-12 h-12 bg-gradient-to-r ${amenity.color} rounded-2xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
-                          <amenity.icon className="w-6 h-6 text-white filter drop-shadow-sm" />
-                        </div>
-                        <div className="flex-1">
-                          <span className="text-lg font-bold text-gray-900 group-hover:text-blue-800 transition-colors">
-                            {amenity.name}
-                          </span>
-                          <div className="text-xs text-gray-500 font-medium mt-1">
-                            {amenity.category}
-                          </div>
-                        </div>
-                        <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                          <CheckCircle className="w-4 h-4 text-white" />
-                        </div>
+                      <amenity.icon className="w-5 h-5 text-gray-400" />
+                      <span className="text-gray-700">
+                        {amenity.name}
+                      </span>
+                      <div className="ml-auto">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
                       </div>
                     </div>
                   ))}
@@ -2090,7 +2051,7 @@ export default function HotelDetails() {
                         Near shopping malls
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">��</span> Metro station nearby
+                        <span className="mr-2">🚇</span> Metro station nearby
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">✈️</span> Airport transfer
