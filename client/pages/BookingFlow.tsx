@@ -3262,7 +3262,10 @@ export default function BookingFlow() {
                     {/* Terms and Conditions */}
                     <div className="bg-[#f2f6fa] border border-[#003580]/20 rounded-lg p-4">
                       <div className="flex items-start space-x-3">
-                        <Checkbox className="w-4 h-4 mt-1" />
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 bg-white border border-gray-400 mt-1"
+                        />
                         <div className="text-sm text-gray-700">
                           <p>
                             I agree to the{" "}
