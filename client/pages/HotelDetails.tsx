@@ -2103,7 +2103,7 @@ export default function HotelDetails() {
                         <span className="mr-2">❄️</span> Air conditioning
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🛋���</span> Living room
+                        <span className="mr-2">🛋�����</span> Living room
                       </li>
                     </ul>
                     <ul className="space-y-2 text-sm text-gray-700">
@@ -2114,7 +2114,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🚿</span> Shower
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">����</span> Flat-screen TV
+                        <span className="mr-2">📺</span> Flat-screen TV
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🔐</span> Safe
@@ -2982,21 +2982,24 @@ export default function HotelDetails() {
           </div>
         ) : (
           /* No Room Selected - Show starting price */
-          <div className="p-4">
+          <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs text-gray-500">Starting from</div>
+                <div className="text-xs text-gray-600">Starting from</div>
                 <div className="text-lg font-bold text-[#003580]">
                   ₹{lowestPrice}
                 </div>
                 <div className="text-xs text-gray-500">per night</div>
               </div>
-              <Button
-                disabled
-                className="bg-gray-300 text-gray-500 cursor-not-allowed px-8"
-              >
-                Select Room First
-              </Button>
+              <div className="text-center">
+                <div className="text-xs text-gray-600 mb-1">👆 Select a room above</div>
+                <Button
+                  disabled
+                  className="bg-gray-300 text-gray-500 cursor-not-allowed px-6 text-sm"
+                >
+                  Choose Room
+                </Button>
+              </div>
             </div>
           </div>
         )}
