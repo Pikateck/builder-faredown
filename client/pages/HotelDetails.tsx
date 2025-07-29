@@ -752,23 +752,19 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "location" && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-bold">Location</h2>
-                <div className="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg h-48 flex items-center justify-center relative overflow-hidden">
+              <div className="bg-white rounded-lg p-4">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Location</h2>
+                <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-4">
                   <div className="text-center">
-                    <MapPin className="w-8 h-8 text-[#003580] mx-auto mb-2" />
-                    <span className="text-gray-700 font-medium">Interactive map</span>
+                    <MapPin className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <span className="text-gray-600 font-medium">Interactive map</span>
                     <div className="text-xs text-gray-500 mt-1">Tap to open full map</div>
                   </div>
-                  {/* Decorative map-like elements */}
-                  <div className="absolute top-4 left-4 w-2 h-2 bg-[#003580] rounded-full"></div>
-                  <div className="absolute top-8 right-6 w-1 h-1 bg-gray-400 rounded-full"></div>
-                  <div className="absolute bottom-6 left-8 w-1 h-1 bg-gray-400 rounded-full"></div>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="border border-gray-200 rounded-lg p-4 mb-4">
                   <div className="flex items-start space-x-3">
-                    <MapPin className="w-5 h-5 text-[#003580] flex-shrink-0 mt-0.5" />
+                    <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium text-gray-900 mb-1">Address</p>
                       <p className="text-sm text-gray-600">{hotel.location}</p>
@@ -778,16 +774,16 @@ export default function HotelDetails() {
 
                 {/* Nearby attractions */}
                 <div>
-                  <h3 className="font-semibold mb-3">Nearby Attractions</h3>
-                  <div className="space-y-2">
+                  <h3 className="font-semibold text-gray-900 mb-3">Nearby Attractions</h3>
+                  <div className="space-y-3">
                     {[
                       { name: "Burj Khalifa", distance: "2.5 km", time: "5 min drive" },
                       { name: "Dubai Mall", distance: "1.8 km", time: "3 min drive" },
                       { name: "Dubai Fountain", distance: "2.0 km", time: "4 min drive" },
                       { name: "Dubai International Airport", distance: "12 km", time: "15 min drive" }
                     ].map((place, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                        <span className="text-sm font-medium">{place.name}</span>
+                      <div key={idx} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
+                        <span className="text-sm font-medium text-gray-900">{place.name}</span>
                         <div className="text-right">
                           <div className="text-xs text-gray-600">{place.distance}</div>
                           <div className="text-xs text-gray-500">{place.time}</div>
