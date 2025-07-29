@@ -109,156 +109,106 @@ export default function Hotels() {
     <div className="min-h-screen bg-gray-50">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
 
-      {/* Mobile Layout (≤768px) */}
-      <div className="block md:hidden">
-        {/* Mobile Header */}
-        <header className="text-white sticky top-0 z-40" style={{ backgroundColor: "#003580" }}>
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <Link to="/" className="flex items-center space-x-2">
-                <span className="text-lg sm:text-xl font-bold tracking-tight">
-                  faredown.com
-                </span>
+      {/* Mobile Layout (≤768px) - Match Index.tsx exactly */}
+      <div className="md:hidden">
+        {/* Mobile Top Header */}
+        <div
+          className="text-white py-3 px-4"
+          style={{ backgroundColor: "#003580" }}
+        >
+          <div className="flex items-center justify-between">
+            <Link to="/" className="text-lg font-bold tracking-tight">
+              faredown.com
+            </Link>
+            <div className="flex items-center space-x-3">
+              <Button
+                size="sm"
+                className="text-xs px-3 py-1.5 bg-[#febb02] text-[#003580] hover:bg-[#d19900] font-medium rounded"
+              >
+                Sign in
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Search Section */}
+        <div
+          className="pb-8 pt-4"
+          style={{ backgroundColor: "#003580" }}
+        >
+          <div className="px-4">
+            {/* Search tabs */}
+            <div className="flex mb-6">
+              <Link
+                to="/"
+                className="flex-1 py-3 px-4 bg-white/10 rounded-l-xl text-white text-center text-sm font-medium hover:bg-white/20 transition-colors"
+              >
+                Flights
               </Link>
+              <button className="flex-1 py-3 px-4 bg-white rounded-r-xl text-[#003580] text-center text-sm font-medium shadow-lg">
+                Hotels
+              </button>
+            </div>
 
-              {/* Centered Navigation */}
-              <nav className="flex items-center space-x-6 text-sm font-medium">
-                <Link
-                  to="/"
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4"
-                >
-                  <span>Flights</span>
-                </Link>
-                <button className="text-white hover:text-blue-200 cursor-pointer flex items-center py-4 border-b-2 border-white">
-                  <span>Hotels</span>
-                </button>
-              </nav>
-
-              <div className="flex items-center space-x-2 md:space-x-6">
-                {/* Language and Currency */}
-                <div className="flex items-center space-x-4 text-sm">
-                  <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                    <span>English (UK)</span>
-                  </button>
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
-                      className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
-                    >
-                      <span>{selectedCurrency.symbol} {selectedCurrency.code}</span>
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
-                    {showCurrencyDropdown && (
-                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
-                        {[
-                          { code: "USD", symbol: "$", name: "US Dollar" },
-                          { code: "EUR", symbol: "€", name: "Euro" },
-                          { code: "GBP", symbol: "£", name: "British Pound" },
-                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                          { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                        ].map((currency) => (
-                          <button
-                            key={currency.code}
-                            onClick={() => {
-                              setSelectedCurrency(currency);
-                              setShowCurrencyDropdown(false);
-                            }}
-                            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
-                          >
-                            <span>{currency.name}</span>
-                            <span className="font-medium">
-                              {currency.symbol} {currency.code}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+            {/* Upgrade Message */}
+            <div className="bg-white rounded-xl p-4 mb-6 shadow-lg">
+              <div className="flex items-start space-x-3">
+                <div className="bg-[#febb02] p-2 rounded-lg">
+                  <TrendingUp className="w-5 h-5 text-[#003580]" />
                 </div>
-
-                <div className="flex items-center space-x-3">
-                  {isLoggedIn ? (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
-                        <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-bold text-black">
-                            {userName.charAt(0)}
-                          </span>
-                        </div>
-                        <span className="text-sm text-white hidden sm:inline">
-                          {userName}
-                        </span>
-                        <span className="text-xs text-yellow-300 hidden md:inline">
-                          Loyalty Level 1
-                        </span>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuItem>
-                          <Link to="/account" className="flex items-center">
-                            <User className="w-4 h-4 mr-2" />
-                            My account
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Link to="/my-trips" className="flex items-center">
-                            <Hotel className="w-4 h-4 mr-2" />
-                            Bookings & Trips
-                          </Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  ) : (
-                    <>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="bg-white text-blue-700 border-white hover:bg-gray-100 rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
-                      >
-                        Register
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="bg-blue-600 hover:bg-blue-800 text-white rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
-                      >
-                        Sign in
-                      </Button>
-                    </>
-                  )}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1">
+                    Upgrade. Bargain. Book.
+                  </h3>
+                  <p className="text-xs text-gray-600 mb-3">
+                    Control your price for flights & hotels — with live AI
+                    bargaining.
+                  </p>
+                  <div className="flex space-x-2">
+                    <Button
+                      size="sm"
+                      className="bg-[#003580] hover:bg-[#002347] text-white text-xs px-3 py-1.5 rounded"
+                    >
+                      Round trip
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white text-xs px-3 py-1.5 rounded"
+                    >
+                      One way
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white text-xs px-3 py-1.5 rounded"
+                    >
+                      Multi-city
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </header>
 
-        {/* Mobile Hotel Search */}
-        <div className="bg-[#003580] pb-6">
-          <div className="px-4">
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-white mb-2">
-                Find Hotels
-              </h1>
-              <p className="text-blue-100 text-sm">
-                Search and book hotels with AI bargaining
-              </p>
-            </div>
-
-            {/* Mobile Search Form */}
-            <div className="bg-white rounded-lg p-4 space-y-4">
+            {/* Hotel Search Form */}
+            <div className="space-y-4">
               {/* Destination */}
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Destination
-                </label>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
                   onClick={() => setShowFromCities(!showFromCities)}
-                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500"
+                  className="w-full text-left"
                 >
-                  <MapPin className="w-4 h-4 text-gray-500 mr-2" />
-                  <div className="flex items-center space-x-2 min-w-0 flex-1">
-                    <span className="text-sm text-gray-700 font-medium truncate">
-                      {cityData[selectedFromCity]?.airport || "Mumbai, Maharashtra, India"}
-                    </span>
+                  <div className="text-xs text-gray-500 mb-1">Destination</div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="w-5 h-5 text-[#003580]" />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {selectedFromCity}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {cityData[selectedFromCity]?.fullName || "City"}
+                      </div>
+                    </div>
                   </div>
                 </button>
 
@@ -295,176 +245,200 @@ export default function Hotels() {
               </div>
 
               {/* Check-in / Check-out */}
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Check-in / Check-out
-                </label>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
                   onClick={() => setShowCalendar(!showCalendar)}
-                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500"
+                  className="w-full text-left"
                 >
-                  <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
-                  <span className="text-sm text-gray-700 font-medium">
-                    {departureDate
-                      ? `${formatDisplayDate(departureDate)} - ${
-                          returnDate ? formatDisplayDate(returnDate) : "Check-out"
-                        }`
-                      : "Select dates"}
-                  </span>
+                  <div className="text-xs text-gray-500 mb-1">Check-in / Check-out</div>
+                  <div className="flex items-center space-x-2">
+                    <CalendarIcon className="w-5 h-5 text-[#003580]" />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {departureDate && returnDate
+                          ? `${formatDisplayDate(departureDate)} - ${formatDisplayDate(returnDate)}`
+                          : "Select dates"}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Choose check-in & check-out
+                      </div>
+                    </div>
+                  </div>
                 </button>
 
                 {showCalendar && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl z-50 mt-1">
-                    <BookingCalendar
-                      initialRange={{
-                        startDate: departureDate || new Date(),
-                        endDate: returnDate || addDays(departureDate || new Date(), 7),
-                      }}
-                      onChange={(range) => {
-                        console.log("Mobile hotel calendar range selected:", range);
-                        setDepartureDate(range.startDate);
-                        setReturnDate(range.endDate);
-                      }}
-                      onClose={() => setShowCalendar(false)}
-                      className="w-full"
-                      bookingType="hotel"
-                    />
+                  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-auto">
+                      <BookingCalendar
+                        initialRange={{
+                          startDate: departureDate || new Date(),
+                          endDate: returnDate || addDays(departureDate || new Date(), 7),
+                        }}
+                        onChange={(range) => {
+                          console.log("Mobile hotel calendar range selected:", range);
+                          setDepartureDate(range.startDate);
+                          setReturnDate(range.endDate);
+                        }}
+                        onClose={() => setShowCalendar(false)}
+                        className="w-full"
+                        bookingType="hotel"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* Guests */}
-              <div className="relative">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Guests
-                </label>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
                   onClick={() => setShowTravelers(!showTravelers)}
-                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500"
+                  className="w-full text-left"
                 >
-                  <Users className="w-4 h-4 text-gray-500 mr-2" />
-                  <span className="text-sm text-gray-700 font-medium">
-                    {travelers.adults} adult{travelers.adults > 1 ? "s" : ""}
-                    {travelers.children > 0
-                      ? `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`
-                      : ""}
-                  </span>
+                  <div className="text-xs text-gray-500 mb-1">Guests</div>
+                  <div className="flex items-center space-x-2">
+                    <Users className="w-5 h-5 text-[#003580]" />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {travelers.adults + travelers.children}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {travelers.adults} adult
+                        {travelers.adults > 1 ? "s" : ""}
+                        {travelers.children > 0 &&
+                          `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`}
+                      </div>
+                    </div>
+                  </div>
                 </button>
 
                 {showTravelers && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-xl p-4 z-50 mt-1 max-h-80 overflow-y-auto">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium text-gray-900">Adults</div>
-                          <div className="text-sm text-gray-500">Age 18+</div>
-                        </div>
-                        <div className="flex items-center space-x-3">
+                  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-auto p-6">
+                      <div className="space-y-6">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-lg font-semibold">Select guests</h3>
                           <button
-                            onClick={() =>
-                              setTravelers((prev) => ({
-                                ...prev,
-                                adults: Math.max(1, prev.adults - 1),
-                              }))
-                            }
-                            disabled={travelers.adults <= 1}
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                            onClick={() => setShowTravelers(false)}
+                            className="p-2 hover:bg-gray-100 rounded-full"
                           >
-                            −
-                          </button>
-                          <span className="w-8 text-center font-medium">
-                            {travelers.adults}
-                          </span>
-                          <button
-                            onClick={() =>
-                              setTravelers((prev) => ({
-                                ...prev,
-                                adults: prev.adults + 1,
-                              }))
-                            }
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
-                          >
-                            +
+                            <X className="w-5 h-5" />
                           </button>
                         </div>
-                      </div>
 
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium text-gray-900">Children</div>
-                          <div className="text-sm text-gray-500">Age 0-17</div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            onClick={() =>
-                              setTravelers((prev) => {
-                                const newChildren = Math.max(0, prev.children - 1);
-                                const newChildAges = prev.childAges.slice(0, newChildren);
-                                return {
-                                  ...prev,
-                                  children: newChildren,
-                                  childAges: newChildAges,
-                                };
-                              })
-                            }
-                            disabled={travelers.children <= 0}
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
-                          >
-                            −
-                          </button>
-                          <span className="w-8 text-center font-medium">
-                            {travelers.children}
-                          </span>
-                          <button
-                            onClick={() =>
-                              setTravelers((prev) => ({
-                                ...prev,
-                                children: prev.children + 1,
-                                childAges: [...prev.childAges, 5], // Default age 5
-                              }))
-                            }
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between py-2">
+                            <div>
+                              <div className="font-medium text-gray-900">Adults</div>
+                              <div className="text-sm text-gray-500">Age 18+</div>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    adults: Math.max(1, prev.adults - 1),
+                                  }))
+                                }
+                                disabled={travelers.adults <= 1}
+                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-[#003580] font-bold"
+                              >
+                                −
+                              </button>
+                              <span className="w-8 text-center font-medium text-gray-900">
+                                {travelers.adults}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    adults: prev.adults + 1,
+                                  }))
+                                }
+                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 text-[#003580] font-bold"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
 
-                      {/* Children Ages */}
-                      {travelers.children > 0 && (
-                        <div className="space-y-2">
-                          <div className="text-sm font-medium text-gray-700">Children's Ages</div>
-                          {Array.from({ length: travelers.children }).map((_, index) => (
-                            <div key={index} className="flex items-center justify-between">
-                              <span className="text-sm text-gray-600">Child {index + 1}</span>
-                              <select
-                                value={travelers.childAges[index] || 5}
-                                onChange={(e) =>
+                          <div className="flex items-center justify-between py-2">
+                            <div>
+                              <div className="font-medium text-gray-900">Children</div>
+                              <div className="text-sm text-gray-500">Age 0-17</div>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <button
+                                onClick={() =>
                                   setTravelers((prev) => {
-                                    const newChildAges = [...prev.childAges];
-                                    newChildAges[index] = parseInt(e.target.value);
-                                    return { ...prev, childAges: newChildAges };
+                                    const newChildren = Math.max(0, prev.children - 1);
+                                    const newChildAges = prev.childAges.slice(0, newChildren);
+                                    return {
+                                      ...prev,
+                                      children: newChildren,
+                                      childAges: newChildAges,
+                                    };
                                   })
                                 }
-                                className="border border-gray-300 rounded px-2 py-1 text-sm"
+                                disabled={travelers.children <= 0}
+                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-[#003580] font-bold"
                               >
-                                {Array.from({ length: 18 }, (_, i) => (
-                                  <option key={i} value={i}>
-                                    {i} {i === 1 ? "year" : "years"}
-                                  </option>
-                                ))}
-                              </select>
+                                −
+                              </button>
+                              <span className="w-8 text-center font-medium text-gray-900">
+                                {travelers.children}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  setTravelers((prev) => ({
+                                    ...prev,
+                                    children: prev.children + 1,
+                                    childAges: [...prev.childAges, 5],
+                                  }))
+                                }
+                                className="w-8 h-8 rounded-full border-2 border-[#003580] flex items-center justify-center hover:bg-blue-50 text-[#003580] font-bold"
+                              >
+                                +
+                              </button>
                             </div>
-                          ))}
-                        </div>
-                      )}
+                          </div>
 
-                      <Button
-                        onClick={() => setShowTravelers(false)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                      >
-                        Done
-                      </Button>
+                          {/* Children Ages */}
+                          {travelers.children > 0 && (
+                            <div className="space-y-3">
+                              <div className="text-sm font-medium text-gray-700">Children's Ages</div>
+                              {Array.from({ length: travelers.children }).map((_, index) => (
+                                <div key={index} className="flex items-center justify-between">
+                                  <span className="text-sm text-gray-600">Child {index + 1}</span>
+                                  <select
+                                    value={travelers.childAges[index] || 5}
+                                    onChange={(e) =>
+                                      setTravelers((prev) => {
+                                        const newChildAges = [...prev.childAges];
+                                        newChildAges[index] = parseInt(e.target.value);
+                                        return { ...prev, childAges: newChildAges };
+                                      })
+                                    }
+                                    className="border border-gray-300 rounded px-3 py-1 text-sm"
+                                  >
+                                    {Array.from({ length: 18 }, (_, i) => (
+                                      <option key={i} value={i}>
+                                        {i} {i === 1 ? "year" : "years"}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        <Button
+                          onClick={() => setShowTravelers(false)}
+                          className="w-full bg-[#003580] hover:bg-[#002347] text-white font-medium py-3"
+                        >
+                          Done
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -472,11 +446,53 @@ export default function Hotels() {
 
               {/* Search Button */}
               <Button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 font-medium"
                 onClick={() => navigate("/hotels/results")}
+                className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg"
               >
+                <Search className="w-5 h-5 mr-2" />
                 Search Hotels
               </Button>
+            </div>
+
+            {/* Why Faredown Section */}
+            <div className="mt-8">
+              <h2 className="text-white text-lg font-semibold mb-4 text-center">
+                Why Faredown?
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
+                  <p className="text-xs text-gray-600">
+                    Negotiate real-time prices
+                  </p>
+                </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <DollarSign className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
+                  <p className="text-xs text-gray-600">
+                    Pay what you feel is fair
+                  </p>
+                </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Shield className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
+                  <p className="text-xs text-gray-600">Instant confirmations</p>
+                </div>
+                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Headphones className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
+                  <p className="text-xs text-gray-600">Always here to help</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
