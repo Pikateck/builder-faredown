@@ -1266,7 +1266,8 @@ export default function HotelDetails() {
                                 )}
                                 {bargainingRoomId === room.id && (
                                   <Badge className="bg-blue-100 text-blue-800 text-xs mb-3 px-2 py-1 animate-pulse">
-                                    💰 Bargaining in Progress
+                                    <Sparkles className="w-3 h-3 mr-1 inline" />
+                                    Bargaining in Progress
                                   </Badge>
                                 )}
                                 <div className="space-y-2">
@@ -2100,7 +2101,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🛎️</span> Concierge service
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">���</span> Luggage storage
+                        <span className="mr-2">🧳</span> Luggage storage
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">💼</span> Business centre
@@ -2384,7 +2385,7 @@ export default function HotelDetails() {
                         { icon: "🚨", text: "Smoke alarms" },
                         { icon: "🔔", text: "Security alarm" },
                         { icon: "🔑", text: "Key card access" },
-                        { icon: "����", text: "In-room safe" },
+                        { icon: "🔐", text: "In-room safe" },
                         { icon: "👮", text: "24-hour security" },
                         { icon: "🚪", text: "Secure access" },
                       ].map((item, idx) => (
