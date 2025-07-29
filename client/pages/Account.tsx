@@ -703,9 +703,9 @@ Please keep this ticket for your records.
               </div>
             </div>
           ) : (
-            savedProfiles.map((profile) => (
+            savedProfiles.map((profile, index) => (
               <div
-                key={profile.id}
+                key={`${profile.id}-${index}`}
                 className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between mb-4">
