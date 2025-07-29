@@ -47,6 +47,7 @@ interface Hotel extends HotelType {
 
 export default function HotelResults() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
   const { departureDate, returnDate, formatDisplayDate, loadDatesFromParams } =
     useDateContext();
