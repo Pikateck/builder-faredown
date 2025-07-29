@@ -678,36 +678,22 @@ export default function Hotels() {
                       <ChevronDown className="w-4 h-4" />
                     </button>
                     {showCurrencyDropdown && (
-                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
-                        {[
-                          { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                          {
-                            code: "AED",
-                            symbol: "د.إ",
-                            name: "United Arab Emirates Dirham",
-                          },
-                          { code: "USD", symbol: "$", name: "US Dollar" },
-                          {
-                            code: "GBP",
-                            symbol: "£",
-                            name: "Great Britain Pound",
-                          },
-                          {
-                            code: "SGD",
-                            symbol: "S$",
-                            name: "Singapore Dollar",
-                          },
-                          { code: "EUR", symbol: "€", name: "Euro" },
-                        ].map((currency) => (
+                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
+                        {currencies.map((currency) => (
                           <button
                             key={currency.code}
                             onClick={() => {
-                              setSelectedCurrency(currency);
+                              setCurrency(currency);
                               setShowCurrencyDropdown(false);
                             }}
-                            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
+                              selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600" : "text-gray-900"
+                            }`}
                           >
-                            <span>{currency.name}</span>
+                            <div className="flex items-center space-x-2">
+                              <span>{currency.flag}</span>
+                              <span>{currency.name}</span>
+                            </div>
                             <span className="font-medium">
                               {currency.symbol} {currency.code}
                             </span>
