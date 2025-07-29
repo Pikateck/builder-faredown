@@ -121,8 +121,13 @@ export default function Account() {
   };
 
   const saveEditedProfile = () => {
+    const updatedProfileData = {
+      ...editingProfileData,
+      profileName: `${editingProfileData.firstName || ""} ${editingProfileData.lastName || ""}`.trim()
+    };
+
     const updatedProfiles = savedProfiles.map((profile) =>
-      profile.id === editingProfileId ? editingProfileData : profile
+      profile.id === editingProfileId ? updatedProfileData : profile
     );
     setSavedProfiles(updatedProfiles);
     localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
