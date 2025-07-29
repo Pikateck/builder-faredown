@@ -55,16 +55,19 @@ export function MobileNavBar({
     if (onBack) {
       onBack();
     } else {
-      // Fallback navigation to hotels results if browser back fails
-      try {
-        if (window.history.length > 1) {
-          navigate(-1);
-        } else {
+      // Check if we can go back in history
+      if (window.history.length > 1 && document.referrer) {
+        navigate(-1);
+      } else {
+        // Fallback navigation based on current path
+        const currentPath = location.pathname;
+        if (currentPath.includes('/hotels/')) {
           navigate('/hotels/results');
+        } else if (currentPath.includes('/flights/')) {
+          navigate('/flights');
+        } else {
+          navigate('/');
         }
-      } catch (error) {
-        console.error('Navigation error:', error);
-        navigate('/hotels/results');
       }
     }
   };
