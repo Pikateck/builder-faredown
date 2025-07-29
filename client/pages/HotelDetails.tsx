@@ -2475,28 +2475,18 @@ export default function HotelDetails() {
                         Languages Spoken
                       </h3>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="grid grid-cols-3 gap-2 text-sm">
                       {[
-                        { icon: "🇺🇸", text: "English" },
-                        { icon: "🇦🇪", text: "Arabic" },
-                        { icon: "🇩🇪", text: "German" },
-                        { icon: "🇫🇷", text: "French" },
-                        { icon: "🇪🇸", text: "Spanish" },
-                        { icon: "🇮🇳", text: "Hindi" },
-                        { icon: "🇮🇩", text: "Indonesian" },
-                        { icon: "🇮🇹", text: "Italian" },
-                        { icon: "🇯🇵", text: "Japanese" },
-                        { icon: "🇰��", text: "Korean" },
-                        { icon: "🇷🇺", text: "Russian" },
-                        { icon: "🇨🇳", text: "Chinese" },
-                      ].map((item, idx) => (
+                        "English", "Arabic", "German", "French", "Spanish", "Hindi",
+                        "Indonesian", "Italian", "Japanese", "Korean", "Russian", "Chinese"
+                      ].map((language, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center text-gray-700 mb-1"
+                          className="flex items-center text-gray-700 mb-1 bg-white border border-teal-200 rounded-lg px-2 py-1"
                         >
-                          <span className="mr-2 text-base">{item.icon}</span>
+                          <div className="w-2 h-2 bg-teal-600 rounded-full mr-2"></div>
                           <span className="font-medium text-xs">
-                            {item.text}
+                            {language}
                           </span>
                         </div>
                       ))}
