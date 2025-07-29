@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { BookingCalendar } from "@/components/BookingCalendar";
+import { SimpleCalendar } from "@/components/SimpleCalendar";
 import { addDays } from "date-fns";
 import {
   Plane,
