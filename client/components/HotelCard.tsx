@@ -56,14 +56,19 @@ interface HotelCardProps {
 }
 
 const getAmenityIcon = (amenity: string) => {
+  const iconClass = "w-5 h-5 text-blue-600 drop-shadow-sm";
   const icons: Record<string, React.ReactNode> = {
-    wifi: <Wifi className="w-4 h-4" />,
-    parking: <Car className="w-4 h-4" />,
-    restaurant: <Coffee className="w-4 h-4" />,
-    gym: <Dumbbell className="w-4 h-4" />,
+    wifi: <Wifi className={iconClass} />,
+    parking: <Car className={iconClass} />,
+    restaurant: <Coffee className={iconClass} />,
+    gym: <Dumbbell className={iconClass} />,
+    pool: <Waves className={iconClass} />,
+    spa: <Sparkles className={iconClass} />,
+    "air conditioning": <Wind className={iconClass} />,
+    "room service": <Building2 className={iconClass} />,
   };
 
-  return icons[amenity.toLowerCase()] || <Coffee className="w-4 h-4" />;
+  return icons[amenity.toLowerCase()] || <Coffee className={iconClass} />;
 };
 
 export function HotelCard({
