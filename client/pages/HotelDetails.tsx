@@ -3084,7 +3084,7 @@ export default function HotelDetails() {
                   className="bg-gradient-to-r from-gray-300 to-gray-400 text-gray-600 cursor-not-allowed px-8 py-3 font-bold rounded-xl shadow-lg"
                 >
                   <span className="flex items-center">
-                    <span className="mr-2">🏨</span>
+                    <Building2 className="w-4 h-4 mr-2" />
                     Select Room
                   </span>
                 </Button>
