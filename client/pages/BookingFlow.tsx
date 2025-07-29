@@ -1583,7 +1583,7 @@ export default function BookingFlow() {
                         { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
                         { code: "JPY", symbol: "¥", name: "Japanese Yen" },
                         { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
-                        { code: "KRW", symbol: "��", name: "South Korean Won" },
+                        { code: "KRW", symbol: "₩", name: "South Korean Won" },
                         { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
                         {
                           code: "AUD",
@@ -2325,6 +2325,7 @@ export default function BookingFlow() {
                           }`}
                         >
                           <Checkbox
+                            className="w-4 h-4"
                             checked={selectedOtherOptions.length === 6}
                             onCheckedChange={(checked) => {
                               if (checked) {
