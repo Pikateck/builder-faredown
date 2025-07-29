@@ -3084,7 +3084,7 @@ export default function FlightResults() {
                                                   Airline fee:
                                                 </span>
                                                 <span className="text-gray-900 font-medium">
-                                                  ₹0
+                                                  ���0
                                                 </span>
                                               </div>
                                               <div className="flex justify-between">
@@ -4560,7 +4560,7 @@ export default function FlightResults() {
                             }
                           }}
                           placeholder="Enter your target price"
-                          className={`text-xl font-bold text-center py-6 border-2 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm transition-colors ${
+                          className={`text-lg md:text-xl font-bold text-center py-4 md:py-6 border-2 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm transition-colors ${
                             duplicatePriceError
                               ? "border-red-300 focus:border-red-500"
                               : "border-[#003580]/20"
