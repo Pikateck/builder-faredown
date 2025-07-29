@@ -2934,14 +2934,14 @@ export default function HotelDetails() {
                     {selectedRoomType.name}
                   </div>
                   <div className="text-xs text-gray-600">
-                    ₹{selectedRoomType.pricePerNight.toLocaleString()} per night
+                    ₹{selectedRoomType.pricePerNight.toLocaleString()} per room per night
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-bold text-gray-900">
                     ₹{calculateTotalPrice(selectedRoomType.pricePerNight).toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-500">total price</div>
+                  <div className="text-xs text-gray-600 font-medium">Total Price (All Inclusive)</div>
                 </div>
               </div>
             </div>
