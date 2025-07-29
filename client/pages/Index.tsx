@@ -93,6 +93,7 @@ import AdminTestButton from "@/components/AdminTestButton";
 
 export default function Index() {
   const { isLoggedIn, user, login, logout } = useAuth();
+  const { selectedCurrency, currencies, setCurrency } = useCurrency();
   const {
     departureDate,
     returnDate,
