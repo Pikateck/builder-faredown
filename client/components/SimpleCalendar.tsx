@@ -86,13 +86,13 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
 
     for (let i = 0; i < 7; i++) {
       days.push(
-        <div className="text-center text-sm font-medium text-gray-500 py-2" key={i}>
+        <div className="text-center text-xs sm:text-sm font-medium text-gray-500 py-2 sm:py-3" key={i}>
           {format(addDays(startDate, i), dateFormat)}
         </div>
       );
     }
 
-    return <div className="grid grid-cols-7">{days}</div>;
+    return <div className="grid grid-cols-7 border-b">{days}</div>;
   };
 
   const renderCells = () => {
