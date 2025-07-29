@@ -64,15 +64,15 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
 
   const renderHeader = () => {
     return (
-      <div className="flex items-center justify-between p-4 border-b">
-        <button onClick={prevMonth} className="p-2 hover:bg-gray-100 rounded">
-          <ChevronLeft className="w-5 h-5" />
+      <div className="flex items-center justify-between p-3 sm:p-4 border-b">
+        <button onClick={prevMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 rounded touch-manipulation">
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-base sm:text-lg font-semibold text-center">
           {format(currentMonth, "MMMM yyyy")}
         </h2>
-        <button onClick={nextMonth} className="p-2 hover:bg-gray-100 rounded">
-          <ChevronRight className="w-5 h-5" />
+        <button onClick={nextMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 rounded touch-manipulation">
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
     );
