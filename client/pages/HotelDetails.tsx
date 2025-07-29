@@ -275,6 +275,9 @@ export default function HotelDetails() {
     },
   ];
 
+  // Assign roomTypes to hotel object
+  hotel.roomTypes = roomTypes;
+
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "gallery", label: "Gallery" },
