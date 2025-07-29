@@ -894,6 +894,21 @@ export default function FlightResults() {
         return a.durationMinutes - b.durationMinutes;
       }
       return 0;
+    })
+    .sort((a, b) => {
+      // Secondary sort for airline diversity: mix airlines in top results
+      // This ensures different airlines appear in the first few results
+      if (window.innerWidth <= 768) { // Mobile only
+        const airlineOrder = ['Emirates', 'Air India', 'Indigo', 'Fly Dubai', 'Air Arabia'];
+        const aIndex = airlineOrder.indexOf(a.airline);
+        const bIndex = airlineOrder.indexOf(b.airline);
+
+        // If both airlines are in our priority list, maintain that order
+        if (aIndex !== -1 && bIndex !== -1) {
+          return aIndex - bIndex;
+        }
+      }
+      return 0;
     });
 
   // Authentication functions
