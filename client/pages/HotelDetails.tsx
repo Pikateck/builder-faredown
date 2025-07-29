@@ -531,7 +531,7 @@ export default function HotelDetails() {
         </div>
 
         {/* Right Content Area */}
-        <div className="flex-1 min-h-screen">
+        <div className="flex-1 min-h-screen pb-20 md:pb-0">
           {/* Tab Navigation - Sticky */}
           <div className="bg-white border-b border-gray-200 sticky top-[64px] lg:top-0 z-30">
             <div className="flex overflow-x-auto scrollbar-hide">
@@ -1936,7 +1936,7 @@ export default function HotelDetails() {
                       { icon: "💆‍♀️", text: "Head massage" },
                       { icon: "👐", text: "Hand massage" },
                       { icon: "💑", text: "Couples massage" },
-                      { icon: "����", text: "Foot massage" },
+                      { icon: "🦶", text: "Foot massage" },
                       { icon: "₹", text: "Back massage" },
                       { icon: "✨", text: "Beauty services" },
                       { icon: "��️", text: "Sun loungers" },
