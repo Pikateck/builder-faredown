@@ -2119,9 +2119,7 @@ export default function HotelDetails() {
                 {/* Swimming Pools Section */}
                 <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mr-4">
-                      <Waves className="w-8 h-8 text-white" />
-                    </div>
+                    <Waves className="w-6 h-6 text-gray-400 mr-4" />
                     <div>
                       <h3 className="font-bold text-2xl text-blue-900">
                         2 Swimming Pools
@@ -2200,9 +2198,7 @@ export default function HotelDetails() {
                 {/* Wellness & Spa Section */}
                 <div className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
                   <div className="flex items-center mb-6">
-                    <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mr-4">
-                      <Sparkles className="w-8 h-8 text-white" />
-                    </div>
+                    <Sparkles className="w-6 h-6 text-gray-400 mr-4" />
                     <div>
                       <h3 className="font-bold text-2xl text-green-900">
                         Wellness & Spa
@@ -2280,16 +2276,14 @@ export default function HotelDetails() {
                   {/* Safety & Security */}
                   <div className="bg-red-50 border border-red-200 rounded-lg p-5">
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center mr-3">
-                        <Shield className="w-6 h-6 text-white" />
-                      </div>
+                      <Shield className="w-5 h-5 text-gray-400 mr-3" />
                       <h3 className="font-bold text-lg text-red-900">
                         Safety & Security
                       </h3>
                     </div>
                     <ul className="space-y-2 text-sm">
                       {[
-                        { icon: "���", text: "Fire extinguishers" },
+                        { icon: "🔥", text: "Fire extinguishers" },
                         { icon: "📹", text: "CCTV surveillance" },
                         { icon: "🚨", text: "Smoke alarms" },
                         { icon: "🔔", text: "Security alarm" },
@@ -2312,9 +2306,7 @@ export default function HotelDetails() {
                   {/* Languages Spoken */}
                   <div className="bg-teal-50 border border-teal-200 rounded-lg p-5">
                     <div className="flex items-center mb-4">
-                      <div className="w-12 h-12 bg-teal-600 rounded-2xl flex items-center justify-center mr-3">
-                        <Languages className="w-6 h-6 text-white" />
-                      </div>
+                      <Languages className="w-5 h-5 text-gray-400 mr-3" />
                       <h3 className="font-bold text-lg text-teal-900">
                         Languages Spoken
                       </h3>
