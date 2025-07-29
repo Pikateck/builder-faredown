@@ -4475,15 +4475,13 @@ export default function FlightResults() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-600 mb-1">
-                          Current All-Inclusive Price
+                        <p className="text-xs text-gray-500 mb-1">
+                          All Inclusive Price
                         </p>
                         <p className="text-3xl font-bold text-[#003580]">
                           {formatPrice(bargainFareType.price)}
                         </p>
-                        <p className="text-xs text-gray-500 font-medium">
-                          {numberToWords(bargainFareType.price.toString())}
-                        </p>
+
                       </div>
                     </div>
                   </div>
