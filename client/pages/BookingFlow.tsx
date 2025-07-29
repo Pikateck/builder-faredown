@@ -2544,7 +2544,7 @@ export default function BookingFlow() {
                     </h3>
                     <div className="space-y-2 text-sm text-gray-700">
                       <p>
-                        • Select a traveller first, then click on any available
+                        ��� Select a traveller first, then click on any available
                         seat
                       </p>
                       <p>
@@ -3613,7 +3613,7 @@ export default function BookingFlow() {
           </DialogHeader>
 
           {selectedTraveller && (
-            <div className="space-y-4">
+            <div className="space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto pr-2">
               {/* Enhanced Profile Selector */}
               {savedProfiles.length > 0 && (
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200">
