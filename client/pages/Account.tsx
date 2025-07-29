@@ -106,6 +106,29 @@ export default function Account() {
     return saved ? JSON.parse(saved) : [];
   });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [editingProfileId, setEditingProfileId] = useState(null);
+  const [editingProfileData, setEditingProfileData] = useState({});
+
+  // Edit profile functions
+  const startEditingProfile = (profile) => {
+    setEditingProfileId(profile.id);
+    setEditingProfileData({ ...profile });
+  };
+
+  const cancelEditingProfile = () => {
+    setEditingProfileId(null);
+    setEditingProfileData({});
+  };
+
+  const saveEditedProfile = () => {
+    const updatedProfiles = savedProfiles.map((profile) =>
+      profile.id === editingProfileId ? editingProfileData : profile
+    );
+    setSavedProfiles(updatedProfiles);
+    localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
+    setEditingProfileId(null);
+    setEditingProfileData({});
+  };
 
   // Delete profile function
   const deleteProfile = (profileId) => {
