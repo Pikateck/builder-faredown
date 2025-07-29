@@ -4476,7 +4476,7 @@ export default function FlightResults() {
                       </div>
                       <div className="text-right">
                         <p className="text-xs text-gray-500 mb-1">
-                          All Inclusive Price
+                          (All Inclusive Price)
                         </p>
                         <p className="text-3xl font-bold text-[#003580]">
                           {formatPrice(bargainFareType.price)}
