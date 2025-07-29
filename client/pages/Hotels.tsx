@@ -32,6 +32,8 @@ import {
   Shield,
   Headphones,
   ArrowRight,
+  Search,
+  X,
 } from "lucide-react";
 import AdminTestButton from "@/components/AdminTestButton";
 
