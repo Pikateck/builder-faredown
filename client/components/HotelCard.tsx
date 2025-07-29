@@ -19,6 +19,10 @@ import {
   Users,
   CreditCard,
   ArrowRight,
+  Waves,
+  Sparkles,
+  Wind,
+  Building2,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import {
