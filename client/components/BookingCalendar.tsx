@@ -26,13 +26,16 @@ export function BookingCalendar({
   className,
   bookingType = "hotel",
 }: BookingCalendarProps) {
-  const [selection, setSelection] = useState([
-    {
-      startDate: initialRange?.startDate || new Date(),
-      endDate: initialRange?.endDate || addDays(new Date(), 3),
+  const [selection, setSelection] = useState(() => {
+    const startDate = initialRange?.startDate || new Date();
+    const endDate = initialRange?.endDate || addDays(startDate, 3);
+
+    return [{
+      startDate,
+      endDate,
       key: "selection",
-    },
-  ]);
+    }];
+  });
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
