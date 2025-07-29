@@ -104,70 +104,264 @@ export default function Hotels() {
 
       {/* Mobile Layout (≤768px) */}
       <div className="block md:hidden">
-        {/* Mobile Features Section */}
-        <div className="bg-gray-50 py-8">
-          <div className="px-4">
-            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
-              Why Faredown?
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <TrendingUp className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
-                <p className="text-xs text-gray-600">
-                  Negotiate real-time prices
-                </p>
-              </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <DollarSign className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
-                <p className="text-xs text-gray-600">
-                  Pay what you feel is fair
-                </p>
-              </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
-                <p className="text-xs text-gray-600">Instant confirmations</p>
-              </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Headphones className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
-                <p className="text-xs text-gray-600">Always here to help</p>
+        {/* Mobile Header */}
+        <header className="text-white" style={{ backgroundColor: "#003580" }}>
+          <div className="px-4 py-3">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <Link to="/" className="flex items-center space-x-2">
+                <span className="text-lg font-bold tracking-tight">
+                  faredown.com
+                </span>
+              </Link>
+
+              {/* Currency Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                  className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1 text-sm"
+                >
+                  <span>{selectedCurrency.symbol} {selectedCurrency.code}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showCurrencyDropdown && (
+                  <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
+                    {[
+                      { code: "INR", symbol: "₹", name: "Indian Rupee" },
+                      { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+                      { code: "USD", symbol: "$", name: "US Dollar" },
+                      { code: "GBP", symbol: "£", name: "British Pound" },
+                      { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+                      { code: "EUR", symbol: "€", name: "Euro" },
+                    ].map((currency) => (
+                      <button
+                        key={currency.code}
+                        onClick={() => {
+                          setSelectedCurrency(currency);
+                          setShowCurrencyDropdown(false);
+                        }}
+                        className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
+                      >
+                        <span>{currency.name}</span>
+                        <span className="font-medium">
+                          {currency.symbol} {currency.code}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Mobile Quick Links */}
-        <div className="bg-white py-6">
+        {/* Mobile Hotel Search */}
+        <div className="bg-[#003580] pb-6">
           <div className="px-4">
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <div className="space-y-3">
-              <Link
-                to="/hotels"
-                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold text-white mb-2">
+                Find Hotels
+              </h1>
+              <p className="text-blue-100 text-sm">
+                Search and book hotels with AI bargaining
+              </p>
+            </div>
+
+            {/* Mobile Search Form */}
+            <div className="bg-white rounded-lg p-4 space-y-4">
+              {/* Destination */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Destination
+                </label>
+                <button
+                  onClick={() => setShowFromCities(!showFromCities)}
+                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500"
+                >
+                  <MapPin className="w-4 h-4 text-gray-500 mr-2" />
+                  <div className="flex items-center space-x-2 min-w-0 flex-1">
+                    <span className="text-sm text-gray-700 font-medium truncate">
+                      {cityData[selectedFromCity]?.airport || "Mumbai, Maharashtra, India"}
+                    </span>
+                  </div>
+                </button>
+
+                {showFromCities && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-3 z-50 mt-1 max-h-60 overflow-y-auto">
+                    <div className="space-y-1">
+                      {Object.entries(cityData).map(([city, data]) => (
+                        <button
+                          key={city}
+                          onClick={() => {
+                            setSelectedFromCity(city);
+                            setShowFromCities(false);
+                          }}
+                          className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                              <span className="text-xs">🏨</span>
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {city}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {data.fullName}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Check-in / Check-out */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Check-in / Check-out
+                </label>
+                <Popover open={showCalendar} onOpenChange={setShowCalendar}>
+                  <PopoverTrigger asChild>
+                    <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500">
+                      <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
+                      <span className="text-sm text-gray-700 font-medium">
+                        {departureDate
+                          ? `${formatDisplayDate(departureDate)} - ${
+                              returnDate ? formatDisplayDate(returnDate) : "Check-out"
+                            }`
+                          : "Select dates"}
+                      </span>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="center">
+                    <BookingCalendar
+                      initialRange={{
+                        startDate: departureDate || new Date(),
+                        endDate: returnDate || addDays(departureDate || new Date(), 7),
+                      }}
+                      onChange={(range) => {
+                        console.log("Mobile hotel calendar range selected:", range);
+                      }}
+                      onClose={() => setShowCalendar(false)}
+                      className="w-full"
+                      bookingType="hotel"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Guests */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Guests
+                </label>
+                <button
+                  onClick={() => setShowTravelers(!showTravelers)}
+                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-3 w-full hover:border-blue-500"
+                >
+                  <Users className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-sm text-gray-700 font-medium">
+                    {travelers.adults} adult{travelers.adults > 1 ? "s" : ""}
+                    {travelers.children > 0
+                      ? `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`
+                      : ""}
+                  </span>
+                </button>
+
+                {showTravelers && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-xl p-4 z-50 mt-1">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-gray-900">Adults</div>
+                          <div className="text-sm text-gray-500">Age 18+</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() =>
+                              setTravelers((prev) => ({
+                                ...prev,
+                                adults: Math.max(1, prev.adults - 1),
+                              }))
+                            }
+                            disabled={travelers.adults <= 1}
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                          >
+                            −
+                          </button>
+                          <span className="w-8 text-center font-medium">
+                            {travelers.adults}
+                          </span>
+                          <button
+                            onClick={() =>
+                              setTravelers((prev) => ({
+                                ...prev,
+                                adults: prev.adults + 1,
+                              }))
+                            }
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-gray-900">Children</div>
+                          <div className="text-sm text-gray-500">Age 0-17</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() =>
+                              setTravelers((prev) => ({
+                                ...prev,
+                                children: Math.max(0, prev.children - 1),
+                              }))
+                            }
+                            disabled={travelers.children <= 0}
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                          >
+                            −
+                          </button>
+                          <span className="w-8 text-center font-medium">
+                            {travelers.children}
+                          </span>
+                          <button
+                            onClick={() =>
+                              setTravelers((prev) => ({
+                                ...prev,
+                                children: prev.children + 1,
+                              }))
+                            }
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => setShowTravelers(false)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Search Button */}
+              <Button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 font-medium"
+                onClick={() => navigate("/hotels/results")}
               >
-                <Hotel className="w-5 h-5 text-[#003580]" />
-                <span className="font-medium">Hotels</span>
-                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
-              </Link>
-              <Link
-                to="/account"
-                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
-              >
-                <User className="w-5 h-5 text-[#003580]" />
-                <span className="font-medium">My Account</span>
-                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
-              </Link>
+                Search Hotels
+              </Button>
             </div>
           </div>
         </div>
