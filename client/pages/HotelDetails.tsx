@@ -566,17 +566,52 @@ export default function HotelDetails() {
               </div>
             )}
 
+            {activeTab === "gallery" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Hotel Gallery</h2>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=400&h=300&fit=crop",
+                    "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=400&h=300&fit=crop",
+                  ].map((image, idx) => (
+                    <div key={idx} className="aspect-video overflow-hidden rounded-lg">
+                      <img
+                        src={image}
+                        alt={`Hotel image ${idx + 1}`}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {activeTab === "amenities" && (
               <div className="space-y-4">
                 <h2 className="text-lg font-bold">Hotel Amenities</h2>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3">
                   {[
-                    "Swimming Pool", "Fitness Center", "Free WiFi", "Restaurant",
-                    "Room Service", "Parking", "Spa", "Business Center"
+                    { icon: "🏊‍♂️", name: "Swimming Pool" },
+                    { icon: "💪", name: "Fitness Center" },
+                    { icon: "📶", name: "Free WiFi" },
+                    { icon: "🍽️", name: "Restaurant" },
+                    { icon: "🛎️", name: "Room Service" },
+                    { icon: "🚗", name: "Parking" },
+                    { icon: "💆‍♀️", name: "Spa" },
+                    { icon: "💼", name: "Business Center" },
+                    { icon: "🧺", name: "Laundry Service" },
+                    { icon: "🏪", name: "Gift Shop" },
+                    { icon: "👶", name: "Babysitting" },
+                    { icon: "♿", name: "Wheelchair Accessible" },
                   ].map((amenity, idx) => (
-                    <div key={idx} className="flex items-center space-x-2 p-2 bg-gray-50 rounded">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="text-sm">{amenity}</span>
+                    <div key={idx} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                      <span className="text-xl">{amenity.icon}</span>
+                      <span className="text-sm font-medium">{amenity.name}</span>
                     </div>
                   ))}
                 </div>
