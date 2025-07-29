@@ -837,7 +837,7 @@ export default function Hotels() {
                     <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Check-in / Check-out
                     </label>
-                    <Popover open={showCalendar} onOpenChange={setShowCalendar}>
+                    <Popover open={showDesktopCalendar} onOpenChange={setShowDesktopCalendar}>
                       <PopoverTrigger asChild>
                         <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation">
                           <CalendarIcon className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
@@ -860,9 +860,9 @@ export default function Hotels() {
                             console.log("Desktop hotel dates selected:", { checkIn, checkOut });
                             setDepartureDate(checkIn);
                             setReturnDate(checkOut);
-                            setShowCalendar(false);
+                            setShowDesktopCalendar(false);
                           }}
-                          onClose={() => setShowCalendar(false)}
+                          onClose={() => setShowDesktopCalendar(false)}
                           initialCheckIn={departureDate || undefined}
                           initialCheckOut={returnDate || undefined}
                         />
