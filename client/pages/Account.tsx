@@ -106,8 +106,9 @@ export default function Account() {
     const profiles = saved ? JSON.parse(saved) : [];
 
     // Ensure all profiles have unique IDs and remove any duplicates
-    const uniqueProfiles = profiles.filter((profile, index, self) =>
-      index === self.findIndex(p => p.id === profile.id)
+    const uniqueProfiles = profiles.filter(
+      (profile, index, self) =>
+        index === self.findIndex((p) => p.id === profile.id),
     );
 
     return uniqueProfiles;
@@ -130,11 +131,12 @@ export default function Account() {
   const saveEditedProfile = () => {
     const updatedProfileData = {
       ...editingProfileData,
-      profileName: `${editingProfileData.firstName || ""} ${editingProfileData.lastName || ""}`.trim()
+      profileName:
+        `${editingProfileData.firstName || ""} ${editingProfileData.lastName || ""}`.trim(),
     };
 
     const updatedProfiles = savedProfiles.map((profile) =>
-      profile.id === editingProfileId ? updatedProfileData : profile
+      profile.id === editingProfileId ? updatedProfileData : profile,
     );
     setSavedProfiles(updatedProfiles);
     localStorage.setItem("customer_profiles", JSON.stringify(updatedProfiles));
@@ -754,15 +756,20 @@ Please keep this ticket for your records.
                   </div>
                 </div>
 
-{editingProfileId === profile.id ? (
+                {editingProfileId === profile.id ? (
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Title</Label>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Title
+                        </Label>
                         <Select
                           value={editingProfileData.title || ""}
                           onValueChange={(value) =>
-                            setEditingProfileData({ ...editingProfileData, title: value })
+                            setEditingProfileData({
+                              ...editingProfileData,
+                              title: value,
+                            })
                           }
                         >
                           <SelectTrigger>
@@ -779,21 +786,31 @@ Please keep this ticket for your records.
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">First Name</Label>
+                          <Label className="text-sm font-medium text-gray-700">
+                            First Name
+                          </Label>
                           <Input
                             value={editingProfileData.firstName || ""}
                             onChange={(e) =>
-                              setEditingProfileData({ ...editingProfileData, firstName: e.target.value })
+                              setEditingProfileData({
+                                ...editingProfileData,
+                                firstName: e.target.value,
+                              })
                             }
                             placeholder="First name"
                           />
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Last Name</Label>
+                          <Label className="text-sm font-medium text-gray-700">
+                            Last Name
+                          </Label>
                           <Input
                             value={editingProfileData.lastName || ""}
                             onChange={(e) =>
-                              setEditingProfileData({ ...editingProfileData, lastName: e.target.value })
+                              setEditingProfileData({
+                                ...editingProfileData,
+                                lastName: e.target.value,
+                              })
                             }
                             placeholder="Last name"
                           />
@@ -801,23 +818,33 @@ Please keep this ticket for your records.
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Date of Birth</Label>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Date of Birth
+                        </Label>
                         <Input
                           type="date"
                           value={editingProfileData.dateOfBirth || ""}
                           onChange={(e) =>
-                            setEditingProfileData({ ...editingProfileData, dateOfBirth: e.target.value })
+                            setEditingProfileData({
+                              ...editingProfileData,
+                              dateOfBirth: e.target.value,
+                            })
                           }
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Gender</Label>
+                          <Label className="text-sm font-medium text-gray-700">
+                            Gender
+                          </Label>
                           <Select
                             value={editingProfileData.gender || ""}
                             onValueChange={(value) =>
-                              setEditingProfileData({ ...editingProfileData, gender: value })
+                              setEditingProfileData({
+                                ...editingProfileData,
+                                gender: value,
+                              })
                             }
                           >
                             <SelectTrigger>
@@ -830,11 +857,16 @@ Please keep this ticket for your records.
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Nationality</Label>
+                          <Label className="text-sm font-medium text-gray-700">
+                            Nationality
+                          </Label>
                           <Input
                             value={editingProfileData.nationality || ""}
                             onChange={(e) =>
-                              setEditingProfileData({ ...editingProfileData, nationality: e.target.value })
+                              setEditingProfileData({
+                                ...editingProfileData,
+                                nationality: e.target.value,
+                              })
                             }
                             placeholder="Nationality"
                           />
@@ -842,33 +874,48 @@ Please keep this ticket for your records.
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Passport Number</Label>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Passport Number
+                        </Label>
                         <Input
                           value={editingProfileData.passportNumber || ""}
                           onChange={(e) =>
-                            setEditingProfileData({ ...editingProfileData, passportNumber: e.target.value })
+                            setEditingProfileData({
+                              ...editingProfileData,
+                              passportNumber: e.target.value,
+                            })
                           }
                           placeholder="Passport number"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">PAN Card Number</Label>
+                        <Label className="text-sm font-medium text-gray-700">
+                          PAN Card Number
+                        </Label>
                         <Input
                           value={editingProfileData.panCardNumber || ""}
                           onChange={(e) =>
-                            setEditingProfileData({ ...editingProfileData, panCardNumber: e.target.value })
+                            setEditingProfileData({
+                              ...editingProfileData,
+                              panCardNumber: e.target.value,
+                            })
                           }
                           placeholder="PAN card number"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-700">Meal Preference</Label>
+                        <Label className="text-sm font-medium text-gray-700">
+                          Meal Preference
+                        </Label>
                         <Select
                           value={editingProfileData.mealPreference || ""}
                           onValueChange={(value) =>
-                            setEditingProfileData({ ...editingProfileData, mealPreference: value })
+                            setEditingProfileData({
+                              ...editingProfileData,
+                              mealPreference: value,
+                            })
                           }
                         >
                           <SelectTrigger>
@@ -876,22 +923,34 @@ Please keep this ticket for your records.
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="Veg">Vegetarian</SelectItem>
-                            <SelectItem value="Non-Veg">Non-Vegetarian</SelectItem>
+                            <SelectItem value="Non-Veg">
+                              Non-Vegetarian
+                            </SelectItem>
                             <SelectItem value="Vegan">Vegan</SelectItem>
                             <SelectItem value="Kosher">Kosher</SelectItem>
                             <SelectItem value="Halal">Halal</SelectItem>
-                            <SelectItem value="No Preference">No Preference</SelectItem>
+                            <SelectItem value="No Preference">
+                              No Preference
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
 
                     <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                      <Button variant="outline" onClick={cancelEditingProfile} size="sm">
+                      <Button
+                        variant="outline"
+                        onClick={cancelEditingProfile}
+                        size="sm"
+                      >
                         <X className="w-4 h-4 mr-2" />
                         Cancel
                       </Button>
-                      <Button onClick={saveEditedProfile} size="sm" className="bg-blue-600 hover:bg-blue-700">
+                      <Button
+                        onClick={saveEditedProfile}
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
                         <Save className="w-4 h-4 mr-2" />
                         Save Changes
                       </Button>

@@ -34,7 +34,9 @@ export function MobileBottomBar({
   const { formatPrice } = useCurrency();
 
   return (
-    <div className={`md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 ${className}`}>
+    <div
+      className={`md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 ${className}`}
+    >
       <div className="flex items-center justify-between">
         {showPrice && price && (
           <div className="flex-1 pr-4">
@@ -52,7 +54,7 @@ export function MobileBottomBar({
             <div className="text-xs text-gray-500">{priceLabel}</div>
           </div>
         )}
-        
+
         <div className="flex gap-2">
           {secondaryAction && (
             <Button
@@ -65,12 +67,12 @@ export function MobileBottomBar({
               {secondaryAction.label}
             </Button>
           )}
-          
+
           <Button
             variant={primaryAction.variant || "default"}
             onClick={primaryAction.onClick}
             className={`font-semibold px-6 ${
-              primaryAction.className || 
+              primaryAction.className ||
               "bg-[#febb02] hover:bg-[#e6a602] text-black"
             }`}
           >

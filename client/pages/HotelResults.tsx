@@ -455,7 +455,9 @@ export default function HotelResults() {
           showMap={true}
           onFilterClick={() => {
             // Open filter sheet
-            const button = document.querySelector('[data-mobile-filter-trigger]') as HTMLButtonElement;
+            const button = document.querySelector(
+              "[data-mobile-filter-trigger]",
+            ) as HTMLButtonElement;
             if (button) button.click();
           }}
           rightActions={
@@ -524,22 +526,48 @@ export default function HotelResults() {
           ) : error ? (
             <div className="text-center py-12">
               <div className="text-red-600 mb-4">
-                <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-12 h-12 mx-auto mb-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No hotels found</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No hotels found
+              </h3>
               <p className="text-gray-600 text-sm">{error}</p>
             </div>
           ) : filteredAndSortedHotels.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-gray-400 mb-4">
-                <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                <svg
+                  className="w-12 h-12 mx-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No hotels found</h3>
-              <p className="text-gray-600 text-sm">Try adjusting your filters or search criteria</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No hotels found
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Try adjusting your filters or search criteria
+              </p>
             </div>
           ) : (
             filteredAndSortedHotels.map((hotel) => (

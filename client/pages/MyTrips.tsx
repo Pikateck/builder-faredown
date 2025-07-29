@@ -192,9 +192,12 @@ export default function MyTrips() {
         const bookingDateISO = trip.bookingDate;
         const bookingDateFormatted = formatDate(trip.bookingDate);
 
-        if (bookingDateStr.includes(searchLower) ||
-            bookingDateISO.includes(searchLower) ||
-            bookingDateFormatted.toLowerCase().includes(searchLower)) return true;
+        if (
+          bookingDateStr.includes(searchLower) ||
+          bookingDateISO.includes(searchLower) ||
+          bookingDateFormatted.toLowerCase().includes(searchLower)
+        )
+          return true;
 
         // Search by total amount
         if (trip.total?.toString().includes(searchLower)) return true;
@@ -205,7 +208,8 @@ export default function MyTrips() {
           if (trip.hotel.name?.toLowerCase().includes(searchLower)) return true;
 
           // Hotel location
-          if (trip.hotel.location?.toLowerCase().includes(searchLower)) return true;
+          if (trip.hotel.location?.toLowerCase().includes(searchLower))
+            return true;
 
           // Room type
           if (trip.room?.type?.toLowerCase().includes(searchLower)) return true;
@@ -216,32 +220,47 @@ export default function MyTrips() {
             const checkInDate = new Date(trip.checkIn);
             const checkInStr = checkInDate.toLocaleDateString();
             const checkInFormatted = formatDate(trip.checkIn);
-            if (checkInStr.includes(searchLower) || checkInFormatted.toLowerCase().includes(searchLower)) return true;
+            if (
+              checkInStr.includes(searchLower) ||
+              checkInFormatted.toLowerCase().includes(searchLower)
+            )
+              return true;
           }
 
           if (trip.checkOut) {
             const checkOutDate = new Date(trip.checkOut);
             const checkOutStr = checkOutDate.toLocaleDateString();
             const checkOutFormatted = formatDate(trip.checkOut);
-            if (checkOutStr.includes(searchLower) || checkOutFormatted.toLowerCase().includes(searchLower)) return true;
+            if (
+              checkOutStr.includes(searchLower) ||
+              checkOutFormatted.toLowerCase().includes(searchLower)
+            )
+              return true;
           }
 
           // Guest information
-          if (trip.guest?.firstName?.toLowerCase().includes(searchLower)) return true;
-          if (trip.guest?.lastName?.toLowerCase().includes(searchLower)) return true;
-          if (trip.guest?.email?.toLowerCase().includes(searchLower)) return true;
+          if (trip.guest?.firstName?.toLowerCase().includes(searchLower))
+            return true;
+          if (trip.guest?.lastName?.toLowerCase().includes(searchLower))
+            return true;
+          if (trip.guest?.email?.toLowerCase().includes(searchLower))
+            return true;
 
           // Payment method and status
-          if (trip.paymentMethod?.toLowerCase().includes(searchLower)) return true;
-          if (trip.paymentStatus?.toLowerCase().includes(searchLower)) return true;
+          if (trip.paymentMethod?.toLowerCase().includes(searchLower))
+            return true;
+          if (trip.paymentStatus?.toLowerCase().includes(searchLower))
+            return true;
         }
 
         // Flight-specific searches
         if (trip.bookingType === "flight" && trip.flights) {
           return trip.flights.some((flight: any) => {
             // Airline name and flight number
-            if (flight.airline?.toLowerCase().includes(searchLower)) return true;
-            if (flight.flightNumber?.toLowerCase().includes(searchLower)) return true;
+            if (flight.airline?.toLowerCase().includes(searchLower))
+              return true;
+            if (flight.flightNumber?.toLowerCase().includes(searchLower))
+              return true;
 
             // Airports (from/to)
             if (flight.from?.toLowerCase().includes(searchLower)) return true;
@@ -252,8 +271,10 @@ export default function MyTrips() {
             if (flight.time?.toLowerCase().includes(searchLower)) return true;
 
             // Departure and arrival times
-            if (flight.departure?.toLowerCase().includes(searchLower)) return true;
-            if (flight.arrival?.toLowerCase().includes(searchLower)) return true;
+            if (flight.departure?.toLowerCase().includes(searchLower))
+              return true;
+            if (flight.arrival?.toLowerCase().includes(searchLower))
+              return true;
 
             return false;
           });
@@ -262,9 +283,12 @@ export default function MyTrips() {
         // Passenger information for flights
         if (trip.passengers) {
           return trip.passengers.some((passenger: any) => {
-            if (passenger.firstName?.toLowerCase().includes(searchLower)) return true;
-            if (passenger.lastName?.toLowerCase().includes(searchLower)) return true;
-            if (passenger.email?.toLowerCase().includes(searchLower)) return true;
+            if (passenger.firstName?.toLowerCase().includes(searchLower))
+              return true;
+            if (passenger.lastName?.toLowerCase().includes(searchLower))
+              return true;
+            if (passenger.email?.toLowerCase().includes(searchLower))
+              return true;
             return false;
           });
         }
@@ -302,7 +326,11 @@ export default function MyTrips() {
     const details = generateTripDetails(trip);
 
     // Open in a new window/tab for better visibility
-    const detailsWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
+    const detailsWindow = window.open(
+      "",
+      "_blank",
+      "width=800,height=600,scrollbars=yes",
+    );
     if (detailsWindow) {
       detailsWindow.document.write(`
         <!DOCTYPE html>
@@ -336,9 +364,9 @@ export default function MyTrips() {
   const handleDownload = (trip: Trip) => {
     try {
       const content = generateDownloadContent(trip);
-      const blob = new Blob([content], { type: 'text/plain' });
+      const blob = new Blob([content], { type: "text/plain" });
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `${trip.bookingType}-booking-${trip.id}.txt`;
       document.body.appendChild(link);
@@ -346,15 +374,15 @@ export default function MyTrips() {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Download failed. Please try again.');
+      console.error("Download failed:", error);
+      alert("Download failed. Please try again.");
     }
   };
 
   const generateTripDetails = (trip: Trip): string => {
     const bookingDate = formatDate(trip.bookingDate);
 
-    if (trip.bookingType === 'flight') {
+    if (trip.bookingType === "flight") {
       return `
         <div class="header">
           <h1>Flight Booking Details</h1>
@@ -365,34 +393,46 @@ export default function MyTrips() {
           <h2>Booking Information</h2>
           <p><span class="label">Booking ID:</span><span class="value">${trip.id}</span></p>
           <p><span class="label">Booking Date:</span><span class="value">${bookingDate}</span></p>
-          <p><span class="label">Total Amount:</span><span class="value">₹${trip.total?.toLocaleString() || 'N/A'}</span></p>
+          <p><span class="label">Total Amount:</span><span class="value">₹${trip.total?.toLocaleString() || "N/A"}</span></p>
           <p><span class="label">Passengers:</span><span class="value">${trip.passengers?.length || 1}</span></p>
         </div>
 
-        ${trip.flights?.map((flight: any, index: number) => `
+        ${
+          trip.flights
+            ?.map(
+              (flight: any, index: number) => `
           <div class="flight-segment">
             <h3>Flight ${index + 1}</h3>
             <p><span class="label">Route:</span><span class="value">${flight.from} → ${flight.to}</span></p>
             <p><span class="label">Airline:</span><span class="value">${flight.airline} ${flight.flightNumber}</span></p>
             <p><span class="label">Date:</span><span class="value">${flight.date}</span></p>
             <p><span class="label">Time:</span><span class="value">${flight.time}</span></p>
-            ${flight.departure ? `<p><span class="label">Departure:</span><span class="value">${flight.departure}</span></p>` : ''}
-            ${flight.arrival ? `<p><span class="label">Arrival:</span><span class="value">${flight.arrival}</span></p>` : ''}
+            ${flight.departure ? `<p><span class="label">Departure:</span><span class="value">${flight.departure}</span></p>` : ""}
+            ${flight.arrival ? `<p><span class="label">Arrival:</span><span class="value">${flight.arrival}</span></p>` : ""}
           </div>
-        `).join('') || ''}
+        `,
+            )
+            .join("") || ""
+        }
 
-        ${trip.passengers?.map((passenger: any, index: number) => `
+        ${
+          trip.passengers
+            ?.map(
+              (passenger: any, index: number) => `
           <div class="section">
             <h3>Passenger ${index + 1}</h3>
             <p><span class="label">Name:</span><span class="value">${passenger.firstName} ${passenger.lastName}</span></p>
-            <p><span class="label">Type:</span><span class="value">${passenger.type || 'Adult'}</span></p>
-            ${passenger.email ? `<p><span class="label">Email:</span><span class="value">${passenger.email}</span></p>` : ''}
+            <p><span class="label">Type:</span><span class="value">${passenger.type || "Adult"}</span></p>
+            ${passenger.email ? `<p><span class="label">Email:</span><span class="value">${passenger.email}</span></p>` : ""}
           </div>
-        `).join('') || ''}
+        `,
+            )
+            .join("") || ""
+        }
       `;
     } else {
-      const checkInDate = trip.checkIn ? formatDate(trip.checkIn) : 'N/A';
-      const checkOutDate = trip.checkOut ? formatDate(trip.checkOut) : 'N/A';
+      const checkInDate = trip.checkIn ? formatDate(trip.checkIn) : "N/A";
+      const checkOutDate = trip.checkOut ? formatDate(trip.checkOut) : "N/A";
 
       return `
         <div class="header">
@@ -404,48 +444,64 @@ export default function MyTrips() {
           <h2>Booking Information</h2>
           <p><span class="label">Booking ID:</span><span class="value">${trip.id}</span></p>
           <p><span class="label">Booking Date:</span><span class="value">${bookingDate}</span></p>
-          <p><span class="label">Total Amount:</span><span class="value">₹${trip.total?.toLocaleString() || 'N/A'}</span></p>
+          <p><span class="label">Total Amount:</span><span class="value">₹${trip.total?.toLocaleString() || "N/A"}</span></p>
           <p><span class="label">Guests:</span><span class="value">${trip.guests || 1}</span></p>
           <p><span class="label">Nights:</span><span class="value">${trip.nights || 1}</span></p>
         </div>
 
-        ${trip.hotel ? `
+        ${
+          trip.hotel
+            ? `
           <div class="hotel-info">
             <h3>Hotel Information</h3>
             <p><span class="label">Hotel Name:</span><span class="value">${trip.hotel.name}</span></p>
             <p><span class="label">Location:</span><span class="value">${trip.hotel.location}</span></p>
-            ${trip.hotel.rating ? `<p><span class="label">Rating:</span><span class="value">${trip.hotel.rating}/5 (${trip.hotel.reviews} reviews)</span></p>` : ''}
+            ${trip.hotel.rating ? `<p><span class="label">Rating:</span><span class="value">${trip.hotel.rating}/5 (${trip.hotel.reviews} reviews)</span></p>` : ""}
           </div>
-        ` : ''}
+        `
+            : ""
+        }
 
         <div class="section">
           <h3>Stay Details</h3>
           <p><span class="label">Check-in:</span><span class="value">${checkInDate}</span></p>
           <p><span class="label">Check-out:</span><span class="value">${checkOutDate}</span></p>
-          ${trip.room ? `
+          ${
+            trip.room
+              ? `
             <p><span class="label">Room Type:</span><span class="value">${trip.room.name || trip.room.type}</span></p>
-            <p><span class="label">Room Details:</span><span class="value">${trip.room.details || 'N/A'}</span></p>
-            ${trip.room.pricePerNight ? `<p><span class="label">Price per Night:</span><span class="value">₹${trip.room.pricePerNight.toLocaleString()}</span></p>` : ''}
-          ` : ''}
+            <p><span class="label">Room Details:</span><span class="value">${trip.room.details || "N/A"}</span></p>
+            ${trip.room.pricePerNight ? `<p><span class="label">Price per Night:</span><span class="value">₹${trip.room.pricePerNight.toLocaleString()}</span></p>` : ""}
+          `
+              : ""
+          }
         </div>
 
-        ${trip.guest ? `
+        ${
+          trip.guest
+            ? `
           <div class="section">
             <h3>Guest Information</h3>
             <p><span class="label">Name:</span><span class="value">${trip.guest.firstName} ${trip.guest.lastName}</span></p>
             <p><span class="label">Email:</span><span class="value">${trip.guest.email}</span></p>
             <p><span class="label">Phone:</span><span class="value">${trip.guest.phone}</span></p>
           </div>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${trip.paymentMethod || trip.paymentStatus ? `
+        ${
+          trip.paymentMethod || trip.paymentStatus
+            ? `
           <div class="section">
             <h3>Payment Information</h3>
-            ${trip.paymentMethod ? `<p><span class="label">Payment Method:</span><span class="value">${trip.paymentMethod}</span></p>` : ''}
-            ${trip.paymentStatus ? `<p><span class="label">Payment Status:</span><span class="value">${trip.paymentStatus}</span></p>` : ''}
-            ${trip.cancellation ? `<p><span class="label">Cancellation Policy:</span><span class="value">${trip.cancellation}</span></p>` : ''}
+            ${trip.paymentMethod ? `<p><span class="label">Payment Method:</span><span class="value">${trip.paymentMethod}</span></p>` : ""}
+            ${trip.paymentStatus ? `<p><span class="label">Payment Status:</span><span class="value">${trip.paymentStatus}</span></p>` : ""}
+            ${trip.cancellation ? `<p><span class="label">Cancellation Policy:</span><span class="value">${trip.cancellation}</span></p>` : ""}
           </div>
-        ` : ''}
+        `
+            : ""
+        }
       `;
     }
   };
@@ -453,7 +509,7 @@ export default function MyTrips() {
   const generateDownloadContent = (trip: Trip): string => {
     const bookingDate = formatDate(trip.bookingDate);
 
-    if (trip.bookingType === 'flight') {
+    if (trip.bookingType === "flight") {
       return `FLIGHT BOOKING CONFIRMATION
 faredown.com
 
@@ -462,31 +518,43 @@ BOOKING DETAILS
 ========================================
 Booking Reference: ${trip.id}
 Booking Date: ${bookingDate}
-Total Amount: ₹${trip.total?.toLocaleString() || 'N/A'}
+Total Amount: ₹${trip.total?.toLocaleString() || "N/A"}
 Number of Passengers: ${trip.passengers?.length || 1}
 
 ========================================
 FLIGHT INFORMATION
 ========================================
-${trip.flights?.map((flight: any, index: number) => `
+${
+  trip.flights
+    ?.map(
+      (flight: any, index: number) => `
 Flight ${index + 1}:
   Route: ${flight.from} → ${flight.to}
   Airline: ${flight.airline} ${flight.flightNumber}
   Date: ${flight.date}
   Time: ${flight.time}
-  ${flight.departure ? `Departure: ${flight.departure}` : ''}
-  ${flight.arrival ? `Arrival: ${flight.arrival}` : ''}
-`).join('\n') || 'Flight details not available'}
+  ${flight.departure ? `Departure: ${flight.departure}` : ""}
+  ${flight.arrival ? `Arrival: ${flight.arrival}` : ""}
+`,
+    )
+    .join("\n") || "Flight details not available"
+}
 
 ========================================
 PASSENGER INFORMATION
 ========================================
-${trip.passengers?.map((passenger: any, index: number) => `
+${
+  trip.passengers
+    ?.map(
+      (passenger: any, index: number) => `
 Passenger ${index + 1}:
   Name: ${passenger.firstName} ${passenger.lastName}
-  Type: ${passenger.type || 'Adult'}
-  ${passenger.email ? `Email: ${passenger.email}` : ''}
-`).join('\n') || 'Passenger details not available'}
+  Type: ${passenger.type || "Adult"}
+  ${passenger.email ? `Email: ${passenger.email}` : ""}
+`,
+    )
+    .join("\n") || "Passenger details not available"
+}
 
 ========================================
 IMPORTANT INFORMATION
@@ -502,8 +570,8 @@ Website: https://faredown.com
 Thank you for choosing Faredown!
 `;
     } else {
-      const checkInDate = trip.checkIn ? formatDate(trip.checkIn) : 'N/A';
-      const checkOutDate = trip.checkOut ? formatDate(trip.checkOut) : 'N/A';
+      const checkInDate = trip.checkIn ? formatDate(trip.checkIn) : "N/A";
+      const checkOutDate = trip.checkOut ? formatDate(trip.checkOut) : "N/A";
 
       return `HOTEL BOOKING CONFIRMATION
 faredown.com
@@ -513,39 +581,51 @@ BOOKING DETAILS
 ========================================
 Booking Reference: ${trip.id}
 Booking Date: ${bookingDate}
-Total Amount: ₹${trip.total?.toLocaleString() || 'N/A'}
+Total Amount: ₹${trip.total?.toLocaleString() || "N/A"}
 Number of Guests: ${trip.guests || 1}
 Number of Nights: ${trip.nights || 1}
 
 ========================================
 HOTEL INFORMATION
 ========================================
-${trip.hotel ? `Hotel Name: ${trip.hotel.name}
+${
+  trip.hotel
+    ? `Hotel Name: ${trip.hotel.name}
 Location: ${trip.hotel.location}
-${trip.hotel.rating ? `Rating: ${trip.hotel.rating}/5 (${trip.hotel.reviews} reviews)` : ''}` : 'Hotel details not available'}
+${trip.hotel.rating ? `Rating: ${trip.hotel.rating}/5 (${trip.hotel.reviews} reviews)` : ""}`
+    : "Hotel details not available"
+}
 
 ========================================
 STAY DETAILS
 ========================================
 Check-in Date: ${checkInDate}
 Check-out Date: ${checkOutDate}
-${trip.room ? `Room Type: ${trip.room.name || trip.room.type}
-Room Details: ${trip.room.details || 'N/A'}
-${trip.room.pricePerNight ? `Price per Night: ₹${trip.room.pricePerNight.toLocaleString()}` : ''}` : 'Room details not available'}
+${
+  trip.room
+    ? `Room Type: ${trip.room.name || trip.room.type}
+Room Details: ${trip.room.details || "N/A"}
+${trip.room.pricePerNight ? `Price per Night: ₹${trip.room.pricePerNight.toLocaleString()}` : ""}`
+    : "Room details not available"
+}
 
 ========================================
 GUEST INFORMATION
 ========================================
-${trip.guest ? `Name: ${trip.guest.firstName} ${trip.guest.lastName}
+${
+  trip.guest
+    ? `Name: ${trip.guest.firstName} ${trip.guest.lastName}
 Email: ${trip.guest.email}
-Phone: ${trip.guest.phone}` : 'Guest details not available'}
+Phone: ${trip.guest.phone}`
+    : "Guest details not available"
+}
 
 ========================================
 PAYMENT INFORMATION
 ========================================
-${trip.paymentMethod ? `Payment Method: ${trip.paymentMethod}` : ''}
-${trip.paymentStatus ? `Payment Status: ${trip.paymentStatus}` : ''}
-${trip.cancellation ? `Cancellation Policy: ${trip.cancellation}` : ''}
+${trip.paymentMethod ? `Payment Method: ${trip.paymentMethod}` : ""}
+${trip.paymentStatus ? `Payment Status: ${trip.paymentStatus}` : ""}
+${trip.cancellation ? `Cancellation Policy: ${trip.cancellation}` : ""}
 
 ========================================
 IMPORTANT INFORMATION

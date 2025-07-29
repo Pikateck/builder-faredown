@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import { format, addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameDay, isSameMonth, isToday, isBefore } from "date-fns";
+import {
+  format,
+  addDays,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  isSameDay,
+  isSameMonth,
+  isToday,
+  isBefore,
+} from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -10,10 +21,17 @@ interface SimpleCalendarProps {
   initialCheckOut?: Date;
 }
 
-export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialCheckOut }: SimpleCalendarProps) {
+export function SimpleCalendar({
+  onDateSelect,
+  onClose,
+  initialCheckIn,
+  initialCheckOut,
+}: SimpleCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [checkIn, setCheckIn] = useState<Date | null>(initialCheckIn || null);
-  const [checkOut, setCheckOut] = useState<Date | null>(initialCheckOut || null);
+  const [checkOut, setCheckOut] = useState<Date | null>(
+    initialCheckOut || null,
+  );
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(monthStart);
@@ -65,13 +83,19 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
   const renderHeader = () => {
     return (
       <div className="flex items-center justify-between p-3 sm:p-4 border-b">
-        <button onClick={prevMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 rounded touch-manipulation">
+        <button
+          onClick={prevMonth}
+          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded touch-manipulation"
+        >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <h2 className="text-base sm:text-lg font-semibold text-center">
           {format(currentMonth, "MMMM yyyy")}
         </h2>
-        <button onClick={nextMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 rounded touch-manipulation">
+        <button
+          onClick={nextMonth}
+          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded touch-manipulation"
+        >
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>
@@ -86,9 +110,12 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
 
     for (let i = 0; i < 7; i++) {
       days.push(
-        <div className="text-center text-xs sm:text-sm font-medium text-gray-500 py-2 sm:py-3" key={i}>
+        <div
+          className="text-center text-xs sm:text-sm font-medium text-gray-500 py-2 sm:py-3"
+          key={i}
+        >
           {format(addDays(startDate, i), dateFormat)}
-        </div>
+        </div>,
       );
     }
 
@@ -107,10 +134,12 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
         const cloneDay = day;
         const isCurrentMonth = isSameMonth(day, monthStart);
         const isDayToday = isToday(day);
-        const isPastDate = isBefore(day, new Date()) && !isSameDay(day, new Date());
+        const isPastDate =
+          isBefore(day, new Date()) && !isSameDay(day, new Date());
         const isCheckInDate = checkIn && isSameDay(day, checkIn);
         const isCheckOutDate = checkOut && isSameDay(day, checkOut);
-        const isInRange = checkIn && checkOut && day >= checkIn && day <= checkOut;
+        const isInRange =
+          checkIn && checkOut && day >= checkIn && day <= checkOut;
 
         days.push(
           <button
@@ -131,14 +160,14 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
             type="button"
           >
             <span>{formattedDate}</span>
-          </button>
+          </button>,
         );
         day = addDays(day, 1);
       }
       rows.push(
         <div className="grid grid-cols-7" key={day.toString()}>
           {days}
-        </div>
+        </div>,
       );
       days = [];
     }
@@ -156,24 +185,36 @@ export function SimpleCalendar({ onDateSelect, onClose, initialCheckIn, initialC
           {checkIn && (
             <div className="mb-1">
               <span className="font-medium">Check-in: </span>
-              <span className="text-blue-600">{format(checkIn, "MMM d, yyyy")}</span>
+              <span className="text-blue-600">
+                {format(checkIn, "MMM d, yyyy")}
+              </span>
             </div>
           )}
           {checkOut && (
             <div className="mb-1">
               <span className="font-medium">Check-out: </span>
-              <span className="text-blue-600">{format(checkOut, "MMM d, yyyy")}</span>
+              <span className="text-blue-600">
+                {format(checkOut, "MMM d, yyyy")}
+              </span>
             </div>
           )}
           {checkIn && checkOut && (
             <div className="text-blue-600 font-semibold">
-              {Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24))} night(s)
+              {Math.ceil(
+                (checkOut.getTime() - checkIn.getTime()) /
+                  (1000 * 60 * 60 * 24),
+              )}{" "}
+              night(s)
             </div>
           )}
         </div>
 
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-          <Button variant="outline" onClick={onClose} className="flex-1 text-sm sm:text-base">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="flex-1 text-sm sm:text-base"
+          >
             Cancel
           </Button>
           <Button

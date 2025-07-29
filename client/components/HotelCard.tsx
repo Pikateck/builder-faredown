@@ -468,7 +468,11 @@ export function HotelCard({
             {hotel.features && hotel.features.length > 0 && (
               <div className="flex flex-wrap gap-1 mb-3">
                 {hotel.features.slice(0, 3).map((feature) => (
-                  <Badge key={feature} variant="secondary" className="text-xs px-2 py-1">
+                  <Badge
+                    key={feature}
+                    variant="secondary"
+                    className="text-xs px-2 py-1"
+                  >
                     {feature}
                   </Badge>
                 ))}
@@ -484,7 +488,8 @@ export function HotelCard({
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="text-xs text-gray-500 mb-1">
-                  {formatPrice(perNightInclusiveTaxes)} per night • {totalNights} nights
+                  {formatPrice(perNightInclusiveTaxes)} per night •{" "}
+                  {totalNights} nights
                 </div>
                 <div className="text-xs text-gray-400">incl. taxes & fees</div>
               </div>

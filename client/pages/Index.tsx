@@ -357,8 +357,6 @@ export default function Index() {
     }
   };
 
-
-
   // City data mapping
   const cityData = {
     Mumbai: {
@@ -492,12 +490,16 @@ export default function Index() {
                               setCurrency(currency);
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors ${
-                              selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600 border border-blue-200" : "text-gray-700"
+                              selectedCurrency.code === currency.code
+                                ? "bg-blue-50 text-blue-600 border border-blue-200"
+                                : "text-gray-700"
                             }`}
                           >
                             <div className="flex items-center space-x-2">
                               <span className="text-base">{currency.flag}</span>
-                              <span className="font-medium">{currency.name}</span>
+                              <span className="font-medium">
+                                {currency.name}
+                              </span>
                             </div>
                             <span className="font-semibold text-xs">
                               {currency.symbol} {currency.code}
@@ -946,12 +948,19 @@ export default function Index() {
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-sm text-gray-900">Mumbai → Dubai</h3>
-                    <p className="text-xs text-gray-500">Emirates • Non-stop • 3h 30m</p>
+                    <h3 className="font-semibold text-sm text-gray-900">
+                      Mumbai → Dubai
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Emirates • Non-stop • 3h 30m
+                    </p>
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-[#003580]">
-                      {selectedCurrency.symbol}{(15500 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                      {selectedCurrency.symbol}
+                      {(15500 * selectedCurrency.rate).toFixed(
+                        selectedCurrency.decimalPlaces,
+                      )}
                     </div>
                     <div className="text-xs text-gray-500">per person</div>
                   </div>
@@ -960,12 +969,19 @@ export default function Index() {
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-sm text-gray-900">Delhi → Singapore</h3>
-                    <p className="text-xs text-gray-500">Air India • 1 stop • 8h 45m</p>
+                    <h3 className="font-semibold text-sm text-gray-900">
+                      Delhi → Singapore
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Air India • 1 stop • 8h 45m
+                    </p>
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-[#003580]">
-                      {selectedCurrency.symbol}{(22800 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                      {selectedCurrency.symbol}
+                      {(22800 * selectedCurrency.rate).toFixed(
+                        selectedCurrency.decimalPlaces,
+                      )}
                     </div>
                     <div className="text-xs text-gray-500">per person</div>
                   </div>
@@ -974,12 +990,19 @@ export default function Index() {
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-sm text-gray-900">Mumbai → London</h3>
-                    <p className="text-xs text-gray-500">British Airways • Non-stop • 9h 25m</p>
+                    <h3 className="font-semibold text-sm text-gray-900">
+                      Mumbai → London
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      British Airways • Non-stop • 9h 25m
+                    </p>
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-bold text-[#003580]">
-                      {selectedCurrency.symbol}{(45200 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                      {selectedCurrency.symbol}
+                      {(45200 * selectedCurrency.rate).toFixed(
+                        selectedCurrency.decimalPlaces,
+                      )}
                     </div>
                     <div className="text-xs text-gray-500">per person</div>
                   </div>
@@ -1188,7 +1211,9 @@ export default function Index() {
                               setShowCurrencyDropdown(false);
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
-                              selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600" : "text-gray-900"
+                              selectedCurrency.code === currency.code
+                                ? "bg-blue-50 text-blue-600"
+                                : "text-gray-900"
                             }`}
                           >
                             <div className="flex items-center space-x-2">

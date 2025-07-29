@@ -318,7 +318,9 @@ export function MobileClassDropdown({
                 <div className="text-base font-medium text-gray-900">
                   {option.value}
                 </div>
-                <div className="text-sm text-gray-500">{option.description}</div>
+                <div className="text-sm text-gray-500">
+                  {option.description}
+                </div>
               </div>
             </div>
           </button>
@@ -431,7 +433,7 @@ export function MobileTravelers({
             style={{
               WebkitTapHighlightColor: "transparent",
               WebkitUserSelect: "none",
-              userSelect: "none"
+              userSelect: "none",
             }}
           >
             Done

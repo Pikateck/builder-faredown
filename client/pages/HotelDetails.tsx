@@ -444,8 +444,8 @@ export default function HotelDetails() {
           onBookmarkToggle={() => setIsSaved(!isSaved)}
           onShareClick={() => setIsShareModalOpen(true)}
           onBack={() => {
-            console.log('Back button clicked - navigating to hotels');
-            navigate('/hotels');
+            console.log("Back button clicked - navigating to hotels");
+            navigate("/hotels");
           }}
         />
 
@@ -464,7 +464,9 @@ export default function HotelDetails() {
             <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
               <div className="flex items-center space-x-1">
                 <Star className="w-4 h-4 fill-blue-600 text-blue-600" />
-                <span className="font-semibold text-sm text-gray-900">{hotel.rating}</span>
+                <span className="font-semibold text-sm text-gray-900">
+                  {hotel.rating}
+                </span>
                 <span className="text-xs text-gray-600">({hotel.reviews})</span>
               </div>
             </div>
@@ -484,15 +486,21 @@ export default function HotelDetails() {
             <div className="grid grid-cols-3 gap-3 mb-4">
               <div className="bg-gray-50 rounded-lg p-3 text-center">
                 <div className="text-xs text-gray-500 mb-1">Check-in</div>
-                <div className="font-semibold text-sm text-gray-900">{formatDate(hotel.checkIn)}</div>
+                <div className="font-semibold text-sm text-gray-900">
+                  {formatDate(hotel.checkIn)}
+                </div>
               </div>
               <div className="bg-gray-50 rounded-lg p-3 text-center">
                 <div className="text-xs text-gray-500 mb-1">Check-out</div>
-                <div className="font-semibold text-sm text-gray-900">{formatDate(hotel.checkOut)}</div>
+                <div className="font-semibold text-sm text-gray-900">
+                  {formatDate(hotel.checkOut)}
+                </div>
               </div>
               <div className="bg-gray-50 rounded-lg p-3 text-center">
                 <div className="text-xs text-gray-500 mb-1">Nights</div>
-                <div className="font-semibold text-sm text-gray-900">{hotel.totalNights}</div>
+                <div className="font-semibold text-sm text-gray-900">
+                  {hotel.totalNights}
+                </div>
               </div>
             </div>
 
@@ -508,7 +516,9 @@ export default function HotelDetails() {
                   <span className="text-gray-600">Free Parking</span>
                 </div>
               </div>
-              <span className="bg-red-50 text-red-700 text-xs font-medium px-2 py-1 rounded">Hot Deal</span>
+              <span className="bg-red-50 text-red-700 text-xs font-medium px-2 py-1 rounded">
+                Hot Deal
+              </span>
             </div>
           </div>
 
@@ -566,14 +576,24 @@ export default function HotelDetails() {
                         <div className="p-4">
                           <div className="flex justify-between items-start mb-3">
                             <div className="flex-1">
-                              <h3 className="font-semibold text-gray-900 mb-1">{room.name}</h3>
-                              <p className="text-sm text-gray-600">{room.type}</p>
+                              <h3 className="font-semibold text-gray-900 mb-1">
+                                {room.name}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {room.type}
+                              </p>
                             </div>
                             <div className="text-right ml-4">
                               <div className="text-lg font-bold text-gray-900">
-                                ₹{calculateTotalPrice(room.pricePerNight).toLocaleString()}
+                                ₹
+                                {calculateTotalPrice(
+                                  room.pricePerNight,
+                                ).toLocaleString()}
                               </div>
-                              <div className="text-xs text-gray-500">₹{room.pricePerNight.toLocaleString()} per room per night</div>
+                              <div className="text-xs text-gray-500">
+                                ₹{room.pricePerNight.toLocaleString()} per room
+                                per night
+                              </div>
                             </div>
                           </div>
 
@@ -622,9 +642,7 @@ export default function HotelDetails() {
 
             {activeTab === "gallery" && (
               <div className="bg-white rounded-lg p-4">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">
-                  Photos
-                </h2>
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Photos</h2>
 
                 <div className="grid grid-cols-2 gap-3">
                   {[
@@ -677,9 +695,7 @@ export default function HotelDetails() {
                       className="flex items-center space-x-3 py-3 border-b border-gray-100 last:border-b-0"
                     >
                       <amenity.icon className="w-5 h-5 text-gray-400" />
-                      <span className="text-gray-700">
-                        {amenity.name}
-                      </span>
+                      <span className="text-gray-700">{amenity.name}</span>
                       <div className="ml-auto">
                         <CheckCircle className="w-4 h-4 text-green-600" />
                       </div>
@@ -691,10 +707,16 @@ export default function HotelDetails() {
 
             {activeTab === "reviews" && (
               <div className="bg-white rounded-lg p-4">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Guest Reviews</h2>
+                <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  Guest Reviews
+                </h2>
                 <div className="bg-gray-50 rounded-lg p-4 text-center mb-4">
-                  <div className="text-2xl font-bold text-gray-900">{hotel.rating}</div>
-                  <div className="text-sm text-gray-600">Based on {hotel.reviews} reviews</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {hotel.rating}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Based on {hotel.reviews} reviews
+                  </div>
                   <div className="flex justify-center mt-2">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -716,25 +738,35 @@ export default function HotelDetails() {
                       name: "Sarah M.",
                       date: "2 days ago",
                       rating: 5,
-                      comment: "Excellent service and beautiful rooms. The staff was incredibly helpful!"
+                      comment:
+                        "Excellent service and beautiful rooms. The staff was incredibly helpful!",
                     },
                     {
                       name: "John D.",
                       date: "1 week ago",
                       rating: 4,
-                      comment: "Great location and amenities. Pool area was fantastic."
+                      comment:
+                        "Great location and amenities. Pool area was fantastic.",
                     },
                     {
                       name: "Emily R.",
                       date: "2 weeks ago",
                       rating: 5,
-                      comment: "Perfect for business travel. Clean, modern, and professional."
-                    }
+                      comment:
+                        "Perfect for business travel. Clean, modern, and professional.",
+                    },
                   ].map((review, idx) => (
-                    <div key={idx} className="border-b border-gray-100 pb-3 last:border-b-0">
+                    <div
+                      key={idx}
+                      className="border-b border-gray-100 pb-3 last:border-b-0"
+                    >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-sm text-gray-900">{review.name}</span>
-                        <span className="text-xs text-gray-500">{review.date}</span>
+                        <span className="font-medium text-sm text-gray-900">
+                          {review.name}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          {review.date}
+                        </span>
                       </div>
                       <div className="flex items-center mb-2">
                         {[...Array(5)].map((_, i) => (
@@ -757,12 +789,18 @@ export default function HotelDetails() {
 
             {activeTab === "location" && (
               <div className="bg-white rounded-lg p-4">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Location</h2>
+                <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  Location
+                </h2>
                 <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center mb-4">
                   <div className="text-center">
                     <MapPin className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <span className="text-gray-600 font-medium">Interactive map</span>
-                    <div className="text-xs text-gray-500 mt-1">Tap to open full map</div>
+                    <span className="text-gray-600 font-medium">
+                      Interactive map
+                    </span>
+                    <div className="text-xs text-gray-500 mt-1">
+                      Tap to open full map
+                    </div>
                   </div>
                 </div>
 
@@ -778,19 +816,46 @@ export default function HotelDetails() {
 
                 {/* Nearby attractions */}
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Nearby Attractions</h3>
+                  <h3 className="font-semibold text-gray-900 mb-3">
+                    Nearby Attractions
+                  </h3>
                   <div className="space-y-3">
                     {[
-                      { name: "Burj Khalifa", distance: "2.5 km", time: "5 min drive" },
-                      { name: "Dubai Mall", distance: "1.8 km", time: "3 min drive" },
-                      { name: "Dubai Fountain", distance: "2.0 km", time: "4 min drive" },
-                      { name: "Dubai International Airport", distance: "12 km", time: "15 min drive" }
+                      {
+                        name: "Burj Khalifa",
+                        distance: "2.5 km",
+                        time: "5 min drive",
+                      },
+                      {
+                        name: "Dubai Mall",
+                        distance: "1.8 km",
+                        time: "3 min drive",
+                      },
+                      {
+                        name: "Dubai Fountain",
+                        distance: "2.0 km",
+                        time: "4 min drive",
+                      },
+                      {
+                        name: "Dubai International Airport",
+                        distance: "12 km",
+                        time: "15 min drive",
+                      },
                     ].map((place, idx) => (
-                      <div key={idx} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
-                        <span className="text-sm font-medium text-gray-900">{place.name}</span>
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+                      >
+                        <span className="text-sm font-medium text-gray-900">
+                          {place.name}
+                        </span>
                         <div className="text-right">
-                          <div className="text-xs text-gray-600">{place.distance}</div>
-                          <div className="text-xs text-gray-500">{place.time}</div>
+                          <div className="text-xs text-gray-600">
+                            {place.distance}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {place.time}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -994,7 +1059,6 @@ export default function HotelDetails() {
                   {/* Simplified Hotel Info Section for Desktop */}
                   <div className="p-4 hidden md:block">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
                       {/* Price Summary Box */}
                       <div className="lg:col-span-1">
                         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
@@ -2317,8 +2381,18 @@ export default function HotelDetails() {
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-sm">
                       {[
-                        "English", "Arabic", "German", "French", "Spanish", "Hindi",
-                        "Indonesian", "Italian", "Japanese", "Korean", "Russian", "Chinese"
+                        "English",
+                        "Arabic",
+                        "German",
+                        "French",
+                        "Spanish",
+                        "Hindi",
+                        "Indonesian",
+                        "Italian",
+                        "Japanese",
+                        "Korean",
+                        "Russian",
+                        "Chinese",
                       ].map((language, idx) => (
                         <div
                           key={idx}
@@ -2930,14 +3004,20 @@ export default function HotelDetails() {
                     {selectedRoomType.name}
                   </div>
                   <div className="text-xs text-gray-600">
-                    ₹{selectedRoomType.pricePerNight.toLocaleString()} per room per night
+                    ₹{selectedRoomType.pricePerNight.toLocaleString()} per room
+                    per night
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-bold text-gray-900">
-                    ₹{calculateTotalPrice(selectedRoomType.pricePerNight).toLocaleString()}
+                    ₹
+                    {calculateTotalPrice(
+                      selectedRoomType.pricePerNight,
+                    ).toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-600 font-medium">Total Price (All Inclusive)</div>
+                  <div className="text-xs text-gray-600 font-medium">
+                    Total Price (All Inclusive)
+                  </div>
                 </div>
               </div>
             </div>
@@ -2976,8 +3056,12 @@ export default function HotelDetails() {
                 <div className="text-lg font-bold text-gray-900">
                   ₹{calculateTotalPrice(lowestPrice).toLocaleString()}
                 </div>
-                <div className="text-xs text-gray-600 font-medium">Total Price (All Inclusive)</div>
-                <div className="text-xs text-gray-500">₹{lowestPrice.toLocaleString()} per room per night</div>
+                <div className="text-xs text-gray-600 font-medium">
+                  Total Price (All Inclusive)
+                </div>
+                <div className="text-xs text-gray-500">
+                  ₹{lowestPrice.toLocaleString()} per room per night
+                </div>
               </div>
               <div>
                 <Button

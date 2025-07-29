@@ -366,21 +366,32 @@ const SeatMap = ({
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input type="checkbox" className="w-4 h-4 bg-blue-600 mr-2" defaultChecked />
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 bg-blue-600 mr-2"
+                      defaultChecked
+                    />
                     <span>Economy Plus</span>
                   </div>
                   <div className="w-3 h-3 bg-[#009fe3] rounded"></div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input type="checkbox" className="w-4 h-4 bg-blue-600 mr-2" defaultChecked />
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 bg-blue-600 mr-2"
+                      defaultChecked
+                    />
                     <span>Economy</span>
                   </div>
                   <div className="w-3 h-3 bg-white border border-gray-300 rounded"></div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <input type="checkbox" className="w-4 h-4 bg-white border border-gray-400 mr-2" />
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 bg-white border border-gray-400 mr-2"
+                    />
                     <span>Unavailable</span>
                   </div>
                   <div className="w-3 h-3 bg-gray-300 rounded"></div>
@@ -2549,8 +2560,8 @@ export default function BookingFlow() {
                     </h3>
                     <div className="space-y-2 text-sm text-gray-700">
                       <p>
-                        ��� Select a traveller first, then click on any available
-                        seat
+                        ��� Select a traveller first, then click on any
+                        available seat
                       </p>
                       <p>
                         • Seat prices vary by location - hover to see pricing
@@ -3844,7 +3855,9 @@ export default function BookingFlow() {
                 <div>
                   <label className="block text-sm font-medium text-[#666] mb-1">
                     Date of Birth
-                    <span className="text-xs text-gray-500 ml-2">(Format: DD-MMM-YYYY, e.g., 04-May-1978)</span>
+                    <span className="text-xs text-gray-500 ml-2">
+                      (Format: DD-MMM-YYYY, e.g., 04-May-1978)
+                    </span>
                   </label>
                   <Input
                     type="date"

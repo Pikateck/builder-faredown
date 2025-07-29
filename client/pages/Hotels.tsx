@@ -67,7 +67,7 @@ export default function Hotels() {
   const [travelers, setTravelers] = useState({
     adults: 1,
     children: 0,
-    childAges: [] as number[]
+    childAges: [] as number[],
   });
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userName] = useState("Zubin Aibara");
@@ -166,7 +166,9 @@ export default function Hotels() {
                             setCurrency(currency);
                           }}
                           className={`w-full text-left px-2 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
-                            selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600 border border-blue-200" : "text-gray-900"
+                            selectedCurrency.code === currency.code
+                              ? "bg-blue-50 text-blue-600 border border-blue-200"
+                              : "text-gray-900"
                           }`}
                         >
                           <div className="flex items-center space-x-2">
@@ -195,7 +197,10 @@ export default function Hotels() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/account?tab=settings" className="flex items-center">
+                    <Link
+                      to="/account?tab=settings"
+                      className="flex items-center"
+                    >
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
                     </Link>
@@ -220,13 +225,8 @@ export default function Hotels() {
         </div>
 
         {/* Mobile Search Section */}
-        <div
-          className="pb-8 pt-4"
-          style={{ backgroundColor: "#003580" }}
-        >
+        <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
           <div className="px-4">
-
-
             {/* Upgrade Message */}
             <div className="bg-white rounded-xl p-4 mb-6 shadow-lg">
               <div className="flex items-start space-x-3">
@@ -312,7 +312,9 @@ export default function Hotels() {
                   onClick={() => setShowMobileCalendar(!showMobileCalendar)}
                   className="w-full text-left"
                 >
-                  <div className="text-xs text-gray-500 mb-1">Check-in / Check-out</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    Check-in / Check-out
+                  </div>
                   <div className="flex items-center space-x-2">
                     <CalendarIcon className="w-5 h-5 text-[#003580]" />
                     <div>
@@ -333,7 +335,10 @@ export default function Hotels() {
                     <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg max-h-[90vh] overflow-auto">
                       <SimpleCalendar
                         onDateSelect={(checkIn, checkOut) => {
-                          console.log("Mobile hotel dates selected:", { checkIn, checkOut });
+                          console.log("Mobile hotel dates selected:", {
+                            checkIn,
+                            checkOut,
+                          });
                           setDepartureDate(checkIn);
                           setReturnDate(checkOut);
                           setShowMobileCalendar(false); // Close calendar after selection
@@ -375,7 +380,9 @@ export default function Hotels() {
                     <div className="bg-white rounded-lg w-full max-w-sm sm:max-w-md max-h-[90vh] overflow-auto p-4 sm:p-6">
                       <div className="space-y-4 sm:space-y-6">
                         <div className="flex items-center justify-between">
-                          <h3 className="text-base sm:text-lg font-semibold">Select guests</h3>
+                          <h3 className="text-base sm:text-lg font-semibold">
+                            Select guests
+                          </h3>
                           <button
                             onClick={() => setShowTravelers(false)}
                             className="p-2 hover:bg-gray-100 rounded-full touch-manipulation"
@@ -387,8 +394,12 @@ export default function Hotels() {
                         <div className="space-y-3 sm:space-y-4">
                           <div className="flex items-center justify-between py-2 sm:py-3">
                             <div>
-                              <div className="font-medium text-gray-900 text-sm sm:text-base">Adults</div>
-                              <div className="text-xs sm:text-sm text-gray-500">Age 18+</div>
+                              <div className="font-medium text-gray-900 text-sm sm:text-base">
+                                Adults
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-500">
+                                Age 18+
+                              </div>
                             </div>
                             <div className="flex items-center space-x-3 sm:space-x-4">
                               <button
@@ -422,15 +433,25 @@ export default function Hotels() {
 
                           <div className="flex items-center justify-between py-2 sm:py-3">
                             <div>
-                              <div className="font-medium text-gray-900 text-sm sm:text-base">Children</div>
-                              <div className="text-xs sm:text-sm text-gray-500">Age 0-17</div>
+                              <div className="font-medium text-gray-900 text-sm sm:text-base">
+                                Children
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-500">
+                                Age 0-17
+                              </div>
                             </div>
                             <div className="flex items-center space-x-3 sm:space-x-4">
                               <button
                                 onClick={() =>
                                   setTravelers((prev) => {
-                                    const newChildren = Math.max(0, prev.children - 1);
-                                    const newChildAges = prev.childAges.slice(0, newChildren);
+                                    const newChildren = Math.max(
+                                      0,
+                                      prev.children - 1,
+                                    );
+                                    const newChildAges = prev.childAges.slice(
+                                      0,
+                                      newChildren,
+                                    );
                                     return {
                                       ...prev,
                                       children: newChildren,
@@ -464,29 +485,45 @@ export default function Hotels() {
                           {/* Children Ages */}
                           {travelers.children > 0 && (
                             <div className="space-y-2 sm:space-y-3">
-                              <div className="text-xs sm:text-sm font-medium text-gray-700">Children's Ages</div>
-                              {Array.from({ length: travelers.children }).map((_, index) => (
-                                <div key={index} className="flex items-center justify-between py-1">
-                                  <span className="text-xs sm:text-sm text-gray-600">Child {index + 1}</span>
-                                  <select
-                                    value={travelers.childAges[index] || 5}
-                                    onChange={(e) =>
-                                      setTravelers((prev) => {
-                                        const newChildAges = [...prev.childAges];
-                                        newChildAges[index] = parseInt(e.target.value);
-                                        return { ...prev, childAges: newChildAges };
-                                      })
-                                    }
-                                    className="border border-gray-300 rounded px-2 sm:px-3 py-1 text-xs sm:text-sm min-w-[80px] touch-manipulation"
+                              <div className="text-xs sm:text-sm font-medium text-gray-700">
+                                Children's Ages
+                              </div>
+                              {Array.from({ length: travelers.children }).map(
+                                (_, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex items-center justify-between py-1"
                                   >
-                                    {Array.from({ length: 18 }, (_, i) => (
-                                      <option key={i} value={i}>
-                                        {i} {i === 1 ? "year" : "years"}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              ))}
+                                    <span className="text-xs sm:text-sm text-gray-600">
+                                      Child {index + 1}
+                                    </span>
+                                    <select
+                                      value={travelers.childAges[index] || 5}
+                                      onChange={(e) =>
+                                        setTravelers((prev) => {
+                                          const newChildAges = [
+                                            ...prev.childAges,
+                                          ];
+                                          newChildAges[index] = parseInt(
+                                            e.target.value,
+                                          );
+                                          return {
+                                            ...prev,
+                                            childAges: newChildAges,
+                                          };
+                                        })
+                                      }
+                                      className="border border-gray-300 rounded px-2 sm:px-3 py-1 text-xs sm:text-sm min-w-[80px] touch-manipulation"
+                                    >
+                                      {Array.from({ length: 18 }, (_, i) => (
+                                        <option key={i} value={i}>
+                                          {i} {i === 1 ? "year" : "years"}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                ),
+                              )}
                             </div>
                           )}
                         </div>
@@ -522,12 +559,17 @@ export default function Hotels() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-sm text-gray-900">Luxury Resort Dubai</h3>
+                      <h3 className="font-semibold text-sm text-gray-900">
+                        Luxury Resort Dubai
+                      </h3>
                       <p className="text-xs text-gray-500">5★ • Pool • Spa</p>
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-bold text-[#003580]">
-                        {selectedCurrency.symbol}{(8500 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                        {selectedCurrency.symbol}
+                        {(8500 * selectedCurrency.rate).toFixed(
+                          selectedCurrency.decimalPlaces,
+                        )}
                       </div>
                       <div className="text-xs text-gray-500">per night</div>
                     </div>
@@ -536,12 +578,19 @@ export default function Hotels() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-sm text-gray-900">Business Hotel Mumbai</h3>
-                      <p className="text-xs text-gray-500">4★ • WiFi • Breakfast</p>
+                      <h3 className="font-semibold text-sm text-gray-900">
+                        Business Hotel Mumbai
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        4★ • WiFi • Breakfast
+                      </p>
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-bold text-[#003580]">
-                        {selectedCurrency.symbol}{(3200 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                        {selectedCurrency.symbol}
+                        {(3200 * selectedCurrency.rate).toFixed(
+                          selectedCurrency.decimalPlaces,
+                        )}
                       </div>
                       <div className="text-xs text-gray-500">per night</div>
                     </div>
@@ -550,12 +599,17 @@ export default function Hotels() {
                 <div className="bg-white rounded-xl p-4 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-semibold text-sm text-gray-900">Budget Inn Delhi</h3>
+                      <h3 className="font-semibold text-sm text-gray-900">
+                        Budget Inn Delhi
+                      </h3>
                       <p className="text-xs text-gray-500">3★ • AC • Clean</p>
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-bold text-[#003580]">
-                        {selectedCurrency.symbol}{(1800 * selectedCurrency.rate).toFixed(selectedCurrency.decimalPlaces)}
+                        {selectedCurrency.symbol}
+                        {(1800 * selectedCurrency.rate).toFixed(
+                          selectedCurrency.decimalPlaces,
+                        )}
                       </div>
                       <div className="text-xs text-gray-500">per night</div>
                     </div>
@@ -577,7 +631,9 @@ export default function Hotels() {
                   <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
                     <TrendingUp className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
+                  <h3 className="font-semibold text-sm mb-1">
+                    Live Bargaining
+                  </h3>
                   <p className="text-xs text-gray-600">
                     Negotiate real-time prices
                   </p>
@@ -741,7 +797,9 @@ export default function Hotels() {
                               setShowCurrencyDropdown(false);
                             }}
                             className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
-                              selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600" : "text-gray-900"
+                              selectedCurrency.code === currency.code
+                                ? "bg-blue-50 text-blue-600"
+                                : "text-gray-900"
                             }`}
                           >
                             <div className="flex items-center space-x-2">
@@ -878,7 +936,10 @@ export default function Hotels() {
                     <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Check-in / Check-out
                     </label>
-                    <Popover open={showDesktopCalendar} onOpenChange={setShowDesktopCalendar}>
+                    <Popover
+                      open={showDesktopCalendar}
+                      onOpenChange={setShowDesktopCalendar}
+                    >
                       <PopoverTrigger asChild>
                         <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation">
                           <CalendarIcon className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
@@ -898,7 +959,10 @@ export default function Hotels() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <SimpleCalendar
                           onDateSelect={(checkIn, checkOut) => {
-                            console.log("Desktop hotel dates selected:", { checkIn, checkOut });
+                            console.log("Desktop hotel dates selected:", {
+                              checkIn,
+                              checkOut,
+                            });
                             setDepartureDate(checkIn);
                             setReturnDate(checkOut);
                             setShowDesktopCalendar(false);

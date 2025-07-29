@@ -32,11 +32,13 @@ export function BookingCalendar({
 
     console.log("Initial calendar range:", { startDate, endDate, bookingType });
 
-    return [{
-      startDate,
-      endDate,
-      key: "selection",
-    }];
+    return [
+      {
+        startDate,
+        endDate,
+        key: "selection",
+      },
+    ];
   });
   const [isMobile, setIsMobile] = useState(false);
 
@@ -57,11 +59,13 @@ export function BookingCalendar({
       const startDate = initialRange.startDate || new Date();
       const endDate = initialRange.endDate || addDays(startDate, 3);
 
-      setSelection([{
-        startDate,
-        endDate,
-        key: "selection",
-      }]);
+      setSelection([
+        {
+          startDate,
+          endDate,
+          key: "selection",
+        },
+      ]);
     }
   }, [initialRange]);
 
@@ -70,11 +74,13 @@ export function BookingCalendar({
     const range = ranges.selection;
 
     if (range && range.startDate) {
-      const newSelection = [{
-        startDate: range.startDate,
-        endDate: range.endDate || range.startDate,
-        key: "selection",
-      }];
+      const newSelection = [
+        {
+          startDate: range.startDate,
+          endDate: range.endDate || range.startDate,
+          key: "selection",
+        },
+      ];
 
       console.log("Setting new selection:", newSelection);
       setSelection(newSelection);

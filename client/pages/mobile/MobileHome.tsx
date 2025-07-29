@@ -228,7 +228,11 @@ const MobileHome = () => {
                 { icon: Hotel, label: "Hotels", path: "/hotels" },
                 { icon: Car, label: "Transfers", path: "/transfers" },
                 { icon: User, label: "My Account", path: "/account" },
-                { icon: Settings, label: "Settings", path: "/account?tab=settings" },
+                {
+                  icon: Settings,
+                  label: "Settings",
+                  path: "/account?tab=settings",
+                },
               ].map(({ icon: Icon, label, path }, index) => (
                 <button
                   key={index}

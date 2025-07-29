@@ -64,23 +64,23 @@ export function MobileNavBar({
           navigate(-1);
         } else {
           // Fallback navigation based on current path
-          if (currentPath.includes('/hotels/')) {
-            navigate('/hotels');
-          } else if (currentPath.includes('/flights/')) {
-            navigate('/flights');
+          if (currentPath.includes("/hotels/")) {
+            navigate("/hotels");
+          } else if (currentPath.includes("/flights/")) {
+            navigate("/flights");
           } else {
-            navigate('/');
+            navigate("/");
           }
         }
       } catch (error) {
         // If navigation fails, use fallback
-        console.log('Navigation fallback:', error);
-        if (currentPath.includes('/hotels/')) {
-          navigate('/hotels');
-        } else if (currentPath.includes('/flights/')) {
-          navigate('/flights');
+        console.log("Navigation fallback:", error);
+        if (currentPath.includes("/hotels/")) {
+          navigate("/hotels");
+        } else if (currentPath.includes("/flights/")) {
+          navigate("/flights");
         } else {
-          navigate('/');
+          navigate("/");
         }
       }
     }
@@ -89,10 +89,7 @@ export function MobileNavBar({
   return (
     <div className="md:hidden bg-white">
       {/* Main Header */}
-      <div 
-        className="text-white"
-        style={{ backgroundColor }}
-      >
+      <div className="text-white" style={{ backgroundColor }}>
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center flex-1 min-w-0">
             <Button
@@ -104,9 +101,7 @@ export function MobileNavBar({
               <ChevronLeft className="w-5 h-5" />
             </Button>
             <div className="flex-1 min-w-0">
-              <h1 className="font-semibold text-lg line-clamp-1">
-                {title}
-              </h1>
+              <h1 className="font-semibold text-lg line-clamp-1">{title}</h1>
               {subtitle && (
                 <div className="flex items-center text-blue-200">
                   {rating && (
@@ -114,22 +109,22 @@ export function MobileNavBar({
                       <Star className="w-3 h-3 fill-current mr-1" />
                       <span className="text-xs">{rating}</span>
                       {reviewCount && (
-                        <span className="text-xs ml-1">• {reviewCount} reviews</span>
+                        <span className="text-xs ml-1">
+                          • {reviewCount} reviews
+                        </span>
                       )}
                     </>
                   )}
-                  {!rating && (
-                    <p className="text-xs truncate">{subtitle}</p>
-                  )}
+                  {!rating && <p className="text-xs truncate">{subtitle}</p>}
                 </div>
               )}
             </div>
           </div>
-          
+
           {/* Right Actions */}
           <div className="flex items-center gap-2 flex-shrink-0">
             {rightActions}
-            
+
             {showBookmark && (
               <Button
                 variant="ghost"
@@ -137,10 +132,12 @@ export function MobileNavBar({
                 className="text-white hover:bg-white/20 p-2"
                 onClick={onBookmarkToggle}
               >
-                <Bookmark className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`} />
+                <Bookmark
+                  className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`}
+                />
               </Button>
             )}
-            
+
             {showShare && (
               <Button
                 variant="ghost"
@@ -160,16 +157,20 @@ export function MobileNavBar({
         <div className="bg-white border-b border-gray-200 p-3">
           <div className="flex gap-2 overflow-x-auto">
             {showSearch && (
-              <Button variant="outline" size="sm" className="flex items-center gap-2 whitespace-nowrap min-w-fit">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 whitespace-nowrap min-w-fit"
+              >
                 <Search className="w-4 h-4" />
                 Search
               </Button>
             )}
-            
+
             {showFilter && (
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 className="flex items-center gap-2 whitespace-nowrap min-w-fit"
                 onClick={onFilterClick}
               >
@@ -177,7 +178,7 @@ export function MobileNavBar({
                 Filters
               </Button>
             )}
-            
+
             {showMap && (
               <Button variant="outline" size="sm" className="whitespace-nowrap">
                 <MapPin className="w-4 h-4 mr-1" />

@@ -389,7 +389,9 @@ export default function ReservationPage() {
                     <CheckCircle className="w-5 h-5 mr-2" />
                   )}
                   {currentStep === 3 && <CreditCard className="w-5 h-5 mr-2" />}
-                  {currentStep === 1 ? "Primary Guest Details" : steps.find((s) => s.number === currentStep)?.title}
+                  {currentStep === 1
+                    ? "Primary Guest Details"
+                    : steps.find((s) => s.number === currentStep)?.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -398,7 +400,10 @@ export default function ReservationPage() {
                   <div className="space-y-4">
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
                       <p className="text-sm text-blue-700">
-                        <strong>Primary Guest Information:</strong> Enter details for the main guest who will be checking in. Additional guest details can be provided during check-in at the hotel.
+                        <strong>Primary Guest Information:</strong> Enter
+                        details for the main guest who will be checking in.
+                        Additional guest details can be provided during check-in
+                        at the hotel.
                       </p>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -536,7 +541,12 @@ export default function ReservationPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="specialRequests">Special Requests <span className="text-gray-500 text-sm">(Optional)</span></Label>
+                      <Label htmlFor="specialRequests">
+                        Special Requests{" "}
+                        <span className="text-gray-500 text-sm">
+                          (Optional)
+                        </span>
+                      </Label>
                       <textarea
                         id="specialRequests"
                         className="w-full p-3 border border-gray-300 rounded-md resize-none h-24"
