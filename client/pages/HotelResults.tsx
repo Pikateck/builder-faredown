@@ -588,8 +588,8 @@ export default function HotelResults() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
-        <div className="flex gap-4 sm:gap-6">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+        <div className="flex gap-6">
           {/* Desktop Filters */}
           <div className="hidden lg:block w-80 flex-shrink-0">
             <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
