@@ -433,7 +433,7 @@ export default function HotelDetails() {
       <style>{sliderStyles}</style>
 
       {/* Mobile-First Layout */}
-      <div className="md:hidden min-h-screen bg-white">
+      <div className="md:hidden min-h-screen bg-gray-50">
         <MobileNavBar
           title={hotel.name}
           rating={hotel.rating}
@@ -447,112 +447,78 @@ export default function HotelDetails() {
 
         {/* Mobile Content */}
         <div className="pb-24">
-          {/* Hero Image - Premium Design */}
-          <div className="relative w-full h-72 overflow-hidden">
+          {/* Simple Hero Image */}
+          <div className="relative w-full h-64 overflow-hidden bg-white">
             <img
               src={hotel.image}
               alt={hotel.name}
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
 
-            {/* Premium Rating Badge */}
-            <div className="absolute bottom-6 left-6 bg-gradient-to-r from-amber-400/90 to-orange-500/90 backdrop-blur-md text-white px-4 py-2 rounded-2xl shadow-xl border border-white/20">
-              <div className="flex items-center space-x-2">
-                <Star className="w-4 h-4 fill-current text-yellow-200" />
-                <span className="font-bold text-sm">{hotel.rating}</span>
-                <span className="text-xs opacity-90">•</span>
-                <span className="text-xs font-medium opacity-90">{hotel.reviews} reviews</span>
-              </div>
-            </div>
-
-            {/* Premium Verified Badge */}
-            <div className="absolute top-6 left-6 bg-emerald-500/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border border-white/20">
+            {/* Simple Rating */}
+            <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
               <div className="flex items-center space-x-1">
-                <CheckCircle className="w-3 h-3" />
-                <span>Verified Property</span>
-              </div>
-            </div>
-
-            {/* Luxury Category Badge */}
-            <div className="absolute top-6 right-6 bg-gradient-to-r from-purple-600/90 to-indigo-600/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg border border-white/20">
-              <div className="flex items-center space-x-1">
-                <Star className="w-3 h-3 fill-current" />
-                <span>5-Star Luxury</span>
+                <Star className="w-4 h-4 fill-blue-600 text-blue-600" />
+                <span className="font-semibold text-sm text-gray-900">{hotel.rating}</span>
+                <span className="text-xs text-gray-600">({hotel.reviews})</span>
               </div>
             </div>
           </div>
 
-          {/* Hotel Info - Premium Design */}
-          <div className="p-6 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 border-b border-indigo-100/50">
-            <div className="space-y-4">
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-2">
-                  {hotel.name}
-                </h1>
-                <div className="flex items-center text-gray-600 mb-4">
-                  <div className="w-5 h-5 bg-gradient-to-r from-red-400 to-pink-500 rounded-full flex items-center justify-center mr-2">
-                    <MapPin className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-sm font-medium">{hotel.location}</span>
-                </div>
-              </div>
+          {/* Clean Hotel Info */}
+          <div className="bg-white p-4 border-b border-gray-100">
+            <h1 className="text-xl font-bold text-gray-900 mb-2">
+              {hotel.name}
+            </h1>
+            <div className="flex items-center text-gray-600 mb-4">
+              <MapPin className="w-4 h-4 text-gray-400 mr-2" />
+              <span className="text-sm">{hotel.location}</span>
+            </div>
 
-              {/* Premium Booking Details */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-gradient-to-br from-white to-blue-50 border border-blue-100 rounded-xl p-3 text-center shadow-sm">
-                  <div className="text-xs text-blue-600 font-semibold mb-1">Check-in</div>
-                  <div className="font-bold text-gray-800 text-sm">{formatDate(hotel.checkIn)}</div>
-                </div>
-                <div className="bg-gradient-to-br from-white to-purple-50 border border-purple-100 rounded-xl p-3 text-center shadow-sm">
-                  <div className="text-xs text-purple-600 font-semibold mb-1">Check-out</div>
-                  <div className="font-bold text-gray-800 text-sm">{formatDate(hotel.checkOut)}</div>
-                </div>
-                <div className="bg-gradient-to-br from-white to-emerald-50 border border-emerald-100 rounded-xl p-3 text-center shadow-sm">
-                  <div className="text-xs text-emerald-600 font-semibold mb-1">Nights</div>
-                  <div className="font-bold text-gray-800 text-sm">{hotel.totalNights}</div>
-                </div>
+            {/* Simple Booking Details */}
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="text-xs text-gray-500 mb-1">Check-in</div>
+                <div className="font-semibold text-sm text-gray-900">{formatDate(hotel.checkIn)}</div>
               </div>
+              <div className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="text-xs text-gray-500 mb-1">Check-out</div>
+                <div className="font-semibold text-sm text-gray-900">{formatDate(hotel.checkOut)}</div>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 text-center">
+                <div className="text-xs text-gray-500 mb-1">Nights</div>
+                <div className="font-semibold text-sm text-gray-900">{hotel.totalNights}</div>
+              </div>
+            </div>
 
-              {/* Premium Features Row */}
-              <div className="flex items-center justify-between pt-2">
-                <div className="flex space-x-4">
-                  <div className="flex items-center space-x-2 text-xs">
-                    <div className="w-5 h-5 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <Wifi className="w-3 h-3 text-white" />
-                    </div>
-                    <span className="text-gray-700 font-medium">Free WiFi</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-xs">
-                    <div className="w-5 h-5 bg-green-600 rounded-lg flex items-center justify-center">
-                      <Car className="w-3 h-3 text-white" />
-                    </div>
-                    <span className="text-gray-700 font-medium">Free Parking</span>
-                  </div>
+            {/* Simple Features */}
+            <div className="flex items-center justify-between">
+              <div className="flex space-x-4">
+                <div className="flex items-center space-x-1 text-xs">
+                  <Wifi className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-600">Free WiFi</span>
                 </div>
-                <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 px-3 py-1 rounded-full">
-                  <div className="flex items-center space-x-1">
-                    <Flame className="w-3 h-3 text-red-600" />
-                    <span className="text-red-700 text-xs font-bold">Hot Deal</span>
-                  </div>
+                <div className="flex items-center space-x-1 text-xs">
+                  <Car className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-600">Free Parking</span>
                 </div>
               </div>
+              <span className="bg-red-50 text-red-700 text-xs font-medium px-2 py-1 rounded">Hot Deal</span>
             </div>
           </div>
 
-          {/* Premium Mobile Tabs */}
-          <div className="bg-gradient-to-r from-white via-blue-50/50 to-white border-b border-blue-100 sticky top-0 z-10 backdrop-blur-lg shadow-sm">
-            <div className="flex overflow-x-auto scrollbar-hide px-2">
+          {/* Clean Mobile Tabs */}
+          <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+            <div className="flex overflow-x-auto scrollbar-hide px-4">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-shrink-0 px-4 py-3 mx-1 text-sm font-semibold whitespace-nowrap transition-all duration-300 rounded-lg ${
+                  className={`flex-shrink-0 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 ${
                     activeTab === tab.id
-                      ? "bg-gradient-to-r from-[#003580] to-blue-600 text-white shadow-lg transform scale-105"
-                      : "text-gray-600 hover:text-[#003580] hover:bg-blue-50/50"
+                      ? "border-blue-600 text-blue-600"
+                      : "border-transparent text-gray-500"
                   }`}
                 >
                   {tab.label}
@@ -561,8 +527,8 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Premium Mobile Content Sections */}
-          <div className="p-6 bg-gradient-to-b from-gray-50/50 to-white">
+          {/* Clean Mobile Content Sections */}
+          <div className="p-4 bg-gray-50">
             {activeTab === "overview" && (
               <div className="space-y-6">
                 {/* Premium Room Selection */}
