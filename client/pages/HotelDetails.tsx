@@ -537,7 +537,13 @@ export default function HotelDetails() {
 
                         {/* Select Button */}
                         <Button
-                          onClick={() => setSelectedRoomType(room)}
+                          onClick={() => {
+                            setSelectedRoomType(room);
+                            // Native-like haptic feedback for mobile
+                            if (navigator.vibrate) {
+                              navigator.vibrate(50);
+                            }
+                          }}
                           className={`w-full transition-all duration-200 ${
                             selectedRoomType?.id === room.id
                               ? "bg-[#003580] text-white shadow-lg"
