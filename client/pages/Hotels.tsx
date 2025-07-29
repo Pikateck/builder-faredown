@@ -460,7 +460,7 @@ export default function Hotels() {
 
                         <Button
                           onClick={() => setShowTravelers(false)}
-                          className="w-full bg-[#003580] hover:bg-[#002347] text-white font-medium py-3"
+                          className="w-full bg-[#003580] hover:bg-[#002347] text-white font-medium py-3 sm:py-4 text-sm sm:text-base touch-manipulation"
                         >
                           Done
                         </Button>
