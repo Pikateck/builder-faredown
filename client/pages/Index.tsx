@@ -477,6 +477,36 @@ export default function Index() {
                       <span className="font-medium">My Account</span>
                     </Link>
 
+                    {/* Currency Selection Tab */}
+                    <div className="border-t border-gray-200 my-4"></div>
+                    <div className="px-4 py-2">
+                      <div className="text-xs font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center">
+                        <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
+                        Currency
+                      </div>
+                      <div className="space-y-1 max-h-32 overflow-y-auto">
+                        {currencies.map((currency) => (
+                          <button
+                            key={currency.code}
+                            onClick={() => {
+                              setCurrency(currency);
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors ${
+                              selectedCurrency.code === currency.code ? "bg-blue-50 text-blue-600 border border-blue-200" : "text-gray-700"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <span className="text-base">{currency.flag}</span>
+                              <span className="font-medium">{currency.name}</span>
+                            </div>
+                            <span className="font-semibold text-xs">
+                              {currency.symbol} {currency.code}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     <div className="border-t border-gray-200 my-4"></div>
 
                     <button
@@ -1057,7 +1087,7 @@ export default function Index() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
-                          { code: "en", name: "English", flag: "🇬🇧" },
+                          { code: "en", name: "English", flag: "🇬����" },
                           { code: "es", name: "Español", flag: "🇪🇸" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
