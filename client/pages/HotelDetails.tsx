@@ -419,8 +419,8 @@ export default function HotelDetails() {
     <div className="min-h-screen bg-gray-50">
       <style>{sliderStyles}</style>
 
-      {/* Mobile-First Header */}
-      <div className="md:hidden">
+      {/* Mobile-First Layout */}
+      <div className="md:hidden min-h-screen bg-white">
         <MobileNavBar
           title={hotel.name}
           rating={hotel.rating}
@@ -432,19 +432,160 @@ export default function HotelDetails() {
           onShareClick={() => setIsShareModalOpen(true)}
         />
 
-        {/* Mobile Quick Info Bar */}
-        <div className="bg-white border-b border-gray-200 p-3">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center text-gray-600">
-              <MapPin className="w-4 h-4 mr-1" />
-              <span className="truncate">{hotel.location}</span>
+        {/* Mobile Content */}
+        <div className="pb-24">
+          {/* Hero Image - Full Width Responsive */}
+          <div className="relative w-full">
+            <img
+              src={hotel.image}
+              alt={hotel.name}
+              className="w-full h-64 object-cover"
+              style={{ objectPosition: 'center' }}
+            />
+            <div className="absolute bottom-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-medium">
+              <Star className="w-3 h-3 fill-current inline mr-1" />
+              {hotel.rating} • {hotel.reviews} reviews
             </div>
-            <div className="text-right">
-              <div className="font-semibold text-[#003580]">
-                ₹{lowestPrice}+
+          </div>
+
+          {/* Hotel Info */}
+          <div className="p-4 border-b border-gray-100">
+            <h1 className="text-xl font-bold text-gray-900 mb-2">{hotel.name}</h1>
+            <div className="flex items-center text-gray-600 mb-3">
+              <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+              <span className="text-sm">{hotel.location}</span>
+            </div>
+
+            {/* Dates and Guests */}
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="bg-gray-50 rounded-lg p-2 text-center">
+                <div className="text-gray-500">Check-in</div>
+                <div className="font-semibold">{formatDate(hotel.checkIn)}</div>
               </div>
-              <div className="text-xs text-gray-500">per night</div>
+              <div className="bg-gray-50 rounded-lg p-2 text-center">
+                <div className="text-gray-500">Check-out</div>
+                <div className="font-semibold">{formatDate(hotel.checkOut)}</div>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-2 text-center">
+                <div className="text-gray-500">Nights</div>
+                <div className="font-semibold">{hotel.totalNights}</div>
+              </div>
             </div>
+          </div>
+
+          {/* Mobile Tabs */}
+          <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
+            <div className="flex overflow-x-auto scrollbar-hide px-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? "border-[#003580] text-[#003580]"
+                      : "border-transparent text-gray-500"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Content Sections */}
+          <div className="p-4">
+            {activeTab === "overview" && (
+              <div className="space-y-4">
+                {/* Room Selection */}
+                <div>
+                  <h2 className="text-lg font-bold mb-3">Choose your room</h2>
+                  <div className="space-y-3">
+                    {hotel.roomTypes.map((room) => (
+                      <div
+                        key={room.id}
+                        className={`border rounded-lg p-4 transition-all ${
+                          selectedRoomType?.id === room.id
+                            ? "border-[#003580] bg-blue-50"
+                            : "border-gray-200"
+                        }`}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900">{room.name}</h3>
+                            <p className="text-sm text-gray-600">{room.type}</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-[#003580]">
+                              ₹{room.pricePerNight.toLocaleString()}
+                            </div>
+                            <div className="text-xs text-gray-500">per night</div>
+                          </div>
+                        </div>
+
+                        {/* Room Features */}
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {room.features?.slice(0, 3).map((feature, idx) => (
+                            <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Select Button */}
+                        <Button
+                          onClick={() => setSelectedRoomType(room)}
+                          className={`w-full ${
+                            selectedRoomType?.id === room.id
+                              ? "bg-[#003580] text-white"
+                              : "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                          }`}
+                        >
+                          {selectedRoomType?.id === room.id ? "Selected" : "Select Room"}
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "amenities" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Hotel Amenities</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    "Swimming Pool", "Fitness Center", "Free WiFi", "Restaurant",
+                    "Room Service", "Parking", "Spa", "Business Center"
+                  ].map((amenity, idx) => (
+                    <div key={idx} className="flex items-center space-x-2 p-2 bg-gray-50 rounded">
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">{amenity}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "reviews" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Guest Reviews</h2>
+                <div className="bg-[#003580] text-white rounded-lg p-4 text-center">
+                  <div className="text-3xl font-bold">{hotel.rating}</div>
+                  <div className="text-sm opacity-90">Based on {hotel.reviews} reviews</div>
+                </div>
+                {/* Add review items here */}
+              </div>
+            )}
+
+            {activeTab === "location" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-bold">Location</h2>
+                <div className="bg-gray-100 rounded-lg h-48 flex items-center justify-center">
+                  <span className="text-gray-500">Interactive map will be here</span>
+                </div>
+                <p className="text-sm text-gray-600">{hotel.location}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
