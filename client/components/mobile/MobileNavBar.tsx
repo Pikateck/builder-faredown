@@ -55,14 +55,28 @@ export function MobileNavBar({
     if (onBack) {
       onBack();
     } else {
-      // Check if we can go back in history
-      if (window.history.length > 1 && document.referrer) {
-        navigate(-1);
-      } else {
-        // Fallback navigation based on current path
-        const currentPath = location.pathname;
+      // Always try to go back in history first
+      const currentPath = location.pathname;
+
+      try {
+        // Check if we have a previous page to go back to
+        if (window.history.length > 1) {
+          navigate(-1);
+        } else {
+          // Fallback navigation based on current path
+          if (currentPath.includes('/hotels/')) {
+            navigate('/hotels');
+          } else if (currentPath.includes('/flights/')) {
+            navigate('/flights');
+          } else {
+            navigate('/');
+          }
+        }
+      } catch (error) {
+        // If navigation fails, use fallback
+        console.log('Navigation fallback:', error);
         if (currentPath.includes('/hotels/')) {
-          navigate('/hotels/results');
+          navigate('/hotels');
         } else if (currentPath.includes('/flights/')) {
           navigate('/flights');
         } else {
