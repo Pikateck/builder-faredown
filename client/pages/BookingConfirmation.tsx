@@ -1897,7 +1897,7 @@ export default function BookingConfirmation() {
               <h2 className="text-xl font-bold text-gray-900">Total Amount</h2>
               {booking.bargained && (
                 <p className="text-sm text-gray-600">
-                  Original price: ₹{booking.originalPrice.toLocaleString()}
+                  Original price: ₹{(booking.originalPrice || 0).toLocaleString()}
                 </p>
               )}
             </div>
