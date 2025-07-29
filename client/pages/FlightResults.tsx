@@ -4459,7 +4459,7 @@ export default function FlightResults() {
                 <>
                   {/* Flight Info */}
                   <div className="bg-white rounded-xl p-3 md:p-6 border border-[#003580]/10 shadow-sm">
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center justify-between mb-3 md:mb-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-12 bg-[#003580]/10 rounded-lg flex items-center justify-center">
                           <Plane className="w-6 h-6 text-[#003580]" />
