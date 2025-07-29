@@ -49,6 +49,20 @@ export function BookingCalendar({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Update selection when initialRange changes
+  useEffect(() => {
+    if (initialRange) {
+      const startDate = initialRange.startDate || new Date();
+      const endDate = initialRange.endDate || addDays(startDate, 3);
+
+      setSelection([{
+        startDate,
+        endDate,
+        key: "selection",
+      }]);
+    }
+  }, [initialRange]);
+
   const handleSelect = (ranges: RangeKeyDict) => {
     const range = ranges.selection;
     if (range.startDate) {
