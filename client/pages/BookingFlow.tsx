@@ -3830,6 +3830,7 @@ export default function BookingFlow() {
                 <div>
                   <label className="block text-sm font-medium text-[#666] mb-1">
                     Date of Birth
+                    <span className="text-xs text-gray-500 ml-2">(Format: DD-MMM-YYYY, e.g., 04-May-1978)</span>
                   </label>
                   <Input
                     type="date"
