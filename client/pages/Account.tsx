@@ -717,12 +717,12 @@ Please keep this ticket for your records.
                       <h4 className="text-lg font-semibold text-gray-900">
                         {profile.profileName}
                       </h4>
-                      <p className="text-sm text-gray-600 flex items-center">
+                      <div className="text-sm text-gray-600 flex items-center">
                         <Badge variant="outline" className="mr-2 text-xs">
                           {profile.type || "Adult"}
                         </Badge>
                         {profile.gender}
-                      </p>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
