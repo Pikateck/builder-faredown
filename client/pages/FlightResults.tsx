@@ -1807,7 +1807,7 @@ export default function FlightResults() {
             </div>
 
             <div className="w-full lg:w-auto lg:min-w-[120px]">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-10 font-medium text-sm w-full touch-manipulation">
                 Search
               </Button>
             </div>
@@ -3381,7 +3381,7 @@ export default function FlightResults() {
                                         Faredown Fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ₹500
+                                        ��500
                                       </span>
                                     </div>
                                   </div>
