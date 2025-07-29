@@ -3718,7 +3718,7 @@ export default function BookingFlow() {
                     setTravellers(updatedTravellers);
                   }}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border-red-300 focus:border-red-500">
                     <SelectValue placeholder="Select title" />
                   </SelectTrigger>
                   <SelectContent>
