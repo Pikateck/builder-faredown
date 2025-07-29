@@ -89,6 +89,7 @@ import {
   ArrowUpDown,
   CheckCircle,
   X,
+  ChevronLeft,
 } from "lucide-react";
 
 export default function HotelDetails() {
