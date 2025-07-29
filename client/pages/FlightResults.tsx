@@ -1630,7 +1630,7 @@ export default function FlightResults() {
                           </div>
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {city} • {data.airport}
+                              {city} ��� {data.airport}
                             </div>
                             <div className="text-xs text-gray-500">
                               {data.fullName}
@@ -4475,13 +4475,12 @@ export default function FlightResults() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-gray-500 mb-1">
-                          (All Inclusive Price)
-                        </p>
-                        <p className="text-3xl font-bold text-[#003580]">
+                        <p className="text-2xl md:text-3xl font-bold text-[#003580] mb-1">
                           {formatPrice(bargainFareType.price)}
                         </p>
-
+                        <p className="text-xs text-gray-500">
+                          (All Inclusive Price)
+                        </p>
                       </div>
                     </div>
                   </div>
