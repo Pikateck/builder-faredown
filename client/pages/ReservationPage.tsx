@@ -389,7 +389,7 @@ export default function ReservationPage() {
                     <CheckCircle className="w-5 h-5 mr-2" />
                   )}
                   {currentStep === 3 && <CreditCard className="w-5 h-5 mr-2" />}
-                  {steps.find((s) => s.number === currentStep)?.title}
+                  {currentStep === 1 ? "Primary Guest Details" : steps.find((s) => s.number === currentStep)?.title}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
