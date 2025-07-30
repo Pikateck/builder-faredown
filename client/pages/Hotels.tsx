@@ -282,43 +282,7 @@ export default function Hotels() {
                   </div>
                 </button>
 
-                {showFromCities && (
-                  <>
-                    {/* Backdrop to close dropdown */}
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setShowFromCities(false)}
-                    />
-                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-3 z-50 mt-1 max-h-60 overflow-y-auto">
-                      <div className="space-y-1">
-                        {Object.entries(cityData).map(([city, data]) => (
-                          <button
-                            key={city}
-                            onClick={() => {
-                              setSelectedFromCity(city);
-                              setShowFromCities(false);
-                            }}
-                            className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <Hotel className="w-4 h-4 text-blue-600" />
-                              </div>
-                              <div>
-                                <div className="text-sm font-medium text-gray-900">
-                                  {city}
-                                </div>
-                                <div className="text-xs text-gray-500">
-                                  {data.fullName}
-                                </div>
-                              </div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                )}
+
               </div>
 
               {/* Check-in / Check-out */}
@@ -772,7 +736,7 @@ export default function Hotels() {
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
-                          { code: "pt", name: "Português", flag: "����🇹" },
+                          { code: "pt", name: "Português", flag: "���🇹" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
