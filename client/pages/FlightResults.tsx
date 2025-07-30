@@ -3873,7 +3873,7 @@ export default function FlightResults() {
                       name="sort"
                       checked={sortBy === "cheapest"}
                       onChange={() => setSortBy("cheapest")}
-                      className="w-3 h-3 text-[#003580]"
+                      className="w-3 h-3 text-[#003580] focus:ring-[#003580] focus:ring-1"
                     />
                     <div className="text-sm">
                       <div className="font-medium text-gray-900">
