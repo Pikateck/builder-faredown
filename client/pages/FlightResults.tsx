@@ -1832,6 +1832,23 @@ export default function FlightResults() {
 
       {/* Main Content Container */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
+        {/* Mobile CSS Override for smaller checkboxes */}
+        <style>
+          {`
+            @media (max-width: 1023px) {
+              input[type="checkbox"], input[type="radio"] {
+                width: 12px !important;
+                height: 12px !important;
+                min-width: 12px !important;
+                min-height: 12px !important;
+              }
+              .filter-container {
+                padding: 2px 0;
+              }
+            }
+          `}
+        </style>
+
         {/* Desktop Sidebar Filters (≥1024px) - Hotel Style Applied */}
         <div className="hidden lg:block w-80 flex-shrink-0">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
@@ -3393,7 +3410,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ��0
+                                        ₹0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
@@ -5278,7 +5295,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return ���{" "}
+                          Return �����{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d, yyyy")
                             : "Select date"}
@@ -5386,7 +5403,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">��3,500 per passenger</p>
+                          <p className="text-red-600">���3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
