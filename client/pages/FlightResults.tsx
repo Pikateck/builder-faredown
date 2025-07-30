@@ -4369,21 +4369,29 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* Search Edit Dropdown - Clean Functional Version */}
+      {/* Search Edit Modal - Fully Functional & Responsive */}
       {showSearchEdit && (
         <>
           {/* Overlay */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={() => setShowSearchEdit(false)}
+            onClick={() => {
+              setShowSearchEdit(false);
+              // Close all dropdowns when overlay is clicked
+              setShowFromCities(false);
+              setShowToCities(false);
+              setShowCalendar(false);
+              setShowTravelers(false);
+              setShowClassDropdown(false);
+            }}
           />
 
-          {/* Modal Container */}
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4">
-            <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          {/* Modal Container - Responsive */}
+          <div className="fixed inset-4 z-50 flex items-center justify-center">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
 
-              {/* Header with Close Button */}
-              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+              {/* Header */}
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 sticky top-0 z-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-gray-900">Edit your search</h3>
                   <button
@@ -4398,13 +4406,16 @@ export default function FlightResults() {
               {/* Form Content */}
               <div className="p-4 space-y-4">
 
-                {/* Trip Type Toggle */}
+                {/* Trip Type Toggle - Fully Functional */}
                 <div className="bg-gray-100 rounded-lg p-1 flex">
                   <button
-                    onClick={() => setTripType("round-trip")}
+                    onClick={() => {
+                      setEditTripType("round-trip");
+                      setTripType("round-trip");
+                    }}
                     className={cn(
-                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                      tripType === "round-trip"
+                      "flex-1 py-2 px-2 rounded-md text-sm font-medium transition-colors",
+                      editTripType === "round-trip"
                         ? "bg-white text-[#003580] shadow-sm"
                         : "text-gray-600 hover:text-gray-800"
                     )}
@@ -4412,27 +4423,45 @@ export default function FlightResults() {
                     Round trip
                   </button>
                   <button
-                    onClick={() => setTripType("one-way")}
+                    onClick={() => {
+                      setEditTripType("one-way");
+                      setTripType("one-way");
+                      setReturnDate(""); // Clear return date for one-way
+                    }}
                     className={cn(
-                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                      tripType === "one-way"
+                      "flex-1 py-2 px-2 rounded-md text-sm font-medium transition-colors",
+                      editTripType === "one-way"
                         ? "bg-white text-[#003580] shadow-sm"
                         : "text-gray-600 hover:text-gray-800"
                     )}
                   >
                     One way
                   </button>
-                  <button className="flex-1 py-2 px-3 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
+                  <button
+                    onClick={() => {
+                      setEditTripType("multi-city");
+                      setTripType("multi-city");
+                    }}
+                    className={cn(
+                      "flex-1 py-2 px-2 rounded-md text-sm font-medium transition-colors",
+                      editTripType === "multi-city"
+                        ? "bg-white text-[#003580] shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
+                    )}
+                  >
                     Multi-city
                   </button>
                 </div>
 
-                {/* From/To Cities Card - Clickable */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                {/* From/To Cities - Responsive */}
+                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
                   <div className="flex items-center space-x-3">
-                    <div className="flex-1">
+                    <div className="flex-1 relative">
                       <button
-                        onClick={() => setShowFromCities(!showFromCities)}
+                        onClick={() => {
+                          setShowFromCities(!showFromCities);
+                          setShowToCities(false);
+                        }}
                         className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
                       >
                         <div className="text-xs text-gray-500 mb-1">From</div>
@@ -4449,18 +4478,24 @@ export default function FlightResults() {
 
                       {/* From Cities Dropdown */}
                       {showFromCities && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
-                          {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata"].map((city) => (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
+                          {[
+                            { code: "BOM", name: "Mumbai", airport: "Chhatrapati Shivaji International" },
+                            { code: "DEL", name: "Delhi", airport: "Indira Gandhi International" },
+                            { code: "BLR", name: "Bangalore", airport: "Kempegowda International" },
+                            { code: "MAA", name: "Chennai", airport: "Chennai International" },
+                            { code: "CCU", name: "Kolkata", airport: "Netaji Subhas Chandra Bose" }
+                          ].map((city) => (
                             <button
-                              key={city}
+                              key={city.code}
                               onClick={() => {
-                                setSelectedFromCity(city);
+                                setSelectedFromCity(city.name);
                                 setShowFromCities(false);
                               }}
                               className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
                             >
-                              <div className="font-medium">{city}</div>
-                              <div className="text-sm text-gray-500">{city} Airport</div>
+                              <div className="font-medium">{city.code} - {city.name}</div>
+                              <div className="text-sm text-gray-500">{city.airport}</div>
                             </button>
                           ))}
                         </div>
@@ -4478,9 +4513,12 @@ export default function FlightResults() {
                       <ArrowRightLeft className="w-4 h-4 text-gray-500" />
                     </button>
 
-                    <div className="flex-1">
+                    <div className="flex-1 relative">
                       <button
-                        onClick={() => setShowToCities(!showToCities)}
+                        onClick={() => {
+                          setShowToCities(!showToCities);
+                          setShowFromCities(false);
+                        }}
                         className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
                       >
                         <div className="text-xs text-gray-500 mb-1">To</div>
@@ -4497,18 +4535,24 @@ export default function FlightResults() {
 
                       {/* To Cities Dropdown */}
                       {showToCities && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
-                          {["Dubai", "London", "New York", "Singapore", "Tokyo"].map((city) => (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
+                          {[
+                            { code: "DXB", name: "Dubai", airport: "Dubai International" },
+                            { code: "LHR", name: "London", airport: "Heathrow Airport" },
+                            { code: "JFK", name: "New York", airport: "John F. Kennedy International" },
+                            { code: "SIN", name: "Singapore", airport: "Changi Airport" },
+                            { code: "NRT", name: "Tokyo", airport: "Narita International" }
+                          ].map((city) => (
                             <button
-                              key={city}
+                              key={city.code}
                               onClick={() => {
-                                setSelectedToCity(city);
+                                setSelectedToCity(city.name);
                                 setShowToCities(false);
                               }}
                               className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
                             >
-                              <div className="font-medium">{city}</div>
-                              <div className="text-sm text-gray-500">{city} Airport</div>
+                              <div className="font-medium">{city.code} - {city.name}</div>
+                              <div className="text-sm text-gray-500">{city.airport}</div>
                             </button>
                           ))}
                         </div>
@@ -4517,74 +4561,62 @@ export default function FlightResults() {
                   </div>
                 </div>
 
-                {/* Dates Card - Clickable */}
+                {/* Dates with Real Calendar */}
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
-                  <button
-                    onClick={() => setShowCalendar(!showCalendar)}
-                    className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
-                  >
-                    <div className="text-xs text-gray-500 mb-1">Dates</div>
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-[#003580]" />
-                      <div>
-                        <div className="font-semibold text-gray-900">
-                          {new Date(departureDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} -
-                          {returnDate ? new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : ' Return'}
+                  <Popover open={showCalendar} onOpenChange={setShowCalendar}>
+                    <PopoverTrigger asChild>
+                      <button className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                        <div className="text-xs text-gray-500 mb-1">Dates</div>
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="w-4 h-4 text-[#003580]" />
+                          <div>
+                            <div className="font-semibold text-gray-900">
+                              {new Date(departureDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                              {editTripType === "round-trip" && returnDate && (
+                                <span> - {new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+                              )}
+                              {editTripType === "one-way" && <span></span>}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {editTripType === "round-trip" ? "Choose departure & return" : "Choose departure"}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-500">Choose departure & return</div>
-                      </div>
-                    </div>
-                  </button>
-
-                  {/* Calendar Dropdown */}
-                  {showCalendar && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
-                      <div className="text-sm text-gray-600 mb-3">Select travel dates</div>
-                      <div className="grid grid-cols-2 gap-2 mb-3">
-                        <button
-                          onClick={() => {
-                            const today = new Date().toISOString().split('T')[0];
-                            setDepartureDate(today);
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <BookingCalendar
+                        initialRange={{
+                          from: new Date(departureDate),
+                          to: editTripType === "round-trip" && returnDate ? new Date(returnDate) : undefined,
+                        }}
+                        onRangeSelect={(range) => {
+                          if (range?.from) {
+                            setDepartureDate(range.from.toISOString().split('T')[0]);
+                          }
+                          if (range?.to && editTripType === "round-trip") {
+                            setReturnDate(range.to.toISOString().split('T')[0]);
+                          }
+                          if (editTripType === "one-way" || (editTripType === "round-trip" && range?.to)) {
                             setShowCalendar(false);
-                          }}
-                          className="p-2 text-left hover:bg-gray-50 rounded border border-gray-200"
-                        >
-                          <div className="text-sm font-medium">Today</div>
-                          <div className="text-xs text-gray-500">
-                            {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => {
-                            const tomorrow = new Date();
-                            tomorrow.setDate(tomorrow.getDate() + 1);
-                            setDepartureDate(tomorrow.toISOString().split('T')[0]);
-                            setShowCalendar(false);
-                          }}
-                          className="p-2 text-left hover:bg-gray-50 rounded border border-gray-200"
-                        >
-                          <div className="text-sm font-medium">Tomorrow</div>
-                          <div className="text-xs text-gray-500">
-                            {new Date(Date.now() + 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                          </div>
-                        </button>
-                      </div>
-                      <Button
-                        onClick={() => setShowCalendar(false)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2"
-                        size="sm"
-                      >
-                        Done
-                      </Button>
-                    </div>
-                  )}
+                          }
+                        }}
+                        selectingDeparture={selectingDeparture}
+                        onSelectingDepartureChange={setSelectingDeparture}
+                        mode={editTripType === "round-trip" ? "range" : "single"}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
-                {/* Travelers & Class Grid - Clickable */}
+                {/* Travelers & Class - Responsive */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
                     <button
-                      onClick={() => setShowTravelers(!showTravelers)}
+                      onClick={() => {
+                        setShowTravelers(!showTravelers);
+                        setShowClassDropdown(false);
+                      }}
                       className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
                     >
                       <div className="text-xs text-gray-500 mb-1">Travelers</div>
@@ -4602,7 +4634,7 @@ export default function FlightResults() {
 
                     {/* Travelers Dropdown */}
                     {showTravelers && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4 min-w-[280px]">
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[300px]">
                         {/* Adults */}
                         <div className="flex items-center justify-between mb-4">
                           <div>
@@ -4613,14 +4645,14 @@ export default function FlightResults() {
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))}
                               disabled={travelers.adults <= 1}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold transition-colors"
                             >
                               -
                             </button>
                             <span className="w-8 text-center font-medium">{travelers.adults}</span>
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, adults: prev.adults + 1 }))}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold transition-colors"
                             >
                               +
                             </button>
@@ -4637,14 +4669,14 @@ export default function FlightResults() {
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))}
                               disabled={travelers.children <= 0}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold transition-colors"
                             >
                               -
                             </button>
                             <span className="w-8 text-center font-medium">{travelers.children}</span>
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, children: prev.children + 1 }))}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold transition-colors"
                             >
                               +
                             </button>
@@ -4653,7 +4685,7 @@ export default function FlightResults() {
 
                         <button
                           onClick={() => setShowTravelers(false)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors"
                         >
                           Done
                         </button>
@@ -4663,7 +4695,10 @@ export default function FlightResults() {
 
                   <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
                     <button
-                      onClick={() => setShowClassDropdown(!showClassDropdown)}
+                      onClick={() => {
+                        setShowClassDropdown(!showClassDropdown);
+                        setShowTravelers(false);
+                      }}
                       className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
                     >
                       <div className="text-xs text-gray-500 mb-1">Class</div>
@@ -4678,7 +4713,7 @@ export default function FlightResults() {
 
                     {/* Class Dropdown */}
                     {showClassDropdown && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-3">
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-3 min-w-[180px]">
                         {["Economy", "Premium Economy", "Business", "First"].map((cabinClass) => (
                           <button
                             key={cabinClass}
@@ -4703,8 +4738,11 @@ export default function FlightResults() {
 
                 {/* Search Button */}
                 <Button
-                  className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-4"
-                  onClick={() => setShowSearchEdit(false)}
+                  className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-6 transition-colors"
+                  onClick={() => {
+                    setShowSearchEdit(false);
+                    // Optionally trigger a new search with updated parameters
+                  }}
                 >
                   <Search className="w-5 h-5 mr-2" />
                   Search Flights
