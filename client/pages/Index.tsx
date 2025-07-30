@@ -692,12 +692,9 @@ export default function Index() {
                     <ArrowRight className="w-4 h-4 text-gray-500" />
                   </button>
 
-                  <div className="flex-1 relative">
+                  <div className="flex-1">
                     <button
-                      onClick={() => {
-                        setShowToCities(!showToCities);
-                        setShowFromCities(false);
-                      }}
+                      onClick={() => setShowToCities(true)}
                       className="w-full text-left"
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
@@ -715,25 +712,6 @@ export default function Index() {
                         </div>
                       </div>
                     </button>
-
-                    {/* To Cities Dropdown */}
-                    {showToCities && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                        {Object.entries(cityData).map(([city, data]) => (
-                          <button
-                            key={city}
-                            onClick={() => {
-                              setSelectedToCity(city);
-                              setShowToCities(false);
-                            }}
-                            className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
-                          >
-                            <div className="font-medium">{data.code} - {city}</div>
-                            <div className="text-sm text-gray-500">{data.airport}</div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
