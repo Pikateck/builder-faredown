@@ -605,6 +605,19 @@ export default function Index() {
 
         {/* Mobile Hero Section */}
         <div className="bg-[#003580] text-white pb-8">
+          {/* Overlay for closing dropdowns */}
+          {(showFromCities || showToCities || showCalendar || showTravelers || showClassDropdown) && (
+            <div
+              className="fixed inset-0 z-10 bg-transparent"
+              onClick={() => {
+                setShowFromCities(false);
+                setShowToCities(false);
+                setShowCalendar(false);
+                setShowTravelers(false);
+                setShowClassDropdown(false);
+              }}
+            />
+          )}
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
@@ -1289,7 +1302,7 @@ export default function Index() {
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
-                          { code: "ar", name: "العربية", flag: "��🇦" },
+                          { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
