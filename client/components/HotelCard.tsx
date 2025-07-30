@@ -706,6 +706,14 @@ export function HotelCard({
               </Button>
 
               <Button
+                variant="outline"
+                className="flex-1 py-3 font-semibold border-gray-300 text-gray-700 hover:bg-gray-50"
+                onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
+              >
+                Reviews
+              </Button>
+
+              <Button
                 onClick={() => onBargainClick(hotel, searchParams)}
                 className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold flex items-center justify-center gap-2"
               >
