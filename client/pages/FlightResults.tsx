@@ -3967,7 +3967,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className="w-3 h-3 text-[#003580]"
+                          className="w-3 h-3 text-[#003580] focus:ring-[#003580] focus:ring-1"
                         />
                         <span className="text-sm text-gray-900">
                           {option.label}
