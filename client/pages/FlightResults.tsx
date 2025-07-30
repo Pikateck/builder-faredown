@@ -4024,11 +4024,11 @@ export default function FlightResults() {
                 </h3>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {availableAircraftTypes.map((aircraftType) => (
-                    <label
+                    <div
                       key={aircraftType}
-                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between py-1"
                     >
-                      <div className="flex items-center space-x-3">
+                      <label className="flex items-center space-x-2 cursor-pointer flex-1">
                         <input
                           type="checkbox"
                           checked={selectedAircraftTypes.has(aircraftType)}
@@ -4038,16 +4038,16 @@ export default function FlightResults() {
                               e.target.checked,
                             )
                           }
-                          className="w-4 h-4 text-[#003580] rounded"
+                          className="w-3 h-3 text-[#003580] rounded"
                         />
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm text-gray-900">
                           {aircraftType}
                         </span>
-                      </div>
-                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                      </label>
+                      <span className="text-xs text-gray-500 ml-2">
                         {aircraftTypeCounts[aircraftType]}
                       </span>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -5369,7 +5369,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">₹3,500 per passenger</p>
+                          <p className="text-red-600">��3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
