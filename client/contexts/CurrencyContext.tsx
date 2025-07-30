@@ -164,8 +164,10 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     try {
       const savedCurrency = localStorage.getItem("preferred_currency");
       if (savedCurrency) {
-        setCurrencies(currentCurrencies => {
-          const currency = currentCurrencies.find((c) => c.code === savedCurrency);
+        setCurrencies((currentCurrencies) => {
+          const currency = currentCurrencies.find(
+            (c) => c.code === savedCurrency,
+          );
           if (currency) {
             setSelectedCurrency(currency);
           }
@@ -222,7 +224,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       const data = await response.json();
 
       if (data.success && data.data) {
-        setCurrencies(currentCurrencies => {
+        setCurrencies((currentCurrencies) => {
           const updatedCurrencies = currentCurrencies.map((currency) => {
             if (currency.code === "INR") return currency; // INR is base currency
 
@@ -234,7 +236,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
           });
 
           // Update selected currency if it was updated
-          setSelectedCurrency(currentSelected => {
+          setSelectedCurrency((currentSelected) => {
             const updatedSelected = updatedCurrencies.find(
               (c) => c.code === currentSelected.code,
             );
@@ -325,22 +327,26 @@ export function useCurrency(): CurrencyContextType {
   const context = useContext(CurrencyContext);
   if (context === undefined) {
     // Provide a more descriptive error message and ensure it's not a timing issue
-    console.error("❌ CurrencyContext is undefined. This usually means either:",
+    console.error(
+      "❌ CurrencyContext is undefined. This usually means either:",
       "\n1. useCurrency hook is called outside of CurrencyProvider",
       "\n2. CurrencyProvider failed to initialize properly",
-      "\n3. There's a circular dependency or timing issue");
+      "\n3. There's a circular dependency or timing issue",
+    );
 
     // Return a fallback context to prevent app crashes
     console.warn("⚠️ Using fallback currency context with INR defaults");
     return {
       selectedCurrency: CURRENCIES[0], // INR
       currencies: CURRENCIES,
-      setCurrency: () => console.warn("Currency change attempted outside provider"),
+      setCurrency: () =>
+        console.warn("Currency change attempted outside provider"),
       convertPrice: (price: number) => price,
       formatPrice: (price: number) => `₹${price.toLocaleString("en-IN")}`,
       isLoading: false,
       lastUpdated: null,
-      refreshRates: async () => console.warn("Rate refresh attempted outside provider")
+      refreshRates: async () =>
+        console.warn("Rate refresh attempted outside provider"),
     };
   }
   return context;
