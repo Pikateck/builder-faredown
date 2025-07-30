@@ -494,14 +494,30 @@ export default function HotelResults() {
                 </div>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-blue-600 font-medium px-3 py-1 h-auto ml-2"
-              onClick={() => setShowSearchEdit(true)}
-            >
-              Edit
-            </Button>
+            <div className="flex items-center gap-2 ml-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 px-3 py-1 h-auto"
+                onClick={() => {
+                  const button = document.querySelector(
+                    "[data-mobile-filter-trigger]",
+                  ) as HTMLButtonElement;
+                  if (button) button.click();
+                }}
+              >
+                <Filter className="w-3 h-3 mr-1" />
+                Filter
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-blue-600 font-medium px-3 py-1 h-auto"
+                onClick={() => setShowSearchEdit(true)}
+              >
+                Edit
+              </Button>
+            </div>
           </div>
         </div>
 
