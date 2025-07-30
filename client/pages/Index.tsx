@@ -717,9 +717,9 @@ export default function Index() {
               </div>
 
               {/* Dates */}
-              <div className="bg-white rounded-xl p-4 shadow-sm relative">
+              <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
-                  onClick={() => setShowCalendar(!showCalendar)}
+                  onClick={() => setShowCalendar(true)}
                   className="w-full text-left"
                 >
                   <div className="text-xs text-gray-500 mb-1">Dates</div>
@@ -747,36 +747,6 @@ export default function Index() {
                     </div>
                   </div>
                 </button>
-
-                {/* Calendar Dropdown */}
-                {showCalendar && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-[99999] bg-black bg-opacity-50"
-                      onClick={() => setShowCalendar(false)}
-                    />
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-[999999] p-4">
-                      <BookingCalendar
-                        initialRange={{
-                          startDate: departureDate ? new Date(departureDate) : new Date(),
-                          endDate: returnDate ? new Date(returnDate) : undefined,
-                        }}
-                        onChange={(range) => {
-                          setDepartureDate(range.startDate);
-                          if (tripType === "round-trip" && range.endDate) {
-                            setReturnDate(range.endDate);
-                          }
-                          if (tripType === "one-way" || (tripType === "round-trip" && range.endDate)) {
-                            setShowCalendar(false);
-                          }
-                        }}
-                        onClose={() => setShowCalendar(false)}
-                        className="w-full"
-                        bookingType="flight"
-                      />
-                    </div>
-                  </>
-                )}
               </div>
 
               {/* Travelers & Class */}
