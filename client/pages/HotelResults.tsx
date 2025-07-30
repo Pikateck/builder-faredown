@@ -758,7 +758,7 @@ export default function HotelResults() {
             <div className="fixed inset-0 z-50 flex items-start">
               <div className="w-full bg-white rounded-b-3xl shadow-2xl max-h-[90vh] overflow-hidden">
                 {/* Modal Header */}
-                <div className="bg-[#003580] text-white p-4 relative">
+                <div className="bg-[#003580] text-white p-4 relative rounded-b-xl">
                   <button
                     onClick={() => setShowSearchEdit(false)}
                     className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
