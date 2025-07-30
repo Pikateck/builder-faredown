@@ -3564,7 +3564,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ₹0
+                                        ��0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
@@ -4471,12 +4471,9 @@ export default function FlightResults() {
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center space-x-3">
                     {/* From Section */}
-                    <div className="flex-1 relative">
+                    <div className="flex-1">
                       <button
-                        onClick={() => {
-                          setShowFromCities(!showFromCities);
-                          setShowToCities(false);
-                        }}
+                        onClick={() => setShowFromCities(true)}
                         className="w-full text-left"
                       >
                         <div className="text-xs text-gray-500 mb-1">From</div>
@@ -4491,31 +4488,6 @@ export default function FlightResults() {
                           </div>
                         </div>
                       </button>
-
-                      {/* From Cities Dropdown */}
-                      {showFromCities && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                          {[
-                            { code: "BOM", name: "Mumbai", airport: "Chhatrapati Shivaji International" },
-                            { code: "DEL", name: "Delhi", airport: "Indira Gandhi International" },
-                            { code: "BLR", name: "Bangalore", airport: "Kempegowda International" },
-                            { code: "MAA", name: "Chennai", airport: "Chennai International" },
-                            { code: "CCU", name: "Kolkata", airport: "Netaji Subhas Chandra Bose" }
-                          ].map((city) => (
-                            <button
-                              key={city.code}
-                              onClick={() => {
-                                setSelectedFromCity(city.name);
-                                setShowFromCities(false);
-                              }}
-                              className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
-                            >
-                              <div className="font-medium">{city.code} - {city.name}</div>
-                              <div className="text-sm text-gray-500">{city.airport}</div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
                     </div>
 
                     {/* Swap Button - 32x32px gray-100 circle */}
