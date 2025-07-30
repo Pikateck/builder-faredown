@@ -71,6 +71,14 @@ export default function HotelResults() {
   const [isLiveData, setIsLiveData] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
+  // Edit modal states
+  const [editDestination, setEditDestination] = useState("Dubai");
+  const [editTravelers, setEditTravelers] = useState({ adults: 2, children: 0 });
+  const [editRooms, setEditRooms] = useState(1);
+  const [showEditDestination, setShowEditDestination] = useState(false);
+  const [showEditDates, setShowEditDates] = useState(false);
+  const [showEditGuests, setShowEditGuests] = useState(false);
+
   // Get search parameters
   const destination = searchParams.get("destination") || "";
   const checkIn = searchParams.get("checkIn") || "";
