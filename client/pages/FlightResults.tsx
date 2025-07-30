@@ -4336,38 +4336,42 @@ export default function FlightResults() {
             </div>
           </DialogHeader>
           <div className="p-4 space-y-3">
-            <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-              <input
-                type="radio"
-                name="mobile-sort"
-                checked={sortBy === "cheapest"}
-                onChange={() => {
-                  setSortBy("cheapest");
-                  setShowSortOptions(false);
-                }}
-                className="text-[#003580]"
-              />
-              <div className="flex-1">
-                <div className="font-medium">Cheapest first</div>
-                <div className="text-sm text-gray-500">Lowest price</div>
-              </div>
-            </label>
-            <label className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
-              <input
-                type="radio"
-                name="mobile-sort"
-                checked={sortBy === "fastest"}
-                onChange={() => {
-                  setSortBy("fastest");
-                  setShowSortOptions(false);
-                }}
-                className="text-[#003580]"
-              />
-              <div className="flex-1">
-                <div className="font-medium">Fastest first</div>
-                <div className="text-sm text-gray-500">Shortest duration</div>
-              </div>
-            </label>
+            <div className="flex items-center py-2">
+              <label className="flex items-center space-x-2 cursor-pointer flex-1">
+                <input
+                  type="radio"
+                  name="mobile-sort"
+                  checked={sortBy === "cheapest"}
+                  onChange={() => {
+                    setSortBy("cheapest");
+                    setShowSortOptions(false);
+                  }}
+                  className="w-3 h-3 text-[#003580]"
+                />
+                <div>
+                  <div className="text-sm font-medium text-gray-900">Cheapest first</div>
+                  <div className="text-xs text-gray-500">Lowest price</div>
+                </div>
+              </label>
+            </div>
+            <div className="flex items-center py-2">
+              <label className="flex items-center space-x-2 cursor-pointer flex-1">
+                <input
+                  type="radio"
+                  name="mobile-sort"
+                  checked={sortBy === "fastest"}
+                  onChange={() => {
+                    setSortBy("fastest");
+                    setShowSortOptions(false);
+                  }}
+                  className="w-3 h-3 text-[#003580]"
+                />
+                <div>
+                  <div className="text-sm font-medium text-gray-900">Fastest first</div>
+                  <div className="text-xs text-gray-500">Shortest duration</div>
+                </div>
+              </label>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -5258,7 +5262,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return •{" "}
+                          Return ���{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d, yyyy")
                             : "Select date"}
