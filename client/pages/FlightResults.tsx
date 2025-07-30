@@ -3860,7 +3860,7 @@ export default function FlightResults() {
             </div>
           </DialogHeader>
           <div className="flex-1 overflow-y-auto">
-            <div className="space-y-4 p-4 pb-0">
+            <div className="space-y-4 p-4 pb-4">
               {/* Sort Options */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-900 mb-2">
