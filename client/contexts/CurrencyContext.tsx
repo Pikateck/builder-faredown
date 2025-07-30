@@ -114,9 +114,13 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     loadUserPreference();
 
     // Try to refresh rates, but don't block the app if it fails
-    refreshRates().catch(() => {
-      console.log("💰 Initial currency rate fetch failed, using static rates");
-    });
+    try {
+      refreshRates().catch((error) => {
+        console.log("💰 Initial currency rate fetch failed, using static rates:", error?.message || 'Unknown error');
+      });
+    } catch (syncError) {
+      console.log("💰 Currency rate refresh setup failed, using static rates:", syncError?.message || 'Unknown error');
+    }
 
     // Update rates every 30 minutes (reduced frequency to prevent spam)
     const interval = setInterval(
