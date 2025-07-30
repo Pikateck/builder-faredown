@@ -322,10 +322,10 @@ export function HotelCard({
               </div>
 
               <div className="flex items-center mb-3">
-                <div className="w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-sm flex items-center justify-center mr-1 shadow-sm">
-                  <Star className="w-2.5 h-2.5 fill-white text-white" />
+                <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full mr-2">
+                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                  <span className="text-xs font-medium text-yellow-700">{hotel.rating}</span>
                 </div>
-                <span className="text-xs font-medium mr-1">{hotel.rating}</span>
                 <span className="text-xs text-gray-500">
                   ({hotel.reviewCount || hotel.reviews || 0} reviews)
                 </span>
