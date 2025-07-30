@@ -338,7 +338,7 @@ export default function HotelResults() {
     {
       id: 3,
       name: "Mountain Lodge",
-      location: `${destination || "Aspen, Colorado"}`,
+      location: "Al Habtoor City, Business Bay, Dubai, United Arab Emirates",
       images: [
         "https://images.unsplash.com/photo-1549294413-26f195200c16?w=600",
         "https://images.unsplash.com/photo-1578645510447-e20b4311e3ce?w=600",
