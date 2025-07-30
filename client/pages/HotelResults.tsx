@@ -503,7 +503,7 @@ export default function HotelResults() {
         {/* Mobile Sort Bar */}
         <div className="bg-white border-b border-gray-200 px-4 py-2">
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full h-9">
+            <SelectTrigger className="w-full h-12 px-4 py-3">
               <SelectValue placeholder="Sort hotels..." />
             </SelectTrigger>
             <SelectContent>
@@ -771,7 +771,7 @@ export default function HotelResults() {
               {/* Sort Dropdown for Mobile/Tablet */}
               <div className="lg:hidden mb-3 sm:mb-4">
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-full h-10 sm:h-12 text-sm sm:text-base touch-manipulation">
+                  <SelectTrigger className="w-full h-12 px-4 py-3 text-sm sm:text-base touch-manipulation">
                     <SelectValue placeholder="Sort by..." />
                   </SelectTrigger>
                   <SelectContent>
