@@ -843,6 +843,55 @@ export default function HotelResults() {
             </div>
           </>
         )}
+
+        {/* Mobile Filter Modal */}
+        {showFilters && (
+          <>
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowFilters(false)}
+            />
+            <div className="fixed inset-0 z-50 flex items-end">
+              <div className="w-full bg-white rounded-t-3xl shadow-2xl h-[85vh] overflow-hidden">
+                {/* Filter Header */}
+                <div className="bg-[#003580] text-white p-4 rounded-t-3xl">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Filter className="w-5 h-5 mr-2" />
+                      <h2 className="text-lg font-bold">Filter Hotels</h2>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-sm font-normal opacity-80">
+                        {filteredAndSortedHotels.length} hotels
+                      </div>
+                      <button
+                        onClick={() => setShowFilters(false)}
+                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filter Content */}
+                <div className="overflow-y-auto flex-1 p-4">
+                  <EnhancedFilters
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
+                    selectedAmenities={selectedAmenities}
+                    setSelectedAmenities={setSelectedAmenities}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    onClearFilters={handleClearFilters}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Desktop Layout */}
