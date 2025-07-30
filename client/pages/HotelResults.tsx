@@ -838,21 +838,32 @@ export default function HotelResults() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="p-6 bg-gray-50 border-t border-gray-200">
+                <div className="p-4 bg-gray-50 border-t border-gray-200">
                   <div className="flex space-x-3">
                     <Button
                       variant="outline"
-                      className="flex-1 py-3 text-base"
+                      className="flex-1 py-3 text-base rounded-xl"
                       onClick={() => setShowSearchEdit(false)}
                     >
                       Cancel
                     </Button>
                     <Button
-                      className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white py-3 text-base rounded-xl"
+                      className="flex-1 bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-3 text-base rounded-xl"
                       onClick={() => {
-                        // Here you would normally trigger a new search
+                        // Create new search params with edited values
+                        const newSearchParams = new URLSearchParams({
+                          destination: cityData[editDestination]?.code || "DXB",
+                          destinationName: editDestination,
+                          checkIn: departureDate ? departureDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                          checkOut: returnDate ? returnDate.toISOString().split('T')[0] : new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                          adults: editTravelers.adults.toString(),
+                          children: editTravelers.children.toString(),
+                          rooms: editRooms.toString(),
+                        });
+
+                        // Navigate to results with new parameters
+                        navigate(`/hotels/results?${newSearchParams.toString()}`);
                         setShowSearchEdit(false);
-                        // For now, just close the modal
                       }}
                     >
                       Search Hotels
