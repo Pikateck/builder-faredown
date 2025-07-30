@@ -168,9 +168,11 @@ export function MobileNavBar({
               <Button
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-2 whitespace-nowrap min-w-fit"
+                className="flex items-center gap-2 whitespace-nowrap min-w-fit border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white"
               >
-                <Search className="w-4 h-4" />
+                <div className="w-5 h-5 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded flex items-center justify-center">
+                  <Search className="w-3 h-3 text-white" />
+                </div>
                 Search
               </Button>
             )}
