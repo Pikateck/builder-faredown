@@ -1879,8 +1879,9 @@ export default function FlightResults() {
             <div className="mt-3 pt-2 border-t border-gray-200">
               <button
                 onClick={resetAllFilters}
-                className="w-full text-blue-600 border border-blue-600 hover:bg-blue-50 text-sm h-8 rounded font-medium"
+                className="w-full text-white bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#0071c2] hover:to-[#003580] text-sm h-8 rounded-lg font-medium shadow-sm transition-all duration-200 flex items-center justify-center"
               >
+                <X className="w-3 h-3 mr-1" />
                 Clear all filters
               </button>
             </div>
