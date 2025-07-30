@@ -547,9 +547,12 @@ export default function HotelResults() {
         </Sheet>
 
         {/* Mobile Sort Bar */}
-        <div className="bg-white border-b border-gray-200 px-4 py-2">
+        <div className="bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
+          <div className="flex items-center mb-2">
+            <span className="text-sm font-medium text-gray-700 mr-2">Sort by:</span>
+          </div>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full h-12 px-4 py-3">
+            <SelectTrigger className="w-full h-12 px-4 py-3 border-gray-200 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
               <SelectValue placeholder="Sort hotels..." />
             </SelectTrigger>
             <SelectContent>
