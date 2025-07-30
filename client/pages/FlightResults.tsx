@@ -2458,7 +2458,7 @@ export default function FlightResults() {
                                   {flight.departureTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.departureCode} •{" "}
+                                  {flight.departureCode} ���{" "}
                                   {departureDate
                                     ? formatDisplayDate(departureDate, "MMM d")
                                     : "Select date"}
@@ -3890,7 +3890,7 @@ export default function FlightResults() {
                       name="sort"
                       checked={sortBy === "fastest"}
                       onChange={() => setSortBy("fastest")}
-                      className="w-3 h-3 text-[#003580]"
+                      className="w-3 h-3 text-[#003580] focus:ring-[#003580] focus:ring-1"
                     />
                     <div className="text-sm">
                       <div className="font-medium text-gray-900">
