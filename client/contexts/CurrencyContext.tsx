@@ -160,6 +160,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+      }).catch((fetchError) => {
+        // Catch any network errors immediately
+        throw new Error(`Network error: ${fetchError.message}`);
       });
 
       clearTimeout(timeoutId);
