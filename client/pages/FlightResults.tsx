@@ -1927,7 +1927,7 @@ export default function FlightResults() {
                           onChange={(e) =>
                             handleAirlineFilter(airline, e.target.checked)
                           }
-                          className={`w-4 h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
                       <span
