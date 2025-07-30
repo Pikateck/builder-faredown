@@ -498,7 +498,9 @@ export function HotelCard({
                 </div>
               </div>
               <div className="flex items-center ml-2">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
+                <div className="w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-sm flex items-center justify-center mr-1 shadow-sm">
+                  <Star className="w-2.5 h-2.5 fill-white text-white" />
+                </div>
                 <span className="text-sm font-medium">{hotel.rating}</span>
               </div>
             </div>
