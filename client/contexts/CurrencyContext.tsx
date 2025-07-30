@@ -329,7 +329,19 @@ export function useCurrency(): CurrencyContextType {
       "\n1. useCurrency hook is called outside of CurrencyProvider",
       "\n2. CurrencyProvider failed to initialize properly",
       "\n3. There's a circular dependency or timing issue");
-    throw new Error("useCurrency must be used within a CurrencyProvider");
+
+    // Return a fallback context to prevent app crashes
+    console.warn("⚠️ Using fallback currency context with INR defaults");
+    return {
+      selectedCurrency: CURRENCIES[0], // INR
+      currencies: CURRENCIES,
+      setCurrency: () => console.warn("Currency change attempted outside provider"),
+      convertPrice: (price: number) => price,
+      formatPrice: (price: number) => `₹${price.toLocaleString("en-IN")}`,
+      isLoading: false,
+      lastUpdated: null,
+      refreshRates: async () => console.warn("Rate refresh attempted outside provider")
+    };
   }
   return context;
 }
