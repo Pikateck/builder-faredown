@@ -256,27 +256,29 @@ export function EnhancedFilters({
 
     if (category.isCollapsible) {
       return (
-        <div key={category.id} className="border-b border-gray-200 pb-0.5">
-          <button
-            onClick={() => toggleSection(category.id)}
-            className="flex w-full items-center justify-between py-0.5 text-left"
-          >
-            <h3 className="text-sm font-semibold text-gray-900">
-              {category.title}
-            </h3>
-            {isExpanded ? (
-              <ChevronUp className="w-4 h-4 text-gray-400" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-gray-400" />
-            )}
-          </button>
+        <div key={category.id} className="space-y-1 mt-4">
+          <div className="border-b border-gray-200 pb-1 flex items-center justify-between">
+            <button
+              onClick={() => toggleSection(category.id)}
+              className="flex w-full items-center justify-between text-left"
+            >
+              <div className="text-sm font-semibold text-gray-900">
+                {category.title}
+              </div>
+              {isExpanded ? (
+                <ChevronUp className="w-4 h-4 text-gray-400" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              )}
+            </button>
+          </div>
           {isExpanded && (
-            <div className="mt-2 space-y-1">
+            <div className="space-y-1">
               {visibleItems.map((item) => renderFilterItem(item, category.id))}
               {hasMore && (
                 <button
                   onClick={() => toggleShowAll(category.id)}
-                  className="text-blue-600 text-xs hover:underline mt-2 py-1"
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium mt-2 py-1"
                 >
                   {showAll ? "Show less" : `Show all ${category.items.length}`}
                 </button>
@@ -288,16 +290,18 @@ export function EnhancedFilters({
     }
 
     return (
-      <div key={category.id} className="border-b border-gray-200 pb-0.5">
-        <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
-          {category.title}
-        </h3>
+      <div key={category.id} className="space-y-1 mt-4">
+        <div className="border-b border-gray-200 pb-1">
+          <div className="text-sm font-semibold text-gray-900">
+            {category.title}
+          </div>
+        </div>
         <div className="space-y-1">
           {visibleItems.map((item) => renderFilterItem(item, category.id))}
           {hasMore && (
             <button
               onClick={() => toggleShowAll(category.id)}
-              className="text-blue-600 text-xs hover:underline mt-2 py-1"
+              className="text-xs text-blue-600 hover:text-blue-800 font-medium mt-2 py-1"
             >
               {showAll ? "Show less" : `Show all ${category.items.length}`}
             </button>
