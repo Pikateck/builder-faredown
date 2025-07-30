@@ -2199,19 +2199,11 @@ export default function FlightResults() {
                           <div className="text-lg font-bold text-gray-900">
                             {formatPrice(flight.fareTypes[0].price)}
                           </div>
-                          <button
-                            onClick={() =>
-                              setExpandedTicketOptions(
-                                expandedTicketOptions ===
-                                  `mobile-tooltip-${flight.id}`
-                                  ? null
-                                  : `mobile-tooltip-${flight.id}`,
-                              )
-                            }
-                            className="text-gray-400 hover:text-gray-600 transition-colors"
-                          >
-                            <Info className="w-3 h-3" />
-                          </button>
+                          <div className="relative group">
+                            <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
+                              <Info className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
                         <div className="text-xs text-gray-500">per person</div>
                         <div
@@ -2223,10 +2215,8 @@ export default function FlightResults() {
                         >
                           {flight.fareTypes[0].refundability}
                         </div>
-                        {/* Mobile Fare Breakdown Tooltip - Classy White Style */}
-                        {expandedTicketOptions ===
-                          `mobile-tooltip-${flight.id}` && (
-                          <div className="absolute right-0 bottom-full mb-2 z-50">
+                        {/* Mobile Fare Breakdown Tooltip - Shows on hover */}
+                        <div className="absolute right-0 bottom-full mb-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                             <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
                               <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
                                 Fare Breakdown
@@ -2276,7 +2266,6 @@ export default function FlightResults() {
                               <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                             </div>
                           </div>
-                        )}
                       </div>
                     </div>
 
