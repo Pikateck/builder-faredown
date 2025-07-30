@@ -685,10 +685,10 @@ export function HotelCard({
                 {formatPrice(totalPriceInclusiveTaxes)}
               </div>
               <div className="text-sm text-gray-600 font-medium mb-2">
-                Total Price • {totalNights} night{totalNights > 1 ? 's' : ''}
+                Total Price • {totalNights} night{totalNights > 1 ? 's' : ''} • All Inclusive taxes
               </div>
               <div className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full inline-block">
-                {formatPrice(perNightInclusiveTaxes)} per night
+                {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)
               </div>
             </div>
 
