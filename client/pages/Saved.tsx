@@ -83,6 +83,7 @@ export default function Saved() {
           </Link>
         </div>
       </div>
+      <MobileNavigation />
     </div>
   );
 }
