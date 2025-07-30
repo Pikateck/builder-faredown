@@ -400,8 +400,9 @@ export function HotelCard({
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-3 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-sm"
+                  className="flex-1 py-3 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-sm flex items-center justify-center gap-2"
                 >
+                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
                 </Button>
               </div>
