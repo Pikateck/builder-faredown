@@ -3393,7 +3393,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ₹0
+                                        ��0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
@@ -4335,9 +4335,14 @@ export default function FlightResults() {
         <DialogContent className="w-full h-auto max-w-none m-0 rounded-t-2xl rounded-b-none md:max-w-lg md:h-auto md:rounded-lg fixed bottom-0 md:relative">
           <DialogHeader className="border-b border-gray-200 pb-4">
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-lg font-semibold">
-                Sort by
-              </DialogTitle>
+              <div className="flex items-center">
+                <div className="w-7 h-7 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center mr-3 shadow-sm">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-white" />
+                </div>
+                <DialogTitle className="text-lg font-semibold">
+                  Sort by
+                </DialogTitle>
+              </div>
               <button
                 onClick={() => setShowSortOptions(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg"
