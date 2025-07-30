@@ -315,7 +315,7 @@ export default function Hotels() {
               {/* Guests */}
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
-                  onClick={() => setShowTravelers(!showTravelers)}
+                  onClick={() => setShowMobileGuests(true)}
                   className="w-full text-left"
                 >
                   <div className="text-xs text-gray-500 mb-1">Guests</div>
