@@ -3813,7 +3813,7 @@ export default function FlightResults() {
           {/* Lucky Message */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 mx-4 md:mx-0 flex items-center space-x-3">
             <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
-              <span className="text-white text-sm">���</span>
+              <span className="text-white text-sm">🍀</span>
             </div>
             <div>
               <p className="font-medium text-[#003580]">
@@ -4321,13 +4321,12 @@ export default function FlightResults() {
             <div className="flex space-x-3">
               <Button
                 variant="outline"
-                className="flex-1 h-10 font-medium border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 text-sm transition-colors"
+                className="flex-1 h-10 font-medium border-gray-300 text-gray-700 text-sm"
                 onClick={() => {
                   resetAllFilters();
                   setShowMobileFilters(false);
                 }}
               >
-                <X className="w-3 h-3 mr-1" />
                 Clear all
               </Button>
               <Button
