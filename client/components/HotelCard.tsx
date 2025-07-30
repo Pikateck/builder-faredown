@@ -584,7 +584,7 @@ export function HotelCard({
       {/* Desktop/Tablet Layout */}
       <div className="hidden sm:flex flex-col sm:flex-row">
         {/* Image Gallery */}
-        <div className="relative sm:w-64 md:w-80 h-48 sm:h-64 md:h-80 flex-shrink-0">
+        <div className="relative sm:w-48 md:w-56 h-32 sm:h-36 md:h-40 flex-shrink-0">
           <img
             src={images[currentImageIndex]}
             alt={hotel.name}
