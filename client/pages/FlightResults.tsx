@@ -35,6 +35,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRightLeft,
+  ArrowRight,
+  MapPin,
   X,
   Shield,
   Users,
