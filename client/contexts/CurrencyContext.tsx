@@ -215,26 +215,29 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       const data = await response.json();
 
       if (data.success && data.data) {
-        const updatedCurrencies = currencies.map((currency) => {
-          if (currency.code === "INR") return currency; // INR is base currency
+        setCurrencies(currentCurrencies => {
+          const updatedCurrencies = currentCurrencies.map((currency) => {
+            if (currency.code === "INR") return currency; // INR is base currency
 
-          const rateData = data.data.find((r: any) => r.to === currency.code);
-          if (rateData) {
-            return { ...currency, rate: rateData.rate };
-          }
-          return currency;
+            const rateData = data.data.find((r: any) => r.to === currency.code);
+            if (rateData) {
+              return { ...currency, rate: rateData.rate };
+            }
+            return currency;
+          });
+
+          // Update selected currency if it was updated
+          setSelectedCurrency(currentSelected => {
+            const updatedSelected = updatedCurrencies.find(
+              (c) => c.code === currentSelected.code,
+            );
+            return updatedSelected || currentSelected;
+          });
+
+          return updatedCurrencies;
         });
 
-        setCurrencies(updatedCurrencies);
         setLastUpdated(data.lastUpdated);
-
-        // Update selected currency if it was updated
-        const updatedSelected = updatedCurrencies.find(
-          (c) => c.code === selectedCurrency.code,
-        );
-        if (updatedSelected) {
-          setSelectedCurrency(updatedSelected);
-        }
 
         console.log(`💱 Exchange rates updated from ${data.source}`);
       } else {
