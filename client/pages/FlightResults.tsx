@@ -1828,26 +1828,15 @@ export default function FlightResults() {
 
       {/* Main Content Container */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
-        {/* Mobile CSS Override for smaller checkboxes */}
+        {/* Mobile CSS Override for appropriately sized checkboxes */}
         <style>
           {`
             @media (max-width: 1023px) {
               input[type="checkbox"], input[type="radio"] {
-                width: 10px !important;
-                height: 10px !important;
-                min-width: 10px !important;
-                min-height: 10px !important;
-                transform: scale(0.8);
-                margin-right: 6px;
-              }
-              .desktop-filter input[type="checkbox"],
-              .desktop-filter input[type="radio"] {
-                width: 10px !important;
-                height: 10px !important;
-                transform: scale(0.8);
-              }
-              .filter-item {
-                padding: 3px 0;
+                width: 14px !important;
+                height: 14px !important;
+                min-width: 14px !important;
+                min-height: 14px !important;
               }
             }
 
@@ -4686,7 +4675,7 @@ export default function FlightResults() {
                             {bargainFlight.airline}
                           </h3>
                           <p className="text-sm text-gray-600">
-                            {bargainFareType.name} •{" "}
+                            {bargainFareType.name} ���{" "}
                             {bargainFlight.flightNumber}
                           </p>
                         </div>
