@@ -5297,6 +5297,7 @@ export default function FlightResults() {
           )}
         </DialogContent>
       </Dialog>
+      <MobileNavigation />
     </div>
   );
 }
