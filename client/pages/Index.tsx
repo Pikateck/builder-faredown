@@ -1058,30 +1058,7 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Mobile Quick Links */}
-        <div className="bg-white py-6">
-          <div className="px-4">
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <div className="space-y-3">
-              <Link
-                to="/hotels"
-                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
-              >
-                <Hotel className="w-5 h-5 text-[#003580]" />
-                <span className="font-medium">Hotels</span>
-                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
-              </Link>
-              <Link
-                to="/account"
-                className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
-              >
-                <User className="w-5 h-5 text-[#003580]" />
-                <span className="font-medium">My Account</span>
-                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
-              </Link>
-            </div>
-          </div>
-        </div>
+
 
         {/* Mobile Bottom Navigation */}
         <div className="bg-white border-t border-gray-200">
@@ -1171,7 +1148,7 @@ export default function Index() {
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
-                          { code: "pt", name: "Português", flag: "🇵🇹" },
+                          { code: "pt", name: "Português", flag: "🇵����" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
