@@ -319,16 +319,16 @@ export function EnhancedFilters({
       </div>
 
       {/* Filter Categories */}
-      <div className="space-y-0">
+      <div className="space-y-4">
         {filterCategories.map(renderFilterCategory)}
       </div>
 
       {/* Clear Filters */}
-      <div className="mt-2 pt-1 border-t border-gray-200">
+      <div className="mt-6 pt-4 border-t border-gray-200">
         <Button
           variant="outline"
           onClick={onClearFilters}
-          className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 text-sm h-8"
+          className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 text-sm h-10 px-4 py-3"
         >
           Clear all filters
         </Button>
