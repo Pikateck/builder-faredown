@@ -277,12 +277,12 @@ export function EnhancedFilters({
         <h3 className="text-sm font-semibold text-gray-900 mb-0.5">
           {category.title}
         </h3>
-        <div className="space-y-0">
+        <div className="space-y-1">
           {visibleItems.map((item) => renderFilterItem(item, category.id))}
           {hasMore && (
             <button
               onClick={() => toggleShowAll(category.id)}
-              className="text-blue-600 text-xs hover:underline mt-1"
+              className="text-blue-600 text-xs hover:underline mt-2 py-1"
             >
               {showAll ? "Show less" : `Show all ${category.items.length}`}
             </button>
