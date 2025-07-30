@@ -4526,45 +4526,22 @@ export default function FlightResults() {
 
                 {/* DATES CARD - Pure white, 12px border-radius, small shadow */}
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                  <Popover open={showCalendar} onOpenChange={setShowCalendar}>
-                    <PopoverTrigger asChild>
-                      <button className="w-full text-left">
-                        <div className="text-xs text-gray-500 mb-1">Dates</div>
-                        <div className="flex items-center space-x-2">
-                          {/* Blue calendar icon - 20x20px */}
-                          <Calendar className="w-5 h-5 text-[#003580]" />
-                          <div>
-                            <div className="font-semibold text-gray-900">
-                              31 Jul - 03 Aug
-                            </div>
-                            <div className="text-xs text-gray-500">Choose departure & return</div>
-                          </div>
+                  <button
+                    onClick={() => setShowCalendar(true)}
+                    className="w-full text-left"
+                  >
+                    <div className="text-xs text-gray-500 mb-1">Dates</div>
+                    <div className="flex items-center space-x-2">
+                      {/* Blue calendar icon - 20x20px */}
+                      <Calendar className="w-5 h-5 text-[#003580]" />
+                      <div>
+                        <div className="font-semibold text-gray-900">
+                          31 Jul - 03 Aug
                         </div>
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <BookingCalendar
-                        initialRange={{
-                          from: new Date(departureDate),
-                          to: editTripType === "round-trip" && returnDate ? new Date(returnDate) : undefined,
-                        }}
-                        onRangeSelect={(range) => {
-                          if (range?.from) {
-                            setDepartureDate(range.from.toISOString().split('T')[0]);
-                          }
-                          if (range?.to && editTripType === "round-trip") {
-                            setReturnDate(range.to.toISOString().split('T')[0]);
-                          }
-                          if (editTripType === "one-way" || (editTripType === "round-trip" && range?.to)) {
-                            setShowCalendar(false);
-                          }
-                        }}
-                        selectingDeparture={selectingDeparture}
-                        onSelectingDepartureChange={setSelectingDeparture}
-                        mode={editTripType === "round-trip" ? "range" : "single"}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                        <div className="text-xs text-gray-500">Choose departure & return</div>
+                      </div>
+                    </div>
+                  </button>
                 </div>
 
                 {/* TRAVELERS & CLASS GRID - 2-column grid with 12px gap */}
