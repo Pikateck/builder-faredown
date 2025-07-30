@@ -1253,6 +1253,39 @@ export default function HotelResults() {
         }
         roomsCount={parseInt(searchParams.get("rooms") || "1")}
       />
+
+      {/* Mobile Dropdown Components for Edit Search */}
+      <MobileCityDropdown
+        isOpen={showEditDestination}
+        onClose={() => setShowEditDestination(false)}
+        title="Edit destination"
+        cities={cityData}
+        selectedCity={editDestination}
+        onSelectCity={setEditDestination}
+      />
+
+      <MobileDatePicker
+        isOpen={showEditDates}
+        onClose={() => setShowEditDates(false)}
+        tripType="round-trip"
+        setTripType={() => {}} // Hotels always use round-trip (check-in/check-out)
+        selectedDepartureDate={departureDate}
+        selectedReturnDate={returnDate}
+        setSelectedDepartureDate={setDepartureDate}
+        setSelectedReturnDate={setReturnDate}
+        selectingDeparture={true}
+        setSelectingDeparture={() => {}}
+      />
+
+      <MobileTravelers
+        isOpen={showEditGuests}
+        onClose={() => setShowEditGuests(false)}
+        travelers={editTravelers}
+        setTravelers={setEditTravelers}
+        showRooms={true}
+        rooms={editRooms}
+        setRooms={setEditRooms}
+      />
     </div>
   );
 }
