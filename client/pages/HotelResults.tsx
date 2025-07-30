@@ -422,6 +422,7 @@ export default function HotelResults() {
         paymentTerms: "Pay at the property",
         cancellationPolicy: "Free cancellation until 2 days before",
       },
+      breakfastIncluded: false,
     },
     {
       id: 3,
@@ -458,6 +459,8 @@ export default function HotelResults() {
         paymentTerms: "Prepayment required",
         cancellationPolicy: "Free cancellation",
       },
+      breakfastIncluded: true,
+      breakfastType: "American Breakfast",
     },
   ];
 
@@ -534,7 +537,7 @@ export default function HotelResults() {
   };
 
   const handleClearFilters = () => {
-    setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
+    setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ��25,000)
     setSelectedRating([]);
     setSelectedAmenities([]);
     setSortBy("recommended");
