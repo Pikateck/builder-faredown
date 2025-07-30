@@ -557,25 +557,14 @@ export default function HotelResults() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 ml-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-blue-600 border-blue-600 hover:bg-blue-50 px-3 py-1 h-auto"
-                onClick={() => setShowFilters(true)}
-              >
-                <Filter className="w-3 h-3 mr-1" />
-                Filter
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-blue-600 font-medium px-3 py-1 h-auto"
-                onClick={() => setShowSearchEdit(true)}
-              >
-                Edit
-              </Button>
-            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-blue-600 font-medium px-3 py-1 h-auto ml-2"
+              onClick={() => setShowSearchEdit(true)}
+            >
+              Edit
+            </Button>
           </div>
         </div>
 
