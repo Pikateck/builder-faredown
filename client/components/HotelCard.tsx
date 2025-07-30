@@ -698,6 +698,29 @@ export function HotelCard({
             ))}
           </div>
 
+          {/* Room Type Information */}
+          {hotel.availableRoom && (
+            <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="font-medium text-gray-900 mb-3">
+                {hotel.availableRoom.type}
+              </div>
+              <div className="grid grid-cols-1 gap-2">
+                <div className="text-sm text-gray-600">
+                  {hotel.availableRoom.bedType}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {hotel.availableRoom.rateType}
+                </div>
+                <div className="text-sm text-green-700 font-medium">
+                  ✓ {hotel.availableRoom.paymentTerms}
+                </div>
+                <div className="text-sm text-green-700 font-medium">
+                  ✓ {hotel.availableRoom.cancellationPolicy}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Pricing and Actions - Desktop Redesigned */}
           <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 mt-4">
             {/* Price Display */}
