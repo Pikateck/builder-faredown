@@ -666,6 +666,143 @@ export default function HotelResults() {
             ))
           )}
         </div>
+
+        {/* Mobile Edit Search Modal */}
+        {showSearchEdit && (
+          <>
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setShowSearchEdit(false)}
+            />
+            <div className="fixed inset-0 z-50 flex items-end">
+              <div className="w-full bg-white rounded-t-3xl shadow-2xl max-h-[90vh] overflow-hidden">
+                {/* Modal Header */}
+                <div className="bg-[#003580] text-white p-4 relative">
+                  <button
+                    onClick={() => setShowSearchEdit(false)}
+                    className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <h2 className="text-xl font-bold">Edit Hotel Search</h2>
+                  <p className="text-blue-100 text-sm mt-1">Modify your search criteria</p>
+                </div>
+
+                {/* Search Form */}
+                <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                  {/* Destination */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Destination
+                    </label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        value={searchParams.get("destinationName") || destination || "Dubai"}
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
+                        placeholder="Where do you want to stay?"
+                        readOnly
+                      />
+                    </div>
+                  </div>
+
+                  {/* Check-in & Check-out Dates */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Check-in
+                      </label>
+                      <div className="relative">
+                        <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          value={departureDate ? formatDisplayDate(departureDate) : checkIn || "Today"}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
+                          placeholder="Check-in"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Check-out
+                      </label>
+                      <div className="relative">
+                        <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          value={returnDate ? formatDisplayDate(returnDate) : checkOut || "Tomorrow"}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
+                          placeholder="Check-out"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Guests & Rooms */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Guests
+                      </label>
+                      <div className="relative">
+                        <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          value={`${adults} adult${parseInt(adults) > 1 ? "s" : ""}${parseInt(children) > 0 ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}` : ""}`}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
+                          placeholder="Guests"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Rooms
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={`${rooms} room${parseInt(rooms) > 1 ? "s" : ""}`}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
+                          placeholder="Rooms"
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="p-6 bg-gray-50 border-t border-gray-200">
+                  <div className="flex space-x-3">
+                    <Button
+                      variant="outline"
+                      className="flex-1 py-3 text-base"
+                      onClick={() => setShowSearchEdit(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white py-3 text-base rounded-xl"
+                      onClick={() => {
+                        // Here you would normally trigger a new search
+                        setShowSearchEdit(false);
+                        // For now, just close the modal
+                      }}
+                    >
+                      Search Hotels
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Desktop Layout */}
