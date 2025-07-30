@@ -108,7 +108,9 @@ export function MobileNavBar({
                 <div className="flex items-center text-blue-200">
                   {rating && (
                     <>
-                      <Star className="w-3 h-3 fill-current mr-1" />
+                      <div className="w-4 h-4 bg-yellow-400 rounded-sm flex items-center justify-center mr-1">
+                        <Star className="w-2.5 h-2.5 fill-white text-white" />
+                      </div>
                       <span className="text-xs">{rating}</span>
                       {reviewCount && (
                         <span className="text-xs ml-1">
