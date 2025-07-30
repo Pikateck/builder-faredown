@@ -194,7 +194,7 @@ export default function HotelDetails() {
 
   // Mock hotel data with dynamic dates
   const hotel = {
-    id: parseInt(hotelId || "3"),
+    id: parseInt(hotelId || "1"),
     name: "Grand Hyatt Dubai",
     location: "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
     image:
