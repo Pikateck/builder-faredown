@@ -100,6 +100,19 @@ export function EnhancedFilters({
 
   const filterCategories: FilterCategory[] = [
     {
+      id: "property-rating",
+      title: "Property rating",
+      defaultExpanded: true,
+      items: [
+        { id: "5-stars", label: "5 stars", count: 298 },
+        { id: "4-stars", label: "4 stars", count: 1195 },
+        { id: "3-stars", label: "3 stars", count: 272 },
+        { id: "2-stars", label: "2 stars", count: 78 },
+        { id: "1-star", label: "1 star", count: 3 },
+      ],
+      maxVisible: 5,
+    },
+    {
       id: "popular",
       title: "Popular filters",
       defaultExpanded: true,
