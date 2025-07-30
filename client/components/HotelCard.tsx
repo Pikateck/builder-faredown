@@ -449,18 +449,7 @@ export function HotelCard({
                   <ChevronRight className="w-4 h-4" />
                 </Button>
 
-                {/* Image Dots */}
-                <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                        index === currentImageIndex ? "bg-white" : "bg-white/50"
-                      }`}
-                      onClick={() => setCurrentImageIndex(index)}
-                    />
-                  ))}
-                </div>
+
               </>
             )}
 
