@@ -111,6 +111,17 @@
   }
 }
 
+/* Desktop filter checkboxes - from backup system */
+@media (min-width: 1024px) {
+  [data-radix-collection-item] button[role="checkbox"],
+  button[role="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+  }
+}
+
 /* Extra small devices (phones in portrait) */
 @media (max-width: 480px) {
   /* Even larger touch targets */
