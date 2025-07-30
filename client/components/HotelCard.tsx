@@ -374,37 +374,35 @@ export function HotelCard({
               )}
             </div>
 
-            {/* Pricing and Actions */}
-            <div className="mt-auto">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-gray-900">
-                      {formatPrice(totalPriceInclusiveTaxes)}
-                    </span>
-                  </div>
-                  <div className="text-xs text-gray-600 font-medium">
-                    Total Price (All Inclusive)
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {formatPrice(perNightInclusiveTaxes)} per room per night
-                  </div>
+            {/* Pricing Section - Redesigned */}
+            <div className="mt-auto bg-gray-50 rounded-lg p-3 border border-gray-100">
+              {/* Price Display */}
+              <div className="text-center mb-3">
+                <div className="text-2xl font-bold text-[#003580] mb-1">
+                  {formatPrice(totalPriceInclusiveTaxes)}
+                </div>
+                <div className="text-sm text-gray-600 font-medium mb-1">
+                  Total Price • {totalNights} night{totalNights > 1 ? 's' : ''}
+                </div>
+                <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full inline-block">
+                  {formatPrice(perNightInclusiveTaxes)} per night
                 </div>
               </div>
 
+              {/* Action Buttons - Next Line */}
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
                   className="flex-1 py-3 text-sm font-semibold border-blue-600 text-blue-600 hover:bg-blue-50"
                   onClick={handleViewDetails}
                 >
-                  View
+                  View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm"
+                  className="flex-1 py-3 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold text-sm"
                 >
-                  Bargain
+                  Bargain Now
                 </Button>
               </div>
             </div>
