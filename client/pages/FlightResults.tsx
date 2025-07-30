@@ -4364,7 +4364,7 @@ export default function FlightResults() {
                     setSortBy("fastest");
                     setShowSortOptions(false);
                   }}
-                  className="w-3 h-3 text-[#003580]"
+                  className="w-3 h-3 text-[#003580] focus:ring-[#003580] focus:ring-1"
                 />
                 <div>
                   <div className="text-sm font-medium text-gray-900">Fastest first</div>
@@ -5347,7 +5347,7 @@ export default function FlightResults() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-blue-700">Check-in:</span>
-                          <span className="font-medium">1 �� 23 kg / Adult</span>
+                          <span className="font-medium">1 ���� 23 kg / Adult</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-blue-700">Cabin:</span>
