@@ -111,45 +111,53 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
   // Load user preference and live rates on mount
   useEffect(() => {
-    loadUserPreference();
-
-    // Try to refresh rates, but don't block the app if it fails
+    // Wrap everything in a try-catch to prevent provider failure
     try {
-      refreshRates().catch((error) => {
-        console.log(
-          "💰 Initial currency rate fetch failed, using static rates:",
-          error?.message || "Unknown error",
-        );
-      });
-    } catch (syncError) {
-      console.log(
-        "💰 Currency rate refresh setup failed, using static rates:",
-        syncError?.message || "Unknown error",
-      );
-    }
+      loadUserPreference();
 
-    // Update rates every 30 minutes (reduced frequency to prevent spam)
-    const interval = setInterval(
-      () => {
+      // Try to refresh rates, but don't block the app if it fails
+      setTimeout(() => {
         try {
           refreshRates().catch((error) => {
-            // Silent fail for periodic updates
             console.log(
-              "💰 Periodic currency rate update failed:",
+              "💰 Initial currency rate fetch failed, using static rates:",
               error?.message || "Unknown error",
             );
           });
         } catch (syncError) {
           console.log(
-            "💰 Periodic currency rate update setup failed:",
+            "💰 Currency rate refresh setup failed, using static rates:",
             syncError?.message || "Unknown error",
           );
         }
-      },
-      30 * 60 * 1000,
-    );
+      }, 100); // Delay to ensure provider is fully initialized
 
-    return () => clearInterval(interval);
+      // Update rates every 30 minutes (reduced frequency to prevent spam)
+      const interval = setInterval(
+        () => {
+          try {
+            refreshRates().catch((error) => {
+              // Silent fail for periodic updates
+              console.log(
+                "💰 Periodic currency rate update failed:",
+                error?.message || "Unknown error",
+              );
+            });
+          } catch (syncError) {
+            console.log(
+              "💰 Periodic currency rate update setup failed:",
+              syncError?.message || "Unknown error",
+            );
+          }
+        },
+        30 * 60 * 1000,
+      );
+
+      return () => clearInterval(interval);
+    } catch (globalError) {
+      console.error("💰 CurrencyProvider useEffect failed:", globalError);
+      // Don't throw - just log and continue with static rates
+    }
   }, []);
 
   const loadUserPreference = () => {
