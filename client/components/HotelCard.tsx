@@ -445,8 +445,8 @@ export function HotelCard({
       <div className="block sm:hidden">
         {/* Mobile Layout - Stacked */}
         <div className="flex flex-col">
-          {/* Hotel Image - Full Width */}
-          <div className="relative w-full h-48 flex-shrink-0">
+          {/* Hotel Image - Compact */}
+          <div className="relative w-full h-32 flex-shrink-0">
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
