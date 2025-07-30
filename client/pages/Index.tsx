@@ -8,12 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  MobileCityDropdown,
-  MobileDatePicker,
-  MobileTravelers,
-  MobileClassDropdown,
-} from "@/components/MobileDropdowns";
+
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import {
   formatDateToDDMMMYYYY,
@@ -2756,7 +2751,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>🇬</span>
+                <span>���</span>
                 <span>Continue with Google</span>
               </Button>
 
