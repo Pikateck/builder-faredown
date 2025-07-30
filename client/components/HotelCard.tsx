@@ -51,6 +51,13 @@ interface Hotel extends Partial<HotelType> {
     pricePerNight?: number;
     features: string[];
   }[];
+  availableRoom?: {
+    type: string;
+    bedType: string;
+    rateType: string;
+    cancellationPolicy: string;
+    paymentTerms: string;
+  };
 }
 
 interface HotelCardProps {
