@@ -531,7 +531,7 @@ export function HotelCard({
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
                   size="sm"
-                  className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-2 text-xs flex items-center justify-center gap-1"
+                  className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-2 text-xs flex items-center justify-center gap-1"
                 >
                   <TrendingDown className="w-3 h-3" />
                   Bargain Now
