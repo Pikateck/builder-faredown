@@ -258,40 +258,30 @@ export function HotelCard({
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`);
   };
 
+  // Handle image gallery click
+  const handleImageClick = () => {
+    // Navigate to hotel details page with gallery tab
+    const detailParams = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      detailParams.set(key, value);
+    });
+    detailParams.set('tab', 'gallery');
+
+    navigate(`/hotels/${hotel.id}?${detailParams.toString()}`);
+  };
+
   if (viewMode === "grid") {
     return (
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group">
         {/* Grid View - Vertical Layout */}
         <div className="flex flex-col h-full">
-          {/* Image Gallery */}
-          <div className="relative w-full h-36 flex-shrink-0">
+          {/* Image Gallery - Clickable */}
+          <div className="relative w-full h-44 flex-shrink-0 cursor-pointer" onClick={handleImageClick}>
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
               className="w-full h-full object-cover"
             />
-
-            {/* Image Navigation - Small arrows like Booking.com */}
-            {images.length > 1 && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
-                  onClick={prevImage}
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
-                  onClick={nextImage}
-                >
-                  <ChevronRight className="w-3 h-3" />
-                </Button>
-              </>
-            )}
 
             {/* Like Button */}
             <Button
@@ -427,7 +417,7 @@ export function HotelCard({
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
                 <div className="text-xs text-gray-500">
-                  {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
+                  {formatPrice(currentPrice)} per room/night (incl. taxes)
                 </div>
               </div>
 
@@ -435,7 +425,7 @@ export function HotelCard({
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className="flex-1 py-3.5 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-blue-50 min-h-[44px]"
+                  className="flex-1 py-3.5 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-colors min-h-[44px]"
                   onClick={handleViewDetails}
                 >
                   View Details
@@ -462,35 +452,13 @@ export function HotelCard({
       <div className="block sm:hidden">
         {/* Mobile Layout - Stacked */}
         <div className="flex flex-col">
-          {/* Hotel Image - Extended */}
-          <div className="relative w-full h-40 flex-shrink-0">
+          {/* Hotel Image - Extended and Clickable */}
+          <div className="relative w-full h-48 flex-shrink-0 cursor-pointer" onClick={handleImageClick}>
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
               className="w-full h-full object-cover"
             />
-
-            {/* Image Navigation for Mobile - Small arrows */}
-            {images.length > 1 && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
-                  onClick={prevImage}
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
-                  onClick={nextImage}
-                >
-                  <ChevronRight className="w-3 h-3" />
-                </Button>
-              </>
-            )}
 
             {/* Like Button */}
             <Button
@@ -583,7 +551,7 @@ export function HotelCard({
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
                 <div className="text-xs text-gray-500">
-                  {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
+                  {formatPrice(currentPrice)} per room/night (incl. taxes)
                 </div>
               </div>
 
@@ -591,7 +559,7 @@ export function HotelCard({
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className="flex-1 py-3 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-blue-50 min-h-[40px]"
+                  className="flex-1 py-3 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-colors min-h-[40px]"
                   onClick={handleViewDetails}
                 >
                   View Details
@@ -611,35 +579,13 @@ export function HotelCard({
 
       {/* Desktop/Tablet Layout */}
       <div className="hidden sm:flex flex-col sm:flex-row">
-        {/* Image Gallery - Extended height */}
-        <div className="relative sm:w-48 md:w-56 h-40 sm:h-44 md:h-48 flex-shrink-0">
+        {/* Image Gallery - Extended height and clickable */}
+        <div className="relative sm:w-48 md:w-56 h-48 sm:h-52 md:h-56 flex-shrink-0 cursor-pointer" onClick={handleImageClick}>
           <img
             src={images[currentImageIndex]}
             alt={hotel.name}
             className="w-full h-full object-cover"
           />
-
-          {/* Image Navigation - Small arrows like Booking.com */}
-          {images.length > 1 && (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
-                onClick={prevImage}
-              >
-                <ChevronLeft className="w-3 h-3" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
-                onClick={nextImage}
-              >
-                <ChevronRight className="w-3 h-3" />
-              </Button>
-            </>
-          )}
 
           {/* Like Button */}
           <Button
@@ -734,13 +680,13 @@ export function HotelCard({
                 {formatPrice(totalPriceInclusiveTaxes)}
               </div>
               <div className="text-xs text-gray-500">
-                {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
+                {formatPrice(currentPrice)} per room/night (incl. taxes)
               </div>
             </div>
             <div className="flex gap-2 ml-3">
               <Button
                 variant="outline"
-                className="text-sm px-4 py-2.5 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold min-h-[40px]"
+                className="text-sm px-4 py-2.5 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-colors font-semibold min-h-[40px]"
                 onClick={handleViewDetails}
               >
                 View Details
