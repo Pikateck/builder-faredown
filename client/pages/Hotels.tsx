@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SimpleCalendar } from "@/components/SimpleCalendar";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { addDays } from "date-fns";
 import {
   Plane,
