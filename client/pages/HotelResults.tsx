@@ -951,35 +951,7 @@ export default function HotelResults() {
             </div>
           </div>
 
-          {/* Mobile Filter Button */}
-          <div className="lg:hidden fixed bottom-4 left-4 z-50">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className="rounded-full w-12 h-12 sm:w-14 sm:h-14 shadow-lg touch-manipulation">
-                  <SlidersHorizontal className="w-5 h-5 sm:w-6 sm:h-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-80 sm:w-96">
-                <SheetHeader>
-                  <SheetTitle className="flex items-center text-sm sm:text-base">
-                    <Filter className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-[#003580]" />
-                    Filter by
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="mt-6">
-                  <EnhancedFilters
-                    priceRange={priceRange}
-                    setPriceRange={setPriceRange}
-                    selectedAmenities={selectedAmenities}
-                    setSelectedAmenities={setSelectedAmenities}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    onClearFilters={handleClearFilters}
-                  />
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
+
 
           {/* Results */}
           <div className="flex-1">
