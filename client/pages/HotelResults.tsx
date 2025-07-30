@@ -38,6 +38,11 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
+import {
+  MobileCityDropdown,
+  MobileDatePicker,
+  MobileTravelers,
+} from "@/components/MobileDropdowns";
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 
 // Use the Hotel type from hotelsService for consistency
