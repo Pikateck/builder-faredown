@@ -80,8 +80,11 @@ export default function Hotels() {
   const [showMobileDestination, setShowMobileDestination] = useState(false);
   const [showMobileDates, setShowMobileDates] = useState(false);
   const [showMobileGuests, setShowMobileGuests] = useState(false);
-  const [selectedDepartureDate, setSelectedDepartureDate] = useState<Date | null>(null);
-  const [selectedReturnDate, setSelectedReturnDate] = useState<Date | null>(null);
+  const [selectedDepartureDate, setSelectedDepartureDate] =
+    useState<Date | null>(null);
+  const [selectedReturnDate, setSelectedReturnDate] = useState<Date | null>(
+    null,
+  );
   const [selectingDeparture, setSelectingDeparture] = useState(true);
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -281,8 +284,6 @@ export default function Hotels() {
                     </div>
                   </div>
                 </button>
-
-
               </div>
 
               {/* Check-in / Check-out */}
@@ -308,8 +309,6 @@ export default function Hotels() {
                     </div>
                   </div>
                 </button>
-
-
               </div>
 
               {/* Guests */}
@@ -334,8 +333,6 @@ export default function Hotels() {
                     </div>
                   </div>
                 </button>
-
-
               </div>
 
               {/* Search Button */}

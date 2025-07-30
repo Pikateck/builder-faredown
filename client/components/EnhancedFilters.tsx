@@ -218,7 +218,9 @@ export function EnhancedFilters({
           <Checkbox
             id={item.id}
             checked={isChecked}
-            onCheckedChange={(checked) => handleFilterChange(item.id, checked as boolean)}
+            onCheckedChange={(checked) =>
+              handleFilterChange(item.id, checked as boolean)
+            }
             className="mr-3 h-4 w-4 lg:h-4 lg:w-4"
           />
           {item.label}

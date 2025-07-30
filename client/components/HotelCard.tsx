@@ -61,7 +61,8 @@ interface HotelCardProps {
 
 const getAmenityIcon = (amenity: string) => {
   const iconClass = "w-3 h-3 text-white";
-  const containerClass = "w-6 h-6 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center shadow-sm";
+  const containerClass =
+    "w-6 h-6 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center shadow-sm";
   const icons: Record<string, React.ReactNode> = {
     wifi: (
       <div className={containerClass}>
@@ -105,10 +106,12 @@ const getAmenityIcon = (amenity: string) => {
     ),
   };
 
-  return icons[amenity.toLowerCase()] || (
-    <div className={containerClass}>
-      <Coffee className={iconClass} />
-    </div>
+  return (
+    icons[amenity.toLowerCase()] || (
+      <div className={containerClass}>
+        <Coffee className={iconClass} />
+      </div>
+    )
   );
 };
 
@@ -276,8 +279,6 @@ export function HotelCard({
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
-
-
               </>
             )}
 
@@ -306,14 +307,18 @@ export function HotelCard({
                 {/* Address in one line directly after hotel name */}
                 <div className="flex items-start text-gray-600">
                   <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-gray-600 line-clamp-2 leading-tight">{hotelLocation}</span>
+                  <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
+                    {hotelLocation}
+                  </span>
                 </div>
               </div>
 
               <div className="flex items-center mb-3">
                 <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full mr-2">
                   <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                  <span className="text-xs font-medium text-yellow-700">{hotel.rating}</span>
+                  <span className="text-xs font-medium text-yellow-700">
+                    {hotel.rating}
+                  </span>
                 </div>
                 <span className="text-xs text-gray-500">
                   ({hotel.reviewCount || hotel.reviews || 0} reviews)
@@ -371,7 +376,8 @@ export function HotelCard({
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
                 <div className="text-sm text-gray-600 font-medium mb-1">
-                  Total Price • {totalNights} night{totalNights > 1 ? 's' : ''} • All Inclusive taxes
+                  Total Price • {totalNights} night{totalNights > 1 ? "s" : ""}{" "}
+                  • All Inclusive taxes
                 </div>
                 <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full inline-block">
                   {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)
@@ -388,9 +394,9 @@ export function HotelCard({
                   View Details
                 </Button>
                 <Button
-                onClick={() => onBargainClick(hotel, searchParams)}
-                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
-              >
+                  onClick={() => onBargainClick(hotel, searchParams)}
+                  className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
+                >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
                 </Button>
@@ -436,8 +442,6 @@ export function HotelCard({
                 >
                   <ChevronRight className="w-4 h-4" />
                 </Button>
-
-
               </>
             )}
 
@@ -473,12 +477,16 @@ export function HotelCard({
                   </h3>
                   <div className="flex items-start text-gray-600">
                     <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-gray-600 line-clamp-2 leading-tight">{hotelLocation}</span>
+                    <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
+                      {hotelLocation}
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full ml-2">
                   <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                  <span className="text-sm font-medium text-yellow-700">{hotel.rating}</span>
+                  <span className="text-sm font-medium text-yellow-700">
+                    {hotel.rating}
+                  </span>
                 </div>
               </div>
             </div>
@@ -511,7 +519,8 @@ export function HotelCard({
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
                 <div className="text-xs text-gray-600 font-medium mb-1">
-                  Total • {totalNights} night{totalNights > 1 ? 's' : ''} • All Inclusive taxes
+                  Total • {totalNights} night{totalNights > 1 ? "s" : ""} • All
+                  Inclusive taxes
                 </div>
                 <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full inline-block">
                   {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)
@@ -571,8 +580,6 @@ export function HotelCard({
               >
                 <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
-
-
             </>
           )}
 
@@ -663,7 +670,8 @@ export function HotelCard({
                 {formatPrice(totalPriceInclusiveTaxes)}
               </div>
               <div className="text-sm text-gray-600 font-medium mb-2">
-                Total Price • {totalNights} night{totalNights > 1 ? 's' : ''} • All Inclusive taxes
+                Total Price • {totalNights} night{totalNights > 1 ? "s" : ""} •
+                All Inclusive taxes
               </div>
               <div className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full inline-block">
                 {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)

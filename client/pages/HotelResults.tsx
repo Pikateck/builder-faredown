@@ -60,7 +60,7 @@ export default function HotelResults() {
     setDepartureDate,
     setReturnDate,
     formatDisplayDate,
-    loadDatesFromParams
+    loadDatesFromParams,
   } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
@@ -79,7 +79,10 @@ export default function HotelResults() {
 
   // Edit modal states
   const [editDestination, setEditDestination] = useState("Dubai");
-  const [editTravelers, setEditTravelers] = useState({ adults: 2, children: 0 });
+  const [editTravelers, setEditTravelers] = useState({
+    adults: 2,
+    children: 0,
+  });
   const [editRooms, setEditRooms] = useState(1);
   const [showEditDestination, setShowEditDestination] = useState(false);
   const [showEditDates, setShowEditDates] = useState(false);
@@ -129,7 +132,9 @@ export default function HotelResults() {
 
   // Initialize edit states from current search params
   React.useEffect(() => {
-    setEditDestination(searchParams.get("destinationName") || destination || "Dubai");
+    setEditDestination(
+      searchParams.get("destinationName") || destination || "Dubai",
+    );
     setEditTravelers({
       adults: parseInt(adults) || 2,
       children: parseInt(children) || 0,
@@ -333,7 +338,8 @@ export default function HotelResults() {
     {
       id: 1,
       name: "Grand Hyatt Dubai",
-      location: "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
+      location:
+        "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
@@ -368,7 +374,8 @@ export default function HotelResults() {
     {
       id: 2,
       name: "Ocean View Resort Dubai",
-      location: "Jumeirah Beach Road, Dubai Marina, Dubai, United Arab Emirates",
+      location:
+        "Jumeirah Beach Road, Dubai Marina, Dubai, United Arab Emirates",
       images: [
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
@@ -536,7 +543,9 @@ export default function HotelResults() {
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 text-gray-500 mr-1" />
                   <span className="font-medium text-gray-900 truncate">
-                    {searchParams.get("destinationName") || destination || "Dubai"}
+                    {searchParams.get("destinationName") ||
+                      destination ||
+                      "Dubai"}
                   </span>
                 </div>
               </div>
@@ -544,14 +553,22 @@ export default function HotelResults() {
                 <div className="flex items-center">
                   <CalendarIcon className="w-3 h-3 mr-1" />
                   <span>
-                    {departureDate ? formatDisplayDate(departureDate) : checkIn || "Today"} - {returnDate ? formatDisplayDate(returnDate) : checkOut || "Tomorrow"}
+                    {departureDate
+                      ? formatDisplayDate(departureDate)
+                      : checkIn || "Today"}{" "}
+                    -{" "}
+                    {returnDate
+                      ? formatDisplayDate(returnDate)
+                      : checkOut || "Tomorrow"}
                   </span>
                 </div>
                 <div className="flex items-center">
                   <Users className="w-3 h-3 mr-1" />
                   <span>
                     {adults} adult{parseInt(adults) > 1 ? "s" : ""}
-                    {parseInt(children) > 0 ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}` : ""}
+                    {parseInt(children) > 0
+                      ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
+                      : ""}
                     , {rooms} room{parseInt(rooms) > 1 ? "s" : ""}
                   </span>
                 </div>
@@ -584,7 +601,9 @@ export default function HotelResults() {
         {/* Mobile Sort Bar */}
         <div className="bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
           <div className="flex items-center mb-2">
-            <span className="text-sm font-medium text-gray-700 mr-2">Sort by:</span>
+            <span className="text-sm font-medium text-gray-700 mr-2">
+              Sort by:
+            </span>
           </div>
           <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="w-full h-12 px-4 py-3 border-gray-200 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
@@ -594,7 +613,11 @@ export default function HotelResults() {
               <SelectItem value="recommended">
                 <div className="flex items-center">
                   <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   </div>
@@ -604,8 +627,18 @@ export default function HotelResults() {
               <SelectItem value="price-low">
                 <div className="flex items-center">
                   <div className="w-5 h-5 bg-gradient-to-br from-green-400 to-green-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M7 11l5-5m0 0l5 5m-5-5v12"
+                      />
                     </svg>
                   </div>
                   Price: Low to High
@@ -614,8 +647,18 @@ export default function HotelResults() {
               <SelectItem value="price-high">
                 <div className="flex items-center">
                   <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-red-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 13l-5 5m0 0l-5-5m5 5V6"
+                      />
                     </svg>
                   </div>
                   Price: High to Low
@@ -624,7 +667,11 @@ export default function HotelResults() {
               <SelectItem value="rating">
                 <div className="flex items-center">
                   <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-blue-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   </div>
@@ -634,7 +681,11 @@ export default function HotelResults() {
               <SelectItem value="stars-high">
                 <div className="flex items-center">
                   <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      className="w-3 h-3 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   </div>
@@ -725,12 +776,24 @@ export default function HotelResults() {
                     onClick={() => setShowSearchEdit(false)}
                     className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                   <h2 className="text-xl font-bold">Edit Hotel Search</h2>
-                  <p className="text-blue-100 text-sm mt-1">Modify your search criteria</p>
+                  <p className="text-blue-100 text-sm mt-1">
+                    Modify your search criteria
+                  </p>
                 </div>
 
                 {/* Interactive Search Form */}
@@ -741,7 +804,9 @@ export default function HotelResults() {
                       onClick={() => setShowEditDestination(true)}
                       className="w-full text-left"
                     >
-                      <div className="text-xs text-gray-500 mb-1">Destination</div>
+                      <div className="text-xs text-gray-500 mb-1">
+                        Destination
+                      </div>
                       <div className="flex items-center space-x-2">
                         <MapPin className="w-5 h-5 text-[#003580]" />
                         <div>
@@ -787,15 +852,19 @@ export default function HotelResults() {
                       onClick={() => setShowEditGuests(true)}
                       className="w-full text-left"
                     >
-                      <div className="text-xs text-gray-500 mb-1">Guests & Rooms</div>
+                      <div className="text-xs text-gray-500 mb-1">
+                        Guests & Rooms
+                      </div>
                       <div className="flex items-center space-x-2">
                         <Users className="w-5 h-5 text-[#003580]" />
                         <div>
                           <div className="font-medium text-gray-900">
-                            {editTravelers.adults + editTravelers.children} guests, {editRooms} room{editRooms > 1 ? "s" : ""}
+                            {editTravelers.adults + editTravelers.children}{" "}
+                            guests, {editRooms} room{editRooms > 1 ? "s" : ""}
                           </div>
                           <div className="text-xs text-gray-500">
-                            {editTravelers.adults} adult{editTravelers.adults > 1 ? "s" : ""}
+                            {editTravelers.adults} adult
+                            {editTravelers.adults > 1 ? "s" : ""}
                             {editTravelers.children > 0 &&
                               `, ${editTravelers.children} child${editTravelers.children > 1 ? "ren" : ""}`}
                           </div>
@@ -822,15 +891,23 @@ export default function HotelResults() {
                         const newSearchParams = new URLSearchParams({
                           destination: cityData[editDestination]?.code || "DXB",
                           destinationName: editDestination,
-                          checkIn: departureDate ? departureDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-                          checkOut: returnDate ? returnDate.toISOString().split('T')[0] : new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                          checkIn: departureDate
+                            ? departureDate.toISOString().split("T")[0]
+                            : new Date().toISOString().split("T")[0],
+                          checkOut: returnDate
+                            ? returnDate.toISOString().split("T")[0]
+                            : new Date(Date.now() + 24 * 60 * 60 * 1000)
+                                .toISOString()
+                                .split("T")[0],
                           adults: editTravelers.adults.toString(),
                           children: editTravelers.children.toString(),
                           rooms: editRooms.toString(),
                         });
 
                         // Navigate to results with new parameters
-                        navigate(`/hotels/results?${newSearchParams.toString()}`);
+                        navigate(
+                          `/hotels/results?${newSearchParams.toString()}`,
+                        );
                         setShowSearchEdit(false);
                       }}
                     >
@@ -867,8 +944,18 @@ export default function HotelResults() {
                         onClick={() => setShowFilters(false)}
                         className="p-2 hover:bg-white/20 rounded-lg transition-colors"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -952,8 +1039,6 @@ export default function HotelResults() {
             </div>
           </div>
 
-
-
           {/* Results */}
           <div className="flex-1">
             {/* Results Header with View Toggle and Sort */}
@@ -1021,7 +1106,11 @@ export default function HotelResults() {
                     >
                       <div className="flex items-center">
                         <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         </div>
@@ -1034,8 +1123,18 @@ export default function HotelResults() {
                     >
                       <div className="flex items-center">
                         <div className="w-5 h-5 bg-gradient-to-br from-green-400 to-green-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M7 11l5-5m0 0l5 5m-5-5v12"
+                            />
                           </svg>
                         </div>
                         Price (lowest first)
@@ -1047,8 +1146,18 @@ export default function HotelResults() {
                     >
                       <div className="flex items-center">
                         <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-red-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17 13l-5 5m0 0l-5-5m5 5V6"
+                            />
                           </svg>
                         </div>
                         Price (highest first)
@@ -1057,7 +1166,11 @@ export default function HotelResults() {
                     <SelectItem value="rating" className="text-sm sm:text-base">
                       <div className="flex items-center">
                         <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-blue-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         </div>
@@ -1070,7 +1183,11 @@ export default function HotelResults() {
                     >
                       <div className="flex items-center">
                         <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         </div>
@@ -1083,9 +1200,24 @@ export default function HotelResults() {
                     >
                       <div className="flex items-center">
                         <div className="w-5 h-5 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <svg
+                            className="w-3 h-3 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
                           </svg>
                         </div>
                         Distance from downtown

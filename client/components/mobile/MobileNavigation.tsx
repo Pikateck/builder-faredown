@@ -40,19 +40,19 @@ export function MobileNavigation() {
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.path);
-          
+
           return (
             <Link
               key={item.path}
               to={item.path}
               className="flex flex-col items-center justify-center space-y-1"
             >
-              <Icon 
+              <Icon
                 className={`w-5 h-5 ${
                   active ? "text-[#003580]" : "text-gray-400"
-                }`} 
+                }`}
               />
-              <span 
+              <span
                 className={`text-xs ${
                   active ? "text-[#003580] font-medium" : "text-gray-500"
                 }`}

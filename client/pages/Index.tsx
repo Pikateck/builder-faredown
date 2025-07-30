@@ -1068,10 +1068,6 @@ export default function Index() {
             </div>
           </div>
         </div>
-
-
-
-
       </div>
 
       {/* Mobile Navigation */}
@@ -2506,8 +2502,6 @@ export default function Index() {
           </div>
         </footer>
       </div>
-
-
 
       {/* Sign In Modal */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>

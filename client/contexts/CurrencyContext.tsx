@@ -116,10 +116,16 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     // Try to refresh rates, but don't block the app if it fails
     try {
       refreshRates().catch((error) => {
-        console.log("💰 Initial currency rate fetch failed, using static rates:", error?.message || 'Unknown error');
+        console.log(
+          "💰 Initial currency rate fetch failed, using static rates:",
+          error?.message || "Unknown error",
+        );
       });
     } catch (syncError) {
-      console.log("💰 Currency rate refresh setup failed, using static rates:", syncError?.message || 'Unknown error');
+      console.log(
+        "💰 Currency rate refresh setup failed, using static rates:",
+        syncError?.message || "Unknown error",
+      );
     }
 
     // Update rates every 30 minutes (reduced frequency to prevent spam)
@@ -128,10 +134,16 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         try {
           refreshRates().catch((error) => {
             // Silent fail for periodic updates
-            console.log("💰 Periodic currency rate update failed:", error?.message || 'Unknown error');
+            console.log(
+              "💰 Periodic currency rate update failed:",
+              error?.message || "Unknown error",
+            );
           });
         } catch (syncError) {
-          console.log("💰 Periodic currency rate update setup failed:", syncError?.message || 'Unknown error');
+          console.log(
+            "💰 Periodic currency rate update setup failed:",
+            syncError?.message || "Unknown error",
+          );
         }
       },
       30 * 60 * 1000,
@@ -160,7 +172,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       setIsLoading(true);
 
       // Early exit if fetch is not available (shouldn't happen in modern browsers)
-      if (typeof fetch === 'undefined') {
+      if (typeof fetch === "undefined") {
         console.log("💰 Fetch API not available, using static rates");
         return;
       }
