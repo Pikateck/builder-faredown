@@ -3866,42 +3866,38 @@ export default function FlightResults() {
                 <h3 className="text-sm font-semibold text-gray-900 mb-2">
                   Sort by
                 </h3>
-                <div className="space-y-1">
-                  <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="radio"
-                        name="sort"
-                        checked={sortBy === "cheapest"}
-                        onChange={() => setSortBy("cheapest")}
-                        className="w-4 h-4 text-[#003580]"
-                      />
-                      <div className="text-sm">
-                        <div className="font-medium text-gray-900">
-                          Cheapest first
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Lowest price
-                        </div>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="sort"
+                      checked={sortBy === "cheapest"}
+                      onChange={() => setSortBy("cheapest")}
+                      className="w-3 h-3 text-[#003580]"
+                    />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">
+                        Cheapest first
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Lowest price
                       </div>
                     </div>
                   </label>
-                  <label className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors">
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="radio"
-                        name="sort"
-                        checked={sortBy === "fastest"}
-                        onChange={() => setSortBy("fastest")}
-                        className="w-4 h-4 text-[#003580]"
-                      />
-                      <div className="text-sm">
-                        <div className="font-medium text-gray-900">
-                          Fastest first
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Shortest duration
-                        </div>
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="sort"
+                      checked={sortBy === "fastest"}
+                      onChange={() => setSortBy("fastest")}
+                      className="w-3 h-3 text-[#003580]"
+                    />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">
+                        Fastest first
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Shortest duration
                       </div>
                     </div>
                   </label>
