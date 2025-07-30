@@ -1154,7 +1154,9 @@ export default function FlightResults() {
                 className="flex-1 h-10 border-gray-300"
                 onClick={() => setShowMobileFilters(true)}
               >
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                <div className="w-5 h-5 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded mr-2 flex items-center justify-center">
+                  <SlidersHorizontal className="w-3 h-3 text-white" />
+                </div>
                 Filters
                 {(() => {
                   let count = 0;
