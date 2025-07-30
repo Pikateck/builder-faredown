@@ -107,7 +107,11 @@ export default function HotelDetails() {
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState(() => {
+    // Check if tab parameter is provided in URL
+    const tabParam = searchParams.get("tab");
+    return tabParam || "overview";
+  });
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [expandedRooms, setExpandedRooms] = useState<Set<string>>(
@@ -2221,7 +2225,7 @@ export default function HotelDetails() {
                         </li>
                         <li className="flex items-center">
                           <span className="text-green-600 mr-2 font-bold">
-                            ✓
+                            ��
                           </span>{" "}
                           All ages welcome
                         </li>
