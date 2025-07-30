@@ -1837,13 +1837,28 @@ export default function FlightResults() {
           {`
             @media (max-width: 1023px) {
               input[type="checkbox"], input[type="radio"] {
-                width: 12px !important;
-                height: 12px !important;
-                min-width: 12px !important;
-                min-height: 12px !important;
+                width: 10px !important;
+                height: 10px !important;
+                min-width: 10px !important;
+                min-height: 10px !important;
+                transform: scale(0.8);
+                margin-right: 6px;
               }
-              .filter-container {
-                padding: 2px 0;
+              .desktop-filter input[type="checkbox"],
+              .desktop-filter input[type="radio"] {
+                width: 10px !important;
+                height: 10px !important;
+                transform: scale(0.8);
+              }
+              .filter-item {
+                padding: 3px 0;
+              }
+            }
+
+            @media (min-width: 1024px) {
+              input[type="checkbox"], input[type="radio"] {
+                width: 16px;
+                height: 16px;
               }
             }
           `}
@@ -5295,7 +5310,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return �����{" "}
+                          Return ���{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d, yyyy")
                             : "Select date"}
@@ -5403,7 +5418,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">���3,500 per passenger</p>
+                          <p className="text-red-600">��3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
