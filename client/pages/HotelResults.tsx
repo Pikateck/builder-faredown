@@ -303,7 +303,7 @@ export default function HotelResults() {
     {
       id: 2,
       name: "Ocean View Resort Dubai",
-      location: `${destination || "Dubai, UAE"}`,
+      location: "Jumeirah Beach Road, Dubai Marina, Dubai, United Arab Emirates",
       images: [
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
