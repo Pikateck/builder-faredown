@@ -3881,14 +3881,9 @@ export default function FlightResults() {
         <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-lg md:h-auto md:rounded-lg flex flex-col">
           <DialogHeader className="border-b border-gray-200 pb-3 px-4 pt-4 bg-white sticky top-0 z-10">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="w-7 h-7 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center mr-3 shadow-sm">
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-white" />
-                </div>
-                <DialogTitle className="text-lg font-semibold text-gray-900">
-                  Filters & Sort
-                </DialogTitle>
-              </div>
+              <DialogTitle className="text-lg font-semibold text-gray-900">
+                Filters & Sort
+              </DialogTitle>
               <button
                 onClick={() => setShowMobileFilters(false)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -4656,7 +4651,7 @@ export default function FlightResults() {
                   <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
                     <div>
                       <div className="text-sm font-medium">Mumbai → London</div>
-                      <div className="text-xs text-blue-200">British Airways • Non-stop • 9h 25m</div>
+                      <div className="text-xs text-blue-200">British Airways ��� Non-stop • 9h 25m</div>
                     </div>
                     <div className="text-lg font-bold">₹45200</div>
                   </div>
