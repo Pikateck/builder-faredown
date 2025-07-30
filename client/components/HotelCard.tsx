@@ -384,7 +384,7 @@ export function HotelCard({
                 </div>
               </div>
 
-              {/* Action Buttons - Next Line */}
+              {/* Action Buttons - Three buttons in row */}
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
@@ -392,6 +392,13 @@ export function HotelCard({
                   onClick={handleViewDetails}
                 >
                   View Details
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1 py-3 text-sm font-semibold border-gray-300 text-gray-700 hover:bg-gray-50"
+                  onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
+                >
+                  Reviews
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
