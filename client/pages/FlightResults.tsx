@@ -1252,7 +1252,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "���िन������ी", flag: "🇮🇳" },
+                      { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
@@ -1887,7 +1887,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedStops === option.value}
                           onChange={() => handleStopsFilter(option.value)}
-                          className={`w-4 h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                          className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedStops === option.value ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
                       {option.label}
@@ -3389,7 +3389,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ��0
+                                        ₹0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
