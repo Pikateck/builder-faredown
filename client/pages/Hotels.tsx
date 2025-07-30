@@ -288,7 +288,7 @@ export default function Hotels() {
               {/* Check-in / Check-out */}
               <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
-                  onClick={() => setShowMobileCalendar(!showMobileCalendar)}
+                  onClick={() => setShowMobileDates(true)}
                   className="w-full text-left"
                 >
                   <div className="text-xs text-gray-500 mb-1">
