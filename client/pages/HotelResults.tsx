@@ -327,7 +327,9 @@ export default function HotelResults() {
       },
       // Add breakfast information
       breakfastIncluded: hotel.breakfastIncluded || Math.random() > 0.5, // Random for demo
-      breakfastType: hotel.breakfastType || (Math.random() > 0.5 ? "Continental Buffet" : "American Breakfast"),
+      breakfastType:
+        hotel.breakfastType ||
+        (Math.random() > 0.5 ? "Continental Buffet" : "American Breakfast"),
       // Add room information for live data
       availableRoom: hotel.availableRoom || {
         type: "1 X Standard Room",
@@ -596,14 +598,21 @@ export default function HotelResults() {
                     -{" "}
                     {returnDate
                       ? formatDisplayDate(returnDate)
-                      : checkOut || "Tomorrow"}
-                    {" "}
-                    ({(() => {
-                      const checkInDate = departureDate || (checkIn ? new Date(checkIn) : new Date());
-                      const checkOutDate = returnDate || (checkOut ? new Date(checkOut) : new Date(Date.now() + 24 * 60 * 60 * 1000));
+                      : checkOut || "Tomorrow"}{" "}
+                    (
+                    {(() => {
+                      const checkInDate =
+                        departureDate ||
+                        (checkIn ? new Date(checkIn) : new Date());
+                      const checkOutDate =
+                        returnDate ||
+                        (checkOut
+                          ? new Date(checkOut)
+                          : new Date(Date.now() + 24 * 60 * 60 * 1000));
                       const nights = calculateNights(checkInDate, checkOutDate);
-                      return `${nights} night${nights > 1 ? 's' : ''}`;
-                    })()})
+                      return `${nights} night${nights > 1 ? "s" : ""}`;
+                    })()}
+                    )
                   </span>
                 </div>
                 <div className="flex items-center">

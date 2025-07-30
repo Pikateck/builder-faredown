@@ -265,7 +265,7 @@ export function HotelCard({
     searchParams.forEach((value, key) => {
       detailParams.set(key, value);
     });
-    detailParams.set('tab', 'gallery');
+    detailParams.set("tab", "gallery");
 
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`);
   };
@@ -276,7 +276,10 @@ export function HotelCard({
         {/* Grid View - Vertical Layout */}
         <div className="flex flex-col h-full">
           {/* Image Gallery - Clickable */}
-          <div className="relative w-full h-44 flex-shrink-0 cursor-pointer" onClick={handleImageClick}>
+          <div
+            className="relative w-full h-44 flex-shrink-0 cursor-pointer"
+            onClick={handleImageClick}
+          >
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
@@ -378,7 +381,8 @@ export function HotelCard({
                     {hotel.availableRoom.type}
                   </div>
                   <div className="text-xs text-gray-600 mb-1">
-                    {hotel.availableRoom.bedType} • {hotel.availableRoom.rateType}
+                    {hotel.availableRoom.bedType} •{" "}
+                    {hotel.availableRoom.rateType}
                   </div>
                   <div className="flex flex-wrap gap-1">
                     <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
@@ -397,10 +401,11 @@ export function HotelCard({
                 <span className="text-xs text-gray-600">
                   {hotel.breakfastIncluded ? (
                     <span className="text-green-600 font-medium">
-                      ✓ Breakfast included{hotel.breakfastType ? ` (${hotel.breakfastType})` : ''}
+                      ✓ Breakfast included
+                      {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
                     </span>
                   ) : (
-                    'Breakfast not included'
+                    "Breakfast not included"
                   )}
                 </span>
               </div>
@@ -453,7 +458,10 @@ export function HotelCard({
         {/* Mobile Layout - Stacked */}
         <div className="flex flex-col">
           {/* Hotel Image - Extended and Clickable */}
-          <div className="relative w-full h-48 flex-shrink-0 cursor-pointer" onClick={handleImageClick}>
+          <div
+            className="relative w-full h-48 flex-shrink-0 cursor-pointer"
+            onClick={handleImageClick}
+          >
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
@@ -532,10 +540,11 @@ export function HotelCard({
               <span className="text-xs text-gray-600">
                 {hotel.breakfastIncluded ? (
                   <span className="text-green-600 font-medium">
-                    ✓ Breakfast included{hotel.breakfastType ? ` (${hotel.breakfastType})` : ''}
+                    ✓ Breakfast included
+                    {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
                   </span>
                 ) : (
-                  'Breakfast not included'
+                  "Breakfast not included"
                 )}
               </span>
             </div>
@@ -580,7 +589,10 @@ export function HotelCard({
       {/* Desktop/Tablet Layout */}
       <div className="hidden sm:flex flex-col sm:flex-row">
         {/* Image Gallery - Extended height and clickable */}
-        <div className="relative sm:w-48 md:w-56 h-48 sm:h-52 md:h-56 flex-shrink-0 cursor-pointer" onClick={handleImageClick}>
+        <div
+          className="relative sm:w-48 md:w-56 h-48 sm:h-52 md:h-56 flex-shrink-0 cursor-pointer"
+          onClick={handleImageClick}
+        >
           <img
             src={images[currentImageIndex]}
             alt={hotel.name}
@@ -636,7 +648,10 @@ export function HotelCard({
           {/* Features - Single Line */}
           <div className="flex flex-wrap gap-1 mb-2">
             {hotel.features.slice(0, 4).map((feature) => (
-              <span key={feature} className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded">
+              <span
+                key={feature}
+                className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
+              >
                 {feature}
               </span>
             ))}
@@ -645,9 +660,13 @@ export function HotelCard({
           {/* Room Type - Inline */}
           {hotel.availableRoom && (
             <div className="mb-2 text-xs">
-              <span className="font-medium text-gray-900">{hotel.availableRoom.type}</span>
+              <span className="font-medium text-gray-900">
+                {hotel.availableRoom.type}
+              </span>
               <span className="text-gray-600 mx-1">•</span>
-              <span className="text-gray-600">{hotel.availableRoom.bedType}</span>
+              <span className="text-gray-600">
+                {hotel.availableRoom.bedType}
+              </span>
               <div className="flex gap-1 mt-1">
                 <span className="text-green-600 bg-green-50 px-1 py-0.5 rounded text-xs">
                   ✓ {hotel.availableRoom.cancellationPolicy}
@@ -662,10 +681,11 @@ export function HotelCard({
             <span className="text-xs text-gray-600">
               {hotel.breakfastIncluded ? (
                 <span className="text-green-600 font-medium">
-                  ✓ Breakfast included{hotel.breakfastType ? ` (${hotel.breakfastType})` : ''}
+                  ✓ Breakfast included
+                  {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
                 </span>
               ) : (
-                'Breakfast not included'
+                "Breakfast not included"
               )}
             </span>
           </div>
