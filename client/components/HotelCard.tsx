@@ -60,19 +60,56 @@ interface HotelCardProps {
 }
 
 const getAmenityIcon = (amenity: string) => {
-  const iconClass = "w-5 h-5 text-blue-600 drop-shadow-sm";
+  const iconClass = "w-3 h-3 text-white";
+  const containerClass = "w-6 h-6 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center shadow-sm";
   const icons: Record<string, React.ReactNode> = {
-    wifi: <Wifi className={iconClass} />,
-    parking: <Car className={iconClass} />,
-    restaurant: <Coffee className={iconClass} />,
-    gym: <Dumbbell className={iconClass} />,
-    pool: <Waves className={iconClass} />,
-    spa: <Sparkles className={iconClass} />,
-    "air conditioning": <Wind className={iconClass} />,
-    "room service": <Building2 className={iconClass} />,
+    wifi: (
+      <div className={containerClass}>
+        <Wifi className={iconClass} />
+      </div>
+    ),
+    parking: (
+      <div className={containerClass}>
+        <Car className={iconClass} />
+      </div>
+    ),
+    restaurant: (
+      <div className={containerClass}>
+        <Coffee className={iconClass} />
+      </div>
+    ),
+    gym: (
+      <div className={containerClass}>
+        <Dumbbell className={iconClass} />
+      </div>
+    ),
+    pool: (
+      <div className={containerClass}>
+        <Waves className={iconClass} />
+      </div>
+    ),
+    spa: (
+      <div className={containerClass}>
+        <Sparkles className={iconClass} />
+      </div>
+    ),
+    "air conditioning": (
+      <div className={containerClass}>
+        <Wind className={iconClass} />
+      </div>
+    ),
+    "room service": (
+      <div className={containerClass}>
+        <Building2 className={iconClass} />
+      </div>
+    ),
   };
 
-  return icons[amenity.toLowerCase()] || <Coffee className={iconClass} />;
+  return icons[amenity.toLowerCase()] || (
+    <div className={containerClass}>
+      <Coffee className={iconClass} />
+    </div>
+  );
 };
 
 export function HotelCard({
