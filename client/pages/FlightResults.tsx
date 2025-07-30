@@ -4346,7 +4346,7 @@ export default function FlightResults() {
                     setSortBy("cheapest");
                     setShowSortOptions(false);
                   }}
-                  className="w-3 h-3 text-[#003580]"
+                  className="w-3 h-3 text-[#003580] focus:ring-[#003580] focus:ring-1"
                 />
                 <div>
                   <div className="text-sm font-medium text-gray-900">Cheapest first</div>
