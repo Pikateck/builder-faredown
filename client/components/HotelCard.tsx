@@ -626,24 +626,22 @@ export function HotelCard({
               {hotel.name}
             </h3>
 
-            {/* Address and Reviews directly below hotel name */}
-            <div className="flex items-center text-gray-600 mb-1">
-              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center mr-1 shadow-sm">
-                <MapPin className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" />
-              </div>
-              <span className="text-xs sm:text-sm truncate">
+            {/* Address directly below hotel name */}
+            <div className="flex items-center text-gray-600 mb-2">
+              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 mr-1 flex-shrink-0" />
+              <span className="text-sm sm:text-base text-gray-600 truncate">
                 {hotelLocation}
               </span>
             </div>
 
             <div className="flex items-center mb-2">
-              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-sm flex items-center justify-center mr-1 shadow-sm">
-                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white text-white" />
+              <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full mr-2">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-500 text-yellow-500 mr-1" />
+                <span className="text-sm sm:text-base font-medium text-yellow-700">
+                  {hotel.rating}
+                </span>
               </div>
-              <span className="text-xs sm:text-sm font-medium mr-1">
-                {hotel.rating}
-              </span>
-              <span className="text-xs sm:text-sm text-gray-500">
+              <span className="text-sm sm:text-base text-gray-500">
                 ({hotel.reviewCount || hotel.reviews || 0} reviews)
               </span>
             </div>
