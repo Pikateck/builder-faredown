@@ -4034,7 +4034,7 @@ export default function FlightResults() {
                               e.target.checked,
                             )
                           }
-                          className="w-3 h-3 text-[#003580] rounded"
+                          className="w-3 h-3 text-[#003580] rounded focus:ring-[#003580] focus:ring-1"
                         />
                         <span className="text-sm text-gray-900">
                           {aircraftType}
