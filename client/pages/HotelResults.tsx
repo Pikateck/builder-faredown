@@ -370,6 +370,13 @@ export default function HotelResults() {
           features: ["2 Bedrooms", "Private Balcony", "Butler Service"],
         },
       ],
+      availableRoom: {
+        type: "1 X Twin Classic",
+        bedType: "Twin bed",
+        rateType: "Non Refundable Rate",
+        paymentTerms: "No prepayment needed",
+        cancellationPolicy: "Free cancellation",
+      },
     },
     {
       id: 2,
