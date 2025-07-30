@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { Heart, Plane, Hotel, User, Search, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
