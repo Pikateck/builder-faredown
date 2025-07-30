@@ -150,6 +150,12 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     try {
       setIsLoading(true);
 
+      // Early exit if fetch is not available (shouldn't happen in modern browsers)
+      if (typeof fetch === 'undefined') {
+        console.log("💰 Fetch API not available, using static rates");
+        return;
+      }
+
       // Check if the API endpoint is available
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
