@@ -805,13 +805,13 @@ export default function Index() {
                       }}
                       onChange={(range) => {
                         console.log("Homepage calendar range selected:", range);
-                        if (range?.startDate) {
-                          setDepartureDate(range.startDate);
-                        }
-                        if (tripType === "round-trip" && range?.endDate) {
+                        setDepartureDate(range.startDate);
+                        if (tripType === "round-trip") {
                           setReturnDate(range.endDate);
                         }
-                        if (tripType === "one-way" || (tripType === "round-trip" && range?.endDate)) {
+                        // For one-way, auto-close after selecting start date
+                        // For round-trip, auto-close after selecting both dates
+                        if (tripType === "one-way" || (tripType === "round-trip" && range.endDate && range.startDate !== range.endDate)) {
                           setShowCalendar(false);
                         }
                       }}
