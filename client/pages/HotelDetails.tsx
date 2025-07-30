@@ -609,29 +609,39 @@ export default function HotelDetails() {
                             ))}
                           </div>
 
-                          {/* Simple Select Button */}
-                          <Button
-                            onClick={() => {
-                              setSelectedRoomType(room);
-                              if (navigator.vibrate) {
-                                navigator.vibrate(50);
-                              }
-                            }}
-                            className={`w-full font-medium py-3 text-sm ${
-                              selectedRoomType?.id === room.id
-                                ? "bg-blue-600 text-white"
-                                : "bg-white border border-blue-600 text-blue-600 hover:bg-blue-50"
-                            }`}
-                          >
-                            {selectedRoomType?.id === room.id ? (
-                              <span className="flex items-center justify-center">
-                                <CheckCircle className="w-4 h-4 mr-2" />
-                                Selected
-                              </span>
-                            ) : (
-                              "Select This Room"
-                            )}
-                          </Button>
+                          {/* Action Buttons */}
+                          <div className="space-y-2">
+                            <Button
+                              onClick={() => {
+                                setSelectedRoomType(room);
+                                if (navigator.vibrate) {
+                                  navigator.vibrate(50);
+                                }
+                              }}
+                              className={`w-full font-medium py-3 text-sm ${
+                                selectedRoomType?.id === room.id
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-white border border-blue-600 text-blue-600 hover:bg-blue-50"
+                              }`}
+                            >
+                              {selectedRoomType?.id === room.id ? (
+                                <span className="flex items-center justify-center">
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Selected
+                                </span>
+                              ) : (
+                                "Select This Room"
+                              )}
+                            </Button>
+
+                            <Button
+                              onClick={() => setActiveTab("reviews")}
+                              variant="outline"
+                              className="w-full font-medium py-2 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
+                            >
+                              View Reviews
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     ))}
