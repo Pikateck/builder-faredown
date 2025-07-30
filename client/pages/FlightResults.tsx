@@ -1252,7 +1252,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन���दी", flag: "🇮🇳" },
+                      { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
@@ -4295,7 +4295,8 @@ export default function FlightResults() {
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-200 p-4 bg-white sticky bottom-0">
+          {/* Fixed Footer Buttons */}
+          <div className="border-t border-gray-200 p-4 bg-white">
             <div className="flex space-x-3">
               <Button
                 variant="outline"
