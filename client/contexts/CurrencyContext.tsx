@@ -125,9 +125,14 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     // Update rates every 30 minutes (reduced frequency to prevent spam)
     const interval = setInterval(
       () => {
-        refreshRates().catch(() => {
-          // Silent fail for periodic updates
-        });
+        try {
+          refreshRates().catch((error) => {
+            // Silent fail for periodic updates
+            console.log("💰 Periodic currency rate update failed:", error?.message || 'Unknown error');
+          });
+        } catch (syncError) {
+          console.log("💰 Periodic currency rate update setup failed:", syncError?.message || 'Unknown error');
+        }
       },
       30 * 60 * 1000,
     );
