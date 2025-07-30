@@ -765,90 +765,75 @@ export default function HotelResults() {
                   <p className="text-blue-100 text-sm mt-1">Modify your search criteria</p>
                 </div>
 
-                {/* Search Form */}
-                <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                {/* Interactive Search Form */}
+                <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(90vh-160px)]">
                   {/* Destination */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Destination
-                    </label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        value={searchParams.get("destinationName") || destination || "Dubai"}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
-                        placeholder="Where do you want to stay?"
-                        readOnly
-                      />
-                    </div>
+                  <div className="bg-white rounded-xl p-4 border border-gray-200">
+                    <button
+                      onClick={() => setShowEditDestination(true)}
+                      className="w-full text-left"
+                    >
+                      <div className="text-xs text-gray-500 mb-1">Destination</div>
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="w-5 h-5 text-[#003580]" />
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {editDestination}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {cityData[editDestination]?.fullName || "City"}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
                   </div>
 
-                  {/* Check-in & Check-out Dates */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Check-in
-                      </label>
-                      <div className="relative">
-                        <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="text"
-                          value={departureDate ? formatDisplayDate(departureDate) : checkIn || "Today"}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
-                          placeholder="Check-in"
-                          readOnly
-                        />
+                  {/* Check-in / Check-out */}
+                  <div className="bg-white rounded-xl p-4 border border-gray-200">
+                    <button
+                      onClick={() => setShowEditDates(true)}
+                      className="w-full text-left"
+                    >
+                      <div className="text-xs text-gray-500 mb-1">
+                        Check-in / Check-out
                       </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Check-out
-                      </label>
-                      <div className="relative">
-                        <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="text"
-                          value={returnDate ? formatDisplayDate(returnDate) : checkOut || "Tomorrow"}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
-                          placeholder="Check-out"
-                          readOnly
-                        />
+                      <div className="flex items-center space-x-2">
+                        <CalendarIcon className="w-5 h-5 text-[#003580]" />
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {departureDate && returnDate
+                              ? `${formatDisplayDate(departureDate)} - ${formatDisplayDate(returnDate)}`
+                              : "Select dates"}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Choose check-in & check-out
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </button>
                   </div>
 
-                  {/* Guests & Rooms */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Guests
-                      </label>
-                      <div className="relative">
-                        <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="text"
-                          value={`${adults} adult${parseInt(adults) > 1 ? "s" : ""}${parseInt(children) > 0 ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}` : ""}`}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
-                          placeholder="Guests"
-                          readOnly
-                        />
+                  {/* Guests */}
+                  <div className="bg-white rounded-xl p-4 border border-gray-200">
+                    <button
+                      onClick={() => setShowEditGuests(true)}
+                      className="w-full text-left"
+                    >
+                      <div className="text-xs text-gray-500 mb-1">Guests & Rooms</div>
+                      <div className="flex items-center space-x-2">
+                        <Users className="w-5 h-5 text-[#003580]" />
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {editTravelers.adults + editTravelers.children} guests, {editRooms} room{editRooms > 1 ? "s" : ""}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {editTravelers.adults} adult{editTravelers.adults > 1 ? "s" : ""}
+                            {editTravelers.children > 0 &&
+                              `, ${editTravelers.children} child${editTravelers.children > 1 ? "ren" : ""}`}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Rooms
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={`${rooms} room${parseInt(rooms) > 1 ? "s" : ""}`}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#003580] focus:border-transparent bg-gray-50"
-                          placeholder="Rooms"
-                          readOnly
-                        />
-                      </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
 
