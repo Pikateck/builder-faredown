@@ -755,8 +755,8 @@ export default function HotelResults() {
               className="fixed inset-0 bg-black bg-opacity-50 z-40"
               onClick={() => setShowSearchEdit(false)}
             />
-            <div className="fixed inset-0 z-50 flex items-end">
-              <div className="w-full bg-white rounded-t-3xl shadow-2xl max-h-[90vh] overflow-hidden">
+            <div className="fixed inset-0 z-50 flex items-start">
+              <div className="w-full bg-white rounded-b-3xl shadow-2xl max-h-[90vh] overflow-hidden">
                 {/* Modal Header */}
                 <div className="bg-[#003580] text-white p-4 relative">
                   <button
