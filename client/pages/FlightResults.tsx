@@ -3854,9 +3854,14 @@ export default function FlightResults() {
         <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-lg md:h-auto md:rounded-lg flex flex-col">
           <DialogHeader className="border-b border-gray-200 pb-3 px-4 pt-4 bg-white sticky top-0 z-10">
             <div className="flex items-center justify-between">
-              <DialogTitle className="text-lg font-semibold text-gray-900">
-                Filters & Sort
-              </DialogTitle>
+              <div className="flex items-center">
+                <div className="w-7 h-7 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center mr-3 shadow-sm">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-white" />
+                </div>
+                <DialogTitle className="text-lg font-semibold text-gray-900">
+                  Filters & Sort
+                </DialogTitle>
+              </div>
               <button
                 onClick={() => setShowMobileFilters(false)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
