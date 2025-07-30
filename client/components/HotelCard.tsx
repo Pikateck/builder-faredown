@@ -298,9 +298,9 @@ export function HotelCard({
               size="sm"
               className={`absolute top-3 right-3 w-8 h-8 p-0 touch-manipulation ${
                 isLiked
-                  ? "bg-red-500 text-white hover:bg-red-600"
-                  : "bg-white/80 hover:bg-white text-gray-700"
-              }`}
+                  ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700 shadow-lg"
+                  : "bg-white/90 hover:bg-white text-gray-700 shadow-sm"
+              } rounded-full backdrop-blur-sm`}
               onClick={() => setIsLiked(!isLiked)}
             >
               <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
