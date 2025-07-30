@@ -494,9 +494,9 @@ export function HotelCard({
                   <h3 className="text-lg font-bold text-gray-900 mb-0.5 line-clamp-1">
                     {hotel.name}
                   </h3>
-                  <div className="flex items-center text-gray-600">
-                    <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                    <span className="text-sm text-gray-600 truncate">{hotelLocation}</span>
+                  <div className="flex items-start text-gray-600">
+                    <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm text-gray-600 line-clamp-2 leading-tight">{hotelLocation}</span>
                   </div>
                 </div>
                 <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full ml-2">
