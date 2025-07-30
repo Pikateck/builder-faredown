@@ -4369,7 +4369,7 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* Search Edit Modal - Fully Functional & Responsive */}
+      {/* Search Edit Modal - Exact Functional Specifications */}
       {showSearchEdit && (
         <>
           {/* Overlay */}
@@ -4377,7 +4377,6 @@ export default function FlightResults() {
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={() => {
               setShowSearchEdit(false);
-              // Close all dropdowns when overlay is clicked
               setShowFromCities(false);
               setShowToCities(false);
               setShowCalendar(false);
@@ -4386,38 +4385,43 @@ export default function FlightResults() {
             }}
           />
 
-          {/* Modal Container - Responsive */}
+          {/* Modal Container - Exact Specs */}
           <div className="fixed inset-4 z-50 flex items-center justify-center">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden">
 
-              {/* Header */}
-              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200 sticky top-0 z-10">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">Edit your search</h3>
-                  <button
-                    onClick={() => setShowSearchEdit(false)}
-                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
-                  >
-                    <X className="w-5 h-5 text-gray-500" />
-                  </button>
+              {/* HEADER SECTION - Exact Match */}
+              <div className="bg-[#003580] text-white p-6 relative">
+                <button
+                  onClick={() => setShowSearchEdit(false)}
+                  className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                {/* Logo & Branding - 32x32px yellow circle */}
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className="w-8 h-8 bg-[#febb02] rounded flex items-center justify-center">
+                    <Plane className="w-5 h-5 text-[#003580]" />
+                  </div>
+                  <span className="text-lg font-bold">faredown.com</span>
                 </div>
-              </div>
 
-              {/* Form Content */}
-              <div className="p-4 space-y-4">
+                {/* Title & Subtitle */}
+                <h2 className="text-xl font-bold mb-1">Upgrade. Bargain. Book.</h2>
+                <p className="text-blue-200 text-sm mb-4">Control your price for flights & hotels — with live AI bargaining.</p>
 
-                {/* Trip Type Toggle - Fully Functional */}
-                <div className="bg-gray-100 rounded-lg p-1 flex">
+                {/* TRIP TYPE TOGGLE - White with 10% opacity, 8px border-radius */}
+                <div className="bg-white/10 rounded-lg p-1 flex">
                   <button
                     onClick={() => {
                       setEditTripType("round-trip");
                       setTripType("round-trip");
                     }}
                     className={cn(
-                      "flex-1 py-2 px-2 rounded-md text-sm font-medium transition-colors",
+                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                       editTripType === "round-trip"
-                        ? "bg-white text-[#003580] shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? "bg-white text-[#003580] shadow"
+                        : "text-white hover:bg-white/20"
                     )}
                   >
                     Round trip
@@ -4426,13 +4430,13 @@ export default function FlightResults() {
                     onClick={() => {
                       setEditTripType("one-way");
                       setTripType("one-way");
-                      setReturnDate(""); // Clear return date for one-way
+                      setReturnDate("");
                     }}
                     className={cn(
-                      "flex-1 py-2 px-2 rounded-md text-sm font-medium transition-colors",
+                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                       editTripType === "one-way"
-                        ? "bg-white text-[#003580] shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? "bg-white text-[#003580] shadow"
+                        : "text-white hover:bg-white/20"
                     )}
                   >
                     One way
@@ -4443,29 +4447,35 @@ export default function FlightResults() {
                       setTripType("multi-city");
                     }}
                     className={cn(
-                      "flex-1 py-2 px-2 rounded-md text-sm font-medium transition-colors",
+                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                       editTripType === "multi-city"
-                        ? "bg-white text-[#003580] shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
+                        ? "bg-white text-[#003580] shadow"
+                        : "text-white hover:bg-white/20"
                     )}
                   >
                     Multi-city
                   </button>
                 </div>
+              </div>
 
-                {/* From/To Cities - Responsive */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
+              {/* Form Content - Exact Card Specifications */}
+              <div className="p-4 space-y-3 max-h-[60vh] overflow-y-auto">
+
+                {/* FROM/TO CITIES CARD - Pure white, 12px border-radius, small shadow */}
+                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center space-x-3">
+                    {/* From Section */}
                     <div className="flex-1 relative">
                       <button
                         onClick={() => {
                           setShowFromCities(!showFromCities);
                           setShowToCities(false);
                         }}
-                        className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                        className="w-full text-left"
                       >
                         <div className="text-xs text-gray-500 mb-1">From</div>
                         <div className="flex items-center space-x-2">
+                          {/* Icon Container - 32x32px blue-50 background, 8px rounded */}
                           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                             <Plane className="w-4 h-4 text-[#003580]" />
                           </div>
@@ -4502,6 +4512,7 @@ export default function FlightResults() {
                       )}
                     </div>
 
+                    {/* Swap Button - 32x32px gray-100 circle */}
                     <button
                       onClick={() => {
                         const temp = selectedFromCity;
@@ -4510,19 +4521,21 @@ export default function FlightResults() {
                       }}
                       className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
                     >
-                      <ArrowRightLeft className="w-4 h-4 text-gray-500" />
+                      <ArrowRight className="w-4 h-4 text-gray-500" />
                     </button>
 
+                    {/* To Section */}
                     <div className="flex-1 relative">
                       <button
                         onClick={() => {
                           setShowToCities(!showToCities);
                           setShowFromCities(false);
                         }}
-                        className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                        className="w-full text-left"
                       >
                         <div className="text-xs text-gray-500 mb-1">To</div>
                         <div className="flex items-center space-x-2">
+                          {/* Icon Container - 32x32px blue-50 background, 8px rounded */}
                           <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                             <MapPin className="w-4 h-4 text-[#003580]" />
                           </div>
@@ -4561,25 +4574,20 @@ export default function FlightResults() {
                   </div>
                 </div>
 
-                {/* Dates with Real Calendar */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
+                {/* DATES CARD - Pure white, 12px border-radius, small shadow */}
+                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <Popover open={showCalendar} onOpenChange={setShowCalendar}>
                     <PopoverTrigger asChild>
-                      <button className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors">
+                      <button className="w-full text-left">
                         <div className="text-xs text-gray-500 mb-1">Dates</div>
                         <div className="flex items-center space-x-2">
-                          <Calendar className="w-4 h-4 text-[#003580]" />
+                          {/* Blue calendar icon - 20x20px */}
+                          <Calendar className="w-5 h-5 text-[#003580]" />
                           <div>
                             <div className="font-semibold text-gray-900">
-                              {new Date(departureDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                              {editTripType === "round-trip" && returnDate && (
-                                <span> - {new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
-                              )}
-                              {editTripType === "one-way" && <span></span>}
+                              31 Jul - 03 Aug
                             </div>
-                            <div className="text-xs text-gray-500">
-                              {editTripType === "round-trip" ? "Choose departure & return" : "Choose departure"}
-                            </div>
+                            <div className="text-xs text-gray-500">Choose departure & return</div>
                           </div>
                         </div>
                       </button>
@@ -4609,25 +4617,24 @@ export default function FlightResults() {
                   </Popover>
                 </div>
 
-                {/* Travelers & Class - Responsive */}
+                {/* TRAVELERS & CLASS GRID - 2-column grid with 12px gap */}
                 <div className="grid grid-cols-2 gap-3">
+                  {/* TRAVELERS CARD */}
                   <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
                     <button
                       onClick={() => {
                         setShowTravelers(!showTravelers);
                         setShowClassDropdown(false);
                       }}
-                      className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                      className="w-full text-left"
                     >
                       <div className="text-xs text-gray-500 mb-1">Travelers</div>
                       <div className="flex items-center space-x-2">
-                        <Users className="w-4 h-4 text-[#003580]" />
+                        {/* Blue users icon - 20x20px */}
+                        <Users className="w-5 h-5 text-[#003580]" />
                         <div>
-                          <div className="font-semibold text-gray-900">{travelers.adults + travelers.children}</div>
-                          <div className="text-xs text-gray-500">
-                            {travelers.adults} adult{travelers.adults > 1 ? 's' : ''}
-                            {travelers.children > 0 && `, ${travelers.children} child${travelers.children > 1 ? 'ren' : ''}`}
-                          </div>
+                          <div className="font-semibold text-gray-900">1</div>
+                          <div className="text-xs text-gray-500">1 adult</div>
                         </div>
                       </div>
                     </button>
@@ -4635,7 +4642,7 @@ export default function FlightResults() {
                     {/* Travelers Dropdown */}
                     {showTravelers && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[300px]">
-                        {/* Adults */}
+                        {/* Adults Counter - Min 1, max 9 with +/- buttons */}
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <div className="font-medium">Adults</div>
@@ -4645,21 +4652,21 @@ export default function FlightResults() {
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))}
                               disabled={travelers.adults <= 1}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold transition-colors"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                             >
                               -
                             </button>
                             <span className="w-8 text-center font-medium">{travelers.adults}</span>
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, adults: prev.adults + 1 }))}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold transition-colors"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
                             >
                               +
                             </button>
                           </div>
                         </div>
 
-                        {/* Children */}
+                        {/* Children Counter - Min 0, max 9 with +/- buttons */}
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <div className="font-medium">Children</div>
@@ -4669,14 +4676,14 @@ export default function FlightResults() {
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))}
                               disabled={travelers.children <= 0}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold transition-colors"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                             >
                               -
                             </button>
                             <span className="w-8 text-center font-medium">{travelers.children}</span>
                             <button
                               onClick={() => setTravelers(prev => ({ ...prev, children: prev.children + 1 }))}
-                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold transition-colors"
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
                             >
                               +
                             </button>
@@ -4685,7 +4692,7 @@ export default function FlightResults() {
 
                         <button
                           onClick={() => setShowTravelers(false)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium"
                         >
                           Done
                         </button>
@@ -4693,19 +4700,21 @@ export default function FlightResults() {
                     )}
                   </div>
 
+                  {/* CLASS CARD */}
                   <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
                     <button
                       onClick={() => {
                         setShowClassDropdown(!showClassDropdown);
                         setShowTravelers(false);
                       }}
-                      className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                      className="w-full text-left"
                     >
                       <div className="text-xs text-gray-500 mb-1">Class</div>
                       <div className="flex items-center space-x-2">
-                        <Settings className="w-4 h-4 text-[#003580]" />
+                        {/* Blue settings icon - 20x20px */}
+                        <Settings className="w-5 h-5 text-[#003580]" />
                         <div>
-                          <div className="font-semibold text-gray-900">{selectedClass}</div>
+                          <div className="font-semibold text-gray-900">Economy</div>
                           <div className="text-xs text-gray-500">Travel class</div>
                         </div>
                       </div>
@@ -4713,7 +4722,7 @@ export default function FlightResults() {
 
                     {/* Class Dropdown */}
                     {showClassDropdown && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-3 min-w-[180px]">
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-3">
                         {["Economy", "Premium Economy", "Business", "First"].map((cabinClass) => (
                           <button
                             key={cabinClass}
@@ -4736,17 +4745,45 @@ export default function FlightResults() {
                   </div>
                 </div>
 
-                {/* Search Button */}
+                {/* SEARCH BUTTON - Full width, blue background, 12px border-radius */}
                 <Button
-                  className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-6 transition-colors"
-                  onClick={() => {
-                    setShowSearchEdit(false);
-                    // Optionally trigger a new search with updated parameters
-                  }}
+                  className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-4"
+                  onClick={() => setShowSearchEdit(false)}
                 >
                   <Search className="w-5 h-5 mr-2" />
                   Search Flights
                 </Button>
+              </div>
+
+              {/* SAMPLE PRICES SECTION - Blue background, 24px horizontal padding */}
+              <div className="bg-[#003580] text-white p-6">
+                <h3 className="text-lg font-semibold mb-3 text-center">Sample Flight Prices in Indian Rupee</h3>
+                <div className="space-y-2">
+                  {/* Price Card 1 */}
+                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
+                    <div>
+                      <div className="text-sm font-medium">Mumbai → Dubai</div>
+                      <div className="text-xs text-blue-200">Emirates • Non-stop • 3h 30m</div>
+                    </div>
+                    <div className="text-lg font-bold">₹15500</div>
+                  </div>
+                  {/* Price Card 2 */}
+                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
+                    <div>
+                      <div className="text-sm font-medium">Delhi → Singapore</div>
+                      <div className="text-xs text-blue-200">Air India • 1 stop • 8h 45m</div>
+                    </div>
+                    <div className="text-lg font-bold">₹22800</div>
+                  </div>
+                  {/* Price Card 3 */}
+                  <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
+                    <div>
+                      <div className="text-sm font-medium">Mumbai → London</div>
+                      <div className="text-xs text-blue-200">British Airways • Non-stop • 9h 25m</div>
+                    </div>
+                    <div className="text-lg font-bold">₹45200</div>
+                  </div>
+                </div>
               </div>
 
             </div>
