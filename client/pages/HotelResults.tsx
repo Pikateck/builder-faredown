@@ -64,6 +64,7 @@ export default function HotelResults() {
   const [error, setError] = useState<string | null>(null);
   const [totalResults, setTotalResults] = useState(0);
   const [isLiveData, setIsLiveData] = useState(false);
+  const [showSearchEdit, setShowSearchEdit] = useState(false);
 
   // Get search parameters
   const destination = searchParams.get("destination") || "";
