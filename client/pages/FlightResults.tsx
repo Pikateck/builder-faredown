@@ -4418,60 +4418,246 @@ export default function FlightResults() {
                   </label>
                 </div>
 
-                {/* Route */}
+                {/* Route Selection */}
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Plane className="w-5 h-5 text-gray-600" />
-                      <span className="font-medium">BOM Mumbai</span>
-                    </div>
+                  {/* From City */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowFromCities(!showFromCities)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <Plane className="w-5 h-5 text-gray-600" />
+                        <span className="font-medium">{selectedFromCity}</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                    </button>
+
+                    {/* From Cities Dropdown */}
+                    {showFromCities && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                        {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata"].map((city) => (
+                          <button
+                            key={city}
+                            onClick={() => {
+                              setSelectedFromCity(city);
+                              setShowFromCities(false);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="font-medium">{city}</div>
+                            <div className="text-sm text-gray-500">{city} Airport</div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
+                  {/* Swap Button */}
                   <div className="flex justify-center">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <button
+                      onClick={() => {
+                        const temp = selectedFromCity;
+                        setSelectedFromCity(selectedToCity);
+                        setSelectedToCity(temp);
+                      }}
+                      className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center hover:bg-blue-200 transition-colors"
+                    >
                       <ArrowRightLeft className="w-4 h-4 text-blue-600" />
-                    </div>
+                    </button>
                   </div>
 
-                  <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <MapPin className="w-5 h-5 text-gray-600" />
-                      <span className="font-medium">Dubai</span>
-                    </div>
+                  {/* To City */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowToCities(!showToCities)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <MapPin className="w-5 h-5 text-gray-600" />
+                        <span className="font-medium">{selectedToCity}</span>
+                      </div>
+                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                    </button>
+
+                    {/* To Cities Dropdown */}
+                    {showToCities && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                        {["Dubai", "London", "New York", "Singapore", "Tokyo"].map((city) => (
+                          <button
+                            key={city}
+                            onClick={() => {
+                              setSelectedToCity(city);
+                              setShowToCities(false);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="font-medium">{city}</div>
+                            <div className="text-sm text-gray-500">{city} Airport</div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Dates */}
-                <div className="p-3 border border-gray-200 rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <Calendar className="w-5 h-5 text-gray-600" />
-                    <div>
-                      <div className="font-medium">
-                        {new Date(departureDate).toLocaleDateString('en-US', {
-                          weekday: 'short',
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                        {tripType === "round-trip" && returnDate && (
-                          <span> - {new Date(returnDate).toLocaleDateString('en-US', {
+                {/* Date Selection */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowCalendar(!showCalendar)}
+                    className="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Calendar className="w-5 h-5 text-gray-600" />
+                      <div className="text-left">
+                        <div className="font-medium">
+                          {new Date(departureDate).toLocaleDateString('en-US', {
                             weekday: 'short',
                             month: 'short',
                             day: 'numeric'
-                          })}</span>
-                        )}
+                          })}
+                          {tripType === "round-trip" && returnDate && (
+                            <span> - {new Date(returnDate).toLocaleDateString('en-US', {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric'
+                            })}</span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                  </button>
+
+                  {/* Calendar Dropdown */}
+                  {showCalendar && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
+                      <div className="text-sm text-gray-600 mb-2">Select dates</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          onClick={() => {
+                            setDepartureDate(new Date().toISOString().split('T')[0]);
+                            setShowCalendar(false);
+                          }}
+                          className="p-2 text-left hover:bg-gray-50 rounded"
+                        >
+                          <div className="text-sm font-medium">Today</div>
+                          <div className="text-xs text-gray-500">
+                            {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            setDepartureDate(tomorrow.toISOString().split('T')[0]);
+                            setShowCalendar(false);
+                          }}
+                          className="p-2 text-left hover:bg-gray-50 rounded"
+                        >
+                          <div className="text-sm font-medium">Tomorrow</div>
+                          <div className="text-xs text-gray-500">
+                            {new Date(Date.now() + 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Travelers & Class */}
-                <div className="p-3 border border-gray-200 rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <User className="w-5 h-5 text-gray-600" />
-                    <span className="font-medium">
-                      {travelers.adults + travelers.children} adult{travelers.adults + travelers.children > 1 ? 's' : ''} • {selectedClass}
-                    </span>
-                  </div>
+                {/* Travelers & Class Selection */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowTravelers(!showTravelers)}
+                    className="w-full flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-blue-500 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <User className="w-5 h-5 text-gray-600" />
+                      <span className="font-medium">
+                        {travelers.adults + travelers.children} adult{travelers.adults + travelers.children !== 1 ? 's' : ''} • {selectedClass}
+                      </span>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                  </button>
+
+                  {/* Travelers & Class Dropdown */}
+                  {showTravelers && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
+                      {/* Adults */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <div className="font-medium">Adults</div>
+                          <div className="text-sm text-gray-500">12+ years</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() => setTravelers(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))}
+                            disabled={travelers.adults <= 1}
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center font-medium">{travelers.adults}</span>
+                          <button
+                            onClick={() => setTravelers(prev => ({ ...prev, adults: prev.adults + 1 }))}
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Children */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <div className="font-medium">Children</div>
+                          <div className="text-sm text-gray-500">2-11 years</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            onClick={() => setTravelers(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))}
+                            disabled={travelers.children <= 0}
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                          >
+                            -
+                          </button>
+                          <span className="w-8 text-center font-medium">{travelers.children}</span>
+                          <button
+                            onClick={() => setTravelers(prev => ({ ...prev, children: prev.children + 1 }))}
+                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Class Selection */}
+                      <div className="border-t border-gray-200 pt-4">
+                        <div className="font-medium mb-2">Cabin class</div>
+                        <div className="space-y-2">
+                          {["Economy", "Premium Economy", "Business", "First"].map((cabinClass) => (
+                            <label key={cabinClass} className="flex items-center">
+                              <input
+                                type="radio"
+                                name="class"
+                                checked={selectedClass === cabinClass}
+                                onChange={() => setSelectedClass(cabinClass)}
+                                className="w-4 h-4 text-blue-600"
+                              />
+                              <span className="ml-2 text-sm">{cabinClass}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setShowTravelers(false)}
+                        className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium"
+                      >
+                        Done
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Search Button */}
