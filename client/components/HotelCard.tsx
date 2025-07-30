@@ -469,9 +469,9 @@ export function HotelCard({
             <Button
               variant="ghost"
               size="sm"
-              className={`absolute top-3 right-3 w-8 h-8 p-0 backdrop-blur-sm ${
+              className={`absolute top-3 right-3 w-8 h-8 p-0 backdrop-blur-sm rounded-full shadow-lg ${
                 isLiked
-                  ? "bg-red-500 text-white hover:bg-red-600"
+                  ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700"
                   : "bg-black/40 hover:bg-black/60 text-white"
               }`}
               onClick={() => setIsLiked(!isLiked)}
