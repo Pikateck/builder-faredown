@@ -161,12 +161,19 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   }, []);
 
   const loadUserPreference = () => {
-    const savedCurrency = localStorage.getItem("preferred_currency");
-    if (savedCurrency) {
-      const currency = currencies.find((c) => c.code === savedCurrency);
-      if (currency) {
-        setSelectedCurrency(currency);
+    try {
+      const savedCurrency = localStorage.getItem("preferred_currency");
+      if (savedCurrency) {
+        setCurrencies(currentCurrencies => {
+          const currency = currentCurrencies.find((c) => c.code === savedCurrency);
+          if (currency) {
+            setSelectedCurrency(currency);
+          }
+          return currentCurrencies;
+        });
       }
+    } catch (error) {
+      console.log("💰 Failed to load currency preference:", error);
     }
   };
 
