@@ -4367,157 +4367,125 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* Search Edit Modal - Native Mobile Style */}
-      <Dialog open={showSearchEdit} onOpenChange={setShowSearchEdit}>
-        <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg bg-gray-50">
-          {/* Modal Header */}
-          <div className="bg-[#003580] text-white p-4">
-            <div className="flex items-center justify-between">
-              <button
-                onClick={() => setShowSearchEdit(false)}
-                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <DialogTitle className="text-lg font-semibold">
-                Edit Search
-              </DialogTitle>
-              <div className="w-9 h-9"></div> {/* Spacer for centering */}
-            </div>
-          </div>
+      {/* Search Edit Dropdown - Booking.com Style */}
+      {showSearchEdit && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-30 z-40"
+            onClick={() => setShowSearchEdit(false)}
+          />
 
-          {/* Search Form Container with Outline */}
-          <div className="p-4 flex-1">
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-200 p-4 outline-blue-500 outline-2 outline-dashed outline-offset-4">
-              {/* Trip Type Toggle */}
-              <div className="mb-4">
-                <div className="flex bg-gray-100 rounded-lg p-1">
+          {/* Dropdown Container */}
+          <div className="fixed top-0 left-0 right-0 z-50 md:relative md:top-auto md:left-auto md:right-auto md:z-10">
+            <div className="bg-white mx-4 mt-4 rounded-xl shadow-2xl border-4 border-orange-400 overflow-hidden md:max-w-md md:mx-auto">
+              {/* Header */}
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">Edit your search</h3>
                   <button
-                    onClick={() => setTripType("round-trip")}
-                    className={cn(
-                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                      tripType === "round-trip"
-                        ? "bg-white text-[#003580] shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
-                    )}
+                    onClick={() => setShowSearchEdit(false)}
+                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
                   >
-                    Round trip
-                  </button>
-                  <button
-                    onClick={() => setTripType("one-way")}
-                    className={cn(
-                      "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                      tripType === "one-way"
-                        ? "bg-white text-[#003580] shadow-sm"
-                        : "text-gray-600 hover:text-gray-800"
-                    )}
-                  >
-                    One way
+                    <X className="w-5 h-5 text-gray-500" />
                   </button>
                 </div>
               </div>
 
-              {/* From/To Cities */}
-              <div className="bg-gray-50 rounded-xl p-4 mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="flex-1">
-                    <div className="text-xs text-gray-500 mb-1 font-medium">From</div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                        <Plane className="w-4 h-4 text-[#003580]" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900">BOM</div>
-                        <div className="text-xs text-gray-500">Mumbai</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                    <ArrowRight className="w-4 h-4 text-gray-500" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-xs text-gray-500 mb-1 font-medium">To</div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                        <MapPin className="w-4 h-4 text-[#003580]" />
-                      </div>
-                      <div>
-                        <div className="font-semibold text-gray-900">DXB</div>
-                        <div className="text-xs text-gray-500">Dubai</div>
-                      </div>
-                    </div>
-                  </div>
+              {/* Form Content */}
+              <div className="p-4 space-y-4">
+                {/* Trip Type */}
+                <div className="flex space-x-4">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="tripType"
+                      checked={tripType === "round-trip"}
+                      onChange={() => setTripType("round-trip")}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <span className="ml-2 text-sm font-medium">Round-trip</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="tripType"
+                      checked={tripType === "one-way"}
+                      onChange={() => setTripType("one-way")}
+                      className="w-4 h-4 text-blue-600"
+                    />
+                    <span className="ml-2 text-sm font-medium">One-way</span>
+                  </label>
                 </div>
-              </div>
 
-              {/* Date Selection */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="text-xs text-gray-500 mb-1 font-medium">Departure</div>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4 text-[#003580]" />
-                    <div>
-                      <div className="font-semibold text-gray-900">
-                        {new Date(departureDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {new Date(departureDate).toLocaleDateString('en-US', { weekday: 'short' })}
-                      </div>
+                {/* Route */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <Plane className="w-5 h-5 text-gray-600" />
+                      <span className="font-medium">BOM Mumbai</span>
                     </div>
                   </div>
-                </div>
-                {tripType === "round-trip" && (
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="text-xs text-gray-500 mb-1 font-medium">Return</div>
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-[#003580]" />
-                      <div>
-                        <div className="font-semibold text-gray-900">
-                          {returnDate ? new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : "Select"}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {returnDate ? new Date(returnDate).toLocaleDateString('en-US', { weekday: 'short' }) : "Return date"}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
 
-              {/* Travelers & Class */}
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="text-xs text-gray-500 mb-1 font-medium">Travelers</div>
-                  <div className="flex items-center space-x-2">
-                    <Users className="w-4 h-4 text-[#003580]" />
-                    <div>
-                      <div className="font-semibold text-gray-900">
-                        {travelers.adults + travelers.children}
-                      </div>
-                      <div className="text-xs text-gray-500">Passengers</div>
+                  <div className="flex justify-center">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <ArrowRightLeft className="w-4 h-4 text-blue-600" />
                     </div>
                   </div>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="text-xs text-gray-500 mb-1 font-medium">Class</div>
-                  <div className="flex items-center space-x-2">
-                    <Star className="w-4 h-4 text-[#003580]" />
-                    <div>
-                      <div className="font-semibold text-gray-900">{selectedClass}</div>
-                      <div className="text-xs text-gray-500">Cabin</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Search Button */}
-              <Button className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg touch-manipulation">
-                Search Flights
-              </Button>
+                  <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <MapPin className="w-5 h-5 text-gray-600" />
+                      <span className="font-medium">Dubai</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dates */}
+                <div className="p-3 border border-gray-200 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <Calendar className="w-5 h-5 text-gray-600" />
+                    <div>
+                      <div className="font-medium">
+                        {new Date(departureDate).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                        {tripType === "round-trip" && returnDate && (
+                          <span> - {new Date(returnDate).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric'
+                          })}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Travelers & Class */}
+                <div className="p-3 border border-gray-200 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <User className="w-5 h-5 text-gray-600" />
+                    <span className="font-medium">
+                      {travelers.adults + travelers.children} adult{travelers.adults + travelers.children > 1 ? 's' : ''} • {selectedClass}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Search Button */}
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold rounded-lg"
+                  onClick={() => setShowSearchEdit(false)}
+                >
+                  Search
+                </Button>
+              </div>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </>
+      )}
 
       {/* Enhanced AI Bargain Modal */}
       <Dialog open={showBargainModal} onOpenChange={setShowBargainModal}>
@@ -5243,7 +5211,7 @@ export default function FlightResults() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-blue-700">Check-in:</span>
-                          <span className="font-medium">1 × 23 kg / Adult</span>
+                          <span className="font-medium">1 �� 23 kg / Adult</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-blue-700">Cabin:</span>
