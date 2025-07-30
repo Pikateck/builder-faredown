@@ -55,8 +55,14 @@ export default function HotelResults() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
-  const { departureDate, returnDate, formatDisplayDate, loadDatesFromParams } =
-    useDateContext();
+  const {
+    departureDate,
+    returnDate,
+    setDepartureDate,
+    setReturnDate,
+    formatDisplayDate,
+    loadDatesFromParams
+  } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
