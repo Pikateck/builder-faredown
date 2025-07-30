@@ -568,7 +568,18 @@ export default function HotelResults() {
           </div>
         </div>
 
-
+        {/* Mobile Filter Bar */}
+        <div className="bg-white border-b border-gray-100 px-4 py-3">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 py-3 rounded-xl flex items-center justify-center gap-2 font-medium"
+            onClick={() => setShowFilters(true)}
+          >
+            <Filter className="w-4 h-4" />
+            Filter Hotels
+          </Button>
+        </div>
 
         {/* Mobile Sort Bar */}
         <div className="bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
