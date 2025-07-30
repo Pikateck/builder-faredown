@@ -2458,7 +2458,7 @@ export default function FlightResults() {
                                   {flight.departureTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.departureCode} ���{" "}
+                                  {flight.departureCode} •{" "}
                                   {departureDate
                                     ? formatDisplayDate(departureDate, "MMM d")
                                     : "Select date"}
@@ -4082,7 +4082,7 @@ export default function FlightResults() {
                           value={option.value}
                           checked={selectedFareType === option.value}
                           onChange={() => handleFareTypeFilter(option.value)}
-                          className="w-3 h-3 text-[#003580]"
+                          className="w-3 h-3 text-[#003580] focus:ring-[#003580] focus:ring-1"
                         />
                         <span className="text-sm text-gray-900">
                           {option.label}
