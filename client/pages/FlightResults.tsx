@@ -4330,10 +4330,9 @@ export default function FlightResults() {
                 Clear all
               </Button>
               <Button
-                className="flex-1 h-10 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#0071c2] hover:to-[#003580] font-medium text-white text-sm shadow-sm transition-all duration-200"
+                className="flex-1 h-10 bg-[#003580] hover:bg-[#0071c2] font-medium text-white text-sm"
                 onClick={() => setShowMobileFilters(false)}
               >
-                <Search className="w-3 h-3 mr-1" />
                 Show {filteredFlights.length} results
               </Button>
             </div>
