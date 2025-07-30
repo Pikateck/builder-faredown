@@ -205,7 +205,9 @@ export default function HotelResults() {
     return hotelbedsData.map((hotel, index) => ({
       id: hotel.id || hotel.code || `hotel-${index}`,
       name: hotel.name || `Hotel ${destination}`,
-      location: `${hotel.address?.city || destination}, ${hotel.address?.country || "Unknown"}`,
+      location: hotel.address?.street
+        ? `${hotel.address.street}, ${hotel.address.city || destination}, ${hotel.address.country || "United Arab Emirates"}`
+        : `${hotel.address?.city || destination}, ${hotel.address?.country || "United Arab Emirates"}`,
       images: transformHotelImages(hotel.images),
       rating: hotel.rating || hotel.reviewScore || 4.0,
       reviews: hotel.reviewCount || 150,
