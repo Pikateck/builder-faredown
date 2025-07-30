@@ -559,7 +559,7 @@ export default function Hotels() {
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
-                          { code: "ko", name: "한국어", flag: "🇰🇷" },
+                          { code: "ko", name: "한국���", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
                         ].map((language) => (
                           <DropdownMenuItem
@@ -900,6 +900,37 @@ export default function Hotels() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Dropdown Components for Hotels */}
+      <MobileCityDropdown
+        isOpen={showMobileDestination}
+        onClose={() => setShowMobileDestination(false)}
+        title="Select destination"
+        cities={cityData}
+        selectedCity={selectedFromCity}
+        onSelectCity={setSelectedFromCity}
+      />
+
+      <MobileDatePicker
+        isOpen={showMobileDates}
+        onClose={() => setShowMobileDates(false)}
+        tripType="round-trip"
+        setTripType={() => {}} // Hotels always use round-trip (check-in/check-out)
+        selectedDepartureDate={departureDate}
+        selectedReturnDate={returnDate}
+        setSelectedDepartureDate={setDepartureDate}
+        setSelectedReturnDate={setReturnDate}
+        selectingDeparture={selectingDeparture}
+        setSelectingDeparture={setSelectingDeparture}
+      />
+
+      <MobileTravelers
+        isOpen={showMobileGuests}
+        onClose={() => setShowMobileGuests(false)}
+        travelers={travelers}
+        setTravelers={setTravelers}
+      />
+
       <MobileNavigation />
     </div>
   );
