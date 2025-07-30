@@ -232,10 +232,10 @@ export default function HotelResults() {
           ],
       // Additional fields for compatibility
       address: hotel.address || {
-        street: "Hotel Street",
-        city: destination,
-        country: "Country",
-        postalCode: "12345",
+        street: `Near ${destination} City Center`,
+        city: destination || "Dubai",
+        country: "United Arab Emirates",
+        postalCode: "00000",
       },
       starRating: hotel.rating || 4,
       reviewCount: hotel.reviewCount || 150,
