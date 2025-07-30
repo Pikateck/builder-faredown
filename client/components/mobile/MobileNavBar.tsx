@@ -136,9 +136,11 @@ export function MobileNavBar({
                 className="text-white hover:bg-white/20 p-2"
                 onClick={onBookmarkToggle}
               >
-                <Bookmark
-                  className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`}
-                />
+                <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <Bookmark
+                    className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`}
+                  />
+                </div>
               </Button>
             )}
 
