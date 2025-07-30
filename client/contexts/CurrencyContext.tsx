@@ -185,6 +185,12 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         return;
       }
 
+      // Ensure currencies state is available
+      if (!currencies || currencies.length === 0) {
+        console.log("💰 Currencies not loaded yet, skipping rate refresh");
+        return;
+      }
+
       // Check if the API endpoint is available
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
