@@ -4368,7 +4368,7 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* Search Edit Modal - Exact Replica of Original Interface */}
+      {/* Search Edit Dropdown - Clean Functional Version */}
       {showSearchEdit && (
         <>
           {/* Overlay */}
@@ -4381,34 +4381,31 @@ export default function FlightResults() {
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md mx-4">
             <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
 
-              {/* Blue Header - Exact Match */}
-              <div className="bg-[#003580] text-white p-6 relative">
-                <button
-                  onClick={() => setShowSearchEdit(false)}
-                  className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className="w-8 h-8 bg-[#febb02] rounded flex items-center justify-center">
-                    <Plane className="w-5 h-5 text-[#003580]" />
-                  </div>
-                  <span className="text-lg font-bold">faredown.com</span>
+              {/* Header with Close Button */}
+              <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">Edit your search</h3>
+                  <button
+                    onClick={() => setShowSearchEdit(false)}
+                    className="p-1 hover:bg-gray-200 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
                 </div>
+              </div>
 
-                <h2 className="text-xl font-bold mb-1">Upgrade. Bargain. Book.</h2>
-                <p className="text-blue-200 text-sm">Control your price for flights & hotels — with live AI bargaining.</p>
+              {/* Form Content */}
+              <div className="p-4 space-y-4">
 
                 {/* Trip Type Toggle */}
-                <div className="mt-4 bg-white/10 rounded-lg p-1 flex">
+                <div className="bg-gray-100 rounded-lg p-1 flex">
                   <button
                     onClick={() => setTripType("round-trip")}
                     className={cn(
                       "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                       tripType === "round-trip"
-                        ? "bg-white text-[#003580]"
-                        : "text-white hover:bg-white/20"
+                        ? "bg-white text-[#003580] shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
                     )}
                   >
                     Round trip
@@ -4418,88 +4415,288 @@ export default function FlightResults() {
                     className={cn(
                       "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                       tripType === "one-way"
-                        ? "bg-white text-[#003580]"
-                        : "text-white hover:bg-white/20"
+                        ? "bg-white text-[#003580] shadow-sm"
+                        : "text-gray-600 hover:text-gray-800"
                     )}
                   >
                     One way
                   </button>
-                  <button className="flex-1 py-2 px-3 rounded-md text-sm font-medium text-white hover:bg-white/20 transition-colors">
+                  <button className="flex-1 py-2 px-3 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
                     Multi-city
                   </button>
                 </div>
-              </div>
 
-              {/* Form Content */}
-              <div className="p-4 space-y-3">
-
-                {/* From/To Cities Card */}
+                {/* From/To Cities Card - Clickable */}
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center space-x-3">
                     <div className="flex-1">
-                      <div className="text-xs text-gray-500 mb-1">From</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <Plane className="w-4 h-4 text-[#003580]" />
+                      <button
+                        onClick={() => setShowFromCities(!showFromCities)}
+                        className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                      >
+                        <div className="text-xs text-gray-500 mb-1">From</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">BOM</div>
+                            <div className="text-xs text-gray-500">Mumbai</div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-semibold text-gray-900">BOM</div>
-                          <div className="text-xs text-gray-500">Mumbai</div>
+                      </button>
+
+                      {/* From Cities Dropdown */}
+                      {showFromCities && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                          {["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata"].map((city) => (
+                            <button
+                              key={city}
+                              onClick={() => {
+                                setSelectedFromCity(city);
+                                setShowFromCities(false);
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                            >
+                              <div className="font-medium">{city}</div>
+                              <div className="text-sm text-gray-500">{city} Airport</div>
+                            </button>
+                          ))}
                         </div>
-                      </div>
+                      )}
                     </div>
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                      <ArrowRight className="w-4 h-4 text-gray-500" />
-                    </div>
+
+                    <button
+                      onClick={() => {
+                        const temp = selectedFromCity;
+                        setSelectedFromCity(selectedToCity);
+                        setSelectedToCity(temp);
+                      }}
+                      className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                    >
+                      <ArrowRightLeft className="w-4 h-4 text-gray-500" />
+                    </button>
+
                     <div className="flex-1">
-                      <div className="text-xs text-gray-500 mb-1">To</div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-[#003580]" />
+                      <button
+                        onClick={() => setShowToCities(!showToCities)}
+                        className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                      >
+                        <div className="text-xs text-gray-500 mb-1">To</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <MapPin className="w-4 h-4 text-[#003580]" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900">DXB</div>
+                            <div className="text-xs text-gray-500">Dubai</div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-semibold text-gray-900">DXB</div>
-                          <div className="text-xs text-gray-500">Dubai</div>
+                      </button>
+
+                      {/* To Cities Dropdown */}
+                      {showToCities && (
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+                          {["Dubai", "London", "New York", "Singapore", "Tokyo"].map((city) => (
+                            <button
+                              key={city}
+                              onClick={() => {
+                                setSelectedToCity(city);
+                                setShowToCities(false);
+                              }}
+                              className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                            >
+                              <div className="font-medium">{city}</div>
+                              <div className="text-sm text-gray-500">{city} Airport</div>
+                            </button>
+                          ))}
                         </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dates Card - Clickable */}
+                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
+                  <button
+                    onClick={() => setShowCalendar(!showCalendar)}
+                    className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                  >
+                    <div className="text-xs text-gray-500 mb-1">Dates</div>
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="w-4 h-4 text-[#003580]" />
+                      <div>
+                        <div className="font-semibold text-gray-900">
+                          {new Date(departureDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} -
+                          {returnDate ? new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) : ' Return'}
+                        </div>
+                        <div className="text-xs text-gray-500">Choose departure & return</div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </button>
 
-                {/* Dates Card */}
-                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                  <div className="text-xs text-gray-500 mb-1">Dates</div>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="w-4 h-4 text-[#003580]" />
-                    <div>
-                      <div className="font-semibold text-gray-900">31 Jul - 03 Aug</div>
-                      <div className="text-xs text-gray-500">Choose departure & return</div>
+                  {/* Calendar Dropdown */}
+                  {showCalendar && (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4">
+                      <div className="text-sm text-gray-600 mb-3">Select travel dates</div>
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <button
+                          onClick={() => {
+                            const today = new Date().toISOString().split('T')[0];
+                            setDepartureDate(today);
+                            setShowCalendar(false);
+                          }}
+                          className="p-2 text-left hover:bg-gray-50 rounded border border-gray-200"
+                        >
+                          <div className="text-sm font-medium">Today</div>
+                          <div className="text-xs text-gray-500">
+                            {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </div>
+                        </button>
+                        <button
+                          onClick={() => {
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            setDepartureDate(tomorrow.toISOString().split('T')[0]);
+                            setShowCalendar(false);
+                          }}
+                          className="p-2 text-left hover:bg-gray-50 rounded border border-gray-200"
+                        >
+                          <div className="text-sm font-medium">Tomorrow</div>
+                          <div className="text-xs text-gray-500">
+                            {new Date(Date.now() + 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </div>
+                        </button>
+                      </div>
+                      <Button
+                        onClick={() => setShowCalendar(false)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2"
+                        size="sm"
+                      >
+                        Done
+                      </Button>
                     </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* Travelers & Class Grid */}
+                {/* Travelers & Class Grid - Clickable */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                    <div className="text-xs text-gray-500 mb-1">Travelers</div>
-                    <div className="flex items-center space-x-2">
-                      <Users className="w-4 h-4 text-[#003580]" />
-                      <div>
-                        <div className="font-semibold text-gray-900">1</div>
-                        <div className="text-xs text-gray-500">1 adult</div>
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
+                    <button
+                      onClick={() => setShowTravelers(!showTravelers)}
+                      className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                    >
+                      <div className="text-xs text-gray-500 mb-1">Travelers</div>
+                      <div className="flex items-center space-x-2">
+                        <Users className="w-4 h-4 text-[#003580]" />
+                        <div>
+                          <div className="font-semibold text-gray-900">{travelers.adults + travelers.children}</div>
+                          <div className="text-xs text-gray-500">
+                            {travelers.adults} adult{travelers.adults > 1 ? 's' : ''}
+                            {travelers.children > 0 && `, ${travelers.children} child${travelers.children > 1 ? 'ren' : ''}`}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </button>
+
+                    {/* Travelers Dropdown */}
+                    {showTravelers && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-4 min-w-[280px]">
+                        {/* Adults */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <div className="font-medium">Adults</div>
+                            <div className="text-sm text-gray-500">12+ years</div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <button
+                              onClick={() => setTravelers(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))}
+                              disabled={travelers.adults <= 1}
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                            >
+                              -
+                            </button>
+                            <span className="w-8 text-center font-medium">{travelers.adults}</span>
+                            <button
+                              onClick={() => setTravelers(prev => ({ ...prev, adults: prev.adults + 1 }))}
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Children */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <div className="font-medium">Children</div>
+                            <div className="text-sm text-gray-500">2-11 years</div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <button
+                              onClick={() => setTravelers(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))}
+                              disabled={travelers.children <= 0}
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
+                            >
+                              -
+                            </button>
+                            <span className="w-8 text-center font-medium">{travelers.children}</span>
+                            <button
+                              onClick={() => setTravelers(prev => ({ ...prev, children: prev.children + 1 }))}
+                              className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => setShowTravelers(false)}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium"
+                        >
+                          Done
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                    <div className="text-xs text-gray-500 mb-1">Class</div>
-                    <div className="flex items-center space-x-2">
-                      <Settings className="w-4 h-4 text-[#003580]" />
-                      <div>
-                        <div className="font-semibold text-gray-900">Economy</div>
-                        <div className="text-xs text-gray-500">Travel class</div>
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 relative">
+                    <button
+                      onClick={() => setShowClassDropdown(!showClassDropdown)}
+                      className="w-full text-left hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                    >
+                      <div className="text-xs text-gray-500 mb-1">Class</div>
+                      <div className="flex items-center space-x-2">
+                        <Settings className="w-4 h-4 text-[#003580]" />
+                        <div>
+                          <div className="font-semibold text-gray-900">{selectedClass}</div>
+                          <div className="text-xs text-gray-500">Travel class</div>
+                        </div>
                       </div>
-                    </div>
+                    </button>
+
+                    {/* Class Dropdown */}
+                    {showClassDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-3">
+                        {["Economy", "Premium Economy", "Business", "First"].map((cabinClass) => (
+                          <button
+                            key={cabinClass}
+                            onClick={() => {
+                              setSelectedClass(cabinClass);
+                              setShowClassDropdown(false);
+                            }}
+                            className={cn(
+                              "w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors",
+                              selectedClass === cabinClass
+                                ? "bg-blue-50 text-blue-700 font-medium"
+                                : "text-gray-700"
+                            )}
+                          >
+                            {cabinClass}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -4511,34 +4708,6 @@ export default function FlightResults() {
                   <Search className="w-5 h-5 mr-2" />
                   Search Flights
                 </Button>
-              </div>
-
-              {/* Sample Prices Section */}
-              <div className="bg-[#003580] text-white p-4">
-                <h3 className="text-sm font-semibold mb-3">Sample Flight Prices in Indian Rupee</h3>
-                <div className="space-y-2">
-                  <div className="bg-white/10 rounded-lg p-3 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Mumbai → Dubai</div>
-                      <div className="text-xs text-blue-200">Emirates, Non-stop, 3h 30m</div>
-                    </div>
-                    <div className="text-lg font-bold">₹15500</div>
-                  </div>
-                  <div className="bg-white/10 rounded-lg p-3 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Delhi → Singapore</div>
-                      <div class="text-xs text-blue-200">Air India, 1 stop, 8h 45m</div>
-                    </div>
-                    <div className="text-lg font-bold">₹22800</div>
-                  </div>
-                  <div className="bg-white/10 rounded-lg p-3 flex justify-between items-center">
-                    <div>
-                      <div className="text-sm font-medium">Mumbai → London</div>
-                      <div className="text-xs text-blue-200">British Airways, Non-stop, 9h 25m</div>
-                    </div>
-                    <div className="text-lg font-bold">₹45200</div>
-                  </div>
-                </div>
               </div>
 
             </div>
