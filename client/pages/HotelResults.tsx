@@ -851,9 +851,9 @@ export default function HotelResults() {
               onClick={() => setShowFilters(false)}
             />
             <div className="fixed inset-0 z-50 flex items-end">
-              <div className="w-full bg-white rounded-t-3xl shadow-2xl h-[85vh] overflow-hidden">
+              <div className="w-full bg-white rounded-t-3xl shadow-2xl h-[85vh] flex flex-col">
                 {/* Filter Header */}
-                <div className="bg-[#003580] text-white p-4 rounded-t-3xl">
+                <div className="bg-[#003580] text-white p-4 rounded-t-3xl flex-shrink-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <Filter className="w-5 h-5 mr-2" />
@@ -875,17 +875,19 @@ export default function HotelResults() {
                   </div>
                 </div>
 
-                {/* Filter Content */}
-                <div className="overflow-y-auto flex-1 p-4">
-                  <EnhancedFilters
-                    priceRange={priceRange}
-                    setPriceRange={setPriceRange}
-                    selectedAmenities={selectedAmenities}
-                    setSelectedAmenities={setSelectedAmenities}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                    onClearFilters={handleClearFilters}
-                  />
+                {/* Filter Content - Scrollable */}
+                <div className="flex-1 overflow-y-auto min-h-0">
+                  <div className="p-4">
+                    <EnhancedFilters
+                      priceRange={priceRange}
+                      setPriceRange={setPriceRange}
+                      selectedAmenities={selectedAmenities}
+                      setSelectedAmenities={setSelectedAmenities}
+                      sortBy={sortBy}
+                      setSortBy={setSortBy}
+                      onClearFilters={handleClearFilters}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
