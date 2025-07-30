@@ -627,9 +627,9 @@ export function HotelCard({
             </h3>
 
             {/* Address directly below hotel name */}
-            <div className="flex items-center text-gray-600 mb-2">
-              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 mr-1 flex-shrink-0" />
-              <span className="text-sm sm:text-base text-gray-600 truncate">
+            <div className="flex items-start text-gray-600 mb-2">
+              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
+              <span className="text-sm sm:text-base text-gray-600 line-clamp-2 leading-tight">
                 {hotelLocation}
               </span>
             </div>
