@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import {
   Dialog,
   DialogContent,
