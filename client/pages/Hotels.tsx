@@ -75,6 +75,15 @@ export default function Hotels() {
     children: 0,
     childAges: [] as number[],
   });
+
+  // Mobile dropdown states
+  const [showMobileDestination, setShowMobileDestination] = useState(false);
+  const [showMobileDates, setShowMobileDates] = useState(false);
+  const [showMobileGuests, setShowMobileGuests] = useState(false);
+  const [selectedDepartureDate, setSelectedDepartureDate] = useState<Date | null>(null);
+  const [selectedReturnDate, setSelectedReturnDate] = useState<Date | null>(null);
+  const [selectingDeparture, setSelectingDeparture] = useState(true);
+
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userName] = useState("Zubin Aibara");
 
