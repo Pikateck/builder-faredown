@@ -23,6 +23,8 @@ import {
   Sparkles,
   Wind,
   Building2,
+  Coffee as CoffeeIcon,
+  Utensils,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import {
@@ -58,6 +60,8 @@ interface Hotel extends Partial<HotelType> {
     cancellationPolicy: string;
     paymentTerms: string;
   };
+  breakfastIncluded?: boolean;
+  breakfastType?: string;
 }
 
 interface HotelCardProps {
@@ -260,31 +264,31 @@ export function HotelCard({
         {/* Grid View - Vertical Layout */}
         <div className="flex flex-col h-full">
           {/* Image Gallery */}
-          <div className="relative w-full h-32 flex-shrink-0">
+          <div className="relative w-full h-36 flex-shrink-0">
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
               className="w-full h-full object-cover"
             />
 
-            {/* Image Navigation */}
+            {/* Image Navigation - Small arrows like Booking.com */}
             {images.length > 1 && (
               <>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 w-8 h-8 p-0 touch-manipulation"
+                  className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
                   onClick={prevImage}
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3 h-3" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 w-8 h-8 p-0 touch-manipulation"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
                   onClick={nextImage}
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3 h-3" />
                 </Button>
               </>
             )}
@@ -396,36 +400,49 @@ export function HotelCard({
                   </div>
                 </div>
               )}
+
+              {/* Breakfast Information */}
+              <div className="flex items-center gap-1 mb-3">
+                <Utensils className="w-3 h-3 text-gray-500" />
+                <span className="text-xs text-gray-600">
+                  {hotel.breakfastIncluded ? (
+                    <span className="text-green-600 font-medium">
+                      ✓ Breakfast included{hotel.breakfastType ? ` (${hotel.breakfastType})` : ''}
+                    </span>
+                  ) : (
+                    'Breakfast not included'
+                  )}
+                </span>
+              </div>
             </div>
 
-            {/* Pricing Section - Redesigned */}
+            {/* Pricing Section - Booking.com Style */}
             <div className="mt-auto bg-gray-50 rounded-lg p-3 border border-gray-100">
               {/* Price Display */}
-              <div className="text-center mb-3">
+              <div className="text-right mb-3">
+                <div className="text-xl font-bold text-[#003580] mb-1">
+                  Total Price
+                </div>
                 <div className="text-2xl font-bold text-[#003580] mb-1">
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
-                <div className="text-sm text-gray-600 font-medium mb-1">
-                  Total Price • {totalNights} night{totalNights > 1 ? "s" : ""}{" "}
-                  • All Inclusive taxes
-                </div>
-                <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full inline-block">
-                  {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)
+                <div className="text-xs text-gray-500">
+                  {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
                 </div>
               </div>
 
-              {/* Action Buttons - Two buttons in row */}
+              {/* Action Buttons - Same size and bigger */}
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  className="flex-1 py-3 text-sm font-semibold border-blue-600 text-blue-600 hover:bg-blue-50"
+                  className="flex-1 py-3.5 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-blue-50 min-h-[44px]"
                   onClick={handleViewDetails}
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px]"
                 >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
@@ -445,32 +462,32 @@ export function HotelCard({
       <div className="block sm:hidden">
         {/* Mobile Layout - Stacked */}
         <div className="flex flex-col">
-          {/* Hotel Image - Compact */}
-          <div className="relative w-full h-32 flex-shrink-0">
+          {/* Hotel Image - Extended */}
+          <div className="relative w-full h-40 flex-shrink-0">
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
               className="w-full h-full object-cover"
             />
 
-            {/* Image Navigation for Mobile */}
+            {/* Image Navigation for Mobile - Small arrows */}
             {images.length > 1 && (
               <>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-8 h-8 p-0 backdrop-blur-sm"
+                  className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
                   onClick={prevImage}
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3 h-3" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-8 h-8 p-0 backdrop-blur-sm"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
                   onClick={nextImage}
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3 h-3" />
                 </Button>
               </>
             )}
@@ -541,36 +558,47 @@ export function HotelCard({
               </div>
             )}
 
-            {/* Pricing and Actions - Mobile Redesigned */}
+            {/* Breakfast Information - Mobile */}
+            <div className="flex items-center gap-1 mb-3">
+              <Utensils className="w-3 h-3 text-gray-500" />
+              <span className="text-xs text-gray-600">
+                {hotel.breakfastIncluded ? (
+                  <span className="text-green-600 font-medium">
+                    ✓ Breakfast included{hotel.breakfastType ? ` (${hotel.breakfastType})` : ''}
+                  </span>
+                ) : (
+                  'Breakfast not included'
+                )}
+              </span>
+            </div>
+
+            {/* Pricing and Actions - Mobile Booking.com Style */}
             <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mt-3">
               {/* Price Display */}
-              <div className="text-center mb-3">
+              <div className="text-right mb-3">
+                <div className="text-sm font-bold text-[#003580] mb-1">
+                  Total Price
+                </div>
                 <div className="text-lg font-bold text-[#003580] mb-1">
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
-                <div className="text-xs text-gray-600 font-medium mb-1">
-                  Total • {totalNights} night{totalNights > 1 ? "s" : ""} • All
-                  Inclusive taxes
-                </div>
-                <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full inline-block">
-                  {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)
+                <div className="text-xs text-gray-500">
+                  {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
                 </div>
               </div>
 
-              {/* Action Buttons - Full Width */}
+              {/* Action Buttons - Same size and bigger */}
               <div className="flex space-x-2">
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="flex-1 py-2 text-xs font-semibold border-blue-600 text-blue-600"
+                  className="flex-1 py-3 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-blue-50 min-h-[40px]"
                   onClick={handleViewDetails}
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  size="sm"
-                  className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-2 text-xs flex items-center justify-center gap-1"
+                  className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-1 min-h-[40px]"
                 >
                   <TrendingDown className="w-3 h-3" />
                   Bargain Now
@@ -583,32 +611,32 @@ export function HotelCard({
 
       {/* Desktop/Tablet Layout */}
       <div className="hidden sm:flex flex-col sm:flex-row">
-        {/* Image Gallery */}
-        <div className="relative sm:w-48 md:w-56 h-32 sm:h-36 md:h-40 flex-shrink-0">
+        {/* Image Gallery - Extended height */}
+        <div className="relative sm:w-48 md:w-56 h-40 sm:h-44 md:h-48 flex-shrink-0">
           <img
             src={images[currentImageIndex]}
             alt={hotel.name}
             className="w-full h-full object-cover"
           />
 
-          {/* Image Navigation */}
+          {/* Image Navigation - Small arrows like Booking.com */}
           {images.length > 1 && (
             <>
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute left-1 sm:left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 w-7 h-7 sm:w-8 sm:h-8 p-0 touch-manipulation"
+                className="absolute left-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
                 onClick={prevImage}
               >
-                <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+                <ChevronLeft className="w-3 h-3" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-700 w-7 h-7 sm:w-8 sm:h-8 p-0 touch-manipulation"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white text-gray-700 w-6 h-6 p-0 rounded-full shadow-sm"
                 onClick={nextImage}
               >
-                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                <ChevronRight className="w-3 h-3" />
               </Button>
             </>
           )}
@@ -682,31 +710,47 @@ export function HotelCard({
             </div>
           )}
 
-          {/* Price and Actions - Horizontal */}
-          <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
+          {/* Breakfast Information - Desktop */}
+          <div className="flex items-center gap-1 mb-2">
+            <Utensils className="w-3 h-3 text-gray-500" />
+            <span className="text-xs text-gray-600">
+              {hotel.breakfastIncluded ? (
+                <span className="text-green-600 font-medium">
+                  ✓ Breakfast included{hotel.breakfastType ? ` (${hotel.breakfastType})` : ''}
+                </span>
+              ) : (
+                'Breakfast not included'
+              )}
+            </span>
+          </div>
+
+          {/* Price and Actions - Booking.com Style */}
+          <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">
             <div className="flex-1">
+              <div className="text-sm font-bold text-[#003580] mb-1">
+                Total Price
+              </div>
               <div className="text-lg font-bold text-[#003580]">
                 {formatPrice(totalPriceInclusiveTaxes)}
               </div>
               <div className="text-xs text-gray-500">
-                per night (incl. taxes)
+                {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
               </div>
             </div>
             <div className="flex gap-2 ml-3">
               <Button
                 variant="outline"
-                size="sm"
-                className="text-xs px-3 py-1.5 border-blue-600 text-blue-600"
+                className="text-sm px-4 py-2.5 border-[#003580] text-[#003580] hover:bg-blue-50 font-semibold min-h-[40px]"
                 onClick={handleViewDetails}
               >
-                Details
+                View Details
               </Button>
               <Button
                 onClick={() => onBargainClick(hotel, searchParams)}
-                size="sm"
-                className="text-xs px-3 py-1.5 bg-[#febb02] hover:bg-[#e6a602] text-black"
+                className="text-sm px-4 py-2.5 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold flex items-center gap-1 min-h-[40px]"
               >
-                Bargain
+                <TrendingDown className="w-3 h-3" />
+                Bargain Now
               </Button>
             </div>
           </div>
