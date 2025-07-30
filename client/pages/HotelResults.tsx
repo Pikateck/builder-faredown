@@ -76,6 +76,7 @@ export default function HotelResults() {
   const [totalResults, setTotalResults] = useState(0);
   const [isLiveData, setIsLiveData] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   // Edit modal states
   const [editDestination, setEditDestination] = useState("Dubai");
@@ -210,7 +211,7 @@ export default function HotelResults() {
       };
 
       console.log(
-        "🔴 Searching live Hotelbeds API with params:",
+        "��� Searching live Hotelbeds API with params:",
         searchRequest,
       );
 
