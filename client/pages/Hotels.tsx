@@ -108,7 +108,7 @@ export default function Hotels() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
 
       {/* Mobile Layout (≤768px) - Match Index.tsx exactly */}
@@ -747,7 +747,7 @@ export default function Hotels() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                          <span>���� English</span>
+                          <span>🌐 English</span>
                           <ChevronDown className="w-4 h-4" />
                         </button>
                       </DropdownMenuTrigger>
