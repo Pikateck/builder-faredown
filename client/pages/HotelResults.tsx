@@ -36,7 +36,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { formatPriceWithSymbol } from "@/lib/pricing";
+import { formatPriceWithSymbol, calculateNights } from "@/lib/pricing";
 import {
   MobileCityDropdown,
   MobileDatePicker,
@@ -597,6 +597,13 @@ export default function HotelResults() {
                     {returnDate
                       ? formatDisplayDate(returnDate)
                       : checkOut || "Tomorrow"}
+                    {" "}
+                    ({(() => {
+                      const checkInDate = departureDate || (checkIn ? new Date(checkIn) : new Date());
+                      const checkOutDate = returnDate || (checkOut ? new Date(checkOut) : new Date(Date.now() + 24 * 60 * 60 * 1000));
+                      const nights = calculateNights(checkInDate, checkOutDate);
+                      return `${nights} night${nights > 1 ? 's' : ''}`;
+                    })()})
                   </span>
                 </div>
                 <div className="flex items-center">
