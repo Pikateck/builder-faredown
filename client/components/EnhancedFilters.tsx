@@ -84,6 +84,7 @@ export function EnhancedFilters({
 }: EnhancedFiltersProps) {
   const { selectedCurrency } = useCurrency();
   const [expandedSections, setExpandedSections] = useState<string[]>([
+    "property-rating",
     "popular",
     "price",
   ]);
