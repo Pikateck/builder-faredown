@@ -68,6 +68,12 @@ import {
   TrendingDown,
   Search,
 } from "lucide-react";
+import {
+  MobileCityDropdown,
+  MobileDatePicker,
+  MobileTravelers,
+  MobileClassDropdown,
+} from "@/components/MobileDropdowns";
 
 // Flight data with fare types
 const flightData = [
