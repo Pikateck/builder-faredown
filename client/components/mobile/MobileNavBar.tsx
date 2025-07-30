@@ -98,7 +98,9 @@ export function MobileNavBar({
               className="text-white hover:bg-white/20 p-2 mr-3 flex-shrink-0"
               onClick={handleBack}
             >
-              <ChevronLeft className="w-5 h-5" />
+              <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <ChevronLeft className="w-4 h-4" />
+              </div>
             </Button>
             <div className="flex-1 min-w-0">
               <h1 className="font-semibold text-lg line-clamp-1">{title}</h1>
