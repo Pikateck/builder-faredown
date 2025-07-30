@@ -86,6 +86,12 @@ import {
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import AdminTestButton from "@/components/AdminTestButton";
+import {
+  MobileCityDropdown,
+  MobileDatePicker,
+  MobileTravelers,
+  MobileClassDropdown,
+} from "@/components/MobileDropdowns";
 
 export default function Index() {
   const { isLoggedIn, user, login, logout } = useAuth();
