@@ -260,7 +260,7 @@ export function HotelCard({
         {/* Grid View - Vertical Layout */}
         <div className="flex flex-col h-full">
           {/* Image Gallery */}
-          <div className="relative w-full h-48 flex-shrink-0">
+          <div className="relative w-full h-32 flex-shrink-0">
             <img
               src={images[currentImageIndex]}
               alt={hotel.name}
