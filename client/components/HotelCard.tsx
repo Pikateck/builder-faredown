@@ -377,25 +377,22 @@ export function HotelCard({
                 </div>
               )}
 
-              {/* Room Type Information */}
+              {/* Room Type Information - Compact */}
               {hotel.availableRoom && (
-                <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <div className="text-sm font-medium text-gray-900 mb-2">
+                <div className="mb-3 pb-2 border-b border-gray-100">
+                  <div className="text-sm font-medium text-gray-900 mb-1">
                     {hotel.availableRoom.type}
                   </div>
-                  <div className="space-y-1">
-                    <div className="text-xs text-gray-600">
-                      {hotel.availableRoom.bedType}
-                    </div>
-                    <div className="text-xs text-gray-600">
-                      {hotel.availableRoom.rateType}
-                    </div>
-                    <div className="text-xs text-green-700 font-medium">
+                  <div className="text-xs text-gray-600 mb-1">
+                    {hotel.availableRoom.bedType} • {hotel.availableRoom.rateType}
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
                       ✓ {hotel.availableRoom.paymentTerms}
-                    </div>
-                    <div className="text-xs text-green-700 font-medium">
+                    </span>
+                    <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
                       ✓ {hotel.availableRoom.cancellationPolicy}
-                    </div>
+                    </span>
                   </div>
                 </div>
               )}
