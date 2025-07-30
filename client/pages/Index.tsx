@@ -14,6 +14,7 @@ import {
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import {
   formatDateToDDMMMYYYY,
   formatDateToDisplayString,
