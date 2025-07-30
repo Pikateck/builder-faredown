@@ -263,7 +263,7 @@ export default function Hotels() {
             {/* Hotel Search Form */}
             <div className="space-y-4">
               {/* Destination */}
-              <div className="bg-white rounded-xl p-4 shadow-sm relative">
+              <div className="bg-white rounded-xl p-4 shadow-sm">
                 <button
                   onClick={() => setShowMobileDestination(true)}
                   className="w-full text-left"
@@ -772,7 +772,7 @@ export default function Hotels() {
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
-                          { code: "pt", name: "Português", flag: "���🇹" },
+                          { code: "pt", name: "Português", flag: "����🇹" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
