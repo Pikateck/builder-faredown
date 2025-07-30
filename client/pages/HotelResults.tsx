@@ -211,7 +211,7 @@ export default function HotelResults() {
       };
 
       console.log(
-        "��� Searching live Hotelbeds API with params:",
+        "🔴 Searching live Hotelbeds API with params:",
         searchRequest,
       );
 
@@ -563,12 +563,7 @@ export default function HotelResults() {
                 variant="outline"
                 size="sm"
                 className="text-blue-600 border-blue-600 hover:bg-blue-50 px-3 py-1 h-auto"
-                onClick={() => {
-                  const button = document.querySelector(
-                    "[data-mobile-filter-trigger]",
-                  ) as HTMLButtonElement;
-                  if (button) button.click();
-                }}
+                onClick={() => setShowFilters(true)}
               >
                 <Filter className="w-3 h-3 mr-1" />
                 Filter
