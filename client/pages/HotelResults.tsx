@@ -413,6 +413,13 @@ export default function HotelResults() {
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
+      availableRoom: {
+        type: "1 X Queen Superior",
+        bedType: "Queen bed",
+        rateType: "Flexible Rate",
+        paymentTerms: "Pay at the property",
+        cancellationPolicy: "Free cancellation until 2 days before",
+      },
     },
     {
       id: 3,
