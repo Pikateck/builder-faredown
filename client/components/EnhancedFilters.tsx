@@ -256,12 +256,12 @@ export function EnhancedFilters({
             )}
           </button>
           {isExpanded && (
-            <div className="mt-0.5 space-y-0">
+            <div className="mt-2 space-y-1">
               {visibleItems.map((item) => renderFilterItem(item, category.id))}
               {hasMore && (
                 <button
                   onClick={() => toggleShowAll(category.id)}
-                  className="text-blue-600 text-xs hover:underline mt-0.5"
+                  className="text-blue-600 text-xs hover:underline mt-2 py-1"
                 >
                   {showAll ? "Show less" : `Show all ${category.items.length}`}
                 </button>
