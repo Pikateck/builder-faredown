@@ -325,6 +325,17 @@ export default function HotelResults() {
         pets: "Pets not allowed",
         smoking: "Non-smoking",
       },
+      // Add breakfast information
+      breakfastIncluded: hotel.breakfastIncluded || Math.random() > 0.5, // Random for demo
+      breakfastType: hotel.breakfastType || (Math.random() > 0.5 ? "Continental Buffet" : "American Breakfast"),
+      // Add room information for live data
+      availableRoom: hotel.availableRoom || {
+        type: "1 X Standard Room",
+        bedType: "Double bed",
+        rateType: "Flexible Rate",
+        paymentTerms: "No prepayment needed",
+        cancellationPolicy: "Free cancellation",
+      },
     }));
   };
 
@@ -435,7 +446,7 @@ export default function HotelResults() {
       rating: 4.9,
       reviews: 567,
       originalPrice: 7500, // ₹7,500 per night
-      currentPrice: 5800, // ₹5,800 per night
+      currentPrice: 5800, // ���5,800 per night
       description:
         "Cozy mountain retreat with fireplace, ski-in/ski-out access, and breathtaking alpine views.",
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
@@ -537,7 +548,7 @@ export default function HotelResults() {
   };
 
   const handleClearFilters = () => {
-    setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ��25,000)
+    setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
     setSelectedRating([]);
     setSelectedAmenities([]);
     setSortBy("recommended");
