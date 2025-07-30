@@ -46,6 +46,15 @@
     border-radius: 8px;
   }
 
+  /* Mobile filter checkboxes - from backup system */
+  [data-radix-collection-item] button[role="checkbox"],
+  button[role="checkbox"] {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+  }
+
   /* Mobile-specific card spacing */
   .card-mobile {
     margin: 8px;
