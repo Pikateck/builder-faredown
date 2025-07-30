@@ -1245,7 +1245,7 @@ export default function FlightResults() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "🇬🇧" },
+                      { code: "en", name: "English", flag: "🇬��" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
@@ -3357,7 +3357,7 @@ export default function FlightResults() {
                                         Airline fee:
                                       </span>
                                       <span className="text-gray-900 font-medium">
-                                        ₹0
+                                        ���0
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
@@ -4503,12 +4503,9 @@ export default function FlightResults() {
                     </button>
 
                     {/* To Section */}
-                    <div className="flex-1 relative">
+                    <div className="flex-1">
                       <button
-                        onClick={() => {
-                          setShowToCities(!showToCities);
-                          setShowFromCities(false);
-                        }}
+                        onClick={() => setShowToCities(true)}
                         className="w-full text-left"
                       >
                         <div className="text-xs text-gray-500 mb-1">To</div>
@@ -4523,31 +4520,6 @@ export default function FlightResults() {
                           </div>
                         </div>
                       </button>
-
-                      {/* To Cities Dropdown */}
-                      {showToCities && (
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-48 overflow-y-auto">
-                          {[
-                            { code: "DXB", name: "Dubai", airport: "Dubai International" },
-                            { code: "LHR", name: "London", airport: "Heathrow Airport" },
-                            { code: "JFK", name: "New York", airport: "John F. Kennedy International" },
-                            { code: "SIN", name: "Singapore", airport: "Changi Airport" },
-                            { code: "NRT", name: "Tokyo", airport: "Narita International" }
-                          ].map((city) => (
-                            <button
-                              key={city.code}
-                              onClick={() => {
-                                setSelectedToCity(city.name);
-                                setShowToCities(false);
-                              }}
-                              className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
-                            >
-                              <div className="font-medium">{city.code} - {city.name}</div>
-                              <div className="text-sm text-gray-500">{city.airport}</div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
