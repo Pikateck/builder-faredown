@@ -309,26 +309,7 @@ export default function Hotels() {
                   </div>
                 </button>
 
-                {showMobileCalendar && (
-                  <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
-                    <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg max-h-[90vh] overflow-auto">
-                      <SimpleCalendar
-                        onDateSelect={(checkIn, checkOut) => {
-                          console.log("Mobile hotel dates selected:", {
-                            checkIn,
-                            checkOut,
-                          });
-                          setDepartureDate(checkIn);
-                          setReturnDate(checkOut);
-                          setShowMobileCalendar(false); // Close calendar after selection
-                        }}
-                        onClose={() => setShowMobileCalendar(false)}
-                        initialCheckIn={departureDate || undefined}
-                        initialCheckOut={returnDate || undefined}
-                      />
-                    </div>
-                  </div>
-                )}
+
               </div>
 
               {/* Guests */}
