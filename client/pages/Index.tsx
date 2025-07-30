@@ -1064,6 +1064,9 @@ export default function Index() {
 
       </div>
 
+      {/* Mobile Navigation */}
+      <MobileNavigation />
+
       {/* DESKTOP LAYOUT (≥769px) - Enhanced Original Design */}
       <div className="hidden md:block">
         {/* Desktop Header */}
