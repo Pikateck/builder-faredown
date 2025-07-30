@@ -4075,27 +4075,27 @@ export default function FlightResults() {
                       ).length,
                     },
                   ].map((option) => (
-                    <label
+                    <div
                       key={option.value}
-                      className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50 active:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between py-1"
                     >
-                      <div className="flex items-center space-x-3">
+                      <label className="flex items-center space-x-2 cursor-pointer flex-1">
                         <input
                           type="radio"
                           name="mobile-fareType"
                           value={option.value}
                           checked={selectedFareType === option.value}
                           onChange={() => handleFareTypeFilter(option.value)}
-                          className="w-4 h-4 text-[#003580]"
+                          className="w-3 h-3 text-[#003580]"
                         />
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm text-gray-900">
                           {option.label}
                         </span>
-                      </div>
-                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">
+                      </label>
+                      <span className="text-xs text-gray-500 ml-2">
                         {option.count}
                       </span>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
