@@ -38,6 +38,11 @@ import {
   X,
 } from "lucide-react";
 import AdminTestButton from "@/components/AdminTestButton";
+import {
+  MobileCityDropdown,
+  MobileDatePicker,
+  MobileTravelers,
+} from "@/components/MobileDropdowns";
 
 export default function Hotels() {
   const navigate = useNavigate();
