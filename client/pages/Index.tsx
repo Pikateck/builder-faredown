@@ -751,12 +751,9 @@ export default function Index() {
 
               {/* Travelers & Class */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white rounded-xl p-4 shadow-sm relative">
+                <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
-                    onClick={() => {
-                      setShowTravelers(!showTravelers);
-                      setShowClassDropdown(false);
-                    }}
+                    onClick={() => setShowTravelers(true)}
                     className="w-full text-left"
                   >
                     <div className="text-xs text-gray-500 mb-1">Travelers</div>
@@ -775,72 +772,11 @@ export default function Index() {
                       </div>
                     </div>
                   </button>
-
-                  {/* Travelers Dropdown */}
-                  {showTravelers && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-4 min-w-[280px]">
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <div className="font-medium">Adults</div>
-                          <div className="text-sm text-gray-500">12+ years</div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            onClick={() => setTravelers(prev => ({ ...prev, adults: Math.max(1, prev.adults - 1) }))}
-                            disabled={travelers.adults <= 1}
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
-                          >
-                            -
-                          </button>
-                          <span className="w-8 text-center font-medium">{travelers.adults}</span>
-                          <button
-                            onClick={() => setTravelers(prev => ({ ...prev, adults: prev.adults + 1 }))}
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <div className="font-medium">Children</div>
-                          <div className="text-sm text-gray-500">2-11 years</div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            onClick={() => setTravelers(prev => ({ ...prev, children: Math.max(0, prev.children - 1) }))}
-                            disabled={travelers.children <= 0}
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
-                          >
-                            -
-                          </button>
-                          <span className="w-8 text-center font-medium">{travelers.children}</span>
-                          <button
-                            onClick={() => setTravelers(prev => ({ ...prev, children: prev.children + 1 }))}
-                            className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => setShowTravelers(false)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium"
-                      >
-                        Done
-                      </button>
-                    </div>
-                  )}
                 </div>
 
-                <div className="bg-white rounded-xl p-4 shadow-sm relative">
+                <div className="bg-white rounded-xl p-4 shadow-sm">
                   <button
-                    onClick={() => {
-                      setShowClassDropdown(!showClassDropdown);
-                      setShowTravelers(false);
-                    }}
+                    onClick={() => setShowClassDropdown(true)}
                     className="w-full text-left"
                   >
                     <div className="text-xs text-gray-500 mb-1">Class</div>
@@ -856,29 +792,6 @@ export default function Index() {
                       </div>
                     </div>
                   </button>
-
-                  {/* Class Dropdown */}
-                  {showClassDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 p-3">
-                      {["Economy", "Premium Economy", "Business", "First"].map((cabinClass) => (
-                        <button
-                          key={cabinClass}
-                          onClick={() => {
-                            setSelectedClass(cabinClass);
-                            setShowClassDropdown(false);
-                          }}
-                          className={cn(
-                            "w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors",
-                            selectedClass === cabinClass
-                              ? "bg-blue-50 text-blue-700 font-medium"
-                              : "text-gray-700"
-                          )}
-                        >
-                          {cabinClass}
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
 
