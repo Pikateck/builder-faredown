@@ -3068,7 +3068,7 @@ export default function FlightResults() {
                                                   Airline fee:
                                                 </span>
                                                 <span className="text-gray-900 font-medium">
-                                                  ₹0
+                                                  ��0
                                                 </span>
                                               </div>
                                               <div className="flex justify-between">
@@ -5484,6 +5484,65 @@ export default function FlightResults() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Mobile Dropdown Components for Edit Search */}
+      <MobileCityDropdown
+        isOpen={showFromCities}
+        onClose={() => setShowFromCities(false)}
+        title="Select departure city"
+        cities={{
+          "Mumbai": { code: "BOM", name: "Mumbai", airport: "Chhatrapati Shivaji International", fullName: "Mumbai, India" },
+          "Delhi": { code: "DEL", name: "Delhi", airport: "Indira Gandhi International", fullName: "Delhi, India" },
+          "Bangalore": { code: "BLR", name: "Bangalore", airport: "Kempegowda International", fullName: "Bangalore, India" },
+          "Chennai": { code: "MAA", name: "Chennai", airport: "Chennai International", fullName: "Chennai, India" },
+          "Kolkata": { code: "CCU", name: "Kolkata", airport: "Netaji Subhas Chandra Bose", fullName: "Kolkata, India" }
+        }}
+        selectedCity={selectedFromCity}
+        onSelectCity={setSelectedFromCity}
+      />
+
+      <MobileCityDropdown
+        isOpen={showToCities}
+        onClose={() => setShowToCities(false)}
+        title="Select destination city"
+        cities={{
+          "Dubai": { code: "DXB", name: "Dubai", airport: "Dubai International", fullName: "Dubai, UAE" },
+          "London": { code: "LHR", name: "London", airport: "Heathrow Airport", fullName: "London, UK" },
+          "New York": { code: "JFK", name: "New York", airport: "John F. Kennedy International", fullName: "New York, USA" },
+          "Singapore": { code: "SIN", name: "Singapore", airport: "Changi Airport", fullName: "Singapore" },
+          "Tokyo": { code: "NRT", name: "Tokyo", airport: "Narita International", fullName: "Tokyo, Japan" }
+        }}
+        selectedCity={selectedToCity}
+        onSelectCity={setSelectedToCity}
+      />
+
+      <MobileDatePicker
+        isOpen={showCalendar}
+        onClose={() => setShowCalendar(false)}
+        tripType={editTripType}
+        setTripType={setEditTripType}
+        selectedDepartureDate={departureDate ? new Date(departureDate) : null}
+        selectedReturnDate={returnDate ? new Date(returnDate) : null}
+        setSelectedDepartureDate={(date) => setDepartureDate(date ? date.toISOString().split('T')[0] : null)}
+        setSelectedReturnDate={(date) => setReturnDate(date ? date.toISOString().split('T')[0] : null)}
+        selectingDeparture={selectingDeparture}
+        setSelectingDeparture={setSelectingDeparture}
+      />
+
+      <MobileTravelers
+        isOpen={showTravelers}
+        onClose={() => setShowTravelers(false)}
+        travelers={travelers}
+        setTravelers={setTravelers}
+      />
+
+      <MobileClassDropdown
+        isOpen={showClassDropdown}
+        onClose={() => setShowClassDropdown(false)}
+        selectedClass={selectedClass}
+        onSelectClass={setSelectedClass}
+      />
+
       <MobileNavigation />
     </div>
   );
