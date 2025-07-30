@@ -513,30 +513,37 @@ export function HotelCard({
               </div>
             )}
 
-            {/* Pricing and Actions - Mobile */}
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <div className="text-xs text-gray-500 mb-1">
-                  {formatPrice(perNightInclusiveTaxes)} per night •{" "}
-                  {totalNights} nights
+            {/* Pricing and Actions - Mobile Redesigned */}
+            <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mt-3">
+              {/* Price Display */}
+              <div className="text-center mb-3">
+                <div className="text-lg font-bold text-[#003580] mb-1">
+                  {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
-                <div className="text-xs text-gray-400">incl. taxes & fees</div>
+                <div className="text-xs text-gray-600 font-medium mb-1">
+                  Total • {totalNights} night{totalNights > 1 ? 's' : ''}
+                </div>
+                <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full inline-block">
+                  {formatPrice(perNightInclusiveTaxes)} per night
+                </div>
               </div>
-              <div className="flex space-x-2 ml-4">
+
+              {/* Action Buttons - Full Width */}
+              <div className="flex space-x-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="px-4 py-2 text-xs font-semibold border-blue-600 text-blue-600"
+                  className="flex-1 py-2 text-xs font-semibold border-blue-600 text-blue-600"
                   onClick={handleViewDetails}
                 >
-                  View
+                  View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 text-xs"
+                  className="flex-1 bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-2 text-xs"
                 >
-                  Bargain
+                  Bargain Now
                 </Button>
               </div>
             </div>
