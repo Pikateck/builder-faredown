@@ -310,16 +310,15 @@ export function HotelCard({
           {/* Hotel Details */}
           <CardContent className="p-4 flex-1 flex flex-col space-y-3">
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#003580] transition-colors line-clamp-2">
-                {hotel.name}
-              </h3>
-
-              {/* Address and Reviews directly below hotel name */}
-              <div className="flex items-center text-gray-600 mb-1">
-                <div className="w-4 h-4 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center mr-1 shadow-sm">
-                  <MapPin className="w-2 h-2 text-white" />
+              <div className="mb-2">
+                <h3 className="text-lg font-bold text-gray-900 mb-0.5 group-hover:text-[#003580] transition-colors line-clamp-1">
+                  {hotel.name}
+                </h3>
+                {/* Address in one line directly after hotel name */}
+                <div className="flex items-center text-gray-600">
+                  <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                  <span className="text-sm text-gray-600 truncate">{hotelLocation}</span>
                 </div>
-                <span className="text-xs truncate">{hotelLocation}</span>
               </div>
 
               <div className="flex items-center mb-3">
