@@ -1978,6 +1978,7 @@ Please keep this ticket for your records.
           </div>
         </DialogContent>
       </Dialog>
+      <MobileNavigation />
     </div>
   );
 }
