@@ -300,6 +300,11 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 export function useCurrency(): CurrencyContextType {
   const context = useContext(CurrencyContext);
   if (context === undefined) {
+    // Provide a more descriptive error message and ensure it's not a timing issue
+    console.error("❌ CurrencyContext is undefined. This usually means either:",
+      "\n1. useCurrency hook is called outside of CurrencyProvider",
+      "\n2. CurrencyProvider failed to initialize properly",
+      "\n3. There's a circular dependency or timing issue");
     throw new Error("useCurrency must be used within a CurrencyProvider");
   }
   return context;
