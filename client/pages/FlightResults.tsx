@@ -1252,7 +1252,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हिन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
@@ -4381,14 +4381,7 @@ export default function FlightResults() {
           {/* Overlay */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={() => {
-              setShowSearchEdit(false);
-              setShowFromCities(false);
-              setShowToCities(false);
-              setShowCalendar(false);
-              setShowTravelers(false);
-              setShowClassDropdown(false);
-            }}
+            onClick={() => setShowSearchEdit(false)}
           />
 
           {/* Modal Container - Exact Specs */}
