@@ -2817,6 +2817,52 @@ export default function Index() {
             />
           </Fragment>
         ))}
+
+      {/* Mobile Dropdown Components */}
+      <MobileCityDropdown
+        isOpen={showFromCities}
+        onClose={() => setShowFromCities(false)}
+        title="Select departure city"
+        cities={cityData}
+        selectedCity={selectedFromCity}
+        onSelectCity={setSelectedFromCity}
+      />
+
+      <MobileCityDropdown
+        isOpen={showToCities}
+        onClose={() => setShowToCities(false)}
+        title="Select destination city"
+        cities={cityData}
+        selectedCity={selectedToCity}
+        onSelectCity={setSelectedToCity}
+      />
+
+      <MobileDatePicker
+        isOpen={showCalendar}
+        onClose={() => setShowCalendar(false)}
+        tripType={tripType}
+        setTripType={setTripType}
+        selectedDepartureDate={departureDate}
+        selectedReturnDate={returnDate}
+        setSelectedDepartureDate={setDepartureDate}
+        setSelectedReturnDate={setReturnDate}
+        selectingDeparture={selectingDeparture}
+        setSelectingDeparture={setSelectingDeparture}
+      />
+
+      <MobileTravelers
+        isOpen={showTravelers}
+        onClose={() => setShowTravelers(false)}
+        travelers={travelers}
+        setTravelers={setTravelers}
+      />
+
+      <MobileClassDropdown
+        isOpen={showClassDropdown}
+        onClose={() => setShowClassDropdown(false)}
+        selectedClass={selectedClass}
+        onSelectClass={setSelectedClass}
+      />
     </div>
   );
 }
