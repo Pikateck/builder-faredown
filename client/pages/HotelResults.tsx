@@ -377,6 +377,8 @@ export default function HotelResults() {
         paymentTerms: "No prepayment needed",
         cancellationPolicy: "Free cancellation",
       },
+      breakfastIncluded: true,
+      breakfastType: "Continental Buffet",
     },
     {
       id: 2,
