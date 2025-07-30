@@ -313,44 +313,45 @@ export function EnhancedFilters({
 
   return (
     <div className="bg-white">
-      {/* Price Range */}
-      <div className="border-b border-gray-200 pb-3 mb-4">
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">
-          Your budget (total stay)
-        </h3>
-        <div className="px-3">
-          <Slider
-            value={priceRange}
-            onValueChange={setPriceRange}
-            max={25000}
-            step={100}
-            className="mb-3"
-          />
-          <div className="flex justify-between text-xs text-gray-600">
-            <span>
-              {formatPriceWithSymbol(priceRange[0], selectedCurrency.code)}
-            </span>
-            <span>
-              {formatPriceWithSymbol(priceRange[1], selectedCurrency.code)}+
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Filter Categories */}
-      <div className="space-y-4">
-        {filterCategories.map(renderFilterCategory)}
-      </div>
-
-      {/* Clear Filters */}
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <Button
-          variant="outline"
+      {/* Clear Filters Button */}
+      <div className="mt-3 pt-2 border-t border-gray-200">
+        <button
           onClick={onClearFilters}
-          className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 text-sm h-10 px-4 py-3"
+          className="w-full text-blue-600 border border-blue-600 hover:bg-blue-50 text-sm h-8 rounded font-medium"
         >
           Clear all filters
-        </Button>
+        </button>
+      </div>
+
+      <div className="max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+        {/* Price Range */}
+        <div className="space-y-1 mt-4">
+          <div className="border-b border-gray-200 pb-1">
+            <div className="text-sm font-semibold text-gray-900">
+              Your budget (total stay)
+            </div>
+          </div>
+          <div className="px-3 py-2">
+            <Slider
+              value={priceRange}
+              onValueChange={setPriceRange}
+              max={25000}
+              step={100}
+              className="mb-3"
+            />
+            <div className="flex justify-between text-xs text-gray-600">
+              <span>
+                {formatPriceWithSymbol(priceRange[0], selectedCurrency.code)}
+              </span>
+              <span>
+                {formatPriceWithSymbol(priceRange[1], selectedCurrency.code)}+
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Categories */}
+        {filterCategories.map(renderFilterCategory)}
       </div>
     </div>
   );
