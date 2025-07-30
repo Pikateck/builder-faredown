@@ -601,12 +601,13 @@ export default function Index() {
         {/* Mobile Hero Section */}
         <div className="bg-[#003580] text-white pb-8">
           {/* Overlay for closing dropdowns */}
-          {(showFromCities || showToCities || showTravelers || showClassDropdown) && (
+          {(showFromCities || showToCities || showCalendar || showTravelers || showClassDropdown) && (
             <div
               className="fixed inset-0 z-10 bg-transparent"
               onClick={() => {
                 setShowFromCities(false);
                 setShowToCities(false);
+                setShowCalendar(false);
                 setShowTravelers(false);
                 setShowClassDropdown(false);
               }}
@@ -767,60 +768,66 @@ export default function Index() {
               </div>
 
               {/* Dates */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
-                <Popover open={showCalendar} onOpenChange={setShowCalendar}>
-                  <PopoverTrigger asChild>
-                    <button className="w-full text-left">
-                      <div className="text-xs text-gray-500 mb-1">Dates</div>
-                      <div className="flex items-center space-x-2">
-                        <CalendarIcon className="w-5 h-5 text-[#003580]" />
-                        <div>
-                          <div className="font-medium text-gray-900">
-                            {departureDate
-                              ? formatDisplayDate(departureDate, "dd MMM")
-                              : "Departure"}
-                            {tripType === "round-trip" && (
-                              <>
-                                {" - "}
-                                {returnDate
-                                  ? formatDisplayDate(returnDate, "dd MMM")
-                                  : "Return"}
-                              </>
-                            )}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {tripType === "round-trip"
-                              ? "Choose departure & return"
-                              : "Choose departure"}
-                          </div>
-                        </div>
+              <div className="bg-white rounded-xl p-4 shadow-sm relative">
+                <button
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="w-full text-left"
+                >
+                  <div className="text-xs text-gray-500 mb-1">Dates</div>
+                  <div className="flex items-center space-x-2">
+                    <CalendarIcon className="w-5 h-5 text-[#003580]" />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {departureDate
+                          ? formatDisplayDate(departureDate, "dd MMM")
+                          : "Departure"}
+                        {tripType === "round-trip" && (
+                          <>
+                            {" - "}
+                            {returnDate
+                              ? formatDisplayDate(returnDate, "dd MMM")
+                              : "Return"}
+                          </>
+                        )}
                       </div>
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <BookingCalendar
-                      initialRange={{
-                        startDate: departureDate || new Date(),
-                        endDate: tripType === "round-trip" && returnDate ? returnDate : addDays(departureDate || new Date(), 7),
-                      }}
-                      onChange={(range) => {
-                        console.log("Homepage calendar range selected:", range);
-                        setDepartureDate(range.startDate);
-                        if (tripType === "round-trip") {
-                          setReturnDate(range.endDate);
-                        }
-                        // For one-way, auto-close after selecting start date
-                        // For round-trip, auto-close after selecting both dates
-                        if (tripType === "one-way" || (tripType === "round-trip" && range.endDate && range.startDate !== range.endDate)) {
-                          setShowCalendar(false);
-                        }
-                      }}
-                      onClose={() => setShowCalendar(false)}
-                      className="w-full"
-                      bookingType="flight"
+                      <div className="text-xs text-gray-500">
+                        {tripType === "round-trip"
+                          ? "Choose departure & return"
+                          : "Choose departure"}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                {/* Calendar Dropdown */}
+                {showCalendar && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-[99999] bg-black bg-opacity-50"
+                      onClick={() => setShowCalendar(false)}
                     />
-                  </PopoverContent>
-                </Popover>
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-[999999] p-4">
+                      <BookingCalendar
+                        initialRange={{
+                          startDate: departureDate ? new Date(departureDate) : new Date(),
+                          endDate: returnDate ? new Date(returnDate) : undefined,
+                        }}
+                        onChange={(range) => {
+                          setDepartureDate(range.startDate);
+                          if (tripType === "round-trip" && range.endDate) {
+                            setReturnDate(range.endDate);
+                          }
+                          if (tripType === "one-way" || (tripType === "round-trip" && range.endDate)) {
+                            setShowCalendar(false);
+                          }
+                        }}
+                        onClose={() => setShowCalendar(false)}
+                        className="w-full"
+                        bookingType="flight"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Travelers & Class */}
