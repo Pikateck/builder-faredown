@@ -298,7 +298,8 @@ export default function FlightResults() {
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
-  // Trip type now managed by DateContext
+  // Trip type states
+  const [editTripType, setEditTripType] = useState("round-trip");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
   const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
