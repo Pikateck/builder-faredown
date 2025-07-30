@@ -538,29 +538,19 @@ export function HotelCard({
               </div>
 
               {/* Action Buttons - Full Width */}
-              <div className="space-y-2">
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 py-2 text-xs font-semibold border-blue-600 text-blue-600"
-                    onClick={handleViewDetails}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 py-2 text-xs font-semibold border-gray-300 text-gray-700"
-                    onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
-                  >
-                    Reviews
-                  </Button>
-                </div>
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 py-2 text-xs font-semibold border-blue-600 text-blue-600"
+                  onClick={handleViewDetails}
+                >
+                  View Details
+                </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
                   size="sm"
-                  className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-2 text-xs flex items-center justify-center gap-1"
+                  className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-2 text-xs flex items-center justify-center gap-1"
                 >
                   <TrendingDown className="w-3 h-3" />
                   Bargain Now
