@@ -1289,7 +1289,7 @@ export default function Index() {
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
-                          { code: "ar", name: "العربية", flag: "🇸🇦" },
+                          { code: "ar", name: "العربية", flag: "��🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
@@ -2667,51 +2667,7 @@ export default function Index() {
         </footer>
       </div>
 
-      {/* Mobile Dropdown Components */}
-      <MobileCityDropdown
-        isOpen={showFromCities}
-        onClose={() => setShowFromCities(false)}
-        title="Leaving from"
-        cities={cityData}
-        selectedCity={selectedFromCity}
-        onSelectCity={setSelectedFromCity}
-      />
 
-      <MobileCityDropdown
-        isOpen={showToCities}
-        onClose={() => setShowToCities(false)}
-        title="Going to"
-        cities={cityData}
-        selectedCity={selectedToCity}
-        onSelectCity={setSelectedToCity}
-      />
-
-      <MobileDatePicker
-        isOpen={showCalendar}
-        onClose={() => setShowCalendar(false)}
-        tripType={tripType}
-        setTripType={setTripType}
-        selectedDepartureDate={departureDate}
-        selectedReturnDate={returnDate}
-        setSelectedDepartureDate={setDepartureDate}
-        setSelectedReturnDate={setReturnDate}
-        selectingDeparture={selectingDeparture}
-        setSelectingDeparture={setSelectingDeparture}
-      />
-
-      <MobileTravelers
-        isOpen={showTravelers}
-        onClose={() => setShowTravelers(false)}
-        travelers={travelers}
-        setTravelers={setTravelers}
-      />
-
-      <MobileClassDropdown
-        isOpen={showClassDropdown}
-        onClose={() => setShowClassDropdown(false)}
-        selectedClass={selectedClass}
-        onSelectClass={setSelectedClass}
-      />
 
       {/* Sign In Modal */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
