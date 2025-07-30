@@ -396,7 +396,7 @@ export default function Index() {
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
 
       {/* Mobile Header & Search (≤768px) - Booking.com Style */}
-      <div className="block md:hidden">
+      <div className="block md:hidden pb-16">
         {/* Mobile Header */}
         <header className="bg-[#003580] text-white">
           <div className="px-4 py-3">
