@@ -941,7 +941,8 @@ export default function Hotels() {
                   Live Bargain Technology
                 </h3>
                 <p className="text-gray-600 text-sm">
-                  Negotiate room upgrades instantly — from standard to suite, from basic to deluxe.
+                  Negotiate room upgrades instantly — from standard to suite,
+                  from basic to deluxe.
                 </p>
               </div>
 
@@ -999,14 +1000,18 @@ export default function Hotels() {
                 <div className="flex items-center space-x-2">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-2xl">★</span>
+                      <span key={i} className="text-yellow-400 text-2xl">
+                        ★
+                      </span>
                     ))}
                   </div>
                   <span className="text-3xl font-bold text-gray-900">4.9</span>
                 </div>
                 <div className="text-gray-600">
                   <div className="font-medium">Excellent</div>
-                  <div className="text-sm">Based on 50,000+ reviews on Trustpilot</div>
+                  <div className="text-sm">
+                    Based on 50,000+ reviews on Trustpilot
+                  </div>
                 </div>
               </div>
             </div>
@@ -1016,7 +1021,9 @@ export default function Hotels() {
               <div className="bg-[#003580] text-white py-4 px-8 rounded-xl inline-block">
                 <div className="flex items-center space-x-3">
                   <Headphones className="w-6 h-6" />
-                  <span className="text-lg font-semibold">24/7 Customer Support | Live Chat & Call Available</span>
+                  <span className="text-lg font-semibold">
+                    24/7 Customer Support | Live Chat & Call Available
+                  </span>
                 </div>
               </div>
             </div>
@@ -1027,13 +1034,17 @@ export default function Hotels() {
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl">👥</span>
                 </div>
-                <div className="text-sm font-medium text-gray-900">Live Chat</div>
+                <div className="text-sm font-medium text-gray-900">
+                  Live Chat
+                </div>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl">📞</span>
                 </div>
-                <div className="text-sm font-medium text-gray-900">Phone Call</div>
+                <div className="text-sm font-medium text-gray-900">
+                  Phone Call
+                </div>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -1045,13 +1056,18 @@ export default function Hotels() {
                 <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl">🎧</span>
                 </div>
-                <div className="text-sm font-medium text-gray-900">24/7 Support</div>
+                <div className="text-sm font-medium text-gray-900">
+                  24/7 Support
+                </div>
               </div>
               <div className="text-center md:col-span-1 col-span-2">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl">🔒</span>
                 </div>
-                <div className="text-sm font-medium text-gray-900">Safe, Verified, and Instant Confirmations. Backed by real humans.</div>
+                <div className="text-sm font-medium text-gray-900">
+                  Safe, Verified, and Instant Confirmations. Backed by real
+                  humans.
+                </div>
               </div>
             </div>
 
@@ -1063,19 +1079,29 @@ export default function Hotels() {
                     <span className="text-white font-bold">P</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Priya Sharma</div>
-                    <div className="text-sm text-gray-500">Marketing Manager</div>
+                    <div className="font-medium text-gray-900">
+                      Priya Sharma
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Marketing Manager
+                    </div>
                   </div>
                 </div>
                 <div className="flex mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
+                    <span key={i} className="text-yellow-400">
+                      ★
+                    </span>
                   ))}
                 </div>
                 <p className="text-gray-700 text-sm">
-                  "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class hotel using Bargain™. Faredown is revolutionary! Customer service is excellent."
+                  "Saved ₹15,000 on my Dubai trip! The bargaining feature is
+                  amazing. Got business class hotel using Bargain™. Faredown is
+                  revolutionary! Customer service is excellent."
                 </p>
-                <div className="mt-4 text-xs text-gray-500">Verified Purchase</div>
+                <div className="mt-4 text-xs text-gray-500">
+                  Verified Purchase
+                </div>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -1085,18 +1111,25 @@ export default function Hotels() {
                   </div>
                   <div>
                     <div className="font-medium text-gray-900">Rohit Kumar</div>
-                    <div className="text-sm text-gray-500">Software Engineer</div>
+                    <div className="text-sm text-gray-500">
+                      Software Engineer
+                    </div>
                   </div>
                 </div>
                 <div className="flex mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
+                    <span key={i} className="text-yellow-400">
+                      ★
+                    </span>
                   ))}
                 </div>
                 <p className="text-gray-700 text-sm">
-                  "Got suite upgrade in Singapore hotel using Bargain™. Faredown is revolutionary! Customer service is excellent."
+                  "Got suite upgrade in Singapore hotel using Bargain™.
+                  Faredown is revolutionary! Customer service is excellent."
                 </p>
-                <div className="mt-4 text-xs text-gray-500">Verified Purchase</div>
+                <div className="mt-4 text-xs text-gray-500">
+                  Verified Purchase
+                </div>
               </div>
 
               <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -1105,19 +1138,28 @@ export default function Hotels() {
                     <span className="text-white font-bold">A</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">Anjali Patel</div>
-                    <div className="text-sm text-gray-500">Product Designer</div>
+                    <div className="font-medium text-gray-900">
+                      Anjali Patel
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Product Designer
+                    </div>
                   </div>
                 </div>
                 <div className="flex mb-3">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
+                    <span key={i} className="text-yellow-400">
+                      ★
+                    </span>
                   ))}
                 </div>
                 <p className="text-gray-700 text-sm">
-                  "Easy booking process and instant confirmations. Saved on both hotels and hotels. Will use again!"
+                  "Easy booking process and instant confirmations. Saved on both
+                  hotels and hotels. Will use again!"
                 </p>
-                <div className="mt-4 text-xs text-gray-500">Verified Purchase</div>
+                <div className="mt-4 text-xs text-gray-500">
+                  Verified Purchase
+                </div>
               </div>
             </div>
           </div>
@@ -1126,9 +1168,12 @@ export default function Hotels() {
         {/* Mobile App Section */}
         <section className="py-16 bg-[#003580] text-white">
           <div className="max-w-[1280px] mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Travel Smarter. Bargain Better. On the Go.</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              Travel Smarter. Bargain Better. On the Go.
+            </h2>
             <p className="text-lg mb-8 text-blue-200">
-              Download the Faredown app for exclusive mobile-only deals and instant bargain alerts.
+              Download the Faredown app for exclusive mobile-only deals and
+              instant bargain alerts.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8">
@@ -1168,8 +1213,12 @@ export default function Hotels() {
         {/* Email Signup Section */}
         <section className="py-16 bg-white">
           <div className="max-w-[1280px] mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Stay ahead with secret travel bargains</h2>
-            <p className="text-gray-600 text-lg mb-8">Enter your email address</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Stay ahead with secret travel bargains
+            </h2>
+            <p className="text-gray-600 text-lg mb-8">
+              Enter your email address
+            </p>
 
             <div className="flex flex-col sm:flex-row max-w-md mx-auto space-y-4 sm:space-y-0 sm:space-x-4">
               <input
@@ -1193,37 +1242,86 @@ export default function Hotels() {
               <div>
                 <h3 className="text-lg font-bold mb-4">Faredown</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  The world's first travel portal where you control the price. Bargain for better deals on hotels and hotels.
+                  The world's first travel portal where you control the price.
+                  Bargain for better deals on hotels and hotels.
                 </p>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-4">Quick Links</h4>
                 <ul className="space-y-2 text-gray-400 text-sm">
-                  <li><Link to="/" className="hover:text-white">About Us</Link></li>
-                  <li><Link to="/" className="hover:text-white">How it Works</Link></li>
-                  <li><Link to="/" className="hover:text-white">Contact</Link></li>
-                  <li><Link to="/" className="hover:text-white">Help Center</Link></li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      How it Works
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      Help Center
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-4">Services</h4>
                 <ul className="space-y-2 text-gray-400 text-sm">
-                  <li><Link to="/" className="hover:text-white">Hotels</Link></li>
-                  <li><Link to="/hotels" className="hover:text-white">Hotels</Link></li>
-                  <li><Link to="/" className="hover:text-white">Car Rentals</Link></li>
-                  <li><Link to="/" className="hover:text-white">Travel Insurance</Link></li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      Hotels
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/hotels" className="hover:text-white">
+                      Hotels
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      Car Rentals
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" className="hover:text-white">
+                      Travel Insurance
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-4">Legal</h4>
                 <ul className="space-y-2 text-gray-400 text-sm">
-                  <li><Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
-                  <li><Link to="/terms-conditions" className="hover:text-white">Terms of Service</Link></li>
-                  <li><Link to="/cookie-policy" className="hover:text-white">Cookie Policy</Link></li>
-                  <li><Link to="/refund-policy" className="hover:text-white">Refund Policy</Link></li>
+                  <li>
+                    <Link to="/privacy-policy" className="hover:text-white">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/terms-conditions" className="hover:text-white">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/cookie-policy" className="hover:text-white">
+                      Cookie Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/refund-policy" className="hover:text-white">
+                      Refund Policy
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
