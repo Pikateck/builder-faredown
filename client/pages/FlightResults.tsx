@@ -1865,9 +1865,7 @@ export default function FlightResults() {
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
             {/* Filter Header */}
             <div className="text-lg font-semibold mb-4 flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center mr-3 shadow-sm">
-                <Filter className="w-4 h-4 text-white" />
-              </div>
+              <Filter className="w-5 h-5 mr-2 text-[#003580]" />
               Filter by
             </div>
 
