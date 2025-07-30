@@ -488,23 +488,21 @@ export function HotelCard({
 
           {/* Hotel Details - Mobile */}
           <CardContent className="p-4 space-y-3">
-            <div className="flex items-start justify-between mb-2">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1">
-                  {hotel.name}
-                </h3>
-                <div className="flex items-center text-gray-600 mb-1">
-                  <div className="w-4 h-4 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center mr-1 shadow-sm">
-                    <MapPin className="w-2 h-2 text-white" />
+            <div className="mb-2">
+              <div className="flex items-start justify-between mb-1">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-bold text-gray-900 mb-0.5 line-clamp-1">
+                    {hotel.name}
+                  </h3>
+                  <div className="flex items-center text-gray-600">
+                    <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                    <span className="text-sm text-gray-600 truncate">{hotelLocation}</span>
                   </div>
-                  <span className="text-sm truncate">{hotelLocation}</span>
                 </div>
-              </div>
-              <div className="flex items-center ml-2">
-                <div className="w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-sm flex items-center justify-center mr-1 shadow-sm">
-                  <Star className="w-2.5 h-2.5 fill-white text-white" />
+                <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full ml-2">
+                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                  <span className="text-sm font-medium text-yellow-700">{hotel.rating}</span>
                 </div>
-                <span className="text-sm font-medium">{hotel.rating}</span>
               </div>
             </div>
 
