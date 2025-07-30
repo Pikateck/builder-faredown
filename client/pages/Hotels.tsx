@@ -265,7 +265,7 @@ export default function Hotels() {
               {/* Destination */}
               <div className="bg-white rounded-xl p-4 shadow-sm relative">
                 <button
-                  onClick={() => setShowFromCities(!showFromCities)}
+                  onClick={() => setShowMobileDestination(true)}
                   className="w-full text-left"
                 >
                   <div className="text-xs text-gray-500 mb-1">Destination</div>
