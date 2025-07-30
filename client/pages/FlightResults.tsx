@@ -4344,12 +4344,13 @@ export default function FlightResults() {
             <div className="flex space-x-3">
               <Button
                 variant="outline"
-                className="flex-1 h-10 font-medium border-gray-300 text-gray-700 text-sm"
+                className="flex-1 h-10 font-medium border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 text-sm transition-colors"
                 onClick={() => {
                   resetAllFilters();
                   setShowMobileFilters(false);
                 }}
               >
+                <X className="w-3 h-3 mr-1" />
                 Clear all
               </Button>
               <Button
