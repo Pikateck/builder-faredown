@@ -25,7 +25,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  SlidersHorizontal,
   MapPin,
   CalendarIcon,
   Users,
