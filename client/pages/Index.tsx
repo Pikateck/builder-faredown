@@ -601,13 +601,12 @@ export default function Index() {
         {/* Mobile Hero Section */}
         <div className="bg-[#003580] text-white pb-8">
           {/* Overlay for closing dropdowns */}
-          {(showFromCities || showToCities || showCalendar || showTravelers || showClassDropdown) && (
+          {(showFromCities || showToCities || showTravelers || showClassDropdown) && (
             <div
               className="fixed inset-0 z-10 bg-transparent"
               onClick={() => {
                 setShowFromCities(false);
                 setShowToCities(false);
-                setShowCalendar(false);
                 setShowTravelers(false);
                 setShowClassDropdown(false);
               }}
