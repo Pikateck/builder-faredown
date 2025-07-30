@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import {
   Plane,
   User,
