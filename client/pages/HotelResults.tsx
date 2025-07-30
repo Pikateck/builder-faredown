@@ -584,40 +584,7 @@ export default function HotelResults() {
           </div>
         </div>
 
-        {/* Hidden Filter Sheet Trigger */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <button
-              data-mobile-filter-trigger
-              className="hidden"
-              aria-hidden="true"
-            />
-          </SheetTrigger>
-          <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl border-0 shadow-2xl">
-            <SheetHeader className="bg-[#003580] text-white p-4 -mx-6 -mt-6 mb-6 rounded-t-3xl">
-              <SheetTitle className="flex items-center justify-between text-lg font-bold">
-                <div className="flex items-center">
-                  <Filter className="w-5 h-5 mr-2" />
-                  Filter Hotels
-                </div>
-                <div className="text-sm font-normal opacity-80">
-                  {filteredAndSortedHotels.length} hotels
-                </div>
-              </SheetTitle>
-            </SheetHeader>
-            <div className="overflow-y-auto flex-1 px-2">
-              <EnhancedFilters
-                priceRange={priceRange}
-                setPriceRange={setPriceRange}
-                selectedAmenities={selectedAmenities}
-                setSelectedAmenities={setSelectedAmenities}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                onClearFilters={handleClearFilters}
-              />
-            </div>
-          </SheetContent>
-        </Sheet>
+
 
         {/* Mobile Sort Bar */}
         <div className="bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
