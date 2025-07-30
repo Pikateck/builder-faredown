@@ -449,6 +449,13 @@ export default function HotelResults() {
           features: ["Separate Living Area", "Hot Tub", "Ski Storage"],
         },
       ],
+      availableRoom: {
+        type: "1 X King Premium",
+        bedType: "King bed",
+        rateType: "Best Available Rate",
+        paymentTerms: "Prepayment required",
+        cancellationPolicy: "Free cancellation",
+      },
     },
   ];
 
