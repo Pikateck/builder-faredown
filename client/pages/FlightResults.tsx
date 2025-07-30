@@ -66,6 +66,7 @@ import {
   Calendar,
   TrendingUp,
   TrendingDown,
+  Search,
 } from "lucide-react";
 
 // Flight data with fare types
@@ -3760,7 +3761,7 @@ export default function FlightResults() {
                                   passenger
                                 </li>
                                 <li>
-                                  �� Name changes not allowed after booking
+                                  • Name changes not allowed after booking
                                 </li>
                                 <li>• Infant fares have different rules</li>
                                 <li>
