@@ -631,122 +631,82 @@ export function HotelCard({
         </div>
 
         {/* Hotel Details */}
-        <CardContent className="flex-1 p-4 md:p-6 flex flex-col space-y-4">
-          <div className="mb-3 sm:mb-4">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 group-hover:text-[#003580] transition-colors line-clamp-2">
+        <CardContent className="flex-1 p-3 flex flex-col">
+          {/* Header Section - Compact */}
+          <div className="mb-2">
+            <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-1">
               {hotel.name}
             </h3>
-
-            {/* Address directly below hotel name */}
-            <div className="flex items-start text-gray-600 mb-2">
-              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
-              <span className="text-sm sm:text-base text-gray-600 line-clamp-2 leading-tight">
-                {hotelLocation}
-              </span>
-            </div>
-
-            <div className="flex items-center mb-2">
-              <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full mr-2">
-                <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-500 text-yellow-500 mr-1" />
-                <span className="text-sm sm:text-base font-medium text-yellow-700">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center min-w-0 flex-1">
+                <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                <span className="text-xs text-gray-600 truncate">
+                  {hotelLocation}
+                </span>
+              </div>
+              <div className="flex items-center ml-2">
+                <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                <span className="text-sm font-medium text-yellow-700 mr-1">
                   {hotel.rating}
                 </span>
+                <button
+                  onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
+                  className="text-xs text-blue-600 hover:underline whitespace-nowrap"
+                >
+                  ({hotel.reviewCount || hotel.reviews || 0})
+                </button>
               </div>
-              <button
-                onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
-                className="text-sm sm:text-base text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
-              >
-                ({hotel.reviewCount || hotel.reviews || 0} reviews)
-              </button>
             </div>
           </div>
 
-          <p className="text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
-            {hotel.description}
-          </p>
-
-          {/* Features */}
-          <div className="flex flex-wrap gap-1 mb-3 sm:mb-4">
-            {hotel.features.slice(0, 3).map((feature) => (
-              <Badge key={feature} variant="secondary" className="text-xs">
+          {/* Features - Single Line */}
+          <div className="flex flex-wrap gap-1 mb-2">
+            {hotel.features.slice(0, 4).map((feature) => (
+              <span key={feature} className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded">
                 {feature}
-              </Badge>
-            ))}
-            {hotel.features.length > 3 && (
-              <Badge variant="secondary" className="text-xs">
-                +{hotel.features.length - 3} more
-              </Badge>
-            )}
-          </div>
-
-          {/* Amenities */}
-          <div className="flex items-center space-x-2 sm:space-x-4 mb-4 sm:mb-6 overflow-x-auto">
-            {hotel.amenities.slice(0, 4).map((amenity) => (
-              <div
-                key={amenity}
-                className="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 rounded-full border border-blue-100 hover:border-blue-200 transition-all duration-200 flex-shrink-0 shadow-sm"
-                title={amenity}
-              >
-                {getAmenityIcon(amenity)}
-                <span className="text-xs hidden sm:inline whitespace-nowrap text-gray-700 font-medium">
-                  {amenity}
-                </span>
-              </div>
+              </span>
             ))}
           </div>
 
-          {/* Room Type Information - Compact */}
+          {/* Room Type - Inline */}
           {hotel.availableRoom && (
-            <div className="mb-4 pb-3 border-b border-gray-100">
-              <div className="font-medium text-gray-900 mb-2">
-                {hotel.availableRoom.type}
-              </div>
-              <div className="text-sm text-gray-600 mb-2">
-                {hotel.availableRoom.bedType} • {hotel.availableRoom.rateType}
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
-                  ✓ {hotel.availableRoom.paymentTerms}
-                </span>
-                <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
+            <div className="mb-2 text-xs">
+              <span className="font-medium text-gray-900">{hotel.availableRoom.type}</span>
+              <span className="text-gray-600 mx-1">•</span>
+              <span className="text-gray-600">{hotel.availableRoom.bedType}</span>
+              <div className="flex gap-1 mt-1">
+                <span className="text-green-600 bg-green-50 px-1 py-0.5 rounded text-xs">
                   ✓ {hotel.availableRoom.cancellationPolicy}
                 </span>
               </div>
             </div>
           )}
 
-          {/* Pricing and Actions - Desktop Redesigned */}
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 mt-4">
-            {/* Price Display */}
-            <div className="text-center mb-4">
-              <div className="text-3xl font-bold text-[#003580] mb-2">
+          {/* Price and Actions - Horizontal */}
+          <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
+            <div className="flex-1">
+              <div className="text-lg font-bold text-[#003580]">
                 {formatPrice(totalPriceInclusiveTaxes)}
               </div>
-              <div className="text-sm text-gray-600 font-medium mb-2">
-                Total Price • {totalNights} night{totalNights > 1 ? "s" : ""} •
-                All Inclusive taxes
-              </div>
-              <div className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full inline-block">
-                {formatPrice(perNightInclusiveTaxes)} per night (incl. taxes)
+              <div className="text-xs text-gray-500">
+                per night (incl. taxes)
               </div>
             </div>
-
-            {/* Action Buttons - Next Line */}
-            <div className="flex space-x-3">
+            <div className="flex gap-2 ml-3">
               <Button
                 variant="outline"
-                className="flex-1 py-3 font-semibold border-blue-600 text-blue-600 hover:bg-blue-50"
+                size="sm"
+                className="text-xs px-3 py-1.5 border-blue-600 text-blue-600"
                 onClick={handleViewDetails}
               >
-                View Details
+                Details
               </Button>
-
               <Button
                 onClick={() => onBargainClick(hotel, searchParams)}
-                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold flex items-center justify-center gap-2"
+                size="sm"
+                className="text-xs px-3 py-1.5 bg-[#febb02] hover:bg-[#e6a602] text-black"
               >
-                <TrendingDown className="w-4 h-4" />
-                Bargain Now
+                Bargain
               </Button>
             </div>
           </div>
