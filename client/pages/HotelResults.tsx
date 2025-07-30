@@ -87,6 +87,50 @@ export default function HotelResults() {
   const children = searchParams.get("children") || "0";
   const rooms = searchParams.get("rooms") || "1";
 
+  // City data for hotel destinations
+  const cityData = {
+    Mumbai: {
+      code: "BOM",
+      name: "Mumbai",
+      airport: "Mumbai, Maharashtra, India",
+      fullName: "Mumbai, Maharashtra, India",
+    },
+    Delhi: {
+      code: "DEL",
+      name: "Delhi",
+      airport: "New Delhi, Delhi, India",
+      fullName: "New Delhi, Delhi, India",
+    },
+    Dubai: {
+      code: "DXB",
+      name: "Dubai",
+      airport: "Dubai, United Arab Emirates",
+      fullName: "Dubai, United Arab Emirates",
+    },
+    "Abu Dhabi": {
+      code: "AUH",
+      name: "Abu Dhabi",
+      airport: "Abu Dhabi, United Arab Emirates",
+      fullName: "Abu Dhabi, United Arab Emirates",
+    },
+    Singapore: {
+      code: "SIN",
+      name: "Singapore",
+      airport: "Singapore, Singapore",
+      fullName: "Singapore, Singapore",
+    },
+  };
+
+  // Initialize edit states from current search params
+  React.useEffect(() => {
+    setEditDestination(searchParams.get("destinationName") || destination || "Dubai");
+    setEditTravelers({
+      adults: parseInt(adults) || 2,
+      children: parseInt(children) || 0,
+    });
+    setEditRooms(parseInt(rooms) || 1);
+  }, [searchParams, destination, adults, children, rooms]);
+
   // Load hotels from live Hotelbeds API and dates from URL params
   useEffect(() => {
     loadDatesFromParams(searchParams);
