@@ -320,9 +320,12 @@ export function HotelCard({
                     {hotel.rating}
                   </span>
                 </div>
-                <span className="text-xs text-gray-500">
+                <button
+                  onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
+                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                >
                   ({hotel.reviewCount || hotel.reviews || 0} reviews)
-                </span>
+                </button>
               </div>
 
               <p className="text-gray-600 text-sm mb-3 line-clamp-2">
