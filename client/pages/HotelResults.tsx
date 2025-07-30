@@ -471,6 +471,46 @@ export default function HotelResults() {
           }
         />
 
+        {/* Hotel Search Summary Bar with Edit Button */}
+        <div className="bg-white border-b border-gray-200 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center space-x-2 text-sm">
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 text-gray-500 mr-1" />
+                  <span className="font-medium text-gray-900 truncate">
+                    {searchParams.get("destinationName") || destination || "Dubai"}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4 mt-1 text-xs text-gray-600">
+                <div className="flex items-center">
+                  <CalendarIcon className="w-3 h-3 mr-1" />
+                  <span>
+                    {departureDate ? formatDisplayDate(departureDate) : checkIn || "Today"} - {returnDate ? formatDisplayDate(returnDate) : checkOut || "Tomorrow"}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <Users className="w-3 h-3 mr-1" />
+                  <span>
+                    {adults} adult{parseInt(adults) > 1 ? "s" : ""}
+                    {parseInt(children) > 0 ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}` : ""}
+                    , {rooms} room{parseInt(rooms) > 1 ? "s" : ""}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-blue-600 font-medium px-3 py-1 h-auto ml-2"
+              onClick={() => setShowSearchEdit(true)}
+            >
+              Edit
+            </Button>
+          </div>
+        </div>
+
         {/* Hidden Filter Sheet Trigger */}
         <Sheet>
           <SheetTrigger asChild>
