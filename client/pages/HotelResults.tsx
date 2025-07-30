@@ -1016,17 +1016,33 @@ export default function HotelResults() {
         </div>
       </div>
 
+      {/* Custom Filter Styling */}
+      <style>
+        {`
+          input[type="checkbox"], input[type="radio"] {
+            accent-color: #2563eb;
+            width: 14px;
+            height: 14px;
+          }
+
+          @media (min-width: 1024px) {
+            input[type="checkbox"], input[type="radio"] {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        `}
+      </style>
+
       <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
         <div className="flex gap-6">
           {/* Desktop Filters */}
           <div className="hidden lg:block w-80 flex-shrink-0">
             <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
-              <h3 className="text-lg font-semibold mb-4 flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-lg flex items-center justify-center mr-3 shadow-sm">
-                  <Filter className="w-4 h-4 text-white" />
-                </div>
+              <div className="text-lg font-semibold mb-4 flex items-center">
+                <Filter className="w-5 h-5 mr-2 text-[#003580]" />
                 Filter by
-              </h3>
+              </div>
               <EnhancedFilters
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
