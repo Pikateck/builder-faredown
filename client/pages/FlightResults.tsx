@@ -1828,7 +1828,7 @@ export default function FlightResults() {
 
       {/* Main Content Container */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto">
-        {/* Desktop Sidebar Filters (≥769px) - Hotel Style Applied */}
+        {/* Desktop Sidebar Filters (≥1024px) - Hotel Style Applied */}
         <div className="hidden lg:block w-80 flex-shrink-0">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
             {/* Filter Header */}
