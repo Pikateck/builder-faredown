@@ -367,13 +367,35 @@ export default function HotelDetails() {
   })();
 
   // Create final hotel object with calculated roomTypes
-  const finalHotelData = hotel ? {
-    ...hotel,
+  const hotel = hotelData ? {
+    id: parseInt(hotelId || "1"),
+    name: hotelData.name || "Grand Hyatt Dubai",
+    location: typeof hotelData.location === 'string' ? hotelData.location :
+              hotelData.location?.address?.street ||
+              hotelData.address?.street ||
+              "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
+    image: hotelData.images && hotelData.images.length > 0 ?
+           (typeof hotelData.images[0] === 'string' ? hotelData.images[0] : hotelData.images[0].url) :
+           "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+    images: hotelData.images || [],
+    rating: hotelData.rating || 4.5,
+    reviews: hotelData.reviews || hotelData.reviewCount || 1247,
+    checkIn: checkInDate.toISOString().split("T")[0],
+    checkOut: checkOutDate.toISOString().split("T")[0],
+    totalNights: totalNights,
+    rooms: parseInt(roomsParam || "1"),
+    adults: parseInt(adultsParam || "2"),
+    description: hotelData.description || "Experience luxury accommodations with exceptional service.",
+    amenities: hotelData.amenities || ["WiFi", "Pool", "Restaurant"],
+    features: hotelData.features || ["City View"],
+    currentPrice: hotelData.currentPrice || 167,
+    totalPrice: hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights,
+    currency: hotelData.currency || "USD",
+    available: hotelData.available !== false,
+    supplier: hotelData.supplier || "hotelbeds",
+    isLiveData: hotelData.supplier === "hotelbeds",
     roomTypes: roomTypes
   } : null;
-
-  // Use the final hotel data as the main hotel object
-  const hotelWithRooms = finalHotelData;
 
   const tabs = [
     { id: "overview", label: "Overview" },
