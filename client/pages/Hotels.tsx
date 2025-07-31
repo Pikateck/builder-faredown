@@ -329,6 +329,9 @@ export default function Hotels() {
                         {travelers.adults > 1 ? "s" : ""}
                         {travelers.children > 0 &&
                           `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`}
+                        {travelers.children > 0 && travelers.childAges.length > 0
+                          ? ` (${travelers.childAges.join(", ")} yrs)`
+                          : ""}
                       </div>
                     </div>
                   </div>
