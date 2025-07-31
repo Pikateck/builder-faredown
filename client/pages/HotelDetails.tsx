@@ -366,11 +366,14 @@ export default function HotelDetails() {
     ];
   })();
 
-  // Update hotel object with calculated roomTypes
-  const finalHotel = hotel ? {
+  // Create final hotel object with calculated roomTypes
+  const finalHotelData = hotel ? {
     ...hotel,
     roomTypes: roomTypes
   } : null;
+
+  // Use the final hotel data as the main hotel object
+  const hotelWithRooms = finalHotelData;
 
   const tabs = [
     { id: "overview", label: "Overview" },
