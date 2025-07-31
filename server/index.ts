@@ -893,12 +893,49 @@ export function createServer() {
           latitude: 25.2048 + (Math.random() - 0.5) * 0.2,
           longitude: 55.2708 + (Math.random() - 0.5) * 0.2,
         },
-        images: [
-          `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop`,
-          `https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop`,
-          `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop`,
-          `https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop`,
-        ],
+        images: (() => {
+          // Create unique image sets for each hotel category to simulate real hotel diversity
+          const imageCollections = {
+            Grand: [
+              `https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop`,
+            ],
+            Premium: [
+              `https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop`,
+            ],
+            Boutique: [
+              `https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&h=600&q=80&auto=format&fit=crop`,
+            ],
+            Business: [
+              `https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1549294413-26f195200c16?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop`,
+            ],
+            City: [
+              `https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1540553016722-983e48a2cd10?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&h=600&q=80&auto=format&fit=crop`,
+            ],
+            Express: [
+              `https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1540553016722-983e48a2cd10?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&q=80&auto=format&fit=crop`,
+              `https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&h=600&q=80&auto=format&fit=crop`,
+            ],
+          };
+
+          return imageCollections[category.prefix] || imageCollections.City;
+        })(),
         amenities: allAmenities.slice(0, category.amenityCount).concat(
           allAmenities
             .slice(category.amenityCount)
