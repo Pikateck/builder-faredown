@@ -283,7 +283,7 @@ export default function HotelDetails() {
     available: hotelData.available !== false,
     supplier: hotelData.supplier || "hotelbeds",
     isLiveData: hotelData.supplier === "hotelbeds",
-    roomTypes: [], // Will be populated below
+    roomTypes: [], // Will be populated after roomTypes calculation
   } : null;
 
   const calculateTotalPrice = (roomPricePerNight: number) => {
