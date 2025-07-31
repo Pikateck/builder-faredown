@@ -19,7 +19,7 @@ export function MobileNavigation() {
     },
     {
       path: "/hotels",
-      icon: Hotel,
+      icon: Building2,
       label: "Hotels",
     },
     {
