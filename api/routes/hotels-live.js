@@ -319,8 +319,17 @@ router.get("/hotel/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
+    console.log(`🏨 Hotel details API called for: ${code}`);
+    console.log('🔧 Request query params:', req.query);
+    console.log('🔑 API credentials check:', {
+      hasApiKey: !!process.env.HOTELBEDS_API_KEY,
+      hasSecret: !!process.env.HOTELBEDS_SECRET,
+      apiKeyLength: process.env.HOTELBEDS_API_KEY ? process.env.HOTELBEDS_API_KEY.length : 0
+    });
+
     // Validate hotel code parameter
     if (!code || typeof code !== 'string' || code.trim() === '') {
+      console.log('❌ Invalid hotel code provided');
       return res.status(400).json({
         success: false,
         error: "Invalid hotel code",
