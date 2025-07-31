@@ -1881,8 +1881,15 @@ export default function Index() {
               </h1>
             </div>
 
-            {/* Hotel Search Form */}
-            <BookingSearchForm />
+            {/* Hotel Search Form with Cities Dropdown */}
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-xl p-4 border-4 border-yellow-400">
+              <div className="text-center mb-3">
+                <span className="inline-block bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
+                  🏨 HOTEL SEARCH WITH TEST CITIES
+                </span>
+              </div>
+              <BookingSearchForm />
+            </div>
           </div>
         </header>
 
