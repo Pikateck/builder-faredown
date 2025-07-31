@@ -481,9 +481,7 @@ export default function HotelDetails() {
         pricePerNight: (tempHotelData?.currentPrice || 167) + 18,
         status: "Upgrade for +₹18",
         statusColor: "yellow",
-        image: (tempHotelData?.images && tempHotelData.images.length > 1) ?
-               (typeof tempHotelData.images[1] === 'string' ? tempHotelData.images[1] : tempHotelData.images[1].url) :
-               "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
+        image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop", // King room
         features: [
           "6.7 km from downtown",
           "Max 2 guests",
