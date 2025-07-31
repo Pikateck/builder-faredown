@@ -362,7 +362,7 @@ export default function HotelResults() {
       originalPrice: 8500, // ₹8,500 per night
       currentPrice: 6750, // ₹6,750 per night
       description:
-        "Experience luxury in the heart of the city with stunning views, world-class amenities, and exceptional service.",
+        `Experience luxury in the heart of ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
       features: ["City View", "Business Center", "Concierge", "Room Service"],
       roomTypes: [
@@ -406,7 +406,7 @@ export default function HotelResults() {
       originalPrice: 12000, // ₹12,000 per night
       currentPrice: 9500, // ₹9,500 per night
       description:
-        "Beachfront paradise with pristine white sand beaches, crystal clear waters, and tropical luxury.",
+        `Modern business hotel in ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
       features: [
         "Beachfront",
@@ -448,7 +448,7 @@ export default function HotelResults() {
       originalPrice: 7500, // ₹7,500 per night
       currentPrice: 5800, // ���5,800 per night
       description:
-        "Cozy mountain retreat with fireplace, ski-in/ski-out access, and breathtaking alpine views.",
+        `Charming boutique hotel in ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"} with unique character and personalized service.`,
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
       features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
       roomTypes: [
