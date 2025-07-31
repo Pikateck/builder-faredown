@@ -785,6 +785,11 @@ export function BookingSearchForm() {
                       <>
                         {format(checkInDate, "d MMM")} -{" "}
                         {format(checkOutDate, "d MMM")}
+                        {nights > 0 && (
+                          <span className="text-blue-600 font-semibold ml-1">
+                            ({nights}N)
+                          </span>
+                        )}
                       </>
                     ) : (
                       "Select dates"
@@ -795,6 +800,11 @@ export function BookingSearchForm() {
                       <>
                         {format(checkInDate, "d/M")}-
                         {format(checkOutDate, "d/M")}
+                        {nights > 0 && (
+                          <span className="text-blue-600 font-semibold ml-1">
+                            ({nights}N)
+                          </span>
+                        )}
                       </>
                     ) : (
                       "Dates"
