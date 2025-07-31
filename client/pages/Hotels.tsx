@@ -557,7 +557,7 @@ export default function Hotels() {
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
                           { code: "ko", name: "한국���", flag: "🇰🇷" },
-                          { code: "zh", name: "中文", flag: "🇨🇳" },
+                          { code: "zh", name: "中文", flag: "🇨���" },
                         ].map((language) => (
                           <DropdownMenuItem
                             key={language.code}
@@ -846,6 +846,7 @@ export default function Hotels() {
                                   setTravelers((prev) => ({
                                     ...prev,
                                     children: Math.max(0, prev.children - 1),
+                                    childAges: prev.childAges.slice(0, -1), // Remove last age
                                   }))
                                 }
                                 disabled={travelers.children <= 0}
@@ -861,6 +862,7 @@ export default function Hotels() {
                                   setTravelers((prev) => ({
                                     ...prev,
                                     children: prev.children + 1,
+                                    childAges: [...prev.childAges, 10], // Default age 10
                                   }))
                                 }
                                 className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
@@ -869,6 +871,40 @@ export default function Hotels() {
                               </button>
                             </div>
                           </div>
+
+                          {/* Child Age Selection */}
+                          {travelers.children > 0 && (
+                            <div className="space-y-3 pl-4 border-l-2 border-gray-100">
+                              <div className="text-sm font-medium text-gray-700">
+                                Ages of children
+                              </div>
+                              {Array.from({ length: travelers.children }).map((_, index) => (
+                                <div key={index} className="flex items-center justify-between">
+                                  <span className="text-sm text-gray-600">
+                                    Child {index + 1}
+                                  </span>
+                                  <select
+                                    value={travelers.childAges[index] || 10}
+                                    onChange={(e) => {
+                                      const newAges = [...travelers.childAges];
+                                      newAges[index] = parseInt(e.target.value);
+                                      setTravelers(prev => ({
+                                        ...prev,
+                                        childAges: newAges
+                                      }));
+                                    }}
+                                    className="border border-gray-300 rounded px-2 py-1 text-sm w-16 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                  >
+                                    {Array.from({ length: 18 }, (_, i) => (
+                                      <option key={i} value={i}>
+                                        {i}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              ))}
+                            </div>
+                          )}
 
                           <div className="pt-2">
                             <Button
