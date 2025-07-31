@@ -463,7 +463,7 @@ export default function HotelDetails() {
         status: "Best Value - Start Here!",
         statusColor: "green",
         nonRefundable: true,
-        image: tempHotelData?.image || "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
+        image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Twin room
         features: [
           "6.7 km from downtown",
           "Max 2 guests",
