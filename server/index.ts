@@ -1336,10 +1336,36 @@ export function createServer() {
         code: code,
         name: `Hotel ${code}`,
         description: "Experience luxury accommodations with exceptional service and modern amenities.",
-        images: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-          "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
-        ],
+        images: (() => {
+          // Generate realistic hotel images based on hotel code
+          const imageCollections = {
+            'htl-DXB-001': [
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop", // Grand luxury exterior
+              "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop", // Luxury room
+              "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop", // Pool area
+              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop"  // Lobby
+            ],
+            'htl-DXB-002': [
+              "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop", // Business hotel exterior
+              "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&q=80&auto=format&fit=crop", // Business room
+              "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&h=600&q=80&auto=format&fit=crop", // Conference room
+              "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop"  // Business lounge
+            ],
+            'htl-DXB-003': [
+              "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop", // Boutique hotel exterior
+              "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop", // Boutique room
+              "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop", // Boutique dining
+              "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop"  // Boutique reception
+            ],
+            'default': [
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
+              "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop",
+              "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop",
+              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop"
+            ]
+          };
+          return imageCollections[code] || imageCollections.default;
+        })(),
         rating: 4.2,
         reviews: 347,
         amenities: ["WiFi", "Pool", "Restaurant", "Spa", "Gym", "Parking"],
