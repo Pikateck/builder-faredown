@@ -313,20 +313,103 @@ class HotelbedsContentService {
   }
 
   /**
-   * Transform hotel images
+   * Transform hotel images with enhanced URL processing for gallery
    */
   transformImages(images) {
     if (!images) return [];
-    
-    return images.map(img => ({
-      url: img.path,
-      type: img.imageTypeCode,
-      order: img.order,
-      visualOrder: img.visualOrder,
-      roomCode: img.roomCode,
-      roomType: img.roomType,
-      characteristicCode: img.characteristicCode
-    }));
+
+    const transformedImages = images
+      .filter(img => img.path) // Only include images with valid paths
+      .map(img => {
+        // Construct full image URL
+        let imageUrl = img.path;
+
+        // If path is relative, make it absolute
+        if (!imageUrl.startsWith('http')) {
+          // Hotelbeds images are typically served from their CDN
+          imageUrl = `https://photos.hotelbeds.com${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+        }
+
+        // Add size parameters for different use cases
+        const baseUrl = imageUrl.split('?')[0]; // Remove existing query params
+
+        return {
+          // High resolution for gallery/lightbox
+          url: `${baseUrl}?width=1200&height=800&crop=fill&quality=85`,
+          // Standard resolution for general use
+          urlStandard: `${baseUrl}?width=600&height=400&crop=fill&quality=80`,
+          // Thumbnail for previews
+          urlThumbnail: `${baseUrl}?width=300&height=200&crop=fill&quality=75`,
+          // Original URL
+          urlOriginal: imageUrl,
+
+          // Metadata
+          type: img.imageTypeCode,
+          typeCode: img.imageTypeCode,
+          order: img.order || 999,
+          visualOrder: img.visualOrder || img.order || 999,
+          roomCode: img.roomCode,
+          roomType: img.roomType,
+          characteristicCode: img.characteristicCode,
+
+          // Image categories for filtering
+          category: this.getImageCategory(img.imageTypeCode),
+          description: this.getImageDescription(img.imageTypeCode, img.characteristicCode),
+
+          // Alt text for accessibility
+          alt: img.roomType ? `${img.roomType} room` : 'Hotel image'
+        };
+      })
+      .sort((a, b) => (a.visualOrder || a.order) - (b.visualOrder || b.order)); // Sort by visual order
+
+    console.log(`📸 Processed ${transformedImages.length} hotel images`);
+    return transformedImages;
+  }
+
+  /**
+   * Get image category for filtering
+   */
+  getImageCategory(imageTypeCode) {
+    const categoryMap = {
+      'GEN': 'general',
+      'HAB': 'room',
+      'SUI': 'suite',
+      'RES': 'restaurant',
+      'BAR': 'bar',
+      'SPA': 'spa',
+      'PIS': 'pool',
+      'PLY': 'beach',
+      'DEP': 'sports',
+      'SAL': 'meeting',
+      'HAL': 'lobby',
+      'EXT': 'exterior',
+      'INT': 'interior'
+    };
+
+    return categoryMap[imageTypeCode] || 'general';
+  }
+
+  /**
+   * Get user-friendly image description
+   */
+  getImageDescription(imageTypeCode, characteristicCode) {
+    const descriptions = {
+      'GEN': 'Hotel view',
+      'HAB': 'Room',
+      'SUI': 'Suite',
+      'RES': 'Restaurant',
+      'BAR': 'Bar & Lounge',
+      'SPA': 'Spa & Wellness',
+      'PIS': 'Swimming Pool',
+      'PLY': 'Beach',
+      'DEP': 'Sports & Recreation',
+      'SAL': 'Meeting Room',
+      'HAL': 'Lobby',
+      'EXT': 'Hotel Exterior',
+      'INT': 'Hotel Interior'
+    };
+
+    return descriptions[imageTypeCode] || 'Hotel Image';
   }
 
   /**
