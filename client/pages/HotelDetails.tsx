@@ -514,7 +514,7 @@ export default function HotelDetails() {
   };
 
   // Show loading state while fetching hotel data
-  if (isLoadingHotel || !hotel) {
+  if (isLoadingHotel || !finalHotel) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -2156,7 +2156,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🎵</span> Live music/performance
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">����</span> Kids' club
+                        <span className="mr-2">🎲</span> Kids' club
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🎮</span> Nightclub/DJ
