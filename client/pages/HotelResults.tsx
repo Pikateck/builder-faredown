@@ -350,9 +350,8 @@ export default function HotelResults() {
   const getMockHotels = (): Hotel[] => [
     {
       id: 1,
-      name: "Grand Hyatt Dubai",
-      location:
-        "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
+      name: `Grand Hotel ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"}`,
+      location: `City Center, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
         "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
