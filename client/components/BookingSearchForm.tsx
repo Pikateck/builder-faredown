@@ -382,7 +382,7 @@ export function BookingSearchForm() {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 w-4 h-4 z-10" />
                 <Input
                   type="text"
-                  value={isUserTyping ? inputValue : destination}
+                  value={isUserTyping ? inputValue : ""}
                   onChange={(e) => {
                     const value = e.target.value;
                     setInputValue(value);
