@@ -12,13 +12,12 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // In production, we can't access localhost - use fallback mode
+  // Production backend URL on Render
   if (window.location.hostname !== "localhost") {
-    console.warn(
-      "⚠️ Production environment detected - API will use fallback mode",
-    );
-    // Return a non-existent URL to force fallback mode
-    return "https://api-unavailable-fallback-mode";
+    // TODO: Replace this with your actual Render backend URL once deployed
+    // For now, use the Vite dev server's built-in API proxy
+    console.log("🌐 Production mode - using current origin for API calls");
+    return window.location.origin;
   }
 
   // Default to localhost for development
