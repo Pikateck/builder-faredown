@@ -290,7 +290,7 @@ export default function HotelDetails() {
     const rooms = parseInt(roomsParam || "1");
     const breakdown = calculatePriceBreakdown(
       roomPricePerNight,
-      hotel.totalNights,
+      totalNights,
       rooms,
     );
     return breakdown.total;
@@ -2156,7 +2156,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🎵</span> Live music/performance
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🎲</span> Kids' club
+                        <span className="mr-2">����</span> Kids' club
                       </li>
                       <li className="flex items-center">
                         <span className="mr-2">🎮</span> Nightclub/DJ
