@@ -670,13 +670,13 @@ export function BookingSearchForm() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <div className="flex-1 min-w-0">
-                              {/* City name and neutral popular badge */}
+                              {/* City name and Live API badge */}
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="font-medium text-gray-900 text-sm truncate">
                                   {dest.name}
                                 </span>
-                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                                  Popular
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                  Live API
                                 </span>
                               </div>
 
