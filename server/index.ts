@@ -1231,7 +1231,7 @@ export function createServer() {
     }
   });
 
-  // Hotel details endpoint with caching
+  // Hotel details endpoint with caching (legacy path)
   app.get("/api/hotels-live/:hotelId", async (_req, res) => {
     const hotelId = _req.params.hotelId;
 
@@ -1256,6 +1256,94 @@ export function createServer() {
         success: false,
         error: "Hotel details fetch failed",
         message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  });
+
+  // Hotel details endpoint with correct path that frontend expects
+  app.get("/api/hotels-live/hotel/:code", async (_req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+
+    const { code } = _req.params;
+    const { checkIn, checkOut } = _req.query;
+
+    console.log(`🏨 Dev server hotel details for: ${code}`);
+
+    try {
+      // Try to proxy to the main API server first
+      try {
+        const backendUrl = `http://localhost:3001/api/hotels-live/hotel/${code}`;
+        const queryParams = new URLSearchParams();
+        if (checkIn) queryParams.append('checkIn', checkIn as string);
+        if (checkOut) queryParams.append('checkOut', checkOut as string);
+
+        const fullUrl = queryParams.toString() ? `${backendUrl}?${queryParams}` : backendUrl;
+
+        console.log(`🔄 Proxying to backend: ${fullUrl}`);
+        const response = await fetch(fullUrl);
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Proxied response from backend API');
+          return res.json(data);
+        } else {
+          console.warn('⚠️ Backend API responded with error, using fallback');
+        }
+      } catch (proxyError) {
+        console.warn('⚠️ Backend API not accessible, using fallback:', proxyError.message);
+      }
+
+      // Fallback hotel data when backend is not available
+      const fallbackHotel = {
+        id: code,
+        code: code,
+        name: `Hotel ${code}`,
+        description: "Experience luxury accommodations with exceptional service and modern amenities.",
+        images: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+          "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
+        ],
+        rating: 4.2,
+        reviews: 347,
+        amenities: ["WiFi", "Pool", "Restaurant", "Spa", "Gym", "Parking"],
+        features: ["City View", "Business Center", "Concierge"],
+        currentPrice: 167,
+        totalPrice: checkIn && checkOut ?
+          167 * Math.ceil((new Date(checkOut as string).getTime() - new Date(checkIn as string).getTime()) / (1000 * 60 * 60 * 24)) : 334,
+        currency: "USD",
+        available: true,
+        location: {
+          address: {
+            street: "Marina District",
+            city: "Dubai",
+            country: "United Arab Emirates"
+          }
+        },
+        checkIn: checkIn || "2025-02-01",
+        checkOut: checkOut || "2025-02-03",
+        supplier: "dev-server-fallback",
+        isLiveData: false
+      };
+
+      res.json({
+        success: true,
+        hotel: fallbackHotel,
+        hasAvailability: true,
+        fallback: true,
+        source: "Dev Server Fallback",
+        timestamp: new Date().toISOString(),
+      });
+
+    } catch (error) {
+      console.error("❌ Hotel details error:", error);
+
+      // Emergency fallback
+      res.status(200).json({
+        success: false,
+        error: "Hotel details temporarily unavailable",
+        message: "Please try again later",
+        fallback: true,
+        timestamp: new Date().toISOString(),
       });
     }
   });
