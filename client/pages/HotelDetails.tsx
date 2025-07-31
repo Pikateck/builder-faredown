@@ -255,8 +255,8 @@ export default function HotelDetails() {
     supplier: "fallback"
   });
 
-  // Use live data or fallback
-  const hotel = hotelData ? {
+  // Temporary hotel data for roomTypes calculation
+  const tempHotelData = hotelData ? {
     id: parseInt(hotelId || "1"),
     name: hotelData.name || "Grand Hyatt Dubai",
     location: typeof hotelData.location === 'string' ? hotelData.location :
@@ -282,8 +282,7 @@ export default function HotelDetails() {
     currency: hotelData.currency || "USD",
     available: hotelData.available !== false,
     supplier: hotelData.supplier || "hotelbeds",
-    isLiveData: hotelData.supplier === "hotelbeds",
-    roomTypes: [], // Will be populated after roomTypes calculation
+    isLiveData: hotelData.supplier === "hotelbeds"
   } : null;
 
   const calculateTotalPrice = (roomPricePerNight: number) => {
