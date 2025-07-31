@@ -146,17 +146,47 @@ async function handleHotelSearch(req, res) {
         // Enrich availability data with content
         processedHotels = availabilityResults.hotels.map(hotel => {
           const content = contentMap.get(hotel.code);
-          
+
+          // Log content data for debugging
+          if (content) {
+            console.log(`🔍 Hotel ${hotel.code} content:`, {
+              name: content.name,
+              hasImages: content.images?.length > 0,
+              imageCount: content.images?.length || 0,
+              firstImageType: content.images?.[0]?.url ? 'url' : content.images?.[0]?.urlStandard ? 'urlStandard' : 'unknown'
+            });
+          } else {
+            console.log(`⚠️  No content found for hotel ${hotel.code}`);
+          }
+
+          // Extract images with proper fallback logic
+          let hotelImages = [];
+          if (content?.images?.length > 0) {
+            hotelImages = content.images
+              .map(img => img.urlStandard || img.url || img.urlOriginal)
+              .filter(Boolean); // Remove any undefined/null URLs
+            console.log(`📸 Hotel ${hotel.code}: Found ${hotelImages.length} valid images from Hotelbeds`);
+          }
+
+          // Only use fallback if no real images available
+          if (hotelImages.length === 0) {
+            console.log(`⚠️  Hotel ${hotel.code}: No images from API, using fallback`);
+            hotelImages = [
+              "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+              "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop"
+            ];
+          }
+
           // Merge data prioritizing content over availability for descriptive fields
           const enrichedHotel = {
             // Basic identification
             id: hotel.code,
             code: hotel.code,
             name: content?.name || hotel.name || `Hotel ${hotel.code}`,
-            
+
             // Descriptive content
             description: content?.description || `Experience luxury at ${hotel.name || 'this hotel'} with modern amenities and exceptional service.`,
-            
+
             // Location data
             location: content?.location?.address?.street || "",
             address: content?.location?.address || {
@@ -165,11 +195,9 @@ async function handleHotelSearch(req, res) {
               country: "United Arab Emirates",
               postalCode: ""
             },
-            
-            // Visual content - prioritize Hotelbeds images
-            images: content?.images?.length > 0
-              ? content.images.map(img => img.urlStandard || img.url || img.urlOriginal)
-              : [],
+
+            // Visual content
+            images: hotelImages,
             
             // Amenities and features
             amenities: content?.amenities?.map(a => a.name) || content?.facilities?.map(f => f.name) || [
