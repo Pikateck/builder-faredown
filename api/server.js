@@ -18,6 +18,7 @@ require("dotenv").config();
 // Import route modules
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+const adminDashboardRoutes = require("./routes/admin-dashboard");
 const bookingRoutes = require("./routes/bookings");
 const userRoutes = require("./routes/users");
 const flightRoutes = require("./routes/flights");
