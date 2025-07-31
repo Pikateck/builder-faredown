@@ -98,7 +98,7 @@ export function createServer() {
       console.log(`🔍 Searching hotels with live Hotelbeds API for: ${destinationCode}`);
 
       // Make live API call to Hotelbeds
-      const hotelbedsResponse = await fetch('http://localhost:3001/api/hotels/search/live', {
+      const hotelbedsResponse = await fetch('http://localhost:3001/api/hotels-live/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
