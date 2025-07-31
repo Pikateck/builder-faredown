@@ -11,9 +11,9 @@ const db = require('../../database/connection');
 class HotelbedsBookingService {
   constructor() {
     // Hotelbeds API Configuration
-    this.baseURL = process.env.HOTELBEDS_BOOKING_API_URL || 'https://api.test.hotelbeds.com';
+    this.baseURL = process.env.HOTELBEDS_BOOKING_API || 'https://api.test.hotelbeds.com/hotel-api/1.0';
     this.apiKey = process.env.HOTELBEDS_API_KEY;
-    this.sharedSecret = process.env.HOTELBEDS_SHARED_SECRET;
+    this.sharedSecret = process.env.HOTELBEDS_SECRET;
     
     // Cache settings for availability (short-lived)
     this.cacheTimeout = 5 * 60 * 1000; // 5 minutes for availability
