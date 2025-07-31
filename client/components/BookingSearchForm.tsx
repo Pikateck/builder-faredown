@@ -770,6 +770,11 @@ export function BookingSearchForm() {
                       <>
                         {format(checkInDate, "d-MMM-yyyy")} to{" "}
                         {format(checkOutDate, "d-MMM-yyyy")}
+                        {nights > 0 && (
+                          <span className="text-blue-600 font-semibold ml-1">
+                            ({nights} night{nights !== 1 ? 's' : ''})
+                          </span>
+                        )}
                       </>
                     ) : (
                       "Check-in to Check-out"
