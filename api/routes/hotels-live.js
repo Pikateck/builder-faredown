@@ -323,6 +323,27 @@ router.get("/test", (req, res) => {
 });
 
 /**
+ * Debug endpoint for hotel details testing
+ * GET /api/hotels-live/debug-hotel/:code
+ */
+router.get("/debug-hotel/:code", (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  const { code } = req.params;
+
+  res.json({
+    success: true,
+    message: "Debug hotel endpoint working",
+    hotelCode: code,
+    query: req.query,
+    timestamp: new Date().toISOString(),
+    credentials: {
+      hasApiKey: !!process.env.HOTELBEDS_API_KEY,
+      hasSecret: !!process.env.HOTELBEDS_SECRET
+    }
+  });
+});
+
+/**
  * Get hotel details with enhanced content
  * GET /api/hotels-live/hotel/:code
  */
