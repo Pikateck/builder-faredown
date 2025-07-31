@@ -309,6 +309,20 @@ async function handleHotelSearch(req, res) {
 }
 
 /**
+ * Simple test endpoint to verify routing works
+ * GET /api/hotels-live/test
+ */
+router.get("/test", (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.json({
+    success: true,
+    message: "Hotels Live API is working",
+    timestamp: new Date().toISOString(),
+    route: "test endpoint"
+  });
+});
+
+/**
  * Get hotel details with enhanced content
  * GET /api/hotels-live/hotel/:code
  */
