@@ -376,34 +376,32 @@ export function BookingSearchForm() {
           <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
             Destination
           </label>
-          {/* Selected destination indicator */}
-          {destination && !isUserTyping && (
-            <div className="flex items-center gap-2 mb-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded text-sm">
-              <MapPin className="w-3 h-3 text-blue-600" />
-              <span className="text-blue-800 font-medium truncate flex-1">
-                {destination}
-              </span>
-              <button
-                onClick={() => {
-                  setDestination("");
-                  setDestinationCode("");
-                  setInputValue("");
-                  setIsUserTyping(false);
-                }}
-                className="text-blue-600 hover:text-blue-800 p-0.5"
-                title="Clear destination"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
-          )}
+
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500 w-4 h-4 z-10" />
+                <svg
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
                 <Input
                   type="text"
-                  value={isUserTyping ? inputValue : ""}
+                  value={isUserTyping ? inputValue : destination || ""}
                   onChange={(e) => {
                     const value = e.target.value;
                     setInputValue(value);
@@ -436,12 +434,11 @@ export function BookingSearchForm() {
                   readOnly={false}
                   disabled={false}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation relative z-10"
-                  placeholder="Where are you going?"
+                  placeholder={destination ? destination : "Where are you going?"}
                   autoComplete="off"
                   data-destination-input="true"
                 />
-                {((isUserTyping && inputValue) ||
-                  (!isUserTyping && destination)) && (
+                {(destination || (isUserTyping && inputValue)) && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -451,9 +448,12 @@ export function BookingSearchForm() {
                       setDestinationCode("");
                       setIsDestinationOpen(false);
                     }}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                    title="Clear destination"
                   >
-                    <X className="w-4 h-4" />
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                 )}
               </div>
