@@ -296,70 +296,75 @@ export default function HotelDetails() {
     return breakdown.total;
   };
 
-  const roomTypes = [
-    {
-      id: "twin-skyline",
-      name: "Twin Room with Skyline View",
-      type: "1 X Twin Classic",
-      details: "Twin bed",
-      pricePerNight: 167,
-      status: "Best Value - Start Here!",
-      statusColor: "green",
-      nonRefundable: true,
-      image:
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
-      features: [
-        "6.7 km from downtown",
-        "Max 2 guests",
-        "2 twin beds",
-        "Free stay for your child",
-        "Free cancellation",
-        "No prepayment needed",
-      ],
-    },
-    {
-      id: "king-skyline",
-      name: "King Room with Skyline View",
-      type: "1 X King Classic",
-      details: "1 king bed",
-      pricePerNight: 185,
-      status: "Upgrade for +₹18",
-      statusColor: "yellow",
-      image:
-        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
-      features: [
-        "6.7 km from downtown",
-        "Max 2 guests",
-        "1 king bed",
-        "Free cancellation",
-        "No prepayment needed",
-      ],
-    },
-    {
-      id: "superior-king",
-      name: "Superior King Room",
-      type: "1 X Superior King",
-      pricePerNight: 195,
-      status: "Upgrade for +₹28",
-      statusColor: "yellow",
-    },
-    {
-      id: "superior-twin-club",
-      name: "Superior Twin Room - Club Access",
-      type: "2 X Twin Superior Club",
-      pricePerNight: 275,
-      status: "Upgrade for +₹108",
-      statusColor: "yellow",
-    },
-    {
-      id: "grand-suite-garden",
-      name: "One Bedroom Grand Suite with Garden View",
-      type: "1 X Grand Suite",
-      pricePerNight: 350,
-      status: "Upgrade for +₹183",
-      statusColor: "yellow",
-    },
-  ];
+  // Generate room types from live data or use mock data
+  const roomTypes = (() => {
+    if (hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0) {
+      // Use live room data from Hotelbeds
+      return hotelData.roomTypes.map((room: any, index: number) => ({
+        id: `live-room-${index}`,
+        name: room.name || `Room Type ${index + 1}`,
+        type: room.name || `1 X ${room.name || 'Standard'}`,
+        details: room.features ? room.features.join(', ') : 'Standard accommodations',
+        pricePerNight: room.price || room.pricePerNight || hotelData.currentPrice || 167,
+        status: index === 0 ? "Best Value - Start Here!" : `Available`,
+        statusColor: index === 0 ? "green" : "blue",
+        nonRefundable: true,
+        image: room.image ||
+               (hotelData.images && hotelData.images.length > 1 ?
+                (typeof hotelData.images[1] === 'string' ? hotelData.images[1] : hotelData.images[1].url) :
+                "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
+        features: room.features || [
+          "Standard room",
+          "Free WiFi",
+          "Air conditioning",
+          "Private bathroom"
+        ],
+        isLiveData: true
+      }));
+    }
+
+    // Fallback mock room types
+    return [
+      {
+        id: "twin-skyline",
+        name: "Twin Room with Skyline View",
+        type: "1 X Twin Classic",
+        details: "Twin bed",
+        pricePerNight: hotel?.currentPrice || 167,
+        status: "Best Value - Start Here!",
+        statusColor: "green",
+        nonRefundable: true,
+        image: hotel?.image || "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
+        features: [
+          "6.7 km from downtown",
+          "Max 2 guests",
+          "2 twin beds",
+          "Free stay for your child",
+          "Free cancellation",
+          "No prepayment needed",
+        ],
+      },
+      {
+        id: "king-skyline",
+        name: "King Room with Skyline View",
+        type: "1 X King Classic",
+        details: "1 king bed",
+        pricePerNight: (hotel?.currentPrice || 167) + 18,
+        status: "Upgrade for +₹18",
+        statusColor: "yellow",
+        image: (hotel?.images && hotel.images.length > 1) ?
+               (typeof hotel.images[1] === 'string' ? hotel.images[1] : hotel.images[1].url) :
+               "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
+        features: [
+          "6.7 km from downtown",
+          "Max 2 guests",
+          "1 king bed",
+          "Free cancellation",
+          "No prepayment needed",
+        ],
+      },
+    ];
+  })();
 
   // Assign roomTypes to hotel object
   hotel.roomTypes = roomTypes;
