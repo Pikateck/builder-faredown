@@ -197,24 +197,94 @@ export default function HotelDetails() {
     (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
   );
 
-  // Note: pricing utility will be imported at top of file
+  // Fetch live hotel data from Hotelbeds API
+  useEffect(() => {
+    const fetchHotelData = async () => {
+      if (!hotelId) return;
 
-  // Mock hotel data with dynamic dates
-  const hotel = {
+      setIsLoadingHotel(true);
+      try {
+        console.log(`🏨 Fetching live hotel details for: ${hotelId}`);
+
+        // Build API URL with search parameters for availability
+        const apiUrl = new URL(`/api/hotels-live/hotel/${hotelId}`, window.location.origin);
+        if (checkInParam) apiUrl.searchParams.set('checkIn', checkInParam);
+        if (checkOutParam) apiUrl.searchParams.set('checkOut', checkOutParam);
+
+        const response = await fetch(apiUrl.toString());
+        const data = await response.json();
+
+        if (data.success && data.hotel) {
+          console.log('✅ Live hotel data received:', data.hotel);
+          setHotelData(data.hotel);
+        } else {
+          console.warn('⚠️ Live hotel data not available, using fallback');
+          // Use fallback data
+          setHotelData(getMockHotelData());
+        }
+      } catch (error) {
+        console.error('❌ Failed to fetch hotel details:', error);
+        // Use fallback data
+        setHotelData(getMockHotelData());
+      } finally {
+        setIsLoadingHotel(false);
+      }
+    };
+
+    fetchHotelData();
+  }, [hotelId, checkInParam, checkOutParam]);
+
+  // Fallback mock data function
+  const getMockHotelData = () => ({
     id: parseInt(hotelId || "1"),
     name: "Grand Hyatt Dubai",
     location: "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
-    image:
-      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F4e78c7022f0345f4909bc6063cdeffd6?format=webp&width=800",
+    images: [
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
+    ],
     rating: 4.5,
     reviews: 1247,
+    description: "Experience luxury in the heart of Dubai with stunning views and world-class amenities.",
+    amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Gym", "Parking"],
+    features: ["City View", "Business Center", "Concierge"],
+    currentPrice: 167,
+    totalPrice: 167 * totalNights,
+    currency: "USD",
+    available: true,
+    supplier: "fallback"
+  });
+
+  // Use live data or fallback
+  const hotel = hotelData ? {
+    id: parseInt(hotelId || "1"),
+    name: hotelData.name || "Grand Hyatt Dubai",
+    location: typeof hotelData.location === 'string' ? hotelData.location :
+              hotelData.location?.address?.street ||
+              hotelData.address?.street ||
+              "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
+    image: hotelData.images && hotelData.images.length > 0 ?
+           (typeof hotelData.images[0] === 'string' ? hotelData.images[0] : hotelData.images[0].url) :
+           "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+    images: hotelData.images || [],
+    rating: hotelData.rating || 4.5,
+    reviews: hotelData.reviews || hotelData.reviewCount || 1247,
     checkIn: checkInDate.toISOString().split("T")[0],
     checkOut: checkOutDate.toISOString().split("T")[0],
     totalNights: totalNights,
     rooms: parseInt(roomsParam || "1"),
     adults: parseInt(adultsParam || "2"),
+    description: hotelData.description || "Experience luxury accommodations with exceptional service.",
+    amenities: hotelData.amenities || ["WiFi", "Pool", "Restaurant"],
+    features: hotelData.features || ["City View"],
+    currentPrice: hotelData.currentPrice || 167,
+    totalPrice: hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights,
+    currency: hotelData.currency || "USD",
+    available: hotelData.available !== false,
+    supplier: hotelData.supplier || "hotelbeds",
+    isLiveData: hotelData.supplier === "hotelbeds",
     roomTypes: [], // Will be populated below
-  };
+  } : null;
 
   const calculateTotalPrice = (roomPricePerNight: number) => {
     const rooms = parseInt(roomsParam || "1");
@@ -2107,7 +2177,7 @@ export default function HotelDetails() {
                         <span className="mr-2">🚗</span> Valet parking
                       </li>
                       <li className="flex items-center">
-                        <span className="mr-2">🎯</span> Tour desk
+                        <span className="mr-2">����</span> Tour desk
                       </li>
                     </ul>
                   </div>
@@ -2769,7 +2839,7 @@ export default function HotelDetails() {
                   );
                 }}
               >
-                ��� Facebook
+                📘 Facebook
               </Button>
             </div>
           </div>
