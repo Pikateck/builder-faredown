@@ -166,11 +166,10 @@ async function handleHotelSearch(req, res) {
               postalCode: ""
             },
             
-            // Visual content
-            images: content?.images?.length > 0 ? content.images.map(img => img.url) : [
-              "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-              "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
-            ],
+            // Visual content - prioritize Hotelbeds images
+            images: content?.images?.length > 0
+              ? content.images.map(img => img.urlStandard || img.url || img.urlOriginal)
+              : [],
             
             // Amenities and features
             amenities: content?.amenities?.map(a => a.name) || content?.facilities?.map(f => f.name) || [
