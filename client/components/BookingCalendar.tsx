@@ -427,36 +427,35 @@ export function BookingCalendar({
           />
         </div>
 
-        {/* Footer with confirm button - Booking.com style */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 p-4 border-t border-gray-200">
-          {/* Removed duplicate date display */}
-          <div></div>
-          <div className="flex gap-2 w-full sm:w-auto">
-            <button
-              onClick={() => {
-                setSelection([
-                  {
-                    startDate: new Date(),
-                    endDate: addDays(new Date(), 3),
-                    key: "selection",
-                  },
-                ]);
-                onChange?.({
-                  startDate: new Date(),
-                  endDate: addDays(new Date(), 3),
-                });
-              }}
-              className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
-            >
-              Reset
-            </button>
-            <button
-              onClick={onClose}
-              className="flex-1 sm:flex-none px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
-            >
-              Done
-            </button>
-          </div>
+        {/* Footer with action buttons */}
+        <div className="flex justify-between items-center p-4 border-t border-gray-200">
+          <button
+            onClick={() => {
+              const today = new Date();
+              const defaultEnd = addDays(today, 1);
+              setSelection([
+                {
+                  startDate: today,
+                  endDate: defaultEnd,
+                  key: "selection",
+                },
+              ]);
+              onChange?.({
+                startDate: today,
+                endDate: defaultEnd,
+              });
+            }}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+          >
+            Clear
+          </button>
+          <button
+            onClick={onClose}
+            className="px-8 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
+            disabled={!dateInfo.checkIn}
+          >
+            Apply
+          </button>
         </div>
       </div>
     </div>
