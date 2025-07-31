@@ -73,7 +73,7 @@ export function BookingCalendar({
         ]);
       }
     }
-  }, [initialRange, selection]);
+  }, [initialRange?.startDate?.getTime(), initialRange?.endDate?.getTime()]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
     console.log("Calendar selection changed:", ranges);
