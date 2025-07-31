@@ -206,6 +206,7 @@ app.use("/api/payments", authenticateToken, paymentRoutes);
 app.use("/api/cms", cmsRoutes);
 app.use("/api/test-live", testLiveRoutes);
 app.use("/api/test-hotelbeds", testHotelbedsRoutes);
+app.use("/api/test-live-hotel", testLiveHotelRoutes);
 
 // New admin module routes
 app.use("/api/markup", authenticateToken, markupRoutes);
