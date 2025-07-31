@@ -62,6 +62,59 @@ export function MobileCityDropdown({
             />
           </div>
         </div>
+        {/* Hotelbeds Test Destinations */}
+        <div className="mb-6">
+          <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
+            <h3 className="text-sm font-semibold text-blue-800">🏨 Hotelbeds Test Destinations</h3>
+            <p className="text-xs text-blue-600">Available cities for testing with live API data</p>
+          </div>
+          <div className="space-y-2">
+            {[
+              { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", airport: "Dubai International Airport" },
+              { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", airport: "Barcelona-El Prat Airport" },
+              { id: "LON", code: "LON", name: "London", country: "United Kingdom", airport: "Heathrow Airport" },
+              { id: "PAR", code: "PAR", name: "Paris", country: "France", airport: "Charles de Gaulle Airport" },
+              { id: "ROM", code: "ROM", name: "Rome", country: "Italy", airport: "Fiumicino Airport" },
+              { id: "NYC", code: "NYC", name: "New York", country: "United States", airport: "John F. Kennedy Airport" },
+              { id: "BKK", code: "BKK", name: "Bangkok", country: "Thailand", airport: "Suvarnabhumi Airport" },
+              { id: "SIN", code: "SIN", name: "Singapore", country: "Singapore", airport: "Changi Airport" },
+              { id: "TKO", code: "TKO", name: "Tokyo", country: "Japan", airport: "Haneda Airport" },
+              { id: "SYD", code: "SYD", name: "Sydney", country: "Australia", airport: "Kingsford Smith Airport" }
+            ].map((dest) => (
+              <button
+                key={dest.id}
+                onClick={() => {
+                  onSelectCity(dest.name);
+                  onClose();
+                }}
+                className="w-full text-left px-4 py-4 hover:bg-blue-50 rounded-lg border border-gray-100 touch-manipulation"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-green-600 font-bold text-xs">API</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-base font-medium text-gray-900">
+                        {dest.name} ({dest.code})
+                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                        Live API
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-500">{dest.airport}</div>
+                    <div className="text-xs text-gray-400">{dest.country}</div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Regular Cities */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">Regular Destinations</h3>
+        </div>
         <div className="space-y-2">
           {Object.entries(cities).map(([city, data]) => (
             <button
