@@ -203,29 +203,89 @@ export default function HotelDetails() {
       if (!hotelId) return;
 
       setIsLoadingHotel(true);
-      try {
-        console.log(`🏨 Fetching live hotel details for: ${hotelId}`);
 
-        // Build API URL with search parameters for availability
-        const apiUrl = new URL(`/api/hotels-live/hotel/${hotelId}`, window.location.origin);
-        if (checkInParam) apiUrl.searchParams.set('checkIn', checkInParam);
-        if (checkOutParam) apiUrl.searchParams.set('checkOut', checkOutParam);
+      // Helper function to fetch with timeout and retry
+      const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 8000): Promise<Response> => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
-        const response = await fetch(apiUrl.toString());
-        const data = await response.json();
-
-        if (data.success && data.hotel) {
-          console.log('✅ Live hotel data received:', data.hotel);
-          setHotelData(data.hotel);
-        } else {
-          console.warn('⚠️ Live hotel data not available, using fallback');
-          // Use fallback data
-          setHotelData(getMockHotelData());
+        try {
+          const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          return response;
+        } catch (error) {
+          clearTimeout(timeoutId);
+          throw error;
         }
+      };
+
+      // Retry logic with exponential backoff
+      const attemptFetch = async (retryCount = 0): Promise<any> => {
+        try {
+          console.log(`🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`);
+
+          // Build API URL with search parameters for availability
+          const apiUrl = new URL(`/api/hotels-live/hotel/${hotelId}`, window.location.origin);
+          if (checkInParam) apiUrl.searchParams.set('checkIn', checkInParam);
+          if (checkOutParam) apiUrl.searchParams.set('checkOut', checkOutParam);
+
+          const response = await fetchWithTimeout(apiUrl.toString(), {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+
+          if (data.success && data.hotel) {
+            console.log('✅ Live hotel data received:', data.hotel);
+            return data.hotel;
+          } else {
+            throw new Error('Invalid response structure or no hotel data');
+          }
+        } catch (error) {
+          console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
+
+          // Retry up to 2 times with exponential backoff
+          if (retryCount < 2 && (
+            error instanceof TypeError || // Network errors
+            error.message.includes('Failed to fetch') ||
+            error.message.includes('NetworkError') ||
+            error.message.includes('fetch')
+          )) {
+            const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+            console.log(`🔄 Retrying in ${delay}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return attemptFetch(retryCount + 1);
+          }
+
+          throw error;
+        }
+      };
+
+      try {
+        const hotelData = await attemptFetch();
+        setHotelData(hotelData);
       } catch (error) {
-        console.error('❌ Failed to fetch hotel details:', error);
-        // Use fallback data
-        setHotelData(getMockHotelData());
+        console.error('❌ All attempts failed, using fallback data:', error);
+
+        // Immediate fallback - don't wait for API in production
+        const fallbackData = getMockHotelData();
+        setHotelData(fallbackData);
+
+        // Show user-friendly message for network issues
+        if (error instanceof TypeError || error.message.includes('Failed to fetch')) {
+          console.info('ℹ️ Using offline mode due to network connectivity issues');
+        }
       } finally {
         setIsLoadingHotel(false);
       }
