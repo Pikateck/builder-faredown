@@ -295,25 +295,71 @@ export default function HotelDetails() {
   }, [hotelId, checkInParam, checkOutParam]);
 
   // Fallback mock data function
-  const getMockHotelData = () => ({
-    id: parseInt(hotelId || "1"),
-    name: "Grand Hyatt Dubai",
-    location: "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
-    images: [
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
-    ],
-    rating: 4.5,
-    reviews: 1247,
-    description: "Experience luxury in the heart of Dubai with stunning views and world-class amenities.",
-    amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Gym", "Parking"],
-    features: ["City View", "Business Center", "Concierge"],
-    currentPrice: 167,
-    totalPrice: 167 * totalNights,
-    currency: "USD",
-    available: true,
-    supplier: "fallback"
-  });
+  const getMockHotelData = () => {
+    // Extract hotel info from URL or use defaults
+    const hotelCode = hotelId || "1";
+    const isBusinessHotel = hotelCode.toLowerCase().includes('business');
+    const isLuxuryHotel = hotelCode.toLowerCase().includes('grand') || hotelCode.toLowerCase().includes('luxury');
+    const isBoutiqueHotel = hotelCode.toLowerCase().includes('boutique');
+
+    // Generate realistic hotel names based on code
+    const hotelNames = {
+      'htl-DXB-001': 'Grand Hyatt Dubai',
+      'htl-DXB-002': 'Business Hotel Dubai Marina',
+      'htl-DXB-003': 'Boutique Hotel Downtown Dubai',
+      'htl-DXB-004': 'Premium Hotel Dubai Creek',
+      'htl-DXB-005': 'City Hotel Dubai Mall',
+      'htl-DXB-006': 'Express Hotel Dubai Airport'
+    };
+
+    const defaultName = hotelNames[hotelCode] ||
+      (isBusinessHotel ? `Business Hotel ${hotelCode}` :
+       isLuxuryHotel ? `Grand Luxury Hotel ${hotelCode}` :
+       isBoutiqueHotel ? `Boutique Hotel ${hotelCode}` :
+       `Premium Hotel ${hotelCode}`);
+
+    return {
+      id: parseInt(hotelCode.replace(/\D/g, '')) || 1,
+      code: hotelCode,
+      name: defaultName,
+      location: "Near Sheikh Zayed Road & Dubai Mall, Dubai, United Arab Emirates",
+      images: [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600"
+      ],
+      rating: isLuxuryHotel ? 4.8 : isBoutiqueHotel ? 4.3 : 4.2,
+      reviews: Math.floor(Math.random() * 800) + 400,
+      reviewCount: Math.floor(Math.random() * 800) + 400,
+      description: `Experience exceptional hospitality at ${defaultName}. Located in the heart of Dubai with modern amenities and world-class service.`,
+      amenities: [
+        "Free WiFi", "Swimming Pool", "Fitness Center", "Restaurant",
+        "Room Service", "Business Center", "Concierge", "Valet Parking",
+        ...(isLuxuryHotel ? ["Spa & Wellness", "Premium Dining"] : []),
+        ...(isBusinessHotel ? ["Meeting Rooms", "Executive Lounge"] : [])
+      ],
+      features: [
+        "City View", "Modern Design", "24/7 Service",
+        ...(isLuxuryHotel ? ["Luxury Amenities", "Premium Location"] : []),
+        ...(isBoutiqueHotel ? ["Unique Design", "Personalized Service"] : [])
+      ],
+      currentPrice: isLuxuryHotel ? 250 : isBoutiqueHotel ? 180 : 167,
+      totalPrice: (isLuxuryHotel ? 250 : isBoutiqueHotel ? 180 : 167) * totalNights,
+      currency: "USD",
+      available: true,
+      supplier: "offline-mode",
+      isLiveData: false,
+      fallback: true,
+      checkIn: checkInDate.toISOString().split("T")[0],
+      checkOut: checkOutDate.toISOString().split("T")[0],
+      address: {
+        street: "Dubai Marina District",
+        city: "Dubai",
+        country: "United Arab Emirates"
+      }
+    };
+  };
 
   // Temporary hotel data for roomTypes calculation
   const tempHotelData = hotelData ? {
