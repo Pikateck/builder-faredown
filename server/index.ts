@@ -806,8 +806,12 @@ export function createServer() {
     }
   });
 
-  // Enhanced live hotel search with database caching
+  // Enhanced live hotel search with Hotelbeds API integration
   app.get("/api/hotels-live/search", async (_req, res) => {
+    // Set proper headers for JSON response
+    res.setHeader('Content-Type', 'application/json');
+
+    // Extract search parameters
     const destinationCode = (_req.query.destination as string) || "DXB";
     const checkIn = _req.query.checkIn as string;
     const checkOut = _req.query.checkOut as string;
