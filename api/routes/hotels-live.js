@@ -320,13 +320,42 @@ router.get("/hotel/:code", async (req, res) => {
     console.log(`🏨 Getting enhanced hotel details for: ${code}`);
 
     // Get detailed content from content API
-    const contentData = await contentService.getHotels([code], language);
-    const hotel = contentData && contentData.length > 0 ? contentData[0] : null;
+    let contentData = null;
+    let hotel = null;
+
+    try {
+      contentData = await contentService.getHotels([code], language);
+      hotel = contentData && contentData.length > 0 ? contentData[0] : null;
+    } catch (contentError) {
+      console.warn("⚠️ Content API error for hotel details:", contentError.message);
+      // Create fallback hotel data
+      hotel = {
+        id: code,
+        code: code,
+        name: `Hotel ${code}`,
+        description: "Hotel information unavailable from live API",
+        images: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+          "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
+        ],
+        rating: 4.0,
+        amenities: ["WiFi", "Restaurant"],
+        location: {
+          address: {
+            city: "Dubai",
+            country: "United Arab Emirates"
+          }
+        },
+        supplier: "fallback"
+      };
+    }
 
     if (!hotel) {
       return res.status(404).json({
+        success: false,
         error: "Hotel not found",
         code: code,
+        message: "Hotel data not available from any source"
       });
     }
 
