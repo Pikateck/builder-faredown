@@ -256,9 +256,9 @@ export function MobileDatePicker({
 interface MobileTravelersProps {
   isOpen: boolean;
   onClose: () => void;
-  travelers: { adults: number; children: number };
+  travelers: { adults: number; children: number; childAges: number[] };
   setTravelers: React.Dispatch<
-    React.SetStateAction<{ adults: number; children: number }>
+    React.SetStateAction<{ adults: number; children: number; childAges: number[] }>
   >;
 }
 
@@ -392,6 +392,7 @@ export function MobileTravelers({
                 setTravelers((prev) => ({
                   ...prev,
                   children: Math.max(0, prev.children - 1),
+                  childAges: prev.childAges.slice(0, -1), // Remove last age
                 }))
               }
               disabled={travelers.children <= 0}
@@ -407,6 +408,7 @@ export function MobileTravelers({
                 setTravelers((prev) => ({
                   ...prev,
                   children: prev.children + 1,
+                  childAges: [...prev.childAges, 10], // Default age 10
                 }))
               }
               className="w-12 h-12 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold text-xl touch-manipulation"
@@ -415,6 +417,41 @@ export function MobileTravelers({
             </button>
           </div>
         </div>
+
+        {/* Child Age Selection - Mobile */}
+        {travelers.children > 0 && (
+          <div className="space-y-4 py-6 border-b border-gray-100">
+            <div className="text-lg font-medium text-gray-900 mb-4">
+              Ages of children
+            </div>
+            {Array.from({ length: travelers.children }).map((_, index) => (
+              <div key={index} className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
+                <span className="text-base font-medium text-gray-700">
+                  Child {index + 1}
+                </span>
+                <select
+                  value={travelers.childAges[index] || 10}
+                  onChange={(e) => {
+                    const newAges = [...travelers.childAges];
+                    newAges[index] = parseInt(e.target.value);
+                    setTravelers(prev => ({
+                      ...prev,
+                      childAges: newAges
+                    }));
+                  }}
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-base min-w-[80px] focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation"
+                >
+                  {Array.from({ length: 18 }, (_, i) => (
+                    <option key={i} value={i}>
+                      {i} {i === 1 ? 'year' : 'years'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="pt-4">
           <Button
             onClick={() => {
