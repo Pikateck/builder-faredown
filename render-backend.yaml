@@ -1,0 +1,40 @@
+services:
+  # Faredown Node.js Backend API
+  - type: web
+    name: faredown-api
+    env: node
+    repo: https://github.com/yourusername/faredown-booking # Replace with your repo
+    buildCommand: "cd api && npm install"
+    startCommand: "cd api && npm start"
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db"
+      - key: HOTELBEDS_API_KEY
+        value: "91d2368789abdb5beec101ce95a9d185"
+      - key: HOTELBEDS_SECRET
+        value: "a9ffaaecce"
+      - key: HOTELBEDS_CONTENT_API
+        value: "https://api.test.hotelbeds.com/hotel-content-api/1.0/"
+      - key: HOTELBEDS_BOOKING_API
+        value: "https://api.test.hotelbeds.com/hotel-api/1.0/"
+      - key: SENDGRID_API_KEY
+        value: "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"
+      - key: RAZORPAY_KEY_ID
+        value: "rzp_test_XkiZskS8iGKFKi"
+      - key: ALLOWED_ORIGINS
+        value: "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev,https://faredown-api.onrender.com,https://faredown.com"
+      - key: CORS_ORIGIN
+        value: "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev"
+      - key: ENABLE_BARGAIN_ENGINE
+        value: "true"
+      - key: ENABLE_AI_PRICING
+        value: "true"
+      - key: ENABLE_REAL_TIME_UPDATES
+        value: "true"
