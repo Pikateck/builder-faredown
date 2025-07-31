@@ -600,21 +600,36 @@ export function BookingSearchForm() {
                   </div>
                 ) : (
                   <div>
-                    <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                      <span className="text-sm font-semibold text-gray-800">
-                        Trending destinations
+                    {/* Hotelbeds Test Destinations */}
+                    <div className="px-4 py-3 bg-blue-50 border-b border-blue-200">
+                      <span className="text-sm font-semibold text-blue-800">
+                        🏨 Hotelbeds Test Destinations
                       </span>
+                      <div className="text-xs text-blue-600 mt-1">
+                        Available cities for testing with live API data
+                      </div>
                     </div>
-                    {popularDestinations.map((dest, index) => (
+                    {[
+                      { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city", popular: true },
+                      { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city", popular: true },
+                      { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city", popular: true },
+                      { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city", popular: true },
+                      { id: "ROM", code: "ROM", name: "Rome", country: "Italy", type: "city", popular: true },
+                      { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city", popular: true },
+                      { id: "BKK", code: "BKK", name: "Bangkok", country: "Thailand", type: "city", popular: true },
+                      { id: "SIN", code: "SIN", name: "Singapore", country: "Singapore", type: "city", popular: true },
+                      { id: "TKO", code: "TKO", name: "Tokyo", country: "Japan", type: "city", popular: true },
+                      { id: "SYD", code: "SYD", name: "Sydney", country: "Australia", type: "city", popular: true }
+                    ].map((dest, index) => (
                       <div
                         key={dest.id}
-                        className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
+                        className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                         onMouseDown={(e) => {
                           e.preventDefault();
                         }}
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("⭐ Trending destination selected:", {
+                          console.log("🎯 Hotelbeds test destination selected:", {
                             name: fullName,
                             code: dest.code,
                             type: dest.type,
