@@ -251,12 +251,10 @@ export class HotelsService {
           window.location.hostname.includes(".local") ||
           window.location.port !== "");
 
-      if (isDevelopment) {
-        console.log(
-          "🔧 Development mode - skipping hotel search API call, using fallback",
-        );
-        return this.searchHotelsFallback(searchParams);
-      }
+      // Enable live API for development too since we have test credentials
+      console.log(
+        "🔍 Searching hotels with enhanced Hotelbeds API integration",
+      );
 
       const queryParams = {
         destination: searchParams.destination,
@@ -1042,7 +1040,7 @@ export class HotelsService {
         type: "city" as const,
         country: "United Kingdom",
         code: "LHR",
-        flag: "🇬🇧",
+        flag: "🇬����",
         popular: true,
       },
       {
