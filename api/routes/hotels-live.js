@@ -112,16 +112,41 @@ async function handleHotelSearch(req, res) {
 
     // Search for availability and pricing
     console.log("🏨 Searching availability with Hotelbeds...");
-    const availabilityResults = await bookingService.searchAvailability({
-      destination: destCode,
-      checkIn,
-      checkOut,
-      rooms: parseInt(rooms),
-      adults: parseInt(adults),
-      children: parseInt(children),
-      childAges: Array.isArray(childAges) ? childAges : [],
-      currency: finalCurrency,
+    console.log("🔑 API Credentials:", {
+      hasApiKey: !!process.env.HOTELBEDS_API_KEY,
+      hasSecret: !!process.env.HOTELBEDS_SECRET,
+      apiKeyLength: process.env.HOTELBEDS_API_KEY?.length,
+      secretLength: process.env.HOTELBEDS_SECRET?.length
     });
+
+    let availabilityResults;
+    try {
+      availabilityResults = await bookingService.searchAvailability({
+        destination: destCode,
+        checkIn,
+        checkOut,
+        rooms: parseInt(rooms),
+        adults: parseInt(adults),
+        children: parseInt(children),
+        childAges: Array.isArray(childAges) ? childAges : [],
+        currency: finalCurrency,
+      });
+      console.log("✅ Hotelbeds availability search successful:", {
+        hotelCount: availabilityResults.hotels?.length || 0,
+        destination: destCode
+      });
+    } catch (apiError) {
+      console.error("❌ Hotelbeds API Error:", apiError.message);
+      console.error("🔍 Full API Error:", apiError);
+
+      // Return fallback data for now to debug
+      return res.json({
+        success: false,
+        error: "Hotelbeds API Error",
+        message: apiError.message,
+        fallback: true
+      });
+    }
 
     let processedHotels = [];
 
