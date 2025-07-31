@@ -300,7 +300,7 @@ export function BookingSearchForm() {
       });
 
       const url = `/hotels/results?${searchParams.toString()}`;
-      console.log("✅ Navigating to live Hotelbeds search:", url);
+      console.log("�� Navigating to live Hotelbeds search:", url);
       navigate(url);
     } catch (error) {
       console.error("🚨 Error in handleSearch:", error);
@@ -700,10 +700,16 @@ export function BookingSearchForm() {
                       </div>
                     ))}
                     <div className="px-4 py-2 border-t bg-gray-50">
-                      <p className="text-xs text-gray-500 flex items-center gap-1">
+                      <p className="text-xs text-gray-500 flex items-center gap-1 mb-1">
                         <span>🔍</span>
                         <span>
                           Type to search 1000+ destinations from database
+                        </span>
+                      </p>
+                      <p className="text-xs text-blue-600 flex items-center gap-1">
+                        <span>💡</span>
+                        <span>
+                          Use the cities above for testing live Hotelbeds API data
                         </span>
                       </p>
                     </div>
