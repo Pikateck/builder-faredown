@@ -9,6 +9,9 @@ import {
 // Import database service
 import destinationsService from "./services/destinationsService.js";
 
+// Add crypto for Hotelbeds API signatures
+import crypto from "crypto";
+
 export function createServer() {
   const app = express();
 
