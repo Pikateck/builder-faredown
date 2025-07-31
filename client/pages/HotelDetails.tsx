@@ -329,11 +329,11 @@ export default function HotelDetails() {
         name: "Twin Room with Skyline View",
         type: "1 X Twin Classic",
         details: "Twin bed",
-        pricePerNight: hotel?.currentPrice || 167,
+        pricePerNight: tempHotelData?.currentPrice || 167,
         status: "Best Value - Start Here!",
         statusColor: "green",
         nonRefundable: true,
-        image: hotel?.image || "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
+        image: tempHotelData?.image || "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
         features: [
           "6.7 km from downtown",
           "Max 2 guests",
