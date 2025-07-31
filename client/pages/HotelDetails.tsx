@@ -759,6 +759,11 @@ export default function HotelDetails() {
                   🔴 LIVE DATA
                 </div>
               )}
+              {hotel.fallback && (
+                <div className="bg-orange-500/95 backdrop-blur-sm px-2 py-1 rounded text-xs text-white font-medium">
+                  📱 OFFLINE MODE
+                </div>
+              )}
             </div>
           </div>
 
