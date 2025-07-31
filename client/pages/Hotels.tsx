@@ -43,6 +43,7 @@ import {
   MobileDatePicker,
   MobileTravelers,
 } from "@/components/MobileDropdowns";
+import { BookingSearchForm } from "@/components/BookingSearchForm";
 
 export default function Hotels() {
   const navigate = useNavigate();
