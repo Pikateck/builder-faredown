@@ -44,6 +44,67 @@ router.post("/search", searchLimiter, async (req, res) => {
   await handleHotelSearch(req, res);
 });
 
+/**
+ * Test endpoint to debug Hotelbeds API directly
+ * GET /api/hotels-live/test
+ */
+router.get("/test", async (req, res) => {
+  try {
+    console.log("🧪 Testing direct Hotelbeds API connection...");
+
+    // Test credentials
+    const hasCredentials = !!(process.env.HOTELBEDS_API_KEY && process.env.HOTELBEDS_SECRET);
+    console.log("🔑 Credentials check:", {
+      hasApiKey: !!process.env.HOTELBEDS_API_KEY,
+      hasSecret: !!process.env.HOTELBEDS_SECRET,
+      apiKeyLength: process.env.HOTELBEDS_API_KEY?.length,
+      secretLength: process.env.HOTELBEDS_SECRET?.length
+    });
+
+    if (!hasCredentials) {
+      return res.json({
+        success: false,
+        error: "Missing Hotelbeds API credentials",
+        debug: {
+          hasApiKey: !!process.env.HOTELBEDS_API_KEY,
+          hasSecret: !!process.env.HOTELBEDS_SECRET
+        }
+      });
+    }
+
+    // Test simple availability search
+    const testSearch = {
+      destination: "BCN", // Barcelona
+      checkIn: "2024-12-15",
+      checkOut: "2024-12-18",
+      rooms: 1,
+      adults: 2,
+      children: 0,
+      currency: "EUR"
+    };
+
+    console.log("🏨 Testing availability search:", testSearch);
+    const result = await bookingService.searchAvailability(testSearch);
+
+    res.json({
+      success: true,
+      message: "Hotelbeds API test successful",
+      hotelCount: result.hotels?.length || 0,
+      hasImages: result.hotels?.some(h => h.images?.length > 0) || false,
+      sampleHotel: result.hotels?.[0] || null,
+      testParams: testSearch
+    });
+
+  } catch (error) {
+    console.error("❌ Hotelbeds test failed:", error);
+    res.json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
 async function handleHotelSearch(req, res) {
   try {
     // Extract parameters from both GET and POST requests
