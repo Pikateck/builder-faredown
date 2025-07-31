@@ -158,12 +158,22 @@ async function handleHotelSearch(req, res) {
       
       try {
         // Get detailed content for these hotels
+        console.log("📚 Fetching content for hotel codes:", hotelCodes);
         const contentData = await contentService.getHotels(hotelCodes);
-        
+        console.log("📚 Content data received:", {
+          hotelCount: contentData?.length || 0,
+          hasImages: contentData?.some(h => h.images?.length > 0) || false
+        });
+
         // Create a map for quick lookup
         const contentMap = new Map();
         if (contentData && contentData.length > 0) {
           contentData.forEach(hotel => {
+            console.log(`📝 Hotel ${hotel.code} content:`, {
+              name: hotel.name,
+              imageCount: hotel.images?.length || 0,
+              firstImageUrl: hotel.images?.[0]?.url || hotel.images?.[0]?.urlStandard || 'none'
+            });
             contentMap.set(hotel.code, hotel);
           });
         }
