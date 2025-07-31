@@ -104,6 +104,13 @@ export function BookingCalendar({
           endDate: endDate,
         });
       }
+
+      // Auto-close calendar when both dates are selected (for better UX)
+      if (range.endDate && onClose && !isSameDay(range.startDate, endDate)) {
+        setTimeout(() => {
+          onClose();
+        }, 200); // Small delay to show the selection
+      }
     }
   };
 
