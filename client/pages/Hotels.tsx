@@ -264,89 +264,9 @@ export default function Hotels() {
               </div>
             </div>
 
-            {/* Hotel Search Form */}
-            <div className="space-y-4">
-              {/* Destination */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
-                <button
-                  onClick={() => setShowMobileDestination(true)}
-                  className="w-full text-left"
-                >
-                  <div className="text-xs text-gray-500 mb-1">Destination</div>
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="w-5 h-5 text-[#003580]" />
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {selectedFromCity}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {cityData[selectedFromCity]?.fullName || "City"}
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Check-in / Check-out */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
-                <button
-                  onClick={() => setShowMobileDates(true)}
-                  className="w-full text-left"
-                >
-                  <div className="text-xs text-gray-500 mb-1">
-                    Check-in / Check-out
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <CalendarIcon className="w-5 h-5 text-[#003580]" />
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {departureDate && returnDate
-                          ? `${formatDisplayDate(departureDate)} - ${formatDisplayDate(returnDate)}`
-                          : "Select dates"}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Choose check-in & check-out
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Guests */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
-                <button
-                  onClick={() => setShowMobileGuests(true)}
-                  className="w-full text-left"
-                >
-                  <div className="text-xs text-gray-500 mb-1">Guests</div>
-                  <div className="flex items-center space-x-2">
-                    <Users className="w-5 h-5 text-[#003580]" />
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {travelers.adults + travelers.children}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {travelers.adults} adult
-                        {travelers.adults > 1 ? "s" : ""}
-                        {travelers.children > 0 &&
-                          `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`}
-                        {travelers.children > 0 && travelers.childAges.length > 0
-                          ? ` (${travelers.childAges.join(", ")} yrs)`
-                          : ""}
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Search Button */}
-              <Button
-                onClick={() => navigate("/hotels/results")}
-                className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg"
-              >
-                <Search className="w-5 h-5 mr-2" />
-                Search Hotels
-              </Button>
+            {/* Hotel Search Form with Hotelbeds Test Destinations */}
+            <div className="mx-auto">
+              <BookingSearchForm />
             </div>
 
             {/* Sample Hotel Prices with Currency Conversion */}
@@ -552,7 +472,7 @@ export default function Hotels() {
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
-                          { code: "es", name: "Español", flag: "🇪🇸" },
+                          { code: "es", name: "Español", flag: "🇪���" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
