@@ -55,19 +55,25 @@ export function BookingCalendar({
 
   // Update selection when initialRange changes
   useEffect(() => {
-    if (initialRange) {
-      const startDate = initialRange.startDate || new Date();
-      const endDate = initialRange.endDate || addDays(startDate, 3);
+    if (initialRange?.startDate) {
+      const startDate = initialRange.startDate;
+      const endDate = initialRange.endDate || addDays(startDate, 1);
 
-      setSelection([
-        {
-          startDate,
-          endDate,
-          key: "selection",
-        },
-      ]);
+      // Only update if the dates are actually different
+      const currentStart = selection[0].startDate;
+      const currentEnd = selection[0].endDate;
+
+      if (!isSameDay(startDate, currentStart) || !isSameDay(endDate, currentEnd)) {
+        setSelection([
+          {
+            startDate,
+            endDate,
+            key: "selection",
+          },
+        ]);
+      }
     }
-  }, [initialRange]);
+  }, [initialRange, selection]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
     console.log("Calendar selection changed:", ranges);
