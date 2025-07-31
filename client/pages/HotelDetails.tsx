@@ -102,6 +102,7 @@ import {
 } from "lucide-react";
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
+import { hotelsService } from "@/services/hotelsService";
 
 export default function HotelDetails() {
   const { hotelId } = useParams();
