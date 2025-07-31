@@ -212,67 +212,32 @@ export function createServer() {
       const adults = parseInt(_req.query.adults as string) || 2;
       const rooms = parseInt(_req.query.rooms as string) || 1;
 
-      console.log(`🔍 Searching hotels with live Hotelbeds API for: ${destinationCode}`);
+      console.log(`🔍 Searching hotels with direct Hotelbeds API for: ${destinationCode}`);
 
-      // Make live API call to Hotelbeds
-      try {
-        const hotelbedsResponse = await fetch('http://localhost:3001/api/hotels-live/search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            destination: destinationCode,
-            checkIn: checkIn || '2024-12-15',
-            checkOut: checkOut || '2024-12-18',
-            rooms: rooms,
-            adults: adults,
-            children: 0,
-            currency: 'EUR'
-          })
+      // Try direct Hotelbeds API call first
+      const directApiResult = await callHotelbedsAPI({
+        destination: destinationCode,
+        checkIn: checkIn,
+        checkOut: checkOut,
+        adults: adults,
+        children: 0
+      });
+
+      if (directApiResult.success && directApiResult.data.length > 0) {
+        console.log(`✅ Found ${directApiResult.data.length} hotels from direct Hotelbeds API`);
+        console.log(`🏨 Sample hotel images:`, directApiResult.data[0]?.images?.slice(0, 2));
+
+        return res.json({
+          success: true,
+          data: directApiResult.data,
+          totalResults: directApiResult.data.length,
+          isLiveData: true,
+          source: "Direct Hotelbeds API",
+          searchParams: _req.query,
         });
-
-        console.log(`📡 API Response Status: ${hotelbedsResponse.status}`);
-
-        if (hotelbedsResponse.ok) {
-          const hotelbedsData = await hotelbedsResponse.json();
-          console.log(`📊 API Response:`, {
-            success: hotelbedsData.success,
-            dataLength: hotelbedsData.data?.length || 0,
-            hasHotels: Array.isArray(hotelbedsData.data) && hotelbedsData.data.length > 0
-          });
-
-          if (hotelbedsData.success && hotelbedsData.data && hotelbedsData.data.length > 0) {
-            console.log(`✅ Found ${hotelbedsData.data.length} hotels from live Hotelbeds API`);
-
-            // Log first hotel to verify image data
-            const firstHotel = hotelbedsData.data[0];
-            console.log(`🏨 Sample hotel:`, {
-              name: firstHotel.name,
-              images: firstHotel.images?.slice(0, 2) || 'no images',
-              hasRealImages: firstHotel.images?.some(img => !img.includes('unsplash')) || false
-            });
-
-            return res.json({
-              success: true,
-              data: hotelbedsData.data,
-              totalResults: hotelbedsData.data.length,
-              isLiveData: true,
-              source: "Live Hotelbeds API",
-              searchParams: _req.query,
-            });
-          } else {
-            console.log('⚠️ API response successful but no hotels found');
-          }
-        } else {
-          const errorText = await hotelbedsResponse.text();
-          console.error(`❌ API Response Error: ${hotelbedsResponse.status} - ${errorText}`);
-        }
-      } catch (apiError) {
-        console.error('❌ API Call Failed:', apiError.message);
       }
 
-      console.log('⚠️ Live API failed, using fallback data');
+      console.log('⚠️ Direct API failed, using fallback data');
 
       // Fallback data if API fails
       const destinationData =
