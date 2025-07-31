@@ -194,6 +194,7 @@ app.use(
   auditLogger,
   adminRoutes,
 );
+app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
 app.use("/api/flights", flightRoutes);
