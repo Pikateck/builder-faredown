@@ -33,39 +33,46 @@ async function callHotelbedsAPI(searchParams: any) {
       "Api-key": API_KEY,
       "X-Signature": signature,
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     };
 
     // Step 1: Get hotel availability and pricing
     const bookingRequest = {
       stay: {
-        checkIn: searchParams.checkIn?.split('T')[0] || '2024-12-15',
-        checkOut: searchParams.checkOut?.split('T')[0] || '2024-12-18'
+        checkIn: searchParams.checkIn?.split("T")[0] || "2024-12-15",
+        checkOut: searchParams.checkOut?.split("T")[0] || "2024-12-18",
       },
-      occupancies: [{
-        rooms: 1,
-        adults: searchParams.adults || 2,
-        children: searchParams.children || 0
-      }],
+      occupancies: [
+        {
+          rooms: 1,
+          adults: searchParams.adults || 2,
+          children: searchParams.children || 0,
+        },
+      ],
       destination: {
-        code: searchParams.destination || 'BCN'
+        code: searchParams.destination || "BCN",
       },
-      currency: 'EUR'
+      currency: "EUR",
     };
 
-    console.log("🏨 Booking API Request:", JSON.stringify(bookingRequest, null, 2));
+    console.log(
+      "🏨 Booking API Request:",
+      JSON.stringify(bookingRequest, null, 2),
+    );
 
     const bookingResponse = await fetch(`${BOOKING_API}/hotels`, {
-      method: 'POST',
+      method: "POST",
       headers,
-      body: JSON.stringify(bookingRequest)
+      body: JSON.stringify(bookingRequest),
     });
 
     console.log(`📡 Booking API Response Status: ${bookingResponse.status}`);
 
     if (!bookingResponse.ok) {
       const errorText = await bookingResponse.text();
-      console.error(`❌ Booking API Error: ${bookingResponse.status} - ${errorText}`);
+      console.error(
+        `❌ Booking API Error: ${bookingResponse.status} - ${errorText}`,
+      );
       return { success: false, error: errorText };
     }
 
@@ -92,21 +99,21 @@ async function callHotelbedsAPI(searchParams: any) {
       "Api-key": API_KEY,
       "X-Signature": contentSignature,
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     };
 
     const contentRequest = {
       hotels: hotelCodes,
-      language: "ENG"
+      language: "ENG",
     };
 
     let hotelContentMap = new Map();
 
     try {
       const contentResponse = await fetch(`${CONTENT_API}/hotels`, {
-        method: 'POST',
+        method: "POST",
         headers: contentHeaders,
-        body: JSON.stringify(contentRequest)
+        body: JSON.stringify(contentRequest),
       });
 
       console.log(`📸 Content API Response Status: ${contentResponse.status}`);
@@ -114,23 +121,33 @@ async function callHotelbedsAPI(searchParams: any) {
       if (contentResponse.ok) {
         const contentData = await contentResponse.json();
         const contentHotels = contentData.hotels || [];
-        console.log(`📸 Content API Success - Hotels with content: ${contentHotels.length}`);
+        console.log(
+          `📸 Content API Success - Hotels with content: ${contentHotels.length}`,
+        );
 
         contentHotels.forEach((hotel: any) => {
-          const images = hotel.images?.map((img: any) => {
-            // Construct full Hotelbeds image URL
-            const baseUrl = img.path.startsWith('http') ? img.path : `https://photos.hotelbeds.com${img.path}`;
-            return `${baseUrl}?width=800&height=600`;
-          }) || [];
+          const images =
+            hotel.images?.map((img: any) => {
+              // Construct full Hotelbeds image URL
+              const baseUrl = img.path.startsWith("http")
+                ? img.path
+                : `https://photos.hotelbeds.com${img.path}`;
+              return `${baseUrl}?width=800&height=600`;
+            }) || [];
 
           hotelContentMap.set(hotel.code, {
             name: hotel.name?.content || hotel.name,
-            description: hotel.description?.content || '',
+            description: hotel.description?.content || "",
             images: images,
-            amenities: hotel.facilities?.slice(0, 5).map((f: any) => f.description?.content || f.code) || []
+            amenities:
+              hotel.facilities
+                ?.slice(0, 5)
+                .map((f: any) => f.description?.content || f.code) || [],
           });
 
-          console.log(`📸 Hotel ${hotel.code}: Found ${images.length} images from Hotelbeds`);
+          console.log(
+            `📸 Hotel ${hotel.code}: Found ${images.length} images from Hotelbeds`,
+          );
         });
       } else {
         console.warn("⚠️ Content API failed, proceeding without images");
@@ -147,7 +164,8 @@ async function callHotelbedsAPI(searchParams: any) {
         id: hotel.code,
         code: hotel.code,
         name: content?.name || hotel.name || `Hotel ${hotel.code}`,
-        description: content?.description || `Premium hotel with excellent facilities`,
+        description:
+          content?.description || `Premium hotel with excellent facilities`,
         currentPrice: Math.round((hotel.minRate || 120) * 85), // Convert EUR to INR roughly
         originalPrice: Math.round((hotel.minRate || 120) * 100),
         currency: "INR",
@@ -155,23 +173,43 @@ async function callHotelbedsAPI(searchParams: any) {
         reviewScore: 8.5,
         reviewCount: 324,
         address: {
-          city: searchParams.destination === 'BCN' ? 'Barcelona' : searchParams.destination === 'SYD' ? 'Sydney' : 'Dubai',
-          country: searchParams.destination === 'BCN' ? 'Spain' : searchParams.destination === 'SYD' ? 'Australia' : 'UAE'
+          city:
+            searchParams.destination === "BCN"
+              ? "Barcelona"
+              : searchParams.destination === "SYD"
+                ? "Sydney"
+                : "Dubai",
+          country:
+            searchParams.destination === "BCN"
+              ? "Spain"
+              : searchParams.destination === "SYD"
+                ? "Australia"
+                : "UAE",
         },
         // Use actual Hotelbeds images if available, fallback only if no images
-        images: content?.images?.length > 0 ? content.images : getDestinationSpecificImages(searchParams.destination),
-        amenities: content?.amenities || ["Free WiFi", "Pool", "Restaurant", "Spa", "Fitness Center"],
+        images:
+          content?.images?.length > 0
+            ? content.images
+            : getDestinationSpecificImages(searchParams.destination),
+        amenities: content?.amenities || [
+          "Free WiFi",
+          "Pool",
+          "Restaurant",
+          "Spa",
+          "Fitness Center",
+        ],
         isLiveData: true,
         supplier: "hotelbeds-direct",
         rateKey: hotel.rateKey,
-        hasRealImages: (content?.images?.length || 0) > 0
+        hasRealImages: (content?.images?.length || 0) > 0,
       };
     });
 
-    console.log(`✅ Final result: ${enrichedHotels.length} hotels, ${enrichedHotels.filter(h => h.hasRealImages).length} with real Hotelbeds images`);
+    console.log(
+      `✅ Final result: ${enrichedHotels.length} hotels, ${enrichedHotels.filter((h) => h.hasRealImages).length} with real Hotelbeds images`,
+    );
 
     return { success: true, data: enrichedHotels };
-
   } catch (error) {
     console.error("❌ Direct Hotelbeds API call failed:", error);
     return { success: false, error: error.message };
@@ -181,24 +219,27 @@ async function callHotelbedsAPI(searchParams: any) {
 // Get destination-specific real hotel images
 function getDestinationSpecificImages(destination: string) {
   const imageCollections = {
-    'BCN': [
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg',
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/87428762.jpg',
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg'
+    BCN: [
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg",
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/87428762.jpg",
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg",
     ],
-    'DXB': [
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/45822596.jpg',
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/133464244.jpg',
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/301918507.jpg'
+    DXB: [
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/45822596.jpg",
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/133464244.jpg",
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/301918507.jpg",
     ],
-    'SYD': [
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/85056963.jpg',
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg',
-      'https://cf.bstatic.com/xdata/images/hotel/max1280x900/45822596.jpg'
-    ]
+    SYD: [
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/85056963.jpg",
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg",
+      "https://cf.bstatic.com/xdata/images/hotel/max1280x900/45822596.jpg",
+    ],
   };
 
-  return imageCollections[destination as keyof typeof imageCollections] || imageCollections['DXB'];
+  return (
+    imageCollections[destination as keyof typeof imageCollections] ||
+    imageCollections["DXB"]
+  );
 }
 
 export function createServer() {
@@ -287,7 +328,9 @@ export function createServer() {
       const adults = parseInt(_req.query.adults as string) || 2;
       const rooms = parseInt(_req.query.rooms as string) || 1;
 
-      console.log(`🔍 Searching hotels with direct Hotelbeds API for: ${destinationCode}`);
+      console.log(
+        `🔍 Searching hotels with direct Hotelbeds API for: ${destinationCode}`,
+      );
 
       // Try direct Hotelbeds API call first
       const directApiResult = await callHotelbedsAPI({
@@ -295,12 +338,17 @@ export function createServer() {
         checkIn: checkIn,
         checkOut: checkOut,
         adults: adults,
-        children: 0
+        children: 0,
       });
 
       if (directApiResult.success && directApiResult.data.length > 0) {
-        console.log(`✅ Found ${directApiResult.data.length} hotels from direct Hotelbeds API`);
-        console.log(`🏨 Sample hotel images:`, directApiResult.data[0]?.images?.slice(0, 2));
+        console.log(
+          `✅ Found ${directApiResult.data.length} hotels from direct Hotelbeds API`,
+        );
+        console.log(
+          `🏨 Sample hotel images:`,
+          directApiResult.data[0]?.images?.slice(0, 2),
+        );
 
         return res.json({
           success: true,
@@ -312,7 +360,7 @@ export function createServer() {
         });
       }
 
-      console.log('⚠️ Direct API failed, using fallback data');
+      console.log("⚠️ Direct API failed, using fallback data");
 
       // Fallback data if API fails
       const destinationData =
@@ -365,9 +413,8 @@ export function createServer() {
         source: "Fallback System (Live API unavailable)",
         searchParams: _req.query,
       });
-
     } catch (error) {
-      console.error('Hotel search error:', error);
+      console.error("Hotel search error:", error);
       res.status(500).json({
         success: false,
         error: "Hotel search failed",
@@ -1043,7 +1090,7 @@ export function createServer() {
   // Enhanced live hotel search with Hotelbeds API integration
   app.get("/api/hotels-live/search", async (_req, res) => {
     // Set proper headers for JSON response
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader("Content-Type", "application/json");
 
     // Extract search parameters
     const destinationCode = (_req.query.destination as string) || "DXB";
@@ -1337,21 +1384,31 @@ export function createServer() {
       let hotelSuggestions = [];
       if (query.length >= 3) {
         const hotelNames = [
-          'Business Hotel', 'Grand Hotel', 'Luxury Resort', 'City Center Hotel',
-          'Boutique Hotel', 'Premium Inn', 'Marriott', 'Hilton', 'Hyatt'
+          "Business Hotel",
+          "Grand Hotel",
+          "Luxury Resort",
+          "City Center Hotel",
+          "Boutique Hotel",
+          "Premium Inn",
+          "Marriott",
+          "Hilton",
+          "Hyatt",
         ];
 
         const matchingHotels = hotelNames
-          .filter(hotel => hotel.toLowerCase().includes(query.toLowerCase()))
+          .filter((hotel) => hotel.toLowerCase().includes(query.toLowerCase()))
           .slice(0, Math.floor(limit * 0.2))
-          .map(hotelName => {
-            const relevantDest = destinations[0] || MASTER_DESTINATIONS.find(d => d.popular) || MASTER_DESTINATIONS[0];
+          .map((hotelName) => {
+            const relevantDest =
+              destinations[0] ||
+              MASTER_DESTINATIONS.find((d) => d.popular) ||
+              MASTER_DESTINATIONS[0];
             return {
               code: `HTL-${relevantDest.code}`,
               name: `${hotelName} ${relevantDest.name}`,
               countryName: relevantDest.country,
               countryCode: relevantDest.countryCode,
-              type: 'hotel',
+              type: "hotel",
               zoneCode: null,
               popular: false,
               hotelCount: 1,
@@ -1359,8 +1416,8 @@ export function createServer() {
                 latitude: 25.2048 + (Math.random() - 0.5) * 15,
                 longitude: 55.2708 + (Math.random() - 0.5) * 25,
               },
-              flag: '🏨',
-              searchPriority: 25
+              flag: "🏨",
+              searchPriority: 25,
             };
           });
 
@@ -1386,8 +1443,9 @@ export function createServer() {
       }));
 
       // Combine and sort results
-      const allResults = [...formattedDestinations, ...hotelSuggestions]
-        .sort((a, b) => a.searchPriority - b.searchPriority);
+      const allResults = [...formattedDestinations, ...hotelSuggestions].sort(
+        (a, b) => a.searchPriority - b.searchPriority,
+      );
 
       res.json({
         success: true,
@@ -1537,7 +1595,7 @@ export function createServer() {
 
   // Hotel details endpoint with correct path that frontend expects
   app.get("/api/hotels-live/hotel/:code", async (_req, res) => {
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader("Content-Type", "application/json");
 
     const { code } = _req.params;
     const { checkIn, checkOut } = _req.query;
@@ -1549,23 +1607,28 @@ export function createServer() {
       try {
         const backendUrl = `http://localhost:3001/api/hotels-live/hotel/${code}`;
         const queryParams = new URLSearchParams();
-        if (checkIn) queryParams.append('checkIn', checkIn as string);
-        if (checkOut) queryParams.append('checkOut', checkOut as string);
+        if (checkIn) queryParams.append("checkIn", checkIn as string);
+        if (checkOut) queryParams.append("checkOut", checkOut as string);
 
-        const fullUrl = queryParams.toString() ? `${backendUrl}?${queryParams}` : backendUrl;
+        const fullUrl = queryParams.toString()
+          ? `${backendUrl}?${queryParams}`
+          : backendUrl;
 
         console.log(`🔄 Proxying to backend: ${fullUrl}`);
         const response = await fetch(fullUrl);
 
         if (response.ok) {
           const data = await response.json();
-          console.log('✅ Proxied response from backend API');
+          console.log("✅ Proxied response from backend API");
           return res.json(data);
         } else {
-          console.warn('⚠️ Backend API responded with error, using fallback');
+          console.warn("⚠️ Backend API responded with error, using fallback");
         }
       } catch (proxyError) {
-        console.warn('⚠️ Backend API not accessible, using fallback:', proxyError.message);
+        console.warn(
+          "⚠️ Backend API not accessible, using fallback:",
+          proxyError.message,
+        );
       }
 
       // Fallback hotel data when backend is not available
@@ -1573,34 +1636,35 @@ export function createServer() {
         id: code,
         code: code,
         name: `Hotel ${code}`,
-        description: "Experience luxury accommodations with exceptional service and modern amenities.",
+        description:
+          "Experience luxury accommodations with exceptional service and modern amenities.",
         images: (() => {
           // Generate realistic hotel images based on hotel code
           const imageCollections = {
-            'htl-DXB-001': [
+            "htl-DXB-001": [
               "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop", // Grand luxury exterior
               "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop", // Luxury room
               "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop", // Pool area
-              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop"  // Lobby
+              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop", // Lobby
             ],
-            'htl-DXB-002': [
+            "htl-DXB-002": [
               "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop", // Business hotel exterior
               "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&q=80&auto=format&fit=crop", // Business room
               "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&h=600&q=80&auto=format&fit=crop", // Conference room
-              "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop"  // Business lounge
+              "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop", // Business lounge
             ],
-            'htl-DXB-003': [
+            "htl-DXB-003": [
               "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop", // Boutique hotel exterior
               "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop", // Boutique room
               "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop", // Boutique dining
-              "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop"  // Boutique reception
+              "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop", // Boutique reception
             ],
-            'default': [
+            default: [
               "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
               "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop",
               "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop",
-              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop"
-            ]
+              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop",
+            ],
           };
           return imageCollections[code] || imageCollections.default;
         })(),
@@ -1609,21 +1673,28 @@ export function createServer() {
         amenities: ["WiFi", "Pool", "Restaurant", "Spa", "Gym", "Parking"],
         features: ["City View", "Business Center", "Concierge"],
         currentPrice: 167,
-        totalPrice: checkIn && checkOut ?
-          167 * Math.ceil((new Date(checkOut as string).getTime() - new Date(checkIn as string).getTime()) / (1000 * 60 * 60 * 24)) : 334,
+        totalPrice:
+          checkIn && checkOut
+            ? 167 *
+              Math.ceil(
+                (new Date(checkOut as string).getTime() -
+                  new Date(checkIn as string).getTime()) /
+                  (1000 * 60 * 60 * 24),
+              )
+            : 334,
         currency: "USD",
         available: true,
         location: {
           address: {
             street: "Marina District",
             city: "Dubai",
-            country: "United Arab Emirates"
-          }
+            country: "United Arab Emirates",
+          },
         },
         checkIn: checkIn || "2025-02-01",
         checkOut: checkOut || "2025-02-03",
         supplier: "dev-server-fallback",
-        isLiveData: false
+        isLiveData: false,
       };
 
       res.json({
@@ -1634,7 +1705,6 @@ export function createServer() {
         source: "Dev Server Fallback",
         timestamp: new Date().toISOString(),
       });
-
     } catch (error) {
       console.error("❌ Hotel details error:", error);
 

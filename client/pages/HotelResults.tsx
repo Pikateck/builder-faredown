@@ -350,7 +350,7 @@ export default function HotelResults() {
   const getMockHotels = (): Hotel[] => [
     {
       id: 1,
-      name: `Grand Hotel ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"}`,
+      name: `Grand Hotel ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
       location: `City Center, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
@@ -361,8 +361,7 @@ export default function HotelResults() {
       reviews: 1234,
       originalPrice: 8500, // ₹8,500 per night
       currentPrice: 6750, // ₹6,750 per night
-      description:
-        `Experience luxury in the heart of ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
+      description: `Experience luxury in the heart of ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
       features: ["City View", "Business Center", "Concierge", "Room Service"],
       roomTypes: [
@@ -394,7 +393,7 @@ export default function HotelResults() {
     },
     {
       id: 2,
-      name: `Business Hotel ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"}`,
+      name: `Business Hotel ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
       location: `Business District, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
@@ -405,8 +404,7 @@ export default function HotelResults() {
       reviews: 856,
       originalPrice: 12000, // ₹12,000 per night
       currentPrice: 9500, // ₹9,500 per night
-      description:
-        `Modern business hotel in ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
+      description: `Modern business hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
       features: [
         "Beachfront",
@@ -437,7 +435,7 @@ export default function HotelResults() {
     },
     {
       id: 3,
-      name: `Boutique Hotel ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"}`,
+      name: `Boutique Hotel ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
       location: `Historic District, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
@@ -448,8 +446,7 @@ export default function HotelResults() {
       reviews: 567,
       originalPrice: 7500, // ₹7,500 per night
       currentPrice: 5800, // ���5,800 per night
-      description:
-        `Charming boutique hotel in ${searchParams.get("destinationName")?.split(',')[0] || destination || "Dubai"} with unique character and personalized service.`,
+      description: `Charming boutique hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with unique character and personalized service.`,
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
       features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
       roomTypes: [

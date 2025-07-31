@@ -205,14 +205,18 @@ export default function HotelDetails() {
       setIsLoadingHotel(true);
 
       // Helper function to fetch with timeout and retry
-      const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 8000): Promise<Response> => {
+      const fetchWithTimeout = async (
+        url: string,
+        options: RequestInit = {},
+        timeout = 8000,
+      ): Promise<Response> => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         try {
           const response = await fetch(url, {
             ...options,
-            signal: controller.signal
+            signal: controller.signal,
           });
           clearTimeout(timeoutId);
           return response;
@@ -225,19 +229,24 @@ export default function HotelDetails() {
       // Retry logic with exponential backoff
       const attemptFetch = async (retryCount = 0): Promise<any> => {
         try {
-          console.log(`🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`);
+          console.log(
+            `🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`,
+          );
 
           // Build API URL with search parameters for availability
-          const apiUrl = new URL(`/api/hotels-live/hotel/${hotelId}`, window.location.origin);
-          if (checkInParam) apiUrl.searchParams.set('checkIn', checkInParam);
-          if (checkOutParam) apiUrl.searchParams.set('checkOut', checkOutParam);
+          const apiUrl = new URL(
+            `/api/hotels-live/hotel/${hotelId}`,
+            window.location.origin,
+          );
+          if (checkInParam) apiUrl.searchParams.set("checkIn", checkInParam);
+          if (checkOutParam) apiUrl.searchParams.set("checkOut", checkOutParam);
 
           const response = await fetchWithTimeout(apiUrl.toString(), {
-            method: 'GET',
+            method: "GET",
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
           });
 
           if (!response.ok) {
@@ -247,24 +256,25 @@ export default function HotelDetails() {
           const data = await response.json();
 
           if (data.success && data.hotel) {
-            console.log('✅ Live hotel data received:', data.hotel);
+            console.log("✅ Live hotel data received:", data.hotel);
             return data.hotel;
           } else {
-            throw new Error('Invalid response structure or no hotel data');
+            throw new Error("Invalid response structure or no hotel data");
           }
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
 
           // Retry up to 2 times with exponential backoff
-          if (retryCount < 2 && (
-            error instanceof TypeError || // Network errors
-            error.message.includes('Failed to fetch') ||
-            error.message.includes('NetworkError') ||
-            error.message.includes('fetch')
-          )) {
+          if (
+            retryCount < 2 &&
+            (error instanceof TypeError || // Network errors
+              error.message.includes("Failed to fetch") ||
+              error.message.includes("NetworkError") ||
+              error.message.includes("fetch"))
+          ) {
             const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
             console.log(`🔄 Retrying in ${delay}ms...`);
-            await new Promise(resolve => setTimeout(resolve, delay));
+            await new Promise((resolve) => setTimeout(resolve, delay));
             return attemptFetch(retryCount + 1);
           }
 
@@ -276,15 +286,20 @@ export default function HotelDetails() {
         const hotelData = await attemptFetch();
         setHotelData(hotelData);
       } catch (error) {
-        console.error('❌ All attempts failed, using fallback data:', error);
+        console.error("❌ All attempts failed, using fallback data:", error);
 
         // Immediate fallback - don't wait for API in production
         const fallbackData = getMockHotelData();
         setHotelData(fallbackData);
 
         // Show user-friendly message for network issues
-        if (error instanceof TypeError || error.message.includes('Failed to fetch')) {
-          console.info('ℹ️ Using offline mode due to network connectivity issues');
+        if (
+          error instanceof TypeError ||
+          error.message.includes("Failed to fetch")
+        ) {
+          console.info(
+            "ℹ️ Using offline mode due to network connectivity issues",
+          );
         }
       } finally {
         setIsLoadingHotel(false);
@@ -298,78 +313,98 @@ export default function HotelDetails() {
   const getMockHotelData = () => {
     // Extract hotel info from URL or use defaults
     const hotelCode = hotelId || "1";
-    const isBusinessHotel = hotelCode.toLowerCase().includes('business');
-    const isLuxuryHotel = hotelCode.toLowerCase().includes('grand') || hotelCode.toLowerCase().includes('luxury');
-    const isBoutiqueHotel = hotelCode.toLowerCase().includes('boutique');
+    const isBusinessHotel = hotelCode.toLowerCase().includes("business");
+    const isLuxuryHotel =
+      hotelCode.toLowerCase().includes("grand") ||
+      hotelCode.toLowerCase().includes("luxury");
+    const isBoutiqueHotel = hotelCode.toLowerCase().includes("boutique");
 
     // Generate realistic hotel names based on code
     const hotelNames = {
-      'htl-DXB-001': 'Grand Hyatt Dubai',
-      'htl-DXB-002': 'Business Hotel Dubai Marina',
-      'htl-DXB-003': 'Boutique Hotel Downtown Dubai',
-      'htl-DXB-004': 'Premium Hotel Dubai Creek',
-      'htl-DXB-005': 'City Hotel Dubai Mall',
-      'htl-DXB-006': 'Express Hotel Dubai Airport'
+      "htl-DXB-001": "Grand Hyatt Dubai",
+      "htl-DXB-002": "Business Hotel Dubai Marina",
+      "htl-DXB-003": "Boutique Hotel Downtown Dubai",
+      "htl-DXB-004": "Premium Hotel Dubai Creek",
+      "htl-DXB-005": "City Hotel Dubai Mall",
+      "htl-DXB-006": "Express Hotel Dubai Airport",
     };
 
-    const defaultName = hotelNames[hotelCode] ||
-      (isBusinessHotel ? `Business Hotel ${hotelCode}` :
-       isLuxuryHotel ? `Grand Luxury Hotel ${hotelCode}` :
-       isBoutiqueHotel ? `Boutique Hotel ${hotelCode}` :
-       `Premium Hotel ${hotelCode}`);
+    const defaultName =
+      hotelNames[hotelCode] ||
+      (isBusinessHotel
+        ? `Business Hotel ${hotelCode}`
+        : isLuxuryHotel
+          ? `Grand Luxury Hotel ${hotelCode}`
+          : isBoutiqueHotel
+            ? `Boutique Hotel ${hotelCode}`
+            : `Premium Hotel ${hotelCode}`);
 
     return {
-      id: parseInt(hotelCode.replace(/\D/g, '')) || 1,
+      id: parseInt(hotelCode.replace(/\D/g, "")) || 1,
       code: hotelCode,
       name: defaultName,
-      location: "Near Sheikh Zayed Road & Dubai Mall, Dubai, United Arab Emirates",
+      location:
+        "Near Sheikh Zayed Road & Dubai Mall, Dubai, United Arab Emirates",
       images: (() => {
         // Hotel-specific images based on hotel code and type
         const imageCollections = {
-          'htl-DXB-001': [ // Grand Hyatt Dubai
+          "htl-DXB-001": [
+            // Grand Hyatt Dubai
             "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&q=80&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop",
           ],
-          'htl-DXB-002': [ // Business Hotel Dubai Marina
+          "htl-DXB-002": [
+            // Business Hotel Dubai Marina
             "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&h=600&q=80&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop",
           ],
-          'htl-DXB-003': [ // Boutique Hotel Downtown Dubai
+          "htl-DXB-003": [
+            // Boutique Hotel Downtown Dubai
             "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop"
+            "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop",
           ],
-          'htl-DXB-004': [ // Premium Hotel Dubai Creek
+          "htl-DXB-004": [
+            // Premium Hotel Dubai Creek
             "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&q=80&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop"
-          ]
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop",
+          ],
         };
-        return imageCollections[hotelCode] || imageCollections['htl-DXB-003']; // Default to boutique hotel
+        return imageCollections[hotelCode] || imageCollections["htl-DXB-003"]; // Default to boutique hotel
       })(),
       rating: isLuxuryHotel ? 4.8 : isBoutiqueHotel ? 4.3 : 4.2,
       reviews: Math.floor(Math.random() * 800) + 400,
       reviewCount: Math.floor(Math.random() * 800) + 400,
       description: `Experience exceptional hospitality at ${defaultName}. Located in the heart of Dubai with modern amenities and world-class service.`,
       amenities: [
-        "Free WiFi", "Swimming Pool", "Fitness Center", "Restaurant",
-        "Room Service", "Business Center", "Concierge", "Valet Parking",
+        "Free WiFi",
+        "Swimming Pool",
+        "Fitness Center",
+        "Restaurant",
+        "Room Service",
+        "Business Center",
+        "Concierge",
+        "Valet Parking",
         ...(isLuxuryHotel ? ["Spa & Wellness", "Premium Dining"] : []),
-        ...(isBusinessHotel ? ["Meeting Rooms", "Executive Lounge"] : [])
+        ...(isBusinessHotel ? ["Meeting Rooms", "Executive Lounge"] : []),
       ],
       features: [
-        "City View", "Modern Design", "24/7 Service",
+        "City View",
+        "Modern Design",
+        "24/7 Service",
         ...(isLuxuryHotel ? ["Luxury Amenities", "Premium Location"] : []),
-        ...(isBoutiqueHotel ? ["Unique Design", "Personalized Service"] : [])
+        ...(isBoutiqueHotel ? ["Unique Design", "Personalized Service"] : []),
       ],
       currentPrice: isLuxuryHotel ? 250 : isBoutiqueHotel ? 180 : 167,
-      totalPrice: (isLuxuryHotel ? 250 : isBoutiqueHotel ? 180 : 167) * totalNights,
+      totalPrice:
+        (isLuxuryHotel ? 250 : isBoutiqueHotel ? 180 : 167) * totalNights,
       currency: "USD",
       available: true,
       supplier: "offline-mode",
@@ -380,50 +415,66 @@ export default function HotelDetails() {
       address: {
         street: "Dubai Marina District",
         city: "Dubai",
-        country: "United Arab Emirates"
-      }
+        country: "United Arab Emirates",
+      },
     };
   };
 
   // Temporary hotel data for roomTypes calculation
-  const tempHotelData = hotelData ? {
-    id: parseInt(hotelId || "1"),
-    name: hotelData.name || "Grand Hyatt Dubai",
-    location: typeof hotelData.location === 'string' ? hotelData.location :
-              hotelData.location?.address?.street ||
+  const tempHotelData = hotelData
+    ? {
+        id: parseInt(hotelId || "1"),
+        name: hotelData.name || "Grand Hyatt Dubai",
+        location:
+          typeof hotelData.location === "string"
+            ? hotelData.location
+            : hotelData.location?.address?.street ||
               hotelData.address?.street ||
               "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
-    image: hotelData.images && hotelData.images.length > 0 ?
-           (typeof hotelData.images[0] === 'string' ? hotelData.images[0] : hotelData.images[0].url) :
-           // Hotel-specific fallback images
-           (() => {
-             const hotelCode = hotelId || "htl-DXB-003";
-             const fallbackImages = {
-               'htl-DXB-001': "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
-               'htl-DXB-002': "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
-               'htl-DXB-003': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
-               'htl-DXB-004': "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop"
-             };
-             return fallbackImages[hotelCode] || fallbackImages['htl-DXB-003'];
-           })(),
-    images: hotelData.images || [],
-    rating: hotelData.rating || 4.5,
-    reviews: hotelData.reviews || hotelData.reviewCount || 1247,
-    checkIn: checkInDate.toISOString().split("T")[0],
-    checkOut: checkOutDate.toISOString().split("T")[0],
-    totalNights: totalNights,
-    rooms: parseInt(roomsParam || "1"),
-    adults: parseInt(adultsParam || "2"),
-    description: hotelData.description || "Experience luxury accommodations with exceptional service.",
-    amenities: hotelData.amenities || ["WiFi", "Pool", "Restaurant"],
-    features: hotelData.features || ["City View"],
-    currentPrice: hotelData.currentPrice || 167,
-    totalPrice: hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights,
-    currency: hotelData.currency || "USD",
-    available: hotelData.available !== false,
-    supplier: hotelData.supplier || "hotelbeds",
-    isLiveData: hotelData.supplier === "hotelbeds"
-  } : null;
+        image:
+          hotelData.images && hotelData.images.length > 0
+            ? typeof hotelData.images[0] === "string"
+              ? hotelData.images[0]
+              : hotelData.images[0].url
+            : // Hotel-specific fallback images
+              (() => {
+                const hotelCode = hotelId || "htl-DXB-003";
+                const fallbackImages = {
+                  "htl-DXB-001":
+                    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
+                  "htl-DXB-002":
+                    "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
+                  "htl-DXB-003":
+                    "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
+                  "htl-DXB-004":
+                    "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
+                };
+                return (
+                  fallbackImages[hotelCode] || fallbackImages["htl-DXB-003"]
+                );
+              })(),
+        images: hotelData.images || [],
+        rating: hotelData.rating || 4.5,
+        reviews: hotelData.reviews || hotelData.reviewCount || 1247,
+        checkIn: checkInDate.toISOString().split("T")[0],
+        checkOut: checkOutDate.toISOString().split("T")[0],
+        totalNights: totalNights,
+        rooms: parseInt(roomsParam || "1"),
+        adults: parseInt(adultsParam || "2"),
+        description:
+          hotelData.description ||
+          "Experience luxury accommodations with exceptional service.",
+        amenities: hotelData.amenities || ["WiFi", "Pool", "Restaurant"],
+        features: hotelData.features || ["City View"],
+        currentPrice: hotelData.currentPrice || 167,
+        totalPrice:
+          hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights,
+        currency: hotelData.currency || "USD",
+        available: hotelData.available !== false,
+        supplier: hotelData.supplier || "hotelbeds",
+        isLiveData: hotelData.supplier === "hotelbeds",
+      }
+    : null;
 
   const calculateTotalPrice = (roomPricePerNight: number) => {
     const rooms = parseInt(roomsParam || "1");
@@ -442,23 +493,29 @@ export default function HotelDetails() {
       return hotelData.roomTypes.map((room: any, index: number) => ({
         id: `live-room-${index}`,
         name: room.name || `Room Type ${index + 1}`,
-        type: room.name || `1 X ${room.name || 'Standard'}`,
-        details: room.features ? room.features.join(', ') : 'Standard accommodations',
-        pricePerNight: room.price || room.pricePerNight || hotelData.currentPrice || 167,
+        type: room.name || `1 X ${room.name || "Standard"}`,
+        details: room.features
+          ? room.features.join(", ")
+          : "Standard accommodations",
+        pricePerNight:
+          room.price || room.pricePerNight || hotelData.currentPrice || 167,
         status: index === 0 ? "Best Value - Start Here!" : `Available`,
         statusColor: index === 0 ? "green" : "blue",
         nonRefundable: true,
-        image: room.image ||
-               (hotelData.images && hotelData.images.length > 1 ?
-                (typeof hotelData.images[1] === 'string' ? hotelData.images[1] : hotelData.images[1].url) :
-                "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
+        image:
+          room.image ||
+          (hotelData.images && hotelData.images.length > 1
+            ? typeof hotelData.images[1] === "string"
+              ? hotelData.images[1]
+              : hotelData.images[1].url
+            : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
         features: room.features || [
           "Standard room",
           "Free WiFi",
           "Air conditioning",
-          "Private bathroom"
+          "Private bathroom",
         ],
-        isLiveData: true
+        isLiveData: true,
       }));
     }
 
@@ -473,7 +530,8 @@ export default function HotelDetails() {
         status: "Best Value - Start Here!",
         statusColor: "green",
         nonRefundable: true,
-        image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Twin room
+        image:
+          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Twin room
         features: [
           "6.7 km from downtown",
           "Max 2 guests",
@@ -491,7 +549,8 @@ export default function HotelDetails() {
         pricePerNight: (tempHotelData?.currentPrice || 167) + 18,
         status: "Upgrade for +₹18",
         statusColor: "yellow",
-        image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop", // King room
+        image:
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop", // King room
         features: [
           "6.7 km from downtown",
           "Max 2 guests",
@@ -509,7 +568,8 @@ export default function HotelDetails() {
         status: "Premium Choice",
         statusColor: "blue",
         nonRefundable: false,
-        image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop", // Deluxe suite
+        image:
+          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop", // Deluxe suite
         features: [
           "5.2 km from downtown",
           "Max 4 guests",
@@ -529,7 +589,8 @@ export default function HotelDetails() {
         status: "Great for Families",
         statusColor: "blue",
         nonRefundable: true,
-        image: "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop", // Family room
+        image:
+          "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop", // Family room
         features: [
           "6.1 km from downtown",
           "Max 6 guests",
@@ -549,7 +610,8 @@ export default function HotelDetails() {
         status: "Business Traveler",
         statusColor: "blue",
         nonRefundable: false,
-        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&q=80&auto=format&fit=crop", // Executive room
+        image:
+          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&q=80&auto=format&fit=crop", // Executive room
         features: [
           "5.8 km from downtown",
           "Max 2 guests",
@@ -569,7 +631,8 @@ export default function HotelDetails() {
         status: "Economy Choice",
         statusColor: "green",
         nonRefundable: true,
-        image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Standard double
+        image:
+          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Standard double
         features: [
           "7.2 km from downtown",
           "Max 2 guests",
@@ -584,10 +647,12 @@ export default function HotelDetails() {
   })();
 
   // Create final hotel object with calculated roomTypes
-  const hotel = tempHotelData ? {
-    ...tempHotelData,
-    roomTypes: roomTypes
-  } : null;
+  const hotel = tempHotelData
+    ? {
+        ...tempHotelData,
+        roomTypes: roomTypes,
+      }
+    : null;
 
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -737,7 +802,9 @@ export default function HotelDetails() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading hotel details...</p>
-          <p className="text-sm text-gray-500 mt-2">Fetching live data from Hotelbeds</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Fetching live data from Hotelbeds
+          </p>
         </div>
       </div>
     );
@@ -783,7 +850,9 @@ export default function HotelDetails() {
                   <span className="font-semibold text-sm text-gray-900">
                     {hotel.rating}
                   </span>
-                  <span className="text-xs text-gray-600">({hotel.reviews})</span>
+                  <span className="text-xs text-gray-600">
+                    ({hotel.reviews})
+                  </span>
                 </div>
               </div>
               {hotel.isLiveData && (
@@ -996,28 +1065,32 @@ export default function HotelDetails() {
                 <div className="grid grid-cols-2 gap-3">
                   {(() => {
                     // Use live images if available, otherwise fallback to sample images
-                    const galleryImages = hotel.images && hotel.images.length > 0
-                      ? hotel.images.slice(0, 12) // Limit to 12 images for mobile
-                      : [
-                          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
-                          "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop",
-                          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop",
-                          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop",
-                          "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=400&h=300&fit=crop",
-                          "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=400&h=300&fit=crop",
-                        ];
+                    const galleryImages =
+                      hotel.images && hotel.images.length > 0
+                        ? hotel.images.slice(0, 12) // Limit to 12 images for mobile
+                        : [
+                            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
+                            "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop",
+                            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop",
+                            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop",
+                            "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=400&h=300&fit=crop",
+                            "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=400&h=300&fit=crop",
+                          ];
 
                     return galleryImages.map((image, idx) => {
                       // Handle both string URLs and image objects
-                      const imageUrl = typeof image === 'string'
-                        ? image
-                        : (image.urlStandard || image.url || image);
-                      const imageAlt = typeof image === 'object' && image.alt
-                        ? image.alt
-                        : `${hotel.name} - Image ${idx + 1}`;
-                      const imageCategory = typeof image === 'object' && image.category
-                        ? image.category
-                        : 'general';
+                      const imageUrl =
+                        typeof image === "string"
+                          ? image
+                          : image.urlStandard || image.url || image;
+                      const imageAlt =
+                        typeof image === "object" && image.alt
+                          ? image.alt
+                          : `${hotel.name} - Image ${idx + 1}`;
+                      const imageCategory =
+                        typeof image === "object" && image.category
+                          ? image.category
+                          : "general";
 
                       return (
                         <div
@@ -1025,7 +1098,7 @@ export default function HotelDetails() {
                           className="aspect-video overflow-hidden rounded-lg relative group cursor-pointer"
                           onClick={() => {
                             // TODO: Open lightbox/modal for full-size image viewing
-                            console.log('Image clicked:', imageUrl);
+                            console.log("Image clicked:", imageUrl);
                           }}
                         >
                           <img
@@ -1035,12 +1108,13 @@ export default function HotelDetails() {
                             loading="lazy"
                             onError={(e) => {
                               // Fallback to placeholder if image fails to load
-                              e.target.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
+                              e.target.src =
+                                "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
                             }}
                           />
                           {/* Image overlay with category */}
                           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 flex items-end">
-                            {typeof image === 'object' && image.description && (
+                            {typeof image === "object" && image.description && (
                               <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 {image.description}
                               </div>
@@ -2418,8 +2492,6 @@ export default function HotelDetails() {
                     </ul>
                   </div>
                 </div>
-
-
               </div>
             )}
 

@@ -72,7 +72,10 @@ export function BookingSearchForm() {
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
   // Calculate nights between check-in and check-out dates
-  const calculateNights = (checkIn: Date | undefined, checkOut: Date | undefined): number => {
+  const calculateNights = (
+    checkIn: Date | undefined,
+    checkOut: Date | undefined,
+  ): number => {
     if (!checkIn || !checkOut) return 0;
     const timeDiff = checkOut.getTime() - checkIn.getTime();
     const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
@@ -444,7 +447,9 @@ export function BookingSearchForm() {
                   readOnly={false}
                   disabled={false}
                   className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation relative z-10"
-                  placeholder={destination ? destination : "Where are you going?"}
+                  placeholder={
+                    destination ? destination : "Where are you going?"
+                  }
                   autoComplete="off"
                   data-destination-input="true"
                 />
@@ -461,8 +466,18 @@ export function BookingSearchForm() {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
                     title="Clear destination"
                   >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg
+                      className="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 )}
@@ -645,16 +660,86 @@ export function BookingSearchForm() {
                       </div>
                     </div>
                     {[
-                      { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", type: "city", popular: true },
-                      { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", type: "city", popular: true },
-                      { id: "LON", code: "LON", name: "London", country: "United Kingdom", type: "city", popular: true },
-                      { id: "PAR", code: "PAR", name: "Paris", country: "France", type: "city", popular: true },
-                      { id: "ROM", code: "ROM", name: "Rome", country: "Italy", type: "city", popular: true },
-                      { id: "NYC", code: "NYC", name: "New York", country: "United States", type: "city", popular: true },
-                      { id: "BKK", code: "BKK", name: "Bangkok", country: "Thailand", type: "city", popular: true },
-                      { id: "SIN", code: "SIN", name: "Singapore", country: "Singapore", type: "city", popular: true },
-                      { id: "TKO", code: "TKO", name: "Tokyo", country: "Japan", type: "city", popular: true },
-                      { id: "SYD", code: "SYD", name: "Sydney", country: "Australia", type: "city", popular: true }
+                      {
+                        id: "DXB",
+                        code: "DXB",
+                        name: "Dubai",
+                        country: "United Arab Emirates",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "BCN",
+                        code: "BCN",
+                        name: "Barcelona",
+                        country: "Spain",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "LON",
+                        code: "LON",
+                        name: "London",
+                        country: "United Kingdom",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "PAR",
+                        code: "PAR",
+                        name: "Paris",
+                        country: "France",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "ROM",
+                        code: "ROM",
+                        name: "Rome",
+                        country: "Italy",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "NYC",
+                        code: "NYC",
+                        name: "New York",
+                        country: "United States",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "BKK",
+                        code: "BKK",
+                        name: "Bangkok",
+                        country: "Thailand",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "SIN",
+                        code: "SIN",
+                        name: "Singapore",
+                        country: "Singapore",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "TKO",
+                        code: "TKO",
+                        name: "Tokyo",
+                        country: "Japan",
+                        type: "city",
+                        popular: true,
+                      },
+                      {
+                        id: "SYD",
+                        code: "SYD",
+                        name: "Sydney",
+                        country: "Australia",
+                        type: "city",
+                        popular: true,
+                      },
                     ].map((dest, index) => (
                       <div
                         key={dest.id}
@@ -664,11 +749,14 @@ export function BookingSearchForm() {
                         }}
                         onClick={() => {
                           const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("🎯 Hotelbeds test destination selected:", {
-                            name: fullName,
-                            code: dest.code,
-                            type: dest.type,
-                          });
+                          console.log(
+                            "🎯 Hotelbeds test destination selected:",
+                            {
+                              name: fullName,
+                              code: dest.code,
+                              type: dest.type,
+                            },
+                          );
                           setDestination(fullName);
                           setDestinationCode(dest.code);
                           setInputValue(""); // Clear the input to show placeholder
@@ -744,7 +832,8 @@ export function BookingSearchForm() {
                       <p className="text-xs text-blue-600 flex items-center gap-1">
                         <span>💡</span>
                         <span>
-                          Use the cities above for testing live Hotelbeds API data
+                          Use the cities above for testing live Hotelbeds API
+                          data
                         </span>
                       </p>
                     </div>

@@ -63,7 +63,10 @@ export function BookingCalendar({
       const currentStart = selection[0].startDate;
       const currentEnd = selection[0].endDate;
 
-      if (!isSameDay(startDate, currentStart) || !isSameDay(endDate, currentEnd)) {
+      if (
+        !isSameDay(startDate, currentStart) ||
+        !isSameDay(endDate, currentEnd)
+      ) {
         setSelection([
           {
             startDate,
@@ -144,17 +147,21 @@ export function BookingCalendar({
     const { startDate, endDate } = selection[0];
 
     if (!startDate) {
-      return { checkIn: '', checkOut: '', nights: 0 };
+      return { checkIn: "", checkOut: "", nights: 0 };
     }
 
     const checkIn = format(startDate, "EEE, MMM d");
-    const checkOut = endDate && !isSameDay(startDate, endDate)
-      ? format(endDate, "EEE, MMM d")
-      : '';
+    const checkOut =
+      endDate && !isSameDay(startDate, endDate)
+        ? format(endDate, "EEE, MMM d")
+        : "";
 
-    const nights = endDate && !isSameDay(startDate, endDate)
-      ? Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
-      : 0;
+    const nights =
+      endDate && !isSameDay(startDate, endDate)
+        ? Math.ceil(
+            (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+          )
+        : 0;
 
     return { checkIn, checkOut, nights };
   };
@@ -170,12 +177,14 @@ export function BookingCalendar({
             <div className="flex-1">
               <div className="text-xs text-gray-600 font-medium">CHECK-IN</div>
               <div className="text-sm font-semibold text-gray-900">
-                {dateInfo.checkIn || 'Select date'}
+                {dateInfo.checkIn || "Select date"}
               </div>
             </div>
             {dateInfo.nights > 0 && (
               <div className="flex-shrink-0 mx-4">
-                <div className="text-xs text-gray-600 font-medium text-center">NIGHTS</div>
+                <div className="text-xs text-gray-600 font-medium text-center">
+                  NIGHTS
+                </div>
                 <div className="text-sm font-semibold text-blue-600 text-center">
                   {dateInfo.nights}
                 </div>
@@ -184,7 +193,7 @@ export function BookingCalendar({
             <div className="flex-1 text-right">
               <div className="text-xs text-gray-600 font-medium">CHECK-OUT</div>
               <div className="text-sm font-semibold text-gray-900">
-                {dateInfo.checkOut || 'Select date'}
+                {dateInfo.checkOut || "Select date"}
               </div>
             </div>
           </div>

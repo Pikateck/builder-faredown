@@ -53,12 +53,14 @@ router.get("/test", async (req, res) => {
     console.log("🧪 Testing direct Hotelbeds API connection...");
 
     // Test credentials
-    const hasCredentials = !!(process.env.HOTELBEDS_API_KEY && process.env.HOTELBEDS_SECRET);
+    const hasCredentials = !!(
+      process.env.HOTELBEDS_API_KEY && process.env.HOTELBEDS_SECRET
+    );
     console.log("🔑 Credentials check:", {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
       hasSecret: !!process.env.HOTELBEDS_SECRET,
       apiKeyLength: process.env.HOTELBEDS_API_KEY?.length,
-      secretLength: process.env.HOTELBEDS_SECRET?.length
+      secretLength: process.env.HOTELBEDS_SECRET?.length,
     });
 
     if (!hasCredentials) {
@@ -67,8 +69,8 @@ router.get("/test", async (req, res) => {
         error: "Missing Hotelbeds API credentials",
         debug: {
           hasApiKey: !!process.env.HOTELBEDS_API_KEY,
-          hasSecret: !!process.env.HOTELBEDS_SECRET
-        }
+          hasSecret: !!process.env.HOTELBEDS_SECRET,
+        },
       });
     }
 
@@ -80,7 +82,7 @@ router.get("/test", async (req, res) => {
       rooms: 1,
       adults: 2,
       children: 0,
-      currency: "EUR"
+      currency: "EUR",
     };
 
     console.log("🏨 Testing availability search:", testSearch);
@@ -90,17 +92,16 @@ router.get("/test", async (req, res) => {
       success: true,
       message: "Hotelbeds API test successful",
       hotelCount: result.hotels?.length || 0,
-      hasImages: result.hotels?.some(h => h.images?.length > 0) || false,
+      hasImages: result.hotels?.some((h) => h.images?.length > 0) || false,
       sampleHotel: result.hotels?.[0] || null,
-      testParams: testSearch
+      testParams: testSearch,
     });
-
   } catch (error) {
     console.error("❌ Hotelbeds test failed:", error);
     res.json({
       success: false,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
   }
 });
@@ -108,8 +109,8 @@ router.get("/test", async (req, res) => {
 async function handleHotelSearch(req, res) {
   try {
     // Extract parameters from both GET and POST requests
-    const params = req.method === 'GET' ? req.query : req.body;
-    
+    const params = req.method === "GET" ? req.query : req.body;
+
     const {
       destination,
       destinationCode,
@@ -120,7 +121,7 @@ async function handleHotelSearch(req, res) {
       children = 0,
       childAges = [],
       currency = "USD",
-      currencyCode
+      currencyCode,
     } = params;
 
     console.log("🔍 Enhanced hotel search request:", params);
@@ -152,13 +153,16 @@ async function handleHotelSearch(req, res) {
       console.log(`🔍 Searching destinations for: ${destination}`);
       try {
         const destinations = await contentService.getDestinations();
-        const matched = destinations.find(d => 
-          d.name.toLowerCase().includes(destination.toLowerCase()) ||
-          d.code.toLowerCase() === destination.toLowerCase()
+        const matched = destinations.find(
+          (d) =>
+            d.name.toLowerCase().includes(destination.toLowerCase()) ||
+            d.code.toLowerCase() === destination.toLowerCase(),
         );
         if (matched) {
           destCode = matched.code;
-          console.log(`✅ Found destination code: ${destCode} for ${matched.name}`);
+          console.log(
+            `✅ Found destination code: ${destCode} for ${matched.name}`,
+          );
         }
       } catch (destError) {
         console.warn("⚠️ Destination lookup failed:", destError.message);
@@ -177,7 +181,7 @@ async function handleHotelSearch(req, res) {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
       hasSecret: !!process.env.HOTELBEDS_SECRET,
       apiKeyLength: process.env.HOTELBEDS_API_KEY?.length,
-      secretLength: process.env.HOTELBEDS_SECRET?.length
+      secretLength: process.env.HOTELBEDS_SECRET?.length,
     });
 
     let availabilityResults;
@@ -194,7 +198,7 @@ async function handleHotelSearch(req, res) {
       });
       console.log("✅ Hotelbeds availability search successful:", {
         hotelCount: availabilityResults.hotels?.length || 0,
-        destination: destCode
+        destination: destCode,
       });
     } catch (apiError) {
       console.error("❌ Hotelbeds API Error:", apiError.message);
@@ -205,42 +209,49 @@ async function handleHotelSearch(req, res) {
         success: false,
         error: "Hotelbeds API Error",
         message: apiError.message,
-        fallback: true
+        fallback: true,
       });
     }
 
     let processedHotels = [];
 
     if (availabilityResults.hotels && availabilityResults.hotels.length > 0) {
-      console.log(`🔄 Enriching ${availabilityResults.hotels.length} hotels with content data`);
-      
+      console.log(
+        `🔄 Enriching ${availabilityResults.hotels.length} hotels with content data`,
+      );
+
       // Get hotel codes for content enrichment (limit to reasonable number)
-      const hotelCodes = availabilityResults.hotels.slice(0, 20).map(hotel => hotel.code);
-      
+      const hotelCodes = availabilityResults.hotels
+        .slice(0, 20)
+        .map((hotel) => hotel.code);
+
       try {
         // Get detailed content for these hotels
         console.log("📚 Fetching content for hotel codes:", hotelCodes);
         const contentData = await contentService.getHotels(hotelCodes);
         console.log("📚 Content data received:", {
           hotelCount: contentData?.length || 0,
-          hasImages: contentData?.some(h => h.images?.length > 0) || false
+          hasImages: contentData?.some((h) => h.images?.length > 0) || false,
         });
 
         // Create a map for quick lookup
         const contentMap = new Map();
         if (contentData && contentData.length > 0) {
-          contentData.forEach(hotel => {
+          contentData.forEach((hotel) => {
             console.log(`📝 Hotel ${hotel.code} content:`, {
               name: hotel.name,
               imageCount: hotel.images?.length || 0,
-              firstImageUrl: hotel.images?.[0]?.url || hotel.images?.[0]?.urlStandard || 'none'
+              firstImageUrl:
+                hotel.images?.[0]?.url ||
+                hotel.images?.[0]?.urlStandard ||
+                "none",
             });
             contentMap.set(hotel.code, hotel);
           });
         }
-        
+
         // Enrich availability data with content
-        processedHotels = availabilityResults.hotels.map(hotel => {
+        processedHotels = availabilityResults.hotels.map((hotel) => {
           const content = contentMap.get(hotel.code);
 
           // Log content data for debugging
@@ -249,7 +260,11 @@ async function handleHotelSearch(req, res) {
               name: content.name,
               hasImages: content.images?.length > 0,
               imageCount: content.images?.length || 0,
-              firstImageType: content.images?.[0]?.url ? 'url' : content.images?.[0]?.urlStandard ? 'urlStandard' : 'unknown'
+              firstImageType: content.images?.[0]?.url
+                ? "url"
+                : content.images?.[0]?.urlStandard
+                  ? "urlStandard"
+                  : "unknown",
             });
           } else {
             console.log(`⚠️  No content found for hotel ${hotel.code}`);
@@ -259,17 +274,21 @@ async function handleHotelSearch(req, res) {
           let hotelImages = [];
           if (content?.images?.length > 0) {
             hotelImages = content.images
-              .map(img => img.urlStandard || img.url || img.urlOriginal)
+              .map((img) => img.urlStandard || img.url || img.urlOriginal)
               .filter(Boolean); // Remove any undefined/null URLs
-            console.log(`📸 Hotel ${hotel.code}: Found ${hotelImages.length} valid images from Hotelbeds`);
+            console.log(
+              `📸 Hotel ${hotel.code}: Found ${hotelImages.length} valid images from Hotelbeds`,
+            );
           }
 
           // Only use fallback if no real images available
           if (hotelImages.length === 0) {
-            console.log(`⚠️  Hotel ${hotel.code}: No images from API, using fallback`);
+            console.log(
+              `⚠️  Hotel ${hotel.code}: No images from API, using fallback`,
+            );
             hotelImages = [
               "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
-              "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop"
+              "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop",
             ];
           }
 
@@ -281,7 +300,9 @@ async function handleHotelSearch(req, res) {
             name: content?.name || hotel.name || `Hotel ${hotel.code}`,
 
             // Descriptive content
-            description: content?.description || `Experience luxury at ${hotel.name || 'this hotel'} with modern amenities and exceptional service.`,
+            description:
+              content?.description ||
+              `Experience luxury at ${hotel.name || "this hotel"} with modern amenities and exceptional service.`,
 
             // Location data
             location: content?.location?.address?.street || "",
@@ -289,87 +310,99 @@ async function handleHotelSearch(req, res) {
               street: "",
               city: destination || "Dubai",
               country: "United Arab Emirates",
-              postalCode: ""
+              postalCode: "",
             },
 
             // Visual content
             images: hotelImages,
-            
+
             // Amenities and features
-            amenities: content?.amenities?.map(a => a.name) || content?.facilities?.map(f => f.name) || [
-              "WiFi", "Parking", "Restaurant", "Pool"
-            ],
+            amenities: content?.amenities?.map((a) => a.name) ||
+              content?.facilities?.map((f) => f.name) || [
+                "WiFi",
+                "Parking",
+                "Restaurant",
+                "Pool",
+              ],
             features: content?.features || ["City View", "Modern Design"],
-            
+
             // Pricing (from availability - this is the key data)
             currentPrice: hotel.currentPrice || 120,
-            originalPrice: hotel.originalPrice || hotel.currentPrice * 1.2 || 150,
+            originalPrice:
+              hotel.originalPrice || hotel.currentPrice * 1.2 || 150,
             totalPrice: hotel.totalPrice || hotel.currentPrice || 120,
             currency: finalCurrency,
-            
+
             // Hotel rating
             rating: content?.rating || hotel.rating || 4.2,
             starRating: content?.starRating || hotel.starRating || 4,
-            
+
             // Reviews (mock data for now)
             reviews: Math.floor(Math.random() * 800) + 200,
             reviewCount: Math.floor(Math.random() * 800) + 200,
             reviewScore: (Math.random() * 2 + 8).toFixed(1),
-            
+
             // Booking-specific data
             available: true,
             rateKey: hotel.rateKey,
             lastRoom: hotel.lastRoom || false,
-            
+
             // Room information
-            roomTypes: hotel.roomTypes || [{
-              name: "Standard Room",
-              price: hotel.currentPrice || 120,
-              pricePerNight: hotel.currentPrice || 120,
-              features: ["Double Bed", "City View", "Free WiFi"]
-            }],
-            
+            roomTypes: hotel.roomTypes || [
+              {
+                name: "Standard Room",
+                price: hotel.currentPrice || 120,
+                pricePerNight: hotel.currentPrice || 120,
+                features: ["Double Bed", "City View", "Free WiFi"],
+              },
+            ],
+
             // Compatibility fields for existing frontend
             priceRange: {
               min: hotel.currentPrice || 120,
               max: hotel.originalPrice || hotel.currentPrice * 1.5 || 180,
-              currency: finalCurrency
+              currency: finalCurrency,
             },
-            
+
             // Supplier information
             supplier: "hotelbeds",
             supplierHotelId: hotel.code,
             isLiveData: true,
-            
+
             // Additional fields for booking flow
-            cancellationPolicy: "Free cancellation until 24 hours before check-in",
+            cancellationPolicy:
+              "Free cancellation until 24 hours before check-in",
             policies: {
               checkIn: "15:00",
               checkOut: "11:00",
               cancellation: "Free cancellation until 24 hours",
               children: "Children welcome",
               pets: "Pets not allowed",
-              smoking: "Non-smoking"
-            }
+              smoking: "Non-smoking",
+            },
           };
-          
+
           return enrichedHotel;
         });
-        
-        console.log(`✅ Enhanced ${processedHotels.length} hotels with content`);
-        
+
+        console.log(
+          `✅ Enhanced ${processedHotels.length} hotels with content`,
+        );
       } catch (contentError) {
-        console.warn("⚠️ Content enrichment failed, using availability data only:", contentError.message);
-        
+        console.warn(
+          "⚠️ Content enrichment failed, using availability data only:",
+          contentError.message,
+        );
+
         // Fallback to basic availability data with minimal enhancement
-        processedHotels = availabilityResults.hotels.map(hotel => ({
+        processedHotels = availabilityResults.hotels.map((hotel) => ({
           id: hotel.code,
           code: hotel.code,
           name: hotel.name || `Hotel ${hotel.code}`,
           description: `Modern hotel with excellent facilities in ${destination}`,
           location: destination || "Dubai",
           images: [
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600"
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
           ],
           amenities: ["WiFi", "Restaurant", "Pool"],
           features: ["City View"],
@@ -382,7 +415,7 @@ async function handleHotelSearch(req, res) {
           available: true,
           rateKey: hotel.rateKey,
           supplier: "hotelbeds",
-          isLiveData: true
+          isLiveData: true,
         }));
       }
     }
@@ -409,10 +442,9 @@ async function handleHotelSearch(req, res) {
       source: "Hotelbeds API Enhanced",
       timestamp: new Date().toISOString(),
     });
-    
   } catch (error) {
     console.error("❌ Enhanced hotel search error:", error);
-    
+
     // Return graceful fallback for frontend compatibility
     res.status(200).json({
       success: false,
@@ -421,9 +453,9 @@ async function handleHotelSearch(req, res) {
       count: 0,
       error: {
         message: "Live search temporarily unavailable",
-        technical: error.message
+        technical: error.message,
       },
-      searchParams: req.method === 'GET' ? req.query : req.body,
+      searchParams: req.method === "GET" ? req.query : req.body,
       isLiveData: false,
       source: "fallback",
       timestamp: new Date().toISOString(),
@@ -436,12 +468,12 @@ async function handleHotelSearch(req, res) {
  * GET /api/hotels-live/test
  */
 router.get("/test", (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader("Content-Type", "application/json");
   res.json({
     success: true,
     message: "Hotels Live API is working",
     timestamp: new Date().toISOString(),
-    route: "test endpoint"
+    route: "test endpoint",
   });
 });
 
@@ -450,7 +482,7 @@ router.get("/test", (req, res) => {
  * GET /api/hotels-live/debug-hotel/:code
  */
 router.get("/debug-hotel/:code", (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader("Content-Type", "application/json");
   const { code } = req.params;
 
   res.json({
@@ -461,8 +493,8 @@ router.get("/debug-hotel/:code", (req, res) => {
     timestamp: new Date().toISOString(),
     credentials: {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
-      hasSecret: !!process.env.HOTELBEDS_SECRET
-    }
+      hasSecret: !!process.env.HOTELBEDS_SECRET,
+    },
   });
 });
 
@@ -472,26 +504,28 @@ router.get("/debug-hotel/:code", (req, res) => {
  */
 router.get("/hotel/:code", async (req, res) => {
   // Set JSON content type header to ensure response is always JSON
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader("Content-Type", "application/json");
 
   try {
     const { code } = req.params;
 
     console.log(`🏨 Hotel details API called for: ${code}`);
-    console.log('🔧 Request query params:', req.query);
-    console.log('🔑 API credentials check:', {
+    console.log("🔧 Request query params:", req.query);
+    console.log("🔑 API credentials check:", {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
       hasSecret: !!process.env.HOTELBEDS_SECRET,
-      apiKeyLength: process.env.HOTELBEDS_API_KEY ? process.env.HOTELBEDS_API_KEY.length : 0
+      apiKeyLength: process.env.HOTELBEDS_API_KEY
+        ? process.env.HOTELBEDS_API_KEY.length
+        : 0,
     });
 
     // Validate hotel code parameter
-    if (!code || typeof code !== 'string' || code.trim() === '') {
-      console.log('❌ Invalid hotel code provided');
+    if (!code || typeof code !== "string" || code.trim() === "") {
+      console.log("❌ Invalid hotel code provided");
       return res.status(400).json({
         success: false,
         error: "Invalid hotel code",
-        message: "Hotel code parameter is required and must be a valid string"
+        message: "Hotel code parameter is required and must be a valid string",
       });
     }
 
@@ -504,10 +538,11 @@ router.get("/hotel/:code", async (req, res) => {
       id: hotelCode,
       code: hotelCode,
       name: `Hotel ${hotelCode}`,
-      description: "Live hotel data temporarily unavailable. Showing fallback information.",
+      description:
+        "Live hotel data temporarily unavailable. Showing fallback information.",
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
       ],
       rating: 4.0,
       reviews: 250,
@@ -521,13 +556,13 @@ router.get("/hotel/:code", async (req, res) => {
         address: {
           street: "Dubai Marina",
           city: "Dubai",
-          country: "United Arab Emirates"
-        }
+          country: "United Arab Emirates",
+        },
       },
       checkIn: checkIn || "2025-02-01",
       checkOut: checkOut || "2025-02-03",
       supplier: "fallback",
-      isLiveData: false
+      isLiveData: false,
     });
 
     // Get detailed content from content API
@@ -538,7 +573,10 @@ router.get("/hotel/:code", async (req, res) => {
       contentData = await contentService.getHotels([code], language);
       hotel = contentData && contentData.length > 0 ? contentData[0] : null;
     } catch (contentError) {
-      console.warn("⚠️ Content API error for hotel details:", contentError.message);
+      console.warn(
+        "⚠️ Content API error for hotel details:",
+        contentError.message,
+      );
       // Use fallback hotel data
       hotel = createFallbackHotel(code);
     }
@@ -554,19 +592,23 @@ router.get("/hotel/:code", async (req, res) => {
     if (checkIn && checkOut) {
       try {
         const availability = await bookingService.searchAvailability({
-          destination: hotel.location?.destinationCode || 'DXB',
+          destination: hotel.location?.destinationCode || "DXB",
           checkIn,
           checkOut,
           rooms: 1,
           adults: 2,
           children: 0,
-          currency: 'USD'
+          currency: "USD",
         });
 
         // Find this specific hotel in availability results
-        availabilityData = availability.hotels?.find(h => h.code === code) || null;
+        availabilityData =
+          availability.hotels?.find((h) => h.code === code) || null;
       } catch (availError) {
-        console.warn("⚠️ Could not fetch availability for hotel details:", availError.message);
+        console.warn(
+          "⚠️ Could not fetch availability for hotel details:",
+          availError.message,
+        );
       }
     }
 
@@ -579,12 +621,12 @@ router.get("/hotel/:code", async (req, res) => {
         totalPrice: availabilityData.totalPrice,
         available: true,
         availableRooms: availabilityData.availableRooms,
-        rateKey: availabilityData.rateKey
+        rateKey: availabilityData.rateKey,
       }),
       // Ensure compatibility fields
       id: hotel.code || code,
       supplier: hotel.supplier || "hotelbeds",
-      isLiveData: hotel.supplier !== "fallback"
+      isLiveData: hotel.supplier !== "fallback",
     };
 
     // Always return success response with hotel data
@@ -595,7 +637,6 @@ router.get("/hotel/:code", async (req, res) => {
       fallback: hotel.supplier === "fallback",
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("❌ Hotel details error:", error);
 
@@ -607,10 +648,11 @@ router.get("/hotel/:code", async (req, res) => {
           id: req.params.code || "unknown",
           code: req.params.code || "unknown",
           name: `Hotel ${req.params.code || "Unknown"}`,
-          description: "Live hotel data temporarily unavailable. Showing fallback information.",
+          description:
+            "Live hotel data temporarily unavailable. Showing fallback information.",
           images: [
             "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
-            "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600"
+            "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600",
           ],
           rating: 4.0,
           reviews: 250,
@@ -624,26 +666,31 @@ router.get("/hotel/:code", async (req, res) => {
             address: {
               street: "Dubai Marina",
               city: "Dubai",
-              country: "United Arab Emirates"
-            }
+              country: "United Arab Emirates",
+            },
           },
           checkIn: req.query?.checkIn || "2025-02-01",
           checkOut: req.query?.checkOut || "2025-02-03",
           supplier: "emergency_fallback",
-          isLiveData: false
+          isLiveData: false,
         },
         hasAvailability: false,
         fallback: true,
         error: {
           message: "Live data unavailable",
-          technical: error.message || "Unknown error"
+          technical: error.message || "Unknown error",
         },
         timestamp: new Date().toISOString(),
       });
     } catch (jsonError) {
       // Final failsafe - even if JSON.stringify fails, return minimal valid JSON
-      console.error("❌ Critical error in JSON response generation:", jsonError);
-      res.end('{"success": false, "error": "Critical server error", "fallback": true}');
+      console.error(
+        "❌ Critical error in JSON response generation:",
+        jsonError,
+      );
+      res.end(
+        '{"success": false, "error": "Critical server error", "fallback": true}',
+      );
     }
   }
 });
@@ -668,26 +715,27 @@ async function handleDestinations(req, res) {
     console.log("🌍 Getting destinations list", { country, query });
 
     const destinations = await contentService.getDestinations(country);
-    
+
     // Filter by query if provided
     let filteredDestinations = destinations;
     if (query && query.length >= 2) {
       const searchTerm = query.toLowerCase();
-      filteredDestinations = destinations.filter(dest =>
-        dest.name.toLowerCase().includes(searchTerm) ||
-        dest.code.toLowerCase().includes(searchTerm)
+      filteredDestinations = destinations.filter(
+        (dest) =>
+          dest.name.toLowerCase().includes(searchTerm) ||
+          dest.code.toLowerCase().includes(searchTerm),
       );
     }
 
     // Transform for frontend compatibility
-    const formattedDestinations = filteredDestinations.map(dest => ({
+    const formattedDestinations = filteredDestinations.map((dest) => ({
       id: dest.code,
       code: dest.code,
       name: dest.name,
       type: dest.type || "city",
       country: dest.countryCode,
       fullName: dest.fullName || `${dest.name}, ${dest.countryCode}`,
-      displayName: dest.displayName || dest.name
+      displayName: dest.displayName || dest.name,
     }));
 
     res.json({
@@ -764,7 +812,7 @@ router.post("/book", bookingLimiter, async (req, res) => {
     // Validate holder information
     const { holder } = bookingData;
     const holderRequired = ["firstName", "lastName", "email"];
-    const holderMissing = holderRequired.filter(field => !holder[field]);
+    const holderMissing = holderRequired.filter((field) => !holder[field]);
 
     if (holderMissing.length > 0) {
       return res.status(400).json({
@@ -776,7 +824,7 @@ router.post("/book", bookingLimiter, async (req, res) => {
     // Create booking through Hotelbeds
     const booking = await bookingService.createBooking({
       ...bookingData,
-      clientReference: `FD${Date.now()}${Math.random().toString(36).substr(2, 5)}`
+      clientReference: `FD${Date.now()}${Math.random().toString(36).substr(2, 5)}`,
     });
 
     console.log("✅ Booking created successfully:", booking.reference);
@@ -786,13 +834,12 @@ router.post("/book", bookingLimiter, async (req, res) => {
       booking: booking,
       timestamp: new Date().toISOString(),
     });
-    
   } catch (error) {
     console.error("❌ Booking creation error:", error);
     res.status(500).json({
       error: "Failed to create booking",
       message: error.message,
-      code: error.code || 'BOOKING_ERROR'
+      code: error.code || "BOOKING_ERROR",
     });
   }
 });
@@ -808,36 +855,50 @@ router.get("/health", async (req, res) => {
     // Check both services in parallel
     const [contentHealth, bookingHealth] = await Promise.allSettled([
       contentService.healthCheck(),
-      bookingService.healthCheck()
+      bookingService.healthCheck(),
     ]);
 
     const overall = {
       service: "hotels-live-enhanced",
       status: "healthy",
       timestamp: new Date().toISOString(),
-      apiKey: process.env.HOTELBEDS_API_KEY ? `${process.env.HOTELBEDS_API_KEY.substring(0, 8)}...` : 'NOT_SET',
+      apiKey: process.env.HOTELBEDS_API_KEY
+        ? `${process.env.HOTELBEDS_API_KEY.substring(0, 8)}...`
+        : "NOT_SET",
       services: {
-        content: contentHealth.status === 'fulfilled' ? contentHealth.value : { 
-          status: 'unhealthy', 
-          error: contentHealth.reason?.message 
-        },
-        booking: bookingHealth.status === 'fulfilled' ? bookingHealth.value : { 
-          status: 'unhealthy', 
-          error: bookingHealth.reason?.message 
-        }
-      }
+        content:
+          contentHealth.status === "fulfilled"
+            ? contentHealth.value
+            : {
+                status: "unhealthy",
+                error: contentHealth.reason?.message,
+              },
+        booking:
+          bookingHealth.status === "fulfilled"
+            ? bookingHealth.value
+            : {
+                status: "unhealthy",
+                error: bookingHealth.reason?.message,
+              },
+      },
     };
 
     // Determine overall health
-    if (contentHealth.status === 'rejected' || bookingHealth.status === 'rejected') {
-      overall.status = 'degraded';
+    if (
+      contentHealth.status === "rejected" ||
+      bookingHealth.status === "rejected"
+    ) {
+      overall.status = "degraded";
     }
 
-    const httpStatus = overall.status === 'healthy' ? 200 : 
-                     overall.status === 'degraded' ? 503 : 500;
+    const httpStatus =
+      overall.status === "healthy"
+        ? 200
+        : overall.status === "degraded"
+          ? 503
+          : 500;
 
     res.status(httpStatus).json(overall);
-    
   } catch (error) {
     console.error("❌ Health check error:", error);
     res.status(500).json({
@@ -856,10 +917,10 @@ router.get("/health", async (req, res) => {
 router.post("/admin/clear-cache", async (req, res) => {
   try {
     console.log("🗑️ Clearing all caches...");
-    
+
     contentService.clearCache();
     bookingService.clearCache();
-    
+
     res.json({
       success: true,
       message: "All caches cleared",
@@ -880,7 +941,7 @@ router.use((error, req, res, next) => {
   console.error("❌ Unhandled router error:", error);
 
   // Set JSON content type
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader("Content-Type", "application/json");
 
   // If response already sent, don't send again
   if (res.headersSent) {
@@ -894,7 +955,7 @@ router.use((error, req, res, next) => {
     message: "An unexpected error occurred",
     technical: error.message || "Unknown error",
     timestamp: new Date().toISOString(),
-    fallback: true
+    fallback: true,
   });
 });
 

@@ -65,21 +65,85 @@ export function MobileCityDropdown({
         {/* Hotelbeds Test Destinations */}
         <div className="mb-6">
           <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
-            <h3 className="text-sm font-semibold text-blue-800">🏨 Hotelbeds Test Destinations</h3>
-            <p className="text-xs text-blue-600">Available cities for testing with live API data</p>
+            <h3 className="text-sm font-semibold text-blue-800">
+              🏨 Hotelbeds Test Destinations
+            </h3>
+            <p className="text-xs text-blue-600">
+              Available cities for testing with live API data
+            </p>
           </div>
           <div className="space-y-2">
             {[
-              { id: "DXB", code: "DXB", name: "Dubai", country: "United Arab Emirates", airport: "Dubai International Airport" },
-              { id: "BCN", code: "BCN", name: "Barcelona", country: "Spain", airport: "Barcelona-El Prat Airport" },
-              { id: "LON", code: "LON", name: "London", country: "United Kingdom", airport: "Heathrow Airport" },
-              { id: "PAR", code: "PAR", name: "Paris", country: "France", airport: "Charles de Gaulle Airport" },
-              { id: "ROM", code: "ROM", name: "Rome", country: "Italy", airport: "Fiumicino Airport" },
-              { id: "NYC", code: "NYC", name: "New York", country: "United States", airport: "John F. Kennedy Airport" },
-              { id: "BKK", code: "BKK", name: "Bangkok", country: "Thailand", airport: "Suvarnabhumi Airport" },
-              { id: "SIN", code: "SIN", name: "Singapore", country: "Singapore", airport: "Changi Airport" },
-              { id: "TKO", code: "TKO", name: "Tokyo", country: "Japan", airport: "Haneda Airport" },
-              { id: "SYD", code: "SYD", name: "Sydney", country: "Australia", airport: "Kingsford Smith Airport" }
+              {
+                id: "DXB",
+                code: "DXB",
+                name: "Dubai",
+                country: "United Arab Emirates",
+                airport: "Dubai International Airport",
+              },
+              {
+                id: "BCN",
+                code: "BCN",
+                name: "Barcelona",
+                country: "Spain",
+                airport: "Barcelona-El Prat Airport",
+              },
+              {
+                id: "LON",
+                code: "LON",
+                name: "London",
+                country: "United Kingdom",
+                airport: "Heathrow Airport",
+              },
+              {
+                id: "PAR",
+                code: "PAR",
+                name: "Paris",
+                country: "France",
+                airport: "Charles de Gaulle Airport",
+              },
+              {
+                id: "ROM",
+                code: "ROM",
+                name: "Rome",
+                country: "Italy",
+                airport: "Fiumicino Airport",
+              },
+              {
+                id: "NYC",
+                code: "NYC",
+                name: "New York",
+                country: "United States",
+                airport: "John F. Kennedy Airport",
+              },
+              {
+                id: "BKK",
+                code: "BKK",
+                name: "Bangkok",
+                country: "Thailand",
+                airport: "Suvarnabhumi Airport",
+              },
+              {
+                id: "SIN",
+                code: "SIN",
+                name: "Singapore",
+                country: "Singapore",
+                airport: "Changi Airport",
+              },
+              {
+                id: "TKO",
+                code: "TKO",
+                name: "Tokyo",
+                country: "Japan",
+                airport: "Haneda Airport",
+              },
+              {
+                id: "SYD",
+                code: "SYD",
+                name: "Sydney",
+                country: "Australia",
+                airport: "Kingsford Smith Airport",
+              },
             ].map((dest) => (
               <button
                 key={dest.id}
@@ -91,7 +155,9 @@ export function MobileCityDropdown({
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-green-600 font-bold text-xs">API</span>
+                    <span className="text-green-600 font-bold text-xs">
+                      API
+                    </span>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
@@ -113,7 +179,9 @@ export function MobileCityDropdown({
 
         {/* Regular Cities */}
         <div className="mb-4">
-          <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">Regular Destinations</h3>
+          <h3 className="text-sm font-semibold text-gray-700 px-4 py-2">
+            Regular Destinations
+          </h3>
         </div>
         <div className="space-y-2">
           {Object.entries(cities).map(([city, data]) => (
@@ -311,7 +379,11 @@ interface MobileTravelersProps {
   onClose: () => void;
   travelers: { adults: number; children: number; childAges: number[] };
   setTravelers: React.Dispatch<
-    React.SetStateAction<{ adults: number; children: number; childAges: number[] }>
+    React.SetStateAction<{
+      adults: number;
+      children: number;
+      childAges: number[];
+    }>
   >;
 }
 
@@ -478,7 +550,10 @@ export function MobileTravelers({
               Ages of children
             </div>
             {Array.from({ length: travelers.children }).map((_, index) => (
-              <div key={index} className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg"
+              >
                 <span className="text-base font-medium text-gray-700">
                   Child {index + 1}
                 </span>
@@ -487,16 +562,16 @@ export function MobileTravelers({
                   onChange={(e) => {
                     const newAges = [...travelers.childAges];
                     newAges[index] = parseInt(e.target.value);
-                    setTravelers(prev => ({
+                    setTravelers((prev) => ({
                       ...prev,
-                      childAges: newAges
+                      childAges: newAges,
                     }));
                   }}
                   className="border border-gray-300 rounded-lg px-3 py-2 text-base min-w-[80px] focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation"
                 >
                   {Array.from({ length: 18 }, (_, i) => (
                     <option key={i} value={i}>
-                      {i} {i === 1 ? 'year' : 'years'}
+                      {i} {i === 1 ? "year" : "years"}
                     </option>
                   ))}
                 </select>
