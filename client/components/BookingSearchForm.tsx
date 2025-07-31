@@ -460,10 +460,15 @@ export function BookingSearchForm() {
                   inputValue.length > 0 &&
                   destinationSuggestions.length > 0 ? (
                   <div>
+                    <div className="px-4 py-2 bg-gray-50 border-b">
+                      <span className="text-xs font-medium text-gray-600">
+                        🔍 Search Results
+                      </span>
+                    </div>
                     {destinationSuggestions.map((dest, index) => (
                       <div
                         key={dest.id || index}
-                        className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
+                        className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                         onMouseDown={(e) => {
                           // Prevent input blur from firing before click
                           e.preventDefault();
