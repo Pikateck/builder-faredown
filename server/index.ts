@@ -16,12 +16,13 @@ import crypto from "crypto";
 async function callHotelbedsAPI(searchParams: any) {
   const API_KEY = "91d2368789abdb5beec010ce95a9d185";
   const API_SECRET = "a9ffaaecce";
-  const BASE_URL = "https://api.test.hotelbeds.com/hotel-api/1.0";
+  const BOOKING_API = "https://api.test.hotelbeds.com/hotel-api/1.0";
+  const CONTENT_API = "https://api.test.hotelbeds.com/hotel-content-api/1.0";
 
   try {
-    console.log("🔑 Making direct Hotelbeds API call with credentials");
+    console.log("🔑 Making direct Hotelbeds Booking API call for availability");
 
-    // Generate signature
+    // Generate signature for booking API
     const timestamp = Math.floor(Date.now() / 1000);
     const signature = crypto
       .createHash("sha256")
@@ -35,8 +36,8 @@ async function callHotelbedsAPI(searchParams: any) {
       "Accept": "application/json",
     };
 
-    // Prepare request payload
-    const requestData = {
+    // Step 1: Get hotel availability and pricing
+    const bookingRequest = {
       stay: {
         checkIn: searchParams.checkIn?.split('T')[0] || '2024-12-15',
         checkOut: searchParams.checkOut?.split('T')[0] || '2024-12-18'
@@ -52,26 +53,101 @@ async function callHotelbedsAPI(searchParams: any) {
       currency: 'EUR'
     };
 
-    console.log("🏨 Direct API Request:", JSON.stringify(requestData, null, 2));
+    console.log("🏨 Booking API Request:", JSON.stringify(bookingRequest, null, 2));
 
-    const response = await fetch(`${BASE_URL}/hotels`, {
+    const bookingResponse = await fetch(`${BOOKING_API}/hotels`, {
       method: 'POST',
       headers,
-      body: JSON.stringify(requestData)
+      body: JSON.stringify(bookingRequest)
     });
 
-    console.log(`📡 Direct API Response Status: ${response.status}`);
+    console.log(`📡 Booking API Response Status: ${bookingResponse.status}`);
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(`✅ Direct API Success - Hotels found: ${data.hotels?.hotels?.length || 0}`);
+    if (!bookingResponse.ok) {
+      const errorText = await bookingResponse.text();
+      console.error(`❌ Booking API Error: ${bookingResponse.status} - ${errorText}`);
+      return { success: false, error: errorText };
+    }
 
-      // Transform response to match frontend expectations
-      const hotels = data.hotels?.hotels?.map((hotel: any) => ({
+    const bookingData = await bookingResponse.json();
+    const hotels = bookingData.hotels?.hotels || [];
+    console.log(`✅ Booking API Success - Hotels found: ${hotels.length}`);
+
+    if (hotels.length === 0) {
+      return { success: false, error: "No hotels found" };
+    }
+
+    // Step 2: Get hotel content (images, descriptions) for the first few hotels
+    const hotelCodes = hotels.slice(0, 10).map((h: any) => h.code);
+    console.log("📸 Fetching images from Content API for hotels:", hotelCodes);
+
+    // Generate new signature for content API call
+    const contentTimestamp = Math.floor(Date.now() / 1000);
+    const contentSignature = crypto
+      .createHash("sha256")
+      .update(API_KEY + API_SECRET + contentTimestamp)
+      .digest("hex");
+
+    const contentHeaders = {
+      "Api-key": API_KEY,
+      "X-Signature": contentSignature,
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    };
+
+    const contentRequest = {
+      hotels: hotelCodes,
+      language: "ENG"
+    };
+
+    let hotelContentMap = new Map();
+
+    try {
+      const contentResponse = await fetch(`${CONTENT_API}/hotels`, {
+        method: 'POST',
+        headers: contentHeaders,
+        body: JSON.stringify(contentRequest)
+      });
+
+      console.log(`📸 Content API Response Status: ${contentResponse.status}`);
+
+      if (contentResponse.ok) {
+        const contentData = await contentResponse.json();
+        const contentHotels = contentData.hotels || [];
+        console.log(`📸 Content API Success - Hotels with content: ${contentHotels.length}`);
+
+        contentHotels.forEach((hotel: any) => {
+          const images = hotel.images?.map((img: any) => {
+            // Construct full Hotelbeds image URL
+            const baseUrl = img.path.startsWith('http') ? img.path : `https://photos.hotelbeds.com${img.path}`;
+            return `${baseUrl}?width=800&height=600`;
+          }) || [];
+
+          hotelContentMap.set(hotel.code, {
+            name: hotel.name?.content || hotel.name,
+            description: hotel.description?.content || '',
+            images: images,
+            amenities: hotel.facilities?.slice(0, 5).map((f: any) => f.description?.content || f.code) || []
+          });
+
+          console.log(`📸 Hotel ${hotel.code}: Found ${images.length} images from Hotelbeds`);
+        });
+      } else {
+        console.warn("⚠️ Content API failed, proceeding without images");
+      }
+    } catch (contentError) {
+      console.warn("⚠️ Content API error:", contentError.message);
+    }
+
+    // Step 3: Combine booking and content data
+    const enrichedHotels = hotels.map((hotel: any) => {
+      const content = hotelContentMap.get(hotel.code);
+
+      return {
         id: hotel.code,
         code: hotel.code,
-        name: hotel.name || `Hotel ${hotel.code}`,
-        description: `Premium hotel with excellent facilities`,
+        name: content?.name || hotel.name || `Hotel ${hotel.code}`,
+        description: content?.description || `Premium hotel with excellent facilities`,
         currentPrice: Math.round((hotel.minRate || 120) * 85), // Convert EUR to INR roughly
         originalPrice: Math.round((hotel.minRate || 120) * 100),
         currency: "INR",
@@ -79,23 +155,22 @@ async function callHotelbedsAPI(searchParams: any) {
         reviewScore: 8.5,
         reviewCount: 324,
         address: {
-          city: searchParams.destination === 'BCN' ? 'Barcelona' : 'Dubai',
-          country: searchParams.destination === 'BCN' ? 'Spain' : 'UAE'
+          city: searchParams.destination === 'BCN' ? 'Barcelona' : searchParams.destination === 'SYD' ? 'Sydney' : 'Dubai',
+          country: searchParams.destination === 'BCN' ? 'Spain' : searchParams.destination === 'SYD' ? 'Australia' : 'UAE'
         },
-        // For now, use destination-specific real hotel images
-        images: getDestinationSpecificImages(searchParams.destination),
-        amenities: ["Free WiFi", "Pool", "Restaurant", "Spa", "Fitness Center"],
+        // Use actual Hotelbeds images if available, fallback only if no images
+        images: content?.images?.length > 0 ? content.images : getDestinationSpecificImages(searchParams.destination),
+        amenities: content?.amenities || ["Free WiFi", "Pool", "Restaurant", "Spa", "Fitness Center"],
         isLiveData: true,
         supplier: "hotelbeds-direct",
-        rateKey: hotel.rateKey
-      })) || [];
+        rateKey: hotel.rateKey,
+        hasRealImages: (content?.images?.length || 0) > 0
+      };
+    });
 
-      return { success: true, data: hotels };
-    } else {
-      const errorText = await response.text();
-      console.error(`❌ Direct API Error: ${response.status} - ${errorText}`);
-      return { success: false, error: errorText };
-    }
+    console.log(`✅ Final result: ${enrichedHotels.length} hotels, ${enrichedHotels.filter(h => h.hasRealImages).length} with real Hotelbeds images`);
+
+    return { success: true, data: enrichedHotels };
 
   } catch (error) {
     console.error("❌ Direct Hotelbeds API call failed:", error);
