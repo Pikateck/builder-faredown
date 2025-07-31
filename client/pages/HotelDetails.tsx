@@ -366,7 +366,11 @@ export default function HotelDetails() {
     ];
   })();
 
-  // Note: roomTypes are now included in hotel object creation above
+  // Update hotel object with calculated roomTypes
+  const finalHotel = hotel ? {
+    ...hotel,
+    roomTypes: roomTypes
+  } : null;
 
   const tabs = [
     { id: "overview", label: "Overview" },
