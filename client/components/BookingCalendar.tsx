@@ -368,11 +368,13 @@ export function BookingCalendar({
             rangeColors={["#0066cc"]}
             showSelectionPreview={true}
             moveRangeOnFirstSelection={false}
-            retainEndDateOnFirstSelection={false}
+            retainEndDateOnFirstSelection={true}
             showMonthAndYearPickers={false}
             showMonthArrow={true}
             staticRanges={[]}
             inputRanges={[]}
+            preventSnapRefocus={true}
+            calendarFocus="forwards"
           />
         </div>
 
