@@ -770,11 +770,6 @@ export function BookingSearchForm() {
                       <>
                         {format(checkInDate, "d-MMM-yyyy")} to{" "}
                         {format(checkOutDate, "d-MMM-yyyy")}
-                        {nights > 0 && (
-                          <span className="text-blue-600 font-semibold ml-1">
-                            ({nights} night{nights !== 1 ? 's' : ''})
-                          </span>
-                        )}
                       </>
                     ) : (
                       "Check-in to Check-out"
@@ -785,11 +780,6 @@ export function BookingSearchForm() {
                       <>
                         {format(checkInDate, "d MMM")} -{" "}
                         {format(checkOutDate, "d MMM")}
-                        {nights > 0 && (
-                          <span className="text-blue-600 font-semibold ml-1">
-                            ({nights}N)
-                          </span>
-                        )}
                       </>
                     ) : (
                       "Select dates"
@@ -800,11 +790,6 @@ export function BookingSearchForm() {
                       <>
                         {format(checkInDate, "d/M")}-
                         {format(checkOutDate, "d/M")}
-                        {nights > 0 && (
-                          <span className="text-blue-600 font-semibold ml-1">
-                            ({nights}N)
-                          </span>
-                        )}
                       </>
                     ) : (
                       "Dates"
