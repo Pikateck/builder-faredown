@@ -947,30 +947,93 @@ export default function HotelDetails() {
 
             {activeTab === "gallery" && (
               <div className="bg-white rounded-lg p-4">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Photos</h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-bold text-gray-900">Photos</h2>
+                  {hotel.isLiveData && (
+                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
+                      Live Images
+                    </span>
+                  )}
+                  {hotel.fallback && (
+                    <span className="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-1 rounded">
+                      Sample Images
+                    </span>
+                  )}
+                </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  {[
-                    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=400&h=300&fit=crop",
-                    "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=400&h=300&fit=crop",
-                  ].map((image, idx) => (
-                    <div
-                      key={idx}
-                      className="aspect-video overflow-hidden rounded-lg"
-                    >
-                      <img
-                        src={image}
-                        alt={`Hotel image ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  ))}
+                  {(() => {
+                    // Use live images if available, otherwise fallback to sample images
+                    const galleryImages = hotel.images && hotel.images.length > 0
+                      ? hotel.images.slice(0, 12) // Limit to 12 images for mobile
+                      : [
+                          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
+                          "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&h=300&fit=crop",
+                          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop",
+                          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&fit=crop",
+                          "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=400&h=300&fit=crop",
+                          "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=400&h=300&fit=crop",
+                        ];
+
+                    return galleryImages.map((image, idx) => {
+                      // Handle both string URLs and image objects
+                      const imageUrl = typeof image === 'string'
+                        ? image
+                        : (image.urlStandard || image.url || image);
+                      const imageAlt = typeof image === 'object' && image.alt
+                        ? image.alt
+                        : `${hotel.name} - Image ${idx + 1}`;
+                      const imageCategory = typeof image === 'object' && image.category
+                        ? image.category
+                        : 'general';
+
+                      return (
+                        <div
+                          key={idx}
+                          className="aspect-video overflow-hidden rounded-lg relative group cursor-pointer"
+                          onClick={() => {
+                            // TODO: Open lightbox/modal for full-size image viewing
+                            console.log('Image clicked:', imageUrl);
+                          }}
+                        >
+                          <img
+                            src={imageUrl}
+                            alt={imageAlt}
+                            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                            loading="lazy"
+                            onError={(e) => {
+                              // Fallback to placeholder if image fails to load
+                              e.target.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
+                            }}
+                          />
+                          {/* Image overlay with category */}
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-200 flex items-end">
+                            {typeof image === 'object' && image.description && (
+                              <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                {image.description}
+                              </div>
+                            )}
+                          </div>
+                          {/* Image count indicator for first image */}
+                          {idx === 0 && galleryImages.length > 6 && (
+                            <div className="absolute top-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+                              +{galleryImages.length - 6} more
+                            </div>
+                          )}
+                        </div>
+                      );
+                    });
+                  })()}
                 </div>
+
+                {/* View all photos button if more images available */}
+                {hotel.images && hotel.images.length > 12 && (
+                  <div className="mt-4 text-center">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                      View All {hotel.images.length} Photos
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
