@@ -366,8 +366,7 @@ export default function HotelDetails() {
     ];
   })();
 
-  // Assign roomTypes to hotel object
-  hotel.roomTypes = roomTypes;
+  // Note: roomTypes are now included in hotel object creation above
 
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -2403,7 +2402,7 @@ export default function HotelDetails() {
                       { icon: "✨", text: "Beauty services" },
                       { icon: "��️", text: "Sun loungers" },
                       { icon: "🧖‍♀️", text: "Spa facilities" },
-                      { icon: "💨", text: "Steam room" },
+                      { icon: "��", text: "Steam room" },
                       { icon: "🔥", text: "Sauna" },
                       { icon: "💅", text: "Manicure/Pedicure" },
                       { icon: "💇", text: "Hair salon" },
