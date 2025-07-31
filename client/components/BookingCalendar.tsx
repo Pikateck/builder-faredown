@@ -74,10 +74,16 @@ export function BookingCalendar({
     const range = ranges.selection;
 
     if (range && range.startDate) {
+      // Ensure endDate is at least the same as startDate or add 1 day for single date selection
+      let endDate = range.endDate;
+      if (!endDate || isSameDay(range.startDate, endDate)) {
+        endDate = addDays(range.startDate, 1);
+      }
+
       const newSelection = [
         {
           startDate: range.startDate,
-          endDate: range.endDate || range.startDate,
+          endDate: endDate,
           key: "selection",
         },
       ];
@@ -85,11 +91,11 @@ export function BookingCalendar({
       console.log("Setting new selection:", newSelection);
       setSelection(newSelection);
 
-      // Call onChange
+      // Call onChange with proper date range
       if (onChange) {
         onChange({
           startDate: range.startDate,
-          endDate: range.endDate || range.startDate,
+          endDate: endDate,
         });
       }
     }
