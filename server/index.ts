@@ -87,59 +87,113 @@ export function createServer() {
     }
   });
 
-  app.get("/api/hotels/search", (_req, res) => {
-    const destinationCode = (_req.query.destination as string) || "DXB";
-    const destinationData =
-      MASTER_DESTINATIONS.find(
-        (d) =>
-          d.name.toLowerCase() === destinationCode.toLowerCase() ||
-          d.code.toLowerCase() === destinationCode.toLowerCase(),
-      ) || MASTER_DESTINATIONS.find((d) => d.code === "DXB"); // Default to Dubai
+  app.get("/api/hotels/search", async (_req, res) => {
+    try {
+      const destinationCode = (_req.query.destination as string) || "DXB";
+      const checkIn = _req.query.checkIn as string;
+      const checkOut = _req.query.checkOut as string;
+      const adults = parseInt(_req.query.adults as string) || 2;
+      const rooms = parseInt(_req.query.rooms as string) || 1;
 
-    // Use simplified hotel data for fallback
-    const hotels = [
-      {
-        id: `fallback-${destinationData!.code}-001`,
-        code: `FB${destinationData!.code}001`,
-        name: `Grand ${destinationData!.name} Hotel`,
-        description: `Premium hotel in ${destinationData!.name} with excellent amenities.`,
-        currentPrice: 15000, // INR equivalent
-        originalPrice: 18000,
-        currency: "INR",
-        rating: 4,
-        reviewScore: 8.2,
-        reviewCount: 245,
-        address: {
-          street: "1 Hotel Street",
-          city: destinationData!.name,
-          country: destinationData!.country,
-          zipCode: `${destinationData!.countryCode}12345`,
+      console.log(`🔍 Searching hotels with live Hotelbeds API for: ${destinationCode}`);
+
+      // Make live API call to Hotelbeds
+      const hotelbedsResponse = await fetch('http://localhost:3000/api/hotels/search/live', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        images: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80",
-        ],
-        amenities: ["Free WiFi", "Pool", "Restaurant", "Spa"],
-        rooms: [
-          {
-            name: "Standard Room",
-            price: 15000,
-            currency: "INR",
-            features: ["City View", "Free WiFi"],
-          },
-        ],
-        isLiveData: false,
-        supplier: "fallback-system",
-      },
-    ];
+        body: JSON.stringify({
+          destination: destinationCode,
+          checkIn: checkIn || '2024-12-15',
+          checkOut: checkOut || '2024-12-18',
+          occupancy: [{
+            rooms: rooms,
+            adults: adults,
+            children: 0
+          }]
+        })
+      });
 
-    res.json({
-      success: true,
-      data: hotels,
-      totalResults: hotels.length,
-      isLiveData: false,
-      source: "Fallback System (Use Live API for better results)",
-      searchParams: _req.query,
-    });
+      if (hotelbedsResponse.ok) {
+        const hotelbedsData = await hotelbedsResponse.json();
+
+        if (hotelbedsData.success && hotelbedsData.data.length > 0) {
+          console.log(`✅ Found ${hotelbedsData.data.length} hotels from live Hotelbeds API`);
+
+          return res.json({
+            success: true,
+            data: hotelbedsData.data,
+            totalResults: hotelbedsData.data.length,
+            isLiveData: true,
+            source: "Live Hotelbeds API",
+            searchParams: _req.query,
+          });
+        }
+      }
+
+      console.log('⚠️ Live API failed, using fallback data');
+
+      // Fallback data if API fails
+      const destinationData =
+        MASTER_DESTINATIONS.find(
+          (d) =>
+            d.name.toLowerCase() === destinationCode.toLowerCase() ||
+            d.code.toLowerCase() === destinationCode.toLowerCase(),
+        ) || MASTER_DESTINATIONS.find((d) => d.code === "DXB");
+
+      const hotels = [
+        {
+          id: `fallback-${destinationData!.code}-001`,
+          code: `FB${destinationData!.code}001`,
+          name: `Grand ${destinationData!.name} Hotel`,
+          description: `Premium hotel in ${destinationData!.name} with excellent amenities.`,
+          currentPrice: 15000,
+          originalPrice: 18000,
+          currency: "INR",
+          rating: 4,
+          reviewScore: 8.2,
+          reviewCount: 245,
+          address: {
+            street: "1 Hotel Street",
+            city: destinationData!.name,
+            country: destinationData!.country,
+            zipCode: `${destinationData!.countryCode}12345`,
+          },
+          images: [
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80",
+          ],
+          amenities: ["Free WiFi", "Pool", "Restaurant", "Spa"],
+          rooms: [
+            {
+              name: "Standard Room",
+              price: 15000,
+              currency: "INR",
+              features: ["City View", "Free WiFi"],
+            },
+          ],
+          isLiveData: false,
+          supplier: "fallback-system",
+        },
+      ];
+
+      res.json({
+        success: true,
+        data: hotels,
+        totalResults: hotels.length,
+        isLiveData: false,
+        source: "Fallback System (Live API unavailable)",
+        searchParams: _req.query,
+      });
+
+    } catch (error) {
+      console.error('Hotel search error:', error);
+      res.status(500).json({
+        success: false,
+        error: "Hotel search failed",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   });
 
   // Enhanced hotel pre-booking with live data integration
