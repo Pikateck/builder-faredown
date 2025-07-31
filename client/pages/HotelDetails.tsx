@@ -499,7 +499,7 @@ export default function HotelDetails() {
         status: "Premium Choice",
         statusColor: "blue",
         nonRefundable: false,
-        image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
+        image: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop", // Deluxe suite
         features: [
           "5.2 km from downtown",
           "Max 4 guests",
@@ -519,7 +519,7 @@ export default function HotelDetails() {
         status: "Great for Families",
         statusColor: "blue",
         nonRefundable: true,
-        image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=300",
+        image: "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop", // Family room
         features: [
           "6.1 km from downtown",
           "Max 6 guests",
@@ -539,7 +539,7 @@ export default function HotelDetails() {
         status: "Business Traveler",
         statusColor: "blue",
         nonRefundable: false,
-        image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=300",
+        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&q=80&auto=format&fit=crop", // Executive room
         features: [
           "5.8 km from downtown",
           "Max 2 guests",
@@ -559,7 +559,7 @@ export default function HotelDetails() {
         status: "Economy Choice",
         statusColor: "green",
         nonRefundable: true,
-        image: "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=300",
+        image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Standard double
         features: [
           "7.2 km from downtown",
           "Max 2 guests",
