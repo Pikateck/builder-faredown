@@ -348,11 +348,11 @@ export default function HotelDetails() {
         name: "King Room with Skyline View",
         type: "1 X King Classic",
         details: "1 king bed",
-        pricePerNight: (hotel?.currentPrice || 167) + 18,
+        pricePerNight: (tempHotelData?.currentPrice || 167) + 18,
         status: "Upgrade for +₹18",
         statusColor: "yellow",
-        image: (hotel?.images && hotel.images.length > 1) ?
-               (typeof hotel.images[1] === 'string' ? hotel.images[1] : hotel.images[1].url) :
+        image: (tempHotelData?.images && tempHotelData.images.length > 1) ?
+               (typeof tempHotelData.images[1] === 'string' ? tempHotelData.images[1] : tempHotelData.images[1].url) :
                "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=300",
         features: [
           "6.7 km from downtown",
