@@ -30,6 +30,7 @@ const analyticsRoutes = require("./routes/analytics");
 const paymentRoutes = require("./routes/payments");
 const cmsRoutes = require("./routes/cms");
 const testLiveRoutes = require("./routes/test-live");
+const testHotelbedsRoutes = require("./routes/test-hotelbeds");
 
 // New admin module routes
 const usersAdminRoutes = require("./routes/users");
