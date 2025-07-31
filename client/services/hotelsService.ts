@@ -323,18 +323,23 @@ export class HotelsService {
               const dbStatus = data.searchMeta?.databaseConnected
                 ? "Database"
                 : "Fallback";
+              const isLive = data.isLiveData ? "Live" : "Mock";
 
               console.log(
-                `✅ ${cacheStatus} Hotelbeds data received (${dbStatus}):`,
+                `✅ ${cacheStatus} ${isLive} Hotelbeds data received (${dbStatus}):`,
                 data.data.length,
                 "hotels",
               );
-              console.log(`   Source: ${data.source}`);
-              console.log(
-                `   Processing time: ${data.searchMeta?.processingTime}`,
-              );
+              console.log(`   Source: ${data.source || data.dataSource}`);
+              if (data.searchMeta?.processingTime) {
+                console.log(`   Processing time: ${data.searchMeta.processingTime}`);
+              }
 
               return data.data;
+            } else if (data.success === false && data.data) {
+              // Handle graceful fallback case
+              console.warn("⚠️ Live search failed, API returned fallback data");
+              return data.data; // Still return the fallback data
             }
           } else {
             console.warn(
@@ -1040,7 +1045,7 @@ export class HotelsService {
         type: "city" as const,
         country: "United Kingdom",
         code: "LHR",
-        flag: "🇬����",
+        flag: "🇬🇧",
         popular: true,
       },
       {
