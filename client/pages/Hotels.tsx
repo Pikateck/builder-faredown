@@ -786,6 +786,9 @@ export default function Hotels() {
                         {travelers.children > 0
                           ? `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`
                           : ""}
+                        {travelers.children > 0 && travelers.childAges.length > 0
+                          ? ` (${travelers.childAges.join(", ")} yrs)`
+                          : ""}
                       </span>
                     </button>
 
