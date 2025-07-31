@@ -513,7 +513,7 @@ export default function HotelDetails() {
   };
 
   // Show loading state while fetching hotel data
-  if (isLoadingHotel || !hotelWithRooms) {
+  if (isLoadingHotel || !hotel) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
