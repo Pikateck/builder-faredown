@@ -555,15 +555,22 @@ export default function HotelDetails() {
               loading="lazy"
             />
 
-            {/* Simple Rating */}
-            <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
-              <div className="flex items-center space-x-1">
-                <Star className="w-4 h-4 fill-blue-600 text-blue-600" />
-                <span className="font-semibold text-sm text-gray-900">
-                  {hotel.rating}
-                </span>
-                <span className="text-xs text-gray-600">({hotel.reviews})</span>
+            {/* Rating and Live Data Indicator */}
+            <div className="absolute bottom-4 left-4 space-y-2">
+              <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
+                <div className="flex items-center space-x-1">
+                  <Star className="w-4 h-4 fill-blue-600 text-blue-600" />
+                  <span className="font-semibold text-sm text-gray-900">
+                    {hotel.rating}
+                  </span>
+                  <span className="text-xs text-gray-600">({hotel.reviews})</span>
+                </div>
               </div>
+              {hotel.isLiveData && (
+                <div className="bg-green-500/95 backdrop-blur-sm px-2 py-1 rounded text-xs text-white font-medium">
+                  🔴 LIVE DATA
+                </div>
+              )}
             </div>
           </div>
 
