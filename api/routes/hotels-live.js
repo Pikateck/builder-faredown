@@ -707,4 +707,28 @@ router.post("/admin/clear-cache", async (req, res) => {
   }
 });
 
+// Global error handler middleware for this router
+// Ensures all errors return JSON responses instead of HTML
+router.use((error, req, res, next) => {
+  console.error("❌ Unhandled router error:", error);
+
+  // Set JSON content type
+  res.setHeader('Content-Type', 'application/json');
+
+  // If response already sent, don't send again
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  // Always return JSON error response
+  res.status(500).json({
+    success: false,
+    error: "Internal server error",
+    message: "An unexpected error occurred",
+    technical: error.message || "Unknown error",
+    timestamp: new Date().toISOString(),
+    fallback: true
+  });
+});
+
 module.exports = router;
