@@ -636,7 +636,7 @@ export function BookingSearchForm() {
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code);
-                          setInputValue("");
+                          setInputValue(""); // Clear the input to show placeholder
                           setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
