@@ -10,9 +10,9 @@ const crypto = require('crypto');
 class HotelbedsContentService {
   constructor() {
     // Hotelbeds API Configuration
-    this.baseURL = process.env.HOTELBEDS_CONTENT_API_URL || 'https://api.test.hotelbeds.com';
+    this.baseURL = process.env.HOTELBEDS_CONTENT_API || 'https://api.test.hotelbeds.com/hotel-content-api/1.0';
     this.apiKey = process.env.HOTELBEDS_API_KEY;
-    this.sharedSecret = process.env.HOTELBEDS_SHARED_SECRET;
+    this.sharedSecret = process.env.HOTELBEDS_SECRET;
     
     // Cache settings
     this.cacheTimeout = 24 * 60 * 60 * 1000; // 24 hours for content
