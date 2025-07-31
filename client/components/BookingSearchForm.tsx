@@ -376,6 +376,27 @@ export function BookingSearchForm() {
           <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
             Destination
           </label>
+          {/* Selected destination indicator */}
+          {destination && !isUserTyping && (
+            <div className="flex items-center gap-2 mb-2 px-3 py-1 bg-blue-50 border border-blue-200 rounded text-sm">
+              <MapPin className="w-3 h-3 text-blue-600" />
+              <span className="text-blue-800 font-medium truncate flex-1">
+                {destination}
+              </span>
+              <button
+                onClick={() => {
+                  setDestination("");
+                  setDestinationCode("");
+                  setInputValue("");
+                  setIsUserTyping(false);
+                }}
+                className="text-blue-600 hover:text-blue-800 p-0.5"
+                title="Clear destination"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
               <div className="relative">
