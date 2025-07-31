@@ -71,6 +71,16 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
+  // Calculate nights between check-in and check-out dates
+  const calculateNights = (checkIn: Date | undefined, checkOut: Date | undefined): number => {
+    if (!checkIn || !checkOut) return 0;
+    const timeDiff = checkOut.getTime() - checkIn.getTime();
+    const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return Math.max(nights, 1); // Minimum 1 night
+  };
+
+  const nights = calculateNights(checkInDate, checkOutDate);
+
   // Popular destinations will be loaded from database
   const [popularDestinations, setPopularDestinations] = useState<
     DestinationOption[]
