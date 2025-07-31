@@ -150,6 +150,8 @@ export default function HotelDetails() {
   const [priceRange, setPriceRange] = useState(100);
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [hotelData, setHotelData] = useState<any>(null);
+  const [isLoadingHotel, setIsLoadingHotel] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState({
     popularFilters: new Set<string>(),
     propertyTypes: new Set<string>(),
@@ -2767,7 +2769,7 @@ export default function HotelDetails() {
                   );
                 }}
               >
-                📘 Facebook
+                ��� Facebook
               </Button>
             </div>
           </div>
