@@ -395,7 +395,17 @@ export default function HotelDetails() {
               "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
     image: hotelData.images && hotelData.images.length > 0 ?
            (typeof hotelData.images[0] === 'string' ? hotelData.images[0] : hotelData.images[0].url) :
-           "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+           // Hotel-specific fallback images
+           (() => {
+             const hotelCode = hotelId || "htl-DXB-003";
+             const fallbackImages = {
+               'htl-DXB-001': "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
+               'htl-DXB-002': "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
+               'htl-DXB-003': "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
+               'htl-DXB-004': "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop"
+             };
+             return fallbackImages[hotelCode] || fallbackImages['htl-DXB-003'];
+           })(),
     images: hotelData.images || [],
     rating: hotelData.rating || 4.5,
     reviews: hotelData.reviews || hotelData.reviewCount || 1247,
