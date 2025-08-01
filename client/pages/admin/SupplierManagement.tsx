@@ -455,6 +455,7 @@ export default function SupplierManagement() {
                     <TableHead>Supplier</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Environment</TableHead>
                     <TableHead>Last Sync</TableHead>
                     <TableHead>Success Rate</TableHead>
                     <TableHead>Bookings</TableHead>
