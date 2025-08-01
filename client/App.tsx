@@ -43,6 +43,7 @@ import MobileTrips from "./pages/MobileTrips";
 import MyTrips from "./pages/MyTrips";
 import ApiTestPanel from "./components/ApiTestPanel";
 import BackendTestDashboard from "./components/BackendTestDashboard";
+import AmadeusTestPanel from "./components/AmadeusTestPanel";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
