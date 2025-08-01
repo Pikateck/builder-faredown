@@ -488,6 +488,9 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Supplier management routes
+  app.use("/api/suppliers", suppliersRouter);
+
   // Test endpoint for Hotelbeds API
   app.get("/api/test-hotelbeds", async (_req, res) => {
     try {
@@ -1701,7 +1704,7 @@ export function createServer() {
 
       if (cachedHotels.length > 0) {
         console.log(
-          `💾 Using ${cachedHotels.length} cached hotels for ${destinationCode}`,
+          `��� Using ${cachedHotels.length} cached hotels for ${destinationCode}`,
         );
 
         res.json({
