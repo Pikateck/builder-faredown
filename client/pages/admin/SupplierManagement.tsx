@@ -387,7 +387,9 @@ export default function SupplierManagement() {
                     <p className="text-sm font-medium text-gray-600">
                       Total Suppliers
                     </p>
-                    <p className="text-2xl font-bold">{suppliers.length}</p>
+                    <p className="text-2xl font-bold">
+                      {analytics?.totalSuppliers || suppliers.length}
+                    </p>
                   </div>
                   <Briefcase className="w-8 h-8 text-blue-600" />
                 </div>
@@ -400,7 +402,7 @@ export default function SupplierManagement() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Active</p>
                     <p className="text-2xl font-bold text-green-600">
-                      {suppliers.filter((s) => s.status === "active").length}
+                      {analytics?.activeSuppliers || suppliers.filter((s) => s.status === "active").length}
                     </p>
                   </div>
                   <CheckCircle className="w-8 h-8 text-green-600" />
@@ -414,7 +416,7 @@ export default function SupplierManagement() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Testing</p>
                     <p className="text-2xl font-bold text-yellow-600">
-                      {suppliers.filter((s) => s.status === "testing").length}
+                      {analytics?.testingSuppliers || suppliers.filter((s) => s.status === "testing").length}
                     </p>
                   </div>
                   <Clock className="w-8 h-8 text-yellow-600" />
@@ -430,11 +432,10 @@ export default function SupplierManagement() {
                       Avg Success Rate
                     </p>
                     <p className="text-2xl font-bold">
-                      {(
-                        suppliers.reduce((acc, s) => acc + s.successRate, 0) /
-                        suppliers.length
-                      ).toFixed(1)}
-                      %
+                      {analytics?.averageSuccessRate?.toFixed(1) ||
+                       (suppliers.length > 0 ?
+                        (suppliers.reduce((acc, s) => acc + s.successRate, 0) / suppliers.length).toFixed(1) :
+                        '0.0')}%
                     </p>
                   </div>
                   <BarChart3 className="w-8 h-8 text-purple-600" />
