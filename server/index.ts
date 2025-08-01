@@ -28,17 +28,33 @@ async function getAmadeusAccessToken() {
 
   try {
     console.log("🔑 Getting new Amadeus access token...");
+    console.log("🔑 Using credentials:", {
+      apiKeyLength: API_KEY.length,
+      secretLength: API_SECRET.length
+    });
+
+    // Properly URL encode the form data
+    const formData = new URLSearchParams();
+    formData.append('grant_type', 'client_credentials');
+    formData.append('client_id', API_KEY);
+    formData.append('client_secret', API_SECRET);
+
+    console.log("🔐 Making auth request to:", `${BASE_URL}/v1/security/oauth2/token`);
 
     const response = await fetch(`${BASE_URL}/v1/security/oauth2/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
       },
-      body: `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`
+      body: formData.toString()
     });
+
+    console.log(`📡 Amadeus auth response status: ${response.status}`);
 
     if (!response.ok) {
       const errorText = await response.text();
+      console.error("❌ Full auth error response:", errorText);
       throw new Error(`Amadeus auth failed: ${response.status} - ${errorText}`);
     }
 
@@ -46,7 +62,7 @@ async function getAmadeusAccessToken() {
     amadeusAccessToken = data.access_token;
     tokenExpiryTime = Date.now() + (data.expires_in * 1000);
 
-    console.log("✅ Amadeus authentication successful");
+    console.log("✅ Amadeus authentication successful, token expires in:", data.expires_in, "seconds");
     return amadeusAccessToken;
 
   } catch (error) {
