@@ -14,7 +14,7 @@ import crypto from "crypto";
 
 // Direct Hotelbeds API integration
 async function callHotelbedsAPI(searchParams: any) {
-  const API_KEY = "91d2368789abdb5beec010ce95a9d185";
+  const API_KEY = "91d2368789abdb5beec101ce95a9d185";
   const API_SECRET = "a9ffaaecce";
   const BOOKING_API = "https://api.test.hotelbeds.com/hotel-api/1.0";
   const CONTENT_API = "https://api.test.hotelbeds.com/hotel-content-api/1.0";
