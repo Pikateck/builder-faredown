@@ -163,14 +163,22 @@ export function FlightStyleBargainModal({
       }, 1000);
       return () => clearTimeout(timer);
     } else if (bargainState.isTimerActive && bargainState.timeRemaining === 0) {
-      console.log("⏰ Timer expired - moving to rejected phase");
-      setBargainState((prev) => ({
-        ...prev,
-        phase: "rejected",
-        isTimerActive: false,
-      }));
+      console.log("⏰ Timer expired");
+      if (bargainState.phase === "counter_offer") {
+        setBargainState((prev) => ({
+          ...prev,
+          phase: "rejected",
+          isTimerActive: false,
+        }));
+      } else if (bargainState.phase === "accepted") {
+        // In accepted phase, timer expiry just stops the timer but stays in accepted phase
+        setBargainState((prev) => ({
+          ...prev,
+          isTimerActive: false,
+        }));
+      }
     }
-  }, [bargainState.isTimerActive, bargainState.timeRemaining]);
+  }, [bargainState.isTimerActive, bargainState.timeRemaining, bargainState.phase]);
 
   // Reset state when modal opens/closes
   useEffect(() => {
