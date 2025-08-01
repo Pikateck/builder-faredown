@@ -23,6 +23,7 @@ import rewardsRoutes from "./rewards";
 import vouchersRoutes from "./vouchers";
 import auditRoutes from "./audit";
 import settingsRoutes from "./settings";
+import loyaltyRoutes from "./loyalty";
 
 const router = express.Router();
 
