@@ -1,5 +1,5 @@
-import { Response } from 'express';
-import { Pool } from 'pg';
+import { Response } from "express";
+import { Pool } from "pg";
 
 // Common response interfaces
 export interface PaginatedResponse<T> {
@@ -24,7 +24,10 @@ export interface ApiResponse<T = any> {
 // Database connection pool
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -35,7 +38,7 @@ export interface PaginationParams {
   page?: number;
   pageSize?: number;
   sort?: string;
-  order?: 'ASC' | 'DESC';
+  order?: "ASC" | "DESC";
   q?: string;
 }
 
@@ -43,9 +46,9 @@ export const parsePaginationParams = (query: any): PaginationParams => {
   return {
     page: Math.max(1, parseInt(query.page) || 1),
     pageSize: Math.min(100, Math.max(1, parseInt(query.pageSize) || 20)),
-    sort: query.sort || 'created_at',
-    order: query.order?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-    q: query.q?.trim() || undefined
+    sort: query.sort || "created_at",
+    order: query.order?.toUpperCase() === "ASC" ? "ASC" : "DESC",
+    q: query.q?.trim() || undefined,
   };
 };
 
@@ -53,10 +56,10 @@ export const parsePaginationParams = (query: any): PaginationParams => {
 export const buildPaginatedQuery = (
   baseQuery: string,
   params: PaginationParams,
-  searchFields: string[] = []
+  searchFields: string[] = [],
 ): { query: string; countQuery: string; queryParams: any[] } => {
   let query = baseQuery;
-  let whereClause = '';
+  let whereClause = "";
   const queryParams: any[] = [];
   let paramIndex = 1;
 
@@ -65,24 +68,24 @@ export const buildPaginatedQuery = (
     const searchConditions = searchFields.map(() => {
       return `LOWER($${paramIndex}) LIKE LOWER($${paramIndex + 1})`;
     });
-    
-    searchFields.forEach(field => {
+
+    searchFields.forEach((field) => {
       queryParams.push(field, `%${params.q}%`);
       paramIndex += 2;
     });
-    
-    whereClause = `WHERE (${searchConditions.join(' OR ')})`;
+
+    whereClause = `WHERE (${searchConditions.join(" OR ")})`;
   }
 
   // Build complete query with pagination
   const orderClause = `ORDER BY ${params.sort} ${params.order}`;
   const limitClause = `LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
-  
+
   queryParams.push(params.pageSize);
   queryParams.push((params.page! - 1) * params.pageSize!);
 
   query = `${query} ${whereClause} ${orderClause} ${limitClause}`;
-  
+
   // Count query for total records
   const countQuery = `SELECT COUNT(*) as total FROM (${baseQuery}) as base_query ${whereClause}`;
 
@@ -93,18 +96,22 @@ export const buildPaginatedQuery = (
 export const executePaginatedQuery = async <T>(
   baseQuery: string,
   params: PaginationParams,
-  searchFields: string[] = []
+  searchFields: string[] = [],
 ): Promise<PaginatedResponse<T>> => {
   try {
-    const { query, countQuery, queryParams } = buildPaginatedQuery(baseQuery, params, searchFields);
-    
+    const { query, countQuery, queryParams } = buildPaginatedQuery(
+      baseQuery,
+      params,
+      searchFields,
+    );
+
     // Execute both queries
     const [dataResult, countResult] = await Promise.all([
       pool.query(query, queryParams),
-      pool.query(countQuery, queryParams.slice(0, -2)) // Remove LIMIT/OFFSET params for count
+      pool.query(countQuery, queryParams.slice(0, -2)), // Remove LIMIT/OFFSET params for count
     ]);
 
-    const total = parseInt(countResult.rows[0]?.total || '0');
+    const total = parseInt(countResult.rows[0]?.total || "0");
     const totalPages = Math.ceil(total / params.pageSize!);
 
     return {
@@ -112,10 +119,10 @@ export const executePaginatedQuery = async <T>(
       page: params.page!,
       pageSize: params.pageSize!,
       total,
-      totalPages
+      totalPages,
     };
   } catch (error) {
-    console.error('Paginated query error:', error);
+    console.error("Paginated query error:", error);
     throw error;
   }
 };
@@ -125,61 +132,61 @@ export const sendSuccess = <T>(res: Response, data: T, meta?: any) => {
   res.json({
     success: true,
     data,
-    meta
+    meta,
   } as ApiResponse<T>);
 };
 
 // Standard error response
 export const sendError = (
-  res: Response, 
-  statusCode: number, 
-  code: string, 
-  message: string, 
-  details?: any
+  res: Response,
+  statusCode: number,
+  code: string,
+  message: string,
+  details?: any,
 ) => {
   res.status(statusCode).json({
     success: false,
     error: {
       code,
       message,
-      details
-    }
+      details,
+    },
   } as ApiResponse);
 };
 
 // Validation error response
 export const sendValidationError = (res: Response, errors: any) => {
-  sendError(res, 400, 'VALIDATION_ERROR', 'Validation failed', errors);
+  sendError(res, 400, "VALIDATION_ERROR", "Validation failed", errors);
 };
 
 // Database error handler
 export const handleDatabaseError = (res: Response, error: any) => {
-  console.error('Database error:', error);
-  
-  if (error.code === '23505') {
-    sendError(res, 409, 'DUPLICATE_ENTRY', 'Record already exists');
-  } else if (error.code === '23503') {
-    sendError(res, 400, 'FOREIGN_KEY_VIOLATION', 'Referenced record not found');
-  } else if (error.code === '23502') {
-    sendError(res, 400, 'NOT_NULL_VIOLATION', 'Required field missing');
+  console.error("Database error:", error);
+
+  if (error.code === "23505") {
+    sendError(res, 409, "DUPLICATE_ENTRY", "Record already exists");
+  } else if (error.code === "23503") {
+    sendError(res, 400, "FOREIGN_KEY_VIOLATION", "Referenced record not found");
+  } else if (error.code === "23502") {
+    sendError(res, 400, "NOT_NULL_VIOLATION", "Required field missing");
   } else {
-    sendError(res, 500, 'DATABASE_ERROR', 'Database operation failed');
+    sendError(res, 500, "DATABASE_ERROR", "Database operation failed");
   }
 };
 
 // Transaction wrapper
 export const withTransaction = async <T>(
-  callback: (client: any) => Promise<T>
+  callback: (client: any) => Promise<T>,
 ): Promise<T> => {
   const client = await pool.connect();
-  
+
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
     const result = await callback(client);
-    await client.query('COMMIT');
+    await client.query("COMMIT");
     return result;
   } catch (error) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     throw error;
   } finally {
     client.release();
@@ -195,39 +202,42 @@ export const logAuditAction = async (
   entityId: string,
   beforeData?: any,
   afterData?: any,
-  ipAddress?: string
+  ipAddress?: string,
 ) => {
   try {
-    await pool.query(`
+    await pool.query(
+      `
       INSERT INTO admin_audit_log (
         admin_id, module, action, entity_type, entity_id, 
         before_data, after_data, ip_address, created_at
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
-    `, [
-      adminId,
-      module,
-      action,
-      entityType,
-      entityId,
-      beforeData ? JSON.stringify(beforeData) : null,
-      afterData ? JSON.stringify(afterData) : null,
-      ipAddress
-    ]);
+    `,
+      [
+        adminId,
+        module,
+        action,
+        entityType,
+        entityId,
+        beforeData ? JSON.stringify(beforeData) : null,
+        afterData ? JSON.stringify(afterData) : null,
+        ipAddress,
+      ],
+    );
   } catch (error) {
-    console.error('Audit logging failed:', error);
+    console.error("Audit logging failed:", error);
     // Don't throw - audit failure shouldn't break the main operation
   }
 };
 
 // Input sanitization
 export const sanitizeInput = (input: any): any => {
-  if (typeof input === 'string') {
+  if (typeof input === "string") {
     return input.trim();
   }
   if (Array.isArray(input)) {
     return input.map(sanitizeInput);
   }
-  if (typeof input === 'object' && input !== null) {
+  if (typeof input === "object" && input !== null) {
     const sanitized: any = {};
     for (const [key, value] of Object.entries(input)) {
       sanitized[key] = sanitizeInput(value);
@@ -240,27 +250,30 @@ export const sanitizeInput = (input: any): any => {
 // Date range validation
 export const validateDateRange = (from?: string, to?: string) => {
   const errors: string[] = [];
-  
+
   if (from && isNaN(Date.parse(from))) {
-    errors.push('Invalid from date format');
+    errors.push("Invalid from date format");
   }
-  
+
   if (to && isNaN(Date.parse(to))) {
-    errors.push('Invalid to date format');
+    errors.push("Invalid to date format");
   }
-  
+
   if (from && to && new Date(from) > new Date(to)) {
-    errors.push('From date must be before to date');
+    errors.push("From date must be before to date");
   }
-  
+
   return errors;
 };
 
 // Currency formatting
-export const formatCurrency = (amount: number, currency: string = 'INR'): string => {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: currency
+export const formatCurrency = (
+  amount: number,
+  currency: string = "INR",
+): string => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: currency,
   }).format(amount);
 };
 
@@ -271,20 +284,25 @@ export const getRecordById = async (table: string, id: string) => {
 };
 
 export const deleteRecord = async (table: string, id: string) => {
-  const result = await pool.query(`DELETE FROM ${table} WHERE id = $1 RETURNING *`, [id]);
+  const result = await pool.query(
+    `DELETE FROM ${table} WHERE id = $1 RETURNING *`,
+    [id],
+  );
   return result.rows[0] || null;
 };
 
 export const updateRecord = async (table: string, id: string, updates: any) => {
   const fields = Object.keys(updates);
   const values = Object.values(updates);
-  
-  const setClause = fields.map((field, index) => `${field} = $${index + 2}`).join(', ');
-  
+
+  const setClause = fields
+    .map((field, index) => `${field} = $${index + 2}`)
+    .join(", ");
+
   const result = await pool.query(
     `UPDATE ${table} SET ${setClause}, updated_at = NOW() WHERE id = $1 RETURNING *`,
-    [id, ...values]
+    [id, ...values],
   );
-  
+
   return result.rows[0] || null;
 };

@@ -15,7 +15,7 @@ import destinationsService from "./services/destinationsService.js";
 import crypto from "crypto";
 
 // Amadeus API integration
-let amadeusAccessToken = '';
+let amadeusAccessToken = "";
 let tokenExpiryTime = 0;
 
 async function getAmadeusAccessToken() {
@@ -36,41 +36,53 @@ async function getAmadeusAccessToken() {
       apiKeyFirst4: API_KEY.substring(0, 4),
       apiKeyLast4: API_KEY.substring(API_KEY.length - 4),
       secretFirst2: API_SECRET.substring(0, 2),
-      secretLast2: API_SECRET.substring(API_SECRET.length - 2)
+      secretLast2: API_SECRET.substring(API_SECRET.length - 2),
     });
 
     // Properly URL encode the form data
     const formData = new URLSearchParams();
-    formData.append('grant_type', 'client_credentials');
-    formData.append('client_id', API_KEY);
-    formData.append('client_secret', API_SECRET);
+    formData.append("grant_type", "client_credentials");
+    formData.append("client_id", API_KEY);
+    formData.append("client_secret", API_SECRET);
 
-    console.log("🔐 Making auth request to:", `${BASE_URL}/v1/security/oauth2/token`);
+    console.log(
+      "🔐 Making auth request to:",
+      `${BASE_URL}/v1/security/oauth2/token`,
+    );
     console.log("🔐 Request body:", formData.toString());
 
     const response = await fetch(`${BASE_URL}/v1/security/oauth2/token`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
       },
-      body: formData.toString()
+      body: formData.toString(),
     });
 
     console.log(`📡 Amadeus auth response status: ${response.status}`);
-    console.log(`📡 Response headers:`, Object.fromEntries(response.headers.entries()));
+    console.log(
+      `📡 Response headers:`,
+      Object.fromEntries(response.headers.entries()),
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error("❌ Full auth error response:", errorText);
 
       // Check if this might be a new credentials activation issue
-      if (response.status === 401 && errorText.includes('invalid_client')) {
-        console.log("🔍 This may be a new credentials activation issue. Credentials might need:");
+      if (response.status === 401 && errorText.includes("invalid_client")) {
+        console.log(
+          "🔍 This may be a new credentials activation issue. Credentials might need:",
+        );
         console.log("   - Time to activate (up to 30 minutes after creation)");
-        console.log("   - Proper registration in Amadeus For Developers portal");
+        console.log(
+          "   - Proper registration in Amadeus For Developers portal",
+        );
         console.log("   - Test environment access enabled");
-        console.log("   - Check credentials are copied exactly from the portal");
+        console.log(
+          "   - Check credentials are copied exactly from the portal",
+        );
       }
 
       throw new Error(`Amadeus auth failed: ${response.status} - ${errorText}`);
@@ -78,11 +90,14 @@ async function getAmadeusAccessToken() {
 
     const data = await response.json();
     amadeusAccessToken = data.access_token;
-    tokenExpiryTime = Date.now() + (data.expires_in * 1000);
+    tokenExpiryTime = Date.now() + data.expires_in * 1000;
 
-    console.log("✅ Amadeus authentication successful, token expires in:", data.expires_in, "seconds");
+    console.log(
+      "✅ Amadeus authentication successful, token expires in:",
+      data.expires_in,
+      "seconds",
+    );
     return amadeusAccessToken;
-
   } catch (error) {
     console.error("❌ Amadeus authentication failed:", error);
     throw error;
@@ -101,36 +116,42 @@ async function searchAmadeusFlights(searchParams: any) {
     // Generate future dates if none provided
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 7); // 7 days from now for flights
-    const defaultDepartureDate = tomorrow.toISOString().split('T')[0];
+    const defaultDepartureDate = tomorrow.toISOString().split("T")[0];
 
     // Prepare search parameters
     const queryParams = new URLSearchParams({
-      originLocationCode: searchParams.origin || 'BOM', // Mumbai
-      destinationLocationCode: searchParams.destination || 'DXB', // Dubai
-      departureDate: searchParams.departureDate?.split('T')[0] || defaultDepartureDate,
-      adults: searchParams.adults?.toString() || '1',
-      currencyCode: 'INR'
+      originLocationCode: searchParams.origin || "BOM", // Mumbai
+      destinationLocationCode: searchParams.destination || "DXB", // Dubai
+      departureDate:
+        searchParams.departureDate?.split("T")[0] || defaultDepartureDate,
+      adults: searchParams.adults?.toString() || "1",
+      currencyCode: "INR",
     });
 
     // Add return date if provided (round trip)
     if (searchParams.returnDate) {
-      queryParams.append('returnDate', searchParams.returnDate.split('T')[0]);
+      queryParams.append("returnDate", searchParams.returnDate.split("T")[0]);
     }
 
     console.log("✈️ Flight search parameters:", queryParams.toString());
 
-    const response = await fetch(`${BASE_URL}/v2/shopping/flight-offers?${queryParams}`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await fetch(
+      `${BASE_URL}/v2/shopping/flight-offers?${queryParams}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
     console.log(`📡 Amadeus Flight API Response Status: ${response.status}`);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`❌ Amadeus Flight API Error: ${response.status} - ${errorText}`);
+      console.error(
+        `❌ Amadeus Flight API Error: ${response.status} - ${errorText}`,
+      );
       return { success: false, error: errorText };
     }
 
@@ -140,56 +161,61 @@ async function searchAmadeusFlights(searchParams: any) {
     console.log(`✅ Found ${flights.length} flight offers from Amadeus`);
 
     // Transform flight data to match frontend expectations
-    const transformedFlights = flights.slice(0, 20).map((flight: any, index: number) => {
-      const outbound = flight.itineraries[0];
-      const firstSegment = outbound.segments[0];
-      const lastSegment = outbound.segments[outbound.segments.length - 1];
+    const transformedFlights = flights
+      .slice(0, 20)
+      .map((flight: any, index: number) => {
+        const outbound = flight.itineraries[0];
+        const firstSegment = outbound.segments[0];
+        const lastSegment = outbound.segments[outbound.segments.length - 1];
 
-      // Calculate total duration
-      const duration = outbound.duration?.replace('PT', '')?.replace('H', 'h ')?.replace('M', 'm') || '2h 30m';
+        // Calculate total duration
+        const duration =
+          outbound.duration
+            ?.replace("PT", "")
+            ?.replace("H", "h ")
+            ?.replace("M", "m") || "2h 30m";
 
-      // Get airline info
-      const airlineCode = firstSegment.carrierCode;
-      const airlineName = getAirlineName(airlineCode);
+        // Get airline info
+        const airlineCode = firstSegment.carrierCode;
+        const airlineName = getAirlineName(airlineCode);
 
-      // Get pricing
-      const price = parseFloat(flight.price.total);
+        // Get pricing
+        const price = parseFloat(flight.price.total);
 
-      return {
-        id: `amadeus-${flight.id || index}`,
-        flightNumber: `${firstSegment.carrierCode}${firstSegment.number}`,
-        airline: {
-          code: airlineCode,
-          name: airlineName,
-          logo: `https://images.kiwi.com/airlines/64/${airlineCode}.png`
-        },
-        departure: {
-          airport: firstSegment.departure.iataCode,
-          time: firstSegment.departure.at,
-          terminal: firstSegment.departure.terminal
-        },
-        arrival: {
-          airport: lastSegment.arrival.iataCode,
-          time: lastSegment.arrival.at,
-          terminal: lastSegment.arrival.terminal
-        },
-        duration: duration,
-        stops: outbound.segments.length - 1,
-        price: Math.round(price),
-        currency: 'INR',
-        originalPrice: Math.round(price * 1.1), // Add 10% as original price
-        cabinClass: firstSegment.cabin || 'ECONOMY',
-        aircraft: firstSegment.aircraft?.code || 'A320',
-        segments: outbound.segments.length,
-        isLiveData: true,
-        supplier: 'amadeus',
-        bookingClass: firstSegment.bookingClass,
-        rateKey: flight.id
-      };
-    });
+        return {
+          id: `amadeus-${flight.id || index}`,
+          flightNumber: `${firstSegment.carrierCode}${firstSegment.number}`,
+          airline: {
+            code: airlineCode,
+            name: airlineName,
+            logo: `https://images.kiwi.com/airlines/64/${airlineCode}.png`,
+          },
+          departure: {
+            airport: firstSegment.departure.iataCode,
+            time: firstSegment.departure.at,
+            terminal: firstSegment.departure.terminal,
+          },
+          arrival: {
+            airport: lastSegment.arrival.iataCode,
+            time: lastSegment.arrival.at,
+            terminal: lastSegment.arrival.terminal,
+          },
+          duration: duration,
+          stops: outbound.segments.length - 1,
+          price: Math.round(price),
+          currency: "INR",
+          originalPrice: Math.round(price * 1.1), // Add 10% as original price
+          cabinClass: firstSegment.cabin || "ECONOMY",
+          aircraft: firstSegment.aircraft?.code || "A320",
+          segments: outbound.segments.length,
+          isLiveData: true,
+          supplier: "amadeus",
+          bookingClass: firstSegment.bookingClass,
+          rateKey: flight.id,
+        };
+      });
 
     return { success: true, data: transformedFlights };
-
   } catch (error) {
     console.error("❌ Amadeus flight search failed:", error);
     return { success: false, error: error.message };
@@ -199,23 +225,23 @@ async function searchAmadeusFlights(searchParams: any) {
 // Helper function to get airline names
 function getAirlineName(code: string): string {
   const airlines: Record<string, string> = {
-    'AI': 'Air India',
-    'EK': 'Emirates',
-    'QR': 'Qatar Airways',
-    'EY': 'Etihad Airways',
-    'SV': 'Saudi Arabian Airlines',
-    'MS': 'EgyptAir',
-    'TK': 'Turkish Airlines',
-    'LH': 'Lufthansa',
-    'BA': 'British Airways',
-    'AF': 'Air France',
-    'KL': 'KLM',
-    'SQ': 'Singapore Airlines',
-    'TG': 'Thai Airways',
-    '9W': 'Jet Airways',
-    '6E': 'IndiGo',
-    'SG': 'SpiceJet',
-    'G8': 'GoAir'
+    AI: "Air India",
+    EK: "Emirates",
+    QR: "Qatar Airways",
+    EY: "Etihad Airways",
+    SV: "Saudi Arabian Airlines",
+    MS: "EgyptAir",
+    TK: "Turkish Airlines",
+    LH: "Lufthansa",
+    BA: "British Airways",
+    AF: "Air France",
+    KL: "KLM",
+    SQ: "Singapore Airlines",
+    TG: "Thai Airways",
+    "9W": "Jet Airways",
+    "6E": "IndiGo",
+    SG: "SpiceJet",
+    G8: "GoAir",
   };
 
   return airlines[code] || `${code} Airlines`;
@@ -232,7 +258,7 @@ async function callHotelbedsAPI(searchParams: any) {
     console.log("🔑 Making direct Hotelbeds Booking API call for availability");
     console.log("🔑 Using credentials:", {
       apiKeyLength: API_KEY.length,
-      secretLength: API_SECRET.length
+      secretLength: API_SECRET.length,
     });
 
     // Generate signature for booking API (Hotelbeds specific format)
@@ -245,14 +271,14 @@ async function callHotelbedsAPI(searchParams: any) {
 
     console.log("🔐 Authentication details:", {
       timestamp,
-      signatureLength: signature.length
+      signatureLength: signature.length,
     });
 
     const headers = {
       "Api-key": API_KEY,
       "X-Signature": signature,
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     };
 
     // Step 1: Get hotel availability and pricing
@@ -262,8 +288,8 @@ async function callHotelbedsAPI(searchParams: any) {
     const dayAfterTomorrow = new Date();
     dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 4);
 
-    const defaultCheckIn = tomorrow.toISOString().split('T')[0];
-    const defaultCheckOut = dayAfterTomorrow.toISOString().split('T')[0];
+    const defaultCheckIn = tomorrow.toISOString().split("T")[0];
+    const defaultCheckOut = dayAfterTomorrow.toISOString().split("T")[0];
 
     const bookingRequest = {
       stay: {
@@ -532,19 +558,20 @@ export function createServer() {
 
       res.json({
         success: testResult.success,
-        message: testResult.success ? "Hotelbeds API working!" : "Hotelbeds API failed",
+        message: testResult.success
+          ? "Hotelbeds API working!"
+          : "Hotelbeds API failed",
         data: testResult.data?.slice(0, 2), // Only return first 2 hotels for testing
         error: testResult.error,
         hotelCount: testResult.data?.length || 0,
-        hasRealImages: testResult.data?.some(h => h.hasRealImages) || false
+        hasRealImages: testResult.data?.some((h) => h.hasRealImages) || false,
       });
-
     } catch (error) {
       console.error("🧪 Test failed:", error);
       res.status(500).json({
         success: false,
         error: error.message,
-        message: "Test endpoint failed"
+        message: "Test endpoint failed",
       });
     }
   });
@@ -565,24 +592,24 @@ export function createServer() {
         apiKeyValid: API_KEY.length > 30 && API_KEY.length < 40,
         secretValid: API_SECRET.length > 10 && API_SECRET.length < 25,
         apiKeyFormat: /^[A-Za-z0-9]+$/.test(API_KEY),
-        secretFormat: /^[A-Za-z0-9]+$/.test(API_SECRET)
+        secretFormat: /^[A-Za-z0-9]+$/.test(API_SECRET),
       };
 
       console.log("🔍 Credentials validation:", credentialsValidation);
 
       // Try authentication
       const formData = new URLSearchParams();
-      formData.append('grant_type', 'client_credentials');
-      formData.append('client_id', API_KEY);
-      formData.append('client_secret', API_SECRET);
+      formData.append("grant_type", "client_credentials");
+      formData.append("client_id", API_KEY);
+      formData.append("client_secret", API_SECRET);
 
       const response = await fetch(`${BASE_URL}/v1/security/oauth2/token`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json'
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
         },
-        body: formData.toString()
+        body: formData.toString(),
       });
 
       const responseText = await response.text();
@@ -597,8 +624,8 @@ export function createServer() {
             status: response.status,
             tokenType: data.type,
             expiresIn: data.expires_in,
-            scope: data.scope
-          }
+            scope: data.scope,
+          },
         });
       } else {
         res.json({
@@ -613,25 +640,24 @@ export function createServer() {
                 "Credentials not yet activated (can take up to 30 minutes)",
                 "API key or secret copied incorrectly",
                 "Test environment access not enabled in Amadeus portal",
-                "Account setup incomplete in Amadeus For Developers"
+                "Account setup incomplete in Amadeus For Developers",
               ],
               nextSteps: [
                 "Wait 30 minutes if credentials are newly created",
                 "Double-check credentials from Amadeus portal",
                 "Verify test environment access is enabled",
-                "Contact Amadeus support if issue persists"
-              ]
-            }
-          }
+                "Contact Amadeus support if issue persists",
+              ],
+            },
+          },
         });
       }
-
     } catch (error) {
       console.error("🧪 Amadeus auth test failed:", error);
       res.status(500).json({
         success: false,
         error: error.message,
-        message: "Amadeus auth test endpoint failed"
+        message: "Amadeus auth test endpoint failed",
       });
     }
   });
@@ -644,24 +670,27 @@ export function createServer() {
       const testResult = await searchAmadeusFlights({
         origin: "BOM", // Mumbai
         destination: "DXB", // Dubai
-        departureDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-        adults: 1
+        departureDate: new Date(
+          Date.now() + 7 * 24 * 60 * 60 * 1000,
+        ).toISOString(), // 7 days from now
+        adults: 1,
       });
 
       res.json({
         success: testResult.success,
-        message: testResult.success ? "Amadeus API working!" : "Amadeus API failed",
+        message: testResult.success
+          ? "Amadeus API working!"
+          : "Amadeus API failed",
         data: testResult.data?.slice(0, 3), // Only return first 3 flights for testing
         error: testResult.error,
-        flightCount: testResult.data?.length || 0
+        flightCount: testResult.data?.length || 0,
       });
-
     } catch (error) {
       console.error("🧪 Amadeus test failed:", error);
       res.status(500).json({
         success: false,
         error: error.message,
-        message: "Amadeus test endpoint failed"
+        message: "Amadeus test endpoint failed",
       });
     }
   });
@@ -674,11 +703,16 @@ export function createServer() {
       const departureDate = _req.query.departureDate as string;
       const returnDate = _req.query.returnDate as string;
       const adults = parseInt(_req.query.adults as string) || 1;
-      const cabinClass = _req.query.cabinClass as string || 'ECONOMY';
+      const cabinClass = (_req.query.cabinClass as string) || "ECONOMY";
 
       console.log(`✈️ Searching flights: ${origin} → ${destination}`);
       console.log("🔍 Flight search parameters:", {
-        origin, destination, departureDate, returnDate, adults, cabinClass
+        origin,
+        destination,
+        departureDate,
+        returnDate,
+        adults,
+        cabinClass,
       });
 
       // Try Amadeus API call first
@@ -688,32 +722,33 @@ export function createServer() {
         departureDate,
         returnDate,
         adults,
-        cabinClass
+        cabinClass,
       });
 
       if (flightResult.success && flightResult.data.length > 0) {
-        console.log(`✅ Found ${flightResult.data.length} flights from Amadeus API`);
+        console.log(
+          `✅ Found ${flightResult.data.length} flights from Amadeus API`,
+        );
 
         // Store flight search results in database for admin dashboard tracking
         try {
           // This would integrate with your PostgreSQL database
           const searchAnalytics = {
-            searchType: 'flight',
+            searchType: "flight",
             origin,
             destination,
             departureDate,
             returnDate,
             adults,
             resultsCount: flightResult.data.length,
-            supplier: 'amadeus',
+            supplier: "amadeus",
             isLiveData: true,
             searchTimestamp: new Date().toISOString(),
-            searchParams: JSON.stringify(_req.query)
+            searchParams: JSON.stringify(_req.query),
           };
 
           // Note: Database integration will be enabled once the PostgreSQL tables are created
           console.log("📊 Flight search analytics:", searchAnalytics);
-
         } catch (dbError) {
           console.warn("⚠️ Database storage failed:", dbError);
           // Continue even if database storage fails
@@ -732,35 +767,37 @@ export function createServer() {
       console.log("⚠️ Amadeus API failed, using fallback data");
 
       // Fallback flight data if API fails
-      const fallbackFlights = [{
-        id: `fallback-${origin}-${destination}-001`,
-        flightNumber: `AI101`,
-        airline: {
-          code: 'AI',
-          name: 'Air India',
-          logo: 'https://images.kiwi.com/airlines/64/AI.png'
+      const fallbackFlights = [
+        {
+          id: `fallback-${origin}-${destination}-001`,
+          flightNumber: `AI101`,
+          airline: {
+            code: "AI",
+            name: "Air India",
+            logo: "https://images.kiwi.com/airlines/64/AI.png",
+          },
+          departure: {
+            airport: origin,
+            time: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+            terminal: "1",
+          },
+          arrival: {
+            airport: destination,
+            time: new Date(Date.now() + 27 * 60 * 60 * 1000).toISOString(),
+            terminal: "3",
+          },
+          duration: "3h 00m",
+          stops: 0,
+          price: 25000,
+          currency: "INR",
+          originalPrice: 28000,
+          cabinClass: "ECONOMY",
+          aircraft: "A320",
+          segments: 1,
+          isLiveData: false,
+          supplier: "fallback-system",
         },
-        departure: {
-          airport: origin,
-          time: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          terminal: '1'
-        },
-        arrival: {
-          airport: destination,
-          time: new Date(Date.now() + 27 * 60 * 60 * 1000).toISOString(),
-          terminal: '3'
-        },
-        duration: '3h 00m',
-        stops: 0,
-        price: 25000,
-        currency: 'INR',
-        originalPrice: 28000,
-        cabinClass: 'ECONOMY',
-        aircraft: 'A320',
-        segments: 1,
-        isLiveData: false,
-        supplier: 'fallback-system'
-      }];
+      ];
 
       res.json({
         success: true,
@@ -770,7 +807,6 @@ export function createServer() {
         source: "Fallback System (Amadeus API unavailable)",
         searchParams: _req.query,
       });
-
     } catch (error) {
       console.error("Flight search error:", error);
       res.status(500).json({
@@ -865,7 +901,7 @@ export function createServer() {
       console.log("🔍 callHotelbedsAPI result:", {
         success: directApiResult.success,
         dataLength: directApiResult.data?.length || 0,
-        error: directApiResult.error
+        error: directApiResult.error,
       });
 
       if (directApiResult.success && directApiResult.data.length > 0) {

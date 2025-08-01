@@ -161,7 +161,7 @@ export class FlightsService {
       returnDate: searchParams.returnDate,
       adults: searchParams.adults,
       children: searchParams.children || 0,
-      cabinClass: searchParams.cabinClass?.toUpperCase() || 'ECONOMY'
+      cabinClass: searchParams.cabinClass?.toUpperCase() || "ECONOMY",
     };
 
     const response = await apiClient.get<ApiResponse<Flight[]>>(

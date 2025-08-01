@@ -262,7 +262,7 @@ export default function AdminDashboard() {
         totalSuppliers: 0,
         activeSuppliers: 0,
         testingSuppliers: 0,
-        averageSuccessRate: 0
+        averageSuccessRate: 0,
       });
     }
   };
@@ -356,13 +356,16 @@ export default function AdminDashboard() {
                   Active Suppliers
                 </p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">
-                  {supplierAnalytics?.activeSuppliers || 0} / {supplierAnalytics?.totalSuppliers || 0}
+                  {supplierAnalytics?.activeSuppliers || 0} /{" "}
+                  {supplierAnalytics?.totalSuppliers || 0}
                 </p>
               </div>
               <Briefcase className="w-6 h-6 lg:w-8 lg:h-8 text-indigo-600" />
             </div>
             <p className="text-xs text-blue-600 mt-2">
-              {supplierAnalytics?.testingSuppliers || 0} testing, {supplierAnalytics?.averageSuccessRate?.toFixed(1) || '0.0'}% avg success
+              {supplierAnalytics?.testingSuppliers || 0} testing,{" "}
+              {supplierAnalytics?.averageSuccessRate?.toFixed(1) || "0.0"}% avg
+              success
             </p>
           </CardContent>
         </Card>
@@ -725,7 +728,9 @@ export default function AdminDashboard() {
               <SupplierManagement />
             ) : activeModule === "auth-helper" ? (
               <div>
-                <h2 className="text-2xl font-bold mb-4">Admin Authentication Helper</h2>
+                <h2 className="text-2xl font-bold mb-4">
+                  Admin Authentication Helper
+                </h2>
                 <AdminAuthHelper />
               </div>
             ) : activeModule === "testing" ? (

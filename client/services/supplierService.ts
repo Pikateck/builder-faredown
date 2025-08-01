@@ -291,7 +291,7 @@ class SupplierService {
       }
 
       // Handle network errors
-      if (error.name === 'TypeError' || error.message.includes('fetch')) {
+      if (error.name === "TypeError" || error.message.includes("fetch")) {
         throw new Error("Network error - unable to connect to analytics API");
       }
 

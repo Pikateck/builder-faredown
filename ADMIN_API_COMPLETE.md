@@ -10,31 +10,32 @@ All Admin CMS modules have been successfully implemented with **end-to-end data 
 
 ### ✅ **Completed Modules**
 
-| Module | API Endpoints | Database Tables | Status |
-|--------|---------------|-----------------|---------|
-| **Dashboard** | `/api/admin/dashboard/*` | `hotel_bookings`, `payments`, `suppliers` | ✅ COMPLETE |
-| **User Management** | `/api/admin/users/*` | `users` | ✅ COMPLETE |
-| **Booking Management** | `/api/admin/bookings/*` | `hotel_bookings`, `booking_audit_log` | ✅ COMPLETE |
-| **Payments & Accounting** | `/api/admin/payments/*` | `payments` | ✅ COMPLETE |
-| **Supplier Management** | `/api/admin/suppliers/*` | `suppliers`, `supplier_sync_logs` | ✅ COMPLETE |
-| **Markup Management** | `/api/admin/markup/*` | `air_markup_rules`, `hotel_markup_rules` | ✅ READY |
-| **VAT Management** | `/api/admin/vat/*` | `vat_rules` | ✅ READY |
-| **Promo Codes** | `/api/admin/promos/*` | `promos` | ✅ READY |
-| **Currency Conversion** | `/api/admin/currency/*` | `fx_rates` | ✅ READY |
-| **Reports & Analytics** | `/api/admin/reports/*` | All booking tables | ✅ READY |
-| **Bargain Engine** | `/api/admin/bargain/*` | `bargain_sessions`, `bargain_messages` | ✅ READY |
-| **API Testing** | `/api/admin/testing/*` | `api_test_runs` | ✅ READY |
-| **Inventory/Extranet** | `/api/admin/inventory/*` | `hotel_content`, `room_content` | ✅ READY |
-| **Rewards Management** | `/api/admin/rewards/*` | `loyalty_accounts`, `loyalty_transactions` | ✅ READY |
-| **Voucher Templates** | `/api/admin/vouchers/*` | `voucher_templates` | ✅ READY |
-| **Audit Logs** | `/api/admin/audit/*` | `admin_audit_log`, `booking_audit_log` | ✅ READY |
-| **System Settings** | `/api/admin/settings/*` | `system_settings`, `email_templates` | ✅ READY |
+| Module                    | API Endpoints            | Database Tables                            | Status      |
+| ------------------------- | ------------------------ | ------------------------------------------ | ----------- |
+| **Dashboard**             | `/api/admin/dashboard/*` | `hotel_bookings`, `payments`, `suppliers`  | ✅ COMPLETE |
+| **User Management**       | `/api/admin/users/*`     | `users`                                    | ✅ COMPLETE |
+| **Booking Management**    | `/api/admin/bookings/*`  | `hotel_bookings`, `booking_audit_log`      | ✅ COMPLETE |
+| **Payments & Accounting** | `/api/admin/payments/*`  | `payments`                                 | ✅ COMPLETE |
+| **Supplier Management**   | `/api/admin/suppliers/*` | `suppliers`, `supplier_sync_logs`          | ✅ COMPLETE |
+| **Markup Management**     | `/api/admin/markup/*`    | `air_markup_rules`, `hotel_markup_rules`   | ✅ READY    |
+| **VAT Management**        | `/api/admin/vat/*`       | `vat_rules`                                | ✅ READY    |
+| **Promo Codes**           | `/api/admin/promos/*`    | `promos`                                   | ✅ READY    |
+| **Currency Conversion**   | `/api/admin/currency/*`  | `fx_rates`                                 | ✅ READY    |
+| **Reports & Analytics**   | `/api/admin/reports/*`   | All booking tables                         | ✅ READY    |
+| **Bargain Engine**        | `/api/admin/bargain/*`   | `bargain_sessions`, `bargain_messages`     | ✅ READY    |
+| **API Testing**           | `/api/admin/testing/*`   | `api_test_runs`                            | ✅ READY    |
+| **Inventory/Extranet**    | `/api/admin/inventory/*` | `hotel_content`, `room_content`            | ✅ READY    |
+| **Rewards Management**    | `/api/admin/rewards/*`   | `loyalty_accounts`, `loyalty_transactions` | ✅ READY    |
+| **Voucher Templates**     | `/api/admin/vouchers/*`  | `voucher_templates`                        | ✅ READY    |
+| **Audit Logs**            | `/api/admin/audit/*`     | `admin_audit_log`, `booking_audit_log`     | ✅ READY    |
+| **System Settings**       | `/api/admin/settings/*`  | `system_settings`, `email_templates`       | ✅ READY    |
 
 ### 🏗️ **Database Schema**
 
 **Total Tables Created:** 25+ tables covering all admin functionality
 
 #### Core Tables
+
 - `users` - Customer accounts and profiles
 - `hotel_bookings` - All hotel booking records
 - `payments` - Payment transactions and refunds
@@ -42,7 +43,8 @@ All Admin CMS modules have been successfully implemented with **end-to-end data 
 - `suppliers` - Hotelbeds, Amadeus and other supplier configs
 - `booking_audit_log` - Complete audit trail
 
-#### Admin-Specific Tables  
+#### Admin-Specific Tables
+
 - `admin_audit_log` - Admin action tracking
 - `air_markup_rules` / `hotel_markup_rules` - Dynamic pricing rules
 - `vat_rules` - Tax calculations by country
@@ -58,6 +60,7 @@ All Admin CMS modules have been successfully implemented with **end-to-end data 
 ## 🚀 **API Architecture**
 
 ### **Authentication & Security**
+
 ```typescript
 // JWT-based admin authentication
 POST /api/admin/auth/login
@@ -76,6 +79,7 @@ enum Permission {
 ```
 
 ### **Standard API Patterns**
+
 All modules follow consistent patterns:
 
 ```typescript
@@ -99,18 +103,19 @@ GET /api/admin/{module}/{id}
 
 // CRUD operations
 POST   /api/admin/{module}      // Create
-PUT    /api/admin/{module}/{id} // Update  
+PUT    /api/admin/{module}/{id} // Update
 DELETE /api/admin/{module}/{id} // Delete
 ```
 
 ### **Error Handling**
+
 ```typescript
 // Consistent error format
 {
   "success": false,
   "error": {
     "code": "VALIDATION_ERROR",
-    "message": "Validation failed", 
+    "message": "Validation failed",
     "details": {...}
   }
 }
@@ -123,6 +128,7 @@ DELETE /api/admin/{module}/{id} // Delete
 ### 1. **Dashboard KPIs** `/api/admin/dashboard`
 
 **Real-time metrics from database:**
+
 - Total bookings, revenue, success rates
 - Monthly booking distribution charts
 - Top destinations by booking volume
@@ -130,6 +136,7 @@ DELETE /api/admin/{module}/{id} // Delete
 - Payment method breakdowns
 
 **Key Endpoints:**
+
 ```typescript
 GET /api/admin/dashboard/summary?from=2025-01-01&to=2025-01-31
 GET /api/admin/dashboard/metrics/realtime
@@ -139,12 +146,14 @@ GET /api/admin/dashboard/trends/bookings?period=7d
 ### 2. **User Management** `/api/admin/users`
 
 **Complete CRUD with analytics:**
+
 - Paginated user listing with search
 - User profiles with booking history
 - Status management (active/inactive)
 - Spending analytics per user
 
 **Key Endpoints:**
+
 ```typescript
 GET    /api/admin/users?page=1&status=active&q=email
 GET    /api/admin/users/{id}
@@ -157,12 +166,14 @@ GET    /api/admin/users/stats/summary // User statistics
 ### 3. **Booking Management** `/api/admin/bookings`
 
 **Advanced booking operations:**
+
 - Multi-filter booking search (date, status, supplier, amount)
 - Complete booking details with audit trail
 - Status transitions with validation
 - Voucher regeneration and email resend
 
 **Key Endpoints:**
+
 ```typescript
 GET    /api/admin/bookings?status=confirmed&from=2025-01-01&supplier=HOTELBEDS
 GET    /api/admin/bookings/{id}
@@ -174,12 +185,14 @@ GET    /api/admin/bookings/stats/summary
 ### 4. **Payments & Accounting** `/api/admin/payments`
 
 **Financial operations & reporting:**
+
 - Payment transaction listing with filters
 - Refund processing with approval workflow
 - Settlement reconciliation tracking
 - Export capabilities for accounting
 
 **Key Endpoints:**
+
 ```typescript
 GET    /api/admin/payments?gateway=razorpay&status=completed
 GET    /api/admin/payments/{id}
@@ -192,18 +205,20 @@ GET    /api/admin/payments/export/settlement?format=csv
 ### 5. **Supplier Management** `/api/admin/suppliers`
 
 **Supplier integration management:**
+
 - Hotelbeds & Amadeus configuration
 - Connection testing and health monitoring
 - Performance analytics and SLA tracking
 - Credential management (secure, env-based)
 
 **Key Endpoints:**
+
 ```typescript
-GET    /api/admin/suppliers
-GET    /api/admin/suppliers/analytics
-POST   /api/admin/suppliers/{id}/test
-POST   /api/admin/suppliers/{id}/sync
-GET    /api/admin/suppliers/sync-logs
+GET / api / admin / suppliers;
+GET / api / admin / suppliers / analytics;
+POST / api / admin / suppliers / { id } / test;
+POST / api / admin / suppliers / { id } / sync;
+GET / api / admin / suppliers / sync - logs;
 ```
 
 ---
@@ -211,6 +226,7 @@ GET    /api/admin/suppliers/sync-logs
 ## 🔧 **Database Setup Instructions**
 
 ### **1. Run Supplier Migration**
+
 ```bash
 # First, set up enhanced suppliers table
 psql $DATABASE_URL -f database-suppliers-migration.sql
@@ -220,12 +236,14 @@ node seed-suppliers.js
 ```
 
 ### **2. Run Admin Tables Migration**
+
 ```bash
 # Create all admin module tables
 psql $DATABASE_URL -f admin-tables-migration.sql
 ```
 
 ### **3. Verify Setup**
+
 ```sql
 -- Check table creation
 \dt
@@ -234,7 +252,7 @@ psql $DATABASE_URL -f admin-tables-migration.sql
 SELECT name, code, type, status FROM suppliers;
 
 -- Check admin tables
-SELECT table_name FROM information_schema.tables 
+SELECT table_name FROM information_schema.tables
 WHERE table_schema = 'public' AND table_name LIKE '%admin%';
 ```
 
@@ -243,11 +261,12 @@ WHERE table_schema = 'public' AND table_name LIKE '%admin%';
 ## 🔐 **Environment Variables**
 
 ### **Required Configuration**
+
 ```bash
 # Database
 DATABASE_URL=postgresql://user:pass@host:port/faredown_booking_db
 
-# Admin Authentication  
+# Admin Authentication
 ADMIN_JWT_SECRET=your-super-secret-admin-jwt-key
 
 # Supplier Credentials (secure - not stored in DB)
@@ -265,25 +284,31 @@ AMADEUS_BASE_URL=https://test.api.amadeus.com
 ## 🧪 **Testing & Validation**
 
 ### **API Health Check**
+
 ```bash
 curl -H "Authorization: Bearer <admin-jwt>" \
      http://localhost:8080/api/admin/health
 ```
 
 ### **Sample Admin Token** (for testing)
+
 ```javascript
 // Generate test token (temporary - replace with real login)
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-const testToken = jwt.sign({
-  id: 'admin-1',
-  email: 'admin@faredown.com', 
-  name: 'Test Admin',
-  role: 'admin'
-}, process.env.ADMIN_JWT_SECRET);
+const testToken = jwt.sign(
+  {
+    id: "admin-1",
+    email: "admin@faredown.com",
+    name: "Test Admin",
+    role: "admin",
+  },
+  process.env.ADMIN_JWT_SECRET,
+);
 ```
 
 ### **Module Testing Checklist**
+
 - ✅ Dashboard metrics load from real database
 - ✅ User CRUD operations work with validation
 - ✅ Booking filters and status updates function
@@ -298,14 +323,17 @@ const testToken = jwt.sign({
 ## 📈 **Performance Optimizations**
 
 ### **Database Indexes**
+
 All critical query paths have optimized indexes:
+
 - Booking date range queries
-- User email searches  
+- User email searches
 - Payment status filters
 - Supplier performance lookups
 - Audit log chronological access
 
 ### **Query Optimization**
+
 - Pagination with efficient LIMIT/OFFSET
 - Strategic JOINs to minimize N+1 queries
 - Computed fields in SQL vs application layer
@@ -316,6 +344,7 @@ All critical query paths have optimized indexes:
 ## 🔄 **Frontend Integration**
 
 ### **Admin UI Binding**
+
 Each admin module UI component should now call the live APIs:
 
 ```typescript
@@ -323,15 +352,16 @@ Each admin module UI component should now call the live APIs:
 const [bookings, setBookings] = useState([]);
 
 useEffect(() => {
-  fetch('/api/admin/bookings', {
-    headers: { 'Authorization': `Bearer ${adminToken}` }
+  fetch("/api/admin/bookings", {
+    headers: { Authorization: `Bearer ${adminToken}` },
   })
-  .then(res => res.json())
-  .then(data => setBookings(data.data.items));
+    .then((res) => res.json())
+    .then((data) => setBookings(data.data.items));
 }, []);
 ```
 
 ### **State Management**
+
 - Real-time data updates
 - Optimistic UI updates for better UX
 - Error handling with user-friendly messages
@@ -342,14 +372,16 @@ useEffect(() => {
 ## 🚦 **Next Steps**
 
 ### **Immediate Actions Required**
+
 1. **Run Database Migrations** - Execute both SQL migration files
-2. **Test API Endpoints** - Verify each module responds correctly  
+2. **Test API Endpoints** - Verify each module responds correctly
 3. **Frontend Integration** - Replace mock data with API calls
 4. **Admin Authentication** - Implement proper login flow
 
 ### **Production Readiness**
+
 - ✅ Database schema complete
-- ✅ API security implemented  
+- ✅ API security implemented
 - ✅ Error handling standardized
 - ✅ Audit logging enabled
 - ✅ Performance optimized
@@ -361,12 +393,14 @@ useEffect(() => {
 ## 📞 **Support & Maintenance**
 
 ### **Troubleshooting**
+
 - Check database connection with `/api/admin/health`
 - Verify JWT token validity for authentication errors
 - Monitor PostgreSQL logs for query performance
 - Use audit logs to trace admin actions
 
 ### **Monitoring**
+
 - Database connection pool metrics
 - API response times per module
 - Authentication success/failure rates
@@ -379,7 +413,7 @@ useEffect(() => {
 **✅ DELIVERABLES COMPLETE:**
 
 1. ✅ **New API routes** under `/api/admin/**` with RBAC + validation
-2. ✅ **SQL migrations** + seed scripts (Hotelbeds/Amadeus in suppliers)  
+2. ✅ **SQL migrations** + seed scripts (Hotelbeds/Amadeus in suppliers)
 3. ✅ **Admin UI ready** for live endpoint binding (no visual changes)
 4. ✅ **Documentation** with env vars, runbook, and sample payloads
 5. ✅ **Database schema** supports all 17 admin modules
@@ -390,4 +424,4 @@ useEffect(() => {
 
 ---
 
-*The entire Admin CMS backend is now production-ready with comprehensive database integration, secure authentication, and standardized API patterns. Every admin module has been architected for scalability and maintainability.*
+_The entire Admin CMS backend is now production-ready with comprehensive database integration, secure authentication, and standardized API patterns. Every admin module has been architected for scalability and maintainability._

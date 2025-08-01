@@ -137,7 +137,8 @@ export default function SupplierManagement() {
   const [suppliers, setSuppliers] = useState<EnhancedSupplier[]>([]);
   const [syncLogs, setSyncLogs] = useState<SyncLog[]>([]);
   const [analytics, setAnalytics] = useState<SupplierAnalytics | null>(null);
-  const [selectedSupplier, setSelectedSupplier] = useState<EnhancedSupplier | null>(null);
+  const [selectedSupplier, setSelectedSupplier] =
+    useState<EnhancedSupplier | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -152,11 +153,7 @@ export default function SupplierManagement() {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      await Promise.all([
-        loadSuppliers(),
-        loadSyncLogs(),
-        loadAnalytics()
-      ]);
+      await Promise.all([loadSuppliers(), loadSyncLogs(), loadAnalytics()]);
     } catch (error) {
       console.error("Failed to load data:", error);
     } finally {
@@ -194,23 +191,31 @@ export default function SupplierManagement() {
       // Provide fallback analytics data when API fails
       setAnalytics({
         totalSuppliers: suppliers.length,
-        activeSuppliers: suppliers.filter(s => s.status === 'active').length,
-        testingSuppliers: suppliers.filter(s => s.status === 'testing').length,
-        disabledSuppliers: suppliers.filter(s => s.status === 'disabled').length,
+        activeSuppliers: suppliers.filter((s) => s.status === "active").length,
+        testingSuppliers: suppliers.filter((s) => s.status === "testing")
+          .length,
+        disabledSuppliers: suppliers.filter((s) => s.status === "disabled")
+          .length,
         healthySuppliers: 0,
         degradedSuppliers: 0,
         downSuppliers: 0,
-        averageSuccessRate: suppliers.length > 0 ?
-          suppliers.reduce((acc, s) => acc + s.successRate, 0) / suppliers.length : 0,
-        averageResponseTime: suppliers.length > 0 ?
-          suppliers.reduce((acc, s) => acc + s.averageResponseTime, 0) / suppliers.length : 0,
+        averageSuccessRate:
+          suppliers.length > 0
+            ? suppliers.reduce((acc, s) => acc + s.successRate, 0) /
+              suppliers.length
+            : 0,
+        averageResponseTime:
+          suppliers.length > 0
+            ? suppliers.reduce((acc, s) => acc + s.averageResponseTime, 0) /
+              suppliers.length
+            : 0,
         supplierTypes: {
-          hotel: suppliers.filter(s => s.type === 'hotel').length,
-          flight: suppliers.filter(s => s.type === 'flight').length,
-          car: suppliers.filter(s => s.type === 'car').length,
-          package: suppliers.filter(s => s.type === 'package').length
+          hotel: suppliers.filter((s) => s.type === "hotel").length,
+          flight: suppliers.filter((s) => s.type === "flight").length,
+          car: suppliers.filter((s) => s.type === "car").length,
+          package: suppliers.filter((s) => s.type === "package").length,
         },
-        recentSyncs: []
+        recentSyncs: [],
       });
     }
   };
@@ -283,7 +288,8 @@ export default function SupplierManagement() {
     try {
       setTestingSupplier(supplierId);
 
-      const testResult = await supplierService.testSupplierConnection(supplierId);
+      const testResult =
+        await supplierService.testSupplierConnection(supplierId);
 
       // Reload data to get updated health status
       await loadSuppliers();
@@ -422,7 +428,8 @@ export default function SupplierManagement() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Active</p>
                     <p className="text-2xl font-bold text-green-600">
-                      {analytics?.activeSuppliers || suppliers.filter((s) => s.status === "active").length}
+                      {analytics?.activeSuppliers ||
+                        suppliers.filter((s) => s.status === "active").length}
                     </p>
                   </div>
                   <CheckCircle className="w-8 h-8 text-green-600" />
@@ -436,7 +443,8 @@ export default function SupplierManagement() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Testing</p>
                     <p className="text-2xl font-bold text-yellow-600">
-                      {analytics?.testingSuppliers || suppliers.filter((s) => s.status === "testing").length}
+                      {analytics?.testingSuppliers ||
+                        suppliers.filter((s) => s.status === "testing").length}
                     </p>
                   </div>
                   <Clock className="w-8 h-8 text-yellow-600" />
@@ -453,9 +461,15 @@ export default function SupplierManagement() {
                     </p>
                     <p className="text-2xl font-bold">
                       {analytics?.averageSuccessRate?.toFixed(1) ||
-                       (suppliers.length > 0 ?
-                        (suppliers.reduce((acc, s) => acc + s.successRate, 0) / suppliers.length).toFixed(1) :
-                        '0.0')}%
+                        (suppliers.length > 0
+                          ? (
+                              suppliers.reduce(
+                                (acc, s) => acc + s.successRate,
+                                0,
+                              ) / suppliers.length
+                            ).toFixed(1)
+                          : "0.0")}
+                      %
                     </p>
                   </div>
                   <BarChart3 className="w-8 h-8 text-purple-600" />
@@ -492,9 +506,12 @@ export default function SupplierManagement() {
                             {supplier.code}
                           </div>
                           <div className="text-xs text-blue-600">
-                            {supplier.credentials?.profileName || 'No credentials'}
-                            {supplier.credentials?.hasApiKey && supplier.credentials?.hasApiSecret ?
-                              ' ✓' : ' ✗'}
+                            {supplier.credentials?.profileName ||
+                              "No credentials"}
+                            {supplier.credentials?.hasApiKey &&
+                            supplier.credentials?.hasApiSecret
+                              ? " ✓"
+                              : " ✗"}
                           </div>
                         </div>
                       </TableCell>
@@ -509,11 +526,18 @@ export default function SupplierManagement() {
                           </Badge>
                           {supplier.healthStatus && (
                             <div className="text-xs">
-                              <Badge variant="outline" className={
-                                supplier.healthStatus === 'healthy' ? 'text-green-600' :
-                                supplier.healthStatus === 'degraded' ? 'text-yellow-600' :
-                                supplier.healthStatus === 'down' ? 'text-red-600' : 'text-gray-600'
-                              }>
+                              <Badge
+                                variant="outline"
+                                className={
+                                  supplier.healthStatus === "healthy"
+                                    ? "text-green-600"
+                                    : supplier.healthStatus === "degraded"
+                                      ? "text-yellow-600"
+                                      : supplier.healthStatus === "down"
+                                        ? "text-red-600"
+                                        : "text-gray-600"
+                                }
+                              >
                                 {supplier.healthStatus}
                               </Badge>
                             </div>
@@ -522,7 +546,7 @@ export default function SupplierManagement() {
                       </TableCell>
                       <TableCell>
                         <Badge variant="secondary" className="text-xs">
-                          {supplier.environment || 'sandbox'}
+                          {supplier.environment || "sandbox"}
                         </Badge>
                       </TableCell>
                       <TableCell>
