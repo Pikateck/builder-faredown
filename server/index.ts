@@ -19,8 +19,8 @@ let amadeusAccessToken = '';
 let tokenExpiryTime = 0;
 
 async function getAmadeusAccessToken() {
-  const API_KEY = "XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv";
-  const API_SECRET = "xoB9eAjCKQSJJEpgI";
+  const API_KEY = "XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv".trim();
+  const API_SECRET = "xoB9eAjCKQSJJEpgI".trim();
   const BASE_URL = "https://test.api.amadeus.com";
 
   // Check if token is still valid (with 5 minute buffer)
@@ -32,7 +32,11 @@ async function getAmadeusAccessToken() {
     console.log("🔑 Getting new Amadeus access token...");
     console.log("🔑 Using credentials:", {
       apiKeyLength: API_KEY.length,
-      secretLength: API_SECRET.length
+      secretLength: API_SECRET.length,
+      apiKeyFirst4: API_KEY.substring(0, 4),
+      apiKeyLast4: API_KEY.substring(API_KEY.length - 4),
+      secretFirst2: API_SECRET.substring(0, 2),
+      secretLast2: API_SECRET.substring(API_SECRET.length - 2)
     });
 
     // Properly URL encode the form data
@@ -42,6 +46,7 @@ async function getAmadeusAccessToken() {
     formData.append('client_secret', API_SECRET);
 
     console.log("🔐 Making auth request to:", `${BASE_URL}/v1/security/oauth2/token`);
+    console.log("🔐 Request body:", formData.toString());
 
     const response = await fetch(`${BASE_URL}/v1/security/oauth2/token`, {
       method: 'POST',
@@ -53,10 +58,21 @@ async function getAmadeusAccessToken() {
     });
 
     console.log(`📡 Amadeus auth response status: ${response.status}`);
+    console.log(`📡 Response headers:`, Object.fromEntries(response.headers.entries()));
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error("❌ Full auth error response:", errorText);
+
+      // Check if this might be a new credentials activation issue
+      if (response.status === 401 && errorText.includes('invalid_client')) {
+        console.log("🔍 This may be a new credentials activation issue. Credentials might need:");
+        console.log("   - Time to activate (up to 30 minutes after creation)");
+        console.log("   - Proper registration in Amadeus For Developers portal");
+        console.log("   - Test environment access enabled");
+        console.log("   - Check credentials are copied exactly from the portal");
+      }
+
       throw new Error(`Amadeus auth failed: ${response.status} - ${errorText}`);
     }
 
