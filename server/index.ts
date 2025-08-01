@@ -21,19 +21,29 @@ async function callHotelbedsAPI(searchParams: any) {
 
   try {
     console.log("🔑 Making direct Hotelbeds Booking API call for availability");
+    console.log("🔑 Using credentials:", {
+      apiKeyLength: API_KEY.length,
+      secretLength: API_SECRET.length
+    });
 
-    // Generate signature for booking API
+    // Generate signature for booking API (Hotelbeds specific format)
     const timestamp = Math.floor(Date.now() / 1000);
+    const stringToSign = API_KEY + API_SECRET + timestamp;
     const signature = crypto
       .createHash("sha256")
-      .update(API_KEY + API_SECRET + timestamp)
+      .update(stringToSign)
       .digest("hex");
+
+    console.log("🔐 Authentication details:", {
+      timestamp,
+      signatureLength: signature.length
+    });
 
     const headers = {
       "Api-key": API_KEY,
       "X-Signature": signature,
       "Content-Type": "application/json",
-      Accept: "application/json",
+      "Accept": "application/json",
     };
 
     // Step 1: Get hotel availability and pricing
@@ -86,7 +96,7 @@ async function callHotelbedsAPI(searchParams: any) {
 
     // Step 2: Get hotel content (images, descriptions) for the first few hotels
     const hotelCodes = hotels.slice(0, 10).map((h: any) => h.code);
-    console.log("📸 Fetching images from Content API for hotels:", hotelCodes);
+    console.log("��� Fetching images from Content API for hotels:", hotelCodes);
 
     // Generate new signature for content API call
     const contentTimestamp = Math.floor(Date.now() / 1000);
