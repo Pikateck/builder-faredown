@@ -47,10 +47,19 @@ async function callHotelbedsAPI(searchParams: any) {
     };
 
     // Step 1: Get hotel availability and pricing
+    // Generate future dates if none provided
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayAfterTomorrow = new Date();
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 4);
+
+    const defaultCheckIn = tomorrow.toISOString().split('T')[0];
+    const defaultCheckOut = dayAfterTomorrow.toISOString().split('T')[0];
+
     const bookingRequest = {
       stay: {
-        checkIn: searchParams.checkIn?.split("T")[0] || "2024-12-15",
-        checkOut: searchParams.checkOut?.split("T")[0] || "2024-12-18",
+        checkIn: searchParams.checkIn?.split("T")[0] || defaultCheckIn,
+        checkOut: searchParams.checkOut?.split("T")[0] || defaultCheckOut,
       },
       occupancies: [
         {
