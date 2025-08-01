@@ -125,18 +125,36 @@ router.get('/analytics', requirePermission(Permission.VIEW_SUPPLIERS), async (re
 
     const summary = summaryResult.rows[0];
 
-    // Get recent sync logs (last 50)
-    const logsResult = await pool.query(`
-      SELECT
-        ssl.*,
-        s.name as supplier_name,
-        s.code as supplier_code,
-        s.type as supplier_type
-      FROM supplier_sync_logs ssl
-      JOIN suppliers s ON ssl.supplier_id = s.id
-      ORDER BY ssl.created_at DESC
-      LIMIT 50
-    `);
+    // Get recent sync logs (last 50) - check if table exists first
+    let logsResult;
+    try {
+      const syncTableCheck = await pool.query(`
+        SELECT EXISTS (
+          SELECT FROM information_schema.tables
+          WHERE table_schema = 'public'
+          AND table_name = 'supplier_sync_logs'
+        );
+      `);
+
+      if (syncTableCheck.rows[0].exists) {
+        logsResult = await pool.query(`
+          SELECT
+            ssl.*,
+            s.name as supplier_name,
+            s.code as supplier_code,
+            s.type as supplier_type
+          FROM supplier_sync_logs ssl
+          JOIN suppliers s ON ssl.supplier_id = s.id
+          ORDER BY ssl.created_at DESC
+          LIMIT 50
+        `);
+      } else {
+        logsResult = { rows: [] };
+      }
+    } catch (error) {
+      console.warn('⚠️ Could not fetch sync logs:', error.message);
+      logsResult = { rows: [] };
+    }
 
     const recentSyncs = logsResult.rows.map(row => ({
       id: row.id.toString(),
