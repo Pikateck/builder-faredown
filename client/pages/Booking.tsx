@@ -54,6 +54,7 @@ import {
   BookOpen,
   X,
   ChevronLeft,
+  Navigation,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
