@@ -59,6 +59,8 @@ import {
   Bell,
   DollarSign,
   MapPin,
+  Building2,
+  Building,
   Star,
   Users,
   Phone,
