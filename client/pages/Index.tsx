@@ -1471,7 +1471,10 @@ export default function Index() {
                                   </div>
                                   <div>
                                     <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">{data.code}</span> • {city}
+                                      <span className="font-semibold">
+                                        {data.code}
+                                      </span>{" "}
+                                      • {city}
                                     </div>
                                     <div className="text-xs text-gray-500">
                                       {data.airport}
@@ -1539,7 +1542,10 @@ export default function Index() {
                                   </div>
                                   <div>
                                     <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">{data.code}</span> • {city}
+                                      <span className="font-semibold">
+                                        {data.code}
+                                      </span>{" "}
+                                      • {city}
                                     </div>
                                     <div className="text-xs text-gray-500">
                                       {data.airport}
