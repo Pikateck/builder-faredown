@@ -47,9 +47,9 @@ export default function AmadeusTestPanel() {
   const testAmadeusAuth = async () => {
     setIsTestingAuth(true);
     setAuthResult(null);
-    
+
     try {
-      const response = await fetch('/api/test-amadeus');
+      const response = await fetch('/api/test-amadeus-auth');
       const data = await response.json();
       setAuthResult(data);
     } catch (error) {
