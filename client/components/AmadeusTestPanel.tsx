@@ -270,12 +270,28 @@ export default function AmadeusTestPanel() {
 
       {/* Status Summary */}
       <div className="bg-gray-50 p-4 rounded-lg">
-        <h3 className="font-medium text-gray-900 mb-2">Expected Results</h3>
-        <div className="text-sm text-gray-600 space-y-1">
+        <h3 className="font-medium text-gray-900 mb-2">Expected Results & Troubleshooting</h3>
+        <div className="text-sm text-gray-600 space-y-2">
           <div>✅ OAuth2 authentication should succeed with new credentials</div>
           <div>✅ Flight search should return live Amadeus data</div>
-          <div>⚠️ If still failing, credentials may need more time to activate (up to 30 minutes)</div>
-          <div>📧 Contact Amadeus support if issues persist after 30 minutes</div>
+
+          <div className="mt-3 pt-2 border-t">
+            <div className="font-medium text-gray-800 mb-1">If authentication is still failing:</div>
+            <div className="space-y-1">
+              <div>⏱️ New credentials can take up to 30 minutes to activate</div>
+              <div>🔑 Verify credentials are copied exactly from Amadeus For Developers portal</div>
+              <div>🧪 Ensure test environment access is enabled in your Amadeus account</div>
+              <div>📋 Check that your Amadeus application is properly configured</div>
+              <div>📧 Contact Amadeus support if issues persist after 30+ minutes</div>
+            </div>
+          </div>
+
+          <div className="mt-3 pt-2 border-t">
+            <div className="font-medium text-gray-800 mb-1">Current Status:</div>
+            <div>Credentials: XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv (34 chars)</div>
+            <div>Secret: xoB9eAjCKQSJJEpgI (17 chars)</div>
+            <div>Environment: Test/Sandbox (test.api.amadeus.com)</div>
+          </div>
         </div>
       </div>
     </div>
