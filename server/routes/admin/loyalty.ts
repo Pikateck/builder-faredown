@@ -320,43 +320,184 @@ router.post("/process-earning", async (req: Request, res: Response) => {
 
 // ADMIN ROUTES
 
+// ===== LOYALTY RULES MANAGEMENT =====
+
 // Get all loyalty rules
 router.get("/admin/rules", requireAdmin, async (req: Request, res: Response) => {
   try {
     const rules = await loyaltyService.getRules();
-    const tierRules = await loyaltyService.getTierRules();
-
-    res.json({ 
-      success: true, 
-      data: { 
-        loyaltyRules: rules,
-        tierRules
-      } 
-    });
+    res.json(rules);
   } catch (error) {
     console.error("Get loyalty rules error:", error);
-    res.status(500).json({ 
-      success: false, 
-      error: "Failed to fetch loyalty rules" 
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch loyalty rules"
     });
   }
 });
 
-// Update loyalty rules (admin only)
-router.put("/admin/rules", requireAdmin, async (req: Request, res: Response) => {
+// Create new loyalty rule
+router.post("/admin/rules", requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { loyaltyRules, tierRules } = req.body;
-
-    // This would implement rule updates - simplified for now
-    res.json({ 
-      success: true, 
-      message: "Loyalty rules updated successfully" 
-    });
+    const rule = await loyaltyService.createLoyaltyRule(req.body);
+    res.status(201).json(rule);
   } catch (error) {
-    console.error("Update loyalty rules error:", error);
-    res.status(500).json({ 
-      success: false, 
-      error: "Failed to update loyalty rules" 
+    console.error("Create loyalty rule error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to create loyalty rule"
+    });
+  }
+});
+
+// Update loyalty rule
+router.put("/admin/rules/:id", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const rule = await loyaltyService.updateLoyaltyRule(id, req.body);
+    res.json(rule);
+  } catch (error) {
+    console.error("Update loyalty rule error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to update loyalty rule"
+    });
+  }
+});
+
+// Delete loyalty rule
+router.delete("/admin/rules/:id", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    await loyaltyService.deleteLoyaltyRule(id);
+    res.status(204).send();
+  } catch (error) {
+    console.error("Delete loyalty rule error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to delete loyalty rule"
+    });
+  }
+});
+
+// ===== TIER MANAGEMENT =====
+
+// Get all tier rules
+router.get("/admin/tiers", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const tiers = await loyaltyService.getTierRules();
+    res.json(tiers);
+  } catch (error) {
+    console.error("Get tier rules error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch tier rules"
+    });
+  }
+});
+
+// Create new tier rule
+router.post("/admin/tiers", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const tier = await loyaltyService.createTierRule(req.body);
+    res.status(201).json(tier);
+  } catch (error) {
+    console.error("Create tier rule error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to create tier rule"
+    });
+  }
+});
+
+// Update tier rule
+router.put("/admin/tiers/:id", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const tier = await loyaltyService.updateTierRule(id, req.body);
+    res.json(tier);
+  } catch (error) {
+    console.error("Update tier rule error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to update tier rule"
+    });
+  }
+});
+
+// ===== MEMBER MANAGEMENT =====
+
+// Get all loyalty members with search and pagination
+router.get("/admin/members", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { search, page = 1, limit = 20 } = req.query;
+    const members = await loyaltyService.getLoyaltyMembers({
+      search: search as string,
+      page: parseInt(page as string),
+      limit: parseInt(limit as string)
+    });
+    res.json(members);
+  } catch (error) {
+    console.error("Get loyalty members error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch loyalty members"
+    });
+  }
+});
+
+// Update member status
+router.patch("/admin/members/:userId", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { status } = req.body;
+
+    if (!['ACTIVE', 'SUSPENDED', 'INACTIVE'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid status"
+      });
+    }
+
+    const member = await loyaltyService.updateMemberStatus(userId, status);
+    res.json({ success: true, data: member });
+  } catch (error) {
+    console.error("Update member status error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to update member status"
+    });
+  }
+});
+
+// Manual point adjustment for members
+router.post("/admin/members/:userId/adjust-points", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { points, reason, type } = req.body;
+
+    if (!points || !reason || !type) {
+      return res.status(400).json({
+        success: false,
+        error: "Points, reason, and type are required"
+      });
+    }
+
+    const adminUserId = (req as any).user?.id;
+    const transaction = await loyaltyService.adjustMemberPoints({
+      userId,
+      points,
+      reason,
+      type,
+      adminUserId
+    });
+
+    res.json({ success: true, data: transaction });
+  } catch (error) {
+    console.error("Adjust member points error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to adjust member points"
     });
   }
 });
@@ -392,28 +533,61 @@ router.get("/admin/member/:userId", requireAdmin, async (req: Request, res: Resp
   }
 });
 
-// Manual point adjustment (admin only)
-router.post("/admin/adjust", requireAdmin, async (req: Request, res: Response) => {
+// Get member transaction history
+router.get("/admin/members/:userId/transactions", requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { userId, points, reason, adminId } = req.body;
+    const { userId } = req.params;
+    const { page = 1, limit = 20 } = req.query;
 
-    if (!userId || !points || !reason) {
-      return res.status(400).json({ 
-        success: false, 
-        error: "User ID, points, and reason required" 
-      });
-    }
-
-    // This would implement manual adjustment logic
-    res.json({ 
-      success: true, 
-      message: "Points adjusted successfully" 
+    const transactions = await loyaltyService.getMemberTransactions(userId, {
+      page: parseInt(page as string),
+      limit: parseInt(limit as string)
     });
+
+    res.json({ success: true, data: transactions });
   } catch (error) {
-    console.error("Manual adjustment error:", error);
-    res.status(500).json({ 
-      success: false, 
-      error: "Failed to adjust points" 
+    console.error("Get member transactions error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch member transactions"
+    });
+  }
+});
+
+// ===== ANALYTICS & REPORTING =====
+
+// Get loyalty program analytics
+router.get("/admin/analytics", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+    const analytics = await loyaltyService.getLoyaltyAnalytics({
+      startDate: startDate as string,
+      endDate: endDate as string
+    });
+    res.json({ success: true, data: analytics });
+  } catch (error) {
+    console.error("Get loyalty analytics error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch loyalty analytics"
+    });
+  }
+});
+
+// Export loyalty data
+router.get("/admin/export", requireAdmin, async (req: Request, res: Response) => {
+  try {
+    const { type, format = 'csv' } = req.query;
+    const data = await loyaltyService.exportLoyaltyData(type as string, format as string);
+
+    res.setHeader('Content-Type', format === 'csv' ? 'text/csv' : 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename=loyalty-${type}-${new Date().toISOString().split('T')[0]}.${format}`);
+    res.send(data);
+  } catch (error) {
+    console.error("Export loyalty data error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to export loyalty data"
     });
   }
 });
