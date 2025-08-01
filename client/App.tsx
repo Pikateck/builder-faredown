@@ -31,6 +31,7 @@ import RefundPolicy from "./pages/RefundPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
 import Saved from "./pages/Saved";
 import NotFound from "./pages/NotFound";
+import MembershipCard from "./pages/MembershipCard";
 
 // Mobile pages
 import MobileSplash from "./pages/mobile/MobileSplash";
