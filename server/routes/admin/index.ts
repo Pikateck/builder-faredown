@@ -84,5 +84,6 @@ router.use("/rewards", rewardsRoutes);
 router.use("/vouchers", vouchersRoutes);
 router.use("/audit", auditRoutes);
 router.use("/settings", settingsRoutes);
+router.use("/loyalty", loyaltyRoutes);
 
 export default router;
