@@ -722,6 +722,11 @@ export default function AdminDashboard() {
               <ReportsAnalytics />
             ) : activeModule === "suppliers" ? (
               <SupplierManagement />
+            ) : activeModule === "auth-helper" ? (
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Admin Authentication Helper</h2>
+                <AdminAuthHelper />
+              </div>
             ) : activeModule === "testing" ? (
               <div className="text-center py-8">
                 <TestTube className="w-16 h-16 text-pink-500 mx-auto mb-4" />
