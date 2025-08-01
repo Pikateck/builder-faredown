@@ -272,7 +272,8 @@ export function FlightStyleBargainModal({
     setBargainState((prev) => ({
       ...prev,
       phase: "accepted",
-      isTimerActive: false,
+      isTimerActive: true,
+      timeRemaining: 28, // Reset timer for booking urgency
     }));
   };
 
