@@ -268,6 +268,38 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Test endpoint for Hotelbeds API
+  app.get("/api/test-hotelbeds", async (_req, res) => {
+    try {
+      console.log("🧪 Testing direct Hotelbeds API integration...");
+
+      const testResult = await callHotelbedsAPI({
+        destination: "BCN",
+        checkIn: "2024-12-15",
+        checkOut: "2024-12-18",
+        adults: 2,
+        children: 0,
+      });
+
+      res.json({
+        success: testResult.success,
+        message: testResult.success ? "Hotelbeds API working!" : "Hotelbeds API failed",
+        data: testResult.data?.slice(0, 2), // Only return first 2 hotels for testing
+        error: testResult.error,
+        hotelCount: testResult.data?.length || 0,
+        hasRealImages: testResult.data?.some(h => h.hasRealImages) || false
+      });
+
+    } catch (error) {
+      console.error("🧪 Test failed:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        message: "Test endpoint failed"
+      });
+    }
+  });
+
   // Database-backed destinations search endpoint
   app.get("/api/hotels/destinations/search", async (_req, res) => {
     try {
