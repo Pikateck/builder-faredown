@@ -1138,7 +1138,7 @@ export default function Index() {
                             key={language.code}
                             className="flex items-center space-x-2 cursor-pointer"
                           >
-                            <span>{language.flag}</span>
+                            <Globe className="w-3 h-3 text-gray-500" />
                             <span>{language.name}</span>
                           </DropdownMenuItem>
                         ))}
