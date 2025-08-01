@@ -465,7 +465,8 @@ export default function Hotels() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                          <span>🌐 English</span>
+                          <Globe className="w-4 h-4" />
+                          <span>English</span>
                           <ChevronDown className="w-4 h-4" />
                         </button>
                       </DropdownMenuTrigger>
@@ -743,7 +744,7 @@ export default function Hotels() {
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">🎧</span>
+                  <span className="text-2xl">���</span>
                 </div>
                 <div className="text-sm font-medium text-gray-900">
                   24/7 Support
