@@ -259,10 +259,27 @@ export default function SupplierManagement() {
     }
   };
 
+  const handleTestSupplier = async (supplierId: string) => {
+    try {
+      setTestingSupplier(supplierId);
+
+      const testResult = await supplierService.testSupplierConnection(supplierId);
+
+      // Reload data to get updated health status
+      await loadSuppliers();
+      await loadSyncLogs();
+
+      console.log("Test completed:", testResult);
+    } catch (error) {
+      console.error("Test failed:", error);
+    } finally {
+      setTestingSupplier(null);
+    }
+  };
+
   const handleSyncSupplier = async (supplierId: string) => {
     try {
       setSyncingSupplier(supplierId);
-      setLoading(true);
 
       // Get default destination codes for sync - you can make this configurable
       const destinationCodes = ["DXB", "BOM", "DEL"]; // Dubai, Mumbai, Delhi
@@ -273,16 +290,14 @@ export default function SupplierManagement() {
         false,
       );
 
-      // Reload suppliers and sync logs to get updated data
-      await loadSuppliers();
-      await loadSyncLogs();
+      // Reload all data to get updated metrics
+      await loadAllData();
 
       console.log("Sync completed:", syncResult);
     } catch (error) {
       console.error("Sync failed:", error);
     } finally {
       setSyncingSupplier(null);
-      setLoading(false);
     }
   };
 
