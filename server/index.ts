@@ -492,6 +492,9 @@ export function createServer() {
   // Supplier management routes
   app.use("/api/suppliers", suppliersRouter);
 
+  // Admin CMS routes
+  app.use("/api/admin", adminRouter);
+
   // Test endpoint for Hotelbeds API
   app.get("/api/test-hotelbeds", async (_req, res) => {
     try {
