@@ -14,7 +14,7 @@ export function initializeLoyaltyService(dbPool: Pool) {
 }
 
 // Get member loyalty profile
-router.get("/me", requireAuth, async (req: Request, res: Response) => {
+router.get("/me", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user?.id;
     if (!userId) {
