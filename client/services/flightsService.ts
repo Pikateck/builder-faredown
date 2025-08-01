@@ -145,18 +145,32 @@ export interface Booking {
 
 // Flights Service Class
 export class FlightsService {
-  private readonly baseUrl = "/api/airlines";
+  private readonly baseUrl = "/api/flights";
 
   /**
-   * Search for flights
+   * Search for flights using live Amadeus API
    */
   async searchFlights(searchParams: FlightSearchRequest): Promise<Flight[]> {
+    console.log("🔍 Searching flights with Amadeus API:", searchParams);
+
+    // Map frontend params to backend API format
+    const apiParams = {
+      origin: searchParams.departure,
+      destination: searchParams.arrival,
+      departureDate: searchParams.departureDate,
+      returnDate: searchParams.returnDate,
+      adults: searchParams.adults,
+      children: searchParams.children || 0,
+      cabinClass: searchParams.cabinClass?.toUpperCase() || 'ECONOMY'
+    };
+
     const response = await apiClient.get<ApiResponse<Flight[]>>(
       `${this.baseUrl}/search`,
-      searchParams,
+      apiParams,
     );
 
     if (response.data) {
+      console.log(`✅ Found ${response.data.length} flights from API`);
       return response.data;
     }
 
