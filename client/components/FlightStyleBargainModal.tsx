@@ -607,17 +607,7 @@ export function FlightStyleBargainModal({
               </p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-              <div className="text-sm text-gray-700">
-                <span className="font-medium">Suggested minimum:</span>{" "}
-                <span className="font-semibold text-gray-900">
-                  {formatLocalPrice(
-                    Math.round(priceCalculation.total * 0.75),
-                    selectedCurrency.code,
-                  )}
-                </span>
-              </div>
-            </div>
+
 
             {bargainState.timeRemaining === 0 && (
               <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-4 shadow-lg">
