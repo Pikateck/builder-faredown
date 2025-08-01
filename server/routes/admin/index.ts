@@ -61,6 +61,7 @@ router.get("/health", (req: AuthenticatedRequest, res) => {
       vouchers: "enabled",
       audit: "enabled",
       settings: "enabled",
+      loyalty: "enabled",
     },
   });
 });
