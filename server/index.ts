@@ -81,9 +81,17 @@ async function callHotelbedsAPI(searchParams: any) {
 
     if (!bookingResponse.ok) {
       const errorText = await bookingResponse.text();
-      console.error(
-        `❌ Booking API Error: ${bookingResponse.status} - ${errorText}`,
-      );
+      console.error(`❌ Booking API Error: ${bookingResponse.status}`);
+      console.error("❌ Full error response:", errorText);
+
+      // Try to parse the error to get more details
+      try {
+        const errorJson = JSON.parse(errorText);
+        console.error("❌ Parsed error:", JSON.stringify(errorJson, null, 2));
+      } catch (e) {
+        console.error("❌ Could not parse error as JSON");
+      }
+
       return { success: false, error: errorText };
     }
 
