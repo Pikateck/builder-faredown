@@ -1638,16 +1638,17 @@ export default function FlightResults() {
                         className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-bold text-gray-600">
-                              ✈
-                            </span>
+                          <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+                            <Navigation className="w-4 h-4 text-green-600" />
                           </div>
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {city} • {data.airport}
+                              <span className="font-semibold">{data.code}</span> • {city}
                             </div>
                             <div className="text-xs text-gray-500">
+                              {data.airport}
+                            </div>
+                            <div className="text-xs text-gray-400">
                               {data.fullName}
                             </div>
                           </div>
@@ -4137,7 +4138,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀��" },
-                    { label: "Afternoon", range: [12, 18], icon: "��️" },
+                    { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
