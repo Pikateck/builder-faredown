@@ -2,6 +2,7 @@ import express from 'express';
 import { authenticateAdmin, AuthenticatedRequest } from '../../middleware/adminAuth';
 
 // Import all admin module routes
+import authRoutes from './auth';
 import dashboardRoutes from './dashboard';
 import usersRoutes from './users';
 import bookingsRoutes from './bookings';
