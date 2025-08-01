@@ -499,12 +499,410 @@ export class LoyaltyService {
     cutoffDate.setDate(cutoffDate.getDate() + daysAhead);
 
     const result = await this.db.query(`
-      SELECT * FROM point_expiry 
+      SELECT * FROM point_expiry
       WHERE user_id = $1 AND expire_on <= $2 AND status = 'active'
       ORDER BY expire_on ASC
     `, [userId, cutoffDate.toISOString().split('T')[0]]);
 
     return result.rows;
+  }
+
+  // ===== ADMIN MANAGEMENT METHODS =====
+
+  // Loyalty Rules Management
+  async createLoyaltyRule(ruleData: any): Promise<any> {
+    try {
+      const query = `
+        INSERT INTO loyalty_rules (
+          rule_type, category, points_per_amount, min_amount,
+          max_points, valid_from, valid_to, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+        RETURNING *
+      `;
+
+      const values = [
+        ruleData.ruleType,
+        ruleData.category,
+        ruleData.pointsPerAmount,
+        ruleData.minAmount,
+        ruleData.maxPoints || null,
+        ruleData.validFrom,
+        ruleData.validTo || null
+      ];
+
+      const result = await this.db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error('Create loyalty rule error:', error);
+      throw error;
+    }
+  }
+
+  async updateLoyaltyRule(id: string, ruleData: any): Promise<any> {
+    try {
+      const query = `
+        UPDATE loyalty_rules
+        SET rule_type = $2, category = $3, points_per_amount = $4,
+            min_amount = $5, max_points = $6, valid_from = $7,
+            valid_to = $8, updated_at = NOW()
+        WHERE id = $1
+        RETURNING *
+      `;
+
+      const values = [
+        id,
+        ruleData.ruleType,
+        ruleData.category,
+        ruleData.pointsPerAmount,
+        ruleData.minAmount,
+        ruleData.maxPoints || null,
+        ruleData.validFrom,
+        ruleData.validTo || null
+      ];
+
+      const result = await this.db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error('Update loyalty rule error:', error);
+      throw error;
+    }
+  }
+
+  async deleteLoyaltyRule(id: string): Promise<void> {
+    try {
+      const query = 'DELETE FROM loyalty_rules WHERE id = $1';
+      await this.db.query(query, [id]);
+    } catch (error) {
+      console.error('Delete loyalty rule error:', error);
+      throw error;
+    }
+  }
+
+  // Tier Rules Management
+  async createTierRule(tierData: any): Promise<any> {
+    try {
+      const query = `
+        INSERT INTO tier_rules (
+          tier, tier_name, threshold_points_12m, points_multiplier,
+          benefits, active, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, NOW())
+        RETURNING *
+      `;
+
+      // Find next tier number
+      const maxTierQuery = 'SELECT COALESCE(MAX(tier), 0) as max_tier FROM tier_rules';
+      const maxTierResult = await this.db.query(maxTierQuery);
+      const nextTier = maxTierResult.rows[0].max_tier + 1;
+
+      const values = [
+        nextTier,
+        tierData.tierName,
+        tierData.minPoints,
+        tierData.multiplier,
+        JSON.stringify(tierData.benefits),
+        tierData.active ?? true
+      ];
+
+      const result = await this.db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error('Create tier rule error:', error);
+      throw error;
+    }
+  }
+
+  async updateTierRule(id: string, tierData: any): Promise<any> {
+    try {
+      const query = `
+        UPDATE tier_rules
+        SET tier_name = $2, threshold_points_12m = $3,
+            points_multiplier = $4, benefits = $5, active = $6,
+            updated_at = NOW()
+        WHERE id = $1
+        RETURNING *
+      `;
+
+      const values = [
+        id,
+        tierData.tierName,
+        tierData.minPoints,
+        tierData.multiplier,
+        JSON.stringify(tierData.benefits),
+        tierData.active ?? true
+      ];
+
+      const result = await this.db.query(query, values);
+      return result.rows[0];
+    } catch (error) {
+      console.error('Update tier rule error:', error);
+      throw error;
+    }
+  }
+
+  // Member Management
+  async getLoyaltyMembers(options: {
+    search?: string;
+    page: number;
+    limit: number;
+  }): Promise<any[]> {
+    try {
+      const offset = (options.page - 1) * options.limit;
+      let whereClause = '';
+      const values: any[] = [];
+
+      if (options.search) {
+        whereClause = `WHERE lm.email ILIKE $1 OR lm.name ILIKE $1`;
+        values.push(`%${options.search}%`);
+      }
+
+      const query = `
+        SELECT
+          lm.id,
+          lm.user_id,
+          lm.email,
+          lm.name,
+          lm.points_balance as currentPoints,
+          lm.points_lifetime as lifetimeEarned,
+          tr.tier_name as currentTier,
+          CASE
+            WHEN next_tier.threshold_points_12m IS NOT NULL
+            THEN ROUND((lm.points_12m - tr.threshold_points_12m) * 100.0 / (next_tier.threshold_points_12m - tr.threshold_points_12m))
+            ELSE 100
+          END as tierProgress,
+          lm.join_date as joinedAt,
+          lm.last_activity as lastActivity,
+          lm.status
+        FROM loyalty_members lm
+        LEFT JOIN tier_rules tr ON tr.tier = lm.tier
+        LEFT JOIN tier_rules next_tier ON next_tier.tier = lm.tier + 1
+        ${whereClause}
+        ORDER BY lm.points_lifetime DESC
+        LIMIT $${values.length + 1} OFFSET $${values.length + 2}
+      `;
+
+      values.push(options.limit, offset);
+      const result = await this.db.query(query, values);
+      return result.rows;
+    } catch (error) {
+      console.error('Get loyalty members error:', error);
+      throw error;
+    }
+  }
+
+  async updateMemberStatus(userId: string, status: string): Promise<any> {
+    try {
+      const query = `
+        UPDATE loyalty_members
+        SET status = $2, updated_at = NOW()
+        WHERE user_id = $1
+        RETURNING *
+      `;
+
+      const result = await this.db.query(query, [userId, status]);
+      return result.rows[0];
+    } catch (error) {
+      console.error('Update member status error:', error);
+      throw error;
+    }
+  }
+
+  async adjustMemberPoints(data: {
+    userId: string;
+    points: number;
+    reason: string;
+    type: string;
+    adminUserId?: string;
+  }): Promise<any> {
+    try {
+      await this.db.query('BEGIN');
+
+      // Update member points
+      const updateQuery = `
+        UPDATE loyalty_members
+        SET points_balance = GREATEST(0, points_balance + $2),
+            points_lifetime = CASE WHEN $2 > 0 THEN points_lifetime + $2 ELSE points_lifetime END,
+            updated_at = NOW()
+        WHERE user_id = $1
+        RETURNING *
+      `;
+
+      const memberResult = await this.db.query(updateQuery, [data.userId, data.points]);
+
+      // Record transaction
+      const transactionQuery = `
+        INSERT INTO loyalty_ledger (
+          user_id, transaction_type, points, balance_after,
+          description, reference_id, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, NOW())
+        RETURNING *
+      `;
+
+      const transactionValues = [
+        data.userId,
+        data.type,
+        data.points,
+        memberResult.rows[0].points_balance,
+        `${data.reason} (Admin: ${data.adminUserId || 'System'})`,
+        `admin-adjustment-${Date.now()}`
+      ];
+
+      const transactionResult = await this.db.query(transactionQuery, transactionValues);
+
+      await this.db.query('COMMIT');
+
+      return transactionResult.rows[0];
+    } catch (error) {
+      await this.db.query('ROLLBACK');
+      console.error('Adjust member points error:', error);
+      throw error;
+    }
+  }
+
+  async getMemberTransactions(userId: string, options: {
+    page: number;
+    limit: number;
+  }): Promise<any> {
+    try {
+      const offset = (options.page - 1) * options.limit;
+
+      const query = `
+        SELECT
+          ll.*,
+          COUNT(*) OVER() as total_count
+        FROM loyalty_ledger ll
+        WHERE ll.user_id = $1
+        ORDER BY ll.created_at DESC
+        LIMIT $2 OFFSET $3
+      `;
+
+      const result = await this.db.query(query, [userId, options.limit, offset]);
+
+      return {
+        items: result.rows,
+        total: result.rows[0]?.total_count || 0,
+        page: options.page,
+        limit: options.limit
+      };
+    } catch (error) {
+      console.error('Get member transactions error:', error);
+      throw error;
+    }
+  }
+
+  // Analytics
+  async getLoyaltyAnalytics(options: {
+    startDate?: string;
+    endDate?: string;
+  }): Promise<any> {
+    try {
+      const startDate = options.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const endDate = options.endDate || new Date().toISOString();
+
+      // Member stats
+      const memberStatsQuery = `
+        SELECT
+          COUNT(*) as total_members,
+          COUNT(CASE WHEN status = 'ACTIVE' THEN 1 END) as active_members,
+          COUNT(CASE WHEN join_date >= $1 THEN 1 END) as new_members,
+          AVG(points_balance) as avg_points_balance,
+          SUM(points_lifetime) as total_points_earned
+        FROM loyalty_members
+      `;
+
+      // Transaction stats
+      const transactionStatsQuery = `
+        SELECT
+          transaction_type,
+          COUNT(*) as transaction_count,
+          SUM(ABS(points)) as total_points
+        FROM loyalty_ledger
+        WHERE created_at >= $1 AND created_at <= $2
+        GROUP BY transaction_type
+      `;
+
+      // Tier distribution
+      const tierStatsQuery = `
+        SELECT
+          tr.tier_name,
+          COUNT(lm.id) as member_count
+        FROM tier_rules tr
+        LEFT JOIN loyalty_members lm ON lm.tier = tr.tier
+        GROUP BY tr.tier, tr.tier_name
+        ORDER BY tr.tier
+      `;
+
+      const [memberStats, transactionStats, tierStats] = await Promise.all([
+        this.db.query(memberStatsQuery, [startDate]),
+        this.db.query(transactionStatsQuery, [startDate, endDate]),
+        this.db.query(tierStatsQuery)
+      ]);
+
+      return {
+        dateRange: { startDate, endDate },
+        memberStats: memberStats.rows[0],
+        transactionStats: transactionStats.rows,
+        tierDistribution: tierStats.rows
+      };
+    } catch (error) {
+      console.error('Get loyalty analytics error:', error);
+      throw error;
+    }
+  }
+
+  // Export functionality
+  async exportLoyaltyData(type: string, format: string): Promise<string> {
+    try {
+      let data: any[] = [];
+
+      switch (type) {
+        case 'members':
+          const membersQuery = `
+            SELECT
+              lm.id, lm.email, lm.name, lm.points_balance,
+              lm.points_lifetime, tr.tier_name, lm.join_date, lm.status
+            FROM loyalty_members lm
+            LEFT JOIN tier_rules tr ON tr.tier = lm.tier
+            ORDER BY lm.points_lifetime DESC
+          `;
+          const membersResult = await this.db.query(membersQuery);
+          data = membersResult.rows;
+          break;
+
+        case 'transactions':
+          const transactionsQuery = `
+            SELECT
+              ll.user_id, ll.transaction_type, ll.points,
+              ll.balance_after, ll.description, ll.created_at
+            FROM loyalty_ledger ll
+            ORDER BY ll.created_at DESC
+            LIMIT 10000
+          `;
+          const transactionsResult = await this.db.query(transactionsQuery);
+          data = transactionsResult.rows;
+          break;
+
+        default:
+          throw new Error('Invalid export type');
+      }
+
+      if (format === 'csv') {
+        if (data.length === 0) return '';
+
+        const headers = Object.keys(data[0]).join(',');
+        const rows = data.map(row =>
+          Object.values(row).map(val =>
+            typeof val === 'string' && val.includes(',') ? `"${val}"` : val
+          ).join(',')
+        );
+
+        return [headers, ...rows].join('\n');
+      } else {
+        return JSON.stringify(data, null, 2);
+      }
+    } catch (error) {
+      console.error('Export loyalty data error:', error);
+      throw error;
+    }
   }
 
   // Helper methods
