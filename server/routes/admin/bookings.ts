@@ -233,7 +233,7 @@ router.get(
           currency: row.currency || "INR",
         },
         status: row.status,
-        dates: {
+        timestamps: {
           booking: row.booking_date,
           confirmation: row.confirmation_date,
           cancellation: row.cancellation_date,
