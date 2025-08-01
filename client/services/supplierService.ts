@@ -275,9 +275,26 @@ class SupplierService {
         return response.data;
       }
 
+      // Handle specific error cases
+      if (response.error) {
+        console.error("Analytics API error:", response.error);
+        throw new Error(`Analytics API error: ${response.error}`);
+      }
+
       throw new Error("No analytics data available");
     } catch (error) {
       console.error("Get analytics error:", error);
+
+      // Handle authentication errors
+      if (error.status === 401) {
+        throw new Error("Authentication required for supplier analytics");
+      }
+
+      // Handle network errors
+      if (error.name === 'TypeError' || error.message.includes('fetch')) {
+        throw new Error("Network error - unable to connect to analytics API");
+      }
+
       throw new Error("Failed to get supplier analytics");
     }
   }
