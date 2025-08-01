@@ -355,7 +355,7 @@ router.post("/process-earning", async (req: Request, res: Response) => {
 // ===== LOYALTY RULES MANAGEMENT =====
 
 // Get all loyalty rules
-router.get("/admin/rules", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/rules", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const rules = await loyaltyService.getRules();
     res.json(rules);
@@ -369,7 +369,7 @@ router.get("/admin/rules", requireAdmin, async (req: Request, res: Response) => 
 });
 
 // Create new loyalty rule
-router.post("/admin/rules", requireAdmin, async (req: Request, res: Response) => {
+router.post("/admin/rules", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const rule = await loyaltyService.createLoyaltyRule(req.body);
     res.status(201).json(rule);
@@ -383,7 +383,7 @@ router.post("/admin/rules", requireAdmin, async (req: Request, res: Response) =>
 });
 
 // Update loyalty rule
-router.put("/admin/rules/:id", requireAdmin, async (req: Request, res: Response) => {
+router.put("/admin/rules/:id", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const rule = await loyaltyService.updateLoyaltyRule(id, req.body);
@@ -398,7 +398,7 @@ router.put("/admin/rules/:id", requireAdmin, async (req: Request, res: Response)
 });
 
 // Delete loyalty rule
-router.delete("/admin/rules/:id", requireAdmin, async (req: Request, res: Response) => {
+router.delete("/admin/rules/:id", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     await loyaltyService.deleteLoyaltyRule(id);
@@ -415,7 +415,7 @@ router.delete("/admin/rules/:id", requireAdmin, async (req: Request, res: Respon
 // ===== TIER MANAGEMENT =====
 
 // Get all tier rules
-router.get("/admin/tiers", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/tiers", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const tiers = await loyaltyService.getTierRules();
     res.json(tiers);
@@ -429,7 +429,7 @@ router.get("/admin/tiers", requireAdmin, async (req: Request, res: Response) => 
 });
 
 // Create new tier rule
-router.post("/admin/tiers", requireAdmin, async (req: Request, res: Response) => {
+router.post("/admin/tiers", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const tier = await loyaltyService.createTierRule(req.body);
     res.status(201).json(tier);
@@ -443,7 +443,7 @@ router.post("/admin/tiers", requireAdmin, async (req: Request, res: Response) =>
 });
 
 // Update tier rule
-router.put("/admin/tiers/:id", requireAdmin, async (req: Request, res: Response) => {
+router.put("/admin/tiers/:id", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const tier = await loyaltyService.updateTierRule(id, req.body);
@@ -460,7 +460,7 @@ router.put("/admin/tiers/:id", requireAdmin, async (req: Request, res: Response)
 // ===== MEMBER MANAGEMENT =====
 
 // Get all loyalty members with search and pagination
-router.get("/admin/members", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/members", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { search, page = 1, limit = 20 } = req.query;
     const members = await loyaltyService.getLoyaltyMembers({
@@ -479,7 +479,7 @@ router.get("/admin/members", requireAdmin, async (req: Request, res: Response) =
 });
 
 // Update member status
-router.patch("/admin/members/:userId", requireAdmin, async (req: Request, res: Response) => {
+router.patch("/admin/members/:userId", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { status } = req.body;
@@ -503,7 +503,7 @@ router.patch("/admin/members/:userId", requireAdmin, async (req: Request, res: R
 });
 
 // Manual point adjustment for members
-router.post("/admin/members/:userId/adjust-points", requireAdmin, async (req: Request, res: Response) => {
+router.post("/admin/members/:userId/adjust-points", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { points, reason, type } = req.body;
@@ -535,7 +535,7 @@ router.post("/admin/members/:userId/adjust-points", requireAdmin, async (req: Re
 });
 
 // Get member details (admin only)
-router.get("/admin/member/:userId", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/member/:userId", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId);
     const member = await loyaltyService.getMember(userId);
@@ -566,7 +566,7 @@ router.get("/admin/member/:userId", requireAdmin, async (req: Request, res: Resp
 });
 
 // Get member transaction history
-router.get("/admin/members/:userId/transactions", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/members/:userId/transactions", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { page = 1, limit = 20 } = req.query;
@@ -589,7 +589,7 @@ router.get("/admin/members/:userId/transactions", requireAdmin, async (req: Requ
 // ===== ANALYTICS & REPORTING =====
 
 // Get loyalty program analytics
-router.get("/admin/analytics", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/analytics", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
     const analytics = await loyaltyService.getLoyaltyAnalytics({
@@ -607,7 +607,7 @@ router.get("/admin/analytics", requireAdmin, async (req: Request, res: Response)
 });
 
 // Export loyalty data
-router.get("/admin/export", requireAdmin, async (req: Request, res: Response) => {
+router.get("/admin/export", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { type, format = 'csv' } = req.query;
     const data = await loyaltyService.exportLoyaltyData(type as string, format as string);
