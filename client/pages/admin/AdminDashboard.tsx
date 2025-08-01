@@ -226,6 +226,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     checkAuth();
+    loadSupplierAnalytics();
   }, []);
 
   const checkAuth = async () => {
@@ -239,6 +240,22 @@ export default function AdminDashboard() {
       setLoading(false);
     } catch (error) {
       navigate("/admin/login");
+    }
+  };
+
+  const loadSupplierAnalytics = async () => {
+    try {
+      const analytics = await supplierService.getAnalytics();
+      setSupplierAnalytics(analytics);
+    } catch (error) {
+      console.error("Failed to load supplier analytics:", error);
+      // Use fallback data
+      setSupplierAnalytics({
+        totalSuppliers: 0,
+        activeSuppliers: 0,
+        testingSuppliers: 0,
+        averageSuccessRate: 0
+      });
     }
   };
 
