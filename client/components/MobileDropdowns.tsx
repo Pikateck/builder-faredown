@@ -200,7 +200,7 @@ export function MobileCityDropdown({
             >
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                  <Navigation className="w-5 h-5 text-blue-600" />
+                  <Plane className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex-1">
                   <div className="text-base font-medium text-gray-900">
