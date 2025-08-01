@@ -534,12 +534,26 @@ export default function SupplierManagement() {
                         {supplier.totalBookings.toLocaleString()}
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleTestSupplier(supplier.id)}
+                            disabled={testingSupplier === supplier.id}
+                            title="Test Connection"
+                          >
+                            {testingSupplier === supplier.id ? (
+                              <Activity className="w-4 h-4 animate-pulse" />
+                            ) : (
+                              <Activity className="w-4 h-4" />
+                            )}
+                          </Button>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleSyncSupplier(supplier.id)}
                             disabled={syncingSupplier === supplier.id}
+                            title="Sync Data"
                           >
                             {syncingSupplier === supplier.id ? (
                               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -554,14 +568,16 @@ export default function SupplierManagement() {
                               setSelectedSupplier(supplier);
                               setIsEditDialogOpen(true);
                             }}
+                            title="Edit Supplier"
                           >
-                            <Edit className="w-4 h-4" />
+                            <Settings className="w-4 h-4" />
                           </Button>
                           <Switch
                             checked={supplier.status === "active"}
                             onCheckedChange={() =>
                               handleToggleStatus(supplier.id)
                             }
+                            title="Toggle Active Status"
                           />
                         </div>
                       </TableCell>
