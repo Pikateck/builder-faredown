@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DateProvider } from "./contexts/DateContext";
+import { LoyaltyProvider } from "./contexts/LoyaltyContext";
 
 // Original pages
 import Index from "./pages/Index";
