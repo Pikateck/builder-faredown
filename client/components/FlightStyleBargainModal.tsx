@@ -234,6 +234,13 @@ export function FlightStyleBargainModal({
       const counterOffer = Math.round(
         originalTotalPrice * (0.8 + Math.random() * 0.1),
       );
+      console.log("🕒 TIMER STARTING - Counter offer phase triggered", {
+        proposedPrice,
+        originalTotalPrice,
+        counterOffer,
+        timeRemaining: 30,
+        isTimerActive: true
+      });
       setBargainState((prev) => ({
         ...prev,
         phase: "counter_offer",
