@@ -702,7 +702,7 @@ export default function Index() {
                       <div className="text-xs text-gray-500 mb-1">To</div>
                       <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-[#003580]" />
+                          <Plane className="w-4 h-4 text-[#003580]" />
                         </div>
                         <div>
                           <div className="font-medium text-gray-900">
@@ -900,7 +900,7 @@ export default function Index() {
                             <div className="text-xs text-gray-500 mb-1">To</div>
                             <div className="flex items-center space-x-2">
                               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                                <MapPin className="w-4 h-4 text-[#003580]" />
+                                <Plane className="w-4 h-4 text-[#003580]" />
                               </div>
                               <div>
                                 <div className="font-medium text-gray-900 text-sm">
