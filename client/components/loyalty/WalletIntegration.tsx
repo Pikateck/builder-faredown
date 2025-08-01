@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { useLoyalty } from '@/contexts/LoyaltyContext';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { useLoyalty } from "@/contexts/LoyaltyContext";
 import {
   Wallet,
   Download,
@@ -11,8 +11,8 @@ import {
   Chrome,
   CheckCircle,
   AlertCircle,
-  ExternalLink
-} from 'lucide-react';
+  ExternalLink,
+} from "lucide-react";
 
 interface WalletIntegrationProps {
   onClose?: () => void;
@@ -43,25 +43,27 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
       // to generate a .pkpass file using the Apple PassKit framework
       const passData = {
         memberCode: profile.member.memberCode,
-        name: profile.member.name || 'Loyalty Member',
+        name: profile.member.name || "Loyalty Member",
         tier: profile.member.tierName,
         pointsBalance: profile.member.pointsBalance,
-        validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+        validUntil: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       };
 
       // Mock API call to generate Apple Wallet pass
-      const response = await fetch('/api/loyalty/generate-apple-pass', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(passData)
+      const response = await fetch("/api/loyalty/generate-apple-pass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(passData),
       });
 
       if (response.ok) {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
-        
+
         // Create download link for .pkpass file
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
         link.download = `faredown-rewards-${profile.member.memberCode}.pkpass`;
         document.body.appendChild(link);
@@ -69,20 +71,21 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
 
-        setGeneratedPasses(prev => ({ ...prev, apple: url }));
-        toast({ 
-          title: 'Apple Wallet Pass Generated', 
-          description: 'Pass downloaded successfully. Tap to add to Apple Wallet.' 
+        setGeneratedPasses((prev) => ({ ...prev, apple: url }));
+        toast({
+          title: "Apple Wallet Pass Generated",
+          description:
+            "Pass downloaded successfully. Tap to add to Apple Wallet.",
         });
       } else {
-        throw new Error('Failed to generate Apple Wallet pass');
+        throw new Error("Failed to generate Apple Wallet pass");
       }
     } catch (error) {
-      console.error('Error generating Apple Wallet pass:', error);
-      toast({ 
-        title: 'Error', 
-        description: 'Failed to generate Apple Wallet pass. Please try again.', 
-        variant: 'destructive' 
+      console.error("Error generating Apple Wallet pass:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate Apple Wallet pass. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
@@ -99,39 +102,41 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
       // to create a digital pass that can be added to Google Pay
       const passData = {
         memberCode: profile.member.memberCode,
-        name: profile.member.name || 'Loyalty Member',
+        name: profile.member.name || "Loyalty Member",
         tier: profile.member.tierName,
         pointsBalance: profile.member.pointsBalance,
-        validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+        validUntil: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       };
 
       // Mock API call to generate Google Wallet pass URL
-      const response = await fetch('/api/loyalty/generate-google-pass', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(passData)
+      const response = await fetch("/api/loyalty/generate-google-pass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(passData),
       });
 
       if (response.ok) {
         const { passUrl } = await response.json();
-        
-        // Open Google Wallet add-to-wallet URL
-        window.open(passUrl, '_blank');
 
-        setGeneratedPasses(prev => ({ ...prev, google: passUrl }));
-        toast({ 
-          title: 'Google Wallet Pass Generated', 
-          description: 'Opening Google Wallet to add your pass.' 
+        // Open Google Wallet add-to-wallet URL
+        window.open(passUrl, "_blank");
+
+        setGeneratedPasses((prev) => ({ ...prev, google: passUrl }));
+        toast({
+          title: "Google Wallet Pass Generated",
+          description: "Opening Google Wallet to add your pass.",
         });
       } else {
-        throw new Error('Failed to generate Google Wallet pass');
+        throw new Error("Failed to generate Google Wallet pass");
       }
     } catch (error) {
-      console.error('Error generating Google Wallet pass:', error);
-      toast({ 
-        title: 'Error', 
-        description: 'Failed to generate Google Wallet pass. Please try again.', 
-        variant: 'destructive' 
+      console.error("Error generating Google Wallet pass:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate Google Wallet pass. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
@@ -147,23 +152,23 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
       // Generate a generic digital pass (PDF or image)
       const passData = {
         memberCode: profile.member.memberCode,
-        name: profile.member.name || 'Loyalty Member',
+        name: profile.member.name || "Loyalty Member",
         tier: profile.member.tierName,
         pointsBalance: profile.member.pointsBalance,
-        qrCode: true
+        qrCode: true,
       };
 
-      const response = await fetch('/api/loyalty/generate-digital-pass', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(passData)
+      const response = await fetch("/api/loyalty/generate-digital-pass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(passData),
       });
 
       if (response.ok) {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
+
+        const link = document.createElement("a");
         link.href = url;
         link.download = `faredown-rewards-${profile.member.memberCode}.pdf`;
         document.body.appendChild(link);
@@ -171,19 +176,19 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
 
-        toast({ 
-          title: 'Digital Pass Downloaded', 
-          description: 'Your digital membership pass has been downloaded.' 
+        toast({
+          title: "Digital Pass Downloaded",
+          description: "Your digital membership pass has been downloaded.",
         });
       } else {
-        throw new Error('Failed to generate digital pass');
+        throw new Error("Failed to generate digital pass");
       }
     } catch (error) {
-      console.error('Error generating digital pass:', error);
-      toast({ 
-        title: 'Error', 
-        description: 'Failed to generate digital pass. Please try again.', 
-        variant: 'destructive' 
+      console.error("Error generating digital pass:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate digital pass. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
@@ -199,7 +204,8 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
             No Membership Found
           </h3>
           <p className="text-gray-600">
-            You need to be a Faredown Rewards member to add passes to your wallet.
+            You need to be a Faredown Rewards member to add passes to your
+            wallet.
           </p>
         </CardContent>
       </Card>
@@ -222,12 +228,18 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-lg">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="font-semibold">{profile.member.name || 'Loyalty Member'}</h3>
-              <p className="text-sm opacity-90">{profile.member.tierName} Member</p>
+              <h3 className="font-semibold">
+                {profile.member.name || "Loyalty Member"}
+              </h3>
+              <p className="text-sm opacity-90">
+                {profile.member.tierName} Member
+              </p>
               <p className="text-xs opacity-75">#{profile.member.memberCode}</p>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold">{profile.member.pointsBalance.toLocaleString()}</p>
+              <p className="text-lg font-bold">
+                {profile.member.pointsBalance.toLocaleString()}
+              </p>
               <p className="text-xs opacity-75">points</p>
             </div>
           </div>
@@ -286,15 +298,17 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
         {/* Generated Passes Status */}
         {(generatedPasses.apple || generatedPasses.google) && (
           <div className="space-y-2 pt-2 border-t">
-            <h4 className="text-sm font-medium text-gray-900">Generated Passes</h4>
-            
+            <h4 className="text-sm font-medium text-gray-900">
+              Generated Passes
+            </h4>
+
             {generatedPasses.apple && (
               <div className="flex items-center text-sm text-green-600">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Apple Wallet pass generated
               </div>
             )}
-            
+
             {generatedPasses.google && (
               <div className="flex items-center text-sm text-green-600">
                 <CheckCircle className="w-4 h-4 mr-2" />
@@ -306,7 +320,9 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
 
         {/* Instructions */}
         <div className="bg-blue-50 p-3 rounded-lg">
-          <h4 className="text-sm font-medium text-blue-900 mb-1">How it works:</h4>
+          <h4 className="text-sm font-medium text-blue-900 mb-1">
+            How it works:
+          </h4>
           <ul className="text-xs text-blue-800 space-y-1">
             <li>• Your membership card will be stored in your mobile wallet</li>
             <li>• Use it at partner locations for quick verification</li>
@@ -320,14 +336,18 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
           <div className="flex items-center justify-center space-x-4 text-xs text-gray-500">
             <div className="flex items-center">
               <Smartphone className="w-3 h-3 mr-1" />
-              {isIOS ? 'iOS Device' : isAndroid ? 'Android Device' : 'Mobile Device'}
+              {isIOS
+                ? "iOS Device"
+                : isAndroid
+                  ? "Android Device"
+                  : "Mobile Device"}
             </div>
             <div className="flex items-center">
               <Wallet className="w-3 h-3 mr-1" />
               Wallet Ready
             </div>
           </div>
-          
+
           {!isIOS && !isAndroid && (
             <p className="text-xs text-amber-600">
               For best experience, use a mobile device with wallet support
@@ -338,10 +358,15 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
         {/* External Wallet Links */}
         <div className="flex space-x-2">
           {isIOS && (
-            <Button variant="ghost" size="sm" className="flex-1 text-xs" asChild>
-              <a 
-                href="https://support.apple.com/en-us/HT204003" 
-                target="_blank" 
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex-1 text-xs"
+              asChild
+            >
+              <a
+                href="https://support.apple.com/en-us/HT204003"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <ExternalLink className="w-3 h-3 mr-1" />
@@ -349,12 +374,17 @@ export default function WalletIntegration({ onClose }: WalletIntegrationProps) {
               </a>
             </Button>
           )}
-          
+
           {isAndroid && (
-            <Button variant="ghost" size="sm" className="flex-1 text-xs" asChild>
-              <a 
-                href="https://support.google.com/pay/answer/7644132" 
-                target="_blank" 
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex-1 text-xs"
+              asChild
+            >
+              <a
+                href="https://support.google.com/pay/answer/7644132"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 <ExternalLink className="w-3 h-3 mr-1" />

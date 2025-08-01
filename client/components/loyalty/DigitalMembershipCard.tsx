@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { useLoyalty } from '@/contexts/LoyaltyContext';
+import React, { useState, useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useLoyalty } from "@/contexts/LoyaltyContext";
 import {
   Download,
   Share2,
@@ -13,25 +13,25 @@ import {
   Star,
   Gift,
   Calendar,
-  QrCode
-} from 'lucide-react';
+  QrCode,
+} from "lucide-react";
 
 // QR Code generation using qrcode.js (you'll need to install this)
-import QRCode from 'qrcode';
+import QRCode from "qrcode";
 
 interface DigitalMembershipCardProps {
   showActions?: boolean;
-  variant?: 'full' | 'compact';
+  variant?: "full" | "compact";
 }
 
-export default function DigitalMembershipCard({ 
-  showActions = true, 
-  variant = 'full' 
+export default function DigitalMembershipCard({
+  showActions = true,
+  variant = "full",
 }: DigitalMembershipCardProps) {
   const { profile, isLoading } = useLoyalty();
   const { toast } = useToast();
   const cardRef = useRef<HTMLDivElement>(null);
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [isGeneratingQR, setIsGeneratingQR] = useState(false);
   const [copiedMemberCode, setCopiedMemberCode] = useState(false);
 
@@ -48,23 +48,25 @@ export default function DigitalMembershipCard({
       const memberData = {
         memberCode: profile?.member?.memberCode,
         tier: profile?.member?.tierName,
-        name: profile?.member?.name || 'Loyalty Member',
-        validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString() // 1 year from now
+        name: profile?.member?.name || "Loyalty Member",
+        validUntil: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000,
+        ).toISOString(), // 1 year from now
       };
-      
+
       const qrDataString = JSON.stringify(memberData);
       const dataUrl = await QRCode.toDataURL(qrDataString, {
         width: 120,
         margin: 1,
         color: {
-          dark: '#1f2937',
-          light: '#ffffff'
-        }
+          dark: "#1f2937",
+          light: "#ffffff",
+        },
       });
-      
+
       setQrCodeDataUrl(dataUrl);
     } catch (error) {
-      console.error('Error generating QR code:', error);
+      console.error("Error generating QR code:", error);
     } finally {
       setIsGeneratingQR(false);
     }
@@ -75,10 +77,17 @@ export default function DigitalMembershipCard({
       try {
         await navigator.clipboard.writeText(profile.member.memberCode);
         setCopiedMemberCode(true);
-        toast({ title: 'Copied!', description: 'Member code copied to clipboard' });
+        toast({
+          title: "Copied!",
+          description: "Member code copied to clipboard",
+        });
         setTimeout(() => setCopiedMemberCode(false), 2000);
       } catch (error) {
-        toast({ title: 'Error', description: 'Failed to copy member code', variant: 'destructive' });
+        toast({
+          title: "Error",
+          description: "Failed to copy member code",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -87,9 +96,9 @@ export default function DigitalMembershipCard({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'My Faredown Rewards Card',
+          title: "My Faredown Rewards Card",
           text: `I'm a ${profile?.member?.tierName} member of Faredown Rewards! Member ID: ${profile?.member?.memberCode}`,
-          url: window.location.origin
+          url: window.location.origin,
         });
       } catch (error) {
         // User cancelled sharing
@@ -99,9 +108,16 @@ export default function DigitalMembershipCard({
       const shareText = `I'm a ${profile?.member?.tierName} member of Faredown Rewards! Member ID: ${profile?.member?.memberCode}`;
       try {
         await navigator.clipboard.writeText(shareText);
-        toast({ title: 'Copied!', description: 'Card details copied to clipboard' });
+        toast({
+          title: "Copied!",
+          description: "Card details copied to clipboard",
+        });
       } catch (error) {
-        toast({ title: 'Error', description: 'Sharing not supported on this device', variant: 'destructive' });
+        toast({
+          title: "Error",
+          description: "Sharing not supported on this device",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -110,13 +126,19 @@ export default function DigitalMembershipCard({
     if (cardRef.current) {
       // Convert card to image and download
       // This would require html2canvas library for full implementation
-      toast({ title: 'Download', description: 'Download feature coming soon!' });
+      toast({
+        title: "Download",
+        description: "Download feature coming soon!",
+      });
     }
   };
 
   const addToWallet = () => {
     // Apple Wallet/Google Pay integration would go here
-    toast({ title: 'Add to Wallet', description: 'Wallet integration coming soon!' });
+    toast({
+      title: "Add to Wallet",
+      description: "Wallet integration coming soon!",
+    });
   };
 
   if (isLoading) {
@@ -138,7 +160,9 @@ export default function DigitalMembershipCard({
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="p-6 text-center">
           <Gift className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Join Faredown Rewards</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Join Faredown Rewards
+          </h3>
           <p className="text-gray-600 mb-4">
             Start earning points on every booking and unlock exclusive benefits!
           </p>
@@ -154,43 +178,47 @@ export default function DigitalMembershipCard({
   // Determine card color scheme based on tier
   const getTierTheme = (tierName: string) => {
     switch (tierName?.toLowerCase()) {
-      case 'gold':
+      case "gold":
         return {
-          gradient: 'from-yellow-400 via-yellow-500 to-yellow-600',
-          accent: 'text-yellow-100',
-          bg: 'bg-gradient-to-br from-yellow-400 to-yellow-600'
+          gradient: "from-yellow-400 via-yellow-500 to-yellow-600",
+          accent: "text-yellow-100",
+          bg: "bg-gradient-to-br from-yellow-400 to-yellow-600",
         };
-      case 'silver':
+      case "silver":
         return {
-          gradient: 'from-gray-300 via-gray-400 to-gray-500',
-          accent: 'text-gray-100',
-          bg: 'bg-gradient-to-br from-gray-300 to-gray-500'
+          gradient: "from-gray-300 via-gray-400 to-gray-500",
+          accent: "text-gray-100",
+          bg: "bg-gradient-to-br from-gray-300 to-gray-500",
         };
-      case 'platinum':
+      case "platinum":
         return {
-          gradient: 'from-purple-400 via-purple-500 to-purple-600',
-          accent: 'text-purple-100',
-          bg: 'bg-gradient-to-br from-purple-400 to-purple-600'
+          gradient: "from-purple-400 via-purple-500 to-purple-600",
+          accent: "text-purple-100",
+          bg: "bg-gradient-to-br from-purple-400 to-purple-600",
         };
       default: // Bronze
         return {
-          gradient: 'from-amber-600 via-amber-700 to-amber-800',
-          accent: 'text-amber-100',
-          bg: 'bg-gradient-to-br from-amber-600 to-amber-800'
+          gradient: "from-amber-600 via-amber-700 to-amber-800",
+          accent: "text-amber-100",
+          bg: "bg-gradient-to-br from-amber-600 to-amber-800",
         };
     }
   };
 
   const theme = getTierTheme(member.tierName);
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <Card className="w-full">
         <CardContent className={`p-4 ${theme.bg} text-white`}>
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-semibold">{member.name || 'Loyalty Member'}</h3>
-              <p className={`text-sm ${theme.accent}`}>{member.tierName} Member</p>
+              <h3 className="font-semibold">
+                {member.name || "Loyalty Member"}
+              </h3>
+              <p className={`text-sm ${theme.accent}`}>
+                {member.tierName} Member
+              </p>
               <p className={`text-xs ${theme.accent}`}>#{member.memberCode}</p>
             </div>
             <div className="text-right">
@@ -213,42 +241,47 @@ export default function DigitalMembershipCard({
             <div className="absolute top-4 right-4 w-32 h-32 rounded-full border-2 border-white"></div>
             <div className="absolute bottom-4 left-4 w-24 h-24 rounded-full border border-white"></div>
           </div>
-          
+
           {/* Card Header */}
           <div className="relative p-6 pb-4">
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h2 className="text-xl font-bold">Faredown Rewards</h2>
-                <Badge variant="secondary" className="mt-1 bg-white/20 text-white hover:bg-white/30">
+                <Badge
+                  variant="secondary"
+                  className="mt-1 bg-white/20 text-white hover:bg-white/30"
+                >
                   {member.tierName} Member
                 </Badge>
               </div>
               <Star className="w-8 h-8 text-white/80" />
             </div>
-            
+
             {/* Member Info */}
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">
-                {member.name || 'Loyalty Member'}
+                {member.name || "Loyalty Member"}
               </h3>
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm ${theme.accent}`}>Member Since</p>
                   <p className="text-sm font-medium">
-                    {new Date(member.joinDate).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      year: 'numeric' 
+                    {new Date(member.joinDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
                     })}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className={`text-sm ${theme.accent}`}>Points Balance</p>
-                  <p className="text-2xl font-bold">{member.pointsBalance.toLocaleString()}</p>
+                  <p className="text-2xl font-bold">
+                    {member.pointsBalance.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          
+
           {/* Card Footer */}
           <div className="bg-black/20 px-6 py-4">
             <div className="flex justify-between items-center">
@@ -268,13 +301,13 @@ export default function DigitalMembershipCard({
                   </button>
                 </div>
               </div>
-              
+
               {/* QR Code */}
               <div className="bg-white p-2 rounded">
                 {qrCodeDataUrl ? (
-                  <img 
-                    src={qrCodeDataUrl} 
-                    alt="Member QR Code" 
+                  <img
+                    src={qrCodeDataUrl}
+                    alt="Member QR Code"
                     className="w-16 h-16"
                   />
                 ) : (
@@ -306,17 +339,20 @@ export default function DigitalMembershipCard({
                 {benefit}
               </div>
             )) || (
-              <p className="text-sm text-gray-600">Benefits information not available</p>
+              <p className="text-sm text-gray-600">
+                Benefits information not available
+              </p>
             )}
           </div>
-          
+
           {tier?.next && (
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
               <p className="text-sm font-medium text-blue-900">
-                Earn {tier.pointsToNext} more points to reach {tier.next.tierName}!
+                Earn {tier.pointsToNext} more points to reach{" "}
+                {tier.next.tierName}!
               </p>
               <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
-                <div 
+                <div
                   className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                   style={{ width: `${tier.progress}%` }}
                 ></div>
@@ -329,11 +365,19 @@ export default function DigitalMembershipCard({
       {/* Action Buttons */}
       {showActions && (
         <div className="grid grid-cols-2 gap-3">
-          <Button variant="outline" onClick={shareCard} className="flex items-center justify-center">
+          <Button
+            variant="outline"
+            onClick={shareCard}
+            className="flex items-center justify-center"
+          >
             <Share2 className="w-4 h-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" onClick={downloadCard} className="flex items-center justify-center">
+          <Button
+            variant="outline"
+            onClick={downloadCard}
+            className="flex items-center justify-center"
+          >
             <Download className="w-4 h-4 mr-2" />
             Download
           </Button>
@@ -341,7 +385,7 @@ export default function DigitalMembershipCard({
       )}
 
       {/* Wallet Integration */}
-      <Button 
+      <Button
         onClick={addToWallet}
         className="w-full flex items-center justify-center bg-black text-white hover:bg-gray-800"
       >

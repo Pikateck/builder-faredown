@@ -614,12 +614,16 @@ class HotelBookingService {
    */
   async processLoyaltyEarning(booking) {
     try {
-      console.log(`🎯 Processing loyalty earning for booking ${booking.booking_ref}`);
+      console.log(
+        `🎯 Processing loyalty earning for booking ${booking.booking_ref}`,
+      );
 
       // Extract user email from booking (adjust based on your data structure)
       const userEmail = booking.guest_details?.contactInfo?.email;
       if (!userEmail) {
-        console.log(`⚠️ No user email found for booking ${booking.booking_ref}, skipping loyalty earning`);
+        console.log(
+          `⚠️ No user email found for booking ${booking.booking_ref}, skipping loyalty earning`,
+        );
         return;
       }
 
@@ -631,7 +635,9 @@ class HotelBookingService {
       const eligibleAmount = Math.max(0, basePrice - taxes - fees);
 
       if (eligibleAmount <= 0) {
-        console.log(`⚠️ No eligible amount for loyalty earning in booking ${booking.booking_ref}`);
+        console.log(
+          `⚠️ No eligible amount for loyalty earning in booking ${booking.booking_ref}`,
+        );
         return;
       }
 
@@ -639,25 +645,33 @@ class HotelBookingService {
       const loyaltyData = {
         userId: userEmail, // Using email as identifier for now
         bookingId: booking.booking_ref,
-        bookingType: 'HOTEL',
+        bookingType: "HOTEL",
         eligibility: {
           eligibleAmount: eligibleAmount,
-          currency: booking.currency || 'INR',
-          fxRate: 1.0 // Adjust if currency conversion is needed
+          currency: booking.currency || "INR",
+          fxRate: 1.0, // Adjust if currency conversion is needed
         },
-        description: `Hotel booking at ${booking.hotel_name || 'Selected Hotel'}`
+        description: `Hotel booking at ${booking.hotel_name || "Selected Hotel"}`,
       };
 
       // Process the earning (non-blocking)
       const result = await loyaltyService.processEarning(loyaltyData);
 
       if (result.success) {
-        console.log(`✅ Loyalty points earned for booking ${booking.booking_ref}: ${result.data?.earnedPoints || 0} points`);
+        console.log(
+          `✅ Loyalty points earned for booking ${booking.booking_ref}: ${result.data?.earnedPoints || 0} points`,
+        );
       } else {
-        console.error(`❌ Failed to process loyalty earning for booking ${booking.booking_ref}:`, result.error);
+        console.error(
+          `❌ Failed to process loyalty earning for booking ${booking.booking_ref}:`,
+          result.error,
+        );
       }
     } catch (error) {
-      console.error(`❌ Error in loyalty earning process for booking ${booking.booking_ref}:`, error);
+      console.error(
+        `❌ Error in loyalty earning process for booking ${booking.booking_ref}:`,
+        error,
+      );
       // Don't throw - loyalty earning failure shouldn't break booking confirmation
     }
   }

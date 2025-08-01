@@ -1076,7 +1076,9 @@ Please keep this ticket for your records.
 
       {/* Digital Membership Card Preview */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Digital Membership Card</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Digital Membership Card
+        </h3>
         <div className="max-w-md">
           <DigitalMembershipCard variant="compact" showActions={false} />
         </div>
@@ -1092,7 +1094,9 @@ Please keep this ticket for your records.
 
       {/* Recent Activity */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Points Activity</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Recent Points Activity
+        </h3>
         <LoyaltyHistory />
       </div>
     </div>

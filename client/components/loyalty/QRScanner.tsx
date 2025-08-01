@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useRef, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import {
   Camera,
   X,
@@ -11,8 +11,8 @@ import {
   Scan,
   Upload,
   User,
-  Star
-} from 'lucide-react';
+  Star,
+} from "lucide-react";
 
 // QR Code scanner using qr-scanner library (you'll need to install this)
 // import QrScanner from 'qr-scanner';
@@ -29,29 +29,33 @@ interface ScannedMember {
   name: string;
   tier: string;
   pointsBalance: number;
-  status: 'ACTIVE' | 'SUSPENDED' | 'EXPIRED';
+  status: "ACTIVE" | "SUSPENDED" | "EXPIRED";
   validUntil: string;
 }
 
 interface QRScannerProps {
   onMemberScanned?: (member: ScannedMember) => void;
   onClose?: () => void;
-  mode?: 'scanner' | 'upload';
+  mode?: "scanner" | "upload";
 }
 
-export default function QRScanner({ 
-  onMemberScanned, 
+export default function QRScanner({
+  onMemberScanned,
   onClose,
-  mode = 'scanner' 
+  mode = "scanner",
 }: QRScannerProps) {
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [hasCamera, setHasCamera] = useState(false);
-  const [scannedMember, setScannedMember] = useState<ScannedMember | null>(null);
-  const [error, setError] = useState<string>('');
-  const [scanMode, setScanMode] = useState<'camera' | 'file'>(mode === 'upload' ? 'file' : 'camera');
+  const [scannedMember, setScannedMember] = useState<ScannedMember | null>(
+    null,
+  );
+  const [error, setError] = useState<string>("");
+  const [scanMode, setScanMode] = useState<"camera" | "file">(
+    mode === "upload" ? "file" : "camera",
+  );
 
   useEffect(() => {
     checkCameraAvailability();
@@ -63,27 +67,29 @@ export default function QRScanner({
   const checkCameraAvailability = async () => {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter(device => device.kind === 'videoinput');
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput",
+      );
       setHasCamera(videoDevices.length > 0);
     } catch (error) {
-      console.error('Error checking camera availability:', error);
+      console.error("Error checking camera availability:", error);
       setHasCamera(false);
     }
   };
 
   const startScanning = async () => {
     try {
-      setError('');
+      setError("");
       setIsScanning(true);
 
       if (!videoRef.current) return;
 
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { 
-          facingMode: 'environment', // Use rear camera on mobile
+        video: {
+          facingMode: "environment", // Use rear camera on mobile
           width: { ideal: 1280 },
-          height: { ideal: 720 }
-        }
+          height: { ideal: 720 },
+        },
       });
 
       videoRef.current.srcObject = stream;
@@ -92,10 +98,9 @@ export default function QRScanner({
       // Initialize QR scanner (mock implementation)
       // In a real implementation, you'd use qr-scanner library
       simulateQRScanning();
-
     } catch (error) {
-      console.error('Error starting camera:', error);
-      setError('Unable to access camera. Please check permissions.');
+      console.error("Error starting camera:", error);
+      setError("Unable to access camera. Please check permissions.");
       setIsScanning(false);
     }
   };
@@ -103,7 +108,7 @@ export default function QRScanner({
   const stopScanning = () => {
     if (videoRef.current?.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach(track => track.stop());
+      stream.getTracks().forEach((track) => track.stop());
       videoRef.current.srcObject = null;
     }
     setIsScanning(false);
@@ -117,7 +122,9 @@ export default function QRScanner({
         memberCode: "FDR2024001234",
         tier: "Gold",
         name: "John Doe",
-        validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+        validUntil: new Date(
+          Date.now() + 365 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       });
       handleQRCodeDetected(mockQRData);
     }, 3000);
@@ -126,10 +133,10 @@ export default function QRScanner({
   const handleQRCodeDetected = async (qrData: string) => {
     try {
       const memberData: MemberData = JSON.parse(qrData);
-      
+
       // Validate QR code structure
       if (!memberData.memberCode || !memberData.tier) {
-        throw new Error('Invalid membership QR code');
+        throw new Error("Invalid membership QR code");
       }
 
       // Check if card is still valid
@@ -138,61 +145,66 @@ export default function QRScanner({
 
       // Fetch member details from server (mock implementation)
       const memberDetails = await fetchMemberDetails(memberData.memberCode);
-      
+
       setScannedMember({
         ...memberDetails,
-        status: isExpired ? 'EXPIRED' : memberDetails.status
+        status: isExpired ? "EXPIRED" : memberDetails.status,
       });
 
       stopScanning();
-      
+
       if (onMemberScanned) {
         onMemberScanned(memberDetails);
       }
 
       toast({
-        title: 'Member Scanned Successfully',
-        description: `${memberDetails.name} (${memberDetails.tier} Member)`
+        title: "Member Scanned Successfully",
+        description: `${memberDetails.name} (${memberDetails.tier} Member)`,
       });
-
     } catch (error) {
-      console.error('Error processing QR code:', error);
-      setError('Invalid or corrupted QR code');
+      console.error("Error processing QR code:", error);
+      setError("Invalid or corrupted QR code");
       toast({
-        title: 'Scan Error',
-        description: 'Unable to read membership QR code',
-        variant: 'destructive'
+        title: "Scan Error",
+        description: "Unable to read membership QR code",
+        variant: "destructive",
       });
     }
   };
 
   // Mock member details fetch (replace with actual API call)
-  const fetchMemberDetails = async (memberCode: string): Promise<ScannedMember> => {
+  const fetchMemberDetails = async (
+    memberCode: string,
+  ): Promise<ScannedMember> => {
     // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     return {
       memberCode,
       name: "John Doe",
       tier: "Gold",
       pointsBalance: 15420,
-      status: 'ACTIVE',
-      validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+      status: "ACTIVE",
+      validUntil: new Date(
+        Date.now() + 365 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
     };
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     try {
-      setError('');
-      
+      setError("");
+
       // Read file as data URL
       const reader = new FileReader();
       reader.onload = async (e) => {
         const imageDataUrl = e.target?.result as string;
-        
+
         // In real implementation, you'd use a QR code reading library
         // For now, simulate successful scan
         setTimeout(() => {
@@ -200,35 +212,44 @@ export default function QRScanner({
             memberCode: "FDR2024005678",
             tier: "Silver",
             name: "Jane Smith",
-            validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+            validUntil: new Date(
+              Date.now() + 365 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
           });
           handleQRCodeDetected(mockData);
         }, 1500);
       };
-      
+
       reader.readAsDataURL(file);
-      
     } catch (error) {
-      console.error('Error reading file:', error);
-      setError('Unable to read uploaded image');
+      console.error("Error reading file:", error);
+      setError("Unable to read uploaded image");
     }
   };
 
   const getMemberStatusColor = (status: string) => {
     switch (status) {
-      case 'ACTIVE': return 'bg-green-100 text-green-800';
-      case 'SUSPENDED': return 'bg-red-100 text-red-800';
-      case 'EXPIRED': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "ACTIVE":
+        return "bg-green-100 text-green-800";
+      case "SUSPENDED":
+        return "bg-red-100 text-red-800";
+      case "EXPIRED":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getTierColor = (tier: string) => {
     switch (tier?.toLowerCase()) {
-      case 'gold': return 'bg-yellow-100 text-yellow-800';
-      case 'silver': return 'bg-gray-100 text-gray-800';
-      case 'platinum': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-amber-100 text-amber-800';
+      case "gold":
+        return "bg-yellow-100 text-yellow-800";
+      case "silver":
+        return "bg-gray-100 text-gray-800";
+      case "platinum":
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-amber-100 text-amber-800";
     }
   };
 
@@ -263,36 +284,39 @@ export default function QRScanner({
           <div className="space-y-3 pt-4 border-t">
             <div className="flex justify-between">
               <span className="text-gray-600">Member Code:</span>
-              <span className="font-mono text-sm">{scannedMember.memberCode}</span>
+              <span className="font-mono text-sm">
+                {scannedMember.memberCode}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Points Balance:</span>
-              <span className="font-semibold">{scannedMember.pointsBalance.toLocaleString()}</span>
+              <span className="font-semibold">
+                {scannedMember.pointsBalance.toLocaleString()}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Valid Until:</span>
-              <span>{new Date(scannedMember.validUntil).toLocaleDateString()}</span>
+              <span>
+                {new Date(scannedMember.validUntil).toLocaleDateString()}
+              </span>
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex space-x-3 pt-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="flex-1"
               onClick={() => {
                 setScannedMember(null);
-                if (scanMode === 'camera') {
+                if (scanMode === "camera") {
                   startScanning();
                 }
               }}
             >
               Scan Another
             </Button>
-            <Button 
-              className="flex-1"
-              onClick={onClose}
-            >
+            <Button className="flex-1" onClick={onClose}>
               Done
             </Button>
           </div>
@@ -319,20 +343,20 @@ export default function QRScanner({
       <CardContent className="space-y-4">
         {/* Mode Selector */}
         <div className="flex space-x-2">
-          <Button 
-            variant={scanMode === 'camera' ? 'default' : 'outline'}
+          <Button
+            variant={scanMode === "camera" ? "default" : "outline"}
             size="sm"
-            onClick={() => setScanMode('camera')}
+            onClick={() => setScanMode("camera")}
             disabled={!hasCamera}
             className="flex-1"
           >
             <Camera className="w-4 h-4 mr-2" />
             Camera
           </Button>
-          <Button 
-            variant={scanMode === 'file' ? 'default' : 'outline'}
+          <Button
+            variant={scanMode === "file" ? "default" : "outline"}
             size="sm"
-            onClick={() => setScanMode('file')}
+            onClick={() => setScanMode("file")}
             className="flex-1"
           >
             <Upload className="w-4 h-4 mr-2" />
@@ -341,7 +365,7 @@ export default function QRScanner({
         </div>
 
         {/* Camera Scanner */}
-        {scanMode === 'camera' && (
+        {scanMode === "camera" && (
           <div className="space-y-4">
             <div className="relative bg-black rounded-lg overflow-hidden aspect-square">
               {isScanning ? (
@@ -359,7 +383,7 @@ export default function QRScanner({
                       <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-blue-500"></div>
                       <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-blue-500"></div>
                       <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-blue-500"></div>
-                      
+
                       {/* Scanning Line Animation */}
                       <div className="absolute inset-x-0 top-0 h-0.5 bg-blue-500 animate-pulse"></div>
                     </div>
@@ -383,7 +407,11 @@ export default function QRScanner({
             )}
 
             {isScanning && (
-              <Button onClick={stopScanning} variant="outline" className="w-full">
+              <Button
+                onClick={stopScanning}
+                variant="outline"
+                className="w-full"
+              >
                 Stop Scanning
               </Button>
             )}
@@ -400,9 +428,9 @@ export default function QRScanner({
         )}
 
         {/* File Upload */}
-        {scanMode === 'file' && (
+        {scanMode === "file" && (
           <div className="space-y-4">
-            <div 
+            <div
               className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-gray-400 transition-colors"
               onClick={() => fileInputRef.current?.click()}
             >
@@ -412,7 +440,7 @@ export default function QRScanner({
                 Click to select a file or drag and drop
               </p>
             </div>
-            
+
             <input
               ref={fileInputRef}
               type="file"

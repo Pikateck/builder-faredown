@@ -1,18 +1,18 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Badge } from '../ui/badge';
-import { Progress } from '../ui/progress';
-import { Button } from '../ui/button';
-import { 
-  Trophy, 
-  Star, 
-  TrendingUp, 
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Progress } from "../ui/progress";
+import { Button } from "../ui/button";
+import {
+  Trophy,
+  Star,
+  TrendingUp,
   Gift,
   Clock,
-  AlertCircle
-} from 'lucide-react';
-import { useLoyalty } from '../../contexts/LoyaltyContext';
-import { loyaltyService } from '../../services/loyaltyService';
+  AlertCircle,
+} from "lucide-react";
+import { useLoyalty } from "../../contexts/LoyaltyContext";
+import { loyaltyService } from "../../services/loyaltyService";
 
 interface LoyaltyOverviewProps {
   onViewHistory?: () => void;
@@ -69,7 +69,8 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
               Join Faredown Rewards
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              Start earning points on every booking and unlock exclusive benefits.
+              Start earning points on every booking and unlock exclusive
+              benefits.
             </p>
             <Button>Get Started</Button>
           </div>
@@ -103,7 +104,8 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
                 </div>
               )}
               <div className="text-sm text-gray-600">
-                Value: {loyaltyService.formatRupees((member.pointsBalance / 100) * 10)}
+                Value:{" "}
+                {loyaltyService.formatRupees((member.pointsBalance / 100) * 10)}
               </div>
             </div>
           </CardContent>
@@ -123,8 +125,14 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Badge 
-                  variant={tier.current.tier === 3 ? "default" : tier.current.tier === 2 ? "secondary" : "outline"}
+                <Badge
+                  variant={
+                    tier.current.tier === 3
+                      ? "default"
+                      : tier.current.tier === 2
+                        ? "secondary"
+                        : "outline"
+                  }
                   className="text-sm"
                 >
                   {tier.current.tierName}
@@ -133,22 +141,20 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
                   Level {tier.current.tier}
                 </span>
               </div>
-              
+
               {tier.next && (
                 <div className="space-y-2">
                   <div className="text-sm text-gray-600">
-                    {loyaltyService.formatPoints(tier.pointsToNext)} to {tier.next.tierName}
+                    {loyaltyService.formatPoints(tier.pointsToNext)} to{" "}
+                    {tier.next.tierName}
                   </div>
-                  <Progress 
-                    value={tier.progress} 
-                    className="h-2"
-                  />
+                  <Progress value={tier.progress} className="h-2" />
                   <div className="text-xs text-gray-500">
                     {tier.progress}% complete
                   </div>
                 </div>
               )}
-              
+
               {!tier.next && (
                 <div className="flex items-center gap-2 text-amber-600">
                   <Star className="w-4 h-4 fill-current" />
@@ -200,23 +206,25 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
                   Points Expiring Soon
                 </h4>
                 <p className="text-sm text-amber-700 mb-2">
-                  You have {loyaltyService.formatPoints(
-                    expiringSoon.reduce((sum, item) => sum + item.points, 0)
-                  )} points expiring in the next 60 days.
+                  You have{" "}
+                  {loyaltyService.formatPoints(
+                    expiringSoon.reduce((sum, item) => sum + item.points, 0),
+                  )}{" "}
+                  points expiring in the next 60 days.
                 </p>
                 <div className="space-y-1">
                   {expiringSoon.slice(0, 2).map((item, index) => (
                     <div key={index} className="text-xs text-amber-600">
-                      {loyaltyService.formatPoints(item.points)} points expire on{' '}
-                      {new Date(item.expireOn).toLocaleDateString()} 
-                      ({item.daysRemaining} days)
+                      {loyaltyService.formatPoints(item.points)} points expire
+                      on {new Date(item.expireOn).toLocaleDateString()}(
+                      {item.daysRemaining} days)
                     </div>
                   ))}
                 </div>
               </div>
-              <Button 
-                size="sm" 
-                variant="outline" 
+              <Button
+                size="sm"
+                variant="outline"
                 className="border-amber-300 text-amber-700 hover:bg-amber-100"
               >
                 Redeem Now
@@ -273,7 +281,7 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
                 )}
               </ul>
             </div>
-            
+
             {tier.next && (
               <div className="space-y-3">
                 <h4 className="font-medium text-gray-900">
@@ -282,11 +290,15 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
                 <ul className="space-y-2 text-sm text-gray-500">
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                    {tier.next.tier === 2 ? '10% bonus points' : '20% bonus points'}
+                    {tier.next.tier === 2
+                      ? "10% bonus points"
+                      : "20% bonus points"}
                   </li>
                   <li className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                    {tier.next.tier === 2 ? 'Priority support' : 'Room upgrades'}
+                    {tier.next.tier === 2
+                      ? "Priority support"
+                      : "Room upgrades"}
                   </li>
                   {tier.next.tier === 3 && (
                     <li className="flex items-center gap-2">
@@ -298,11 +310,11 @@ export function LoyaltyOverview({ onViewHistory }: LoyaltyOverviewProps) {
               </div>
             )}
           </div>
-          
+
           {onViewHistory && (
             <div className="mt-6 pt-4 border-t">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={onViewHistory}
                 className="w-full sm:w-auto"
               >

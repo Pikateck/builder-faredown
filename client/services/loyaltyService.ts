@@ -1,4 +1,4 @@
-import { apiClient as api } from '../lib/api';
+import { apiClient as api } from "../lib/api";
 
 export interface LoyaltyMember {
   id: number;
@@ -44,7 +44,7 @@ export interface LoyaltyProfile {
 
 export interface TransactionHistoryItem {
   id: number;
-  eventType: 'earn' | 'redeem' | 'adjust' | 'expire' | 'revoke';
+  eventType: "earn" | "redeem" | "adjust" | "expire" | "revoke";
   pointsDelta: number;
   rupeeValue?: number;
   description?: string;
@@ -89,7 +89,7 @@ export interface LoyaltyRules {
 }
 
 class LoyaltyService {
-  private baseUrl = '/api/loyalty';
+  private baseUrl = "/api/loyalty";
 
   // Get current user's loyalty profile
   async getProfile(): Promise<LoyaltyProfile> {
@@ -98,15 +98,18 @@ class LoyaltyService {
       if (response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || 'Failed to fetch loyalty profile');
+      throw new Error(response.data.error || "Failed to fetch loyalty profile");
     } catch (error) {
-      console.error('Error fetching loyalty profile:', error);
+      console.error("Error fetching loyalty profile:", error);
       throw error;
     }
   }
 
   // Get transaction history with pagination
-  async getTransactionHistory(limit = 20, offset = 0): Promise<{
+  async getTransactionHistory(
+    limit = 20,
+    offset = 0,
+  ): Promise<{
     items: TransactionHistoryItem[];
     pagination: {
       total: number;
@@ -117,32 +120,38 @@ class LoyaltyService {
   }> {
     try {
       const response = await api.get(`${this.baseUrl}/me/history`, {
-        params: { limit, offset }
+        params: { limit, offset },
       });
       if (response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || 'Failed to fetch transaction history');
+      throw new Error(
+        response.data.error || "Failed to fetch transaction history",
+      );
     } catch (error) {
-      console.error('Error fetching transaction history:', error);
+      console.error("Error fetching transaction history:", error);
       throw error;
     }
   }
 
   // Quote redemption for a cart
-  async quoteRedemption(eligibleAmount: number, currency = 'INR', fxRate = 1.0): Promise<RedemptionQuote> {
+  async quoteRedemption(
+    eligibleAmount: number,
+    currency = "INR",
+    fxRate = 1.0,
+  ): Promise<RedemptionQuote> {
     try {
       const response = await api.post(`${this.baseUrl}/quote-redeem`, {
         eligibleAmount,
         currency,
-        fxRate
+        fxRate,
       });
       if (response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || 'Failed to quote redemption');
+      throw new Error(response.data.error || "Failed to quote redemption");
     } catch (error) {
-      console.error('Error quoting redemption:', error);
+      console.error("Error quoting redemption:", error);
       throw error;
     }
   }
@@ -152,8 +161,8 @@ class LoyaltyService {
     cartId: string,
     points: number,
     eligibleAmount: number,
-    currency = 'INR',
-    fxRate = 1.0
+    currency = "INR",
+    fxRate = 1.0,
   ): Promise<ApplyRedemptionResult> {
     try {
       const response = await api.post(`${this.baseUrl}/apply`, {
@@ -161,14 +170,14 @@ class LoyaltyService {
         points,
         eligibleAmount,
         currency,
-        fxRate
+        fxRate,
       });
       if (response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || 'Failed to apply points');
+      throw new Error(response.data.error || "Failed to apply points");
     } catch (error) {
-      console.error('Error applying points:', error);
+      console.error("Error applying points:", error);
       throw error;
     }
   }
@@ -177,11 +186,11 @@ class LoyaltyService {
   async cancelRedemption(lockedId: string): Promise<boolean> {
     try {
       const response = await api.post(`${this.baseUrl}/cancel-redemption`, {
-        lockedId
+        lockedId,
       });
       return response.data.success;
     } catch (error) {
-      console.error('Error cancelling redemption:', error);
+      console.error("Error cancelling redemption:", error);
       return false;
     }
   }
@@ -193,26 +202,30 @@ class LoyaltyService {
       if (response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || 'Failed to fetch loyalty rules');
+      throw new Error(response.data.error || "Failed to fetch loyalty rules");
     } catch (error) {
-      console.error('Error fetching loyalty rules:', error);
+      console.error("Error fetching loyalty rules:", error);
       throw error;
     }
   }
 
   // Format points for display
   formatPoints(points: number): string {
-    return points.toLocaleString('en-IN');
+    return points.toLocaleString("en-IN");
   }
 
   // Format rupee value for display
   formatRupees(amount: number): string {
-    return `₹${amount.toLocaleString('en-IN')}`;
+    return `₹${amount.toLocaleString("en-IN")}`;
   }
 
   // Calculate points earned from amount
-  calculatePointsEarned(amount: number, bookingType: 'air' | 'hotel', tierMultiplier = 1.0): number {
-    const earnRate = bookingType === 'hotel' ? 5 : 3; // points per ₹100
+  calculatePointsEarned(
+    amount: number,
+    bookingType: "air" | "hotel",
+    tierMultiplier = 1.0,
+  ): number {
+    const earnRate = bookingType === "hotel" ? 5 : 3; // points per ₹100
     const basePoints = Math.floor((amount / 100) * earnRate);
     return Math.floor(basePoints * tierMultiplier);
   }
@@ -220,19 +233,26 @@ class LoyaltyService {
   // Validate redemption points
   validateRedemptionPoints(points: number): { valid: boolean; error?: string } {
     if (points < 200) {
-      return { valid: false, error: 'Minimum 200 points required' };
+      return { valid: false, error: "Minimum 200 points required" };
     }
     if (points % 100 !== 0) {
-      return { valid: false, error: 'Points must be in multiples of 100' };
+      return { valid: false, error: "Points must be in multiples of 100" };
     }
     return { valid: true };
   }
 
   // Get tier progress percentage
-  getTierProgress(currentPoints: number, currentThreshold: number, nextThreshold?: number): number {
+  getTierProgress(
+    currentPoints: number,
+    currentThreshold: number,
+    nextThreshold?: number,
+  ): number {
     if (!nextThreshold) return 100; // Already at highest tier
-    
-    const progress = ((currentPoints - currentThreshold) / (nextThreshold - currentThreshold)) * 100;
+
+    const progress =
+      ((currentPoints - currentThreshold) /
+        (nextThreshold - currentThreshold)) *
+      100;
     return Math.max(0, Math.min(100, Math.round(progress)));
   }
 

@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
-import { 
-  ArrowUp, 
-  ArrowDown, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import {
+  ArrowUp,
+  ArrowDown,
+  Clock,
   AlertCircle,
   ChevronLeft,
   RefreshCw,
-  Calendar
-} from 'lucide-react';
-import { loyaltyService, TransactionHistoryItem } from '../../services/loyaltyService';
+  Calendar,
+} from "lucide-react";
+import {
+  loyaltyService,
+  TransactionHistoryItem,
+} from "../../services/loyaltyService";
 
 interface LoyaltyHistoryProps {
   onBack?: () => void;
 }
 
 export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
-  const [transactions, setTransactions] = useState<TransactionHistoryItem[]>([]);
+  const [transactions, setTransactions] = useState<TransactionHistoryItem[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -28,22 +33,29 @@ export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
   const loadTransactions = async (reset = false) => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const currentOffset = reset ? 0 : offset;
-      const response = await loyaltyService.getTransactionHistory(limit, currentOffset);
-      
+      const response = await loyaltyService.getTransactionHistory(
+        limit,
+        currentOffset,
+      );
+
       if (reset) {
         setTransactions(response.items);
         setOffset(response.items.length);
       } else {
-        setTransactions(prev => [...prev, ...response.items]);
-        setOffset(prev => prev + response.items.length);
+        setTransactions((prev) => [...prev, ...response.items]);
+        setOffset((prev) => prev + response.items.length);
       }
-      
+
       setHasMore(response.pagination.hasMore);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load transaction history');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to load transaction history",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -63,33 +75,33 @@ export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
 
   const getTransactionLabel = (eventType: string) => {
     switch (eventType) {
-      case 'earn':
-        return { label: 'Earned', color: 'bg-green-100 text-green-800' };
-      case 'redeem':
-        return { label: 'Redeemed', color: 'bg-blue-100 text-blue-800' };
-      case 'adjust':
-        return { label: 'Adjustment', color: 'bg-yellow-100 text-yellow-800' };
-      case 'expire':
-        return { label: 'Expired', color: 'bg-gray-100 text-gray-800' };
-      case 'revoke':
-        return { label: 'Revoked', color: 'bg-red-100 text-red-800' };
+      case "earn":
+        return { label: "Earned", color: "bg-green-100 text-green-800" };
+      case "redeem":
+        return { label: "Redeemed", color: "bg-blue-100 text-blue-800" };
+      case "adjust":
+        return { label: "Adjustment", color: "bg-yellow-100 text-yellow-800" };
+      case "expire":
+        return { label: "Expired", color: "bg-gray-100 text-gray-800" };
+      case "revoke":
+        return { label: "Revoked", color: "bg-red-100 text-red-800" };
       default:
-        return { label: 'Unknown', color: 'bg-gray-100 text-gray-800' };
+        return { label: "Unknown", color: "bg-gray-100 text-gray-800" };
     }
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return {
-      date: date.toLocaleDateString('en-IN', { 
-        day: 'numeric', 
-        month: 'short', 
-        year: 'numeric' 
+      date: date.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
       }),
-      time: date.toLocaleTimeString('en-IN', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      })
+      time: date.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
   };
 
@@ -105,8 +117,8 @@ export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
               </p>
               <p className="text-xs text-red-600">{error}</p>
             </div>
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               variant="outline"
               onClick={() => loadTransactions(true)}
               className="ml-auto"
@@ -126,12 +138,7 @@ export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {onBack && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={onBack}
-              className="p-2"
-            >
+            <Button variant="ghost" size="sm" onClick={onBack} className="p-2">
               <ChevronLeft className="w-4 h-4" />
             </Button>
           )}
@@ -144,14 +151,16 @@ export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
             </p>
           </div>
         </div>
-        
-        <Button 
-          variant="outline" 
+
+        <Button
+          variant="outline"
           size="sm"
           onClick={() => loadTransactions(true)}
           disabled={isLoading}
         >
-          <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+          <RefreshCw
+            className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+          />
           Refresh
         </Button>
       </div>
@@ -192,67 +201,75 @@ export function LoyaltyHistory({ onBack }: LoyaltyHistoryProps) {
             <div className="divide-y">
               {transactions.map((transaction, index) => {
                 const { date, time } = formatDate(transaction.createdAt);
-                const { label, color } = getTransactionLabel(transaction.eventType);
-                
+                const { label, color } = getTransactionLabel(
+                  transaction.eventType,
+                );
+
                 return (
-                  <div 
+                  <div
                     key={`${transaction.id}-${index}`}
                     className="flex items-center gap-4 p-6 hover:bg-gray-50 transition-colors"
                   >
                     {/* Icon */}
                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                      {getTransactionIcon(transaction.eventType, transaction.pointsDelta)}
+                      {getTransactionIcon(
+                        transaction.eventType,
+                        transaction.pointsDelta,
+                      )}
                     </div>
-                    
+
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
                         <p className="text-sm font-medium text-gray-900 truncate">
                           {transaction.description || `${label} points`}
                         </p>
-                        <Badge className={`text-xs ${color}`}>
-                          {label}
-                        </Badge>
+                        <Badge className={`text-xs ${color}`}>{label}</Badge>
                       </div>
-                      
+
                       <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span>{date} at {time}</span>
+                        <span>
+                          {date} at {time}
+                        </span>
                         {transaction.bookingId && (
                           <span>Booking: {transaction.bookingId}</span>
                         )}
                         {transaction.rupeeValue && (
                           <span>
-                            Value: {loyaltyService.formatRupees(transaction.rupeeValue)}
+                            Value:{" "}
+                            {loyaltyService.formatRupees(
+                              transaction.rupeeValue,
+                            )}
                           </span>
                         )}
                       </div>
                     </div>
-                    
+
                     {/* Points */}
                     <div className="text-right">
-                      <div className={`font-semibold ${
-                        transaction.pointsDelta > 0 
-                          ? 'text-green-600' 
-                          : 'text-red-600'
-                      }`}>
-                        {transaction.pointsDelta > 0 ? '+' : ''}
+                      <div
+                        className={`font-semibold ${
+                          transaction.pointsDelta > 0
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {transaction.pointsDelta > 0 ? "+" : ""}
                         {loyaltyService.formatPoints(transaction.pointsDelta)}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        points
-                      </div>
+                      <div className="text-xs text-gray-500">points</div>
                     </div>
                   </div>
                 );
               })}
             </div>
           )}
-          
+
           {/* Load More Button */}
           {hasMore && (
             <div className="p-6 border-t">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => loadTransactions(false)}
                 disabled={isLoading}
                 className="w-full"

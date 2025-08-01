@@ -1,20 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { useToast } from '@/hooks/use-toast';
-import { apiClient as api } from '@/lib/api';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
+import { apiClient as api } from "@/lib/api";
 
 interface LoyaltyRule {
   id: string;
-  ruleType: 'EARNING' | 'REDEMPTION';
-  category: 'HOTEL' | 'FLIGHT';
+  ruleType: "EARNING" | "REDEMPTION";
+  category: "HOTEL" | "FLIGHT";
   pointsPerAmount: number;
   minAmount: number;
   maxPoints?: number;
@@ -44,26 +66,26 @@ interface LoyaltyMember {
   tierProgress: number;
   joinedAt: string;
   lastActivity: string;
-  status: 'ACTIVE' | 'SUSPENDED' | 'INACTIVE';
+  status: "ACTIVE" | "SUSPENDED" | "INACTIVE";
 }
 
 export default function LoyaltyManagement() {
-  const [activeTab, setActiveTab] = useState('rules');
+  const [activeTab, setActiveTab] = useState("rules");
   const [rules, setRules] = useState<LoyaltyRule[]>([]);
   const [tiers, setTiers] = useState<TierRule[]>([]);
   const [members, setMembers] = useState<LoyaltyMember[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingRule, setEditingRule] = useState<LoyaltyRule | null>(null);
   const [editingTier, setEditingTier] = useState<TierRule | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
-    if (activeTab === 'rules') {
+    if (activeTab === "rules") {
       fetchRules();
-    } else if (activeTab === 'tiers') {
+    } else if (activeTab === "tiers") {
       fetchTiers();
-    } else if (activeTab === 'members') {
+    } else if (activeTab === "members") {
       fetchMembers();
     }
   }, [activeTab]);
@@ -71,10 +93,14 @@ export default function LoyaltyManagement() {
   const fetchRules = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/api/admin/loyalty/rules');
+      const response = await api.get("/api/admin/loyalty/rules");
       setRules(response.data);
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch loyalty rules', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to fetch loyalty rules",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -83,10 +109,14 @@ export default function LoyaltyManagement() {
   const fetchTiers = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/api/admin/loyalty/tiers');
+      const response = await api.get("/api/admin/loyalty/tiers");
       setTiers(response.data);
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch tier rules', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to fetch tier rules",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -95,12 +125,16 @@ export default function LoyaltyManagement() {
   const fetchMembers = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/api/admin/loyalty/members', {
-        params: { search: searchTerm }
+      const response = await api.get("/api/admin/loyalty/members", {
+        params: { search: searchTerm },
       });
       setMembers(response.data);
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch loyalty members', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to fetch loyalty members",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -110,15 +144,25 @@ export default function LoyaltyManagement() {
     try {
       if (editingRule) {
         await api.put(`/api/admin/loyalty/rules/${editingRule.id}`, rule);
-        toast({ title: 'Success', description: 'Loyalty rule updated successfully' });
+        toast({
+          title: "Success",
+          description: "Loyalty rule updated successfully",
+        });
       } else {
-        await api.post('/api/admin/loyalty/rules', rule);
-        toast({ title: 'Success', description: 'Loyalty rule created successfully' });
+        await api.post("/api/admin/loyalty/rules", rule);
+        toast({
+          title: "Success",
+          description: "Loyalty rule created successfully",
+        });
       }
       setEditingRule(null);
       fetchRules();
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to save loyalty rule', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to save loyalty rule",
+        variant: "destructive",
+      });
     }
   };
 
@@ -126,74 +170,122 @@ export default function LoyaltyManagement() {
     try {
       if (editingTier) {
         await api.put(`/api/admin/loyalty/tiers/${editingTier.id}`, tier);
-        toast({ title: 'Success', description: 'Tier rule updated successfully' });
+        toast({
+          title: "Success",
+          description: "Tier rule updated successfully",
+        });
       } else {
-        await api.post('/api/admin/loyalty/tiers', tier);
-        toast({ title: 'Success', description: 'Tier rule created successfully' });
+        await api.post("/api/admin/loyalty/tiers", tier);
+        toast({
+          title: "Success",
+          description: "Tier rule created successfully",
+        });
       }
       setEditingTier(null);
       fetchTiers();
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to save tier rule', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to save tier rule",
+        variant: "destructive",
+      });
     }
   };
 
   const deleteRule = async (ruleId: string) => {
     try {
       await api.delete(`/api/admin/loyalty/rules/${ruleId}`);
-      toast({ title: 'Success', description: 'Loyalty rule deleted successfully' });
+      toast({
+        title: "Success",
+        description: "Loyalty rule deleted successfully",
+      });
       fetchRules();
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to delete loyalty rule', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to delete loyalty rule",
+        variant: "destructive",
+      });
     }
   };
 
   const updateMemberStatus = async (memberId: string, status: string) => {
     try {
       await api.patch(`/api/admin/loyalty/members/${memberId}`, { status });
-      toast({ title: 'Success', description: 'Member status updated successfully' });
-      fetchMembers();
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to update member status', variant: 'destructive' });
-    }
-  };
-
-  const adjustMemberPoints = async (memberId: string, points: number, reason: string) => {
-    try {
-      await api.post(`/api/admin/loyalty/members/${memberId}/adjust-points`, { 
-        points, 
-        reason,
-        type: points > 0 ? 'MANUAL_CREDIT' : 'MANUAL_DEBIT'
+      toast({
+        title: "Success",
+        description: "Member status updated successfully",
       });
-      toast({ title: 'Success', description: 'Member points adjusted successfully' });
       fetchMembers();
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to adjust member points', variant: 'destructive' });
+      toast({
+        title: "Error",
+        description: "Failed to update member status",
+        variant: "destructive",
+      });
     }
   };
 
-  const RuleForm = ({ rule, onSave, onCancel }: { rule?: LoyaltyRule | null, onSave: (rule: any) => void, onCancel: () => void }) => {
+  const adjustMemberPoints = async (
+    memberId: string,
+    points: number,
+    reason: string,
+  ) => {
+    try {
+      await api.post(`/api/admin/loyalty/members/${memberId}/adjust-points`, {
+        points,
+        reason,
+        type: points > 0 ? "MANUAL_CREDIT" : "MANUAL_DEBIT",
+      });
+      toast({
+        title: "Success",
+        description: "Member points adjusted successfully",
+      });
+      fetchMembers();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to adjust member points",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const RuleForm = ({
+    rule,
+    onSave,
+    onCancel,
+  }: {
+    rule?: LoyaltyRule | null;
+    onSave: (rule: any) => void;
+    onCancel: () => void;
+  }) => {
     const [formData, setFormData] = useState({
-      ruleType: rule?.ruleType || 'EARNING',
-      category: rule?.category || 'HOTEL',
+      ruleType: rule?.ruleType || "EARNING",
+      category: rule?.category || "HOTEL",
       pointsPerAmount: rule?.pointsPerAmount || 0,
       minAmount: rule?.minAmount || 0,
-      maxPoints: rule?.maxPoints || '',
+      maxPoints: rule?.maxPoints || "",
       active: rule?.active ?? true,
-      validFrom: rule?.validFrom || new Date().toISOString().split('T')[0],
-      validTo: rule?.validTo || ''
+      validFrom: rule?.validFrom || new Date().toISOString().split("T")[0],
+      validTo: rule?.validTo || "",
     });
 
     return (
       <Card className="mt-4">
         <CardHeader>
-          <CardTitle>{rule ? 'Edit' : 'Create'} Loyalty Rule</CardTitle>
+          <CardTitle>{rule ? "Edit" : "Create"} Loyalty Rule</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="ruleType">Rule Type</Label>
-              <Select value={formData.ruleType} onValueChange={(value) => setFormData({...formData, ruleType: value as any})}>
+              <Select
+                value={formData.ruleType}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, ruleType: value as any })
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -205,7 +297,12 @@ export default function LoyaltyManagement() {
             </div>
             <div>
               <Label htmlFor="category">Category</Label>
-              <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value as any})}>
+              <Select
+                value={formData.category}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, category: value as any })
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -222,7 +319,12 @@ export default function LoyaltyManagement() {
               <Input
                 type="number"
                 value={formData.pointsPerAmount}
-                onChange={(e) => setFormData({...formData, pointsPerAmount: parseFloat(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    pointsPerAmount: parseFloat(e.target.value),
+                  })
+                }
               />
             </div>
             <div>
@@ -230,7 +332,12 @@ export default function LoyaltyManagement() {
               <Input
                 type="number"
                 value={formData.minAmount}
-                onChange={(e) => setFormData({...formData, minAmount: parseFloat(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    minAmount: parseFloat(e.target.value),
+                  })
+                }
               />
             </div>
           </div>
@@ -240,14 +347,18 @@ export default function LoyaltyManagement() {
               <Input
                 type="number"
                 value={formData.maxPoints}
-                onChange={(e) => setFormData({...formData, maxPoints: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, maxPoints: e.target.value })
+                }
                 placeholder="No limit"
               />
             </div>
             <div className="flex items-center space-x-2 pt-6">
               <Switch
                 checked={formData.active}
-                onCheckedChange={(checked) => setFormData({...formData, active: checked})}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, active: checked })
+                }
               />
               <Label>Active</Label>
             </div>
@@ -258,7 +369,9 @@ export default function LoyaltyManagement() {
               <Input
                 type="date"
                 value={formData.validFrom}
-                onChange={(e) => setFormData({...formData, validFrom: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, validFrom: e.target.value })
+                }
               />
             </div>
             <div>
@@ -266,33 +379,45 @@ export default function LoyaltyManagement() {
               <Input
                 type="date"
                 value={formData.validTo}
-                onChange={(e) => setFormData({...formData, validTo: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, validTo: e.target.value })
+                }
               />
             </div>
           </div>
           <div className="flex gap-2">
             <Button onClick={() => onSave(formData)}>Save Rule</Button>
-            <Button variant="outline" onClick={onCancel}>Cancel</Button>
+            <Button variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
           </div>
         </CardContent>
       </Card>
     );
   };
 
-  const TierForm = ({ tier, onSave, onCancel }: { tier?: TierRule | null, onSave: (tier: any) => void, onCancel: () => void }) => {
+  const TierForm = ({
+    tier,
+    onSave,
+    onCancel,
+  }: {
+    tier?: TierRule | null;
+    onSave: (tier: any) => void;
+    onCancel: () => void;
+  }) => {
     const [formData, setFormData] = useState({
-      tierName: tier?.tierName || '',
+      tierName: tier?.tierName || "",
       minPoints: tier?.minPoints || 0,
-      maxPoints: tier?.maxPoints || '',
+      maxPoints: tier?.maxPoints || "",
       multiplier: tier?.multiplier || 1,
-      benefits: tier?.benefits?.join('\n') || '',
-      active: tier?.active ?? true
+      benefits: tier?.benefits?.join("\n") || "",
+      active: tier?.active ?? true,
     });
 
     return (
       <Card className="mt-4">
         <CardHeader>
-          <CardTitle>{tier ? 'Edit' : 'Create'} Tier Rule</CardTitle>
+          <CardTitle>{tier ? "Edit" : "Create"} Tier Rule</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -300,7 +425,9 @@ export default function LoyaltyManagement() {
               <Label htmlFor="tierName">Tier Name</Label>
               <Input
                 value={formData.tierName}
-                onChange={(e) => setFormData({...formData, tierName: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, tierName: e.target.value })
+                }
                 placeholder="e.g., Bronze, Silver, Gold"
               />
             </div>
@@ -310,7 +437,12 @@ export default function LoyaltyManagement() {
                 type="number"
                 step="0.1"
                 value={formData.multiplier}
-                onChange={(e) => setFormData({...formData, multiplier: parseFloat(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    multiplier: parseFloat(e.target.value),
+                  })
+                }
               />
             </div>
           </div>
@@ -320,7 +452,12 @@ export default function LoyaltyManagement() {
               <Input
                 type="number"
                 value={formData.minPoints}
-                onChange={(e) => setFormData({...formData, minPoints: parseInt(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    minPoints: parseInt(e.target.value),
+                  })
+                }
               />
             </div>
             <div>
@@ -328,7 +465,9 @@ export default function LoyaltyManagement() {
               <Input
                 type="number"
                 value={formData.maxPoints}
-                onChange={(e) => setFormData({...formData, maxPoints: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, maxPoints: e.target.value })
+                }
                 placeholder="No limit for highest tier"
               />
             </div>
@@ -338,37 +477,59 @@ export default function LoyaltyManagement() {
             <textarea
               className="w-full min-h-[100px] p-2 border rounded-md"
               value={formData.benefits}
-              onChange={(e) => setFormData({...formData, benefits: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, benefits: e.target.value })
+              }
               placeholder="Priority support\nExtra baggage allowance\nFree room upgrades"
             />
           </div>
           <div className="flex items-center space-x-2">
             <Switch
               checked={formData.active}
-              onCheckedChange={(checked) => setFormData({...formData, active: checked})}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, active: checked })
+              }
             />
             <Label>Active</Label>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => onSave({
-              ...formData,
-              benefits: formData.benefits.split('\n').filter(b => b.trim())
-            })}>Save Tier</Button>
-            <Button variant="outline" onClick={onCancel}>Cancel</Button>
+            <Button
+              onClick={() =>
+                onSave({
+                  ...formData,
+                  benefits: formData.benefits
+                    .split("\n")
+                    .filter((b) => b.trim()),
+                })
+              }
+            >
+              Save Tier
+            </Button>
+            <Button variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
           </div>
         </CardContent>
       </Card>
     );
   };
 
-  const MemberAdjustmentDialog = ({ member, onSave }: { member: LoyaltyMember, onSave: (points: number, reason: string) => void }) => {
+  const MemberAdjustmentDialog = ({
+    member,
+    onSave,
+  }: {
+    member: LoyaltyMember;
+    onSave: (points: number, reason: string) => void;
+  }) => {
     const [points, setPoints] = useState(0);
-    const [reason, setReason] = useState('');
+    const [reason, setReason] = useState("");
 
     return (
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="outline" size="sm">Adjust Points</Button>
+          <Button variant="outline" size="sm">
+            Adjust Points
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -398,7 +559,10 @@ export default function LoyaltyManagement() {
           </div>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => onSave(points, reason)} disabled={!reason.trim()}>
+            <AlertDialogAction
+              onClick={() => onSave(points, reason)}
+              disabled={!reason.trim()}
+            >
               Adjust Points
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -411,7 +575,9 @@ export default function LoyaltyManagement() {
     <div className="container mx-auto p-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Loyalty Management</h1>
-        <p className="text-muted-foreground">Configure loyalty rules, tiers, and manage members</p>
+        <p className="text-muted-foreground">
+          Configure loyalty rules, tiers, and manage members
+        </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -444,12 +610,20 @@ export default function LoyaltyManagement() {
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <Badge variant={rule.ruleType === 'EARNING' ? 'default' : 'secondary'}>
+                        <Badge
+                          variant={
+                            rule.ruleType === "EARNING"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
                           {rule.ruleType}
                         </Badge>
                         <Badge variant="outline">{rule.category}</Badge>
-                        <Badge variant={rule.active ? 'default' : 'destructive'}>
-                          {rule.active ? 'Active' : 'Inactive'}
+                        <Badge
+                          variant={rule.active ? "default" : "destructive"}
+                        >
+                          {rule.active ? "Active" : "Inactive"}
                         </Badge>
                       </div>
                       <p className="text-sm">
@@ -458,7 +632,8 @@ export default function LoyaltyManagement() {
                         {rule.maxPoints && ` (max ${rule.maxPoints} points)`}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Valid: {rule.validFrom} {rule.validTo && `- ${rule.validTo}`}
+                        Valid: {rule.validFrom}{" "}
+                        {rule.validTo && `- ${rule.validTo}`}
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -471,18 +646,25 @@ export default function LoyaltyManagement() {
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button variant="destructive" size="sm">Delete</Button>
+                          <Button variant="destructive" size="sm">
+                            Delete
+                          </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Loyalty Rule</AlertDialogTitle>
+                            <AlertDialogTitle>
+                              Delete Loyalty Rule
+                            </AlertDialogTitle>
                             <AlertDialogDescription>
-                              This action cannot be undone. This will permanently delete the loyalty rule.
+                              This action cannot be undone. This will
+                              permanently delete the loyalty rule.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => deleteRule(rule.id)}>
+                            <AlertDialogAction
+                              onClick={() => deleteRule(rule.id)}
+                            >
                               Delete
                             </AlertDialogAction>
                           </AlertDialogFooter>
@@ -520,13 +702,17 @@ export default function LoyaltyManagement() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold">{tier.tierName}</h3>
-                        <Badge variant={tier.active ? 'default' : 'destructive'}>
-                          {tier.active ? 'Active' : 'Inactive'}
+                        <Badge
+                          variant={tier.active ? "default" : "destructive"}
+                        >
+                          {tier.active ? "Active" : "Inactive"}
                         </Badge>
-                        <Badge variant="outline">{tier.multiplier}x Multiplier</Badge>
+                        <Badge variant="outline">
+                          {tier.multiplier}x Multiplier
+                        </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">
-                        {tier.minPoints} - {tier.maxPoints || '∞'} points
+                        {tier.minPoints} - {tier.maxPoints || "∞"} points
                       </p>
                       {tier.benefits.length > 0 && (
                         <div>
@@ -578,38 +764,58 @@ export default function LoyaltyManagement() {
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold">{member.name}</h3>
                         <Badge variant="outline">{member.currentTier}</Badge>
-                        <Badge variant={
-                          member.status === 'ACTIVE' ? 'default' : 
-                          member.status === 'SUSPENDED' ? 'destructive' : 'secondary'
-                        }>
+                        <Badge
+                          variant={
+                            member.status === "ACTIVE"
+                              ? "default"
+                              : member.status === "SUSPENDED"
+                                ? "destructive"
+                                : "secondary"
+                          }
+                        >
                           {member.status}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-1">{member.email}</p>
+                      <p className="text-sm text-muted-foreground mb-1">
+                        {member.email}
+                      </p>
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
-                          <span className="font-medium">Current Points:</span> {member.currentPoints}
+                          <span className="font-medium">Current Points:</span>{" "}
+                          {member.currentPoints}
                         </div>
                         <div>
-                          <span className="font-medium">Lifetime Earned:</span> {member.lifetimeEarned}
+                          <span className="font-medium">Lifetime Earned:</span>{" "}
+                          {member.lifetimeEarned}
                         </div>
                         <div>
-                          <span className="font-medium">Tier Progress:</span> {member.tierProgress}%
+                          <span className="font-medium">Tier Progress:</span>{" "}
+                          {member.tierProgress}%
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground mt-2">
-                        <div>Joined: {new Date(member.joinedAt).toLocaleDateString()}</div>
-                        <div>Last Activity: {new Date(member.lastActivity).toLocaleDateString()}</div>
+                        <div>
+                          Joined:{" "}
+                          {new Date(member.joinedAt).toLocaleDateString()}
+                        </div>
+                        <div>
+                          Last Activity:{" "}
+                          {new Date(member.lastActivity).toLocaleDateString()}
+                        </div>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <MemberAdjustmentDialog
                         member={member}
-                        onSave={(points, reason) => adjustMemberPoints(member.id, points, reason)}
+                        onSave={(points, reason) =>
+                          adjustMemberPoints(member.id, points, reason)
+                        }
                       />
                       <Select
                         value={member.status}
-                        onValueChange={(status) => updateMemberStatus(member.id, status)}
+                        onValueChange={(status) =>
+                          updateMemberStatus(member.id, status)
+                        }
                       >
                         <SelectTrigger className="w-32">
                           <SelectValue />

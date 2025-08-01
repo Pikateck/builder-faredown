@@ -178,7 +178,11 @@ export function FlightStyleBargainModal({
         }));
       }
     }
-  }, [bargainState.isTimerActive, bargainState.timeRemaining, bargainState.phase]);
+  }, [
+    bargainState.isTimerActive,
+    bargainState.timeRemaining,
+    bargainState.phase,
+  ]);
 
   // Reset state when modal opens/closes
   useEffect(() => {
@@ -252,7 +256,7 @@ export function FlightStyleBargainModal({
         originalTotalPrice,
         counterOffer,
         timeRemaining: 30,
-        isTimerActive: true
+        isTimerActive: true,
       });
       setBargainState((prev) => {
         const newState = {
@@ -357,9 +361,7 @@ export function FlightStyleBargainModal({
                       selectedCurrency.code,
                     )}
                   </p>
-                  <p className="text-xs text-gray-500">
-                    (All Inclusive Price)
-                  </p>
+                  <p className="text-xs text-gray-500">(All Inclusive Price)</p>
                 </div>
               </div>
             </div>
@@ -375,16 +377,14 @@ export function FlightStyleBargainModal({
                     AI Assistant
                   </p>
                   <p className="text-sm text-gray-600">
-                    Tell me your target price and I'll negotiate with the
-                    hotel!
+                    Tell me your target price and I'll negotiate with the hotel!
                   </p>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm md:text-base font-semibold mb-3 text-gray-900 text-center">
-                  What price would you like to pay? (
-                  {selectedCurrency.symbol})
+                  What price would you like to pay? ({selectedCurrency.symbol})
                 </label>
 
                 <div className="relative">
@@ -440,8 +440,7 @@ export function FlightStyleBargainModal({
                 AI Negotiating with {hotel.name}
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Analyzing market rates and finding the best deal for
-                you...
+                Analyzing market rates and finding the best deal for you...
               </p>
               <Progress
                 value={bargainState.negotiationProgress}
@@ -458,7 +457,7 @@ export function FlightStyleBargainModal({
         console.log("🎯 RENDERING COUNTER OFFER PHASE WITH TIMER", {
           timeRemaining: bargainState.timeRemaining,
           isTimerActive: bargainState.isTimerActive,
-          currentCounterOffer: bargainState.currentCounterOffer
+          currentCounterOffer: bargainState.currentCounterOffer,
         });
         const savings =
           priceCalculation.total - (bargainState.currentCounterOffer || 0);
@@ -469,8 +468,8 @@ export function FlightStyleBargainModal({
                 AI Counter Offer!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The hotel couldn't match your price, but here's
-                their best offer!
+                The hotel couldn't match your price, but here's their best
+                offer!
               </p>
             </div>
 
@@ -480,13 +479,14 @@ export function FlightStyleBargainModal({
                 {(bargainState.currentCounterOffer || 0).toLocaleString()}
               </div>
               <p className="text-sm text-[#003580] font-medium mb-3">
-                {numberToWords((bargainState.currentCounterOffer || 0).toString())}
+                {numberToWords(
+                  (bargainState.currentCounterOffer || 0).toString(),
+                )}
               </p>
               <div className="text-center">
                 <span className="text-sm font-semibold text-[#003580] bg-[#003580]/10 px-4 py-2 rounded-full">
                   You save {selectedCurrency.symbol}
-                  {savings.toLocaleString()}
-                  !
+                  {savings.toLocaleString()}!
                 </span>
               </div>
             </div>
@@ -510,7 +510,9 @@ export function FlightStyleBargainModal({
               </Button>
 
               <Button
-                onClick={() => setBargainState((prev) => ({ ...prev, phase: "initial" }))}
+                onClick={() =>
+                  setBargainState((prev) => ({ ...prev, phase: "initial" }))
+                }
                 variant="outline"
                 className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
               >
@@ -584,7 +586,14 @@ export function FlightStyleBargainModal({
             </Button>
 
             <Button
-              onClick={() => setBargainState({ phase: "initial", userOffers: [], timeRemaining: 30, isTimerActive: false })}
+              onClick={() =>
+                setBargainState({
+                  phase: "initial",
+                  userOffers: [],
+                  timeRemaining: 30,
+                  isTimerActive: false,
+                })
+              }
               variant="outline"
               className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
             >
@@ -607,13 +616,9 @@ export function FlightStyleBargainModal({
               </p>
             </div>
 
-
-
             {bargainState.timeRemaining === 0 && (
               <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-4 shadow-lg">
-                <p className="text-[#003580] font-medium">
-                  Offer has expired
-                </p>
+                <p className="text-[#003580] font-medium">Offer has expired</p>
               </div>
             )}
 

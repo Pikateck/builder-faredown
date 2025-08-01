@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool } from "pg";
 
 export interface LoyaltyMember {
   id: number;
@@ -18,7 +18,7 @@ export interface LoyaltyLedgerEntry {
   id: number;
   userId: number;
   bookingId?: string;
-  eventType: 'earn' | 'redeem' | 'adjust' | 'expire' | 'revoke';
+  eventType: "earn" | "redeem" | "adjust" | "expire" | "revoke";
   pointsDelta: number;
   rupeeValue?: number;
   fxRate: number;
@@ -36,7 +36,7 @@ export interface TierRule {
 }
 
 export interface LoyaltyRule {
-  channel: 'AIR' | 'HOTEL';
+  channel: "AIR" | "HOTEL";
   earnPer100: number;
   redeemValuePer100: number;
   minRedeem: number;
@@ -69,21 +69,26 @@ export class LoyaltyService {
   async createMember(userId: number): Promise<LoyaltyMember> {
     const client = await this.db.connect();
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
-      const memberCodeResult = await client.query('SELECT generate_member_code() as code');
+      const memberCodeResult = await client.query(
+        "SELECT generate_member_code() as code",
+      );
       const memberCode = memberCodeResult.rows[0].code;
 
-      const result = await client.query(`
+      const result = await client.query(
+        `
         INSERT INTO loyalty_members (user_id, member_code)
         VALUES ($1, $2)
         RETURNING *
-      `, [userId, memberCode]);
+      `,
+        [userId, memberCode],
+      );
 
-      await client.query('COMMIT');
+      await client.query("COMMIT");
       return this.mapMemberRow(result.rows[0]);
     } catch (error) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       throw error;
     } finally {
       client.release();
@@ -92,9 +97,12 @@ export class LoyaltyService {
 
   // Get member by user ID
   async getMember(userId: number): Promise<LoyaltyMember | null> {
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT * FROM loyalty_members WHERE user_id = $1
-    `, [userId]);
+    `,
+      [userId],
+    );
 
     return result.rows.length > 0 ? this.mapMemberRow(result.rows[0]) : null;
   }
@@ -122,7 +130,7 @@ export class LoyaltyService {
         earnPer100: row.earn_per_100,
         redeemValuePer100: row.redeem_value_per_100,
         minRedeem: row.min_redeem,
-        maxCapPct: row.max_cap_pct
+        maxCapPct: row.max_cap_pct,
       };
       return acc;
     }, {} as any);
@@ -138,26 +146,26 @@ export class LoyaltyService {
       ORDER BY tier ASC
     `);
 
-    return result.rows.map(row => ({
+    return result.rows.map((row) => ({
       tier: row.tier,
       thresholdPoints12m: row.threshold_points_12m,
       earnMultiplier: row.earn_multiplier,
       benefits: row.benefits,
-      tierName: row.tier_name
+      tierName: row.tier_name,
     }));
   }
 
   // Calculate points earned from booking
   async calculateEarning(
     userId: number,
-    bookingType: 'AIR' | 'HOTEL',
-    eligibility: BookingEligibility
+    bookingType: "AIR" | "HOTEL",
+    eligibility: BookingEligibility,
   ): Promise<number> {
     const member = await this.getOrCreateMember(userId);
     const rules = await this.getRules();
     const tierRules = await this.getTierRules();
 
-    const rule = rules[bookingType.toLowerCase() as 'air' | 'hotel'];
+    const rule = rules[bookingType.toLowerCase() as "air" | "hotel"];
     if (!rule) return 0;
 
     // Convert to INR if needed
@@ -167,7 +175,7 @@ export class LoyaltyService {
     const basePoints = Math.floor((inrAmount / 100) * rule.earnPer100);
 
     // Apply tier multiplier
-    const currentTier = tierRules.find(t => t.tier === member.tier);
+    const currentTier = tierRules.find((t) => t.tier === member.tier);
     const multiplier = currentTier?.earnMultiplier || 1.0;
     const earnedPoints = Math.floor(basePoints * multiplier);
 
@@ -178,60 +186,78 @@ export class LoyaltyService {
   async processEarning(
     userId: number,
     bookingId: string,
-    bookingType: 'AIR' | 'HOTEL',
+    bookingType: "AIR" | "HOTEL",
     eligibility: BookingEligibility,
-    description?: string
+    description?: string,
   ): Promise<number> {
-    const earnedPoints = await this.calculateEarning(userId, bookingType, eligibility);
+    const earnedPoints = await this.calculateEarning(
+      userId,
+      bookingType,
+      eligibility,
+    );
     if (earnedPoints <= 0) return 0;
 
     const client = await this.db.connect();
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
       // Add to ledger
-      await client.query(`
+      await client.query(
+        `
         INSERT INTO loyalty_ledger 
         (user_id, booking_id, event_type, points_delta, rupee_value, fx_rate, description, meta)
         VALUES ($1, $2, 'earn', $3, $4, $5, $6, $7)
-      `, [
-        userId,
-        bookingId,
-        earnedPoints,
-        eligibility.eligibleAmount,
-        eligibility.fxRate,
-        description || `Earned from ${bookingType} booking`,
-        JSON.stringify({
-          bookingType,
-          baseAmount: eligibility.baseAmount,
-          eligibleAmount: eligibility.eligibleAmount,
-          currency: eligibility.currency
-        })
-      ]);
+      `,
+        [
+          userId,
+          bookingId,
+          earnedPoints,
+          eligibility.eligibleAmount,
+          eligibility.fxRate,
+          description || `Earned from ${bookingType} booking`,
+          JSON.stringify({
+            bookingType,
+            baseAmount: eligibility.baseAmount,
+            eligibleAmount: eligibility.eligibleAmount,
+            currency: eligibility.currency,
+          }),
+        ],
+      );
 
       // Update member balance
-      await client.query(`
+      await client.query(
+        `
         UPDATE loyalty_members 
         SET points_balance = points_balance + $1,
             points_lifetime = points_lifetime + $1,
             points_12m = points_12m + $1,
             last_calc_date = NOW()
         WHERE user_id = $2
-      `, [earnedPoints, userId]);
+      `,
+        [earnedPoints, userId],
+      );
 
       // Add to expiry tracking (24 months from now)
       const expiryDate = new Date();
       expiryDate.setMonth(expiryDate.getMonth() + 24);
-      
-      await client.query(`
+
+      await client.query(
+        `
         INSERT INTO point_expiry (user_id, points, earn_batch_id, expire_on)
         VALUES ($1, $2, $3, $4)
-      `, [userId, earnedPoints, bookingId, expiryDate.toISOString().split('T')[0]]);
+      `,
+        [
+          userId,
+          earnedPoints,
+          bookingId,
+          expiryDate.toISOString().split("T")[0],
+        ],
+      );
 
-      await client.query('COMMIT');
+      await client.query("COMMIT");
       return earnedPoints;
     } catch (error) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       throw error;
     } finally {
       client.release();
@@ -242,16 +268,17 @@ export class LoyaltyService {
   async quoteRedemption(
     userId: number,
     eligibleAmount: number,
-    currency: string = 'INR',
-    fxRate: number = 1.0
+    currency: string = "INR",
+    fxRate: number = 1.0,
   ): Promise<RedemptionQuote> {
     const member = await this.getMember(userId);
     if (!member) {
-      return { maxPoints: 0, rupeeValue: 0, capReason: 'Not a loyalty member' };
+      return { maxPoints: 0, rupeeValue: 0, capReason: "Not a loyalty member" };
     }
 
     const rules = await this.getRules();
-    const redeemValuePer100 = rules.air?.redeemValuePer100 || rules.hotel?.redeemValuePer100 || 10;
+    const redeemValuePer100 =
+      rules.air?.redeemValuePer100 || rules.hotel?.redeemValuePer100 || 10;
     const maxCapPct = rules.air?.maxCapPct || rules.hotel?.maxCapPct || 0.2;
     const minRedeem = rules.air?.minRedeem || rules.hotel?.minRedeem || 200;
 
@@ -262,11 +289,13 @@ export class LoyaltyService {
     const maxRedeemValue = inrEligibleAmount * maxCapPct;
 
     // Calculate maximum points based on value cap and available balance
-    const maxPointsByValue = Math.floor((maxRedeemValue / redeemValuePer100) * 100);
+    const maxPointsByValue = Math.floor(
+      (maxRedeemValue / redeemValuePer100) * 100,
+    );
     const availablePoints = member.pointsBalance - member.pointsLocked;
 
     let maxPoints = Math.min(maxPointsByValue, availablePoints);
-    let capReason = '';
+    let capReason = "";
 
     if (maxPoints < minRedeem) {
       maxPoints = 0;
@@ -274,7 +303,7 @@ export class LoyaltyService {
     } else if (maxPoints === maxPointsByValue) {
       capReason = `Limited to ${Math.round(maxCapPct * 100)}% of booking value`;
     } else if (maxPoints === availablePoints) {
-      capReason = 'Limited by available point balance';
+      capReason = "Limited by available point balance";
     }
 
     // Round down to nearest 100 for clean UX
@@ -285,7 +314,7 @@ export class LoyaltyService {
     return {
       maxPoints,
       rupeeValue,
-      capReason: capReason || undefined
+      capReason: capReason || undefined,
     };
   }
 
@@ -295,106 +324,150 @@ export class LoyaltyService {
     cartId: string,
     points: number,
     eligibleAmount: number,
-    currency: string = 'INR',
-    fxRate: number = 1.0
-  ): Promise<{ success: boolean; lockedId?: string; rupeeValue?: number; error?: string }> {
-    const quote = await this.quoteRedemption(userId, eligibleAmount, currency, fxRate);
-    
+    currency: string = "INR",
+    fxRate: number = 1.0,
+  ): Promise<{
+    success: boolean;
+    lockedId?: string;
+    rupeeValue?: number;
+    error?: string;
+  }> {
+    const quote = await this.quoteRedemption(
+      userId,
+      eligibleAmount,
+      currency,
+      fxRate,
+    );
+
     if (points > quote.maxPoints) {
-      return { success: false, error: `Cannot redeem ${points} points. Maximum: ${quote.maxPoints}` };
+      return {
+        success: false,
+        error: `Cannot redeem ${points} points. Maximum: ${quote.maxPoints}`,
+      };
     }
 
     const rules = await this.getRules();
-    const redeemValuePer100 = rules.air?.redeemValuePer100 || rules.hotel?.redeemValuePer100 || 10;
+    const redeemValuePer100 =
+      rules.air?.redeemValuePer100 || rules.hotel?.redeemValuePer100 || 10;
     const rupeeValue = (points / 100) * redeemValuePer100;
 
     const client = await this.db.connect();
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
       // Create redemption transaction
-      const result = await client.query(`
+      const result = await client.query(
+        `
         INSERT INTO loyalty_transactions 
         (user_id, cart_id, points_applied, rupee_value, expires_at)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id
-      `, [userId, cartId, points, rupeeValue, new Date(Date.now() + 30 * 60 * 1000)]); // 30 min expiry
+      `,
+        [
+          userId,
+          cartId,
+          points,
+          rupeeValue,
+          new Date(Date.now() + 30 * 60 * 1000),
+        ],
+      ); // 30 min expiry
 
       const lockedId = result.rows[0].id;
 
       // Lock points
-      await client.query(`
+      await client.query(
+        `
         UPDATE loyalty_members 
         SET points_locked = points_locked + $1
         WHERE user_id = $2
-      `, [points, userId]);
+      `,
+        [points, userId],
+      );
 
-      await client.query('COMMIT');
-      
+      await client.query("COMMIT");
+
       return {
         success: true,
         lockedId: lockedId.toString(),
-        rupeeValue
+        rupeeValue,
       };
     } catch (error) {
-      await client.query('ROLLBACK');
-      return { success: false, error: 'Failed to apply redemption' };
+      await client.query("ROLLBACK");
+      return { success: false, error: "Failed to apply redemption" };
     } finally {
       client.release();
     }
   }
 
   // Confirm redemption after successful payment
-  async confirmRedemption(lockedId: string, bookingId: string): Promise<boolean> {
+  async confirmRedemption(
+    lockedId: string,
+    bookingId: string,
+  ): Promise<boolean> {
     const client = await this.db.connect();
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
       // Get transaction details
-      const txnResult = await client.query(`
+      const txnResult = await client.query(
+        `
         SELECT * FROM loyalty_transactions WHERE id = $1 AND status = 'pending'
-      `, [lockedId]);
+      `,
+        [lockedId],
+      );
 
       if (txnResult.rows.length === 0) {
-        await client.query('ROLLBACK');
+        await client.query("ROLLBACK");
         return false;
       }
 
       const transaction = txnResult.rows[0];
 
       // Add to ledger
-      await client.query(`
+      await client.query(
+        `
         INSERT INTO loyalty_ledger 
         (user_id, booking_id, event_type, points_delta, rupee_value, description, meta)
         VALUES ($1, $2, 'redeem', $3, $4, $5, $6)
-      `, [
-        transaction.user_id,
-        bookingId,
-        -transaction.points_applied,
-        transaction.rupee_value,
-        'Points redeemed on booking',
-        JSON.stringify({ transactionId: lockedId, cartId: transaction.cart_id })
-      ]);
+      `,
+        [
+          transaction.user_id,
+          bookingId,
+          -transaction.points_applied,
+          transaction.rupee_value,
+          "Points redeemed on booking",
+          JSON.stringify({
+            transactionId: lockedId,
+            cartId: transaction.cart_id,
+          }),
+        ],
+      );
 
       // Update member balance
-      await client.query(`
+      await client.query(
+        `
         UPDATE loyalty_members 
         SET points_balance = points_balance - $1,
             points_locked = points_locked - $1
         WHERE user_id = $2
-      `, [transaction.points_applied, transaction.user_id]);
+      `,
+        [transaction.points_applied, transaction.user_id],
+      );
 
       // Update transaction status
-      await client.query(`
+      await client.query(
+        `
         UPDATE loyalty_transactions 
         SET status = 'confirmed', booking_id = $1, updated_at = NOW()
         WHERE id = $2
-      `, [bookingId, lockedId]);
+      `,
+        [bookingId, lockedId],
+      );
 
-      await client.query('COMMIT');
+      await client.query("COMMIT");
       return true;
     } catch (error) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       throw error;
     } finally {
       client.release();
@@ -405,37 +478,46 @@ export class LoyaltyService {
   async cancelRedemption(lockedId: string): Promise<boolean> {
     const client = await this.db.connect();
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
-      const txnResult = await client.query(`
+      const txnResult = await client.query(
+        `
         SELECT * FROM loyalty_transactions WHERE id = $1 AND status = 'pending'
-      `, [lockedId]);
+      `,
+        [lockedId],
+      );
 
       if (txnResult.rows.length === 0) {
-        await client.query('ROLLBACK');
+        await client.query("ROLLBACK");
         return false;
       }
 
       const transaction = txnResult.rows[0];
 
       // Release locked points
-      await client.query(`
+      await client.query(
+        `
         UPDATE loyalty_members 
         SET points_locked = points_locked - $1
         WHERE user_id = $2
-      `, [transaction.points_applied, transaction.user_id]);
+      `,
+        [transaction.points_applied, transaction.user_id],
+      );
 
       // Update transaction status
-      await client.query(`
+      await client.query(
+        `
         UPDATE loyalty_transactions 
         SET status = 'cancelled', updated_at = NOW()
         WHERE id = $1
-      `, [lockedId]);
+      `,
+        [lockedId],
+      );
 
-      await client.query('COMMIT');
+      await client.query("COMMIT");
       return true;
     } catch (error) {
-      await client.query('ROLLBACK');
+      await client.query("ROLLBACK");
       throw error;
     } finally {
       client.release();
@@ -446,33 +528,38 @@ export class LoyaltyService {
   async getMemberLedger(
     userId: number,
     limit: number = 20,
-    offset: number = 0
+    offset: number = 0,
   ): Promise<{ items: LoyaltyLedgerEntry[]; total: number }> {
     const countResult = await this.db.query(
-      'SELECT COUNT(*) FROM loyalty_ledger WHERE user_id = $1',
-      [userId]
+      "SELECT COUNT(*) FROM loyalty_ledger WHERE user_id = $1",
+      [userId],
     );
 
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT * FROM loyalty_ledger 
       WHERE user_id = $1
       ORDER BY created_at DESC
       LIMIT $2 OFFSET $3
-    `, [userId, limit, offset]);
+    `,
+      [userId, limit, offset],
+    );
 
     return {
       items: result.rows.map(this.mapLedgerRow),
-      total: parseInt(countResult.rows[0].count)
+      total: parseInt(countResult.rows[0].count),
     };
   }
 
   // Calculate and update member tier
-  async updateMemberTier(userId: number): Promise<{ oldTier: number; newTier: number }> {
+  async updateMemberTier(
+    userId: number,
+  ): Promise<{ oldTier: number; newTier: number }> {
     const member = await this.getMember(userId);
-    if (!member) throw new Error('Member not found');
+    if (!member) throw new Error("Member not found");
 
     const tierRules = await this.getTierRules();
-    
+
     // Find appropriate tier based on 12-month points
     let newTier = 1;
     for (const rule of tierRules.reverse()) {
@@ -483,26 +570,35 @@ export class LoyaltyService {
     }
 
     if (newTier !== member.tier) {
-      await this.db.query(`
+      await this.db.query(
+        `
         UPDATE loyalty_members 
         SET tier = $1, last_calc_date = NOW()
         WHERE user_id = $2
-      `, [newTier, userId]);
+      `,
+        [newTier, userId],
+      );
     }
 
     return { oldTier: member.tier, newTier };
   }
 
   // Get expiring points
-  async getExpiringPoints(userId: number, daysAhead: number = 60): Promise<any[]> {
+  async getExpiringPoints(
+    userId: number,
+    daysAhead: number = 60,
+  ): Promise<any[]> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() + daysAhead);
 
-    const result = await this.db.query(`
+    const result = await this.db.query(
+      `
       SELECT * FROM point_expiry
       WHERE user_id = $1 AND expire_on <= $2 AND status = 'active'
       ORDER BY expire_on ASC
-    `, [userId, cutoffDate.toISOString().split('T')[0]]);
+    `,
+      [userId, cutoffDate.toISOString().split("T")[0]],
+    );
 
     return result.rows;
   }
@@ -527,13 +623,13 @@ export class LoyaltyService {
         ruleData.minAmount,
         ruleData.maxPoints || null,
         ruleData.validFrom,
-        ruleData.validTo || null
+        ruleData.validTo || null,
       ];
 
       const result = await this.db.query(query, values);
       return result.rows[0];
     } catch (error) {
-      console.error('Create loyalty rule error:', error);
+      console.error("Create loyalty rule error:", error);
       throw error;
     }
   }
@@ -557,23 +653,23 @@ export class LoyaltyService {
         ruleData.minAmount,
         ruleData.maxPoints || null,
         ruleData.validFrom,
-        ruleData.validTo || null
+        ruleData.validTo || null,
       ];
 
       const result = await this.db.query(query, values);
       return result.rows[0];
     } catch (error) {
-      console.error('Update loyalty rule error:', error);
+      console.error("Update loyalty rule error:", error);
       throw error;
     }
   }
 
   async deleteLoyaltyRule(id: string): Promise<void> {
     try {
-      const query = 'DELETE FROM loyalty_rules WHERE id = $1';
+      const query = "DELETE FROM loyalty_rules WHERE id = $1";
       await this.db.query(query, [id]);
     } catch (error) {
-      console.error('Delete loyalty rule error:', error);
+      console.error("Delete loyalty rule error:", error);
       throw error;
     }
   }
@@ -590,7 +686,8 @@ export class LoyaltyService {
       `;
 
       // Find next tier number
-      const maxTierQuery = 'SELECT COALESCE(MAX(tier), 0) as max_tier FROM tier_rules';
+      const maxTierQuery =
+        "SELECT COALESCE(MAX(tier), 0) as max_tier FROM tier_rules";
       const maxTierResult = await this.db.query(maxTierQuery);
       const nextTier = maxTierResult.rows[0].max_tier + 1;
 
@@ -600,13 +697,13 @@ export class LoyaltyService {
         tierData.minPoints,
         tierData.multiplier,
         JSON.stringify(tierData.benefits),
-        tierData.active ?? true
+        tierData.active ?? true,
       ];
 
       const result = await this.db.query(query, values);
       return result.rows[0];
     } catch (error) {
-      console.error('Create tier rule error:', error);
+      console.error("Create tier rule error:", error);
       throw error;
     }
   }
@@ -628,13 +725,13 @@ export class LoyaltyService {
         tierData.minPoints,
         tierData.multiplier,
         JSON.stringify(tierData.benefits),
-        tierData.active ?? true
+        tierData.active ?? true,
       ];
 
       const result = await this.db.query(query, values);
       return result.rows[0];
     } catch (error) {
-      console.error('Update tier rule error:', error);
+      console.error("Update tier rule error:", error);
       throw error;
     }
   }
@@ -647,7 +744,7 @@ export class LoyaltyService {
   }): Promise<any[]> {
     try {
       const offset = (options.page - 1) * options.limit;
-      let whereClause = '';
+      let whereClause = "";
       const values: any[] = [];
 
       if (options.search) {
@@ -684,7 +781,7 @@ export class LoyaltyService {
       const result = await this.db.query(query, values);
       return result.rows;
     } catch (error) {
-      console.error('Get loyalty members error:', error);
+      console.error("Get loyalty members error:", error);
       throw error;
     }
   }
@@ -701,7 +798,7 @@ export class LoyaltyService {
       const result = await this.db.query(query, [userId, status]);
       return result.rows[0];
     } catch (error) {
-      console.error('Update member status error:', error);
+      console.error("Update member status error:", error);
       throw error;
     }
   }
@@ -714,7 +811,7 @@ export class LoyaltyService {
     adminUserId?: string;
   }): Promise<any> {
     try {
-      await this.db.query('BEGIN');
+      await this.db.query("BEGIN");
 
       // Update member points
       const updateQuery = `
@@ -726,7 +823,10 @@ export class LoyaltyService {
         RETURNING *
       `;
 
-      const memberResult = await this.db.query(updateQuery, [data.userId, data.points]);
+      const memberResult = await this.db.query(updateQuery, [
+        data.userId,
+        data.points,
+      ]);
 
       // Record transaction
       const transactionQuery = `
@@ -742,26 +842,32 @@ export class LoyaltyService {
         data.type,
         data.points,
         memberResult.rows[0].points_balance,
-        `${data.reason} (Admin: ${data.adminUserId || 'System'})`,
-        `admin-adjustment-${Date.now()}`
+        `${data.reason} (Admin: ${data.adminUserId || "System"})`,
+        `admin-adjustment-${Date.now()}`,
       ];
 
-      const transactionResult = await this.db.query(transactionQuery, transactionValues);
+      const transactionResult = await this.db.query(
+        transactionQuery,
+        transactionValues,
+      );
 
-      await this.db.query('COMMIT');
+      await this.db.query("COMMIT");
 
       return transactionResult.rows[0];
     } catch (error) {
-      await this.db.query('ROLLBACK');
-      console.error('Adjust member points error:', error);
+      await this.db.query("ROLLBACK");
+      console.error("Adjust member points error:", error);
       throw error;
     }
   }
 
-  async getMemberTransactions(userId: string, options: {
-    page: number;
-    limit: number;
-  }): Promise<any> {
+  async getMemberTransactions(
+    userId: string,
+    options: {
+      page: number;
+      limit: number;
+    },
+  ): Promise<any> {
     try {
       const offset = (options.page - 1) * options.limit;
 
@@ -775,16 +881,20 @@ export class LoyaltyService {
         LIMIT $2 OFFSET $3
       `;
 
-      const result = await this.db.query(query, [userId, options.limit, offset]);
+      const result = await this.db.query(query, [
+        userId,
+        options.limit,
+        offset,
+      ]);
 
       return {
         items: result.rows,
         total: result.rows[0]?.total_count || 0,
         page: options.page,
-        limit: options.limit
+        limit: options.limit,
       };
     } catch (error) {
-      console.error('Get member transactions error:', error);
+      console.error("Get member transactions error:", error);
       throw error;
     }
   }
@@ -795,7 +905,9 @@ export class LoyaltyService {
     endDate?: string;
   }): Promise<any> {
     try {
-      const startDate = options.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const startDate =
+        options.startDate ||
+        new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
       const endDate = options.endDate || new Date().toISOString();
 
       // Member stats
@@ -834,17 +946,17 @@ export class LoyaltyService {
       const [memberStats, transactionStats, tierStats] = await Promise.all([
         this.db.query(memberStatsQuery, [startDate]),
         this.db.query(transactionStatsQuery, [startDate, endDate]),
-        this.db.query(tierStatsQuery)
+        this.db.query(tierStatsQuery),
       ]);
 
       return {
         dateRange: { startDate, endDate },
         memberStats: memberStats.rows[0],
         transactionStats: transactionStats.rows,
-        tierDistribution: tierStats.rows
+        tierDistribution: tierStats.rows,
       };
     } catch (error) {
-      console.error('Get loyalty analytics error:', error);
+      console.error("Get loyalty analytics error:", error);
       throw error;
     }
   }
@@ -855,7 +967,7 @@ export class LoyaltyService {
       let data: any[] = [];
 
       switch (type) {
-        case 'members':
+        case "members":
           const membersQuery = `
             SELECT
               lm.id, lm.email, lm.name, lm.points_balance,
@@ -868,7 +980,7 @@ export class LoyaltyService {
           data = membersResult.rows;
           break;
 
-        case 'transactions':
+        case "transactions":
           const transactionsQuery = `
             SELECT
               ll.user_id, ll.transaction_type, ll.points,
@@ -882,25 +994,27 @@ export class LoyaltyService {
           break;
 
         default:
-          throw new Error('Invalid export type');
+          throw new Error("Invalid export type");
       }
 
-      if (format === 'csv') {
-        if (data.length === 0) return '';
+      if (format === "csv") {
+        if (data.length === 0) return "";
 
-        const headers = Object.keys(data[0]).join(',');
-        const rows = data.map(row =>
-          Object.values(row).map(val =>
-            typeof val === 'string' && val.includes(',') ? `"${val}"` : val
-          ).join(',')
+        const headers = Object.keys(data[0]).join(",");
+        const rows = data.map((row) =>
+          Object.values(row)
+            .map((val) =>
+              typeof val === "string" && val.includes(",") ? `"${val}"` : val,
+            )
+            .join(","),
         );
 
-        return [headers, ...rows].join('\n');
+        return [headers, ...rows].join("\n");
       } else {
         return JSON.stringify(data, null, 2);
       }
     } catch (error) {
-      console.error('Export loyalty data error:', error);
+      console.error("Export loyalty data error:", error);
       throw error;
     }
   }
@@ -918,7 +1032,7 @@ export class LoyaltyService {
       points12m: row.points_12m,
       joinDate: row.join_date,
       status: row.status,
-      optedOut: row.opted_out
+      optedOut: row.opted_out,
     };
   }
 
@@ -930,10 +1044,10 @@ export class LoyaltyService {
       eventType: row.event_type,
       pointsDelta: row.points_delta,
       rupeeValue: row.rupee_value ? parseFloat(row.rupee_value) : undefined,
-      fxRate: parseFloat(row.fx_rate || '1.0'),
+      fxRate: parseFloat(row.fx_rate || "1.0"),
       description: row.description,
       meta: row.meta,
-      createdAt: row.created_at
+      createdAt: row.created_at,
     };
   }
 }

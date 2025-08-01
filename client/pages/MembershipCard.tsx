@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { useLoyalty } from '@/contexts/LoyaltyContext';
-import DigitalMembershipCard from '@/components/loyalty/DigitalMembershipCard';
-import QRScanner from '@/components/loyalty/QRScanner';
-import WalletIntegration from '@/components/loyalty/WalletIntegration';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { useLoyalty } from "@/contexts/LoyaltyContext";
+import DigitalMembershipCard from "@/components/loyalty/DigitalMembershipCard";
+import QRScanner from "@/components/loyalty/QRScanner";
+import WalletIntegration from "@/components/loyalty/WalletIntegration";
 import {
   CreditCard,
   Scan,
@@ -21,12 +21,12 @@ import {
   MapPin,
   ExternalLink,
   Download,
-  Share2
-} from 'lucide-react';
+  Share2,
+} from "lucide-react";
 
 export default function MembershipCard() {
   const { profile, isLoading } = useLoyalty();
-  const [activeTab, setActiveTab] = useState('card');
+  const [activeTab, setActiveTab] = useState("card");
   const [showScanner, setShowScanner] = useState(false);
   const [showWallet, setShowWallet] = useState(false);
 
@@ -49,9 +49,12 @@ export default function MembershipCard() {
           <div className="w-24 h-24 bg-gray-100 rounded-full mx-auto flex items-center justify-center">
             <CreditCard className="w-12 h-12 text-gray-400" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Join Faredown Rewards</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Join Faredown Rewards
+          </h1>
           <p className="text-lg text-gray-600 max-w-md mx-auto">
-            Earn points on every booking, unlock exclusive benefits, and enjoy personalized travel experiences.
+            Earn points on every booking, unlock exclusive benefits, and enjoy
+            personalized travel experiences.
           </p>
           <div className="flex justify-center space-x-4">
             <Button size="lg">
@@ -74,7 +77,9 @@ export default function MembershipCard() {
     <div className="container mx-auto p-6 max-w-4xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">My Membership Card</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          My Membership Card
+        </h1>
         <p className="text-gray-600">
           Your digital Faredown Rewards membership card and benefits
         </p>
@@ -90,7 +95,7 @@ export default function MembershipCard() {
             <div className="text-sm text-gray-600">Points Balance</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-green-600">
@@ -99,16 +104,14 @@ export default function MembershipCard() {
             <div className="text-sm text-gray-600">Lifetime Earned</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
-            <Badge className="text-sm">
-              {member.tierName}
-            </Badge>
+            <Badge className="text-sm">{member.tierName}</Badge>
             <div className="text-sm text-gray-600 mt-1">Current Tier</div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-purple-600">
@@ -147,7 +150,7 @@ export default function MembershipCard() {
             <div>
               <DigitalMembershipCard />
             </div>
-            
+
             {/* Card Actions */}
             <div className="space-y-6">
               <Card>
@@ -155,23 +158,23 @@ export default function MembershipCard() {
                   <CardTitle>Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button 
+                  <Button
                     onClick={() => setShowWallet(true)}
                     className="w-full flex items-center justify-center"
                   >
                     <Wallet className="w-4 h-4 mr-2" />
                     Add to Wallet
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                     variant="outline"
                     className="w-full flex items-center justify-center"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download Card
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                     variant="outline"
                     className="w-full flex items-center justify-center"
                   >
@@ -189,19 +192,20 @@ export default function MembershipCard() {
                 <CardContent className="space-y-3">
                   <div className="flex items-center text-sm">
                     <Mail className="w-4 h-4 mr-3 text-gray-400" />
-                    <span>{member.email || 'Not provided'}</span>
+                    <span>{member.email || "Not provided"}</span>
                   </div>
-                  
+
                   <div className="flex items-center text-sm">
                     <Calendar className="w-4 h-4 mr-3 text-gray-400" />
                     <span>
-                      Member since {new Date(member.joinDate).toLocaleDateString('en-US', {
-                        month: 'long',
-                        year: 'numeric'
+                      Member since{" "}
+                      {new Date(member.joinDate).toLocaleDateString("en-US", {
+                        month: "long",
+                        year: "numeric",
                       })}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center text-sm">
                     <Star className="w-4 h-4 mr-3 text-gray-400" />
                     <span>{member.tierName} Tier Benefits Active</span>
@@ -225,13 +229,17 @@ export default function MembershipCard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {tier?.current?.benefits?.map((benefit: string, index: number) => (
-                    <div key={index} className="flex items-start">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                      <span className="text-sm">{benefit}</span>
-                    </div>
-                  )) || (
-                    <p className="text-gray-600">Benefits information not available</p>
+                  {tier?.current?.benefits?.map(
+                    (benefit: string, index: number) => (
+                      <div key={index} className="flex items-start">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                        <span className="text-sm">{benefit}</span>
+                      </div>
+                    ),
+                  ) || (
+                    <p className="text-gray-600">
+                      Benefits information not available
+                    </p>
                   )}
                 </div>
               </CardContent>
@@ -254,7 +262,7 @@ export default function MembershipCard() {
                         <span>{tier.progress}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-3">
-                        <div 
+                        <div
                           className="bg-blue-600 h-3 rounded-full transition-all duration-300"
                           style={{ width: `${tier.progress}%` }}
                         ></div>
@@ -263,15 +271,21 @@ export default function MembershipCard() {
                         {tier.pointsToNext} more points needed
                       </p>
                     </div>
-                    
+
                     <div className="space-y-2">
-                      <h4 className="font-medium text-sm">Additional Benefits:</h4>
-                      {tier.next.benefits?.slice(tier.current?.benefits?.length || 0).map((benefit: string, index: number) => (
-                        <div key={index} className="flex items-start">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                          <span className="text-sm text-gray-700">{benefit}</span>
-                        </div>
-                      ))}
+                      <h4 className="font-medium text-sm">
+                        Additional Benefits:
+                      </h4>
+                      {tier.next.benefits
+                        ?.slice(tier.current?.benefits?.length || 0)
+                        .map((benefit: string, index: number) => (
+                          <div key={index} className="flex items-start">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                            <span className="text-sm text-gray-700">
+                              {benefit}
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </CardContent>
@@ -345,12 +359,10 @@ export default function MembershipCard() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-600 mb-4">
-                  Scan QR codes at partner locations to earn points or verify membership
+                  Scan QR codes at partner locations to earn points or verify
+                  membership
                 </p>
-                <Button 
-                  onClick={() => setShowScanner(true)}
-                  className="w-full"
-                >
+                <Button onClick={() => setShowScanner(true)} className="w-full">
                   <Scan className="w-4 h-4 mr-2" />
                   Open Scanner
                 </Button>
@@ -367,9 +379,10 @@ export default function MembershipCard() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-600 mb-4">
-                  Add your membership card to Apple Wallet or Google Pay for quick access
+                  Add your membership card to Apple Wallet or Google Pay for
+                  quick access
                 </p>
-                <Button 
+                <Button
                   onClick={() => setShowWallet(true)}
                   variant="outline"
                   className="w-full"
@@ -390,7 +403,8 @@ export default function MembershipCard() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-600 mb-4">
-                  Find nearby partners where you can use your membership benefits
+                  Find nearby partners where you can use your membership
+                  benefits
                 </p>
                 <Button variant="outline" className="w-full">
                   <MapPin className="w-4 h-4 mr-2" />
@@ -433,11 +447,15 @@ export default function MembershipCard() {
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" defaultChecked />
-                    <span className="text-sm">Email notifications for point earnings</span>
+                    <span className="text-sm">
+                      Email notifications for point earnings
+                    </span>
                   </label>
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" defaultChecked />
-                    <span className="text-sm">SMS alerts for tier upgrades</span>
+                    <span className="text-sm">
+                      SMS alerts for tier upgrades
+                    </span>
                   </label>
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" />
@@ -452,11 +470,15 @@ export default function MembershipCard() {
                 <div className="space-y-2">
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" defaultChecked />
-                    <span className="text-sm">Allow point balance visibility to partners</span>
+                    <span className="text-sm">
+                      Allow point balance visibility to partners
+                    </span>
                   </label>
                   <label className="flex items-center">
                     <input type="checkbox" className="mr-2" />
-                    <span className="text-sm">Share travel preferences with partners</span>
+                    <span className="text-sm">
+                      Share travel preferences with partners
+                    </span>
                   </label>
                 </div>
               </div>
