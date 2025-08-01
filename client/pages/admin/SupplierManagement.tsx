@@ -94,66 +94,24 @@ interface SyncLog {
   details: string;
 }
 
-const mockSuppliers: Supplier[] = [
-  {
-    id: "1",
-    name: "Hotelbeds",
-    type: "hotel",
-    status: "active",
-    apiEndpoint: "https://api.test.hotelbeds.com",
-    lastSync: "2025-01-23T10:30:00Z",
-    totalBookings: 1247,
-    successRate: 94.2,
-    averageResponseTime: 850,
-    credentials: {
-      apiKey: "91d2368789abdb5beec101ce95a9d185",
-      secret: "a9ffaaecce",
-    },
-    configuration: {
-      contentAPI: "https://api.test.hotelbeds.com/hotel-content-api/1.0/",
-      bookingAPI: "https://api.test.hotelbeds.com/hotel-api/1.0/",
-      timeoutMs: 30000,
-      retryAttempts: 3,
-      cacheEnabled: true,
-      syncFrequency: "daily",
-    },
-    supportedCurrencies: ["EUR", "USD", "GBP", "INR"],
-    supportedDestinations: ["Dubai", "Mumbai", "Delhi", "Singapore"],
-    markup: {
-      defaultPercentage: 12,
-      minPercentage: 8,
-      maxPercentage: 25,
-    },
-  },
-  {
-    id: "2",
-    name: "Sabre",
-    type: "flight",
-    status: "testing",
-    apiEndpoint: "https://api.test.sabre.com",
-    lastSync: "2025-01-23T08:15:00Z",
-    totalBookings: 892,
-    successRate: 91.8,
-    averageResponseTime: 1200,
-    credentials: {
-      apiKey: "test_key_sabre",
-      secret: "test_secret_sabre",
-    },
-    configuration: {
-      timeoutMs: 45000,
-      retryAttempts: 2,
-      cacheEnabled: false,
-      syncFrequency: "realtime",
-    },
-    supportedCurrencies: ["USD", "EUR", "INR"],
-    supportedDestinations: ["Dubai", "New York", "London"],
-    markup: {
-      defaultPercentage: 8,
-      minPercentage: 5,
-      maxPercentage: 15,
-    },
-  },
-];
+// Enhanced supplier interface to match API response
+interface EnhancedSupplier extends Supplier {
+  code: string;
+  environment: string;
+  healthStatus: string;
+  credentialProfile: string;
+  recentSyncs?: number;
+  successfulSyncs?: number;
+  failedSyncs?: number;
+  lastSyncAttempt?: string;
+  lastSyncStatus?: string;
+  credentials: {
+    profileName: string;
+    hasApiKey: boolean;
+    hasApiSecret: boolean;
+    configuredEnvironment: string;
+  };
+}
 
 const mockSyncLogs: SyncLog[] = [
   {
