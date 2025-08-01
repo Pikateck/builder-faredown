@@ -7,6 +7,8 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
+  Navigation,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
