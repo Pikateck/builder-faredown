@@ -538,6 +538,9 @@ export function createServer() {
   // Admin CMS routes
   app.use("/api/admin", adminRouter);
 
+  // Loyalty program routes
+  app.use("/api/loyalty", loyaltyRouter);
+
   // Test endpoint for Hotelbeds API
   app.get("/api/test-hotelbeds", async (_req, res) => {
     try {
@@ -751,7 +754,7 @@ export function createServer() {
           // Note: Database integration will be enabled once the PostgreSQL tables are created
           console.log("📊 Flight search analytics:", searchAnalytics);
         } catch (dbError) {
-          console.warn("⚠️ Database storage failed:", dbError);
+          console.warn("���️ Database storage failed:", dbError);
           // Continue even if database storage fails
         }
 
