@@ -1570,16 +1570,17 @@ export default function FlightResults() {
                         className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-bold text-gray-600">
-                              ✈
-                            </span>
+                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-blue-600" />
                           </div>
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {city} • {data.airport}
+                              <span className="font-semibold">{data.code}</span> • {city}
                             </div>
                             <div className="text-xs text-gray-500">
+                              {data.airport}
+                            </div>
+                            <div className="text-xs text-gray-400">
                               {data.fullName}
                             </div>
                           </div>
