@@ -1152,6 +1152,7 @@ export default function Index() {
                       }
                       className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
                     >
+                      <DollarSign className="w-4 h-4" />
                       <span>
                         {selectedCurrency.symbol} {selectedCurrency.code}
                       </span>
