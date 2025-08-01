@@ -69,6 +69,7 @@ async function callHotelbedsAPI(searchParams: any) {
       "🏨 Booking API Request:",
       JSON.stringify(bookingRequest, null, 2),
     );
+    console.log("🌐 Making request to:", `${BOOKING_API}/hotels`);
 
     const bookingResponse = await fetch(`${BOOKING_API}/hotels`, {
       method: "POST",
