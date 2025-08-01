@@ -468,8 +468,13 @@ export default function SupplierManagement() {
                       <TableCell>
                         <div>
                           <div className="font-medium">{supplier.name}</div>
-                          <div className="text-sm text-gray-500">
-                            {supplier.apiEndpoint}
+                          <div className="text-xs text-gray-500">
+                            {supplier.code}
+                          </div>
+                          <div className="text-xs text-blue-600">
+                            {supplier.credentials?.profileName || 'No credentials'}
+                            {supplier.credentials?.hasApiKey && supplier.credentials?.hasApiSecret ?
+                              ' ✓' : ' ✗'}
                           </div>
                         </div>
                       </TableCell>
@@ -477,9 +482,27 @@ export default function SupplierManagement() {
                         <Badge variant="outline">{supplier.type}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge className={getStatusColor(supplier.status)}>
-                          {getStatusIcon(supplier.status)}
-                          <span className="ml-1">{supplier.status}</span>
+                        <div className="space-y-1">
+                          <Badge className={getStatusColor(supplier.status)}>
+                            {getStatusIcon(supplier.status)}
+                            <span className="ml-1">{supplier.status}</span>
+                          </Badge>
+                          {supplier.healthStatus && (
+                            <div className="text-xs">
+                              <Badge variant="outline" className={
+                                supplier.healthStatus === 'healthy' ? 'text-green-600' :
+                                supplier.healthStatus === 'degraded' ? 'text-yellow-600' :
+                                supplier.healthStatus === 'down' ? 'text-red-600' : 'text-gray-600'
+                              }>
+                                {supplier.healthStatus}
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className="text-xs">
+                          {supplier.environment || 'sandbox'}
                         </Badge>
                       </TableCell>
                       <TableCell>
