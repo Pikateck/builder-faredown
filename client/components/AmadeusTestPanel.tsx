@@ -125,7 +125,7 @@ export default function AmadeusTestPanel() {
         {authResult && (
           <Alert className={authResult.success ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}>
             <AlertDescription>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Badge variant={authResult.success ? 'default' : 'destructive'}>
                     {authResult.success ? 'SUCCESS' : 'FAILED'}
@@ -134,11 +134,65 @@ export default function AmadeusTestPanel() {
                     {authResult.message || (authResult.success ? 'Authentication successful' : 'Authentication failed')}
                   </span>
                 </div>
+
+                {/* Credentials Validation */}
+                {authResult.credentialsValidation && (
+                  <div className="bg-gray-100 p-2 rounded text-xs">
+                    <div className="font-medium mb-1">Credentials Validation:</div>
+                    <div className="space-y-1">
+                      <div>API Key Length: {authResult.credentialsValidation.apiKeyLength} ✓</div>
+                      <div>Secret Length: {authResult.credentialsValidation.secretLength} ✓</div>
+                      <div>Format Valid: {authResult.credentialsValidation.apiKeyFormat && authResult.credentialsValidation.secretFormat ? '✅' : '❌'}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Auth Response Details */}
+                {authResult.authResponse && (
+                  <div className="bg-gray-100 p-2 rounded text-xs">
+                    <div className="font-medium mb-1">Response Details:</div>
+                    <div>Status: {authResult.authResponse.status}</div>
+                    {authResult.authResponse.tokenType && (
+                      <div>Token Type: {authResult.authResponse.tokenType}</div>
+                    )}
+                    {authResult.authResponse.expiresIn && (
+                      <div>Expires In: {authResult.authResponse.expiresIn}s</div>
+                    )}
+                  </div>
+                )}
+
+                {/* Error Details */}
                 {authResult.error && (
                   <div className="text-xs text-red-600 font-mono bg-red-100 p-2 rounded">
                     {authResult.error}
                   </div>
                 )}
+
+                {/* Troubleshooting */}
+                {authResult.authResponse?.troubleshooting && (
+                  <div className="bg-yellow-50 p-3 rounded text-xs">
+                    <div className="font-medium text-yellow-800 mb-2">Troubleshooting:</div>
+                    <div className="text-yellow-700 space-y-2">
+                      <div>
+                        <div className="font-medium">Possible Causes:</div>
+                        <ul className="list-disc list-inside space-y-1">
+                          {authResult.authResponse.troubleshooting.possibleCauses.map((cause, index) => (
+                            <li key={index}>{cause}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <div className="font-medium">Next Steps:</div>
+                        <ul className="list-disc list-inside space-y-1">
+                          {authResult.authResponse.troubleshooting.nextSteps.map((step, index) => (
+                            <li key={index}>{step}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {authResult.success && authResult.flightCount && (
                   <div className="text-xs text-green-600">
                     Found {authResult.flightCount} flight offers
