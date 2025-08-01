@@ -1116,11 +1116,7 @@ export default function Index() {
                   <div className="relative">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                          <Globe className="w-4 h-4" />
-                          <span>English</span>
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
+                        <span className="text-white text-sm">English</span>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
@@ -1134,7 +1130,7 @@ export default function Index() {
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本���", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
-                          { code: "zh", name: "中文", flag: "🇨🇳" },
+                          { code: "zh", name: "中文", flag: "🇨����" },
                         ].map((language) => (
                           <DropdownMenuItem
                             key={language.code}
