@@ -509,6 +509,126 @@ export function createServer() {
     }
   });
 
+  // Test endpoint for Amadeus flights API
+  app.get("/api/test-amadeus", async (_req, res) => {
+    try {
+      console.log("🧪 Testing Amadeus flight API integration...");
+
+      const testResult = await searchAmadeusFlights({
+        origin: "BOM", // Mumbai
+        destination: "DXB", // Dubai
+        departureDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+        adults: 1
+      });
+
+      res.json({
+        success: testResult.success,
+        message: testResult.success ? "Amadeus API working!" : "Amadeus API failed",
+        data: testResult.data?.slice(0, 3), // Only return first 3 flights for testing
+        error: testResult.error,
+        flightCount: testResult.data?.length || 0
+      });
+
+    } catch (error) {
+      console.error("🧪 Amadeus test failed:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        message: "Amadeus test endpoint failed"
+      });
+    }
+  });
+
+  // Flight search endpoint - Production ready with live Amadeus data
+  app.get("/api/flights/search", async (_req, res) => {
+    try {
+      const origin = (_req.query.origin as string) || "BOM";
+      const destination = (_req.query.destination as string) || "DXB";
+      const departureDate = _req.query.departureDate as string;
+      const returnDate = _req.query.returnDate as string;
+      const adults = parseInt(_req.query.adults as string) || 1;
+      const cabinClass = _req.query.cabinClass as string || 'ECONOMY';
+
+      console.log(`✈️ Searching flights: ${origin} → ${destination}`);
+      console.log("🔍 Flight search parameters:", {
+        origin, destination, departureDate, returnDate, adults, cabinClass
+      });
+
+      // Try Amadeus API call first
+      const flightResult = await searchAmadeusFlights({
+        origin,
+        destination,
+        departureDate,
+        returnDate,
+        adults,
+        cabinClass
+      });
+
+      if (flightResult.success && flightResult.data.length > 0) {
+        console.log(`✅ Found ${flightResult.data.length} flights from Amadeus API`);
+
+        return res.json({
+          success: true,
+          data: flightResult.data,
+          totalResults: flightResult.data.length,
+          isLiveData: true,
+          source: "Amadeus API",
+          searchParams: _req.query,
+        });
+      }
+
+      console.log("⚠️ Amadeus API failed, using fallback data");
+
+      // Fallback flight data if API fails
+      const fallbackFlights = [{
+        id: `fallback-${origin}-${destination}-001`,
+        flightNumber: `AI101`,
+        airline: {
+          code: 'AI',
+          name: 'Air India',
+          logo: 'https://images.kiwi.com/airlines/64/AI.png'
+        },
+        departure: {
+          airport: origin,
+          time: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+          terminal: '1'
+        },
+        arrival: {
+          airport: destination,
+          time: new Date(Date.now() + 27 * 60 * 60 * 1000).toISOString(),
+          terminal: '3'
+        },
+        duration: '3h 00m',
+        stops: 0,
+        price: 25000,
+        currency: 'INR',
+        originalPrice: 28000,
+        cabinClass: 'ECONOMY',
+        aircraft: 'A320',
+        segments: 1,
+        isLiveData: false,
+        supplier: 'fallback-system'
+      }];
+
+      res.json({
+        success: true,
+        data: fallbackFlights,
+        totalResults: fallbackFlights.length,
+        isLiveData: false,
+        source: "Fallback System (Amadeus API unavailable)",
+        searchParams: _req.query,
+      });
+
+    } catch (error) {
+      console.error("Flight search error:", error);
+      res.status(500).json({
+        success: false,
+        error: "Flight search failed",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  });
+
   // Database-backed destinations search endpoint
   app.get("/api/hotels/destinations/search", async (_req, res) => {
     try {
