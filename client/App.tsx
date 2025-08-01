@@ -114,6 +114,7 @@ function App() {
                   path="/backend-test"
                   element={<BackendTestDashboard />}
                 />
+                <Route path="/amadeus-test" element={<AmadeusTestPanel />} />
 
                 {/* Admin CMS Routes */}
                 <Route path="/admin/login" element={<AdminLogin />} />
