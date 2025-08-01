@@ -144,21 +144,34 @@ export default function SupplierManagement() {
   const [syncingSupplier, setSyncingSupplier] = useState<string | null>(null);
   const [testingSupplier, setTestingSupplier] = useState<string | null>(null);
 
-  // Load suppliers and sync logs on component mount
+  // Load all data on component mount
   useEffect(() => {
-    loadSuppliers();
-    loadSyncLogs();
+    loadAllData();
   }, []);
+
+  const loadAllData = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        loadSuppliers(),
+        loadSyncLogs(),
+        loadAnalytics()
+      ]);
+    } catch (error) {
+      console.error("Failed to load data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadSuppliers = async () => {
     try {
-      setLoading(true);
       const suppliersData = await supplierService.getSuppliers();
-      setSuppliers(suppliersData);
+      setSuppliers(suppliersData as EnhancedSupplier[]);
     } catch (error) {
       console.error("Failed to load suppliers:", error);
-    } finally {
-      setLoading(false);
+      // Use empty array on error to prevent crashes
+      setSuppliers([]);
     }
   };
 
@@ -168,6 +181,17 @@ export default function SupplierManagement() {
       setSyncLogs(logsData);
     } catch (error) {
       console.error("Failed to load sync logs:", error);
+      setSyncLogs([]);
+    }
+  };
+
+  const loadAnalytics = async () => {
+    try {
+      const analyticsData = await supplierService.getAnalytics();
+      setAnalytics(analyticsData);
+    } catch (error) {
+      console.error("Failed to load analytics:", error);
+      setAnalytics(null);
     }
   };
 
