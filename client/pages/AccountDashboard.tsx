@@ -54,7 +54,7 @@ export default function AccountDashboard() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center space-x-1 text-sm hover:text-blue-200">
-                  <DollarSign className="w-3 h-3" />
+                  <span className="text-xs font-medium">Curr</span>
                   <span>INR</span>
                   <ChevronDown className="w-3 h-3" />
                 </DropdownMenuTrigger>
