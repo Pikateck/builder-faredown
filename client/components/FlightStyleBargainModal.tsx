@@ -683,17 +683,25 @@ export function FlightStyleBargainModal({
                 onClick={() =>
                   setBargainState((prev) => ({ ...prev, phase: "initial" }))
                 }
-                className="flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50"
+                className={`flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50 ${
+                  bargainState.timeRemaining === 0
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+                }`}
                 disabled={bargainState.timeRemaining === 0}
               >
                 Try Different Price
               </Button>
               <Button
                 onClick={handleAcceptCounterOffer}
-                className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white"
+                className={`flex-1 bg-[#003580] hover:bg-[#002a66] text-white ${
+                  bargainState.timeRemaining === 0
+                    ? 'opacity-50 cursor-not-allowed bg-gray-400'
+                    : ''
+                }`}
                 disabled={bargainState.timeRemaining === 0}
               >
-                Accept Offer
+                {bargainState.timeRemaining === 0 ? 'Offer Expired' : 'Accept Offer'}
               </Button>
             </div>
           </div>
