@@ -631,19 +631,19 @@ export function FlightStyleBargainModal({
               </p>
             </div>
 
-            <div className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-300 p-4 rounded-lg shadow-sm">
-              <div className="flex items-center justify-center mb-3">
-                <Clock className="w-5 h-5 text-orange-600 mr-2 animate-pulse" />
-                <span className="font-bold text-[#003580] text-xl animate-pulse">
+            <div className="bg-gradient-to-r from-orange-100 to-red-100 border-4 border-red-400 p-6 rounded-xl shadow-lg animate-pulse">
+              <div className="flex items-center justify-center mb-4">
+                <Clock className="w-8 h-8 text-red-600 mr-3 animate-bounce" />
+                <span className="font-bold text-red-600 text-2xl">
                   Offer expires in: {bargainState.timeRemaining}s
                 </span>
               </div>
               <Progress
                 value={(bargainState.timeRemaining / 30) * 100}
-                className="h-3 bg-orange-200"
+                className="h-4 bg-red-200 mb-3"
               />
-              <p className="text-center text-xs text-orange-700 mt-2 font-medium">
-                This offer expires quickly! Decide now.
+              <p className="text-center text-sm text-red-700 font-bold">
+                🔥 LIMITED TIME OFFER - DECIDE NOW! 🔥
               </p>
             </div>
 
