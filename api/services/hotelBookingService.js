@@ -591,7 +591,7 @@ class HotelBookingService {
           }
         } else {
           console.error(
-            `❌ Failed to store voucher in database for booking ${booking.booking_ref}:`,
+            `�� Failed to store voucher in database for booking ${booking.booking_ref}:`,
             voucherDbResult.error,
           );
         }
@@ -606,6 +606,59 @@ class HotelBookingService {
         `❌ Error processing booking confirmation for ${booking.booking_ref}:`,
         error,
       );
+    }
+  }
+
+  /**
+   * Process loyalty points earning for a confirmed booking
+   */
+  async processLoyaltyEarning(booking) {
+    try {
+      console.log(`🎯 Processing loyalty earning for booking ${booking.booking_ref}`);
+
+      // Extract user email from booking (adjust based on your data structure)
+      const userEmail = booking.guest_details?.contactInfo?.email;
+      if (!userEmail) {
+        console.log(`⚠️ No user email found for booking ${booking.booking_ref}, skipping loyalty earning`);
+        return;
+      }
+
+      // Calculate eligible amount (base price excluding taxes/fees)
+      // This should be the amount on which loyalty points are earned
+      const basePrice = parseFloat(booking.total_price) || 0;
+      const taxes = parseFloat(booking.taxes) || 0;
+      const fees = parseFloat(booking.fees) || 0;
+      const eligibleAmount = Math.max(0, basePrice - taxes - fees);
+
+      if (eligibleAmount <= 0) {
+        console.log(`⚠️ No eligible amount for loyalty earning in booking ${booking.booking_ref}`);
+        return;
+      }
+
+      // Prepare loyalty earning data
+      const loyaltyData = {
+        userId: userEmail, // Using email as identifier for now
+        bookingId: booking.booking_ref,
+        bookingType: 'HOTEL',
+        eligibility: {
+          eligibleAmount: eligibleAmount,
+          currency: booking.currency || 'INR',
+          fxRate: 1.0 // Adjust if currency conversion is needed
+        },
+        description: `Hotel booking at ${booking.hotel_name || 'Selected Hotel'}`
+      };
+
+      // Process the earning (non-blocking)
+      const result = await loyaltyService.processEarning(loyaltyData);
+
+      if (result.success) {
+        console.log(`✅ Loyalty points earned for booking ${booking.booking_ref}: ${result.data?.earnedPoints || 0} points`);
+      } else {
+        console.error(`❌ Failed to process loyalty earning for booking ${booking.booking_ref}:`, result.error);
+      }
+    } catch (error) {
+      console.error(`❌ Error in loyalty earning process for booking ${booking.booking_ref}:`, error);
+      // Don't throw - loyalty earning failure shouldn't break booking confirmation
     }
   }
 
