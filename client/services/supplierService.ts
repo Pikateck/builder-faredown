@@ -67,7 +67,7 @@ export interface SupplierAnalytics {
 }
 
 class SupplierService {
-  private readonly baseUrl = "/api/suppliers";
+  private readonly baseUrl = "/api/admin/suppliers";
 
   /**
    * Get all suppliers
