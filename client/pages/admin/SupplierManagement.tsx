@@ -113,28 +113,25 @@ interface EnhancedSupplier extends Supplier {
   };
 }
 
-const mockSyncLogs: SyncLog[] = [
-  {
-    id: "1",
-    supplierId: "1",
-    timestamp: "2025-01-23T10:30:00Z",
-    status: "success",
-    recordsProcessed: 1247,
-    duration: 45000,
-    errors: [],
-    details: "Full hotel content sync completed successfully",
-  },
-  {
-    id: "2",
-    supplierId: "1",
-    timestamp: "2025-01-22T10:30:00Z",
-    status: "partial",
-    recordsProcessed: 980,
-    duration: 38000,
-    errors: ["Failed to sync 15 hotels due to API timeout"],
-    details: "Partial sync - some hotels failed to update",
-  },
-];
+// Analytics interface to match API response
+interface SupplierAnalytics {
+  totalSuppliers: number;
+  activeSuppliers: number;
+  testingSuppliers: number;
+  disabledSuppliers: number;
+  healthySuppliers: number;
+  degradedSuppliers: number;
+  downSuppliers: number;
+  averageSuccessRate: number;
+  averageResponseTime: number;
+  supplierTypes: {
+    hotel: number;
+    flight: number;
+    car: number;
+    package: number;
+  };
+  recentSyncs: SyncLog[];
+}
 
 export default function SupplierManagement() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
