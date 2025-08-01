@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { Pool } from "pg";
 import LoyaltyService from "../../services/loyaltyService";
-import { requireAuth, requireAdmin } from "../../middleware/adminAuth";
+import { authenticateAdmin } from "../../middleware/adminAuth";
 
 const router = Router();
 
