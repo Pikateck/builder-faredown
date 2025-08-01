@@ -134,15 +134,15 @@ interface SupplierAnalytics {
 }
 
 export default function SupplierManagement() {
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [suppliers, setSuppliers] = useState<EnhancedSupplier[]>([]);
   const [syncLogs, setSyncLogs] = useState<SyncLog[]>([]);
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null,
-  );
+  const [analytics, setAnalytics] = useState<SupplierAnalytics | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<EnhancedSupplier | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [syncingSupplier, setSyncingSupplier] = useState<string | null>(null);
+  const [testingSupplier, setTestingSupplier] = useState<string | null>(null);
 
   // Load suppliers and sync logs on component mount
   useEffect(() => {
