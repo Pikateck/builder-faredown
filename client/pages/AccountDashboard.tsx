@@ -23,6 +23,7 @@ import {
   Car,
   Home,
   Gift,
+  DollarSign,
 } from "lucide-react";
 
 export default function AccountDashboard() {
