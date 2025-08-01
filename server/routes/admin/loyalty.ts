@@ -273,6 +273,38 @@ router.post("/confirm-redemption", async (req: Request, res: Response) => {
   }
 });
 
+// Calculate points earning (preview)
+router.post("/calculate-earning", async (req: Request, res: Response) => {
+  try {
+    const { eligibleAmount, bookingType, currency = 'INR', fxRate = 1.0 } = req.body;
+
+    if (!eligibleAmount || !bookingType) {
+      return res.status(400).json({
+        success: false,
+        error: "Eligible amount and booking type required"
+      });
+    }
+
+    const calculation = await loyaltyService.calculateEarning(
+      eligibleAmount,
+      bookingType,
+      currency,
+      fxRate
+    );
+
+    res.json({
+      success: true,
+      data: calculation
+    });
+  } catch (error) {
+    console.error("Calculate earning error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to calculate earning"
+    });
+  }
+});
+
 // Process earning (internal use - called after booking completion)
 router.post("/process-earning", async (req: Request, res: Response) => {
   try {
