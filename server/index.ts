@@ -3,6 +3,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import suppliersRouter from "./routes/suppliers";
 import adminRouter from "./routes/admin";
+import loyaltyRouter from "./routes/loyalty";
 import {
   MASTER_DESTINATIONS,
   searchDestinations,
