@@ -85,6 +85,8 @@ import {
   Gift,
   Plus,
   Minus,
+  Navigation,
+  Compass,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import AdminTestButton from "@/components/AdminTestButton";
@@ -1129,7 +1131,7 @@ export default function Index() {
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
-                          { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                          { code: "hi", name: "हिन्दी", flag: "��🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
