@@ -61,7 +61,8 @@ function App() {
       <AuthProvider>
         <CurrencyProvider>
           <DateProvider>
-            <Router>
+            <LoyaltyProvider>
+              <Router>
               <Routes>
                 {/* Original Web Routes */}
                 <Route path="/" element={<Index />} />
@@ -149,10 +150,14 @@ function App() {
                 <Route path="/mobile-trips" element={<MobileTrips />} />
                 <Route path="/mobile-profile" element={<MobileTrips />} />
 
+                {/* Loyalty Routes */}
+                <Route path="/membership-card" element={<MembershipCard />} />
+
                 {/* Fallback */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </Router>
+              </Router>
+            </LoyaltyProvider>
           </DateProvider>
         </CurrencyProvider>
       </AuthProvider>
