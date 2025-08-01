@@ -81,6 +81,32 @@ router.get('/analytics', requirePermission(Permission.VIEW_SUPPLIERS), async (re
   try {
     console.log('📈 Admin: Getting supplier analytics...');
 
+    // Check if suppliers table exists
+    const tableCheck = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables
+        WHERE table_schema = 'public'
+        AND table_name = 'suppliers'
+      );
+    `);
+
+    if (!tableCheck.rows[0].exists) {
+      console.warn('⚠️ Suppliers table does not exist, returning empty analytics');
+      return sendSuccess(res, {
+        totalSuppliers: 0,
+        activeSuppliers: 0,
+        testingSuppliers: 0,
+        disabledSuppliers: 0,
+        healthySuppliers: 0,
+        degradedSuppliers: 0,
+        downSuppliers: 0,
+        averageSuccessRate: 0,
+        averageResponseTime: 0,
+        supplierTypes: { hotel: 0, flight: 0, car: 0, package: 0 },
+        recentSyncs: []
+      });
+    }
+
     // Get summary statistics
     const summaryResult = await pool.query(`
       SELECT
