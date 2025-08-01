@@ -47,6 +47,7 @@ import {
   LogOut,
   Settings,
   CreditCard,
+  Globe,
   Luggage,
   Info,
   Target,
