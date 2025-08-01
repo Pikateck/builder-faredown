@@ -223,10 +223,13 @@ export function FlightStyleBargainModal({
 
     // Negotiation logic
     const originalTotalPrice = priceCalculation.total;
-    const minAcceptablePrice = originalTotalPrice * 0.70;
-    const goodPrice = originalTotalPrice * 0.92;
+    const minAcceptablePrice = originalTotalPrice * 0.65;
+    const goodPrice = originalTotalPrice * 0.95;
 
-    if (proposedPrice >= goodPrice) {
+    // Force counter offer for testing - 80% chance of counter offer
+    const shouldCounter = Math.random() > 0.2;
+
+    if (proposedPrice >= goodPrice && !shouldCounter) {
       setBargainState((prev) => ({
         ...prev,
         phase: "accepted",
