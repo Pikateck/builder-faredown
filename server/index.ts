@@ -549,6 +549,93 @@ export function createServer() {
     }
   });
 
+  // Test endpoint for Amadeus API credentials validation
+  app.get("/api/test-amadeus-auth", async (_req, res) => {
+    try {
+      console.log("🧪 Testing Amadeus authentication only...");
+
+      const API_KEY = "XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv".trim();
+      const API_SECRET = "xoB9eAjCKQSJJEpgI".trim();
+      const BASE_URL = "https://test.api.amadeus.com";
+
+      // Test credentials format
+      const credentialsValidation = {
+        apiKeyLength: API_KEY.length,
+        secretLength: API_SECRET.length,
+        apiKeyValid: API_KEY.length > 30 && API_KEY.length < 40,
+        secretValid: API_SECRET.length > 10 && API_SECRET.length < 25,
+        apiKeyFormat: /^[A-Za-z0-9]+$/.test(API_KEY),
+        secretFormat: /^[A-Za-z0-9]+$/.test(API_SECRET)
+      };
+
+      console.log("🔍 Credentials validation:", credentialsValidation);
+
+      // Try authentication
+      const formData = new URLSearchParams();
+      formData.append('grant_type', 'client_credentials');
+      formData.append('client_id', API_KEY);
+      formData.append('client_secret', API_SECRET);
+
+      const response = await fetch(`${BASE_URL}/v1/security/oauth2/token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
+        body: formData.toString()
+      });
+
+      const responseText = await response.text();
+
+      if (response.ok) {
+        const data = JSON.parse(responseText);
+        res.json({
+          success: true,
+          message: "Amadeus authentication successful!",
+          credentialsValidation,
+          authResponse: {
+            status: response.status,
+            tokenType: data.type,
+            expiresIn: data.expires_in,
+            scope: data.scope
+          }
+        });
+      } else {
+        res.json({
+          success: false,
+          message: "Amadeus authentication failed",
+          credentialsValidation,
+          authResponse: {
+            status: response.status,
+            error: responseText,
+            troubleshooting: {
+              possibleCauses: [
+                "Credentials not yet activated (can take up to 30 minutes)",
+                "API key or secret copied incorrectly",
+                "Test environment access not enabled in Amadeus portal",
+                "Account setup incomplete in Amadeus For Developers"
+              ],
+              nextSteps: [
+                "Wait 30 minutes if credentials are newly created",
+                "Double-check credentials from Amadeus portal",
+                "Verify test environment access is enabled",
+                "Contact Amadeus support if issue persists"
+              ]
+            }
+          }
+        });
+      }
+
+    } catch (error) {
+      console.error("🧪 Amadeus auth test failed:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        message: "Amadeus auth test endpoint failed"
+      });
+    }
+  });
+
   // Test endpoint for Amadeus flights API
   app.get("/api/test-amadeus", async (_req, res) => {
     try {
