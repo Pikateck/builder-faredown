@@ -17,6 +17,7 @@ import VATManagement from "./VATManagement";
 import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
 import SupplierManagement from "./SupplierManagement";
+import LoyaltyManagement from "./LoyaltyManagement";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
 import { supplierService } from "@/services/supplierService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -726,6 +727,8 @@ export default function AdminDashboard() {
               <ReportsAnalytics />
             ) : activeModule === "suppliers" ? (
               <SupplierManagement />
+            ) : activeModule === "rewards" ? (
+              <LoyaltyManagement />
             ) : activeModule === "auth-helper" ? (
               <div>
                 <h2 className="text-2xl font-bold mb-4">
