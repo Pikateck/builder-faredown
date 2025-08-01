@@ -12,6 +12,181 @@ import destinationsService from "./services/destinationsService.js";
 // Add crypto for Hotelbeds API signatures
 import crypto from "crypto";
 
+// Amadeus API integration
+let amadeusAccessToken = '';
+let tokenExpiryTime = 0;
+
+async function getAmadeusAccessToken() {
+  const API_KEY = "WpjIBGouhoAGYcos4b77aQ4H04AS54Cm";
+  const API_SECRET = "rwQyZTsCRTn6sxBs";
+  const BASE_URL = "https://test.api.amadeus.com";
+
+  // Check if token is still valid (with 5 minute buffer)
+  if (amadeusAccessToken && Date.now() < tokenExpiryTime - 300000) {
+    return amadeusAccessToken;
+  }
+
+  try {
+    console.log("🔑 Getting new Amadeus access token...");
+
+    const response = await fetch(`${BASE_URL}/v1/security/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Amadeus auth failed: ${response.status} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    amadeusAccessToken = data.access_token;
+    tokenExpiryTime = Date.now() + (data.expires_in * 1000);
+
+    console.log("✅ Amadeus authentication successful");
+    return amadeusAccessToken;
+
+  } catch (error) {
+    console.error("❌ Amadeus authentication failed:", error);
+    throw error;
+  }
+}
+
+async function searchAmadeusFlights(searchParams: any) {
+  const BASE_URL = "https://test.api.amadeus.com";
+
+  try {
+    console.log("✈️ Searching flights with Amadeus API");
+
+    // Get access token
+    const accessToken = await getAmadeusAccessToken();
+
+    // Generate future dates if none provided
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 7); // 7 days from now for flights
+    const defaultDepartureDate = tomorrow.toISOString().split('T')[0];
+
+    // Prepare search parameters
+    const queryParams = new URLSearchParams({
+      originLocationCode: searchParams.origin || 'BOM', // Mumbai
+      destinationLocationCode: searchParams.destination || 'DXB', // Dubai
+      departureDate: searchParams.departureDate?.split('T')[0] || defaultDepartureDate,
+      adults: searchParams.adults?.toString() || '1',
+      currencyCode: 'INR'
+    });
+
+    // Add return date if provided (round trip)
+    if (searchParams.returnDate) {
+      queryParams.append('returnDate', searchParams.returnDate.split('T')[0]);
+    }
+
+    console.log("✈️ Flight search parameters:", queryParams.toString());
+
+    const response = await fetch(`${BASE_URL}/v2/shopping/flight-offers?${queryParams}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log(`📡 Amadeus Flight API Response Status: ${response.status}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ Amadeus Flight API Error: ${response.status} - ${errorText}`);
+      return { success: false, error: errorText };
+    }
+
+    const data = await response.json();
+    const flights = data.data || [];
+
+    console.log(`✅ Found ${flights.length} flight offers from Amadeus`);
+
+    // Transform flight data to match frontend expectations
+    const transformedFlights = flights.slice(0, 20).map((flight: any, index: number) => {
+      const outbound = flight.itineraries[0];
+      const firstSegment = outbound.segments[0];
+      const lastSegment = outbound.segments[outbound.segments.length - 1];
+
+      // Calculate total duration
+      const duration = outbound.duration?.replace('PT', '')?.replace('H', 'h ')?.replace('M', 'm') || '2h 30m';
+
+      // Get airline info
+      const airlineCode = firstSegment.carrierCode;
+      const airlineName = getAirlineName(airlineCode);
+
+      // Get pricing
+      const price = parseFloat(flight.price.total);
+
+      return {
+        id: `amadeus-${flight.id || index}`,
+        flightNumber: `${firstSegment.carrierCode}${firstSegment.number}`,
+        airline: {
+          code: airlineCode,
+          name: airlineName,
+          logo: `https://images.kiwi.com/airlines/64/${airlineCode}.png`
+        },
+        departure: {
+          airport: firstSegment.departure.iataCode,
+          time: firstSegment.departure.at,
+          terminal: firstSegment.departure.terminal
+        },
+        arrival: {
+          airport: lastSegment.arrival.iataCode,
+          time: lastSegment.arrival.at,
+          terminal: lastSegment.arrival.terminal
+        },
+        duration: duration,
+        stops: outbound.segments.length - 1,
+        price: Math.round(price),
+        currency: 'INR',
+        originalPrice: Math.round(price * 1.1), // Add 10% as original price
+        cabinClass: firstSegment.cabin || 'ECONOMY',
+        aircraft: firstSegment.aircraft?.code || 'A320',
+        segments: outbound.segments.length,
+        isLiveData: true,
+        supplier: 'amadeus',
+        bookingClass: firstSegment.bookingClass,
+        rateKey: flight.id
+      };
+    });
+
+    return { success: true, data: transformedFlights };
+
+  } catch (error) {
+    console.error("❌ Amadeus flight search failed:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+// Helper function to get airline names
+function getAirlineName(code: string): string {
+  const airlines: Record<string, string> = {
+    'AI': 'Air India',
+    'EK': 'Emirates',
+    'QR': 'Qatar Airways',
+    'EY': 'Etihad Airways',
+    'SV': 'Saudi Arabian Airlines',
+    'MS': 'EgyptAir',
+    'TK': 'Turkish Airlines',
+    'LH': 'Lufthansa',
+    'BA': 'British Airways',
+    'AF': 'Air France',
+    'KL': 'KLM',
+    'SQ': 'Singapore Airlines',
+    'TG': 'Thai Airways',
+    '9W': 'Jet Airways',
+    '6E': 'IndiGo',
+    'SG': 'SpiceJet',
+    'G8': 'GoAir'
+  };
+
+  return airlines[code] || `${code} Airlines`;
+}
+
 // Direct Hotelbeds API integration
 async function callHotelbedsAPI(searchParams: any) {
   const API_KEY = "91d2368789abdb5beec101ce95a9d185";
