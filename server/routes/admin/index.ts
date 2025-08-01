@@ -23,7 +23,10 @@ import settingsRoutes from './settings';
 
 const router = express.Router();
 
-// Apply admin authentication to all routes
+// Auth routes (no authentication required)
+router.use('/auth', authRoutes);
+
+// Apply admin authentication to all other routes
 router.use(authenticateAdmin);
 
 // Health check for admin API
