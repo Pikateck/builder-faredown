@@ -1912,10 +1912,11 @@ export default function Booking() {
                 {/* Razorpay Payment Button */}
                 <div className="pt-4 space-y-3">
                   <Button
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 text-lg"
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 text-lg flex items-center justify-center gap-2"
                     onClick={() => navigate("/ancillaries")}
                   >
-                    ✈️ Continue to Extras
+                    <Plane className="w-5 h-5" />
+                    Continue to Extras
                   </Button>
                   <Button
                     variant="outline"
