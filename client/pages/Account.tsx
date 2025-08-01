@@ -1061,94 +1061,40 @@ Please keep this ticket for your records.
 
   const renderLoyalty = () => (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Loyalty Program</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-gray-900">Faredown Rewards</h2>
+        <Link to="/membership-card">
+          <Button variant="outline" size="sm">
+            <CreditCard className="w-4 h-4 mr-2" />
+            View Card
+          </Button>
+        </Link>
+      </div>
 
-      {/* Loyalty Status Card */}
-      <Card className="p-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Level 1 Member</h3>
-            <p className="text-blue-100">Welcome to Faredown Loyalty!</p>
-          </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold">0</div>
-            <div className="text-sm text-blue-100">Points Balance</div>
-          </div>
-        </div>
-      </Card>
+      {/* Main Loyalty Overview */}
+      <LoyaltyOverview />
 
-      {/* Progress to Next Level */}
-      <Card className="p-4">
-        <h3 className="font-medium text-gray-900 mb-4">Progress to Level 2</h3>
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span>Current Progress</span>
-            <span>0 / 1000 points</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full"
-              style={{ width: "0%" }}
-            ></div>
-          </div>
-          <p className="text-xs text-gray-600">
-            Earn 1000 more points to reach Level 2 and unlock exclusive
-            benefits!
-          </p>
+      {/* Digital Membership Card Preview */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Digital Membership Card</h3>
+        <div className="max-w-md">
+          <DigitalMembershipCard variant="compact" showActions={false} />
         </div>
-      </Card>
+        <div className="mt-4">
+          <Link to="/membership-card">
+            <Button variant="outline">
+              <CreditCard className="w-4 h-4 mr-2" />
+              View Full Card & Benefits
+            </Button>
+          </Link>
+        </div>
+      </div>
 
-      {/* Benefits */}
-      <Card className="p-4">
-        <h3 className="font-medium text-gray-900 mb-4">Your Benefits</h3>
-        <div className="space-y-3">
-          <div className="flex items-center space-x-3">
-            <CheckCircle className="w-5 h-5 text-green-500" />
-            <span className="text-sm">Member prices on hotels</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <CheckCircle className="w-5 h-5 text-green-500" />
-            <span className="text-sm">
-              Free cancellation on select bookings
-            </span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <X className="w-5 h-5 text-gray-400" />
-            <span className="text-sm text-gray-500">
-              Priority customer support (Level 2+)
-            </span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <X className="w-5 h-5 text-gray-400" />
-            <span className="text-sm text-gray-500">
-              Room upgrades (Level 3+)
-            </span>
-          </div>
-        </div>
-      </Card>
-
-      {/* How to Earn Points */}
-      <Card className="p-4">
-        <h3 className="font-medium text-gray-900 mb-4">How to Earn Points</h3>
-        <div className="space-y-3">
-          <div className="flex justify-between">
-            <span className="text-sm">Hotel booking</span>
-            <span className="text-sm font-medium">5 points per ₹100</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm">Flight booking</span>
-            <span className="text-sm font-medium">3 points per ₹100</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm">Review after stay</span>
-            <span className="text-sm font-medium">50 points</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-sm">Refer a friend</span>
-            <span className="text-sm font-medium">500 points</span>
-          </div>
-        </div>
-      </Card>
+      {/* Recent Activity */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Points Activity</h3>
+        <LoyaltyHistory />
+      </div>
     </div>
   );
 
