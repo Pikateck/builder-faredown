@@ -7,6 +7,7 @@ const hotelbedsService = require("./hotelbedsService");
 const markupService = require("./markupService");
 const emailService = require("./emailService");
 const voucherService = require("./voucherService");
+const loyaltyService = require("./loyaltyService");
 const HotelBooking = require("../models/HotelBooking");
 const Payment = require("../models/Payment");
 const Voucher = require("../models/Voucher");
@@ -570,6 +571,10 @@ class HotelBookingService {
           if (emailResult.success) {
             // Update voucher email status
             await Voucher.updateEmailStatus(voucherDbResult.data.id, "sent");
+
+            // Process loyalty points earning
+            await this.processLoyaltyEarning(booking);
+
             console.log(
               `✅ Booking confirmation processed successfully for ${booking.booking_ref}`,
             );
