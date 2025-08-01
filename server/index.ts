@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import suppliersRouter from "./routes/suppliers";
+import adminRouter from "./routes/admin";
 import {
   MASTER_DESTINATIONS,
   searchDestinations,
@@ -1704,7 +1705,7 @@ export function createServer() {
 
       if (cachedHotels.length > 0) {
         console.log(
-          `��� Using ${cachedHotels.length} cached hotels for ${destinationCode}`,
+          `💾 Using ${cachedHotels.length} cached hotels for ${destinationCode}`,
         );
 
         res.json({
