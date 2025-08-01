@@ -583,6 +583,31 @@ export function createServer() {
       if (flightResult.success && flightResult.data.length > 0) {
         console.log(`✅ Found ${flightResult.data.length} flights from Amadeus API`);
 
+        // Store flight search results in database for admin dashboard tracking
+        try {
+          // This would integrate with your PostgreSQL database
+          const searchAnalytics = {
+            searchType: 'flight',
+            origin,
+            destination,
+            departureDate,
+            returnDate,
+            adults,
+            resultsCount: flightResult.data.length,
+            supplier: 'amadeus',
+            isLiveData: true,
+            searchTimestamp: new Date().toISOString(),
+            searchParams: JSON.stringify(_req.query)
+          };
+
+          // Note: Database integration will be enabled once the PostgreSQL tables are created
+          console.log("📊 Flight search analytics:", searchAnalytics);
+
+        } catch (dbError) {
+          console.warn("⚠️ Database storage failed:", dbError);
+          // Continue even if database storage fails
+        }
+
         return res.json({
           success: true,
           data: flightResult.data,
