@@ -624,6 +624,23 @@ export function FlightStyleBargainModal({
           priceCalculation.total - (bargainState.currentCounterOffer || 0);
         return (
           <div className="space-y-6">
+            {/* TIMER FIRST - MOST PROMINENT */}
+            <div className="bg-gradient-to-r from-red-100 to-orange-100 border-4 border-red-500 p-8 rounded-2xl shadow-2xl animate-pulse">
+              <div className="flex items-center justify-center mb-4">
+                <Clock className="w-12 h-12 text-red-600 mr-4 animate-bounce" />
+                <span className="font-bold text-red-600 text-3xl">
+                  EXPIRES IN: {bargainState.timeRemaining}s
+                </span>
+              </div>
+              <Progress
+                value={(bargainState.timeRemaining / 30) * 100}
+                className="h-6 bg-red-300 mb-4"
+              />
+              <p className="text-center text-lg text-red-700 font-bold">
+                ⚡ URGENT: LIMITED TIME OFFER ⚡
+              </p>
+            </div>
+
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-4 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center">
                 <svg
@@ -645,22 +662,6 @@ export function FlightStyleBargainModal({
               </h3>
               <p className="text-gray-600 text-sm">
                 The hotel found your price, but here's their best offer
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-r from-orange-100 to-red-100 border-4 border-red-400 p-6 rounded-xl shadow-lg animate-pulse">
-              <div className="flex items-center justify-center mb-4">
-                <Clock className="w-8 h-8 text-red-600 mr-3 animate-bounce" />
-                <span className="font-bold text-red-600 text-2xl">
-                  Offer expires in: {bargainState.timeRemaining}s
-                </span>
-              </div>
-              <Progress
-                value={(bargainState.timeRemaining / 30) * 100}
-                className="h-4 bg-red-200 mb-3"
-              />
-              <p className="text-center text-sm text-red-700 font-bold">
-                🔥 LIMITED TIME OFFER - DECIDE NOW! 🔥
               </p>
             </div>
 
