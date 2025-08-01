@@ -615,6 +615,11 @@ export function FlightStyleBargainModal({
         );
 
       case "counter_offer":
+        console.log("🎯 RENDERING COUNTER OFFER PHASE WITH TIMER", {
+          timeRemaining: bargainState.timeRemaining,
+          isTimerActive: bargainState.isTimerActive,
+          currentCounterOffer: bargainState.currentCounterOffer
+        });
         const savings =
           priceCalculation.total - (bargainState.currentCounterOffer || 0);
         return (
