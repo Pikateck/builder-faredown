@@ -541,7 +541,7 @@ export function FlightStyleBargainModal({
             <div className="bg-white border-2 border-[#febb02] rounded-xl p-4 shadow-lg">
               <div className="flex items-center justify-center space-x-3">
                 <span className="font-bold text-[#003580] text-xl">
-                  Offer expires in: 28s
+                  Offer expires in: {bargainState.timeRemaining}s
                 </span>
               </div>
             </div>
