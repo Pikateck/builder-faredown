@@ -154,6 +154,7 @@ export function FlightStyleBargainModal({
   // Timer effect
   useEffect(() => {
     if (bargainState.isTimerActive && bargainState.timeRemaining > 0) {
+      console.log("⏰ Timer tick:", bargainState.timeRemaining);
       const timer = setTimeout(() => {
         setBargainState((prev) => ({
           ...prev,
@@ -162,6 +163,7 @@ export function FlightStyleBargainModal({
       }, 1000);
       return () => clearTimeout(timer);
     } else if (bargainState.isTimerActive && bargainState.timeRemaining === 0) {
+      console.log("⏰ Timer expired - moving to rejected phase");
       setBargainState((prev) => ({
         ...prev,
         phase: "rejected",
