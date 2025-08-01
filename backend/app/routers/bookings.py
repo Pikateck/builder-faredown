@@ -316,7 +316,58 @@ async def confirm_payment(
     booking.supplier_booking_ref = f"SUP_{secrets.token_hex(4).upper()}"
     
     db.commit()
-    
+
+    # Process loyalty points earning (non-blocking)
+    try:
+        import asyncio
+        import httpx
+        import os
+
+        async def process_loyalty_earning():
+            try:
+                loyalty_server_url = os.getenv('LOYALTY_SERVER_URL', 'http://localhost:5000')
+
+                # Calculate eligible amount (adjust based on your price structure)
+                eligible_amount = float(booking.total_amount) * 0.8  # 80% of total (excluding taxes/fees)
+
+                loyalty_data = {
+                    "userId": str(current_user.id),
+                    "bookingId": booking.booking_reference,
+                    "bookingType": "HOTEL" if booking.booking_type.value == "hotel" else "FLIGHT",
+                    "eligibility": {
+                        "eligibleAmount": eligible_amount,
+                        "currency": booking.currency or "INR",
+                        "fxRate": 1.0
+                    },
+                    "description": f"{booking.booking_type.value.title()} booking confirmed"
+                }
+
+                async with httpx.AsyncClient() as client:
+                    response = await client.post(
+                        f"{loyalty_server_url}/api/loyalty/process-earning",
+                        json=loyalty_data,
+                        timeout=5.0
+                    )
+
+                    if response.status_code == 200:
+                        result = response.json()
+                        if result.get("success"):
+                            print(f"✅ Loyalty points earned for booking {booking.booking_reference}")
+                        else:
+                            print(f"❌ Loyalty earning failed: {result.get('error')}")
+                    else:
+                        print(f"❌ Loyalty service error: {response.status_code}")
+
+            except Exception as e:
+                print(f"❌ Error processing loyalty earning: {e}")
+
+        # Run loyalty earning in background (don't await)
+        asyncio.create_task(process_loyalty_earning())
+
+    except Exception as e:
+        print(f"❌ Failed to trigger loyalty earning: {e}")
+        # Continue with normal response even if loyalty fails
+
     return {
         "message": "Payment confirmed successfully",
         "booking_reference": booking.booking_reference,
