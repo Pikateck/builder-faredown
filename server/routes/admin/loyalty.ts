@@ -84,7 +84,7 @@ router.get("/me", authenticateAdmin, async (req: Request, res: Response) => {
 });
 
 // Get member transaction ledger
-router.get("/me/ledger", requireAuth, async (req: Request, res: Response) => {
+router.get("/me/ledger", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user?.id;
     if (!userId) {
@@ -118,7 +118,7 @@ router.get("/me/ledger", requireAuth, async (req: Request, res: Response) => {
 });
 
 // Quote redemption for cart
-router.post("/quote-redeem", requireAuth, async (req: Request, res: Response) => {
+router.post("/quote-redeem", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user?.id;
     if (!userId) {
@@ -152,7 +152,7 @@ router.post("/quote-redeem", requireAuth, async (req: Request, res: Response) =>
 });
 
 // Apply points to cart
-router.post("/apply", requireAuth, async (req: Request, res: Response) => {
+router.post("/apply", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user?.id;
     if (!userId) {
@@ -212,7 +212,7 @@ router.post("/apply", requireAuth, async (req: Request, res: Response) => {
 });
 
 // Cancel point redemption
-router.post("/cancel-redemption", requireAuth, async (req: Request, res: Response) => {
+router.post("/cancel-redemption", authenticateAdmin, async (req: Request, res: Response) => {
   try {
     const { lockedId } = req.body;
 
