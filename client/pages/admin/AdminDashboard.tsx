@@ -92,6 +92,7 @@ import {
   Smartphone,
   Mail,
   Bell,
+  Key,
 } from "lucide-react";
 
 // Mock data for demonstration
