@@ -214,6 +214,12 @@ const adminModules = [
     icon: Settings,
     color: "bg-gray-500",
   },
+  {
+    id: "auth-helper",
+    name: "Auth Helper",
+    icon: Key,
+    color: "bg-blue-500",
+  },
 ];
 
 export default function AdminDashboard() {
