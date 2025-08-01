@@ -345,15 +345,17 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Rewards Issued
+                  Active Suppliers
                 </p>
                 <p className="text-xl lg:text-2xl font-bold text-gray-900">
-                  ₹{mockStats.rewardsIssued.toLocaleString()}
+                  {supplierAnalytics?.activeSuppliers || 0} / {supplierAnalytics?.totalSuppliers || 0}
                 </p>
               </div>
-              <Award className="w-6 h-6 lg:w-8 lg:h-8 text-yellow-600" />
+              <Briefcase className="w-6 h-6 lg:w-8 lg:h-8 text-indigo-600" />
             </div>
-            <p className="text-xs text-blue-600 mt-2">Weekly total</p>
+            <p className="text-xs text-blue-600 mt-2">
+              {supplierAnalytics?.testingSuppliers || 0} testing, {supplierAnalytics?.averageSuccessRate?.toFixed(1) || '0.0'}% avg success
+            </p>
           </CardContent>
         </Card>
       </div>
