@@ -218,6 +218,7 @@ const adminModules = [
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [supplierAnalytics, setSupplierAnalytics] = useState(null);
   const [activeModule, setActiveModule] = useState("dashboard");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
