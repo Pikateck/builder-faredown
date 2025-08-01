@@ -301,10 +301,16 @@ export function createServer() {
     try {
       console.log("🧪 Testing direct Hotelbeds API integration...");
 
+      // Use future dates for testing
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dayAfterTomorrow = new Date();
+      dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 4);
+
       const testResult = await callHotelbedsAPI({
         destination: "BCN",
-        checkIn: "2024-12-15",
-        checkOut: "2024-12-18",
+        checkIn: tomorrow.toISOString(),
+        checkOut: dayAfterTomorrow.toISOString(),
         adults: 2,
         children: 0,
       });
