@@ -17,8 +17,8 @@ let amadeusAccessToken = '';
 let tokenExpiryTime = 0;
 
 async function getAmadeusAccessToken() {
-  const API_KEY = "WpjIBGouhoAGYcos4b77aQ4H04AS54Cm";
-  const API_SECRET = "rwQyZTsCRTn6sxBs";
+  const API_KEY = "XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv";
+  const API_SECRET = "xoB9eAjCKQSJJEpgI";
   const BASE_URL = "https://test.api.amadeus.com";
 
   // Check if token is still valid (with 5 minute buffer)
