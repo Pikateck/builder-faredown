@@ -333,12 +333,26 @@ export function createServer() {
       );
 
       // Try direct Hotelbeds API call first
+      console.log("🔍 About to call callHotelbedsAPI with params:", {
+        destination: destinationCode,
+        checkIn: checkIn,
+        checkOut: checkOut,
+        adults: adults,
+        children: 0,
+      });
+
       const directApiResult = await callHotelbedsAPI({
         destination: destinationCode,
         checkIn: checkIn,
         checkOut: checkOut,
         adults: adults,
         children: 0,
+      });
+
+      console.log("🔍 callHotelbedsAPI result:", {
+        success: directApiResult.success,
+        dataLength: directApiResult.data?.length || 0,
+        error: directApiResult.error
       });
 
       if (directApiResult.success && directApiResult.data.length > 0) {
