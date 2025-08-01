@@ -156,15 +156,13 @@ export function MobileCityDropdown({
                 className="w-full text-left px-4 py-4 hover:bg-blue-50 rounded-lg border border-gray-100 touch-manipulation"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-green-600 font-bold text-xs">
-                      API
-                    </span>
+                  <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                    <Plane className="w-5 h-5 text-green-600" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-base font-medium text-gray-900">
-                        {dest.name} ({dest.code})
+                        <span className="font-semibold">{dest.code}</span> • {dest.name}
                       </span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
                         Live API
