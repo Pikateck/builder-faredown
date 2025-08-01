@@ -246,13 +246,17 @@ export function FlightStyleBargainModal({
         timeRemaining: 30,
         isTimerActive: true
       });
-      setBargainState((prev) => ({
-        ...prev,
-        phase: "counter_offer",
-        currentCounterOffer: counterOffer,
-        timeRemaining: 30,
-        isTimerActive: true,
-      }));
+      setBargainState((prev) => {
+        const newState = {
+          ...prev,
+          phase: "counter_offer",
+          currentCounterOffer: counterOffer,
+          timeRemaining: 30,
+          isTimerActive: true,
+        };
+        console.log("🔄 NEW BARGAIN STATE:", newState);
+        return newState;
+      });
     } else {
       setBargainState((prev) => ({
         ...prev,
