@@ -737,7 +737,7 @@ export function FlightStyleBargainModal({
                 Perfect Match!
               </h3>
               <p className="text-gray-600 mb-4">
-                The airline accepted your exact price!
+                The hotel accepted your exact price!
               </p>
               <p className="text-sm text-gray-600 mb-6">
                 This is your final all-inclusive price - includes all taxes,
