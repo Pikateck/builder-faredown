@@ -269,7 +269,15 @@ export class DevApiClient {
                 fee: 0
               }
             },
-            fareClass: "ECONOMY"
+            fareClass: "ECONOMY",
+            // Return flight information
+            returnDepartureTime: "20:15",
+            returnArrivalTime: "01:45+1",
+            returnDuration: "5h 30m",
+            returnAirline: "Air India",
+            returnFlightNumber: "AI 132",
+            returnAircraft: "Boeing 787-8",
+            returnStops: 0
           }
         ],
         meta: {
