@@ -289,6 +289,118 @@ export class DevApiClient {
       };
     }
 
+    // Loyalty profile endpoint
+    if (endpoint.includes("/loyalty/me") && !endpoint.includes("/history")) {
+      return {
+        success: true,
+        data: {
+          member: {
+            id: 1,
+            memberCode: "FD123456",
+            tier: 1,
+            tierName: "Silver",
+            pointsBalance: 2500,
+            pointsLocked: 0,
+            pointsLifetime: 5000,
+            points12m: 2500,
+            joinDate: "2024-01-15",
+            status: "active"
+          },
+          tier: {
+            current: {
+              tier: 1,
+              tierName: "Silver",
+              thresholdPoints12m: 0,
+              earnMultiplier: 1.0,
+              benefits: ["Base earning rate", "Standard support"]
+            },
+            next: {
+              tier: 2,
+              tierName: "Gold",
+              thresholdPoints12m: 5000,
+              earnMultiplier: 1.5,
+              benefits: ["1.5x earning rate", "Priority support", "Free cancellation"]
+            },
+            progress: 50,
+            pointsToNext: 2500
+          },
+          expiringSoon: [
+            {
+              points: 500,
+              expireOn: "2024-09-15",
+              daysRemaining: 30
+            }
+          ]
+        },
+        message: "Fallback loyalty profile (API offline)"
+      };
+    }
+
+    // Loyalty transaction history
+    if (endpoint.includes("/loyalty/me/history")) {
+      return {
+        success: true,
+        data: {
+          items: [
+            {
+              id: 1,
+              eventType: "earn",
+              pointsDelta: 250,
+              rupeeValue: 5000,
+              description: "Hotel booking at Dubai Marina Resort",
+              createdAt: "2024-07-15T10:30:00Z",
+              bookingId: "FD12345"
+            },
+            {
+              id: 2,
+              eventType: "redeem",
+              pointsDelta: -200,
+              rupeeValue: 200,
+              description: "Points redemption on flight booking",
+              createdAt: "2024-07-10T14:20:00Z",
+              bookingId: "FD12340"
+            }
+          ],
+          pagination: {
+            total: 2,
+            limit: 20,
+            offset: 0,
+            hasMore: false
+          }
+        },
+        message: "Fallback loyalty history (API offline)"
+      };
+    }
+
+    // Loyalty rules endpoint
+    if (endpoint.includes("/loyalty/rules")) {
+      return {
+        success: true,
+        data: {
+          earning: {
+            hotel: { pointsPer100: 5, description: "Earn 5 points per ₹100 spent on hotels" },
+            air: { pointsPer100: 3, description: "Earn 3 points per ₹100 spent on flights" }
+          },
+          redemption: {
+            valuePerPoint: 0.1,
+            minRedeem: 200,
+            maxCapPercentage: 20,
+            description: "Redeem 100 points = ₹10, max 20% of booking value"
+          },
+          tiers: [
+            { tier: 1, name: "Silver", threshold: 0, multiplier: 1.0, benefits: ["Base earning rate"] },
+            { tier: 2, name: "Gold", threshold: 5000, multiplier: 1.5, benefits: ["1.5x earning", "Priority support"] },
+            { tier: 3, name: "Platinum", threshold: 15000, multiplier: 2.0, benefits: ["2x earning", "Free upgrades"] }
+          ],
+          expiry: {
+            months: 24,
+            description: "Points expire after 24 months of inactivity"
+          }
+        },
+        message: "Fallback loyalty rules (API offline)"
+      };
+    }
+
     // Default fallback
     return {
       success: false,
