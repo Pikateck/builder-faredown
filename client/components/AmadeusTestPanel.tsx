@@ -361,7 +361,7 @@ export default function AmadeusTestPanel() {
             <div>
               Credentials: 6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv (34 chars)
             </div>
-            <div>Secret: xoB9eAjCKQSJJEpgI (17 chars)</div>
+            <div>Secret: 2eVYfPeZVxmvbjRm (17 chars)</div>
             <div>Environment: Test/Sandbox (test.api.amadeus.com)</div>
           </div>
         </div>
