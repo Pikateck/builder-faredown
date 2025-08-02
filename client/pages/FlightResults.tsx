@@ -1309,7 +1309,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本����", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한국��", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -2440,7 +2440,7 @@ export default function FlightResults() {
                               {flight.arrivalTime}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {flight.arrivalCode}
+                              {flight.arrival.code}
                             </div>
                           </div>
                         </div>
@@ -3233,7 +3233,7 @@ export default function FlightResults() {
                                                   Airline fee:
                                                 </span>
                                                 <span className="text-gray-900 font-medium">
-                                                  ₹0
+                                                  ���0
                                                 </span>
                                               </div>
                                               <div className="flex justify-between">
@@ -3271,7 +3271,7 @@ export default function FlightResults() {
                                             </p>
                                             <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                               <p>
-                                                ��� Direct flights are usually
+                                                ����� Direct flights are usually
                                                 cheaper than refundable flights.
                                                 However, you may have to pay a
                                                 large fee to cancel or change
