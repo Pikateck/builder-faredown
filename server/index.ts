@@ -566,6 +566,9 @@ export function createServer() {
   // Loyalty program routes
   app.use("/api/loyalty", loyaltyRouter);
 
+  // Flights API routes
+  app.use("/api/flights", flightsRoutes);
+
   // Test endpoint for Hotelbeds API
   app.get("/api/test-hotelbeds", async (_req, res) => {
     try {
