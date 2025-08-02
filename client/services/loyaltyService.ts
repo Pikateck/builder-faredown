@@ -222,7 +222,15 @@ class LoyaltyService {
       const response = await api.post(`${this.baseUrl}/cancel-redemption`, {
         lockedId,
       });
-      return response.data.success;
+
+      // Handle different response structures safely
+      if (response && response.success !== undefined) {
+        return response.success;
+      } else if (response && response.data && response.data.success !== undefined) {
+        return response.data.success;
+      }
+
+      return false;
     } catch (error) {
       console.error("Error cancelling redemption:", error);
       return false;
