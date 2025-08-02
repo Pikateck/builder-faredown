@@ -1908,7 +1908,7 @@ export default function FlightResults() {
           `}
         </style>
 
-        {/* Desktop Sidebar Filters (≥1024px) - Hotel Style Applied */}
+        {/* Desktop Sidebar Filters (���1024px) - Hotel Style Applied */}
         <div className="hidden lg:block w-80 flex-shrink-0 desktop-filter">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
             {/* Filter Header */}
@@ -2391,14 +2391,8 @@ export default function FlightResults() {
                           </div>
                         </div>
                         <div className="text-xs text-gray-500">per person</div>
-                        <div
-                          className={`text-xs font-medium ${
-                            flight.fareTypes[0].refundability === "Refundable"
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {flight.fareTypes[0].refundability}
+                        <div className="text-xs font-medium text-blue-600">
+                          {flight.fareClass || 'Economy'}
                         </div>
                       </div>
                     </div>
