@@ -169,12 +169,22 @@ export class FlightsService {
       apiParams,
     );
 
-    if (response.data) {
+    // Handle both direct API response and wrapped response
+    if (response.success && response.data) {
       console.log(`✅ Found ${response.data.length} flights from API`);
       return response.data;
+    } else if (response.data && Array.isArray(response.data)) {
+      // Handle case where data is directly an array
+      console.log(`✅ Found ${response.data.length} flights from API`);
+      return response.data;
+    } else if ((response as any).length) {
+      // Handle case where response itself is the array
+      console.log(`✅ Found ${(response as any).length} flights from API`);
+      return response as any;
     }
 
-    throw new Error("Failed to search flights");
+    console.error("❌ Invalid API response structure:", response);
+    throw new Error("Failed to search flights - invalid response structure");
   }
 
   /**
