@@ -275,7 +275,7 @@ function getBaggageInfo(airlineCode: string): any {
 router.get("/search", async (req, res) => {
   try {
     console.log("🔍 Flight search request:", req.query);
-    
+
     const {
       origin,
       destination,
@@ -286,6 +286,35 @@ router.get("/search", async (req, res) => {
       cabinClass = "ECONOMY",
       tripType = "one_way",
     } = req.query;
+
+    // Prepare search parameters for caching
+    const searchParams = {
+      origin: origin as string,
+      destination: destination as string,
+      departureDate: departureDate as string,
+      returnDate: returnDate as string,
+      adults: parseInt(adults as string),
+      children: parseInt(children as string),
+      cabinClass: cabinClass as string,
+      tripType: tripType as string,
+      currency: 'INR'
+    };
+
+    // Check cache first
+    const cachedResult = await flightBookingService.getCachedFlightSearch(searchParams);
+    if (cachedResult.success && cachedResult.cached) {
+      console.log("🎯 Returning cached flight search results");
+      return res.json({
+        success: true,
+        data: cachedResult.data,
+        cached: true,
+        meta: {
+          total: cachedResult.data.length,
+          currency: "INR",
+          searchParams: req.query
+        }
+      });
+    }
 
     // Validate required parameters
     if (!origin || !destination || !departureDate) {
