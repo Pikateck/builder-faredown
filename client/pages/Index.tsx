@@ -1113,9 +1113,7 @@ export default function Index() {
               <div className="flex items-center space-x-2 md:space-x-6">
                 {/* Currency Only - Language dropdown removed */}
                 <div className="flex items-center space-x-4 text-sm">
-                  <div className="relative">
 
-                  </div>
                   <div className="relative">
                     <button
                       onClick={() =>
@@ -2576,7 +2574,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>����</span>
+                <span>�����</span>
                 <span>Continue with Facebook</span>
               </Button>
             </div>
