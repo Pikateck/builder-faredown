@@ -641,49 +641,19 @@ router.get("/bookings/:bookingRef", async (req, res) => {
   try {
     const { bookingRef } = req.params;
 
-    // In a real implementation, fetch from database
-    // For now, return a simulated booking
+    // Fetch booking from database
+    const bookingResult = await flightBookingService.getFlightBooking(bookingRef);
 
-    const booking = {
-      id: `booking_${Date.now()}`,
-      bookingRef: bookingRef,
-      status: "confirmed",
-      flight: {
-        id: "sample_flight_1",
-        airline: "Emirates",
-        flightNumber: "EK 500",
-        departure: {
-          code: "BOM",
-          city: "Mumbai",
-          time: "10:15",
-          terminal: "2"
-        },
-        arrival: {
-          code: "DXB",
-          city: "Dubai",
-          time: "11:45",
-          terminal: "3"
-        },
-        duration: "3h 30m"
-      },
-      passengers: [
-        {
-          id: "pax_1",
-          firstName: "John",
-          lastName: "Doe",
-          title: "Mr"
-        }
-      ],
-      totalPrice: {
-        amount: 25000,
-        currency: "INR"
-      },
-      createdAt: new Date().toISOString()
-    };
+    if (!bookingResult.success) {
+      return res.status(404).json({
+        success: false,
+        error: bookingResult.error || "Booking not found"
+      });
+    }
 
     res.json({
       success: true,
-      data: booking
+      data: bookingResult.data
     });
 
   } catch (error) {
