@@ -1114,10 +1114,7 @@ export default function Index() {
                 {/* Currency Only - Language dropdown removed */}
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="relative">
-                    <DropdownMenu>
 
-
-                    </DropdownMenu>
                   </div>
                   <div className="relative">
                     <button
