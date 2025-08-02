@@ -2559,8 +2559,8 @@ export default function FlightResults() {
                         </div>
                       </div>
 
-                      {/* Return Flight - Only show for round-trip */}
-                      {false && tripType === "round-trip" && (
+                      {/* Return Flight - Show for round-trip flights */}
+                      {tripType === "round-trip" && (
                         <div>
                           <div className="text-xs text-gray-500 mb-2 font-medium">
                             Return Flight
