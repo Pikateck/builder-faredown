@@ -127,11 +127,33 @@ async function searchAmadeusFlights(searchParams: any) {
         searchParams.departureDate?.split("T")[0] || defaultDepartureDate,
       adults: searchParams.adults?.toString() || "1",
       currencyCode: "INR",
+      max: "250", // Maximum number of offers to return
     });
 
     // Add return date if provided (round trip)
     if (searchParams.returnDate) {
       queryParams.append("returnDate", searchParams.returnDate.split("T")[0]);
+    }
+
+    // Add optional parameters if provided
+    if (searchParams.children && parseInt(searchParams.children) > 0) {
+      queryParams.append("children", searchParams.children.toString());
+    }
+
+    if (searchParams.infants && parseInt(searchParams.infants) > 0) {
+      queryParams.append("infants", searchParams.infants.toString());
+    }
+
+    if (searchParams.travelClass) {
+      queryParams.append("travelClass", searchParams.travelClass);
+    }
+
+    if (searchParams.nonStop === true) {
+      queryParams.append("nonStop", "true");
+    }
+
+    if (searchParams.maxPrice) {
+      queryParams.append("maxPrice", searchParams.maxPrice.toString());
     }
 
     console.log("✈️ Flight search parameters:", queryParams.toString());
