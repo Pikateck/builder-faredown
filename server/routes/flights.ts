@@ -283,6 +283,7 @@ router.get("/search", async (req, res) => {
       adults = 1,
       children = 0,
       cabinClass = "ECONOMY",
+      tripType = "one_way",
     } = req.query;
 
     // Validate required parameters
