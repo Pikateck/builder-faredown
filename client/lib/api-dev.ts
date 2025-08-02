@@ -304,7 +304,7 @@ export class DevApiClient {
             pointsLifetime: 5000,
             points12m: 2500,
             joinDate: "2024-01-15",
-            status: "active"
+            status: "active",
           },
           tier: {
             current: {
@@ -312,27 +312,31 @@ export class DevApiClient {
               tierName: "Silver",
               thresholdPoints12m: 0,
               earnMultiplier: 1.0,
-              benefits: ["Base earning rate", "Standard support"]
+              benefits: ["Base earning rate", "Standard support"],
             },
             next: {
               tier: 2,
               tierName: "Gold",
               thresholdPoints12m: 5000,
               earnMultiplier: 1.5,
-              benefits: ["1.5x earning rate", "Priority support", "Free cancellation"]
+              benefits: [
+                "1.5x earning rate",
+                "Priority support",
+                "Free cancellation",
+              ],
             },
             progress: 50,
-            pointsToNext: 2500
+            pointsToNext: 2500,
           },
           expiringSoon: [
             {
               points: 500,
               expireOn: "2024-09-15",
-              daysRemaining: 30
-            }
-          ]
+              daysRemaining: 30,
+            },
+          ],
         },
-        message: "Fallback loyalty profile (API offline)"
+        message: "Fallback loyalty profile (API offline)",
       };
     }
 
@@ -349,7 +353,7 @@ export class DevApiClient {
               rupeeValue: 5000,
               description: "Hotel booking at Dubai Marina Resort",
               createdAt: "2024-07-15T10:30:00Z",
-              bookingId: "FD12345"
+              bookingId: "FD12345",
             },
             {
               id: 2,
@@ -358,17 +362,17 @@ export class DevApiClient {
               rupeeValue: 200,
               description: "Points redemption on flight booking",
               createdAt: "2024-07-10T14:20:00Z",
-              bookingId: "FD12340"
-            }
+              bookingId: "FD12340",
+            },
           ],
           pagination: {
             total: 2,
             limit: 20,
             offset: 0,
-            hasMore: false
-          }
+            hasMore: false,
+          },
         },
-        message: "Fallback loyalty history (API offline)"
+        message: "Fallback loyalty history (API offline)",
       };
     }
 
@@ -378,26 +382,50 @@ export class DevApiClient {
         success: true,
         data: {
           earning: {
-            hotel: { pointsPer100: 5, description: "Earn 5 points per ₹100 spent on hotels" },
-            air: { pointsPer100: 3, description: "Earn 3 points per ₹100 spent on flights" }
+            hotel: {
+              pointsPer100: 5,
+              description: "Earn 5 points per ₹100 spent on hotels",
+            },
+            air: {
+              pointsPer100: 3,
+              description: "Earn 3 points per ₹100 spent on flights",
+            },
           },
           redemption: {
             valuePerPoint: 0.1,
             minRedeem: 200,
             maxCapPercentage: 20,
-            description: "Redeem 100 points = ₹10, max 20% of booking value"
+            description: "Redeem 100 points = ₹10, max 20% of booking value",
           },
           tiers: [
-            { tier: 1, name: "Silver", threshold: 0, multiplier: 1.0, benefits: ["Base earning rate"] },
-            { tier: 2, name: "Gold", threshold: 5000, multiplier: 1.5, benefits: ["1.5x earning", "Priority support"] },
-            { tier: 3, name: "Platinum", threshold: 15000, multiplier: 2.0, benefits: ["2x earning", "Free upgrades"] }
+            {
+              tier: 1,
+              name: "Silver",
+              threshold: 0,
+              multiplier: 1.0,
+              benefits: ["Base earning rate"],
+            },
+            {
+              tier: 2,
+              name: "Gold",
+              threshold: 5000,
+              multiplier: 1.5,
+              benefits: ["1.5x earning", "Priority support"],
+            },
+            {
+              tier: 3,
+              name: "Platinum",
+              threshold: 15000,
+              multiplier: 2.0,
+              benefits: ["2x earning", "Free upgrades"],
+            },
           ],
           expiry: {
             months: 24,
-            description: "Points expire after 24 months of inactivity"
-          }
+            description: "Points expire after 24 months of inactivity",
+          },
         },
-        message: "Fallback loyalty rules (API offline)"
+        message: "Fallback loyalty rules (API offline)",
       };
     }
 

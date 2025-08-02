@@ -104,9 +104,10 @@ class LoyaltyService {
       }
 
       // If no valid response structure, throw error
-      const errorMessage = (response && response.error) ||
-                          (response && response.data && response.data.error) ||
-                          "Failed to fetch loyalty profile";
+      const errorMessage =
+        (response && response.error) ||
+        (response && response.data && response.data.error) ||
+        "Failed to fetch loyalty profile";
       throw new Error(errorMessage);
     } catch (error) {
       console.error("Error fetching loyalty profile:", error);
@@ -140,9 +141,10 @@ class LoyaltyService {
       }
 
       // If no valid response structure, throw error
-      const errorMessage = (response && response.error) ||
-                          (response && response.data && response.data.error) ||
-                          "Failed to fetch transaction history";
+      const errorMessage =
+        (response && response.error) ||
+        (response && response.data && response.data.error) ||
+        "Failed to fetch transaction history";
       throw new Error(errorMessage);
     } catch (error) {
       console.error("Error fetching transaction history:", error);
@@ -171,9 +173,10 @@ class LoyaltyService {
       }
 
       // If no valid response structure, throw error
-      const errorMessage = (response && response.error) ||
-                          (response && response.data && response.data.error) ||
-                          "Failed to quote redemption";
+      const errorMessage =
+        (response && response.error) ||
+        (response && response.data && response.data.error) ||
+        "Failed to quote redemption";
       throw new Error(errorMessage);
     } catch (error) {
       console.error("Error quoting redemption:", error);
@@ -206,9 +209,10 @@ class LoyaltyService {
       }
 
       // If no valid response structure, throw error
-      const errorMessage = (response && response.error) ||
-                          (response && response.data && response.data.error) ||
-                          "Failed to apply points";
+      const errorMessage =
+        (response && response.error) ||
+        (response && response.data && response.data.error) ||
+        "Failed to apply points";
       throw new Error(errorMessage);
     } catch (error) {
       console.error("Error applying points:", error);
@@ -226,7 +230,11 @@ class LoyaltyService {
       // Handle different response structures safely
       if (response && response.success !== undefined) {
         return response.success;
-      } else if (response && response.data && response.data.success !== undefined) {
+      } else if (
+        response &&
+        response.data &&
+        response.data.success !== undefined
+      ) {
         return response.data.success;
       }
 
@@ -250,9 +258,10 @@ class LoyaltyService {
       }
 
       // If no valid response structure, throw error
-      const errorMessage = (response && response.error) ||
-                          (response && response.data && response.data.error) ||
-                          "Failed to fetch loyalty rules";
+      const errorMessage =
+        (response && response.error) ||
+        (response && response.data && response.data.error) ||
+        "Failed to fetch loyalty rules";
       throw new Error(errorMessage);
     } catch (error) {
       console.error("Error fetching loyalty rules:", error);
