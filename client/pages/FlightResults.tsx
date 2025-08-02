@@ -381,6 +381,52 @@ export default function FlightResults() {
   const [offerExpiryTime, setOfferExpiryTime] = useState(0);
   const [duplicatePriceError, setDuplicatePriceError] = useState(false);
 
+  // Load flights from Amadeus API
+  useEffect(() => {
+    const loadFlights = async () => {
+      try {
+        setIsLoading(true);
+        setSearchError(null);
+
+        // Get search parameters from URL or use defaults
+        const origin = searchParams.get('from') || 'BOM';
+        const destination = searchParams.get('to') || 'DXB';
+        const departure = searchParams.get('departure') || departureDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0];
+        const adults = parseInt(searchParams.get('adults') || '1');
+        const children = parseInt(searchParams.get('children') || '0');
+        const cabinClass = searchParams.get('class') || 'economy';
+        const tripTypeParam = searchParams.get('tripType') || tripType;
+
+        console.log('🔍 Searching flights:', { origin, destination, departure, adults, children, cabinClass });
+
+        const searchRequest = {
+          departure: origin,
+          arrival: destination,
+          departureDate: departure,
+          returnDate: tripTypeParam === 'round_trip' ? returnDate?.toISOString().split('T')[0] : undefined,
+          adults,
+          children,
+          cabinClass: cabinClass as any,
+          tripType: tripTypeParam as any,
+        };
+
+        const flightResults = await flightsService.searchFlights(searchRequest);
+        console.log('✅ Loaded flights:', flightResults.length);
+
+        setFlights(flightResults);
+      } catch (error) {
+        console.error('❌ Flight search error:', error);
+        setSearchError(error.message || 'Failed to load flights');
+        // Fall back to static data if API fails
+        setFlights([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadFlights();
+  }, [searchParams, departureDate, returnDate, tripType]);
+
   // Format number with commas
   const formatNumberWithCommas = (num: string) => {
     if (!num) return "";
@@ -1263,7 +1309,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한국��", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
