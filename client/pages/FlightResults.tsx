@@ -1260,7 +1260,7 @@ export default function FlightResults() {
                   {tripType === "one-way"
                     ? "One way"
                     : tripType === "multi-city"
-                      ? "Multi-city"
+                      ? "Multi-city (showing one-way options)"
                       : "Round trip"}{" "}
                   • {adults} adult{adults > 1 ? "s" : ""}
                 </p>
