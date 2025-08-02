@@ -131,12 +131,19 @@ class LoyaltyService {
       const response = await api.get(`${this.baseUrl}/me/history`, {
         params: { limit, offset },
       });
-      if (response.data.success) {
+
+      // Handle different response structures safely
+      if (response && response.success && response.data) {
+        return response.data;
+      } else if (response && response.data && response.data.success) {
         return response.data.data;
       }
-      throw new Error(
-        response.data.error || "Failed to fetch transaction history",
-      );
+
+      // If no valid response structure, throw error
+      const errorMessage = (response && response.error) ||
+                          (response && response.data && response.data.error) ||
+                          "Failed to fetch transaction history";
+      throw new Error(errorMessage);
     } catch (error) {
       console.error("Error fetching transaction history:", error);
       throw error;
