@@ -1115,9 +1115,7 @@ export default function Index() {
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="relative">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
 
-                      </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬����" },
