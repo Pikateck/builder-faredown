@@ -2321,17 +2321,17 @@ export default function FlightResults() {
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-white rounded-lg border shadow-sm flex items-center justify-center">
                           <img
-                            src={flight.logo}
+                            src={`https://pics.avs.io/60/60/${flight.airlineCode || 'XX'}.png`}
                             alt={flight.airline}
                             className="w-6 h-6 object-contain"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/24x24/E5E7EB/6B7280?text=✈';
+                            }}
                           />
                         </div>
                         <div>
                           <div className="font-medium text-gray-900 text-sm">
-                            {flight.returnAirline &&
-                            flight.returnAirline !== flight.airline
-                              ? `${flight.airline}, ${flight.returnAirline}`
-                              : flight.airline}
+                            {flight.airline}
                           </div>
                           <div className="text-xs text-gray-500">
                             {flight.flightNumber} • {flight.aircraft}
