@@ -20,8 +20,8 @@ let amadeusAccessToken = "";
 let tokenExpiryTime = 0;
 
 async function getAmadeusAccessToken() {
-  const API_KEY = "XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv".trim();
-  const API_SECRET = "xoB9eAjCKQSJJEpgI".trim();
+  const API_KEY = "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv".trim();
+  const API_SECRET = "2eVYfPeZVxmvbjRm".trim();
   const BASE_URL = "https://test.api.amadeus.com";
 
   // Check if token is still valid (with 5 minute buffer)
@@ -754,7 +754,7 @@ export function createServer() {
           // Note: Database integration will be enabled once the PostgreSQL tables are created
           console.log("📊 Flight search analytics:", searchAnalytics);
         } catch (dbError) {
-          console.warn("���️ Database storage failed:", dbError);
+          console.warn("⚠️ Database storage failed:", dbError);
           // Continue even if database storage fails
         }
 
@@ -913,7 +913,7 @@ export function createServer() {
           `✅ Found ${directApiResult.data.length} hotels from direct Hotelbeds API`,
         );
         console.log(
-          `🏨 Sample hotel images:`,
+          `�� Sample hotel images:`,
           directApiResult.data[0]?.images?.slice(0, 2),
         );
 
