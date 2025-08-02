@@ -109,8 +109,8 @@ export default function AmadeusTestPanel() {
           Current API Configuration
         </h3>
         <div className="space-y-1 text-sm text-blue-800">
-          <div>API Key: XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv</div>
-          <div>API Secret: xoB9eAjCKQSJJEpgI</div>
+          <div>API Key: 6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv</div>
+          <div>API Secret: 2eVYfPeZVxmvbjRm</div>
           <div>Base URL: https://test.api.amadeus.com</div>
         </div>
       </div>
