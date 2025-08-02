@@ -905,7 +905,7 @@ export default function FlightResults() {
   );
 
   // Filter flights based on selected airlines, aircraft types and fare type with sorting and pricing logic
-  const filteredFlights = flightData
+  const filteredFlights = flights
     .filter((flight) => {
       // Filter by airlines
       const airlineMatch =
@@ -1309,7 +1309,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本���", flag: "🇯🇵" },
-                      { code: "ko", name: "한국��", flag: "🇰🇷" },
+                      { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
