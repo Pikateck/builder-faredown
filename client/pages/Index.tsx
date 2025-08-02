@@ -1116,7 +1116,7 @@ export default function Index() {
                   <div className="relative">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <span className="text-white text-sm">English</span>
+
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
