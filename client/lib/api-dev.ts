@@ -103,6 +103,168 @@ export class DevApiClient {
       };
     }
 
+    // Flight search
+    if (endpoint.includes("/flights/search")) {
+      return {
+        success: true,
+        data: [
+          {
+            id: "fallback_flight_1",
+            airline: "Emirates",
+            airlineCode: "EK",
+            flightNumber: "EK 500",
+            departure: {
+              code: "BOM",
+              name: "Chhatrapati Shivaji Maharaj International Airport",
+              city: "Mumbai",
+              country: "India",
+              terminal: "2"
+            },
+            arrival: {
+              code: "DXB",
+              name: "Dubai International Airport",
+              city: "Dubai",
+              country: "UAE",
+              terminal: "3"
+            },
+            departureTime: "10:15",
+            arrivalTime: "11:45",
+            duration: "3h 30m",
+            aircraft: "Boeing 777-300ER",
+            stops: 0,
+            price: {
+              amount: 25890,
+              currency: "INR",
+              breakdown: {
+                baseFare: 20712,
+                taxes: 3890,
+                fees: 1288,
+                total: 25890
+              }
+            },
+            amenities: ["WiFi", "Entertainment System", "Premium Meals"],
+            baggage: {
+              carryOn: {
+                weight: "7kg",
+                dimensions: "55x40x20cm",
+                included: true
+              },
+              checked: {
+                weight: "20kg",
+                count: 1,
+                fee: 0
+              }
+            },
+            fareClass: "ECONOMY"
+          },
+          {
+            id: "fallback_flight_2",
+            airline: "IndiGo",
+            airlineCode: "6E",
+            flightNumber: "6E 1407",
+            departure: {
+              code: "BOM",
+              name: "Chhatrapati Shivaji Maharaj International Airport",
+              city: "Mumbai",
+              country: "India",
+              terminal: "2"
+            },
+            arrival: {
+              code: "DXB",
+              name: "Dubai International Airport",
+              city: "Dubai",
+              country: "UAE",
+              terminal: "2"
+            },
+            departureTime: "14:30",
+            arrivalTime: "16:00",
+            duration: "3h 30m",
+            aircraft: "Airbus A320",
+            stops: 0,
+            price: {
+              amount: 22650,
+              currency: "INR",
+              breakdown: {
+                baseFare: 18120,
+                taxes: 3400,
+                fees: 1130,
+                total: 22650
+              }
+            },
+            amenities: ["Seat Selection", "Onboard Refreshments"],
+            baggage: {
+              carryOn: {
+                weight: "7kg",
+                dimensions: "55x40x20cm",
+                included: true
+              },
+              checked: {
+                weight: "15kg",
+                count: 1,
+                fee: 0
+              }
+            },
+            fareClass: "ECONOMY"
+          },
+          {
+            id: "fallback_flight_3",
+            airline: "Air India",
+            airlineCode: "AI",
+            flightNumber: "AI 131",
+            departure: {
+              code: "BOM",
+              name: "Chhatrapati Shivaji Maharaj International Airport",
+              city: "Mumbai",
+              country: "India",
+              terminal: "2"
+            },
+            arrival: {
+              code: "DXB",
+              name: "Dubai International Airport",
+              city: "Dubai",
+              country: "UAE",
+              terminal: "1"
+            },
+            departureTime: "18:45",
+            arrivalTime: "20:15",
+            duration: "3h 30m",
+            aircraft: "Boeing 787-8",
+            stops: 0,
+            price: {
+              amount: 24100,
+              currency: "INR",
+              breakdown: {
+                baseFare: 19280,
+                taxes: 3620,
+                fees: 1200,
+                total: 24100
+              }
+            },
+            amenities: ["WiFi", "Entertainment System", "Meals"],
+            baggage: {
+              carryOn: {
+                weight: "8kg",
+                dimensions: "55x40x20cm",
+                included: true
+              },
+              checked: {
+                weight: "23kg",
+                count: 1,
+                fee: 0
+              }
+            },
+            fareClass: "ECONOMY"
+          }
+        ],
+        meta: {
+          total: 3,
+          currency: "INR",
+          searchParams: params
+        },
+        message: "Fallback flight data (Live Amadeus API unavailable)"
+      };
+    }
+
     // Default fallback
     return {
       success: false,
