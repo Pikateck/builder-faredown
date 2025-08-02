@@ -1302,7 +1302,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬��" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫🇷" },
+                      { code: "fr", name: "Fran��ais", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
@@ -2509,11 +2509,11 @@ export default function FlightResults() {
                             <div className="space-y-1">
                               <div className="flex justify-between">
                                 <span className="text-gray-600">Check-in:</span>
-                                <span className="font-medium">23kg</span>
+                                <span className="font-medium">{flight.baggage?.checked?.weight || '20kg'}</span>
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-600">Cabin:</span>
-                                <span className="font-medium">7kg</span>
+                                <span className="font-medium">{flight.baggage?.carryOn?.weight || '7kg'}</span>
                               </div>
                             </div>
                             {/* Tooltip arrow */}
