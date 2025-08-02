@@ -1023,13 +1023,13 @@ export default function FlightResults() {
         selectedAircraftTypes.size === availableAircraftTypes.length ||
         selectedAircraftTypes.has(flight.aircraft);
 
-      // Filter by fare type
+      // Filter by fare type (assume non-refundable for new structure)
       const fareTypeMatch =
         selectedFareType === "all" ||
         (selectedFareType === "refundable" &&
-          flight.refundability === "Refundable") ||
+          (flight.refundability === "Refundable" || flight.fareClass === "BUSINESS" || flight.fareClass === "FIRST")) ||
         (selectedFareType === "non-refundable" &&
-          flight.refundability === "Non-Refundable");
+          (flight.refundability === "Non-Refundable" || !flight.refundability));
 
       return airlineMatch && aircraftTypeMatch && fareTypeMatch;
     })
@@ -1413,7 +1413,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "���िन�����ी", flag: "🇮🇳" },
+                      { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本����", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
