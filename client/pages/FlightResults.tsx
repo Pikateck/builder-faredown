@@ -412,11 +412,11 @@ export default function FlightResults() {
           departure: origin,
           arrival: destination,
           departureDate: departure,
-          returnDate: apiTripType === 'round_trip' ? returnDate?.toISOString().split('T')[0] : undefined,
+          returnDate: searchTripType === 'round_trip' ? returnDate?.toISOString().split('T')[0] : undefined,
           adults,
           children,
           cabinClass: cabinClass as any,
-          tripType: apiTripType,
+          tripType: searchTripType,
         };
 
         const flightResults = await flightsService.searchFlights(searchRequest);
@@ -2457,7 +2457,7 @@ export default function FlightResults() {
                       <div className="text-right relative">
                         <div className="flex items-center justify-end space-x-1">
                           <div className="text-lg font-bold text-gray-900">
-                            ₹{flight.price.amount.toLocaleString('en-IN')}
+                            ���{flight.price.amount.toLocaleString('en-IN')}
                           </div>
                           <div className="relative group">
                             <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
@@ -3502,7 +3502,7 @@ export default function FlightResults() {
                                             </p>
                                             <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                               <p>
-                                                ��� Direct flights are usually
+                                                • Direct flights are usually
                                                 cheaper than refundable flights.
                                                 However, you may have to pay a
                                                 large fee to cancel or change
