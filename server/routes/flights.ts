@@ -5,7 +5,8 @@ import flightBookingService from "../services/flightBookingService";
 const router = Router();
 
 // Amadeus API Configuration
-const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY || "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv";
+const AMADEUS_API_KEY =
+  process.env.AMADEUS_API_KEY || "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv";
 const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET || "2eVYfPeZVxmvbjRm";
 const AMADEUS_BASE_URL = "https://test.api.amadeus.com";
 
@@ -44,10 +45,11 @@ function transformAmadeusFlightData(amadeusData: any): any {
     const lastSegment = outbound.segments[outbound.segments.length - 1];
 
     // Calculate duration
-    const duration = outbound.duration
-      ?.replace("PT", "")
-      ?.replace("H", "h ")
-      ?.replace("M", "m") || "2h 30m";
+    const duration =
+      outbound.duration
+        ?.replace("PT", "")
+        ?.replace("H", "h ")
+        ?.replace("M", "m") || "2h 30m";
 
     // Get airline info
     const airlineCode = firstSegment.carrierCode;
@@ -91,7 +93,7 @@ function transformAmadeusFlightData(amadeusData: any): any {
           taxes: totalPrice * 0.15, // Estimate
           fees: totalPrice * 0.05, // Estimate
           total: totalPrice,
-        }
+        },
       },
       amenities: getAmenities(airlineCode),
       baggage: getBaggageInfo(airlineCode),
@@ -109,9 +111,15 @@ function transformAmadeusFlightData(amadeusData: any): any {
         airline: getAirlineName(segment.carrierCode),
         flightNumber: `${segment.carrierCode} ${segment.number}`,
         aircraft: segment.aircraft?.code || "Unknown",
-        duration: segment.duration?.replace("PT", "").replace("H", "h ").replace("M", "m") || "Unknown",
+        duration:
+          segment.duration
+            ?.replace("PT", "")
+            .replace("H", "h ")
+            .replace("M", "m") || "Unknown",
       })),
-      fareClass: flight.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin || "ECONOMY",
+      fareClass:
+        flight.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin ||
+        "ECONOMY",
       validatingAirlineCode: flight.validatingAirlineCodes?.[0] || airlineCode,
       amadeusData: flight, // Store original data for booking
     };
@@ -120,17 +128,25 @@ function transformAmadeusFlightData(amadeusData: any): any {
     if (inbound && inbound.segments && inbound.segments.length > 0) {
       const returnFirstSegment = inbound.segments[0];
       const returnLastSegment = inbound.segments[inbound.segments.length - 1];
-      const returnDuration = inbound.duration
-        ?.replace("PT", "")
-        ?.replace("H", "h ")
-        ?.replace("M", "m") || "2h 30m";
+      const returnDuration =
+        inbound.duration
+          ?.replace("PT", "")
+          ?.replace("H", "h ")
+          ?.replace("M", "m") || "2h 30m";
 
-      transformedFlight.returnDepartureTime = formatTime(returnFirstSegment.departure.at);
-      transformedFlight.returnArrivalTime = formatTime(returnLastSegment.arrival.at);
+      transformedFlight.returnDepartureTime = formatTime(
+        returnFirstSegment.departure.at,
+      );
+      transformedFlight.returnArrivalTime = formatTime(
+        returnLastSegment.arrival.at,
+      );
       transformedFlight.returnDuration = returnDuration;
-      transformedFlight.returnAirline = getAirlineName(returnFirstSegment.carrierCode);
+      transformedFlight.returnAirline = getAirlineName(
+        returnFirstSegment.carrierCode,
+      );
       transformedFlight.returnFlightNumber = `${returnFirstSegment.carrierCode} ${returnFirstSegment.number}`;
-      transformedFlight.returnAircraft = returnFirstSegment.aircraft?.code || "Unknown";
+      transformedFlight.returnAircraft =
+        returnFirstSegment.aircraft?.code || "Unknown";
       transformedFlight.returnStops = inbound.segments.length - 1;
     }
 
@@ -141,96 +157,104 @@ function transformAmadeusFlightData(amadeusData: any): any {
 // Helper functions
 function getAirlineName(code: string): string {
   const airlines: Record<string, string> = {
-    "EK": "Emirates",
-    "AI": "Air India",
+    EK: "Emirates",
+    AI: "Air India",
     "6E": "IndiGo",
-    "SG": "SpiceJet",
-    "UK": "Vistara",
+    SG: "SpiceJet",
+    UK: "Vistara",
     "9W": "Jet Airways",
-    "G8": "Go First",
-    "QR": "Qatar Airways",
-    "EY": "Etihad Airways",
-    "LH": "Lufthansa",
-    "BA": "British Airways",
-    "AF": "Air France",
-    "KL": "KLM",
-    "TK": "Turkish Airlines",
-    "SQ": "Singapore Airlines",
-    "CX": "Cathay Pacific",
-    "QF": "Qantas",
-    "UA": "United Airlines",
-    "DL": "Delta Air Lines",
-    "AA": "American Airlines",
+    G8: "Go First",
+    QR: "Qatar Airways",
+    EY: "Etihad Airways",
+    LH: "Lufthansa",
+    BA: "British Airways",
+    AF: "Air France",
+    KL: "KLM",
+    TK: "Turkish Airlines",
+    SQ: "Singapore Airlines",
+    CX: "Cathay Pacific",
+    QF: "Qantas",
+    UA: "United Airlines",
+    DL: "Delta Air Lines",
+    AA: "American Airlines",
   };
   return airlines[code] || code;
 }
 
 function getAirportName(code: string): string {
   const airports: Record<string, string> = {
-    "BOM": "Chhatrapati Shivaji Maharaj International Airport",
-    "DEL": "Indira Gandhi International Airport",
-    "BLR": "Kempegowda International Airport",
-    "MAA": "Chennai International Airport",
-    "HYD": "Rajiv Gandhi International Airport",
-    "CCU": "Netaji Subhash Chandra Bose International Airport",
-    "DXB": "Dubai International Airport",
-    "DOH": "Hamad International Airport",
-    "AUH": "Abu Dhabi International Airport",
-    "LHR": "Heathrow Airport",
-    "FRA": "Frankfurt Airport",
-    "CDG": "Charles de Gaulle Airport",
-    "AMS": "Amsterdam Airport Schiphol",
-    "IST": "Istanbul Airport",
-    "SIN": "Singapore Changi Airport",
-    "HKG": "Hong Kong International Airport",
-    "SYD": "Sydney Kingsford Smith Airport",
-    "LAX": "Los Angeles International Airport",
-    "JFK": "John F. Kennedy International Airport",
-    "ORD": "O'Hare International Airport",
+    BOM: "Chhatrapati Shivaji Maharaj International Airport",
+    DEL: "Indira Gandhi International Airport",
+    BLR: "Kempegowda International Airport",
+    MAA: "Chennai International Airport",
+    HYD: "Rajiv Gandhi International Airport",
+    CCU: "Netaji Subhash Chandra Bose International Airport",
+    DXB: "Dubai International Airport",
+    DOH: "Hamad International Airport",
+    AUH: "Abu Dhabi International Airport",
+    LHR: "Heathrow Airport",
+    FRA: "Frankfurt Airport",
+    CDG: "Charles de Gaulle Airport",
+    AMS: "Amsterdam Airport Schiphol",
+    IST: "Istanbul Airport",
+    SIN: "Singapore Changi Airport",
+    HKG: "Hong Kong International Airport",
+    SYD: "Sydney Kingsford Smith Airport",
+    LAX: "Los Angeles International Airport",
+    JFK: "John F. Kennedy International Airport",
+    ORD: "O'Hare International Airport",
   };
   return airports[code] || `${code} Airport`;
 }
 
 function getCityName(code: string): string {
   const cities: Record<string, string> = {
-    "BOM": "Mumbai",
-    "DEL": "New Delhi",
-    "BLR": "Bangalore",
-    "MAA": "Chennai",
-    "HYD": "Hyderabad",
-    "CCU": "Kolkata",
-    "DXB": "Dubai",
-    "DOH": "Doha",
-    "AUH": "Abu Dhabi",
-    "LHR": "London",
-    "FRA": "Frankfurt",
-    "CDG": "Paris",
-    "AMS": "Amsterdam",
-    "IST": "Istanbul",
-    "SIN": "Singapore",
-    "HKG": "Hong Kong",
-    "SYD": "Sydney",
-    "LAX": "Los Angeles",
-    "JFK": "New York",
-    "ORD": "Chicago",
+    BOM: "Mumbai",
+    DEL: "New Delhi",
+    BLR: "Bangalore",
+    MAA: "Chennai",
+    HYD: "Hyderabad",
+    CCU: "Kolkata",
+    DXB: "Dubai",
+    DOH: "Doha",
+    AUH: "Abu Dhabi",
+    LHR: "London",
+    FRA: "Frankfurt",
+    CDG: "Paris",
+    AMS: "Amsterdam",
+    IST: "Istanbul",
+    SIN: "Singapore",
+    HKG: "Hong Kong",
+    SYD: "Sydney",
+    LAX: "Los Angeles",
+    JFK: "New York",
+    ORD: "Chicago",
   };
   return cities[code] || code;
 }
 
 function getCountryName(code: string): string {
   const countries: Record<string, string> = {
-    "BOM": "India", "DEL": "India", "BLR": "India", "MAA": "India", "HYD": "India", "CCU": "India",
-    "DXB": "UAE", "AUH": "UAE",
-    "DOH": "Qatar",
-    "LHR": "United Kingdom",
-    "FRA": "Germany",
-    "CDG": "France",
-    "AMS": "Netherlands",
-    "IST": "Turkey",
-    "SIN": "Singapore",
-    "HKG": "Hong Kong",
-    "SYD": "Australia",
-    "LAX": "United States", "JFK": "United States", "ORD": "United States",
+    BOM: "India",
+    DEL: "India",
+    BLR: "India",
+    MAA: "India",
+    HYD: "India",
+    CCU: "India",
+    DXB: "UAE",
+    AUH: "UAE",
+    DOH: "Qatar",
+    LHR: "United Kingdom",
+    FRA: "Germany",
+    CDG: "France",
+    AMS: "Netherlands",
+    IST: "Turkey",
+    SIN: "Singapore",
+    HKG: "Hong Kong",
+    SYD: "Australia",
+    LAX: "United States",
+    JFK: "United States",
+    ORD: "United States",
   };
   return countries[code] || "Unknown";
 }
@@ -240,16 +264,21 @@ function formatTime(dateTimeString: string): string {
   return date.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false
+    hour12: false,
   });
 }
 
 function getAmenities(airlineCode: string): string[] {
   const premiumAirlines = ["EK", "QR", "EY", "LH", "BA", "AF", "SQ", "CX"];
   const basicAmenities = ["Seat Selection", "Onboard Refreshments"];
-  const premiumAmenities = ["WiFi", "Entertainment System", "Premium Meals", "Lounge Access"];
-  
-  return premiumAirlines.includes(airlineCode) 
+  const premiumAmenities = [
+    "WiFi",
+    "Entertainment System",
+    "Premium Meals",
+    "Lounge Access",
+  ];
+
+  return premiumAirlines.includes(airlineCode)
     ? [...basicAmenities, ...premiumAmenities]
     : basicAmenities;
 }
@@ -265,7 +294,7 @@ function getBaggageInfo(airlineCode: string): any {
       weight: "20kg",
       count: 1,
       fee: 0,
-    }
+    },
   };
 }
 
@@ -297,11 +326,12 @@ router.get("/search", async (req, res) => {
       children: parseInt(children as string),
       cabinClass: cabinClass as string,
       tripType: tripType as string,
-      currency: 'INR'
+      currency: "INR",
     };
 
     // Check cache first
-    const cachedResult = await flightBookingService.getCachedFlightSearch(searchParams);
+    const cachedResult =
+      await flightBookingService.getCachedFlightSearch(searchParams);
     if (cachedResult.success && cachedResult.cached) {
       console.log("🎯 Returning cached flight search results");
       return res.json({
@@ -311,8 +341,8 @@ router.get("/search", async (req, res) => {
         meta: {
           total: cachedResult.data.length,
           currency: "INR",
-          searchParams: req.query
-        }
+          searchParams: req.query,
+        },
       });
     }
 
@@ -320,13 +350,14 @@ router.get("/search", async (req, res) => {
     if (!origin || !destination || !departureDate) {
       return res.status(400).json({
         success: false,
-        error: "Missing required parameters: origin, destination, departureDate"
+        error:
+          "Missing required parameters: origin, destination, departureDate",
       });
     }
 
     // Get access token
     const accessToken = await getAmadeusAccessToken();
-    
+
     // Prepare search parameters
     const queryParams = new URLSearchParams({
       originLocationCode: origin as string,
@@ -341,18 +372,18 @@ router.get("/search", async (req, res) => {
     if (returnDate && tripType === "round_trip") {
       queryParams.append("returnDate", (returnDate as string).split("T")[0]);
     }
-    
+
     if (children && parseInt(children as string) > 0) {
       queryParams.append("children", children.toString());
     }
-    
+
     if (cabinClass) {
       queryParams.append("travelClass", cabinClass as string);
     }
 
     console.log("✈️ Amadeus flight search parameters:", {
       tripType,
-      params: queryParams.toString()
+      params: queryParams.toString(),
     });
 
     // Call Amadeus API
@@ -363,7 +394,7 @@ router.get("/search", async (req, res) => {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -372,20 +403,24 @@ router.get("/search", async (req, res) => {
       return res.status(500).json({
         success: false,
         error: "Failed to search flights",
-        details: errorText
+        details: errorText,
       });
     }
 
     const amadeusData = await response.json();
-    console.log(`✅ Found ${amadeusData.data?.length || 0} flights from Amadeus`);
-    
+    console.log(
+      `✅ Found ${amadeusData.data?.length || 0} flights from Amadeus`,
+    );
+
     // Transform data to our format
     const transformedFlights = transformAmadeusFlightData(amadeusData);
 
     // Cache the search results in database (don't wait for it)
-    flightBookingService.cacheFlightSearch(searchParams, transformedFlights).catch(error => {
-      console.error("Failed to cache flight search results:", error);
-    });
+    flightBookingService
+      .cacheFlightSearch(searchParams, transformedFlights)
+      .catch((error) => {
+        console.error("Failed to cache flight search results:", error);
+      });
 
     res.json({
       success: true,
@@ -394,16 +429,15 @@ router.get("/search", async (req, res) => {
       meta: {
         total: transformedFlights.length,
         currency: "INR",
-        searchParams: req.query
-      }
+        searchParams: req.query,
+      },
     });
-
   } catch (error) {
     console.error("🚨 Flight search error:", error);
     res.status(500).json({
       success: false,
       error: "Internal server error",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -412,23 +446,24 @@ router.get("/search", async (req, res) => {
 router.get("/flights/:flightId", async (req, res) => {
   try {
     const { flightId } = req.params;
-    
+
     // For now, we'll return enhanced details based on the flight ID
     // In a full implementation, you'd store flight offers temporarily and retrieve them
-    
+
     res.json({
       success: true,
       data: {
         id: flightId,
         // This would include detailed information like seat maps, fare rules, etc.
-        message: "Flight details endpoint - implement based on stored flight offers"
-      }
+        message:
+          "Flight details endpoint - implement based on stored flight offers",
+      },
     });
   } catch (error) {
     console.error("🚨 Flight details error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to get flight details"
+      error: "Failed to get flight details",
     });
   }
 });
@@ -437,17 +472,17 @@ router.get("/flights/:flightId", async (req, res) => {
 router.get("/airports/search", async (req, res) => {
   try {
     const { q } = req.query;
-    
+
     if (!q || (q as string).length < 2) {
       return res.status(400).json({
         success: false,
-        error: "Query must be at least 2 characters"
+        error: "Query must be at least 2 characters",
       });
     }
 
     // Get access token
     const accessToken = await getAmadeusAccessToken();
-    
+
     // Search airports using Amadeus
     const response = await fetch(
       `${AMADEUS_BASE_URL}/v1/reference-data/locations?subType=AIRPORT&keyword=${encodeURIComponent(q as string)}&page%5Blimit%5D=10`,
@@ -455,7 +490,7 @@ router.get("/airports/search", async (req, res) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -463,7 +498,7 @@ router.get("/airports/search", async (req, res) => {
     }
 
     const data = await response.json();
-    
+
     const airports = data.data.map((airport: any) => ({
       code: airport.iataCode,
       name: airport.name,
@@ -473,14 +508,13 @@ router.get("/airports/search", async (req, res) => {
 
     res.json({
       success: true,
-      data: airports
+      data: airports,
     });
-
   } catch (error) {
     console.error("🚨 Airport search error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to search airports"
+      error: "Failed to search airports",
     });
   }
 });
@@ -489,25 +523,65 @@ router.get("/airports/search", async (req, res) => {
 router.get("/destinations/popular", async (req, res) => {
   try {
     const popularDestinations = [
-      { code: "DXB", name: "Dubai International Airport", city: "Dubai", country: "UAE" },
-      { code: "DOH", name: "Hamad International Airport", city: "Doha", country: "Qatar" },
-      { code: "LHR", name: "Heathrow Airport", city: "London", country: "United Kingdom" },
-      { code: "SIN", name: "Singapore Changi Airport", city: "Singapore", country: "Singapore" },
-      { code: "BKK", name: "Suvarnabhumi Airport", city: "Bangkok", country: "Thailand" },
-      { code: "KUL", name: "Kuala Lumpur International Airport", city: "Kuala Lumpur", country: "Malaysia" },
-      { code: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", country: "Hong Kong" },
-      { code: "FRA", name: "Frankfurt Airport", city: "Frankfurt", country: "Germany" },
+      {
+        code: "DXB",
+        name: "Dubai International Airport",
+        city: "Dubai",
+        country: "UAE",
+      },
+      {
+        code: "DOH",
+        name: "Hamad International Airport",
+        city: "Doha",
+        country: "Qatar",
+      },
+      {
+        code: "LHR",
+        name: "Heathrow Airport",
+        city: "London",
+        country: "United Kingdom",
+      },
+      {
+        code: "SIN",
+        name: "Singapore Changi Airport",
+        city: "Singapore",
+        country: "Singapore",
+      },
+      {
+        code: "BKK",
+        name: "Suvarnabhumi Airport",
+        city: "Bangkok",
+        country: "Thailand",
+      },
+      {
+        code: "KUL",
+        name: "Kuala Lumpur International Airport",
+        city: "Kuala Lumpur",
+        country: "Malaysia",
+      },
+      {
+        code: "HKG",
+        name: "Hong Kong International Airport",
+        city: "Hong Kong",
+        country: "Hong Kong",
+      },
+      {
+        code: "FRA",
+        name: "Frankfurt Airport",
+        city: "Frankfurt",
+        country: "Germany",
+      },
     ];
 
     res.json({
       success: true,
-      data: popularDestinations
+      data: popularDestinations,
     });
   } catch (error) {
     console.error("🚨 Popular destinations error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to get popular destinations"
+      error: "Failed to get popular destinations",
     });
   }
 });
@@ -516,23 +590,23 @@ router.get("/destinations/popular", async (req, res) => {
 router.get("/airlines/:airlineCode", async (req, res) => {
   try {
     const { airlineCode } = req.params;
-    
+
     const airlineInfo = {
       code: airlineCode,
       name: getAirlineName(airlineCode),
       logo: `https://pics.avs.io/120/120/${airlineCode}.png`, // Aviation API for logos
-      country: "Unknown" // Would need additional API call to get this
+      country: "Unknown", // Would need additional API call to get this
     };
 
     res.json({
       success: true,
-      data: airlineInfo
+      data: airlineInfo,
     });
   } catch (error) {
     console.error("🚨 Airline info error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to get airline information"
+      error: "Failed to get airline information",
     });
   }
 });
@@ -550,14 +624,14 @@ router.post("/book", async (req, res) => {
       mealPreferences,
       specialRequests,
       totalAmount,
-      currency = "INR"
+      currency = "INR",
     } = req.body;
 
     // Validate required fields
     if (!flightId || !passengers || !contactInfo || !totalAmount) {
       return res.status(400).json({
         success: false,
-        error: "Missing required booking information"
+        error: "Missing required booking information",
       });
     }
 
@@ -570,16 +644,17 @@ router.post("/book", async (req, res) => {
       mealPreferences,
       specialRequests,
       totalAmount,
-      currency
+      currency,
     };
 
     // Create pre-booking (this holds the booking during payment)
-    const preBookingResult = await flightBookingService.preBookFlight(bookingData);
+    const preBookingResult =
+      await flightBookingService.preBookFlight(bookingData);
 
     if (!preBookingResult.success) {
       return res.status(400).json({
         success: false,
-        error: preBookingResult.error || "Failed to create pre-booking"
+        error: preBookingResult.error || "Failed to create pre-booking",
       });
     }
 
@@ -592,13 +667,13 @@ router.post("/book", async (req, res) => {
       amount: totalAmount,
       currency,
       method: "card",
-      status: "captured"
+      status: "captured",
     };
 
     try {
       const confirmedBooking = await flightBookingService.confirmFlightBooking(
         preBookingResult.tempBookingRef,
-        mockPaymentDetails
+        mockPaymentDetails,
       );
 
       console.log("✅ Flight booking confirmed:", confirmedBooking.bookingRef);
@@ -613,25 +688,24 @@ router.post("/book", async (req, res) => {
             ticketNumber: `TKT${Math.random().toString(36).substr(2, 10).toUpperCase()}`,
             passengerName: `${passenger.firstName} ${passenger.lastName}`,
             seatNumber: seatSelections?.[passenger.id] || `${12 + index}A`,
-          }))
+          })),
         },
-        message: "Flight booked successfully"
+        message: "Flight booked successfully",
       });
     } catch (confirmError) {
       console.error("❌ Flight booking confirmation failed:", confirmError);
       res.status(500).json({
         success: false,
         error: "Booking confirmation failed",
-        details: confirmError.message
+        details: confirmError.message,
       });
     }
-
   } catch (error) {
     console.error("🚨 Flight booking error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to book flight",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -642,25 +716,25 @@ router.get("/bookings/:bookingRef", async (req, res) => {
     const { bookingRef } = req.params;
 
     // Fetch booking from database
-    const bookingResult = await flightBookingService.getFlightBooking(bookingRef);
+    const bookingResult =
+      await flightBookingService.getFlightBooking(bookingRef);
 
     if (!bookingResult.success) {
       return res.status(404).json({
         success: false,
-        error: bookingResult.error || "Booking not found"
+        error: bookingResult.error || "Booking not found",
       });
     }
 
     res.json({
       success: true,
-      data: bookingResult.data
+      data: bookingResult.data,
     });
-
   } catch (error) {
     console.error("🚨 Get booking error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to get booking details"
+      error: "Failed to get booking details",
     });
   }
 });
@@ -680,14 +754,13 @@ router.delete("/bookings/:bookingRef", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Booking cancelled successfully"
+      message: "Booking cancelled successfully",
     });
-
   } catch (error) {
     console.error("🚨 Cancel booking error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to cancel booking"
+      error: "Failed to cancel booking",
     });
   }
 });
@@ -708,14 +781,14 @@ router.get("/bookings", async (req, res) => {
         flight: {
           airline: "Emirates",
           flightNumber: "EK 500",
-          route: "BOM → DXB"
+          route: "BOM → DXB",
         },
         totalPrice: {
           amount: 25000,
-          currency: "INR"
+          currency: "INR",
         },
-        createdAt: new Date().toISOString()
-      }
+        createdAt: new Date().toISOString(),
+      },
     ];
 
     res.json({
@@ -725,15 +798,14 @@ router.get("/bookings", async (req, res) => {
         page: parseInt(page as string),
         limit: parseInt(limit as string),
         total: bookings.length,
-        pages: 1
-      }
+        pages: 1,
+      },
     });
-
   } catch (error) {
     console.error("🚨 Get user bookings error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to get bookings"
+      error: "Failed to get bookings",
     });
   }
 });

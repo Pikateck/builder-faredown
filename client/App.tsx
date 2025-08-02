@@ -68,7 +68,10 @@ function App() {
                   {/* Original Web Routes */}
                   <Route path="/" element={<Index />} />
                   <Route path="/flights" element={<FlightResults />} />
-                  <Route path="/flight-details/:flightId" element={<FlightDetails />} />
+                  <Route
+                    path="/flight-details/:flightId"
+                    element={<FlightDetails />}
+                  />
                   <Route path="/booking-flow" element={<BookingFlow />} />
                   <Route path="/booking" element={<Booking />} />
                   <Route

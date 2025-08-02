@@ -118,14 +118,14 @@ export class DevApiClient {
               name: "Chhatrapati Shivaji Maharaj International Airport",
               city: "Mumbai",
               country: "India",
-              terminal: "2"
+              terminal: "2",
             },
             arrival: {
               code: "DXB",
               name: "Dubai International Airport",
               city: "Dubai",
               country: "UAE",
-              terminal: "3"
+              terminal: "3",
             },
             departureTime: "10:15",
             arrivalTime: "11:45",
@@ -139,21 +139,21 @@ export class DevApiClient {
                 baseFare: 20712,
                 taxes: 3890,
                 fees: 1288,
-                total: 25890
-              }
+                total: 25890,
+              },
             },
             amenities: ["WiFi", "Entertainment System", "Premium Meals"],
             baggage: {
               carryOn: {
                 weight: "7kg",
                 dimensions: "55x40x20cm",
-                included: true
+                included: true,
               },
               checked: {
                 weight: "20kg",
                 count: 1,
-                fee: 0
-              }
+                fee: 0,
+              },
             },
             fareClass: "ECONOMY",
             // Return flight information
@@ -163,7 +163,7 @@ export class DevApiClient {
             returnAirline: "Emirates",
             returnFlightNumber: "EK 501",
             returnAircraft: "Boeing 777-200LR",
-            returnStops: 0
+            returnStops: 0,
           },
           {
             id: "fallback_flight_2",
@@ -175,14 +175,14 @@ export class DevApiClient {
               name: "Chhatrapati Shivaji Maharaj International Airport",
               city: "Mumbai",
               country: "India",
-              terminal: "2"
+              terminal: "2",
             },
             arrival: {
               code: "DXB",
               name: "Dubai International Airport",
               city: "Dubai",
               country: "UAE",
-              terminal: "2"
+              terminal: "2",
             },
             departureTime: "14:30",
             arrivalTime: "16:00",
@@ -196,21 +196,21 @@ export class DevApiClient {
                 baseFare: 18120,
                 taxes: 3400,
                 fees: 1130,
-                total: 22650
-              }
+                total: 22650,
+              },
             },
             amenities: ["Seat Selection", "Onboard Refreshments"],
             baggage: {
               carryOn: {
                 weight: "7kg",
                 dimensions: "55x40x20cm",
-                included: true
+                included: true,
               },
               checked: {
                 weight: "15kg",
                 count: 1,
-                fee: 0
-              }
+                fee: 0,
+              },
             },
             fareClass: "ECONOMY",
             // Return flight information
@@ -220,7 +220,7 @@ export class DevApiClient {
             returnAirline: "IndiGo",
             returnFlightNumber: "6E 1408",
             returnAircraft: "Airbus A320",
-            returnStops: 0
+            returnStops: 0,
           },
           {
             id: "fallback_flight_3",
@@ -232,14 +232,14 @@ export class DevApiClient {
               name: "Chhatrapati Shivaji Maharaj International Airport",
               city: "Mumbai",
               country: "India",
-              terminal: "2"
+              terminal: "2",
             },
             arrival: {
               code: "DXB",
               name: "Dubai International Airport",
               city: "Dubai",
               country: "UAE",
-              terminal: "1"
+              terminal: "1",
             },
             departureTime: "18:45",
             arrivalTime: "20:15",
@@ -253,21 +253,21 @@ export class DevApiClient {
                 baseFare: 19280,
                 taxes: 3620,
                 fees: 1200,
-                total: 24100
-              }
+                total: 24100,
+              },
             },
             amenities: ["WiFi", "Entertainment System", "Meals"],
             baggage: {
               carryOn: {
                 weight: "8kg",
                 dimensions: "55x40x20cm",
-                included: true
+                included: true,
               },
               checked: {
                 weight: "23kg",
                 count: 1,
-                fee: 0
-              }
+                fee: 0,
+              },
             },
             fareClass: "ECONOMY",
             // Return flight information
@@ -277,15 +277,15 @@ export class DevApiClient {
             returnAirline: "Air India",
             returnFlightNumber: "AI 132",
             returnAircraft: "Boeing 787-8",
-            returnStops: 0
-          }
+            returnStops: 0,
+          },
         ],
         meta: {
           total: 3,
           currency: "INR",
-          searchParams: params
+          searchParams: params,
         },
-        message: "Fallback flight data (Live Amadeus API unavailable)"
+        message: "Fallback flight data (Live Amadeus API unavailable)",
       };
     }
 

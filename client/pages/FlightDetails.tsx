@@ -32,7 +32,12 @@ interface FlightDetailsProps {
   onBargain?: (flight: Flight) => void;
 }
 
-export default function FlightDetails({ flightId, flight: providedFlight, onBook, onBargain }: FlightDetailsProps) {
+export default function FlightDetails({
+  flightId,
+  flight: providedFlight,
+  onBook,
+  onBargain,
+}: FlightDetailsProps) {
   const params = useParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
@@ -51,11 +56,12 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
 
   const loadFlightDetails = async () => {
     if (!finalFlightId) return;
-    
+
     try {
       setIsLoading(true);
       setError(null);
-      const flightDetails = await flightsService.getFlightDetails(finalFlightId);
+      const flightDetails =
+        await flightsService.getFlightDetails(finalFlightId);
       setFlight(flightDetails);
     } catch (err) {
       console.error("Failed to load flight details:", err);
@@ -74,7 +80,7 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
   };
 
   const formatPrice = (amount: number) => {
-    return `${selectedCurrency.symbol}${amount.toLocaleString('en-IN')}`;
+    return `${selectedCurrency.symbol}${amount.toLocaleString("en-IN")}`;
   };
 
   if (isLoading) {
@@ -83,8 +89,12 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
         <div className="text-center space-y-4">
           <Plane className="w-8 h-8 mx-auto text-blue-600 animate-bounce" />
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Loading Flight Details</h3>
-            <p className="text-gray-600">Please wait while we fetch the details...</p>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Loading Flight Details
+            </h3>
+            <p className="text-gray-600">
+              Please wait while we fetch the details...
+            </p>
           </div>
         </div>
       </div>
@@ -99,8 +109,12 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
             <Info className="w-8 h-8 text-red-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Flight Not Found</h3>
-            <p className="text-gray-600">{error || "The requested flight could not be found."}</p>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Flight Not Found
+            </h3>
+            <p className="text-gray-600">
+              {error || "The requested flight could not be found."}
+            </p>
             <Button onClick={() => navigate(-1)} className="mt-4">
               Go Back
             </Button>
@@ -128,7 +142,9 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
               </Button>
               <div className="h-6 w-px bg-gray-300" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Flight Details</h1>
+                <h1 className="text-xl font-bold text-gray-900">
+                  Flight Details
+                </h1>
                 <p className="text-sm text-gray-600">{flight.flightNumber}</p>
               </div>
             </div>
@@ -154,22 +170,27 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <img
-                      src={`https://pics.avs.io/120/120/${flight.airlineCode || 'XX'}.png`}
+                      src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
                       alt={flight.airline}
                       className="w-12 h-12 object-contain"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48x48/E5E7EB/6B7280?text=✈';
+                        (e.target as HTMLImageElement).src =
+                          "https://via.placeholder.com/48x48/E5E7EB/6B7280?text=✈";
                       }}
                     />
                     <div>
-                      <CardTitle className="text-lg">{flight.airline}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {flight.airline}
+                      </CardTitle>
                       <p className="text-sm text-gray-600">
                         {flight.flightNumber} • {flight.aircraft}
                       </p>
                     </div>
                   </div>
                   <Badge variant={flight.stops === 0 ? "default" : "secondary"}>
-                    {flight.stops === 0 ? "Direct" : `${flight.stops} Stop${flight.stops > 1 ? 's' : ''}`}
+                    {flight.stops === 0
+                      ? "Direct"
+                      : `${flight.stops} Stop${flight.stops > 1 ? "s" : ""}`}
                   </Badge>
                 </div>
               </CardHeader>
@@ -211,9 +232,7 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                     <div className="text-sm font-medium text-gray-700 mt-2">
                       {flight.duration}
                     </div>
-                    <div className="text-xs text-gray-500">
-                      Flight time
-                    </div>
+                    <div className="text-xs text-gray-500">Flight time</div>
                   </div>
 
                   {/* Arrival */}
@@ -243,7 +262,11 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
             {/* Detailed Information Tabs */}
             <Card>
               <CardContent className="p-0">
-                <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+                <Tabs
+                  value={selectedTab}
+                  onValueChange={setSelectedTab}
+                  className="w-full"
+                >
                   <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="overview">Overview</TabsTrigger>
                     <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
@@ -255,15 +278,21 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                     <TabsContent value="overview" className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">Flight Information</h4>
+                          <h4 className="font-semibold text-gray-900 mb-3">
+                            Flight Information
+                          </h4>
                           <div className="space-y-2">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Aircraft:</span>
-                              <span className="font-medium">{flight.aircraft}</span>
+                              <span className="font-medium">
+                                {flight.aircraft}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Class:</span>
-                              <span className="font-medium">{flight.fareClass || 'Economy'}</span>
+                              <span className="font-medium">
+                                {flight.fareClass || "Economy"}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Distance:</span>
@@ -271,21 +300,30 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                             </div>
                           </div>
                         </div>
-                        
+
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">Baggage Allowance</h4>
+                          <h4 className="font-semibold text-gray-900 mb-3">
+                            Baggage Allowance
+                          </h4>
                           <div className="space-y-2">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Cabin bag:</span>
-                              <span className="font-medium">{flight.baggage?.carryOn?.weight || '7kg'}</span>
+                              <span className="font-medium">
+                                {flight.baggage?.carryOn?.weight || "7kg"}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Check-in:</span>
-                              <span className="font-medium">{flight.baggage?.checked?.weight || '20kg'}</span>
+                              <span className="font-medium">
+                                {flight.baggage?.checked?.weight || "20kg"}
+                              </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Dimensions:</span>
-                              <span className="font-medium">{flight.baggage?.carryOn?.dimensions || '55x40x20cm'}</span>
+                              <span className="font-medium">
+                                {flight.baggage?.carryOn?.dimensions ||
+                                  "55x40x20cm"}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -293,35 +331,58 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                     </TabsContent>
 
                     <TabsContent value="itinerary" className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 mb-4">Detailed Itinerary</h4>
+                      <h4 className="font-semibold text-gray-900 mb-4">
+                        Detailed Itinerary
+                      </h4>
                       {flight.segments?.map((segment, index) => (
                         <div key={index} className="border rounded-lg p-4">
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <span className="text-sm font-semibold text-blue-600">{index + 1}</span>
+                                <span className="text-sm font-semibold text-blue-600">
+                                  {index + 1}
+                                </span>
                               </div>
                               <div>
-                                <div className="font-medium">{segment.airline}</div>
-                                <div className="text-sm text-gray-600">{segment.flightNumber}</div>
+                                <div className="font-medium">
+                                  {segment.airline}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {segment.flightNumber}
+                                </div>
                               </div>
                             </div>
-                            <div className="text-sm text-gray-600">{segment.duration}</div>
+                            <div className="text-sm text-gray-600">
+                              {segment.duration}
+                            </div>
                           </div>
-                          
+
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <div className="text-sm text-gray-600">Departure</div>
-                              <div className="font-semibold">{segment.departure.time} • {segment.departure.code}</div>
+                              <div className="text-sm text-gray-600">
+                                Departure
+                              </div>
+                              <div className="font-semibold">
+                                {segment.departure.time} •{" "}
+                                {segment.departure.code}
+                              </div>
                               {segment.departure.terminal && (
-                                <div className="text-sm text-gray-600">Terminal {segment.departure.terminal}</div>
+                                <div className="text-sm text-gray-600">
+                                  Terminal {segment.departure.terminal}
+                                </div>
                               )}
                             </div>
                             <div>
-                              <div className="text-sm text-gray-600">Arrival</div>
-                              <div className="font-semibold">{segment.arrival.time} • {segment.arrival.code}</div>
+                              <div className="text-sm text-gray-600">
+                                Arrival
+                              </div>
+                              <div className="font-semibold">
+                                {segment.arrival.time} • {segment.arrival.code}
+                              </div>
                               {segment.arrival.terminal && (
-                                <div className="text-sm text-gray-600">Terminal {segment.arrival.terminal}</div>
+                                <div className="text-sm text-gray-600">
+                                  Terminal {segment.arrival.terminal}
+                                </div>
                               )}
                             </div>
                           </div>
@@ -329,23 +390,34 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                       )) || (
                         <div className="text-center py-8 text-gray-500">
                           <Plane className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                          <p>Detailed itinerary information will be available after booking</p>
+                          <p>
+                            Detailed itinerary information will be available
+                            after booking
+                          </p>
                         </div>
                       )}
                     </TabsContent>
 
                     <TabsContent value="amenities" className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 mb-4">In-Flight Amenities</h4>
+                      <h4 className="font-semibold text-gray-900 mb-4">
+                        In-Flight Amenities
+                      </h4>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {flight.amenities?.map((amenity, index) => (
-                          <div key={index} className="flex items-center space-x-2">
+                          <div
+                            key={index}
+                            className="flex items-center space-x-2"
+                          >
                             <CheckCircle className="w-4 h-4 text-green-600" />
                             <span className="text-sm">{amenity}</span>
                           </div>
                         )) || (
                           <div className="col-span-full text-center py-8 text-gray-500">
                             <Coffee className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>Amenity information will be available during booking</p>
+                            <p>
+                              Amenity information will be available during
+                              booking
+                            </p>
                           </div>
                         )}
                       </div>
@@ -354,29 +426,41 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                     <TabsContent value="policies" className="space-y-4">
                       <div className="space-y-6">
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">Cancellation Policy</h4>
+                          <h4 className="font-semibold text-gray-900 mb-3">
+                            Cancellation Policy
+                          </h4>
                           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                             <p className="text-sm text-amber-800">
-                              This fare is non-refundable. Changes may be permitted with fees.
-                              Please review complete terms and conditions before booking.
+                              This fare is non-refundable. Changes may be
+                              permitted with fees. Please review complete terms
+                              and conditions before booking.
                             </p>
                           </div>
                         </div>
-                        
+
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">Check-in Requirements</h4>
+                          <h4 className="font-semibold text-gray-900 mb-3">
+                            Check-in Requirements
+                          </h4>
                           <div className="space-y-2 text-sm">
                             <div className="flex items-start space-x-2">
                               <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                              <span>Online check-in opens 24 hours before departure</span>
+                              <span>
+                                Online check-in opens 24 hours before departure
+                              </span>
                             </div>
                             <div className="flex items-start space-x-2">
                               <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                              <span>Arrive at airport at least 2 hours before international flights</span>
+                              <span>
+                                Arrive at airport at least 2 hours before
+                                international flights
+                              </span>
                             </div>
                             <div className="flex items-start space-x-2">
                               <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                              <span>Valid passport required for international travel</span>
+                              <span>
+                                Valid passport required for international travel
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -400,33 +484,42 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Base fare:</span>
-                      <span>{formatPrice(flight.price.breakdown.baseFare)}</span>
+                      <span>
+                        {formatPrice(flight.price.breakdown.baseFare)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Taxes & fees:</span>
-                      <span>{formatPrice(flight.price.breakdown.taxes + flight.price.breakdown.fees)}</span>
+                      <span>
+                        {formatPrice(
+                          flight.price.breakdown.taxes +
+                            flight.price.breakdown.fees,
+                        )}
+                      </span>
                     </div>
                     <div className="border-t pt-2">
                       <div className="flex justify-between font-semibold text-lg">
                         <span>Total:</span>
-                        <span className="text-blue-600">{formatPrice(flight.price.breakdown.total)}</span>
+                        <span className="text-blue-600">
+                          {formatPrice(flight.price.breakdown.total)}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-3 pt-4 border-t">
-                    <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700" 
+                    <Button
+                      className="w-full bg-blue-600 hover:bg-blue-700"
                       size="lg"
                       onClick={() => onBook?.(flight)}
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
                       Book Now
                     </Button>
-                    
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-amber-500 text-amber-700 hover:bg-amber-50" 
+
+                    <Button
+                      variant="outline"
+                      className="w-full border-amber-500 text-amber-700 hover:bg-amber-50"
                       size="lg"
                       onClick={() => onBargain?.(flight)}
                     >
@@ -434,7 +527,7 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                       Try to Bargain
                     </Button>
                   </div>
-                  
+
                   <div className="text-xs text-gray-500 text-center">
                     Prices include all taxes and fees
                   </div>
@@ -444,7 +537,9 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
               {/* Flight Features */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Why Book This Flight?</CardTitle>
+                  <CardTitle className="text-lg">
+                    Why Book This Flight?
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -462,7 +557,9 @@ export default function FlightDetails({ flightId, flight: providedFlight, onBook
                     </div>
                     <div className="flex items-center space-x-3">
                       <Luggage className="w-4 h-4 text-purple-500" />
-                      <span className="text-sm">Generous baggage allowance</span>
+                      <span className="text-sm">
+                        Generous baggage allowance
+                      </span>
                     </div>
                   </div>
                 </CardContent>

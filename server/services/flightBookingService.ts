@@ -3,8 +3,8 @@
  * Handles flight booking operations with Amadeus API and database storage
  */
 
-import { Pool } from 'pg';
-import { v4 as uuidv4 } from 'uuid';
+import { Pool } from "pg";
+import { v4 as uuidv4 } from "uuid";
 
 // Database connection (assuming it's set up similar to hotel service)
 let db: Pool;
@@ -23,12 +23,12 @@ export interface FlightSearchParams {
 }
 
 export interface PassengerDetails {
-  type: 'adult' | 'child' | 'infant';
+  type: "adult" | "child" | "infant";
   title: string;
   firstName: string;
   lastName: string;
   dateOfBirth?: string;
-  gender?: 'M' | 'F';
+  gender?: "M" | "F";
   nationality?: string;
   passportNumber?: string;
   passportExpiry?: string;
@@ -91,9 +91,9 @@ class FlightBookingService {
     try {
       // Initialize connection to Render database
       // This would use the same connection as hotel bookings
-      console.log('🛫 Initializing flight booking database service...');
+      console.log("🛫 Initializing flight booking database service...");
     } catch (error) {
-      console.error('Failed to initialize flight booking database:', error);
+      console.error("Failed to initialize flight booking database:", error);
     }
   }
 
@@ -103,7 +103,7 @@ class FlightBookingService {
   async cacheFlightSearch(searchParams: FlightSearchParams, results: any[]) {
     try {
       const searchHash = this.generateSearchHash(searchParams);
-      
+
       const query = `
         INSERT INTO flight_searches_cache (
           search_hash, origin_airport_code, destination_airport_code,
@@ -133,25 +133,27 @@ class FlightBookingService {
         searchParams.infants || 0,
         searchParams.cabinClass,
         searchParams.tripType,
-        searchParams.currency || 'INR',
+        searchParams.currency || "INR",
         JSON.stringify(results),
         results.length,
-        JSON.stringify({ searchParams, results })
+        JSON.stringify({ searchParams, results }),
       ];
 
       const result = await this.executeQuery(query, values);
-      
-      console.log(`✈️ Cached flight search results: ${results.length} flights for ${searchParams.origin}-${searchParams.destination}`);
-      
+
+      console.log(
+        `✈️ Cached flight search results: ${results.length} flights for ${searchParams.origin}-${searchParams.destination}`,
+      );
+
       return {
         success: true,
-        data: result.rows[0]
+        data: result.rows[0],
       };
     } catch (error) {
-      console.error('Error caching flight search:', error);
+      console.error("Error caching flight search:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -162,41 +164,43 @@ class FlightBookingService {
   async getCachedFlightSearch(searchParams: FlightSearchParams) {
     try {
       const searchHash = this.generateSearchHash(searchParams);
-      
+
       const query = `
         SELECT * FROM flight_searches_cache
         WHERE search_hash = $1 AND expires_at > CURRENT_TIMESTAMP
       `;
 
       const result = await this.executeQuery(query, [searchHash]);
-      
+
       if (result.rows.length > 0) {
         // Update hit count and last accessed
         await this.executeQuery(
           `UPDATE flight_searches_cache SET hit_count = hit_count + 1, last_accessed = CURRENT_TIMESTAMP WHERE search_hash = $1`,
-          [searchHash]
+          [searchHash],
         );
-        
-        console.log(`🎯 Cache hit for flight search: ${searchParams.origin}-${searchParams.destination}`);
-        
+
+        console.log(
+          `🎯 Cache hit for flight search: ${searchParams.origin}-${searchParams.destination}`,
+        );
+
         return {
           success: true,
           data: result.rows[0].search_results,
-          cached: true
+          cached: true,
         };
       }
 
       return {
         success: false,
         cached: false,
-        message: 'No cached results found'
+        message: "No cached results found",
       };
     } catch (error) {
-      console.error('Error getting cached flight search:', error);
+      console.error("Error getting cached flight search:", error);
       return {
         success: false,
         error: error.message,
-        cached: false
+        cached: false,
       };
     }
   }
@@ -222,16 +226,16 @@ class FlightBookingService {
 
       // This would require looking up airline and airport IDs
       // For now, we'll store essential flight information
-      
+
       return {
         success: true,
-        message: 'Flight data stored successfully'
+        message: "Flight data stored successfully",
       };
     } catch (error) {
-      console.error('Error storing flight data:', error);
+      console.error("Error storing flight data:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -244,9 +248,13 @@ class FlightBookingService {
       const tempBookingRef = `TEMP_FLT_${uuidv4().substring(0, 8).toUpperCase()}`;
 
       // Validate passenger details
-      const validationResult = this.validatePassengerDetails(bookingData.passengers);
+      const validationResult = this.validatePassengerDetails(
+        bookingData.passengers,
+      );
       if (!validationResult.isValid) {
-        throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
+        throw new Error(
+          `Validation failed: ${validationResult.errors.join(", ")}`,
+        );
       }
 
       // Create pre-booking record
@@ -260,29 +268,32 @@ class FlightBookingService {
         specialRequests: bookingData.specialRequests,
         totalAmount: bookingData.totalAmount,
         currency: bookingData.currency,
-        status: 'pending_payment',
+        status: "pending_payment",
         createdAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes
-        paymentStatus: 'pending'
+        paymentStatus: "pending",
       };
 
       // Store temporarily
       this.pendingBookings.set(tempBookingRef, preBooking);
 
       // Set auto-cleanup
-      setTimeout(() => {
-        this.pendingBookings.delete(tempBookingRef);
-      }, 15 * 60 * 1000); // 15 minutes
+      setTimeout(
+        () => {
+          this.pendingBookings.delete(tempBookingRef);
+        },
+        15 * 60 * 1000,
+      ); // 15 minutes
 
       return {
         success: true,
         tempBookingRef,
         expiresAt: preBooking.expiresAt,
         totalAmount: bookingData.totalAmount,
-        currency: bookingData.currency
+        currency: bookingData.currency,
       };
     } catch (error) {
-      console.error('Flight pre-booking error:', error);
+      console.error("Flight pre-booking error:", error);
       throw new Error(`Pre-booking failed: ${error.message}`);
     }
   }
@@ -295,12 +306,12 @@ class FlightBookingService {
       const preBooking = this.pendingBookings.get(tempBookingRef);
 
       if (!preBooking) {
-        throw new Error('Pre-booking not found or expired');
+        throw new Error("Pre-booking not found or expired");
       }
 
       if (new Date() > new Date(preBooking.expiresAt)) {
         this.pendingBookings.delete(tempBookingRef);
-        throw new Error('Pre-booking has expired');
+        throw new Error("Pre-booking has expired");
       }
 
       // Generate final booking reference
@@ -311,8 +322,8 @@ class FlightBookingService {
         booking_reference: finalBookingRef,
         contact_email: preBooking.contactInfo.email,
         contact_phone: preBooking.contactInfo.phone,
-        booking_status: 'confirmed',
-        payment_status: 'paid',
+        booking_status: "confirmed",
+        payment_status: "paid",
         total_amount: preBooking.totalAmount,
         currency_code: preBooking.currency,
         travel_date: this.extractTravelDate(preBooking.flightId),
@@ -323,21 +334,26 @@ class FlightBookingService {
           flightId: preBooking.flightId,
           passengers: preBooking.passengers,
           seatSelections: preBooking.seatSelections,
-          mealPreferences: preBooking.mealPreferences
-        }
+          mealPreferences: preBooking.mealPreferences,
+        },
       };
 
       // Store confirmed booking in database
       const dbResult = await this.createFlightBooking(bookingDbData);
 
       if (!dbResult.success) {
-        throw new Error(`Failed to store booking in database: ${dbResult.error}`);
+        throw new Error(
+          `Failed to store booking in database: ${dbResult.error}`,
+        );
       }
 
       const confirmedBooking = dbResult.data;
 
       // Store individual passengers
-      await this.storeFlightPassengers(confirmedBooking.id, preBooking.passengers);
+      await this.storeFlightPassengers(
+        confirmedBooking.id,
+        preBooking.passengers,
+      );
 
       // Store flight segments
       await this.storeFlightSegments(confirmedBooking.id, preBooking.flightId);
@@ -349,17 +365,17 @@ class FlightBookingService {
       this.pendingBookings.delete(tempBookingRef);
 
       // Process booking confirmation (email, etc.)
-      this.processFlightBookingConfirmation(confirmedBooking).catch(error => {
-        console.error('Failed to process flight booking confirmation:', error);
+      this.processFlightBookingConfirmation(confirmedBooking).catch((error) => {
+        console.error("Failed to process flight booking confirmation:", error);
       });
 
       return {
         success: true,
         bookingRef: finalBookingRef,
-        booking: confirmedBooking
+        booking: confirmedBooking,
       };
     } catch (error) {
-      console.error('Flight booking confirmation error:', error);
+      console.error("Flight booking confirmation error:", error);
       throw new Error(`Booking confirmation failed: ${error.message}`);
     }
   }
@@ -392,21 +408,21 @@ class FlightBookingService {
       if (result.rows.length === 0) {
         return {
           success: false,
-          error: 'Flight booking not found',
-          data: null
+          error: "Flight booking not found",
+          data: null,
         };
       }
 
       return {
         success: true,
-        data: result.rows[0]
+        data: result.rows[0],
       };
     } catch (error) {
-      console.error('Error getting flight booking:', error);
+      console.error("Error getting flight booking:", error);
       return {
         success: false,
         error: error.message,
-        data: null
+        data: null,
       };
     }
   }
@@ -437,7 +453,7 @@ class FlightBookingService {
         bookingData.passenger_count,
         bookingData.is_round_trip,
         bookingData.special_requests,
-        JSON.stringify(bookingData.amadeus_data)
+        JSON.stringify(bookingData.amadeus_data),
       ];
 
       const result = await this.executeQuery(query, values);
@@ -445,13 +461,13 @@ class FlightBookingService {
       return {
         success: true,
         data: result.rows[0],
-        message: 'Flight booking created successfully'
+        message: "Flight booking created successfully",
       };
     } catch (error) {
-      console.error('Error creating flight booking:', error);
+      console.error("Error creating flight booking:", error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -459,7 +475,10 @@ class FlightBookingService {
   /**
    * Store flight passengers
    */
-  private async storeFlightPassengers(bookingId: number, passengers: PassengerDetails[]) {
+  private async storeFlightPassengers(
+    bookingId: number,
+    passengers: PassengerDetails[],
+  ) {
     try {
       const query = `
         INSERT INTO flight_passengers (
@@ -482,15 +501,17 @@ class FlightBookingService {
           passenger.passportNumber || null,
           passenger.passportExpiry || null,
           passenger.freqFlyerNumber || null,
-          passenger.freqFlyerAirline || null
+          passenger.freqFlyerAirline || null,
         ];
 
         await this.executeQuery(query, values);
       }
 
-      console.log(`✅ Stored ${passengers.length} flight passengers for booking ${bookingId}`);
+      console.log(
+        `✅ Stored ${passengers.length} flight passengers for booking ${bookingId}`,
+      );
     } catch (error) {
-      console.error('Error storing flight passengers:', error);
+      console.error("Error storing flight passengers:", error);
       throw error;
     }
   }
@@ -512,7 +533,7 @@ class FlightBookingService {
 
       // This would be populated from actual flight data
       const segments = this.extractFlightSegments(flightId);
-      
+
       for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
         const values = [
@@ -525,7 +546,7 @@ class FlightBookingService {
           segment.flightNumber,
           segment.airlineCode,
           segment.cabinClass,
-          'confirmed'
+          "confirmed",
         ];
 
         await this.executeQuery(query, values);
@@ -533,7 +554,7 @@ class FlightBookingService {
 
       console.log(`✅ Stored flight segments for booking ${bookingId}`);
     } catch (error) {
-      console.error('Error storing flight segments:', error);
+      console.error("Error storing flight segments:", error);
       throw error;
     }
   }
@@ -547,7 +568,7 @@ class FlightBookingService {
       console.log(`💳 Storing payment details for flight booking ${bookingId}`);
       // Implementation would be similar to hotel payment storage
     } catch (error) {
-      console.error('Error storing payment details:', error);
+      console.error("Error storing payment details:", error);
       throw error;
     }
   }
@@ -557,8 +578,10 @@ class FlightBookingService {
    */
   private async processFlightBookingConfirmation(booking: any) {
     try {
-      console.log(`📧 Processing flight booking confirmation for ${booking.booking_reference}`);
-      
+      console.log(
+        `📧 Processing flight booking confirmation for ${booking.booking_reference}`,
+      );
+
       // Generate e-tickets
       // Send confirmation email
       // Process loyalty points
@@ -567,9 +590,11 @@ class FlightBookingService {
       // Update route statistics
       await this.updateRouteStatistics(booking);
 
-      console.log(`✅ Flight booking confirmation processed for ${booking.booking_reference}`);
+      console.log(
+        `✅ Flight booking confirmation processed for ${booking.booking_reference}`,
+      );
     } catch (error) {
-      console.error('Error processing flight booking confirmation:', error);
+      console.error("Error processing flight booking confirmation:", error);
     }
   }
 
@@ -581,10 +606,10 @@ class FlightBookingService {
       // Extract route information and update statistics
       const amadeusData = booking.amadeus_data;
       // This would update the flight_routes table with booking counts
-      
-      console.log('📊 Updated flight route statistics');
+
+      console.log("📊 Updated flight route statistics");
     } catch (error) {
-      console.error('Error updating route statistics:', error);
+      console.error("Error updating route statistics:", error);
     }
   }
 
@@ -595,7 +620,7 @@ class FlightBookingService {
     const errors: string[] = [];
 
     if (!passengers || passengers.length === 0) {
-      errors.push('At least one passenger is required');
+      errors.push("At least one passenger is required");
     }
 
     passengers.forEach((passenger, index) => {
@@ -612,7 +637,7 @@ class FlightBookingService {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -629,14 +654,14 @@ class FlightBookingService {
       children: params.children || 0,
       infants: params.infants || 0,
       cabinClass: params.cabinClass,
-      tripType: params.tripType
+      tripType: params.tripType,
     });
 
     // Simple hash function (in production, use crypto.createHash)
     let hash = 0;
     for (let i = 0; i < hashInput.length; i++) {
       const char = hashInput.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash).toString(16);
@@ -656,7 +681,7 @@ class FlightBookingService {
    */
   private extractTravelDate(flightId: string): string {
     // This would extract the actual travel date from the flight data
-    return new Date().toISOString().split('T')[0];
+    return new Date().toISOString().split("T")[0];
   }
 
   /**
@@ -674,14 +699,14 @@ class FlightBookingService {
     // This would extract actual segment data
     return [
       {
-        departureAirport: 'BOM',
-        arrivalAirport: 'DXB',
+        departureAirport: "BOM",
+        arrivalAirport: "DXB",
         departureTime: new Date(),
         arrivalTime: new Date(),
-        flightNumber: 'EK500',
-        airlineCode: 'EK',
-        cabinClass: 'ECONOMY'
-      }
+        flightNumber: "EK500",
+        airlineCode: "EK",
+        cabinClass: "ECONOMY",
+      },
     ];
   }
 
@@ -692,7 +717,7 @@ class FlightBookingService {
     // This would use the actual database connection
     // For now, return a mock result
     return {
-      rows: [{ id: 1, booking_reference: 'FL12345678' }]
+      rows: [{ id: 1, booking_reference: "FL12345678" }],
     };
   }
 }

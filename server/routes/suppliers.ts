@@ -22,8 +22,7 @@ const CREDENTIAL_PROFILES = {
       process.env.HOTELBEDS_BASE_URL || "https://api.test.hotelbeds.com",
   },
   amadeus_sandbox: {
-    api_key:
-      process.env.AMADEUS_API_KEY || "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv",
+    api_key: process.env.AMADEUS_API_KEY || "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv",
     api_secret: process.env.AMADEUS_API_SECRET || "2eVYfPeZVxmvbjRm",
     base_url: process.env.AMADEUS_BASE_URL || "https://test.api.amadeus.com",
   },

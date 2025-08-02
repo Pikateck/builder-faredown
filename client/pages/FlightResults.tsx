@@ -388,31 +388,49 @@ export default function FlightResults() {
         setSearchError(null);
 
         // Get search parameters from URL or use defaults
-        const origin = searchParams.get('from') || 'BOM';
-        const destination = searchParams.get('to') || 'DXB';
-        const departure = searchParams.get('departure') || departureDate?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0];
-        const adults = parseInt(searchParams.get('adults') || '1');
-        const children = parseInt(searchParams.get('children') || '0');
-        const cabinClass = searchParams.get('class') || 'economy';
-        const tripTypeParam = searchParams.get('tripType') || tripType;
+        const origin = searchParams.get("from") || "BOM";
+        const destination = searchParams.get("to") || "DXB";
+        const departure =
+          searchParams.get("departure") ||
+          departureDate?.toISOString().split("T")[0] ||
+          new Date().toISOString().split("T")[0];
+        const adults = parseInt(searchParams.get("adults") || "1");
+        const children = parseInt(searchParams.get("children") || "0");
+        const cabinClass = searchParams.get("class") || "economy";
+        const tripTypeParam = searchParams.get("tripType") || tripType;
 
-        console.log('🎯 Trip type for search:', tripTypeParam);
+        console.log("🎯 Trip type for search:", tripTypeParam);
 
         // Convert trip type to the correct format for API
-        const apiTripType = tripTypeParam === 'round-trip' ? 'round_trip' :
-                          tripTypeParam === 'one-way' ? 'one_way' :
-                          'multi_city';
+        const apiTripType =
+          tripTypeParam === "round-trip"
+            ? "round_trip"
+            : tripTypeParam === "one-way"
+              ? "one_way"
+              : "multi_city";
 
         // For multi-city, use one-way search for now (simplified implementation)
-        const searchTripType = apiTripType === 'multi_city' ? 'one_way' : apiTripType;
+        const searchTripType =
+          apiTripType === "multi_city" ? "one_way" : apiTripType;
 
-        console.log('🔍 Searching flights:', { origin, destination, departure, adults, children, cabinClass, apiTripType });
+        console.log("🔍 Searching flights:", {
+          origin,
+          destination,
+          departure,
+          adults,
+          children,
+          cabinClass,
+          apiTripType,
+        });
 
         const searchRequest = {
           departure: origin,
           arrival: destination,
           departureDate: departure,
-          returnDate: searchTripType === 'round_trip' ? returnDate?.toISOString().split('T')[0] : undefined,
+          returnDate:
+            searchTripType === "round_trip"
+              ? returnDate?.toISOString().split("T")[0]
+              : undefined,
           adults,
           children,
           cabinClass: cabinClass as any,
@@ -420,12 +438,12 @@ export default function FlightResults() {
         };
 
         const flightResults = await flightsService.searchFlights(searchRequest);
-        console.log('✅ Loaded flights:', flightResults.length);
+        console.log("✅ Loaded flights:", flightResults.length);
 
         setFlights(flightResults);
       } catch (error) {
-        console.error('❌ Flight search error:', error);
-        console.log('📄 Using fallback flight data for demo');
+        console.error("❌ Flight search error:", error);
+        console.log("📄 Using fallback flight data for demo");
 
         // Clear the error state and use fallback flights to ensure something displays
         setSearchError(null);
@@ -442,14 +460,14 @@ export default function FlightResults() {
               name: "Chhatrapati Shivaji Maharaj International Airport",
               city: "Mumbai",
               country: "India",
-              terminal: "2"
+              terminal: "2",
             },
             arrival: {
               code: "DXB",
               name: "Dubai International Airport",
               city: "Dubai",
               country: "UAE",
-              terminal: "3"
+              terminal: "3",
             },
             departureTime: "10:15",
             arrivalTime: "11:45",
@@ -463,23 +481,23 @@ export default function FlightResults() {
                 baseFare: 20712,
                 taxes: 3890,
                 fees: 1288,
-                total: 25890
-              }
+                total: 25890,
+              },
             },
             amenities: ["WiFi", "Entertainment System", "Premium Meals"],
             baggage: {
               carryOn: {
                 weight: "7kg",
                 dimensions: "55x40x20cm",
-                included: true
+                included: true,
               },
               checked: {
                 weight: "20kg",
                 count: 1,
-                fee: 0
-              }
+                fee: 0,
+              },
             },
-            fareClass: "ECONOMY"
+            fareClass: "ECONOMY",
           },
           {
             id: "demo_flight_2",
@@ -491,14 +509,14 @@ export default function FlightResults() {
               name: "Chhatrapati Shivaji Maharaj International Airport",
               city: "Mumbai",
               country: "India",
-              terminal: "2"
+              terminal: "2",
             },
             arrival: {
               code: "DXB",
               name: "Dubai International Airport",
               city: "Dubai",
               country: "UAE",
-              terminal: "2"
+              terminal: "2",
             },
             departureTime: "14:30",
             arrivalTime: "16:00",
@@ -512,24 +530,24 @@ export default function FlightResults() {
                 baseFare: 18120,
                 taxes: 3400,
                 fees: 1130,
-                total: 22650
-              }
+                total: 22650,
+              },
             },
             amenities: ["Seat Selection", "Onboard Refreshments"],
             baggage: {
               carryOn: {
                 weight: "7kg",
                 dimensions: "55x40x20cm",
-                included: true
+                included: true,
               },
               checked: {
                 weight: "15kg",
                 count: 1,
-                fee: 0
-              }
+                fee: 0,
+              },
             },
-            fareClass: "ECONOMY"
-          }
+            fareClass: "ECONOMY",
+          },
         ];
 
         setFlights(fallbackFlights as Flight[]);
@@ -1037,7 +1055,9 @@ export default function FlightResults() {
       const fareTypeMatch =
         selectedFareType === "all" ||
         (selectedFareType === "refundable" &&
-          (flight.refundability === "Refundable" || flight.fareClass === "BUSINESS" || flight.fareClass === "FIRST")) ||
+          (flight.refundability === "Refundable" ||
+            flight.fareClass === "BUSINESS" ||
+            flight.fareClass === "FIRST")) ||
         (selectedFareType === "non-refundable" &&
           (flight.refundability === "Non-Refundable" || !flight.refundability));
 
@@ -1048,11 +1068,11 @@ export default function FlightResults() {
       // Add fareTypes for backward compatibility if it doesn't exist
       fareTypes: flight.fareTypes || [
         {
-          id: 'default',
-          name: flight.fareClass || 'Economy',
+          id: "default",
+          name: flight.fareClass || "Economy",
           price: flight.price?.amount || 0,
-          refundability: 'Non-Refundable'
-        }
+          refundability: "Non-Refundable",
+        },
       ],
       durationMinutes: (() => {
         try {
@@ -2395,9 +2415,7 @@ export default function FlightResults() {
                 <h3 className="text-lg font-semibold text-red-900 mb-2">
                   Search Failed
                 </h3>
-                <p className="text-red-700 mb-4">
-                  {searchError}
-                </p>
+                <p className="text-red-700 mb-4">{searchError}</p>
                 <Button
                   onClick={() => window.location.reload()}
                   className="bg-red-600 hover:bg-red-700 text-white"
@@ -2415,7 +2433,8 @@ export default function FlightResults() {
                   No Flights Found
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Try adjusting your search criteria or dates to find available flights.
+                  Try adjusting your search criteria or dates to find available
+                  flights.
                 </p>
                 <Button
                   onClick={() => setShowSearchEdit(true)}
@@ -2427,154 +2446,123 @@ export default function FlightResults() {
             )}
 
             {/* Flight Results */}
-            {!isLoading && !searchError && filteredFlights.map((flight) => (
-              <div key={flight.id}>
-                {/* MOBILE CARD DESIGN (≤768px) - App Style */}
-                <div className="block md:hidden bg-white border-b border-gray-100">
-                  <div className="p-4">
-                    {/* Flight Header */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-white rounded-lg border shadow-sm flex items-center justify-center">
-                          <img
-                            src={`https://pics.avs.io/60/60/${flight.airlineCode || 'XX'}.png`}
-                            alt={flight.airline}
-                            className="w-6 h-6 object-contain"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/24x24/E5E7EB/6B7280?text=✈';
-                            }}
-                          />
+            {!isLoading &&
+              !searchError &&
+              filteredFlights.map((flight) => (
+                <div key={flight.id}>
+                  {/* MOBILE CARD DESIGN (≤768px) - App Style */}
+                  <div className="block md:hidden bg-white border-b border-gray-100">
+                    <div className="p-4">
+                      {/* Flight Header */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-white rounded-lg border shadow-sm flex items-center justify-center">
+                            <img
+                              src={`https://pics.avs.io/60/60/${flight.airlineCode || "XX"}.png`}
+                              alt={flight.airline}
+                              className="w-6 h-6 object-contain"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src =
+                                  "https://via.placeholder.com/24x24/E5E7EB/6B7280?text=✈";
+                              }}
+                            />
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900 text-sm">
+                              {flight.airline}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {flight.flightNumber} • {flight.aircraft}
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-medium text-gray-900 text-sm">
-                            {flight.airline}
+                        <div className="text-right relative">
+                          <div className="flex items-center justify-end space-x-1">
+                            <div className="text-lg font-bold text-gray-900">
+                              ₹{flight.price.amount.toLocaleString("en-IN")}
+                            </div>
+                            <div className="relative group">
+                              <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
+                                <Info className="w-3 h-3" />
+                              </button>
+                              {/* Mobile Fare Breakdown Tooltip - Shows on hover */}
+                              <div className="absolute right-0 bottom-full mb-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                                  <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
+                                    Fare Breakdown
+                                  </div>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-gray-600">
+                                        Base fare:
+                                      </span>
+                                      <span className="font-medium text-gray-900">
+                                        ₹
+                                        {flight.price.breakdown.baseFare.toLocaleString(
+                                          "en-IN",
+                                        )}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-gray-600">
+                                        Taxes & fees:
+                                      </span>
+                                      <span className="font-medium text-gray-900">
+                                        ₹
+                                        {(
+                                          flight.price.breakdown.taxes +
+                                          flight.price.breakdown.fees
+                                        ).toLocaleString("en-IN")}
+                                      </span>
+                                    </div>
+                                    <div className="border-t border-gray-200 pt-2">
+                                      <div className="flex justify-between items-center font-semibold">
+                                        <span className="text-gray-900">
+                                          Total:
+                                        </span>
+                                        <span className="text-blue-600">
+                                          ₹
+                                          {flight.price.breakdown.total.toLocaleString(
+                                            "en-IN",
+                                          )}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p className="text-xs text-gray-500 text-center">
+                                    All taxes and fees included
+                                  </p>
+                                  {/* Tooltip arrow pointing upward */}
+                                  <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                           <div className="text-xs text-gray-500">
-                            {flight.flightNumber} • {flight.aircraft}
+                            per person
                           </div>
-                        </div>
-                      </div>
-                      <div className="text-right relative">
-                        <div className="flex items-center justify-end space-x-1">
-                          <div className="text-lg font-bold text-gray-900">
-                            ₹{flight.price.amount.toLocaleString('en-IN')}
-                          </div>
-                          <div className="relative group">
-                            <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
-                              <Info className="w-3 h-3" />
-                            </button>
-                            {/* Mobile Fare Breakdown Tooltip - Shows on hover */}
-                            <div className="absolute right-0 bottom-full mb-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                              <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
-                                <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
-                                  Fare Breakdown
-                                </div>
-                                <div className="space-y-2">
-                                  <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">
-                                      Base fare:
-                                    </span>
-                                    <span className="font-medium text-gray-900">
-                                      ₹{flight.price.breakdown.baseFare.toLocaleString('en-IN')}
-                                    </span>
-                                  </div>
-                                  <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">
-                                      Taxes & fees:
-                                    </span>
-                                    <span className="font-medium text-gray-900">
-                                      ₹{(flight.price.breakdown.taxes + flight.price.breakdown.fees).toLocaleString('en-IN')}
-                                    </span>
-                                  </div>
-                                  <div className="border-t border-gray-200 pt-2">
-                                    <div className="flex justify-between items-center font-semibold">
-                                      <span className="text-gray-900">
-                                        Total:
-                                      </span>
-                                      <span className="text-blue-600">
-                                        ₹{flight.price.breakdown.total.toLocaleString('en-IN')}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <p className="text-xs text-gray-500 text-center">
-                                  All taxes and fees included
-                                </p>
-                                {/* Tooltip arrow pointing upward */}
-                                <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-500">per person</div>
-                        <div className="text-xs font-medium text-blue-600">
-                          {flight.fareClass || 'Economy'}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Flight Route - Mobile */}
-                    <div className="space-y-4 mb-4">
-                      {/* Outbound Flight */}
-                      <div>
-                        <div className="text-xs text-gray-500 mb-2 font-medium">
-                          {tripType === "round-trip"
-                            ? "Outbound Flight"
-                            : "Flight"}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-center">
-                            <div className="text-xl font-bold text-gray-900">
-                              {flight.departureTime}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {flight.departure.code}
-                            </div>
-                          </div>
-                          <div className="flex-1 mx-4">
-                            <div className="relative">
-                              <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t-2 border-dashed border-gray-300"></div>
-                              </div>
-                              <div className="relative flex justify-center">
-                                <div className="bg-white px-2">
-                                  <div className="flex flex-col items-center">
-                                    <div className="text-xs text-gray-500 mb-1">
-                                      {flight.duration}
-                                    </div>
-                                    <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
-                                    <div className="text-xs text-green-600 mt-1">
-                                      {flight.stops === 0 ? 'Direct' : `${flight.stops} Stop${flight.stops > 1 ? 's' : ''}`}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-xl font-bold text-gray-900">
-                              {flight.arrivalTime}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {flight.arrival.code}
-                            </div>
+                          <div className="text-xs font-medium text-blue-600">
+                            {flight.fareClass || "Economy"}
                           </div>
                         </div>
                       </div>
 
-                      {/* Return Flight - Show for round-trip flights */}
-                      {tripType === "round-trip" && (
+                      {/* Flight Route - Mobile */}
+                      <div className="space-y-4 mb-4">
+                        {/* Outbound Flight */}
                         <div>
                           <div className="text-xs text-gray-500 mb-2 font-medium">
-                            Return Flight
+                            {tripType === "round-trip"
+                              ? "Outbound Flight"
+                              : "Flight"}
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="text-center">
                               <div className="text-xl font-bold text-gray-900">
-                                {flight.returnDepartureTime}
+                                {flight.departureTime}
                               </div>
                               <div className="text-sm text-gray-600">
-                                {flight.arrivalCode}
+                                {flight.departure.code}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
@@ -2586,11 +2574,13 @@ export default function FlightResults() {
                                   <div className="bg-white px-2">
                                     <div className="flex flex-col items-center">
                                       <div className="text-xs text-gray-500 mb-1">
-                                        {flight.returnDuration}
+                                        {flight.duration}
                                       </div>
                                       <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
                                       <div className="text-xs text-green-600 mt-1">
-                                        {flight.flightType}
+                                        {flight.stops === 0
+                                          ? "Direct"
+                                          : `${flight.stops} Stop${flight.stops > 1 ? "s" : ""}`}
                                       </div>
                                     </div>
                                   </div>
@@ -2599,167 +2589,187 @@ export default function FlightResults() {
                             </div>
                             <div className="text-center">
                               <div className="text-xl font-bold text-gray-900">
-                                {flight.returnArrivalTime}
+                                {flight.arrivalTime}
                               </div>
                               <div className="text-sm text-gray-600">
-                                {flight.departureCode}
+                                {flight.arrival.code}
                               </div>
                             </div>
                           </div>
                         </div>
-                      )}
-                    </div>
 
-                    {/* Flight Features - Mobile */}
-                    <div className="flex items-center justify-center space-x-4 mb-4 py-2 bg-gray-50 rounded-lg">
-                      <div className="relative group flex items-center space-x-1">
-                        <Luggage className="w-4 h-4 text-green-600 cursor-help" />
-                        <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
-                        <span className="text-xs text-gray-700">Baggage</span>
-                        {/* Mobile Baggage Tooltip */}
-                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
-                          <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
-                            <div className="font-semibold mb-2 text-gray-900">
-                              Baggage Allowance
+                        {/* Return Flight - Show for round-trip flights */}
+                        {tripType === "round-trip" && (
+                          <div>
+                            <div className="text-xs text-gray-500 mb-2 font-medium">
+                              Return Flight
                             </div>
-                            <div className="space-y-1">
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Check-in:</span>
-                                <span className="font-medium">{flight.baggage?.checked?.weight || '20kg'}</span>
+                            <div className="flex items-center justify-between">
+                              <div className="text-center">
+                                <div className="text-xl font-bold text-gray-900">
+                                  {flight.returnDepartureTime}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {flight.arrivalCode}
+                                </div>
                               </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-600">Cabin:</span>
-                                <span className="font-medium">{flight.baggage?.carryOn?.weight || '7kg'}</span>
+                              <div className="flex-1 mx-4">
+                                <div className="relative">
+                                  <div className="absolute inset-0 flex items-center">
+                                    <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                                  </div>
+                                  <div className="relative flex justify-center">
+                                    <div className="bg-white px-2">
+                                      <div className="flex flex-col items-center">
+                                        <div className="text-xs text-gray-500 mb-1">
+                                          {flight.returnDuration}
+                                        </div>
+                                        <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                                        <div className="text-xs text-green-600 mt-1">
+                                          {flight.flightType}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-xl font-bold text-gray-900">
+                                  {flight.returnArrivalTime}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {flight.departureCode}
+                                </div>
                               </div>
                             </div>
-                            {/* Tooltip arrow */}
-                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Flight Features - Mobile */}
+                      <div className="flex items-center justify-center space-x-4 mb-4 py-2 bg-gray-50 rounded-lg">
+                        <div className="relative group flex items-center space-x-1">
+                          <Luggage className="w-4 h-4 text-green-600 cursor-help" />
+                          <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
+                          <span className="text-xs text-gray-700">Baggage</span>
+                          {/* Mobile Baggage Tooltip */}
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                            <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
+                              <div className="font-semibold mb-2 text-gray-900">
+                                Baggage Allowance
+                              </div>
+                              <div className="space-y-1">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">
+                                    Check-in:
+                                  </span>
+                                  <span className="font-medium">
+                                    {flight.baggage?.checked?.weight || "20kg"}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-600">Cabin:</span>
+                                  <span className="font-medium">
+                                    {flight.baggage?.carryOn?.weight || "7kg"}
+                                  </span>
+                                </div>
+                              </div>
+                              {/* Tooltip arrow */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                            </div>
                           </div>
                         </div>
+                        <div className="flex items-center space-x-1">
+                          <Shield className="w-4 h-4 text-green-600" />
+                          <span className="text-xs text-gray-700">
+                            Flexible
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Wifi className="w-4 h-4 text-green-600" />
+                          <span className="text-xs text-gray-700">Wi-Fi</span>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <Shield className="w-4 h-4 text-green-600" />
-                        <span className="text-xs text-gray-700">Flexible</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Wifi className="w-4 h-4 text-green-600" />
-                        <span className="text-xs text-gray-700">Wi-Fi</span>
-                      </div>
-                    </div>
 
-                    {/* Action Buttons - Hotel Section Style Mobile */}
-                    <div className="flex gap-2 mt-3">
-                      <Link to={`/flight-details/${flight.id}`} state={{ flight }}>
-                        <Button
-                          variant="outline"
-                          className="flex-1 sm:flex-none touch-manipulation text-sm w-full"
+                      {/* Action Buttons - Hotel Section Style Mobile */}
+                      <div className="flex gap-2 mt-3">
+                        <Link
+                          to={`/flight-details/${flight.id}`}
+                          state={{ flight }}
                         >
-                          View Details
+                          <Button
+                            variant="outline"
+                            className="flex-1 sm:flex-none touch-manipulation text-sm w-full"
+                          >
+                            View Details
+                          </Button>
+                        </Link>
+                        <Button
+                          className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm sm:text-base"
+                          onClick={() => {
+                            setBargainFlight(flight);
+                            setBargainFareType({
+                              id: "default",
+                              name: flight.fareClass || "Economy",
+                              price: flight.price.amount,
+                              refundability: "Non-Refundable",
+                            });
+                            setShowBargainModal(true);
+                            setBargainStep("input");
+                          }}
+                        >
+                          <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                          <span>Bargain</span>
                         </Button>
-                      </Link>
-                      <Button
-                        className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm sm:text-base"
-                        onClick={() => {
-                          setBargainFlight(flight);
-                          setBargainFareType({
-                            id: 'default',
-                            name: flight.fareClass || 'Economy',
-                            price: flight.price.amount,
-                            refundability: 'Non-Refundable'
-                          });
-                          setShowBargainModal(true);
-                          setBargainStep('input');
-                        }}
-                      >
-                        <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                        <span>Bargain</span>
-                      </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* DESKTOP CARD DESIGN (≥769px) - Original Enhanced */}
-                <div className="hidden md:block bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="p-6">
-                    <div className="flex items-start justify-between">
-                      {/* Left Side - Flight Details */}
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-8">
-                          {/* Airline Logo */}
-                          <div className="flex flex-col space-y-4">
-                            <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
-                              <img
-                                src={`https://pics.avs.io/120/120/${flight.airlineCode || 'XX'}.png`}
-                                alt={flight.airline}
-                                className="w-8 h-6 object-contain"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈';
-                                }}
-                              />
-                            </div>
-                            <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
-                              <img
-                                src={`https://pics.avs.io/120/120/${flight.airlineCode || 'XX'}.png`}
-                                alt={flight.airline}
-                                className="w-8 h-6 object-contain"
-                              />
-                            </div>
-                          </div>
-
-                          {/* Flight Route */}
-                          <div className="space-y-6">
-                            {/* Outbound */}
-                            <div className="flex items-center space-x-12">
-                              <div className="text-center">
-                                <div className="text-xl font-bold text-gray-900">
-                                  {flight.departureTime}
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                  {flight.departureCode} •{" "}
-                                  {departureDate
-                                    ? formatDisplayDate(departureDate, "MMM d")
-                                    : "Select date"}
-                                </div>
+                  {/* DESKTOP CARD DESIGN (≥769px) - Original Enhanced */}
+                  <div className="hidden md:block bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="p-6">
+                      <div className="flex items-start justify-between">
+                        {/* Left Side - Flight Details */}
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-8">
+                            {/* Airline Logo */}
+                            <div className="flex flex-col space-y-4">
+                              <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
+                                <img
+                                  src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                                  alt={flight.airline}
+                                  className="w-8 h-6 object-contain"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      "https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈";
+                                  }}
+                                />
                               </div>
-                              <div className="flex flex-col items-center">
-                                <div className="relative flex items-center">
-                                  <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
-                                  <div className="w-16 h-px bg-gray-300 mx-2"></div>
-                                  <div className="bg-green-600 text-white text-xs px-2 py-1 rounded font-medium">
-                                    {flight.flightType}
-                                  </div>
-                                  <div className="w-16 h-px bg-gray-300 mx-2"></div>
-                                  <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
-                                </div>
-                                <div className="text-xs text-gray-500 mt-1">
-                                  {flight.duration}
-                                </div>
-                              </div>
-                              <div className="text-center">
-                                <div className="text-xl font-bold text-gray-900">
-                                  {flight.arrivalTime}
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                  {flight.arrivalCode} •{" "}
-                                  {departureDate
-                                    ? formatDisplayDate(departureDate, "MMM d")
-                                    : "Select date"}
-                                </div>
+                              <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
+                                <img
+                                  src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                                  alt={flight.airline}
+                                  className="w-8 h-6 object-contain"
+                                />
                               </div>
                             </div>
 
-                            {/* Return Flight */}
-                            {tripType === "round-trip" && (
+                            {/* Flight Route */}
+                            <div className="space-y-6">
+                              {/* Outbound */}
                               <div className="flex items-center space-x-12">
                                 <div className="text-center">
                                   <div className="text-xl font-bold text-gray-900">
-                                    {flight.returnDepartureTime}
+                                    {flight.departureTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.arrivalCode} •{" "}
-                                    {returnDate
-                                      ? formatDisplayDate(returnDate, "MMM d")
-                                      : "Select return date"}
+                                    {flight.departureCode} •{" "}
+                                    {departureDate
+                                      ? formatDisplayDate(
+                                          departureDate,
+                                          "MMM d",
+                                        )
+                                      : "Select date"}
                                   </div>
                                 </div>
                                 <div className="flex flex-col items-center">
@@ -2773,191 +2783,290 @@ export default function FlightResults() {
                                     <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
                                   </div>
                                   <div className="text-xs text-gray-500 mt-1">
-                                    {flight.returnDuration}
+                                    {flight.duration}
                                   </div>
                                 </div>
                                 <div className="text-center">
                                   <div className="text-xl font-bold text-gray-900">
-                                    {flight.returnArrivalTime}
+                                    {flight.arrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.departureCode} •{" "}
-                                    {returnDate
-                                      ? formatDisplayDate(returnDate, "MMM d")
-                                      : "Select return date"}
+                                    {flight.arrivalCode} •{" "}
+                                    {departureDate
+                                      ? formatDisplayDate(
+                                          departureDate,
+                                          "MMM d",
+                                        )
+                                      : "Select date"}
                                   </div>
                                 </div>
                               </div>
-                            )}
+
+                              {/* Return Flight */}
+                              {tripType === "round-trip" && (
+                                <div className="flex items-center space-x-12">
+                                  <div className="text-center">
+                                    <div className="text-xl font-bold text-gray-900">
+                                      {flight.returnDepartureTime}
+                                    </div>
+                                    <div className="text-sm text-gray-600">
+                                      {flight.arrivalCode} •{" "}
+                                      {returnDate
+                                        ? formatDisplayDate(returnDate, "MMM d")
+                                        : "Select return date"}
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col items-center">
+                                    <div className="relative flex items-center">
+                                      <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
+                                      <div className="w-16 h-px bg-gray-300 mx-2"></div>
+                                      <div className="bg-green-600 text-white text-xs px-2 py-1 rounded font-medium">
+                                        {flight.flightType}
+                                      </div>
+                                      <div className="w-16 h-px bg-gray-300 mx-2"></div>
+                                      <div className="w-3 h-3 bg-white border-2 border-gray-400 rounded-full"></div>
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-1">
+                                      {flight.returnDuration}
+                                    </div>
+                                  </div>
+                                  <div className="text-center">
+                                    <div className="text-xl font-bold text-gray-900">
+                                      {flight.returnArrivalTime}
+                                    </div>
+                                    <div className="text-sm text-gray-600">
+                                      {flight.departureCode} •{" "}
+                                      {returnDate
+                                        ? formatDisplayDate(returnDate, "MMM d")
+                                        : "Select return date"}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="mt-4 text-sm text-gray-600">
+                            {flight.returnAirline &&
+                            flight.returnAirline !== flight.airline
+                              ? `${flight.airline}, ${flight.returnAirline}`
+                              : flight.airline}
                           </div>
                         </div>
 
-                        <div className="mt-4 text-sm text-gray-600">
-                          {flight.returnAirline &&
-                          flight.returnAirline !== flight.airline
-                            ? `${flight.airline}, ${flight.returnAirline}`
-                            : flight.airline}
-                        </div>
-                      </div>
+                        {/* Right Side - Pricing - Compact Layout */}
+                        <div className="text-center ml-8">
+                          {/* Fare Type and Price with Info Button */}
+                          <div className="mb-1 relative">
+                            <span className="text-sm font-medium text-gray-900">
+                              {flight.fareTypes[0].name}
+                            </span>
+                            <div className="flex items-center justify-center space-x-2 mt-1">
+                              <div className="text-xl font-bold text-gray-900">
+                                {formatPrice(flight.fareTypes[0].price)}
+                              </div>
+                              <div className="relative group">
+                                <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
+                                  <Info className="w-4 h-4" />
+                                </button>
 
-                      {/* Right Side - Pricing - Compact Layout */}
-                      <div className="text-center ml-8">
-                        {/* Fare Type and Price with Info Button */}
-                        <div className="mb-1 relative">
-                          <span className="text-sm font-medium text-gray-900">
-                            {flight.fareTypes[0].name}
-                          </span>
-                          <div className="flex items-center justify-center space-x-2 mt-1">
-                            <div className="text-xl font-bold text-gray-900">
-                              {formatPrice(flight.fareTypes[0].price)}
-                            </div>
-                            <div className="relative group">
-                              <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
-                                <Info className="w-4 h-4" />
-                              </button>
-
-                              {/* Fare Breakdown Tooltip - Shows on hover */}
-                              <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
-                                  <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
-                                    Fare Breakdown
-                                  </div>
-                                  <div className="space-y-2">
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-gray-600">
-                                        Base fare:
-                                      </span>
-                                      <span className="font-medium text-gray-900">
-                                        {formatPrice(
-                                          Math.round(
-                                            flight.fareTypes[0].price * 0.75,
-                                          ),
-                                        )}
-                                      </span>
+                                {/* Fare Breakdown Tooltip - Shows on hover */}
+                                <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                  <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                                    <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
+                                      Fare Breakdown
                                     </div>
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-gray-600">
-                                        Taxes & fees:
-                                      </span>
-                                      <span className="font-medium text-gray-900">
-                                        {formatPrice(
-                                          Math.round(
-                                            flight.fareTypes[0].price * 0.25,
-                                          ),
-                                        )}
-                                      </span>
-                                    </div>
-                                    <div className="border-t border-gray-200 pt-2 mt-2">
+                                    <div className="space-y-2">
                                       <div className="flex justify-between items-center">
-                                        <span className="font-semibold text-gray-900">
-                                          Total:
+                                        <span className="text-gray-600">
+                                          Base fare:
                                         </span>
-                                        <span className="font-bold text-lg text-blue-600">
+                                        <span className="font-medium text-gray-900">
                                           {formatPrice(
-                                            flight.fareTypes[0].price,
+                                            Math.round(
+                                              flight.fareTypes[0].price * 0.75,
+                                            ),
                                           )}
                                         </span>
                                       </div>
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">
+                                          Taxes & fees:
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                          {formatPrice(
+                                            Math.round(
+                                              flight.fareTypes[0].price * 0.25,
+                                            ),
+                                          )}
+                                        </span>
+                                      </div>
+                                      <div className="border-t border-gray-200 pt-2 mt-2">
+                                        <div className="flex justify-between items-center">
+                                          <span className="font-semibold text-gray-900">
+                                            Total:
+                                          </span>
+                                          <span className="font-bold text-lg text-blue-600">
+                                            {formatPrice(
+                                              flight.fareTypes[0].price,
+                                            )}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="mt-3 pt-2 border-t border-gray-100">
+                                      <p className="text-xs text-gray-500 text-center">
+                                        All taxes and fees included
+                                      </p>
+                                    </div>
+                                    {/* Tooltip arrow pointing to info icon */}
+                                    <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Baggage Info with Hover Indicator */}
+                          <div className="flex items-center justify-center mb-2">
+                            <div className="relative group flex items-center space-x-1">
+                              <Luggage className="w-5 h-5 text-green-600 cursor-help" />
+                              <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
+                              {/* Baggage Tooltip */}
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                                <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
+                                  <div className="font-semibold mb-2 text-gray-900">
+                                    Baggage Allowance
+                                  </div>
+                                  <div className="space-y-1">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">
+                                        Check-in:
+                                      </span>
+                                      <span className="font-medium">23kg</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">
+                                        Cabin:
+                                      </span>
+                                      <span className="font-medium">7kg</span>
                                     </div>
                                   </div>
-                                  <div className="mt-3 pt-2 border-t border-gray-100">
-                                    <p className="text-xs text-gray-500 text-center">
-                                      All taxes and fees included
-                                    </p>
-                                  </div>
-                                  {/* Tooltip arrow pointing to info icon */}
-                                  <div className="absolute right-full top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white"></div>
+                                  {/* Tooltip arrow */}
+                                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
 
-                        {/* Baggage Info with Hover Indicator */}
-                        <div className="flex items-center justify-center mb-2">
-                          <div className="relative group flex items-center space-x-1">
-                            <Luggage className="w-5 h-5 text-green-600 cursor-help" />
-                            <Info className="w-3 h-3 text-gray-400 animate-pulse cursor-help" />
-                            {/* Baggage Tooltip */}
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
-                              <div className="bg-white text-gray-800 text-xs rounded-lg p-3 shadow-lg border border-gray-200 min-w-[180px]">
-                                <div className="font-semibold mb-2 text-gray-900">
-                                  Baggage Allowance
-                                </div>
-                                <div className="space-y-1">
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                      Check-in:
-                                    </span>
-                                    <span className="font-medium">23kg</span>
-                                  </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                      Cabin:
-                                    </span>
-                                    <span className="font-medium">7kg</span>
-                                  </div>
-                                </div>
-                                {/* Tooltip arrow */}
-                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
-                              </div>
-                            </div>
+                          {/* Compact text info */}
+                          <div className="text-xs text-gray-600 mb-1">
+                            All-inclusive price
                           </div>
-                        </div>
-
-                        {/* Compact text info */}
-                        <div className="text-xs text-gray-600 mb-1">
-                          All-inclusive price
-                        </div>
-                        <div
-                          className={`text-xs mb-2 font-medium ${
-                            flight.fareTypes[0].refundability === "Refundable"
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {flight.fareTypes[0].refundability}
-                        </div>
-
-                        {/* Side-by-side buttons - Hotel Section Style */}
-                        <div className="flex gap-2 mt-3">
-                          <Button
-                            onClick={() =>
-                              handleToggleFlightDetails(
-                                flight.id,
-                                flight.fareTypes[0].id,
-                              )
-                            }
-                            variant="outline"
-                            className="flex-1 touch-manipulation text-sm"
+                          <div
+                            className={`text-xs mb-2 font-medium ${
+                              flight.fareTypes[0].refundability === "Refundable"
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
                           >
-                            View Details
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              handleBargain(flight, flight.fareTypes[0])
-                            }
-                            className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm"
-                          >
-                            <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                            Bargain
-                          </Button>
+                            {flight.fareTypes[0].refundability}
+                          </div>
+
+                          {/* Side-by-side buttons - Hotel Section Style */}
+                          <div className="flex gap-2 mt-3">
+                            <Button
+                              onClick={() =>
+                                handleToggleFlightDetails(
+                                  flight.id,
+                                  flight.fareTypes[0].id,
+                                )
+                              }
+                              variant="outline"
+                              className="flex-1 touch-manipulation text-sm"
+                            >
+                              View Details
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                handleBargain(flight, flight.fareTypes[0])
+                              }
+                              className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm"
+                            >
+                              <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                              Bargain
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Tabbed Flight Details Section - Appears when View Details is clicked */}
-                {Object.keys(expandedFlightDetails).some(
-                  (key) =>
-                    key.startsWith(flight.id) && expandedFlightDetails[key],
-                ) && (
-                  <div className="mt-4 mx-4 md:mx-0">
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                      {/* Tabs Header */}
-                      <div className="border-b border-gray-200">
-                        <div className="flex">
+                  {/* Tabbed Flight Details Section - Appears when View Details is clicked */}
+                  {Object.keys(expandedFlightDetails).some(
+                    (key) =>
+                      key.startsWith(flight.id) && expandedFlightDetails[key],
+                  ) && (
+                    <div className="mt-4 mx-4 md:mx-0">
+                      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        {/* Tabs Header */}
+                        <div className="border-b border-gray-200">
+                          <div className="flex">
+                            {Object.keys(expandedFlightDetails)
+                              .filter(
+                                (key) =>
+                                  key.startsWith(flight.id) &&
+                                  expandedFlightDetails[key],
+                              )
+                              .map((detailKey) => {
+                                const currentTab =
+                                  activeDetailTab[detailKey] || "itinerary";
+                                return (
+                                  <React.Fragment key={detailKey}>
+                                    <button
+                                      onClick={() => {
+                                        const [flightId, fareTypeId] =
+                                          detailKey.split("-");
+                                        handleTabChange(
+                                          flightId,
+                                          fareTypeId,
+                                          "itinerary",
+                                        );
+                                      }}
+                                      className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
+                                        currentTab === "itinerary"
+                                          ? "border-gray-800 text-gray-800 bg-gray-50"
+                                          : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                                      }`}
+                                    >
+                                      Itinerary
+                                    </button>
+                                    <button
+                                      onClick={() => {
+                                        const [flightId, fareTypeId] =
+                                          detailKey.split("-");
+                                        handleTabChange(
+                                          flightId,
+                                          fareTypeId,
+                                          "fare-rules",
+                                        );
+                                      }}
+                                      className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
+                                        currentTab === "fare-rules"
+                                          ? "border-gray-800 text-gray-800 bg-gray-50"
+                                          : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                                      }`}
+                                    >
+                                      Fare Rules
+                                    </button>
+                                  </React.Fragment>
+                                );
+                              })}
+                          </div>
+                        </div>
+
+                        {/* Tab Content */}
+                        <div className="p-6">
                           {Object.keys(expandedFlightDetails)
                             .filter(
                               (key) =>
@@ -2967,196 +3076,25 @@ export default function FlightResults() {
                             .map((detailKey) => {
                               const currentTab =
                                 activeDetailTab[detailKey] || "itinerary";
+
                               return (
-                                <React.Fragment key={detailKey}>
-                                  <button
-                                    onClick={() => {
-                                      const [flightId, fareTypeId] =
-                                        detailKey.split("-");
-                                      handleTabChange(
-                                        flightId,
-                                        fareTypeId,
-                                        "itinerary",
-                                      );
-                                    }}
-                                    className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
-                                      currentTab === "itinerary"
-                                        ? "border-gray-800 text-gray-800 bg-gray-50"
-                                        : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                                    }`}
-                                  >
-                                    Itinerary
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      const [flightId, fareTypeId] =
-                                        detailKey.split("-");
-                                      handleTabChange(
-                                        flightId,
-                                        fareTypeId,
-                                        "fare-rules",
-                                      );
-                                    }}
-                                    className={`flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
-                                      currentTab === "fare-rules"
-                                        ? "border-gray-800 text-gray-800 bg-gray-50"
-                                        : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                                    }`}
-                                  >
-                                    Fare Rules
-                                  </button>
-                                </React.Fragment>
-                              );
-                            })}
-                        </div>
-                      </div>
-
-                      {/* Tab Content */}
-                      <div className="p-6">
-                        {Object.keys(expandedFlightDetails)
-                          .filter(
-                            (key) =>
-                              key.startsWith(flight.id) &&
-                              expandedFlightDetails[key],
-                          )
-                          .map((detailKey) => {
-                            const currentTab =
-                              activeDetailTab[detailKey] || "itinerary";
-
-                            return (
-                              <div key={detailKey}>
-                                {/* Itinerary Tab Content */}
-                                {currentTab === "itinerary" && (
-                                  <div className="space-y-8">
-                                    {/* Outbound Flight */}
-                                    <div>
-                                      {/* Header */}
-                                      <div className="flex items-center mb-6">
-                                        <Plane className="w-5 h-5 mr-2 text-gray-700" />
-                                        <h4 className="text-lg font-semibold text-gray-900">
-                                          Outbound •{" "}
-                                          {departureDate
-                                            ? formatDisplayDate(
-                                                departureDate,
-                                                "eee, MMM d",
-                                              )
-                                            : "Tue, Jul 29"}
-                                        </h4>
-                                      </div>
-
-                                      {/* Flight Card */}
-                                      <div className="bg-white border border-gray-200 rounded-lg p-6">
-                                        {/* Airline Info */}
-                                        <div className="flex items-center mb-6">
-                                          <img
-                                            src={flight.logo}
-                                            alt={flight.airline}
-                                            className="w-10 h-8 object-contain mr-3"
-                                          />
-                                          <div>
-                                            <p className="font-semibold text-gray-900 text-base">
-                                              {flight.airline}
-                                            </p>
-                                            <p className="text-sm text-gray-600">
-                                              {flight.flightNumber}
-                                            </p>
-                                          </div>
-                                        </div>
-
-                                        {/* Flight Timeline */}
-                                        <div className="flex items-center justify-between mb-6">
-                                          {/* Departure */}
-                                          <div className="text-center">
-                                            <div className="text-3xl font-bold text-gray-900 mb-1">
-                                              {flight.departureTime}
-                                            </div>
-                                            <div className="text-sm font-semibold text-gray-700 mb-1">
-                                              {flight.departureCode}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                              {flight.departureCity}
-                                            </div>
-                                          </div>
-
-                                          {/* Connection Line */}
-                                          <div className="flex-1 flex items-center mx-8">
-                                            <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
-                                            <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
-                                              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                                <div className="bg-gray-600 text-white text-xs px-2 py-1 rounded font-medium">
-                                                  Stop
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
-                                          </div>
-
-                                          {/* Arrival */}
-                                          <div className="text-center">
-                                            <div className="text-3xl font-bold text-gray-900 mb-1">
-                                              {flight.arrivalTime}
-                                            </div>
-                                            <div className="text-sm font-semibold text-gray-700 mb-1">
-                                              {flight.arrivalCode}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                              {flight.arrivalCity}
-                                            </div>
-                                          </div>
-                                        </div>
-
-                                        {/* Flight Details Grid */}
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
-                                          <div>
-                                            <p className="text-gray-500 mb-1">
-                                              Aircraft
-                                            </p>
-                                            <p className="font-medium text-gray-900">
-                                              {flight.aircraft}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <p className="text-gray-500 mb-1">
-                                              Layover
-                                            </p>
-                                            <p className="font-medium text-gray-900">
-                                              2h 5m
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <p className="text-gray-500 mb-1">
-                                              Flight time
-                                            </p>
-                                            <p className="font-medium text-gray-900">
-                                              {flight.duration}
-                                            </p>
-                                          </div>
-                                          <div>
-                                            <p className="text-gray-500 mb-1">
-                                              Operated by
-                                            </p>
-                                            <p className="font-medium text-gray-900">
-                                              {flight.airline}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    {/* Return Flight (if round trip) */}
-                                    {tripType === "round-trip" && (
+                                <div key={detailKey}>
+                                  {/* Itinerary Tab Content */}
+                                  {currentTab === "itinerary" && (
+                                    <div className="space-y-8">
+                                      {/* Outbound Flight */}
                                       <div>
                                         {/* Header */}
                                         <div className="flex items-center mb-6">
-                                          <Plane className="w-5 h-5 mr-2 text-gray-700 rotate-180" />
+                                          <Plane className="w-5 h-5 mr-2 text-gray-700" />
                                           <h4 className="text-lg font-semibold text-gray-900">
-                                            Return •{" "}
-                                            {returnDate
+                                            Outbound •{" "}
+                                            {departureDate
                                               ? formatDisplayDate(
-                                                  returnDate,
+                                                  departureDate,
                                                   "eee, MMM d",
                                                 )
-                                              : "Fri, Aug 1"}
+                                              : "Tue, Jul 29"}
                                           </h4>
                                         </div>
 
@@ -3165,23 +3103,16 @@ export default function FlightResults() {
                                           {/* Airline Info */}
                                           <div className="flex items-center mb-6">
                                             <img
-                                              src={
-                                                flight.returnLogo || flight.logo
-                                              }
-                                              alt={
-                                                flight.returnAirline ||
-                                                flight.airline
-                                              }
+                                              src={flight.logo}
+                                              alt={flight.airline}
                                               className="w-10 h-8 object-contain mr-3"
                                             />
                                             <div>
                                               <p className="font-semibold text-gray-900 text-base">
-                                                {flight.returnAirline ||
-                                                  flight.airline}
+                                                {flight.airline}
                                               </p>
                                               <p className="text-sm text-gray-600">
-                                                {flight.returnFlightNumber ||
-                                                  "6E 1366"}
+                                                {flight.flightNumber}
                                               </p>
                                             </div>
                                           </div>
@@ -3191,14 +3122,13 @@ export default function FlightResults() {
                                             {/* Departure */}
                                             <div className="text-center">
                                               <div className="text-3xl font-bold text-gray-900 mb-1">
-                                                {flight.returnDepartureTime ||
-                                                  "14:00"}
+                                                {flight.departureTime}
                                               </div>
                                               <div className="text-sm font-semibold text-gray-700 mb-1">
-                                                {flight.arrivalCode}
+                                                {flight.departureCode}
                                               </div>
                                               <div className="text-xs text-gray-500">
-                                                {flight.arrivalCity}
+                                                {flight.departureCity}
                                               </div>
                                             </div>
 
@@ -3218,14 +3148,13 @@ export default function FlightResults() {
                                             {/* Arrival */}
                                             <div className="text-center">
                                               <div className="text-3xl font-bold text-gray-900 mb-1">
-                                                {flight.returnArrivalTime ||
-                                                  "19:30"}
+                                                {flight.arrivalTime}
                                               </div>
                                               <div className="text-sm font-semibold text-gray-700 mb-1">
-                                                {flight.departureCode}
+                                                {flight.arrivalCode}
                                               </div>
                                               <div className="text-xs text-gray-500">
-                                                {flight.departureCity}
+                                                {flight.arrivalCity}
                                               </div>
                                             </div>
                                           </div>
@@ -3237,8 +3166,7 @@ export default function FlightResults() {
                                                 Aircraft
                                               </p>
                                               <p className="font-medium text-gray-900">
-                                                {flight.returnAircraft ||
-                                                  flight.aircraft}
+                                                {flight.aircraft}
                                               </p>
                                             </div>
                                             <div>
@@ -3254,8 +3182,7 @@ export default function FlightResults() {
                                                 Flight time
                                               </p>
                                               <p className="font-medium text-gray-900">
-                                                {flight.returnDuration ||
-                                                  "5h 30m"}
+                                                {flight.duration}
                                               </p>
                                             </div>
                                             <div>
@@ -3263,145 +3190,210 @@ export default function FlightResults() {
                                                 Operated by
                                               </p>
                                               <p className="font-medium text-gray-900">
-                                                {flight.returnAirline ||
-                                                  flight.airline}
+                                                {flight.airline}
                                               </p>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
-                                    )}
 
-                                    {/* Book Now Button - Prominent & Intuitive */}
-                                    <div className="border-t border-gray-200 pt-4 mt-6">
-                                      <Button
-                                        onClick={() => {
-                                          // Find the fare type for this detail key
-                                          const [flightId, fareTypeId] =
-                                            detailKey.split("-");
-                                          const fareType =
-                                            flight.fareTypes.find(
-                                              (ft) => ft.id === fareTypeId,
-                                            ) || flight.fareTypes[0];
-                                          handleBooking(flight, fareType);
-                                        }}
-                                        className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
-                                      >
-                                        Book Now •{" "}
-                                        {formatPrice(
-                                          flight.fareTypes[0]?.price || 0,
-                                        )}
-                                      </Button>
+                                      {/* Return Flight (if round trip) */}
+                                      {tripType === "round-trip" && (
+                                        <div>
+                                          {/* Header */}
+                                          <div className="flex items-center mb-6">
+                                            <Plane className="w-5 h-5 mr-2 text-gray-700 rotate-180" />
+                                            <h4 className="text-lg font-semibold text-gray-900">
+                                              Return •{" "}
+                                              {returnDate
+                                                ? formatDisplayDate(
+                                                    returnDate,
+                                                    "eee, MMM d",
+                                                  )
+                                                : "Fri, Aug 1"}
+                                            </h4>
+                                          </div>
+
+                                          {/* Flight Card */}
+                                          <div className="bg-white border border-gray-200 rounded-lg p-6">
+                                            {/* Airline Info */}
+                                            <div className="flex items-center mb-6">
+                                              <img
+                                                src={
+                                                  flight.returnLogo ||
+                                                  flight.logo
+                                                }
+                                                alt={
+                                                  flight.returnAirline ||
+                                                  flight.airline
+                                                }
+                                                className="w-10 h-8 object-contain mr-3"
+                                              />
+                                              <div>
+                                                <p className="font-semibold text-gray-900 text-base">
+                                                  {flight.returnAirline ||
+                                                    flight.airline}
+                                                </p>
+                                                <p className="text-sm text-gray-600">
+                                                  {flight.returnFlightNumber ||
+                                                    "6E 1366"}
+                                                </p>
+                                              </div>
+                                            </div>
+
+                                            {/* Flight Timeline */}
+                                            <div className="flex items-center justify-between mb-6">
+                                              {/* Departure */}
+                                              <div className="text-center">
+                                                <div className="text-3xl font-bold text-gray-900 mb-1">
+                                                  {flight.returnDepartureTime ||
+                                                    "14:00"}
+                                                </div>
+                                                <div className="text-sm font-semibold text-gray-700 mb-1">
+                                                  {flight.arrivalCode}
+                                                </div>
+                                                <div className="text-xs text-gray-500">
+                                                  {flight.arrivalCity}
+                                                </div>
+                                              </div>
+
+                                              {/* Connection Line */}
+                                              <div className="flex-1 flex items-center mx-8">
+                                                <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
+                                                <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
+                                                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                    <div className="bg-gray-600 text-white text-xs px-2 py-1 rounded font-medium">
+                                                      Stop
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
+                                              </div>
+
+                                              {/* Arrival */}
+                                              <div className="text-center">
+                                                <div className="text-3xl font-bold text-gray-900 mb-1">
+                                                  {flight.returnArrivalTime ||
+                                                    "19:30"}
+                                                </div>
+                                                <div className="text-sm font-semibold text-gray-700 mb-1">
+                                                  {flight.departureCode}
+                                                </div>
+                                                <div className="text-xs text-gray-500">
+                                                  {flight.departureCity}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            {/* Flight Details Grid */}
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
+                                              <div>
+                                                <p className="text-gray-500 mb-1">
+                                                  Aircraft
+                                                </p>
+                                                <p className="font-medium text-gray-900">
+                                                  {flight.returnAircraft ||
+                                                    flight.aircraft}
+                                                </p>
+                                              </div>
+                                              <div>
+                                                <p className="text-gray-500 mb-1">
+                                                  Layover
+                                                </p>
+                                                <p className="font-medium text-gray-900">
+                                                  2h 5m
+                                                </p>
+                                              </div>
+                                              <div>
+                                                <p className="text-gray-500 mb-1">
+                                                  Flight time
+                                                </p>
+                                                <p className="font-medium text-gray-900">
+                                                  {flight.returnDuration ||
+                                                    "5h 30m"}
+                                                </p>
+                                              </div>
+                                              <div>
+                                                <p className="text-gray-500 mb-1">
+                                                  Operated by
+                                                </p>
+                                                <p className="font-medium text-gray-900">
+                                                  {flight.returnAirline ||
+                                                    flight.airline}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Book Now Button - Prominent & Intuitive */}
+                                      <div className="border-t border-gray-200 pt-4 mt-6">
+                                        <Button
+                                          onClick={() => {
+                                            // Find the fare type for this detail key
+                                            const [flightId, fareTypeId] =
+                                              detailKey.split("-");
+                                            const fareType =
+                                              flight.fareTypes.find(
+                                                (ft) => ft.id === fareTypeId,
+                                              ) || flight.fareTypes[0];
+                                            handleBooking(flight, fareType);
+                                          }}
+                                          className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
+                                        >
+                                          Book Now •{" "}
+                                          {formatPrice(
+                                            flight.fareTypes[0]?.price || 0,
+                                          )}
+                                        </Button>
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
+                                  )}
 
-                                {/* Fare Rules Tab Content */}
-                                {currentTab === "fare-rules" && (
-                                  <div className="space-y-6">
-                                    <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                      <FileText className="w-5 h-5 mr-2 text-gray-700" />
-                                      Standard fare (Price per traveller)
-                                    </h4>
-
-                                    {/* Sector-Specific Fare Rules */}
+                                  {/* Fare Rules Tab Content */}
+                                  {currentTab === "fare-rules" && (
                                     <div className="space-y-6">
-                                      {/* First Sector Rules - Outbound */}
-                                      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                                        <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
-                                          <Plane className="w-5 h-5 mr-3 text-gray-600" />
-                                          {flight.airline || "Emirates"} |{" "}
-                                          {flight.departureCode || "BOM"} -{" "}
-                                          {flight.arrivalCode || "DXB"}
-                                        </h5>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Cancellation fee
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Airline fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ��0
-                                                </span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Faredown Fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹500
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <p className="text-xs text-gray-500 leading-relaxed">
-                                              Cancellation/Flight change charges
-                                              are indicated per traveller.
-                                              Clearing will stop accepting
-                                              cancellation/change request if 72
-                                              hours before departure of the
-                                              flight, depending on the airline.
-                                            </p>
-                                          </div>
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Date change fee
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Airline fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹0
-                                                </span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Faredown Fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹500
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <p className="text-xs text-gray-500 leading-relaxed">
-                                              Cancellation/Flight change charges
-                                              are indicated per traveller.
-                                              Clearing will stop accepting
-                                              cancellation/change request if 72
-                                              hours before departure of the
-                                              flight, depending on the airline.
-                                            </p>
-                                          </div>
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Baggage Information:
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3">
-                                              <p className="text-gray-900 font-medium">
-                                                Check-in: 1 x 25 kg / Adult -
-                                                Cabin: 1 x 7 kg / Adult
+                                      <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                                        <FileText className="w-5 h-5 mr-2 text-gray-700" />
+                                        Standard fare (Price per traveller)
+                                      </h4>
+
+                                      {/* Sector-Specific Fare Rules */}
+                                      <div className="space-y-6">
+                                        {/* First Sector Rules - Outbound */}
+                                        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                          <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
+                                            <Plane className="w-5 h-5 mr-3 text-gray-600" />
+                                            {flight.airline || "Emirates"} |{" "}
+                                            {flight.departureCode || "BOM"} -{" "}
+                                            {flight.arrivalCode || "DXB"}
+                                          </h5>
+                                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Cancellation fee
                                               </p>
-                                            </div>
-                                          </div>
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Important:
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
-                                              <p>
-                                                ��� Direct flights are usually
-                                                cheaper than refundable flights.
-                                                However, you may have to pay a
-                                                large fee to cancel or change
-                                                your flight.
-                                              </p>
-                                              <p>
-                                                • Cancellation/Flight change
+                                              <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Airline fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ��0
+                                                  </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Faredown Fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹500
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <p className="text-xs text-gray-500 leading-relaxed">
+                                                Cancellation/Flight change
                                                 charges are indicated per
                                                 traveller. Clearing will stop
                                                 accepting cancellation/change
@@ -3410,106 +3402,30 @@ export default function FlightResults() {
                                                 depending on the airline.
                                               </p>
                                             </div>
-                                          </div>
-                                        </div>
-                                      </div>
-
-                                      {/* Second Sector Rules - Return */}
-                                      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                                        <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
-                                          <Plane className="w-5 h-5 mr-3 text-gray-600" />
-                                          {flight.returnAirline || "Indigo"} |{" "}
-                                          {flight.arrivalCode || "DXB"} -{" "}
-                                          {flight.departureCode || "BOM"}
-                                        </h5>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Cancellation fee
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Airline fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹0
-                                                </span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Faredown Fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹500
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <p className="text-xs text-gray-500 leading-relaxed">
-                                              Cancellation/Flight change charges
-                                              are indicated per traveller.
-                                              Clearing will stop accepting
-                                              cancellation/change request if 72
-                                              hours before departure of the
-                                              flight, depending on the airline.
-                                            </p>
-                                          </div>
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Date change fee
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Airline fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹0
-                                                </span>
-                                              </div>
-                                              <div className="flex justify-between">
-                                                <span className="text-gray-600">
-                                                  Faredown Fee:
-                                                </span>
-                                                <span className="text-gray-900 font-medium">
-                                                  ₹500
-                                                </span>
-                                              </div>
-                                            </div>
-                                            <p className="text-xs text-gray-500 leading-relaxed">
-                                              Cancellation/Flight change charges
-                                              are indicated per traveller.
-                                              Clearing will stop accepting
-                                              cancellation/change request if 72
-                                              hours before departure of the
-                                              flight, depending on the airline.
-                                            </p>
-                                          </div>
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Baggage Information:
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3">
-                                              <p className="text-gray-900 font-medium">
-                                                Check-in: 1 x 15 kg / Adult -
-                                                Cabin: 1 x 7 kg / Adult
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Date change fee
                                               </p>
-                                            </div>
-                                          </div>
-                                          <div className="space-y-3">
-                                            <p className="font-semibold text-gray-800 mb-2">
-                                              Important:
-                                            </p>
-                                            <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
-                                              <p>
-                                                • Direct flights are usually
-                                                cheaper than refundable flights.
-                                                However, you may have to pay a
-                                                large fee to cancel or change
-                                                your flight.
-                                              </p>
-                                              <p>
-                                                • Cancellation/Flight change
+                                              <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Airline fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹0
+                                                  </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Faredown Fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹500
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <p className="text-xs text-gray-500 leading-relaxed">
+                                                Cancellation/Flight change
                                                 charges are indicated per
                                                 traveller. Clearing will stop
                                                 accepting cancellation/change
@@ -3518,400 +3434,440 @@ export default function FlightResults() {
                                                 depending on the airline.
                                               </p>
                                             </div>
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Baggage Information:
+                                              </p>
+                                              <div className="bg-gray-50 rounded-lg p-3">
+                                                <p className="text-gray-900 font-medium">
+                                                  Check-in: 1 x 25 kg / Adult -
+                                                  Cabin: 1 x 7 kg / Adult
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Important:
+                                              </p>
+                                              <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
+                                                <p>
+                                                  ��� Direct flights are usually
+                                                  cheaper than refundable
+                                                  flights. However, you may have
+                                                  to pay a large fee to cancel
+                                                  or change your flight.
+                                                </p>
+                                                <p>
+                                                  • Cancellation/Flight change
+                                                  charges are indicated per
+                                                  traveller. Clearing will stop
+                                                  accepting cancellation/change
+                                                  request if 72 hours before
+                                                  departure of the flight,
+                                                  depending on the airline.
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        {/* Second Sector Rules - Return */}
+                                        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                          <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
+                                            <Plane className="w-5 h-5 mr-3 text-gray-600" />
+                                            {flight.returnAirline || "Indigo"} |{" "}
+                                            {flight.arrivalCode || "DXB"} -{" "}
+                                            {flight.departureCode || "BOM"}
+                                          </h5>
+                                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Cancellation fee
+                                              </p>
+                                              <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Airline fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹0
+                                                  </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Faredown Fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹500
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <p className="text-xs text-gray-500 leading-relaxed">
+                                                Cancellation/Flight change
+                                                charges are indicated per
+                                                traveller. Clearing will stop
+                                                accepting cancellation/change
+                                                request if 72 hours before
+                                                departure of the flight,
+                                                depending on the airline.
+                                              </p>
+                                            </div>
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Date change fee
+                                              </p>
+                                              <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Airline fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹0
+                                                  </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                  <span className="text-gray-600">
+                                                    Faredown Fee:
+                                                  </span>
+                                                  <span className="text-gray-900 font-medium">
+                                                    ₹500
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <p className="text-xs text-gray-500 leading-relaxed">
+                                                Cancellation/Flight change
+                                                charges are indicated per
+                                                traveller. Clearing will stop
+                                                accepting cancellation/change
+                                                request if 72 hours before
+                                                departure of the flight,
+                                                depending on the airline.
+                                              </p>
+                                            </div>
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Baggage Information:
+                                              </p>
+                                              <div className="bg-gray-50 rounded-lg p-3">
+                                                <p className="text-gray-900 font-medium">
+                                                  Check-in: 1 x 15 kg / Adult -
+                                                  Cabin: 1 x 7 kg / Adult
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <div className="space-y-3">
+                                              <p className="font-semibold text-gray-800 mb-2">
+                                                Important:
+                                              </p>
+                                              <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
+                                                <p>
+                                                  • Direct flights are usually
+                                                  cheaper than refundable
+                                                  flights. However, you may have
+                                                  to pay a large fee to cancel
+                                                  or change your flight.
+                                                </p>
+                                                <p>
+                                                  • Cancellation/Flight change
+                                                  charges are indicated per
+                                                  traveller. Clearing will stop
+                                                  accepting cancellation/change
+                                                  request if 72 hours before
+                                                  departure of the flight,
+                                                  depending on the airline.
+                                                </p>
+                                              </div>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
 
-                                    {/* Book Now Button - Prominent & Intuitive */}
-                                    <div className="border-t border-gray-200 pt-4 mt-4">
-                                      <Button
-                                        onClick={() => {
-                                          // Find the fare type for this detail key
-                                          const [flightId, fareTypeId] =
-                                            detailKey.split("-");
-                                          const fareType =
-                                            flight.fareTypes.find(
-                                              (ft) => ft.id === fareTypeId,
-                                            ) || flight.fareTypes[0];
-                                          handleBooking(flight, fareType);
-                                        }}
-                                        className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
-                                      >
-                                        Book Now •{" "}
-                                        {formatPrice(
-                                          flight.fareTypes[0]?.price || 0,
-                                        )}
-                                      </Button>
+                                      {/* Book Now Button - Prominent & Intuitive */}
+                                      <div className="border-t border-gray-200 pt-4 mt-4">
+                                        <Button
+                                          onClick={() => {
+                                            // Find the fare type for this detail key
+                                            const [flightId, fareTypeId] =
+                                              detailKey.split("-");
+                                            const fareType =
+                                              flight.fareTypes.find(
+                                                (ft) => ft.id === fareTypeId,
+                                              ) || flight.fareTypes[0];
+                                            handleBooking(flight, fareType);
+                                          }}
+                                          className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
+                                        >
+                                          Book Now •{" "}
+                                          {formatPrice(
+                                            flight.fareTypes[0]?.price || 0,
+                                          )}
+                                        </Button>
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
+                                  )}
+                                </div>
+                              );
+                            })}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Fare Rules Section - Appears when View Fare Rules is clicked */}
-                {Object.keys(showFareRules).some(
-                  (key) => key.startsWith(flight.id) && showFareRules[key],
-                ) && (
-                  <div className="mt-4 mx-4 md:mx-0">
-                    <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="font-semibold text-gray-900 flex items-center">
-                          <Info className="w-5 h-5 mr-2 text-[#003580]" />
-                          Fare Rules -{" "}
-                          {flight.returnAirline &&
-                          flight.returnAirline !== flight.airline
-                            ? `${flight.airline} & ${flight.returnAirline}`
-                            : flight.airline}{" "}
-                          Flight
-                        </h4>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            const keysToClose = Object.keys(
-                              showFareRules,
-                            ).filter((key) => key.startsWith(flight.id));
-                            setShowFareRules((prev) => {
-                              const newState = { ...prev };
-                              keysToClose.forEach((key) => {
-                                newState[key] = false;
+                  {/* Fare Rules Section - Appears when View Fare Rules is clicked */}
+                  {Object.keys(showFareRules).some(
+                    (key) => key.startsWith(flight.id) && showFareRules[key],
+                  ) && (
+                    <div className="mt-4 mx-4 md:mx-0">
+                      <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="font-semibold text-gray-900 flex items-center">
+                            <Info className="w-5 h-5 mr-2 text-[#003580]" />
+                            Fare Rules -{" "}
+                            {flight.returnAirline &&
+                            flight.returnAirline !== flight.airline
+                              ? `${flight.airline} & ${flight.returnAirline}`
+                              : flight.airline}{" "}
+                            Flight
+                          </h4>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const keysToClose = Object.keys(
+                                showFareRules,
+                              ).filter((key) => key.startsWith(flight.id));
+                              setShowFareRules((prev) => {
+                                const newState = { ...prev };
+                                keysToClose.forEach((key) => {
+                                  newState[key] = false;
+                                });
+                                return newState;
                               });
-                              return newState;
-                            });
-                          }}
-                          className="text-gray-400 hover:text-gray-600"
-                        >
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </div>
+                            }}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
 
-                      <div className="space-y-6">
-                        {/* Force mixed airline display for debugging */}
-                        {true ? (
-                          <>
-                            {/* First Sector Rules - Outbound */}
-                            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                              <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
-                                <Plane className="w-5 h-5 mr-3 text-gray-600" />
-                                {flight.airline || "Emirates"} |{" "}
-                                {flight.departureCode || "BOM"} -{" "}
-                                {flight.arrivalCode || "DXB"}
-                              </h5>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Cancellation fee
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Airline fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ���0
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Faredown Fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹500
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 leading-relaxed">
-                                    Cancellation/Flight change charges are
-                                    indicated per traveller. Clearing will stop
-                                    accepting cancellation/change request if 72
-                                    hours before departure of the flight,
-                                    depending on the airline.
-                                  </p>
-                                </div>
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Date change fee
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Airline fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹0
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Faredown Fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹500
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 leading-relaxed">
-                                    Cancellation/Flight change charges are
-                                    indicated per traveller. Clearing will stop
-                                    accepting cancellation/change request if 72
-                                    hours before departure of the flight,
-                                    depending on the airline.
-                                  </p>
-                                </div>
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Baggage Information:
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3">
-                                    <p className="text-gray-900 font-medium">
-                                      Check-in: 1 x 25 kg / Adult - Cabin: 1 x 7
-                                      kg / Adult
+                        <div className="space-y-6">
+                          {/* Force mixed airline display for debugging */}
+                          {true ? (
+                            <>
+                              {/* First Sector Rules - Outbound */}
+                              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
+                                  <Plane className="w-5 h-5 mr-3 text-gray-600" />
+                                  {flight.airline || "Emirates"} |{" "}
+                                  {flight.departureCode || "BOM"} -{" "}
+                                  {flight.arrivalCode || "DXB"}
+                                </h5>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Cancellation fee
                                     </p>
-                                  </div>
-                                </div>
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Important:
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
-                                    <p>
-                                      • Direct flights are usually cheaper than
-                                      refundable flights. However, you may have
-                                      to pay a large fee to cancel or change
-                                      your flight.
-                                    </p>
-                                    <p>
-                                      • Cancellation/Flight change charges are
+                                    <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Airline fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ���0
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Faredown Fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹500
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-gray-500 leading-relaxed">
+                                      Cancellation/Flight change charges are
                                       indicated per traveller. Clearing will
                                       stop accepting cancellation/change request
                                       if 72 hours before departure of the
                                       flight, depending on the airline.
                                     </p>
                                   </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Second Sector Rules - Return */}
-                            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                              <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
-                                <Plane className="w-5 h-5 mr-3 text-gray-600" />
-                                {flight.returnAirline || "Indigo"} |{" "}
-                                {flight.arrivalCode || "DXB"} -{" "}
-                                {flight.departureCode || "BOM"}
-                              </h5>
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Cancellation fee
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Airline fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹0
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Faredown Fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹500
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 leading-relaxed">
-                                    Cancellation/Flight change charges are
-                                    indicated per traveller. Clearing will stop
-                                    accepting cancellation/change request if 72
-                                    hours before departure of the flight,
-                                    depending on the airline.
-                                  </p>
-                                </div>
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Date change fee
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Airline fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹0
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Faredown Fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹500
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-gray-500 leading-relaxed">
-                                    Cancellation/Flight change charges are
-                                    indicated per traveller. Clearing will stop
-                                    accepting cancellation/change request if 72
-                                    hours before departure of the flight,
-                                    depending on the airline.
-                                  </p>
-                                </div>
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Baggage Information:
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3">
-                                    <p className="text-gray-900 font-medium">
-                                      Check-in: 1 x 15 kg / Adult - Cabin: 1 x 7
-                                      kg / Adult
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Date change fee
                                     </p>
-                                  </div>
-                                </div>
-                                <div className="space-y-3">
-                                  <p className="font-semibold text-gray-800 mb-2">
-                                    Important:
-                                  </p>
-                                  <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
-                                    <p>
-                                      • Direct flights are usually cheaper than
-                                      refundable flights. However, you may have
-                                      to pay a large fee to cancel or change
-                                      your flight.
-                                    </p>
-                                    <p>
-                                      • Cancellation/Flight change charges are
+                                    <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Airline fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹0
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Faredown Fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹500
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-gray-500 leading-relaxed">
+                                      Cancellation/Flight change charges are
                                       indicated per traveller. Clearing will
                                       stop accepting cancellation/change request
                                       if 72 hours before departure of the
                                       flight, depending on the airline.
                                     </p>
                                   </div>
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Baggage Information:
+                                    </p>
+                                    <div className="bg-gray-50 rounded-lg p-3">
+                                      <p className="text-gray-900 font-medium">
+                                        Check-in: 1 x 25 kg / Adult - Cabin: 1 x
+                                        7 kg / Adult
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Important:
+                                    </p>
+                                    <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
+                                      <p>
+                                        • Direct flights are usually cheaper
+                                        than refundable flights. However, you
+                                        may have to pay a large fee to cancel or
+                                        change your flight.
+                                      </p>
+                                      <p>
+                                        • Cancellation/Flight change charges are
+                                        indicated per traveller. Clearing will
+                                        stop accepting cancellation/change
+                                        request if 72 hours before departure of
+                                        the flight, depending on the airline.
+                                      </p>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            {/* Single Airline Outbound Sector */}
-                            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                              <h5 className="font-medium text-blue-900 mb-3 flex items-center">
-                                <Plane className="w-4 h-4 mr-2" />
-                                {flight.airline} | {flight.departureCode} -{" "}
-                                {flight.arrivalCode}
-                              </h5>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                <div>
-                                  <p className="font-medium text-blue-700 mb-1">
-                                    Cancellation fee
-                                  </p>
-                                  <div className="space-y-1">
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Airline fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ��0
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Faredown Fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹500
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-blue-600 mt-2">
-                                    Cancellation/Flight change charges are
-                                    indicated per traveller. Clearing will stop
-                                    accepting cancellation/change request if 72
-                                    hours before departure of the flight,
-                                    depending on the airline.
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className="font-medium text-blue-700 mb-1">
-                                    Date change fee
-                                  </p>
-                                  <div className="space-y-1">
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Airline fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹0
-                                      </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                      <span className="text-gray-600">
-                                        Faredown Fee:
-                                      </span>
-                                      <span className="text-gray-900 font-medium">
-                                        ₹500
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-blue-600 mt-2">
-                                    Cancellation/Flight change charges are
-                                    indicated per traveller. Clearing will stop
-                                    accepting cancellation/change request if 72
-                                    hours before departure of the flight,
-                                    depending on the airline.
-                                  </p>
-                                </div>
-                                <div>
-                                  <p className="font-medium text-blue-700 mb-1">
-                                    Baggage Information:
-                                  </p>
-                                  <div className="space-y-1">
-                                    <p className="text-gray-900">
-                                      Check-in: 1 x 25 kg / Adult - Cabin: 1 x 7
-                                      kg / Adult
+
+                              {/* Second Sector Rules - Return */}
+                              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                <h5 className="font-semibold text-gray-900 mb-4 flex items-center border-b border-gray-100 pb-3">
+                                  <Plane className="w-5 h-5 mr-3 text-gray-600" />
+                                  {flight.returnAirline || "Indigo"} |{" "}
+                                  {flight.arrivalCode || "DXB"} -{" "}
+                                  {flight.departureCode || "BOM"}
+                                </h5>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-sm">
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Cancellation fee
                                     </p>
-                                  </div>
-                                </div>
-                                <div>
-                                  <p className="font-medium text-blue-700 mb-1">
-                                    Important:
-                                  </p>
-                                  <div className="text-xs text-gray-700 space-y-1">
-                                    <p>
-                                      • Direct flights are usually cheaper than
-                                      refundable flights. However, you may have
-                                      to pay a large fee to cancel or change
-                                      your flight.
-                                    </p>
-                                    <p>
-                                      • Cancellation/Flight change charges are
+                                    <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Airline fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹0
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Faredown Fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹500
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-gray-500 leading-relaxed">
+                                      Cancellation/Flight change charges are
                                       indicated per traveller. Clearing will
                                       stop accepting cancellation/change request
                                       if 72 hours before departure of the
                                       flight, depending on the airline.
                                     </p>
                                   </div>
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Date change fee
+                                    </p>
+                                    <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Airline fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹0
+                                        </span>
+                                      </div>
+                                      <div className="flex justify-between">
+                                        <span className="text-gray-600">
+                                          Faredown Fee:
+                                        </span>
+                                        <span className="text-gray-900 font-medium">
+                                          ₹500
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-gray-500 leading-relaxed">
+                                      Cancellation/Flight change charges are
+                                      indicated per traveller. Clearing will
+                                      stop accepting cancellation/change request
+                                      if 72 hours before departure of the
+                                      flight, depending on the airline.
+                                    </p>
+                                  </div>
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Baggage Information:
+                                    </p>
+                                    <div className="bg-gray-50 rounded-lg p-3">
+                                      <p className="text-gray-900 font-medium">
+                                        Check-in: 1 x 15 kg / Adult - Cabin: 1 x
+                                        7 kg / Adult
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="space-y-3">
+                                    <p className="font-semibold text-gray-800 mb-2">
+                                      Important:
+                                    </p>
+                                    <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
+                                      <p>
+                                        • Direct flights are usually cheaper
+                                        than refundable flights. However, you
+                                        may have to pay a large fee to cancel or
+                                        change your flight.
+                                      </p>
+                                      <p>
+                                        • Cancellation/Flight change charges are
+                                        indicated per traveller. Clearing will
+                                        stop accepting cancellation/change
+                                        request if 72 hours before departure of
+                                        the flight, depending on the airline.
+                                      </p>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-
-                            {/* Single Airline Return Sector (if round trip) */}
-                            {tripType === "round-trip" && (
-                              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200 mt-4">
+                            </>
+                          ) : (
+                            <>
+                              {/* Single Airline Outbound Sector */}
+                              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                                 <h5 className="font-medium text-blue-900 mb-3 flex items-center">
                                   <Plane className="w-4 h-4 mr-2" />
-                                  {flight.airline} | {flight.arrivalCode} -{" "}
-                                  {flight.departureCode}
+                                  {flight.airline} | {flight.departureCode} -{" "}
+                                  {flight.arrivalCode}
                                 </h5>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                   <div>
@@ -3924,7 +3880,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹0
+                                          ��0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
@@ -4007,43 +3963,147 @@ export default function FlightResults() {
                                   </div>
                                 </div>
                               </div>
-                            )}
-                          </>
-                        )}
 
-                        {/* Important Terms */}
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                          <div className="flex items-start">
-                            <Info className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
-                            <div>
-                              <h6 className="font-medium text-yellow-800 mb-2">
-                                Important Terms
-                              </h6>
-                              <ul className="text-sm text-yellow-700 space-y-1">
-                                <li>
-                                  • All cancellation and change fees are per
-                                  passenger
-                                </li>
-                                <li>
-                                  • Name changes not allowed after booking
-                                </li>
-                                <li>• Infant fares have different rules</li>
-                                <li>
-                                  • Group bookings may have different terms
-                                </li>
-                                <li>
-                                  • Check-in required 2 hours before departure
-                                </li>
-                              </ul>
+                              {/* Single Airline Return Sector (if round trip) */}
+                              {tripType === "round-trip" && (
+                                <div className="bg-blue-50 rounded-lg p-4 border border-blue-200 mt-4">
+                                  <h5 className="font-medium text-blue-900 mb-3 flex items-center">
+                                    <Plane className="w-4 h-4 mr-2" />
+                                    {flight.airline} | {flight.arrivalCode} -{" "}
+                                    {flight.departureCode}
+                                  </h5>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                      <p className="font-medium text-blue-700 mb-1">
+                                        Cancellation fee
+                                      </p>
+                                      <div className="space-y-1">
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-600">
+                                            Airline fee:
+                                          </span>
+                                          <span className="text-gray-900 font-medium">
+                                            ₹0
+                                          </span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-600">
+                                            Faredown Fee:
+                                          </span>
+                                          <span className="text-gray-900 font-medium">
+                                            ₹500
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <p className="text-xs text-blue-600 mt-2">
+                                        Cancellation/Flight change charges are
+                                        indicated per traveller. Clearing will
+                                        stop accepting cancellation/change
+                                        request if 72 hours before departure of
+                                        the flight, depending on the airline.
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="font-medium text-blue-700 mb-1">
+                                        Date change fee
+                                      </p>
+                                      <div className="space-y-1">
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-600">
+                                            Airline fee:
+                                          </span>
+                                          <span className="text-gray-900 font-medium">
+                                            ₹0
+                                          </span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-600">
+                                            Faredown Fee:
+                                          </span>
+                                          <span className="text-gray-900 font-medium">
+                                            ₹500
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <p className="text-xs text-blue-600 mt-2">
+                                        Cancellation/Flight change charges are
+                                        indicated per traveller. Clearing will
+                                        stop accepting cancellation/change
+                                        request if 72 hours before departure of
+                                        the flight, depending on the airline.
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="font-medium text-blue-700 mb-1">
+                                        Baggage Information:
+                                      </p>
+                                      <div className="space-y-1">
+                                        <p className="text-gray-900">
+                                          Check-in: 1 x 25 kg / Adult - Cabin: 1
+                                          x 7 kg / Adult
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <p className="font-medium text-blue-700 mb-1">
+                                        Important:
+                                      </p>
+                                      <div className="text-xs text-gray-700 space-y-1">
+                                        <p>
+                                          • Direct flights are usually cheaper
+                                          than refundable flights. However, you
+                                          may have to pay a large fee to cancel
+                                          or change your flight.
+                                        </p>
+                                        <p>
+                                          • Cancellation/Flight change charges
+                                          are indicated per traveller. Clearing
+                                          will stop accepting
+                                          cancellation/change request if 72
+                                          hours before departure of the flight,
+                                          depending on the airline.
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          )}
+
+                          {/* Important Terms */}
+                          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div className="flex items-start">
+                              <Info className="w-5 h-5 text-yellow-600 mr-3 mt-0.5" />
+                              <div>
+                                <h6 className="font-medium text-yellow-800 mb-2">
+                                  Important Terms
+                                </h6>
+                                <ul className="text-sm text-yellow-700 space-y-1">
+                                  <li>
+                                    • All cancellation and change fees are per
+                                    passenger
+                                  </li>
+                                  <li>
+                                    • Name changes not allowed after booking
+                                  </li>
+                                  <li>• Infant fares have different rules</li>
+                                  <li>
+                                    • Group bookings may have different terms
+                                  </li>
+                                  <li>
+                                    • Check-in required 2 hours before departure
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  )}
+                </div>
+              ))}
           </div>
 
           {/* Lucky Message */}
@@ -5687,7 +5747,9 @@ export default function FlightResults() {
                           <span className="text-yellow-700 font-medium">
                             Faredown Fee:
                           </span>
-                          <p className="text-yellow-600">���500 per passenger</p>
+                          <p className="text-yellow-600">
+                            ���500 per passenger
+                          </p>
                         </div>
                         <p className="text-xs text-yellow-600 mt-2">
                           Date change charges are indicated per traveller.
