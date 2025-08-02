@@ -197,10 +197,19 @@ class LoyaltyService {
         currency,
         fxRate,
       });
-      if (response.data.success) {
+
+      // Handle different response structures safely
+      if (response && response.success && response.data) {
+        return response.data;
+      } else if (response && response.data && response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || "Failed to apply points");
+
+      // If no valid response structure, throw error
+      const errorMessage = (response && response.error) ||
+                          (response && response.data && response.data.error) ||
+                          "Failed to apply points";
+      throw new Error(errorMessage);
     } catch (error) {
       console.error("Error applying points:", error);
       throw error;
