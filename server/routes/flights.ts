@@ -34,29 +34,31 @@ async function getAmadeusAccessToken(): Promise<string> {
 // Transform Amadeus flight data to our format
 function transformAmadeusFlightData(amadeusData: any): any {
   const flights = amadeusData.data || [];
-  
+
   return flights.map((flight: any, index: number) => {
     const outbound = flight.itineraries[0];
+    const inbound = flight.itineraries[1]; // Return flight for round-trip
+
     const firstSegment = outbound.segments[0];
     const lastSegment = outbound.segments[outbound.segments.length - 1];
-    
+
     // Calculate duration
     const duration = outbound.duration
       ?.replace("PT", "")
       ?.replace("H", "h ")
       ?.replace("M", "m") || "2h 30m";
-    
+
     // Get airline info
     const airlineCode = firstSegment.carrierCode;
-    
+
     // Calculate stops
     const stops = outbound.segments.length - 1;
-    
+
     // Get price
     const totalPrice = parseFloat(flight.price.total);
     const currency = flight.price.currency;
-    
-    return {
+
+    const transformedFlight: any = {
       id: `amadeus_${flight.id || index}`,
       airline: getAirlineName(airlineCode),
       airlineCode: airlineCode,
@@ -112,6 +114,26 @@ function transformAmadeusFlightData(amadeusData: any): any {
       validatingAirlineCode: flight.validatingAirlineCodes?.[0] || airlineCode,
       amadeusData: flight, // Store original data for booking
     };
+
+    // Add return flight information if available (round-trip)
+    if (inbound && inbound.segments && inbound.segments.length > 0) {
+      const returnFirstSegment = inbound.segments[0];
+      const returnLastSegment = inbound.segments[inbound.segments.length - 1];
+      const returnDuration = inbound.duration
+        ?.replace("PT", "")
+        ?.replace("H", "h ")
+        ?.replace("M", "m") || "2h 30m";
+
+      transformedFlight.returnDepartureTime = formatTime(returnFirstSegment.departure.at);
+      transformedFlight.returnArrivalTime = formatTime(returnLastSegment.arrival.at);
+      transformedFlight.returnDuration = returnDuration;
+      transformedFlight.returnAirline = getAirlineName(returnFirstSegment.carrierCode);
+      transformedFlight.returnFlightNumber = `${returnFirstSegment.carrierCode} ${returnFirstSegment.number}`;
+      transformedFlight.returnAircraft = returnFirstSegment.aircraft?.code || "Unknown";
+      transformedFlight.returnStops = inbound.segments.length - 1;
+    }
+
+    return transformedFlight;
   });
 }
 
