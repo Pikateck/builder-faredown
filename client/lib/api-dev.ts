@@ -155,7 +155,15 @@ export class DevApiClient {
                 fee: 0
               }
             },
-            fareClass: "ECONOMY"
+            fareClass: "ECONOMY",
+            // Return flight information
+            returnDepartureTime: "13:00",
+            returnArrivalTime: "17:40",
+            returnDuration: "4h 40m",
+            returnAirline: "Emirates",
+            returnFlightNumber: "EK 501",
+            returnAircraft: "Boeing 777-200LR",
+            returnStops: 0
           },
           {
             id: "fallback_flight_2",
