@@ -523,7 +523,6 @@ export default function FlightResults() {
         ];
 
         setFlights(fallbackFlights as Flight[]);
-        setSearchError(null); // Clear error so results show
       } finally {
         setIsLoading(false);
       }
@@ -1405,7 +1404,7 @@ export default function FlightResults() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "�����" },
+                      { code: "en", name: "English", flag: "🇬��" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
