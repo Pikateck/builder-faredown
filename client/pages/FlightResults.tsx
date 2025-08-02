@@ -396,17 +396,24 @@ export default function FlightResults() {
         const cabinClass = searchParams.get('class') || 'economy';
         const tripTypeParam = searchParams.get('tripType') || tripType;
 
-        console.log('🔍 Searching flights:', { origin, destination, departure, adults, children, cabinClass });
+        console.log('🎯 Trip type for search:', tripTypeParam);
+
+        // Convert trip type to the correct format for API
+        const apiTripType = tripTypeParam === 'round-trip' ? 'round_trip' :
+                          tripTypeParam === 'one-way' ? 'one_way' :
+                          'multi_city';
+
+        console.log('🔍 Searching flights:', { origin, destination, departure, adults, children, cabinClass, apiTripType });
 
         const searchRequest = {
           departure: origin,
           arrival: destination,
           departureDate: departure,
-          returnDate: tripTypeParam === 'round_trip' ? returnDate?.toISOString().split('T')[0] : undefined,
+          returnDate: apiTripType === 'round_trip' ? returnDate?.toISOString().split('T')[0] : undefined,
           adults,
           children,
           cabinClass: cabinClass as any,
-          tripType: tripTypeParam as any,
+          tripType: apiTripType,
         };
 
         const flightResults = await flightsService.searchFlights(searchRequest);
