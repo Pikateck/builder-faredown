@@ -212,7 +212,15 @@ export class DevApiClient {
                 fee: 0
               }
             },
-            fareClass: "ECONOMY"
+            fareClass: "ECONOMY",
+            // Return flight information
+            returnDepartureTime: "18:45",
+            returnArrivalTime: "23:15",
+            returnDuration: "4h 30m",
+            returnAirline: "IndiGo",
+            returnFlightNumber: "6E 1408",
+            returnAircraft: "Airbus A320",
+            returnStops: 0
           },
           {
             id: "fallback_flight_3",
