@@ -585,8 +585,8 @@ export function createServer() {
     try {
       console.log("🧪 Testing Amadeus authentication only...");
 
-      const API_KEY = "XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv".trim();
-      const API_SECRET = "xoB9eAjCKQSJJEpgI".trim();
+      const API_KEY = "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv".trim();
+      const API_SECRET = "2eVYfPeZVxmvbjRm".trim();
       const BASE_URL = "https://test.api.amadeus.com";
 
       // Test credentials format
@@ -913,7 +913,7 @@ export function createServer() {
           `✅ Found ${directApiResult.data.length} hotels from direct Hotelbeds API`,
         );
         console.log(
-          `�� Sample hotel images:`,
+          `🏨 Sample hotel images:`,
           directApiResult.data[0]?.images?.slice(0, 2),
         );
 
