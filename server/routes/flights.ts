@@ -320,7 +320,10 @@ router.get("/search", async (req, res) => {
       queryParams.append("travelClass", cabinClass as string);
     }
 
-    console.log("✈️ Amadeus flight search parameters:", queryParams.toString());
+    console.log("✈️ Amadeus flight search parameters:", {
+      tripType,
+      params: queryParams.toString()
+    });
 
     // Call Amadeus API
     const response = await fetch(
