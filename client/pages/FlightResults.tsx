@@ -1908,7 +1908,7 @@ export default function FlightResults() {
           `}
         </style>
 
-        {/* Desktop Sidebar Filters (���1024px) - Hotel Style Applied */}
+        {/* Desktop Sidebar Filters (≥1024px) - Hotel Style Applied */}
         <div className="hidden lg:block w-80 flex-shrink-0 desktop-filter">
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
             {/* Filter Header */}
@@ -2412,7 +2412,7 @@ export default function FlightResults() {
                               {flight.departureTime}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {flight.departureCode}
+                              {flight.departure.code}
                             </div>
                           </div>
                           <div className="flex-1 mx-4">
@@ -2428,7 +2428,7 @@ export default function FlightResults() {
                                     </div>
                                     <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
                                     <div className="text-xs text-green-600 mt-1">
-                                      {flight.flightType}
+                                      {flight.stops === 0 ? 'Direct' : `${flight.stops} Stop${flight.stops > 1 ? 's' : ''}`}
                                     </div>
                                   </div>
                                 </div>
