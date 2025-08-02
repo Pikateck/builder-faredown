@@ -403,6 +403,9 @@ export default function FlightResults() {
                           tripTypeParam === 'one-way' ? 'one_way' :
                           'multi_city';
 
+        // For multi-city, use one-way search for now (simplified implementation)
+        const searchTripType = apiTripType === 'multi_city' ? 'one_way' : apiTripType;
+
         console.log('🔍 Searching flights:', { origin, destination, departure, adults, children, cabinClass, apiTripType });
 
         const searchRequest = {
@@ -3499,7 +3502,7 @@ export default function FlightResults() {
                                             </p>
                                             <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                               <p>
-                                                • Direct flights are usually
+                                                ��� Direct flights are usually
                                                 cheaper than refundable flights.
                                                 However, you may have to pay a
                                                 large fee to cancel or change
