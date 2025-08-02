@@ -1035,13 +1035,15 @@ export default function FlightResults() {
     })
     .map((flight) => ({
       ...flight,
-      fareTypes: flight.fareTypes.map((fareType) => ({
-        ...fareType,
-        price:
-          tripType === "one-way" && fareType.price
-            ? Math.round(fareType.price * 0.6)
-            : fareType.price || 0,
-      })),
+      // Add fareTypes for backward compatibility if it doesn't exist
+      fareTypes: flight.fareTypes || [
+        {
+          id: 'default',
+          name: flight.fareClass || 'Economy',
+          price: flight.price?.amount || 0,
+          refundability: 'Non-Refundable'
+        }
+      ],
       durationMinutes: (() => {
         try {
           const duration = flight.duration || "0h 0m";
@@ -1411,7 +1413,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
+                      { code: "hi", name: "���िन�����ी", flag: "🇮🇳" },
                       { code: "ja", name: "日本����", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
