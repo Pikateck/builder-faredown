@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -5427,7 +5426,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return ���{" "}
+                          Return �����{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d, yyyy")
                             : "Select date"}
