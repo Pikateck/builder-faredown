@@ -381,10 +381,16 @@ router.get("/search", async (req, res) => {
     
     // Transform data to our format
     const transformedFlights = transformAmadeusFlightData(amadeusData);
-    
+
+    // Cache the search results in database (don't wait for it)
+    flightBookingService.cacheFlightSearch(searchParams, transformedFlights).catch(error => {
+      console.error("Failed to cache flight search results:", error);
+    });
+
     res.json({
       success: true,
       data: transformedFlights,
+      cached: false,
       meta: {
         total: transformedFlights.length,
         currency: "INR",
