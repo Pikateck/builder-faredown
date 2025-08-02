@@ -264,6 +264,11 @@ export default function FlightResults() {
   } = useDateContext();
   const userName = user?.name || "";
 
+  // Live flight data states
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchError, setSearchError] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
