@@ -1302,7 +1302,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬��" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Fran��ais", flag: "🇫🇷" },
+                      { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
@@ -1844,7 +1844,7 @@ export default function FlightResults() {
                           disabled={travelers.children <= 0}
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
                         >
-                          −
+                          ���
                         </button>
                         <span className="w-8 text-center font-medium text-gray-900">
                           {travelers.children}
@@ -2575,15 +2575,18 @@ export default function FlightResults() {
                           <div className="flex flex-col space-y-4">
                             <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                               <img
-                                src={flight.logo}
+                                src={`https://pics.avs.io/120/120/${flight.airlineCode || 'XX'}.png`}
                                 alt={flight.airline}
                                 className="w-8 h-6 object-contain"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈';
+                                }}
                               />
                             </div>
                             <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                               <img
-                                src={flight.returnLogo || flight.logo}
-                                alt={flight.returnAirline || flight.airline}
+                                src={`https://pics.avs.io/120/120/${flight.airlineCode || 'XX'}.png`}
+                                alt={flight.airline}
                                 className="w-8 h-6 object-contain"
                               />
                             </div>
