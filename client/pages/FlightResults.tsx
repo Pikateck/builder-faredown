@@ -2534,12 +2534,10 @@ export default function FlightResults() {
                     {/* Action Buttons - Hotel Section Style Mobile */}
                     <div className="flex gap-2 mt-3">
                       <Button
-                        onClick={() =>
-                          handleToggleFlightDetails(
-                            flight.id,
-                            flight.fareTypes[0].id,
-                          )
-                        }
+                        onClick={() => {
+                          setSelectedFlightForDetails(flight);
+                          setShowFlightDetails(true);
+                        }}
                         variant="outline"
                         className="flex-1 sm:flex-none touch-manipulation text-sm"
                       >
@@ -2547,9 +2545,17 @@ export default function FlightResults() {
                       </Button>
                       <Button
                         className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm sm:text-base"
-                        onClick={() =>
-                          handleBargain(flight, flight.fareTypes[0])
-                        }
+                        onClick={() => {
+                          setBargainFlight(flight);
+                          setBargainFareType({
+                            id: 'default',
+                            name: flight.fareClass || 'Economy',
+                            price: flight.price.amount,
+                            refundability: 'Non-Refundable'
+                          });
+                          setShowBargainModal(true);
+                          setBargainStep('input');
+                        }}
                       >
                         <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         <span>Bargain</span>
