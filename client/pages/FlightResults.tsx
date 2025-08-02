@@ -2257,7 +2257,61 @@ export default function FlightResults() {
 
           {/* Flight Cards */}
           <div className="space-y-0 md:space-y-4">
-            {filteredFlights.map((flight) => (
+            {/* Loading State */}
+            {isLoading && (
+              <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                <RefreshCw className="w-8 h-8 text-blue-600 animate-spin" />
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Searching for Flights
+                  </h3>
+                  <p className="text-gray-600">
+                    Finding the best deals from our airline partners...
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Error State */}
+            {searchError && !isLoading && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                <XCircle className="w-8 h-8 text-red-600 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-red-900 mb-2">
+                  Search Failed
+                </h3>
+                <p className="text-red-700 mb-4">
+                  {searchError}
+                </p>
+                <Button
+                  onClick={() => window.location.reload()}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Try Again
+                </Button>
+              </div>
+            )}
+
+            {/* No Results State */}
+            {!isLoading && !searchError && filteredFlights.length === 0 && (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                <Plane className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  No Flights Found
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Try adjusting your search criteria or dates to find available flights.
+                </p>
+                <Button
+                  onClick={() => setShowSearchEdit(true)}
+                  variant="outline"
+                >
+                  Modify Search
+                </Button>
+              </div>
+            )}
+
+            {/* Flight Results */}
+            {!isLoading && !searchError && filteredFlights.map((flight) => (
               <div key={flight.id}>
                 {/* MOBILE CARD DESIGN (≤768px) - App Style */}
                 <div className="block md:hidden bg-white border-b border-gray-100">
@@ -3899,7 +3953,7 @@ export default function FlightResults() {
       {/* Mobile Bottom Padding */}
       <div className="h-20 md:h-0"></div>
 
-      {/* Mobile Navigation Bottom Bar (≤768px) */}
+      {/* Mobile Navigation Bottom Bar (���768px) */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-40">
         <div className="grid grid-cols-4 h-16">
           <Link
@@ -5569,7 +5623,7 @@ export default function FlightResults() {
                     <ul className="text-sm text-gray-600 space-y-1">
                       <li>• Passenger names cannot be changed after booking</li>
                       <li>
-                        • Check-in must be completed 2 hours before departure
+                        �� Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
