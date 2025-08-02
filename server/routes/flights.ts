@@ -547,68 +547,84 @@ router.post("/book", async (req, res) => {
       passengers,
       contactInfo,
       seatSelections,
-      addOns
+      mealPreferences,
+      specialRequests,
+      totalAmount,
+      currency = "INR"
     } = req.body;
 
     // Validate required fields
-    if (!flightId || !passengers || !contactInfo) {
+    if (!flightId || !passengers || !contactInfo || !totalAmount) {
       return res.status(400).json({
         success: false,
         error: "Missing required booking information"
       });
     }
 
-    // Get access token
-    const accessToken = await getAmadeusAccessToken();
-
-    // For now, we'll simulate the booking process since Amadeus booking
-    // requires additional setup and test credit cards
-
-    // In a real implementation, you would:
-    // 1. Call Amadeus Flight Create Orders API
-    // 2. Process payment through your payment gateway
-    // 3. Create the actual booking
-    // 4. Store booking details in your database
-
-    // Simulated booking response
-    const booking = {
-      id: `booking_${Date.now()}`,
-      bookingRef: `PNR${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-      status: "confirmed",
-      flight: {
-        id: flightId,
-        // Flight details would be populated from the original search
-      },
+    // Prepare booking data
+    const bookingData = {
+      flightId,
       passengers,
       contactInfo,
-      totalPrice: {
-        amount: 25000, // This would come from the flight price
-        currency: "INR",
-        breakdown: {
-          baseFare: 20000,
-          taxes: 3500,
-          fees: 1500,
-          total: 25000
-        }
-      },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      confirmationNumber: `FD${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
-      tickets: passengers.map((passenger: any, index: number) => ({
-        ticketNumber: `TKT${Math.random().toString(36).substr(2, 10).toUpperCase()}`,
-        passengerName: `${passenger.firstName} ${passenger.lastName}`,
-        seatNumber: seatSelections?.[passenger.id] || `${12 + index}A`,
-      }))
+      seatSelections,
+      mealPreferences,
+      specialRequests,
+      totalAmount,
+      currency
     };
 
-    // In a real implementation, save to database here
-    console.log("✅ Flight booking created:", booking.bookingRef);
+    // Create pre-booking (this holds the booking during payment)
+    const preBookingResult = await flightBookingService.preBookFlight(bookingData);
 
-    res.json({
-      success: true,
-      data: booking,
-      message: "Flight booked successfully"
-    });
+    if (!preBookingResult.success) {
+      return res.status(400).json({
+        success: false,
+        error: preBookingResult.error || "Failed to create pre-booking"
+      });
+    }
+
+    // For demo purposes, auto-confirm the booking
+    // In production, this would be done after payment confirmation
+    const mockPaymentDetails = {
+      paymentId: `pay_${Date.now()}`,
+      orderId: `order_${Date.now()}`,
+      signature: `sig_${Date.now()}`,
+      amount: totalAmount,
+      currency,
+      method: "card",
+      status: "captured"
+    };
+
+    try {
+      const confirmedBooking = await flightBookingService.confirmFlightBooking(
+        preBookingResult.tempBookingRef,
+        mockPaymentDetails
+      );
+
+      console.log("✅ Flight booking confirmed:", confirmedBooking.bookingRef);
+
+      res.json({
+        success: true,
+        data: {
+          bookingRef: confirmedBooking.bookingRef,
+          booking: confirmedBooking.booking,
+          confirmationNumber: `FD${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
+          tickets: passengers.map((passenger: any, index: number) => ({
+            ticketNumber: `TKT${Math.random().toString(36).substr(2, 10).toUpperCase()}`,
+            passengerName: `${passenger.firstName} ${passenger.lastName}`,
+            seatNumber: seatSelections?.[passenger.id] || `${12 + index}A`,
+          }))
+        },
+        message: "Flight booked successfully"
+      });
+    } catch (confirmError) {
+      console.error("❌ Flight booking confirmation failed:", confirmError);
+      res.status(500).json({
+        success: false,
+        error: "Booking confirmation failed",
+        details: confirmError.message
+      });
+    }
 
   } catch (error) {
     console.error("🚨 Flight booking error:", error);
