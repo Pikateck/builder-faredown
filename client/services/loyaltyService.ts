@@ -241,10 +241,19 @@ class LoyaltyService {
   async getRules(): Promise<LoyaltyRules> {
     try {
       const response = await api.get(`${this.baseUrl}/rules`);
-      if (response.data.success) {
+
+      // Handle different response structures safely
+      if (response && response.success && response.data) {
+        return response.data;
+      } else if (response && response.data && response.data.success) {
         return response.data.data;
       }
-      throw new Error(response.data.error || "Failed to fetch loyalty rules");
+
+      // If no valid response structure, throw error
+      const errorMessage = (response && response.error) ||
+                          (response && response.data && response.data.error) ||
+                          "Failed to fetch loyalty rules";
+      throw new Error(errorMessage);
     } catch (error) {
       console.error("Error fetching loyalty rules:", error);
       throw error;
