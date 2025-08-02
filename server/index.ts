@@ -12,6 +12,9 @@ import {
 // Import database service
 import destinationsService from "./services/destinationsService.js";
 
+// Import route modules
+import flightsRoutes from "./routes/flights.js";
+
 // Add crypto for Hotelbeds API signatures
 import crypto from "crypto";
 
