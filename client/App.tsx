@@ -8,6 +8,7 @@ import { LoyaltyProvider } from "./contexts/LoyaltyContext";
 // Original pages
 import Index from "./pages/Index";
 import FlightResults from "./pages/FlightResults";
+import FlightDetails from "./pages/FlightDetails";
 import BookingFlow from "./pages/BookingFlow";
 import BookingConfirmation from "./pages/BookingConfirmation";
 import Account from "./pages/Account";
