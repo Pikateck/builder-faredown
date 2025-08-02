@@ -417,6 +417,9 @@ export default function FlightResults() {
         console.error('❌ Flight search error:', error);
         console.log('📄 Using fallback flight data for demo');
 
+        // Clear the error state and use fallback flights to ensure something displays
+        setSearchError(null);
+
         // Use fallback flights to ensure something displays
         const fallbackFlights = [
           {
@@ -1402,7 +1405,7 @@ export default function FlightResults() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "🇬���" },
+                      { code: "en", name: "English", flag: "�����" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
@@ -1449,7 +1452,7 @@ export default function FlightResults() {
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "ر.س", name: "Saudi Riyal" },
                       JPY: { symbol: "¥", name: "Japanese Yen" },
-                      CNY: { symbol: "��", name: "Chinese Yuan" },
+                      CNY: { symbol: "¥", name: "Chinese Yuan" },
                       SGD: { symbol: "S$", name: "Singapore Dollar" },
                       AUD: { symbol: "A$", name: "Australian Dollar" },
                       CAD: { symbol: "C$", name: "Canadian Dollar" },
