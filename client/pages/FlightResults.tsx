@@ -1308,7 +1308,7 @@ export default function FlightResults() {
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
-                      { code: "ja", name: "日本���", flag: "🇯🇵" },
+                      { code: "ja", name: "日本����", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "����🇳" },
                     ].map((language) => (
@@ -2359,9 +2359,7 @@ export default function FlightResults() {
                                       Base fare:
                                     </span>
                                     <span className="font-medium text-gray-900">
-                                      {formatPrice(
-                                        flight.fareTypes[0].price * 0.7,
-                                      )}
+                                      ₹{flight.price.breakdown.baseFare.toLocaleString('en-IN')}
                                     </span>
                                   </div>
                                   <div className="flex justify-between items-center">
@@ -2369,9 +2367,7 @@ export default function FlightResults() {
                                       Taxes & fees:
                                     </span>
                                     <span className="font-medium text-gray-900">
-                                      {formatPrice(
-                                        flight.fareTypes[0].price * 0.3,
-                                      )}
+                                      ₹{(flight.price.breakdown.taxes + flight.price.breakdown.fees).toLocaleString('en-IN')}
                                     </span>
                                   </div>
                                   <div className="border-t border-gray-200 pt-2">
@@ -2380,7 +2376,7 @@ export default function FlightResults() {
                                         Total:
                                       </span>
                                       <span className="text-blue-600">
-                                        {formatPrice(flight.fareTypes[0].price)}
+                                        ₹{flight.price.breakdown.total.toLocaleString('en-IN')}
                                       </span>
                                     </div>
                                   </div>
@@ -5574,7 +5570,7 @@ export default function FlightResults() {
                           <span className="text-yellow-700 font-medium">
                             Faredown Fee:
                           </span>
-                          <p className="text-yellow-600">₹500 per passenger</p>
+                          <p className="text-yellow-600">���500 per passenger</p>
                         </div>
                         <p className="text-xs text-yellow-600 mt-2">
                           Date change charges are indicated per traveller.
