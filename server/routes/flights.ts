@@ -1,0 +1,478 @@
+import { Router } from "express";
+import fetch from "node-fetch";
+
+const router = Router();
+
+// Amadeus API Configuration
+const AMADEUS_API_KEY = process.env.AMADEUS_API_KEY || "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv";
+const AMADEUS_API_SECRET = process.env.AMADEUS_API_SECRET || "2eVYfPeZVxmvbjRm";
+const AMADEUS_BASE_URL = "https://test.api.amadeus.com";
+
+// Get access token for Amadeus API
+async function getAmadeusAccessToken(): Promise<string> {
+  const formData = new URLSearchParams();
+  formData.append("grant_type", "client_credentials");
+  formData.append("client_id", AMADEUS_API_KEY);
+  formData.append("client_secret", AMADEUS_API_SECRET);
+
+  const response = await fetch(`${AMADEUS_BASE_URL}/v1/security/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: formData.toString(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to get Amadeus access token");
+  }
+
+  const data = await response.json();
+  return data.access_token;
+}
+
+// Transform Amadeus flight data to our format
+function transformAmadeusFlightData(amadeusData: any): any {
+  const flights = amadeusData.data || [];
+  
+  return flights.map((flight: any, index: number) => {
+    const outbound = flight.itineraries[0];
+    const firstSegment = outbound.segments[0];
+    const lastSegment = outbound.segments[outbound.segments.length - 1];
+    
+    // Calculate duration
+    const duration = outbound.duration
+      ?.replace("PT", "")
+      ?.replace("H", "h ")
+      ?.replace("M", "m") || "2h 30m";
+    
+    // Get airline info
+    const airlineCode = firstSegment.carrierCode;
+    
+    // Calculate stops
+    const stops = outbound.segments.length - 1;
+    
+    // Get price
+    const totalPrice = parseFloat(flight.price.total);
+    const currency = flight.price.currency;
+    
+    return {
+      id: `amadeus_${flight.id || index}`,
+      airline: getAirlineName(airlineCode),
+      airlineCode: airlineCode,
+      flightNumber: `${airlineCode} ${firstSegment.number}`,
+      departure: {
+        code: firstSegment.departure.iataCode,
+        name: getAirportName(firstSegment.departure.iataCode),
+        city: getCityName(firstSegment.departure.iataCode),
+        country: getCountryName(firstSegment.departure.iataCode),
+        terminal: firstSegment.departure.terminal,
+      },
+      arrival: {
+        code: lastSegment.arrival.iataCode,
+        name: getAirportName(lastSegment.arrival.iataCode),
+        city: getCityName(lastSegment.arrival.iataCode),
+        country: getCountryName(lastSegment.arrival.iataCode),
+        terminal: lastSegment.arrival.terminal,
+      },
+      departureTime: formatTime(firstSegment.departure.at),
+      arrivalTime: formatTime(lastSegment.arrival.at),
+      duration: duration,
+      aircraft: firstSegment.aircraft?.code || "Unknown",
+      stops: stops,
+      price: {
+        amount: totalPrice,
+        currency: currency,
+        breakdown: {
+          baseFare: totalPrice * 0.8, // Estimate
+          taxes: totalPrice * 0.15, // Estimate
+          fees: totalPrice * 0.05, // Estimate
+          total: totalPrice,
+        }
+      },
+      amenities: getAmenities(airlineCode),
+      baggage: getBaggageInfo(airlineCode),
+      segments: outbound.segments.map((segment: any) => ({
+        departure: {
+          code: segment.departure.iataCode,
+          time: formatTime(segment.departure.at),
+          terminal: segment.departure.terminal,
+        },
+        arrival: {
+          code: segment.arrival.iataCode,
+          time: formatTime(segment.arrival.at),
+          terminal: segment.arrival.terminal,
+        },
+        airline: getAirlineName(segment.carrierCode),
+        flightNumber: `${segment.carrierCode} ${segment.number}`,
+        aircraft: segment.aircraft?.code || "Unknown",
+        duration: segment.duration?.replace("PT", "").replace("H", "h ").replace("M", "m") || "Unknown",
+      })),
+      fareClass: flight.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin || "ECONOMY",
+      validatingAirlineCode: flight.validatingAirlineCodes?.[0] || airlineCode,
+      amadeusData: flight, // Store original data for booking
+    };
+  });
+}
+
+// Helper functions
+function getAirlineName(code: string): string {
+  const airlines: Record<string, string> = {
+    "EK": "Emirates",
+    "AI": "Air India",
+    "6E": "IndiGo",
+    "SG": "SpiceJet",
+    "UK": "Vistara",
+    "9W": "Jet Airways",
+    "G8": "Go First",
+    "QR": "Qatar Airways",
+    "EY": "Etihad Airways",
+    "LH": "Lufthansa",
+    "BA": "British Airways",
+    "AF": "Air France",
+    "KL": "KLM",
+    "TK": "Turkish Airlines",
+    "SQ": "Singapore Airlines",
+    "CX": "Cathay Pacific",
+    "QF": "Qantas",
+    "UA": "United Airlines",
+    "DL": "Delta Air Lines",
+    "AA": "American Airlines",
+  };
+  return airlines[code] || code;
+}
+
+function getAirportName(code: string): string {
+  const airports: Record<string, string> = {
+    "BOM": "Chhatrapati Shivaji Maharaj International Airport",
+    "DEL": "Indira Gandhi International Airport",
+    "BLR": "Kempegowda International Airport",
+    "MAA": "Chennai International Airport",
+    "HYD": "Rajiv Gandhi International Airport",
+    "CCU": "Netaji Subhash Chandra Bose International Airport",
+    "DXB": "Dubai International Airport",
+    "DOH": "Hamad International Airport",
+    "AUH": "Abu Dhabi International Airport",
+    "LHR": "Heathrow Airport",
+    "FRA": "Frankfurt Airport",
+    "CDG": "Charles de Gaulle Airport",
+    "AMS": "Amsterdam Airport Schiphol",
+    "IST": "Istanbul Airport",
+    "SIN": "Singapore Changi Airport",
+    "HKG": "Hong Kong International Airport",
+    "SYD": "Sydney Kingsford Smith Airport",
+    "LAX": "Los Angeles International Airport",
+    "JFK": "John F. Kennedy International Airport",
+    "ORD": "O'Hare International Airport",
+  };
+  return airports[code] || `${code} Airport`;
+}
+
+function getCityName(code: string): string {
+  const cities: Record<string, string> = {
+    "BOM": "Mumbai",
+    "DEL": "New Delhi",
+    "BLR": "Bangalore",
+    "MAA": "Chennai",
+    "HYD": "Hyderabad",
+    "CCU": "Kolkata",
+    "DXB": "Dubai",
+    "DOH": "Doha",
+    "AUH": "Abu Dhabi",
+    "LHR": "London",
+    "FRA": "Frankfurt",
+    "CDG": "Paris",
+    "AMS": "Amsterdam",
+    "IST": "Istanbul",
+    "SIN": "Singapore",
+    "HKG": "Hong Kong",
+    "SYD": "Sydney",
+    "LAX": "Los Angeles",
+    "JFK": "New York",
+    "ORD": "Chicago",
+  };
+  return cities[code] || code;
+}
+
+function getCountryName(code: string): string {
+  const countries: Record<string, string> = {
+    "BOM": "India", "DEL": "India", "BLR": "India", "MAA": "India", "HYD": "India", "CCU": "India",
+    "DXB": "UAE", "AUH": "UAE",
+    "DOH": "Qatar",
+    "LHR": "United Kingdom",
+    "FRA": "Germany",
+    "CDG": "France",
+    "AMS": "Netherlands",
+    "IST": "Turkey",
+    "SIN": "Singapore",
+    "HKG": "Hong Kong",
+    "SYD": "Australia",
+    "LAX": "United States", "JFK": "United States", "ORD": "United States",
+  };
+  return countries[code] || "Unknown";
+}
+
+function formatTime(dateTimeString: string): string {
+  const date = new Date(dateTimeString);
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+}
+
+function getAmenities(airlineCode: string): string[] {
+  const premiumAirlines = ["EK", "QR", "EY", "LH", "BA", "AF", "SQ", "CX"];
+  const basicAmenities = ["Seat Selection", "Onboard Refreshments"];
+  const premiumAmenities = ["WiFi", "Entertainment System", "Premium Meals", "Lounge Access"];
+  
+  return premiumAirlines.includes(airlineCode) 
+    ? [...basicAmenities, ...premiumAmenities]
+    : basicAmenities;
+}
+
+function getBaggageInfo(airlineCode: string): any {
+  return {
+    carryOn: {
+      weight: "7kg",
+      dimensions: "55x40x20cm",
+      included: true,
+    },
+    checked: {
+      weight: "20kg",
+      count: 1,
+      fee: 0,
+    }
+  };
+}
+
+// Routes
+
+// Flight search endpoint
+router.get("/search", async (req, res) => {
+  try {
+    console.log("🔍 Flight search request:", req.query);
+    
+    const {
+      origin,
+      destination,
+      departureDate,
+      returnDate,
+      adults = 1,
+      children = 0,
+      cabinClass = "ECONOMY",
+    } = req.query;
+
+    // Validate required parameters
+    if (!origin || !destination || !departureDate) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required parameters: origin, destination, departureDate"
+      });
+    }
+
+    // Get access token
+    const accessToken = await getAmadeusAccessToken();
+    
+    // Prepare search parameters
+    const queryParams = new URLSearchParams({
+      originLocationCode: origin as string,
+      destinationLocationCode: destination as string,
+      departureDate: (departureDate as string).split("T")[0],
+      adults: adults.toString(),
+      currencyCode: "INR",
+      max: "50", // Limit results
+    });
+
+    // Add optional parameters
+    if (returnDate) {
+      queryParams.append("returnDate", (returnDate as string).split("T")[0]);
+    }
+    
+    if (children && parseInt(children as string) > 0) {
+      queryParams.append("children", children.toString());
+    }
+    
+    if (cabinClass) {
+      queryParams.append("travelClass", cabinClass as string);
+    }
+
+    console.log("✈️ Amadeus flight search parameters:", queryParams.toString());
+
+    // Call Amadeus API
+    const response = await fetch(
+      `${AMADEUS_BASE_URL}/v2/shopping/flight-offers?${queryParams}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("❌ Amadeus API Error:", response.status, errorText);
+      return res.status(500).json({
+        success: false,
+        error: "Failed to search flights",
+        details: errorText
+      });
+    }
+
+    const amadeusData = await response.json();
+    console.log(`✅ Found ${amadeusData.data?.length || 0} flights from Amadeus`);
+    
+    // Transform data to our format
+    const transformedFlights = transformAmadeusFlightData(amadeusData);
+    
+    res.json({
+      success: true,
+      data: transformedFlights,
+      meta: {
+        total: transformedFlights.length,
+        currency: "INR",
+        searchParams: req.query
+      }
+    });
+
+  } catch (error) {
+    console.error("🚨 Flight search error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal server error",
+      message: error.message
+    });
+  }
+});
+
+// Get flight details
+router.get("/flights/:flightId", async (req, res) => {
+  try {
+    const { flightId } = req.params;
+    
+    // For now, we'll return enhanced details based on the flight ID
+    // In a full implementation, you'd store flight offers temporarily and retrieve them
+    
+    res.json({
+      success: true,
+      data: {
+        id: flightId,
+        // This would include detailed information like seat maps, fare rules, etc.
+        message: "Flight details endpoint - implement based on stored flight offers"
+      }
+    });
+  } catch (error) {
+    console.error("🚨 Flight details error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get flight details"
+    });
+  }
+});
+
+// Airport search
+router.get("/airports/search", async (req, res) => {
+  try {
+    const { q } = req.query;
+    
+    if (!q || (q as string).length < 2) {
+      return res.status(400).json({
+        success: false,
+        error: "Query must be at least 2 characters"
+      });
+    }
+
+    // Get access token
+    const accessToken = await getAmadeusAccessToken();
+    
+    // Search airports using Amadeus
+    const response = await fetch(
+      `${AMADEUS_BASE_URL}/v1/reference-data/locations?subType=AIRPORT&keyword=${encodeURIComponent(q as string)}&page%5Blimit%5D=10`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to search airports");
+    }
+
+    const data = await response.json();
+    
+    const airports = data.data.map((airport: any) => ({
+      code: airport.iataCode,
+      name: airport.name,
+      city: airport.address?.cityName || airport.name,
+      country: airport.address?.countryName || "Unknown",
+    }));
+
+    res.json({
+      success: true,
+      data: airports
+    });
+
+  } catch (error) {
+    console.error("🚨 Airport search error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to search airports"
+    });
+  }
+});
+
+// Popular destinations
+router.get("/destinations/popular", async (req, res) => {
+  try {
+    const popularDestinations = [
+      { code: "DXB", name: "Dubai International Airport", city: "Dubai", country: "UAE" },
+      { code: "DOH", name: "Hamad International Airport", city: "Doha", country: "Qatar" },
+      { code: "LHR", name: "Heathrow Airport", city: "London", country: "United Kingdom" },
+      { code: "SIN", name: "Singapore Changi Airport", city: "Singapore", country: "Singapore" },
+      { code: "BKK", name: "Suvarnabhumi Airport", city: "Bangkok", country: "Thailand" },
+      { code: "KUL", name: "Kuala Lumpur International Airport", city: "Kuala Lumpur", country: "Malaysia" },
+      { code: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", country: "Hong Kong" },
+      { code: "FRA", name: "Frankfurt Airport", city: "Frankfurt", country: "Germany" },
+    ];
+
+    res.json({
+      success: true,
+      data: popularDestinations
+    });
+  } catch (error) {
+    console.error("🚨 Popular destinations error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get popular destinations"
+    });
+  }
+});
+
+// Get airline information
+router.get("/airlines/:airlineCode", async (req, res) => {
+  try {
+    const { airlineCode } = req.params;
+    
+    const airlineInfo = {
+      code: airlineCode,
+      name: getAirlineName(airlineCode),
+      logo: `https://pics.avs.io/120/120/${airlineCode}.png`, // Aviation API for logos
+      country: "Unknown" // Would need additional API call to get this
+    };
+
+    res.json({
+      success: true,
+      data: airlineInfo
+    });
+  } catch (error) {
+    console.error("🚨 Airline info error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get airline information"
+    });
+  }
+});
+
+export default router;
