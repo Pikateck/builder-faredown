@@ -308,7 +308,7 @@ router.get("/search", async (req, res) => {
     });
 
     // Add optional parameters
-    if (returnDate) {
+    if (returnDate && tripType === "round_trip") {
       queryParams.append("returnDate", (returnDate as string).split("T")[0]);
     }
     
