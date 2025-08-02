@@ -274,8 +274,8 @@ HOTELBEDS_API_KEY=91d2368789abdb5beec101ce95a9d185
 HOTELBEDS_API_SECRET=a9ffaaecce
 HOTELBEDS_BASE_URL=https://api.test.hotelbeds.com
 
-AMADEUS_API_KEY=XpQdwZsr8jOmkvaXFECxqp3NgPj8gbBcOv
-AMADEUS_API_SECRET=xoB9eAjCKQSJJEpgI
+AMADEUS_API_KEY=6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv
+AMADEUS_API_SECRET=2eVYfPeZVxmvbjRm
 AMADEUS_BASE_URL=https://test.api.amadeus.com
 ```
 
@@ -310,7 +310,7 @@ const testToken = jwt.sign(
 ### **Module Testing Checklist**
 
 - ✅ Dashboard metrics load from real database
-- ✅ User CRUD operations work with validation
+- �� User CRUD operations work with validation
 - ✅ Booking filters and status updates function
 - ✅ Payment refunds process correctly
 - ✅ Supplier analytics show live data
