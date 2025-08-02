@@ -475,4 +475,219 @@ router.get("/airlines/:airlineCode", async (req, res) => {
   }
 });
 
+// Flight booking endpoint
+router.post("/book", async (req, res) => {
+  try {
+    console.log("✈️ Flight booking request:", req.body);
+
+    const {
+      flightId,
+      passengers,
+      contactInfo,
+      seatSelections,
+      addOns
+    } = req.body;
+
+    // Validate required fields
+    if (!flightId || !passengers || !contactInfo) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required booking information"
+      });
+    }
+
+    // Get access token
+    const accessToken = await getAmadeusAccessToken();
+
+    // For now, we'll simulate the booking process since Amadeus booking
+    // requires additional setup and test credit cards
+
+    // In a real implementation, you would:
+    // 1. Call Amadeus Flight Create Orders API
+    // 2. Process payment through your payment gateway
+    // 3. Create the actual booking
+    // 4. Store booking details in your database
+
+    // Simulated booking response
+    const booking = {
+      id: `booking_${Date.now()}`,
+      bookingRef: `PNR${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+      status: "confirmed",
+      flight: {
+        id: flightId,
+        // Flight details would be populated from the original search
+      },
+      passengers,
+      contactInfo,
+      totalPrice: {
+        amount: 25000, // This would come from the flight price
+        currency: "INR",
+        breakdown: {
+          baseFare: 20000,
+          taxes: 3500,
+          fees: 1500,
+          total: 25000
+        }
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      confirmationNumber: `FD${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
+      tickets: passengers.map((passenger: any, index: number) => ({
+        ticketNumber: `TKT${Math.random().toString(36).substr(2, 10).toUpperCase()}`,
+        passengerName: `${passenger.firstName} ${passenger.lastName}`,
+        seatNumber: seatSelections?.[passenger.id] || `${12 + index}A`,
+      }))
+    };
+
+    // In a real implementation, save to database here
+    console.log("✅ Flight booking created:", booking.bookingRef);
+
+    res.json({
+      success: true,
+      data: booking,
+      message: "Flight booked successfully"
+    });
+
+  } catch (error) {
+    console.error("🚨 Flight booking error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to book flight",
+      message: error.message
+    });
+  }
+});
+
+// Get booking details
+router.get("/bookings/:bookingRef", async (req, res) => {
+  try {
+    const { bookingRef } = req.params;
+
+    // In a real implementation, fetch from database
+    // For now, return a simulated booking
+
+    const booking = {
+      id: `booking_${Date.now()}`,
+      bookingRef: bookingRef,
+      status: "confirmed",
+      flight: {
+        id: "sample_flight_1",
+        airline: "Emirates",
+        flightNumber: "EK 500",
+        departure: {
+          code: "BOM",
+          city: "Mumbai",
+          time: "10:15",
+          terminal: "2"
+        },
+        arrival: {
+          code: "DXB",
+          city: "Dubai",
+          time: "11:45",
+          terminal: "3"
+        },
+        duration: "3h 30m"
+      },
+      passengers: [
+        {
+          id: "pax_1",
+          firstName: "John",
+          lastName: "Doe",
+          title: "Mr"
+        }
+      ],
+      totalPrice: {
+        amount: 25000,
+        currency: "INR"
+      },
+      createdAt: new Date().toISOString()
+    };
+
+    res.json({
+      success: true,
+      data: booking
+    });
+
+  } catch (error) {
+    console.error("🚨 Get booking error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get booking details"
+    });
+  }
+});
+
+// Cancel booking
+router.delete("/bookings/:bookingRef", async (req, res) => {
+  try {
+    const { bookingRef } = req.params;
+
+    // In a real implementation:
+    // 1. Check cancellation policy
+    // 2. Call Amadeus cancellation API
+    // 3. Process refund if applicable
+    // 4. Update booking status in database
+
+    console.log(`✅ Booking ${bookingRef} cancelled`);
+
+    res.json({
+      success: true,
+      message: "Booking cancelled successfully"
+    });
+
+  } catch (error) {
+    console.error("🚨 Cancel booking error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to cancel booking"
+    });
+  }
+});
+
+// Get user bookings
+router.get("/bookings", async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+
+    // In a real implementation, fetch from database with user authentication
+    // For now, return sample bookings
+
+    const bookings = [
+      {
+        id: "booking_1",
+        bookingRef: "PNR123ABC",
+        status: "confirmed",
+        flight: {
+          airline: "Emirates",
+          flightNumber: "EK 500",
+          route: "BOM → DXB"
+        },
+        totalPrice: {
+          amount: 25000,
+          currency: "INR"
+        },
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    res.json({
+      success: true,
+      data: bookings,
+      pagination: {
+        page: parseInt(page as string),
+        limit: parseInt(limit as string),
+        total: bookings.length,
+        pages: 1
+      }
+    });
+
+  } catch (error) {
+    console.error("🚨 Get user bookings error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get bookings"
+    });
+  }
+});
+
 export default router;
