@@ -162,6 +162,7 @@ export class FlightsService {
       adults: searchParams.adults,
       children: searchParams.children || 0,
       cabinClass: searchParams.cabinClass?.toUpperCase() || "ECONOMY",
+      tripType: searchParams.tripType || "one_way", // Ensure trip type is passed
     };
 
     const response = await apiClient.get<ApiResponse<Flight[]>>(
@@ -179,7 +180,7 @@ export class FlightsService {
       return response.data;
     } else if ((response as any).length) {
       // Handle case where response itself is the array
-      console.log(`✅ Found ${(response as any).length} flights from API`);
+      console.log(`�� Found ${(response as any).length} flights from API`);
       return response as any;
     }
 
