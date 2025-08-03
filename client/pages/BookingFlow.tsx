@@ -59,6 +59,7 @@ import {
 
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
 // Utility function to format currency
 const formatCurrency = (amount: number) => {
@@ -1022,7 +1023,7 @@ export default function BookingFlow() {
 
   const countries = [
     { name: "Guernsey", code: "+44", flag: "🇬🇬" },
-    { name: "Guinea", code: "+224", flag: "🇬🇳" },
+    { name: "Guinea", code: "+224", flag: "🇬����" },
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
     { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
