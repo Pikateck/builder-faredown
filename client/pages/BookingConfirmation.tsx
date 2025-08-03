@@ -2023,6 +2023,9 @@ export default function BookingConfirmation() {
 
       {/* Email Modal */}
       {showEmailModal && <EmailModal />}
+
+      {/* Mobile Navigation */}
+      <MobileNavigation />
     </div>
   );
 }
