@@ -192,14 +192,26 @@ export class FlightsService {
    * Get flight details by ID
    */
   async getFlightDetails(flightId: string): Promise<Flight> {
+    console.log(`🔍 Getting flight details for: ${flightId}`);
+
     const response = await apiClient.get<ApiResponse<Flight>>(
       `${this.baseUrl}/${flightId}`,
     );
 
-    if (response.data) {
+    console.log("✅ Flight details response:", response);
+
+    // Handle both wrapped response and direct response
+    if (response && response.success && response.data) {
       return response.data;
+    } else if (response && response.data) {
+      // Handle case where data is directly the flight object
+      return response.data;
+    } else if (response && typeof response === 'object' && response.id) {
+      // Handle case where response itself is the flight object
+      return response as Flight;
     }
 
+    console.error("❌ Invalid flight details response:", response);
     throw new Error("Failed to get flight details");
   }
 
