@@ -75,6 +75,7 @@ export function BookingSearchForm() {
   // Mobile-specific states
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
+  const [tripType, setTripType] = useState("round-trip");
 
   // Calculate nights between check-in and check-out dates
   const calculateNights = (
