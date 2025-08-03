@@ -450,17 +450,8 @@ export function BookingSearchForm() {
                       setIsUserTyping(true);
                     }
                   }}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     setIsDestinationOpen(true);
-                  }}
-                  onKeyDown={(e) => {
-                    // Prevent PopoverTrigger from capturing keyboard events
-                    e.stopPropagation();
-                  }}
-                  onMouseDown={(e) => {
-                    // Prevent PopoverTrigger from capturing mouse events
-                    e.stopPropagation();
                   }}
                   readOnly={false}
                   disabled={false}
