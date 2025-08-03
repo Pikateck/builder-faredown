@@ -863,66 +863,78 @@ export function BookingSearchForm() {
 
         {/* Check-in Date */}
         <div className="flex-1 lg:max-w-[280px]">
-          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                <span className="truncate text-xs sm:text-sm">
-                  <span className="hidden md:inline">
-                    {checkInDate && checkOutDate ? (
-                      <>
-                        {format(checkInDate, "d-MMM-yyyy")} to{" "}
-                        {format(checkOutDate, "d-MMM-yyyy")}
-                      </>
-                    ) : (
-                      "Check-in to Check-out"
-                    )}
-                  </span>
-                  <span className="hidden sm:inline md:hidden">
-                    {checkInDate && checkOutDate ? (
-                      <>
-                        {format(checkInDate, "d MMM")} -{" "}
-                        {format(checkOutDate, "d MMM")}
-                      </>
-                    ) : (
-                      "Select dates"
-                    )}
-                  </span>
-                  <span className="sm:hidden text-xs">
-                    {checkInDate && checkOutDate ? (
-                      <>
-                        {format(checkInDate, "d/M")}-
-                        {format(checkOutDate, "d/M")}
-                      </>
-                    ) : (
-                      "Dates"
-                    )}
-                  </span>
+          {isMobile ? (
+            <Button
+              variant="outline"
+              className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+              onClick={() => setShowMobileDatePicker(true)}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+              <span className="truncate text-xs sm:text-sm">
+                <span className="sm:hidden text-xs">
+                  {checkInDate && checkOutDate ? (
+                    <>
+                      {format(checkInDate, "d/M")}-
+                      {format(checkOutDate, "d/M")}
+                    </>
+                  ) : (
+                    "Dates"
+                  )}
                 </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <div className="flex flex-col">
-                <BookingCalendar
-                  initialRange={{
-                    startDate: checkInDate || new Date(),
-                    endDate:
-                      checkOutDate || addDays(checkInDate || new Date(), 3),
-                  }}
-                  onChange={(range) => {
-                    console.log("Booking calendar range selected:", range);
-                    setCheckInDate(range.startDate);
-                    setCheckOutDate(range.endDate);
-                  }}
-                  onClose={() => setIsCalendarOpen(false)}
-                  className="w-full"
-                />
-              </div>
-            </PopoverContent>
-          </Popover>
+              </span>
+            </Button>
+          ) : (
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate text-xs sm:text-sm">
+                    <span className="hidden md:inline">
+                      {checkInDate && checkOutDate ? (
+                        <>
+                          {format(checkInDate, "d-MMM-yyyy")} to{" "}
+                          {format(checkOutDate, "d-MMM-yyyy")}
+                        </>
+                      ) : (
+                        "Check-in to Check-out"
+                      )}
+                    </span>
+                    <span className="hidden sm:inline md:hidden">
+                      {checkInDate && checkOutDate ? (
+                        <>
+                          {format(checkInDate, "d MMM")} -{" "}
+                          {format(checkOutDate, "d MMM")}
+                        </>
+                      ) : (
+                        "Select dates"
+                      )}
+                    </span>
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <div className="flex flex-col">
+                  <BookingCalendar
+                    initialRange={{
+                      startDate: checkInDate || new Date(),
+                      endDate:
+                        checkOutDate || addDays(checkInDate || new Date(), 3),
+                    }}
+                    onChange={(range) => {
+                      console.log("Booking calendar range selected:", range);
+                      setCheckInDate(range.startDate);
+                      setCheckOutDate(range.endDate);
+                    }}
+                    onClose={() => setIsCalendarOpen(false)}
+                    className="w-full"
+                  />
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
 
         {/* Guests & Rooms */}
