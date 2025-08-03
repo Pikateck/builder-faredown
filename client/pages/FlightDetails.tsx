@@ -511,7 +511,26 @@ export default function FlightDetails({
                     <Button
                       className="w-full bg-blue-600 hover:bg-blue-700"
                       size="lg"
-                      onClick={() => onBook?.(flight)}
+                      onClick={() => {
+                        if (onBook) {
+                          onBook(flight);
+                        } else {
+                          // Navigate to booking flow with flight data
+                          navigate("/booking-flow", {
+                            state: {
+                              selectedFlight: flight,
+                              selectedFareType: {
+                                id: "default",
+                                name: flight.fareClass || "Economy",
+                                price: flight.price.amount,
+                                refundability: "Non-Refundable",
+                              },
+                              negotiatedPrice: flight.price.amount,
+                              passengers: { adults: 1, children: 0 },
+                            },
+                          });
+                        }
+                      }}
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
                       Book Now
@@ -521,7 +540,14 @@ export default function FlightDetails({
                       variant="outline"
                       className="w-full border-amber-500 text-amber-700 hover:bg-amber-50"
                       size="lg"
-                      onClick={() => onBargain?.(flight)}
+                      onClick={() => {
+                        if (onBargain) {
+                          onBargain(flight);
+                        } else {
+                          // Show bargain functionality (you can implement a modal or navigate to bargain page)
+                          alert("Bargain functionality will be implemented here");
+                        }
+                      }}
                     >
                       <TrendingDown className="w-4 h-4 mr-2" />
                       Try to Bargain
