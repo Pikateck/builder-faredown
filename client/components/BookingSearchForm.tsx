@@ -962,7 +962,7 @@ export function BookingSearchForm() {
                     room{guests.rooms > 1 ? "s" : ""}
                   </span>
                   <span className="sm:hidden">
-                    {guests.adults + guests.children}G, {guests.rooms}R
+                    {guests.rooms} Room{guests.rooms > 1 ? "s" : ""} • {guests.adults} Adult{guests.adults > 1 ? "s" : ""} • {guests.children} Child{guests.children !== 1 ? "ren" : ""}
                   </span>
                 </span>
               </Button>
