@@ -193,7 +193,7 @@ export class FlightsService {
    */
   async getFlightDetails(flightId: string): Promise<Flight> {
     const response = await apiClient.get<ApiResponse<Flight>>(
-      `${this.baseUrl}/flights/${flightId}`,
+      `${this.baseUrl}/${flightId}`,
     );
 
     if (response.data) {
