@@ -501,7 +501,7 @@ export default function FlightResults() {
           },
           {
             id: "demo_flight_2",
-            airline: "IndiGo",
+            airline: "Indigo",
             airlineCode: "6E",
             flightNumber: "6E 1407",
             departure: {
