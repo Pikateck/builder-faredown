@@ -1142,6 +1142,20 @@ export function BookingSearchForm() {
           </Button>
         </div>
       </div>
+
+      {/* Mobile Date Picker */}
+      <MobileDatePicker
+        isOpen={showMobileDatePicker}
+        onClose={() => setShowMobileDatePicker(false)}
+        tripType="round-trip"
+        setTripType={() => {}} // Hotels always use round-trip (check-in/check-out)
+        selectedDepartureDate={checkInDate}
+        selectedReturnDate={checkOutDate}
+        setSelectedDepartureDate={(date) => setCheckInDate(date)}
+        setSelectedReturnDate={(date) => setCheckOutDate(date)}
+        selectingDeparture={true}
+        setSelectingDeparture={() => {}}
+      />
     </div>
   );
 }
