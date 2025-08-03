@@ -134,7 +134,7 @@ export default function FlightDetails({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/flight-results")}
                 className="flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
