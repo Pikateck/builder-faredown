@@ -546,8 +546,7 @@ export default function FlightDetails({
                         if (onBargain) {
                           onBargain(flight);
                         } else {
-                          // Show bargain functionality (you can implement a modal or navigate to bargain page)
-                          alert("Bargain functionality will be implemented here");
+                          setShowBargainModal(true);
                         }
                       }}
                     >
