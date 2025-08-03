@@ -429,6 +429,228 @@ export class DevApiClient {
       };
     }
 
+    // Flight details endpoint
+    if (endpoint.includes("/flights/") && !endpoint.includes("/search")) {
+      const flightId = endpoint.split("/flights/")[1];
+      console.log(`🔍 Getting fallback flight details for: ${flightId}`);
+
+      // Return detailed flight information based on flightId
+      let flightDetails;
+
+      if (flightId.includes("emirates") || flightId.includes("EK") || flightId.includes("fallback_flight_1")) {
+        flightDetails = {
+          id: flightId,
+          airline: "Emirates",
+          airlineCode: "EK",
+          flightNumber: "EK 500",
+          departure: {
+            code: "BOM",
+            name: "Chhatrapati Shivaji Maharaj International Airport",
+            city: "Mumbai",
+            country: "India",
+            terminal: "2",
+          },
+          arrival: {
+            code: "DXB",
+            name: "Dubai International Airport",
+            city: "Dubai",
+            country: "UAE",
+            terminal: "3",
+          },
+          departureTime: "10:15",
+          arrivalTime: "11:45",
+          duration: "3h 30m",
+          aircraft: "Boeing 777-300ER",
+          stops: 0,
+          price: {
+            amount: 25890,
+            currency: "INR",
+            breakdown: {
+              baseFare: 20712,
+              taxes: 3890,
+              fees: 1288,
+              total: 25890,
+            },
+          },
+          amenities: ["WiFi", "Entertainment System", "Premium Meals", "Lounge Access"],
+          baggage: {
+            carryOn: {
+              weight: "7kg",
+              dimensions: "55x40x20cm",
+              included: true,
+            },
+            checked: {
+              weight: "25kg",
+              count: 1,
+              fee: 0,
+            },
+          },
+          fareClass: "ECONOMY",
+          segments: [
+            {
+              departure: {
+                code: "BOM",
+                time: "10:15",
+                terminal: "2",
+              },
+              arrival: {
+                code: "DXB",
+                time: "11:45",
+                terminal: "3",
+              },
+              airline: "Emirates",
+              flightNumber: "EK 500",
+              aircraft: "Boeing 777-300ER",
+              duration: "3h 30m",
+            },
+          ],
+        };
+      } else if (flightId.includes("indigo") || flightId.includes("6E") || flightId.includes("fallback_flight_2")) {
+        flightDetails = {
+          id: flightId,
+          airline: "IndiGo",
+          airlineCode: "6E",
+          flightNumber: "6E 1407",
+          departure: {
+            code: "BOM",
+            name: "Chhatrapati Shivaji Maharaj International Airport",
+            city: "Mumbai",
+            country: "India",
+            terminal: "2",
+          },
+          arrival: {
+            code: "DXB",
+            name: "Dubai International Airport",
+            city: "Dubai",
+            country: "UAE",
+            terminal: "2",
+          },
+          departureTime: "14:30",
+          arrivalTime: "16:00",
+          duration: "3h 30m",
+          aircraft: "Airbus A320",
+          stops: 0,
+          price: {
+            amount: 22650,
+            currency: "INR",
+            breakdown: {
+              baseFare: 18120,
+              taxes: 3400,
+              fees: 1130,
+              total: 22650,
+            },
+          },
+          amenities: ["Seat Selection", "Onboard Refreshments"],
+          baggage: {
+            carryOn: {
+              weight: "7kg",
+              dimensions: "55x40x20cm",
+              included: true,
+            },
+            checked: {
+              weight: "15kg",
+              count: 1,
+              fee: 0,
+            },
+          },
+          fareClass: "ECONOMY",
+          segments: [
+            {
+              departure: {
+                code: "BOM",
+                time: "14:30",
+                terminal: "2",
+              },
+              arrival: {
+                code: "DXB",
+                time: "16:00",
+                terminal: "2",
+              },
+              airline: "IndiGo",
+              flightNumber: "6E 1407",
+              aircraft: "Airbus A320",
+              duration: "3h 30m",
+            },
+          ],
+        };
+      } else {
+        // Default flight details for any unknown ID
+        flightDetails = {
+          id: flightId,
+          airline: "Air India",
+          airlineCode: "AI",
+          flightNumber: "AI 131",
+          departure: {
+            code: "BOM",
+            name: "Chhatrapati Shivaji Maharaj International Airport",
+            city: "Mumbai",
+            country: "India",
+            terminal: "2",
+          },
+          arrival: {
+            code: "DXB",
+            name: "Dubai International Airport",
+            city: "Dubai",
+            country: "UAE",
+            terminal: "1",
+          },
+          departureTime: "18:45",
+          arrivalTime: "20:15",
+          duration: "3h 30m",
+          aircraft: "Boeing 787-8",
+          stops: 0,
+          price: {
+            amount: 24100,
+            currency: "INR",
+            breakdown: {
+              baseFare: 19280,
+              taxes: 3620,
+              fees: 1200,
+              total: 24100,
+            },
+          },
+          amenities: ["WiFi", "Entertainment System", "Meals"],
+          baggage: {
+            carryOn: {
+              weight: "8kg",
+              dimensions: "55x40x20cm",
+              included: true,
+            },
+            checked: {
+              weight: "23kg",
+              count: 1,
+              fee: 0,
+            },
+          },
+          fareClass: "ECONOMY",
+          segments: [
+            {
+              departure: {
+                code: "BOM",
+                time: "18:45",
+                terminal: "2",
+              },
+              arrival: {
+                code: "DXB",
+                time: "20:15",
+                terminal: "1",
+              },
+              airline: "Air India",
+              flightNumber: "AI 131",
+              aircraft: "Boeing 787-8",
+              duration: "3h 30m",
+            },
+          ],
+        };
+      }
+
+      return {
+        success: true,
+        data: flightDetails,
+        message: "Fallback flight details (Live API unavailable)",
+      };
+    }
+
     // Default fallback
     return {
       success: false,
