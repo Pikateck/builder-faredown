@@ -450,8 +450,21 @@ export function BookingSearchForm() {
                       setIsUserTyping(true);
                     }
                   }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIsDestinationOpen(true);
+                  }}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onFocus={(e) => {
+                    e.stopPropagation();
+                    setIsDestinationOpen(true);
+                    // Set inputValue to current destination when focusing for editing
+                    if (!isUserTyping && destination) {
+                      setInputValue(destination);
+                      setIsUserTyping(true);
+                    }
                   }}
                   readOnly={false}
                   disabled={false}
