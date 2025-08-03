@@ -1045,17 +1045,6 @@ export default function FlightResults() {
         selectedAirlines.size === availableAirlines.length ||
         selectedAirlines.has(flight.airline);
 
-      // Debug logging for airline filtering
-      if (selectedAirlines.size > 0 && selectedAirlines.size < availableAirlines.length) {
-        console.log("🔍 Airline Filter Debug:", {
-          flightAirline: flight.airline,
-          selectedAirlines: Array.from(selectedAirlines),
-          airlineMatch,
-          selectedCount: selectedAirlines.size,
-          totalCount: availableAirlines.length
-        });
-      }
-
       // Filter by aircraft types
       const aircraftTypeMatch =
         selectedAircraftTypes.size === 0 ||
