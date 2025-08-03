@@ -1119,9 +1119,9 @@ export function BookingSearchForm() {
           <Button
             onClick={handleSearch}
             className="h-10 sm:h-12 w-full sm:w-auto bg-[#003580] hover:bg-[#0071c2] active:bg-[#002a66] text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
-            disabled={!destination || !checkInDate || !checkOutDate}
+            disabled={!destination || !destinationCode || !checkInDate || !checkOutDate}
             title={
-              !destination || !checkInDate || !checkOutDate
+              !destination || !destinationCode || !checkInDate || !checkOutDate
                 ? "Please fill in all required fields"
                 : "Search hotels"
             }
