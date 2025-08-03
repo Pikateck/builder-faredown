@@ -1116,7 +1116,7 @@ export function BookingSearchForm() {
         <div className="flex-shrink-0 w-full sm:w-auto">
           <Button
             onClick={handleSearch}
-            className="h-10 sm:h-12 w-full sm:w-auto bg-[#003580] hover:bg-[#0071c2] active:bg-[#002a66] text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
+            className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a502] active:bg-[#cc9102] text-[#003580] font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
             disabled={!destination || !destinationCode || !checkInDate || !checkOutDate}
             title={
               !destination || !destinationCode || !checkInDate || !checkOutDate
