@@ -1023,7 +1023,7 @@ export default function BookingFlow() {
 
   const countries = [
     { name: "Guernsey", code: "+44", flag: "🇬🇬" },
-    { name: "Guinea", code: "+224", flag: "🇬����" },
+    { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
     { name: "Guyana", code: "+592", flag: "🇬🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
@@ -4035,6 +4035,9 @@ export default function BookingFlow() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Mobile Navigation */}
+      <MobileNavigation />
     </div>
   );
 }
