@@ -409,8 +409,7 @@ export function BookingSearchForm() {
           </label>
 
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
-            <PopoverTrigger asChild>
-              <div className="relative">
+            <div className="relative">
                 <svg
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10"
                   fill="none"
@@ -488,8 +487,7 @@ export function BookingSearchForm() {
                     </svg>
                   </button>
                 )}
-              </div>
-            </PopoverTrigger>
+            </div>
             <PopoverContent
               className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg"
               align="start"
