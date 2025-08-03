@@ -711,6 +711,30 @@ class FlightBookingService {
   }
 
   /**
+   * Get flight details by ID
+   */
+  async getFlightDetails(flightId: string) {
+    try {
+      // First check if we have this flight in our cache or database
+      // For now, return that we don't have it so the route can use mock data
+      console.log(`🔍 Searching for flight details: ${flightId}`);
+
+      return {
+        success: false,
+        error: "Flight details not found in database",
+        data: null,
+      };
+    } catch (error) {
+      console.error("Error getting flight details:", error);
+      return {
+        success: false,
+        error: error.message,
+        data: null,
+      };
+    }
+  }
+
+  /**
    * Execute database query
    */
   private async executeQuery(query: string, values: any[] = []): Promise<any> {
