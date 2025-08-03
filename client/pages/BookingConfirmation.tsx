@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { generateBookingPackage } from "@/lib/downloadUtils";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
 export default function BookingConfirmation() {
   const [searchParams] = useSearchParams();
