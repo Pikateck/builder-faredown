@@ -103,6 +103,18 @@ export function BookingSearchForm() {
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Load popular destinations from database on component mount
   useEffect(() => {
     const loadPopularDestinations = async () => {
@@ -144,7 +156,7 @@ export function BookingSearchForm() {
             name: "London",
             country: "United Kingdom",
             type: "city",
-            flag: "🇬���",
+            flag: "🇬🇧",
           },
           {
             id: "BCN",
