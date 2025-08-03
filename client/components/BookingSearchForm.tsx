@@ -442,7 +442,8 @@ export function BookingSearchForm() {
                       setIsDestinationOpen(true);
                     }
                   }}
-                  onFocus={() => {
+                  onFocus={(e) => {
+                    e.stopPropagation();
                     setIsDestinationOpen(true);
                     // Set inputValue to current destination when focusing for editing
                     if (!isUserTyping && destination) {
@@ -456,15 +457,6 @@ export function BookingSearchForm() {
                   }}
                   onKeyDown={(e) => {
                     e.stopPropagation();
-                  }}
-                  onFocus={(e) => {
-                    e.stopPropagation();
-                    setIsDestinationOpen(true);
-                    // Set inputValue to current destination when focusing for editing
-                    if (!isUserTyping && destination) {
-                      setInputValue(destination);
-                      setIsUserTyping(true);
-                    }
                   }}
                   readOnly={false}
                   disabled={false}
