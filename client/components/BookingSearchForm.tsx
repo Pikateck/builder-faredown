@@ -72,6 +72,10 @@ export function BookingSearchForm() {
   const [lookingForFlights, setLookingForFlights] = useState(false);
   const [travelingWithPets, setTravelingWithPets] = useState(false);
 
+  // Mobile-specific states
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
+
   // Calculate nights between check-in and check-out dates
   const calculateNights = (
     checkIn: Date | undefined,
@@ -140,7 +144,7 @@ export function BookingSearchForm() {
             name: "London",
             country: "United Kingdom",
             type: "city",
-            flag: "🇬🇧",
+            flag: "🇬���",
           },
           {
             id: "BCN",
