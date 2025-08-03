@@ -443,21 +443,236 @@ router.get("/search", async (req, res) => {
 });
 
 // Get flight details
-router.get("/flights/:flightId", async (req, res) => {
+router.get("/:flightId", async (req, res) => {
   try {
     const { flightId } = req.params;
+    console.log("🔍 Getting flight details for:", flightId);
 
-    // For now, we'll return enhanced details based on the flight ID
-    // In a full implementation, you'd store flight offers temporarily and retrieve them
+    // Try to get flight details from the booking service first
+    const flightDetails = await flightBookingService.getFlightDetails(flightId);
 
+    if (flightDetails.success && flightDetails.data) {
+      console.log("✅ Found flight details in booking service");
+      return res.json({
+        success: true,
+        data: flightDetails.data,
+      });
+    }
+
+    // If not found in booking service, return mock data based on flight ID patterns
+    let mockFlight;
+
+    if (flightId.includes("emirates") || flightId.includes("EK")) {
+      mockFlight = {
+        id: flightId,
+        airline: "Emirates",
+        airlineCode: "EK",
+        flightNumber: "EK 500",
+        departure: {
+          code: "BOM",
+          name: "Chhatrapati Shivaji Maharaj International Airport",
+          city: "Mumbai",
+          country: "India",
+          terminal: "2",
+        },
+        arrival: {
+          code: "DXB",
+          name: "Dubai International Airport",
+          city: "Dubai",
+          country: "UAE",
+          terminal: "3",
+        },
+        departureTime: "10:15",
+        arrivalTime: "11:45",
+        duration: "3h 30m",
+        aircraft: "Boeing 777-300ER",
+        stops: 0,
+        price: {
+          amount: 25890,
+          currency: "INR",
+          breakdown: {
+            baseFare: 20712,
+            taxes: 3890,
+            fees: 1288,
+            total: 25890,
+          },
+        },
+        amenities: ["WiFi", "Entertainment System", "Premium Meals", "Lounge Access"],
+        baggage: {
+          carryOn: {
+            weight: "7kg",
+            dimensions: "55x40x20cm",
+            included: true,
+          },
+          checked: {
+            weight: "25kg",
+            count: 1,
+            fee: 0,
+          },
+        },
+        fareClass: "ECONOMY",
+        segments: [
+          {
+            departure: {
+              code: "BOM",
+              time: "10:15",
+              terminal: "2",
+            },
+            arrival: {
+              code: "DXB",
+              time: "11:45",
+              terminal: "3",
+            },
+            airline: "Emirates",
+            flightNumber: "EK 500",
+            aircraft: "Boeing 777-300ER",
+            duration: "3h 30m",
+          },
+        ],
+      };
+    } else if (flightId.includes("indigo") || flightId.includes("6E")) {
+      mockFlight = {
+        id: flightId,
+        airline: "Indigo",
+        airlineCode: "6E",
+        flightNumber: "6E 1407",
+        departure: {
+          code: "BOM",
+          name: "Chhatrapati Shivaji Maharaj International Airport",
+          city: "Mumbai",
+          country: "India",
+          terminal: "2",
+        },
+        arrival: {
+          code: "DXB",
+          name: "Dubai International Airport",
+          city: "Dubai",
+          country: "UAE",
+          terminal: "2",
+        },
+        departureTime: "14:30",
+        arrivalTime: "16:00",
+        duration: "3h 30m",
+        aircraft: "Airbus A320",
+        stops: 0,
+        price: {
+          amount: 22650,
+          currency: "INR",
+          breakdown: {
+            baseFare: 18120,
+            taxes: 3400,
+            fees: 1130,
+            total: 22650,
+          },
+        },
+        amenities: ["Seat Selection", "Onboard Refreshments"],
+        baggage: {
+          carryOn: {
+            weight: "7kg",
+            dimensions: "55x40x20cm",
+            included: true,
+          },
+          checked: {
+            weight: "15kg",
+            count: 1,
+            fee: 0,
+          },
+        },
+        fareClass: "ECONOMY",
+        segments: [
+          {
+            departure: {
+              code: "BOM",
+              time: "14:30",
+              terminal: "2",
+            },
+            arrival: {
+              code: "DXB",
+              time: "16:00",
+              terminal: "2",
+            },
+            airline: "Indigo",
+            flightNumber: "6E 1407",
+            aircraft: "Airbus A320",
+            duration: "3h 30m",
+          },
+        ],
+      };
+    } else {
+      // Generic mock flight for unknown IDs
+      mockFlight = {
+        id: flightId,
+        airline: "Emirates",
+        airlineCode: "EK",
+        flightNumber: "EK 500",
+        departure: {
+          code: "BOM",
+          name: "Chhatrapati Shivaji Maharaj International Airport",
+          city: "Mumbai",
+          country: "India",
+          terminal: "2",
+        },
+        arrival: {
+          code: "DXB",
+          name: "Dubai International Airport",
+          city: "Dubai",
+          country: "UAE",
+          terminal: "3",
+        },
+        departureTime: "10:15",
+        arrivalTime: "11:45",
+        duration: "3h 30m",
+        aircraft: "Boeing 777-300ER",
+        stops: 0,
+        price: {
+          amount: 25890,
+          currency: "INR",
+          breakdown: {
+            baseFare: 20712,
+            taxes: 3890,
+            fees: 1288,
+            total: 25890,
+          },
+        },
+        amenities: ["WiFi", "Entertainment System", "Premium Meals"],
+        baggage: {
+          carryOn: {
+            weight: "7kg",
+            dimensions: "55x40x20cm",
+            included: true,
+          },
+          checked: {
+            weight: "20kg",
+            count: 1,
+            fee: 0,
+          },
+        },
+        fareClass: "ECONOMY",
+        segments: [
+          {
+            departure: {
+              code: "BOM",
+              time: "10:15",
+              terminal: "2",
+            },
+            arrival: {
+              code: "DXB",
+              time: "11:45",
+              terminal: "3",
+            },
+            airline: "Emirates",
+            flightNumber: "EK 500",
+            aircraft: "Boeing 777-300ER",
+            duration: "3h 30m",
+          },
+        ],
+      };
+    }
+
+    console.log("✅ Returning mock flight details");
     res.json({
       success: true,
-      data: {
-        id: flightId,
-        // This would include detailed information like seat maps, fare rules, etc.
-        message:
-          "Flight details endpoint - implement based on stored flight offers",
-      },
+      data: mockFlight,
     });
   } catch (error) {
     console.error("🚨 Flight details error:", error);
