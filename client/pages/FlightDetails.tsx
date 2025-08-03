@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
 interface FlightDetailsProps {
   flightId?: string;
