@@ -875,8 +875,7 @@ export function BookingSearchForm() {
                 <span className="sm:hidden text-xs">
                   {checkInDate && checkOutDate ? (
                     <>
-                      {format(checkInDate, "d/M")}-
-                      {format(checkOutDate, "d/M")}
+                      {format(checkInDate, "dd-MMM-yyyy")} - {format(checkOutDate, "dd-MMM-yyyy")}
                     </>
                   ) : (
                     "Dates"
