@@ -740,7 +740,7 @@ export default function ReservationPage() {
                         Payment Method
                       </Label>
                       <div className="space-y-3">
-                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300">
+                        <label className="flex items-center min-h-[44px] px-6 py-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 font-semibold">
                           <div className="w-4 h-4 flex items-center justify-center mr-3">
                             <input
                               type="radio"
