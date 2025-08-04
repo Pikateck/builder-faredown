@@ -435,13 +435,27 @@ export class HotelsService {
       );
 
       if (response.success && response.data) {
+        console.log("✅ Fallback API returned", response.data.length, "hotels");
         return response.data;
       }
 
+      console.log("⚠️ Fallback API returned no data");
       return [];
     } catch (error) {
-      console.error("Fallback hotel search error:", error);
-      return [];
+      // Handle network errors gracefully
+      if (error instanceof Error && error.name === "AbortError") {
+        console.log("⏰ Fallback hotel search was aborted");
+        throw error; // Re-throw to handle at higher level
+      }
+      if (error instanceof Error &&
+          (error.message.includes("Failed to fetch") ||
+           error.name === "TypeError" ||
+           error.message.includes("NetworkError"))) {
+        console.log("🌐 Network connectivity issue in fallback hotel search");
+        throw error; // Re-throw to trigger static mock data
+      }
+      console.warn("Fallback hotel search error:", error instanceof Error ? error.message : "Unknown error");
+      throw error; // Re-throw to trigger static mock data
     }
   }
 
@@ -1087,7 +1101,7 @@ export class HotelsService {
         type: "city" as const,
         country: "United Kingdom",
         code: "LHR",
-        flag: "🇬🇧",
+        flag: "��🇧",
         popular: true,
       },
       {
@@ -1096,7 +1110,7 @@ export class HotelsService {
         type: "city" as const,
         country: "France",
         code: "CDG",
-        flag: "�����🇷",
+        flag: "����🇷",
         popular: true,
       },
       {
