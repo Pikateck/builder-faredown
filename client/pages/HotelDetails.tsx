@@ -1020,9 +1020,10 @@ export default function HotelDetails() {
                                   navigator.vibrate(50);
                                 }
                               }}
-                              className="w-full bg-[#febb02] hover:bg-[#e6a502] text-[#003580] font-bold py-3 text-sm"
+                              className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 text-sm flex items-center justify-center gap-2 min-h-[44px]"
                             >
-                              🎯 Bargain This Room
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
                             </Button>
 
                             <Button
