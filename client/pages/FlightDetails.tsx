@@ -146,24 +146,16 @@ export default function FlightDetails({
   // Flight should always be available now due to immediate fallback
   const displayFlight = flight;
 
-  if (error) {
-    console.error("Flight Details Error:", error);
+  // We now always have flight data, so no need for error state
+  if (!displayFlight) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
-            <Info className="w-8 h-8 text-red-600" />
-          </div>
+          <Plane className="w-8 h-8 mx-auto text-blue-600 animate-bounce" />
           <div>
             <h3 className="text-lg font-semibold text-gray-900">
-              Error Loading Flight
+              Loading Flight Details
             </h3>
-            <p className="text-gray-600">
-              {error}
-            </p>
-            <Button onClick={() => navigate(-1)} className="mt-4">
-              Go Back
-            </Button>
           </div>
         </div>
       </div>
