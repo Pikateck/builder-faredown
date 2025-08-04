@@ -583,13 +583,9 @@ export default function HotelDetails() {
         image:
           "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop", // Family room
         features: [
-          "6.1 km from downtown",
-          "Max 6 guests",
-          "2 double beds",
-          "City view",
-          "Extra space",
-          "Free cancellation",
-          "Kid-friendly amenities",
+          "Upgrade for +₹35",
+          "Family Room",
+          "Kid-friendly space",
         ],
       },
       {
@@ -2714,7 +2710,7 @@ export default function HotelDetails() {
                     </div>
                     <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center relative">
                       <div className="text-center">
-                        <div className="text-4xl mb-2">🗺️</div>
+                        <div className="text-4xl mb-2">���️</div>
                         <div className="text-gray-600">Interactive Map</div>
                         <div className="text-sm text-gray-500">
                           Hotel location and nearby landmarks
