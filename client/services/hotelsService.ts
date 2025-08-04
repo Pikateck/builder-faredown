@@ -1027,7 +1027,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Kuwait",
         code: "KWI",
-        flag: "🇰🇼",
+        flag: "🇰����",
       },
       {
         id: "RUH",
@@ -1696,6 +1696,243 @@ export class HotelsService {
       console.error("Clear cache error:", error);
       throw new Error("Failed to clear cache");
     }
+  }
+
+  /**
+   * Get static mock hotels as ultimate fallback
+   */
+  private getStaticMockHotels(searchParams: HotelSearchRequest): Hotel[] {
+    console.log("🏨 Using static mock hotels as last resort");
+
+    const destination = searchParams.destination || "DXB";
+    const destinationName = destination === "DXB" ? "Dubai" : "Unknown City";
+
+    return [
+      {
+        id: "hotel-1",
+        name: `Grand Hotel ${destinationName}`,
+        description: `Luxury accommodation in the heart of ${destinationName}`,
+        address: {
+          street: "123 Main Street",
+          city: destinationName,
+          country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
+          postalCode: "12345"
+        },
+        location: {
+          latitude: destination === "DXB" ? 25.2048 : 0,
+          longitude: destination === "DXB" ? 55.2708 : 0,
+          address: `${destinationName} City Center`,
+          city: destinationName,
+          country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
+          landmarks: [
+            { name: "Airport", distance: 5.2, type: "airport" },
+            { name: "City Center", distance: 1.1, type: "shopping" }
+          ]
+        },
+        rating: 4.5,
+        starRating: 5,
+        reviewCount: 1245,
+        images: [
+          {
+            id: "img-1",
+            url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+            caption: "Hotel Exterior",
+            type: "exterior",
+            order: 1
+          }
+        ],
+        amenities: [
+          { id: "wifi", name: "Free WiFi", icon: "wifi", category: "general", available: true },
+          { id: "pool", name: "Swimming Pool", icon: "pool", category: "wellness", available: true },
+          { id: "gym", name: "Fitness Center", icon: "gym", category: "wellness", available: true }
+        ],
+        roomTypes: [
+          {
+            id: "standard",
+            name: "Standard Room",
+            description: "Comfortable standard accommodation",
+            maxOccupancy: 2,
+            size: "25 sqm",
+            bedTypes: ["1 Double Bed"],
+            amenities: ["Free WiFi", "Air Conditioning", "TV"],
+            images: ["https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300"],
+            pricePerNight: 129,
+            availability: 5,
+            features: [
+              { name: "Free WiFi", icon: "wifi", included: true },
+              { name: "Air Conditioning", icon: "ac", included: true }
+            ]
+          }
+        ],
+        policies: {
+          checkIn: "3:00 PM",
+          checkOut: "11:00 AM",
+          cancellation: "Free cancellation up to 24 hours before check-in",
+          children: "Children welcome",
+          pets: "Pets not allowed",
+          smoking: "Non-smoking property"
+        },
+        contact: {
+          phone: "+971-4-123-4567",
+          email: "info@grandhotel.com",
+          website: "https://grandhotel.com"
+        },
+        priceRange: {
+          min: 99,
+          max: 299,
+          currency: searchParams.currencyCode || "INR"
+        }
+      },
+      {
+        id: "hotel-2",
+        name: `Business Hotel ${destinationName}`,
+        description: `Modern business hotel in ${destinationName}`,
+        address: {
+          street: "456 Business District",
+          city: destinationName,
+          country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
+          postalCode: "12346"
+        },
+        location: {
+          latitude: destination === "DXB" ? 25.2148 : 0,
+          longitude: destination === "DXB" ? 55.2808 : 0,
+          address: `${destinationName} Business District`,
+          city: destinationName,
+          country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
+          landmarks: [
+            { name: "Business Center", distance: 0.5, type: "shopping" },
+            { name: "Metro Station", distance: 0.3, type: "transport" }
+          ]
+        },
+        rating: 4.2,
+        starRating: 4,
+        reviewCount: 892,
+        images: [
+          {
+            id: "img-2",
+            url: "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&h=600&fit=crop",
+            caption: "Business Hotel",
+            type: "exterior",
+            order: 1
+          }
+        ],
+        amenities: [
+          { id: "wifi", name: "Free WiFi", icon: "wifi", category: "general", available: true },
+          { id: "parking", name: "Free Parking", icon: "parking", category: "general", available: true },
+          { id: "restaurant", name: "Restaurant", icon: "restaurant", category: "dining", available: true }
+        ],
+        roomTypes: [
+          {
+            id: "business",
+            name: "Business Room",
+            description: "Perfect for business travelers",
+            maxOccupancy: 2,
+            size: "30 sqm",
+            bedTypes: ["1 King Bed"],
+            amenities: ["Free WiFi", "Work Desk", "Coffee Machine"],
+            images: ["https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=300"],
+            pricePerNight: 99,
+            availability: 8,
+            features: [
+              { name: "Work Desk", icon: "desk", included: true },
+              { name: "Coffee Machine", icon: "coffee", included: true }
+            ]
+          }
+        ],
+        policies: {
+          checkIn: "2:00 PM",
+          checkOut: "12:00 PM",
+          cancellation: "Free cancellation up to 48 hours before check-in",
+          children: "Children welcome",
+          pets: "Pets not allowed",
+          smoking: "Smoking rooms available"
+        },
+        contact: {
+          phone: "+971-4-987-6543",
+          email: "reservations@businesshotel.com"
+        },
+        priceRange: {
+          min: 79,
+          max: 199,
+          currency: searchParams.currencyCode || "INR"
+        }
+      },
+      {
+        id: "hotel-3",
+        name: `Boutique Hotel ${destinationName}`,
+        description: `Charming boutique hotel with unique character`,
+        address: {
+          street: "789 Heritage Street",
+          city: destinationName,
+          country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
+          postalCode: "12347"
+        },
+        location: {
+          latitude: destination === "DXB" ? 25.1948 : 0,
+          longitude: destination === "DXB" ? 55.2608 : 0,
+          address: `${destinationName} Heritage Area`,
+          city: destinationName,
+          country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
+          landmarks: [
+            { name: "Heritage Museum", distance: 0.2, type: "attraction" },
+            { name: "Traditional Market", distance: 0.4, type: "shopping" }
+          ]
+        },
+        rating: 4.7,
+        starRating: 4,
+        reviewCount: 567,
+        images: [
+          {
+            id: "img-3",
+            url: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop",
+            caption: "Boutique Hotel",
+            type: "exterior",
+            order: 1
+          }
+        ],
+        amenities: [
+          { id: "wifi", name: "Free WiFi", icon: "wifi", category: "general", available: true },
+          { id: "spa", name: "Spa Services", icon: "spa", category: "wellness", available: true },
+          { id: "breakfast", name: "Complimentary Breakfast", icon: "breakfast", category: "dining", available: true }
+        ],
+        roomTypes: [
+          {
+            id: "boutique",
+            name: "Boutique Room",
+            description: "Stylishly designed room with local touches",
+            maxOccupancy: 2,
+            size: "28 sqm",
+            bedTypes: ["1 Queen Bed"],
+            amenities: ["Free WiFi", "Minibar", "Balcony"],
+            images: ["https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300"],
+            pricePerNight: 149,
+            availability: 3,
+            features: [
+              { name: "Minibar", icon: "minibar", included: true },
+              { name: "Balcony", icon: "balcony", included: true }
+            ]
+          }
+        ],
+        policies: {
+          checkIn: "3:00 PM",
+          checkOut: "11:00 AM",
+          cancellation: "Free cancellation up to 24 hours before check-in",
+          children: "Children over 12 welcome",
+          pets: "Small pets allowed with fee",
+          smoking: "Non-smoking property"
+        },
+        contact: {
+          phone: "+971-4-555-0123",
+          email: "stay@boutiquehotel.com",
+          website: "https://boutiquehotel.com"
+        },
+        priceRange: {
+          min: 120,
+          max: 250,
+          currency: searchParams.currencyCode || "INR"
+        }
+      }
+    ];
   }
 }
 
