@@ -506,48 +506,7 @@ export default function FlightDetails({
                     </div>
                   </div>
 
-                  <div className="space-y-3 pt-4 border-t">
-                    <Button
-                      className="w-full min-h-[44px] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-2"
-                      onClick={() => {
-                        if (onBook) {
-                          onBook(flight);
-                        } else {
-                          // Navigate to booking flow with flight data
-                          navigate("/booking-flow", {
-                            state: {
-                              selectedFlight: flight,
-                              selectedFareType: {
-                                id: "default",
-                                name: flight.fareClass || "Economy",
-                                price: flight.price.amount,
-                                refundability: "Non-Refundable",
-                              },
-                              negotiatedPrice: flight.price.amount,
-                              passengers: { adults: 1, children: 0 },
-                            },
-                          });
-                        }
-                      }}
-                    >
-                      <CreditCard className="w-4 h-4" />
-                      Book Now
-                    </Button>
 
-                    <Button
-                      className="w-full min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
-                      onClick={() => {
-                        if (onBargain) {
-                          onBargain(flight);
-                        } else {
-                          setShowBargainModal(true);
-                        }
-                      }}
-                    >
-                      <TrendingDown className="w-4 h-4" />
-                      Bargain Now
-                    </Button>
-                  </div>
 
                   <div className="text-xs text-gray-500 text-center">
                     Prices include all taxes and fees
