@@ -196,7 +196,7 @@ export default function FlightDetails({
                 if (navigator.share) {
                   navigator.share({
                     title: 'Flight Details',
-                    text: `${flight.airline} flight from ${flight.departure.city} to ${flight.arrival.city}`,
+                    text: `${displayFlight.airline} flight from ${displayFlight.departure.city} to ${displayFlight.arrival.city}`,
                     url: window.location.href
                   });
                 }
