@@ -2698,8 +2698,12 @@ export default function FlightResults() {
                         <Button
                           variant="outline"
                           className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
-                          onClick={() => {
-                            window.location.href = `/flight-details/${flight.id}`;
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            navigate(`/flight-details/${flight.id}`, {
+                              state: { flight }
+                            });
                           }}
                         >
                           View Details
