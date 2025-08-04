@@ -600,13 +600,9 @@ export default function HotelDetails() {
         image:
           "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&q=80&auto=format&fit=crop", // Executive room
         features: [
-          "5.8 km from downtown",
-          "Max 2 guests",
-          "1 king bed",
-          "Business lounge access",
-          "Work desk",
-          "Free cancellation",
-          "Complimentary Wi-Fi",
+          "Upgrade for +₹42",
+          "Executive Access",
+          "Business lounge",
         ],
       },
       {
