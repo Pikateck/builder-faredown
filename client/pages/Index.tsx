@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import {
   formatDateToDDMMMYYYY,
   formatDateToDisplayString,
