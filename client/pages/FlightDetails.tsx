@@ -41,6 +41,7 @@ export default function FlightDetails({
   onBook,
   onBargain,
 }: FlightDetailsProps) {
+  useScrollToTop();
   const params = useParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
