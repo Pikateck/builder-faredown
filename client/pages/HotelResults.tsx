@@ -43,6 +43,7 @@ import {
   MobileTravelers,
 } from "@/components/MobileDropdowns";
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
 // Use the Hotel type from hotelsService for consistency
 interface Hotel extends HotelType {
@@ -1026,7 +1027,7 @@ export default function HotelResults() {
         <div className="bg-gray-50 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
             <div className="flex items-center text-sm text-gray-600">
-              <span>🌍 Global</span>
+              <span>���� Global</span>
               <span className="mx-2">›</span>
               <span>
                 {searchParams.get("destinationName") || destination || "Dubai"}
