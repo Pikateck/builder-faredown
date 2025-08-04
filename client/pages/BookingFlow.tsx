@@ -3348,9 +3348,14 @@ export default function BookingFlow() {
               <div className="flex flex-col sm:flex-row justify-between pt-6 border-t border-[#f2f6fa] gap-4">
                 <Button
                   variant="outline"
-                  onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+                  onClick={() => {
+                    if (currentStep === 1) {
+                      navigate(-1); // Go back to previous page (flight results)
+                    } else {
+                      setCurrentStep(Math.max(1, currentStep - 1));
+                    }
+                  }}
                   className="flex items-center justify-center w-full sm:w-auto"
-                  disabled={currentStep === 1}
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
