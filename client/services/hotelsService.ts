@@ -228,16 +228,36 @@ export class HotelsService {
         console.log("⏰ Hotel search was aborted, returning empty results");
         return [];
       }
-      // For other errors, log and continue to fallback
-      console.warn("Live API failed, trying fallback:", error instanceof Error ? error.message : "Unknown error");
+      // Handle network errors gracefully
+      if (error instanceof Error &&
+          (error.message.includes("Failed to fetch") ||
+           error.name === "TypeError" ||
+           error.message.includes("NetworkError"))) {
+        console.log("🌐 Network connectivity issue in searchHotels - skipping to fallback");
+      } else {
+        // For other errors, log and continue to fallback
+        console.warn("Live API failed, trying fallback:", error instanceof Error ? error.message : "Unknown error");
+      }
     }
 
     try {
       // If no live results or live API failed, fall back to regular API
-      console.log("⚠️ No live data available, using fallback");
+      console.log("⚠️ No live data available, using fallback API");
       return await this.searchHotelsFallback(searchParams);
     } catch (fallbackError) {
-      console.error("Fallback API also failed:", fallbackError);
+      // Handle fallback errors gracefully
+      if (fallbackError instanceof Error && fallbackError.name === "AbortError") {
+        console.log("⏰ Fallback API was aborted, returning static data");
+        return this.getStaticMockHotels(searchParams);
+      }
+      if (fallbackError instanceof Error &&
+          (fallbackError.message.includes("Failed to fetch") ||
+           fallbackError.name === "TypeError" ||
+           fallbackError.message.includes("NetworkError"))) {
+        console.log("🌐 Fallback API also has network issues - using static mock data");
+      } else {
+        console.warn("Fallback API failed:", fallbackError instanceof Error ? fallbackError.message : "Unknown error");
+      }
       // Return static mock data as last resort
       return this.getStaticMockHotels(searchParams);
     }
@@ -1027,7 +1047,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Kuwait",
         code: "KWI",
-        flag: "🇰����",
+        flag: "🇰🇼",
       },
       {
         id: "RUH",
@@ -1299,7 +1319,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Thailand",
         code: "BKK",
-        flag: "🇹🇭",
+        flag: "🇹��",
         popular: true,
       },
       {
