@@ -815,6 +815,7 @@ const SeatMap = ({
 };
 
 export default function BookingFlow() {
+  useScrollToTop();
   const location = useLocation();
   const navigate = useNavigate();
   const {
