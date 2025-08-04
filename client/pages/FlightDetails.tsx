@@ -18,6 +18,11 @@ import {
   TrendingDown,
   CreditCard,
   X,
+  Share2,
+  Heart,
+  Suitcase,
+  ShoppingBag,
+  AlertCircle,
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
