@@ -334,7 +334,7 @@ export class HotelsService {
           return null; // Return null for other fetch errors
         });
 
-        if (response.ok) {
+        if (response && response.ok) {
           // Check if response is JSON
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -1518,7 +1518,7 @@ export class HotelsService {
             // Don't return here - let it fall through to use fallback data
           } else {
             console.warn(
-              `⚠️ API fetch failed:`,
+              `⚠��� API fetch failed:`,
               fetchError instanceof Error
                 ? fetchError.message
                 : "Unknown error",
