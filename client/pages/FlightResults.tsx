@@ -2694,7 +2694,7 @@ export default function FlightResults() {
                       </div>
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="flex gap-2 mt-3 items-center">
+                      <div className="flex gap-2 mt-3 items-stretch">
                         <Link
                           to={`/flight-details/${flight.id}`}
                           state={{ flight }}
@@ -2702,13 +2702,13 @@ export default function FlightResults() {
                         >
                           <Button
                             variant="outline"
-                            className="w-full min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
+                            className="w-full h-full min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
                           >
                             View Details
                           </Button>
                         </Link>
                         <Button
-                          className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold min-h-[44px] px-6 py-3 text-sm touch-manipulation flex items-center justify-center gap-2"
+                          className="flex-1 h-full min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
                           onClick={() => {
                             setBargainFlight(flight);
                             setBargainFareType({
