@@ -2986,7 +2986,7 @@ export default function FlightResults() {
                                 )
                               }
                               variant="outline"
-                              className="flex-1 touch-manipulation text-sm"
+                              className="flex-1 min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation"
                             >
                               View Details
                             </Button>
@@ -2994,10 +2994,10 @@ export default function FlightResults() {
                               onClick={() =>
                                 handleBargain(flight, flight.fareTypes[0])
                               }
-                              className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm"
+                              className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold min-h-[44px] px-6 py-3 text-sm touch-manipulation flex items-center justify-center gap-2"
                             >
-                              <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                              Bargain
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
                             </Button>
                           </div>
                         </div>
