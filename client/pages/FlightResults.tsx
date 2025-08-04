@@ -2697,13 +2697,17 @@ export default function FlightResults() {
                       <div className="grid grid-cols-2 gap-2 mt-3">
                         <Button
                           variant="outline"
-                          className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
+                          className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
+                            console.log('View Details clicked for flight:', flight.id);
                             navigate(`/flight-details/${flight.id}`, {
                               state: { flight }
                             });
+                          }}
+                          onTouchStart={(e) => {
+                            e.stopPropagation();
                           }}
                         >
                           View Details
