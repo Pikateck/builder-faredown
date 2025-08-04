@@ -132,37 +132,45 @@ export default function FlightDetails({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 space-y-3 sm:space-y-0">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <Button
-                variant="ghost"
-                className="min-h-[44px] px-3 py-2 font-semibold text-sm flex items-center gap-2"
-                onClick={() => navigate("/flights")}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Back to Results</span>
-                <span className="sm:hidden">Back</span>
-              </Button>
-              <div className="h-6 w-px bg-gray-300 hidden sm:block" />
-              <div>
-                <h1 className="text-lg sm:text-xl font-bold text-gray-900">
-                  Flight Details
-                </h1>
-                <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
-                  <span className="font-medium">{flight.flightNumber}</span>
-                  <span>•</span>
-                  <span>Today, 15 Jan</span>
-                  <span>•</span>
-                  <span>1 Adult</span>
-                  <span>•</span>
-                  <span>Economy</span>
-                </div>
-              </div>
+      {/* Booking.com Style Header */}
+      <div className="bg-[#003580] text-white">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center space-x-3">
+            <Button
+              variant="ghost"
+              className="text-white hover:bg-white/10 p-2"
+              onClick={() => navigate("/flights")}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <div>
+              <h1 className="text-lg font-semibold">
+                Your flight to Dubai
+              </h1>
             </div>
-
+          </div>
+          <div className="flex items-center space-x-3">
+            <Button
+              variant="ghost"
+              className="text-white hover:bg-white/10 p-2"
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'Flight Details',
+                    text: `${flight.airline} flight from ${flight.departure.city} to ${flight.arrival.city}`,
+                    url: window.location.href
+                  });
+                }
+              }}
+            >
+              <Share2 className="w-5 h-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white hover:bg-white/10 p-2"
+            >
+              <Heart className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </div>
