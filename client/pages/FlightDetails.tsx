@@ -469,21 +469,21 @@ export default function FlightDetails({
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-8 space-y-6">
+            <div className="sticky top-4 space-y-4">
               {/* Price Summary */}
               <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg font-bold text-gray-900">Price Summary</CardTitle>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-bold text-gray-900">Price Summary</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
+                <CardContent className="space-y-3 pt-0">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Base fare:</span>
                       <span>
                         {formatPrice(flight.price.breakdown.baseFare)}
                       </span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-sm">
                       <span className="text-gray-600">Taxes & fees:</span>
                       <span>
                         {formatPrice(
@@ -492,8 +492,8 @@ export default function FlightDetails({
                         )}
                       </span>
                     </div>
-                    <div className="border-t pt-2">
-                      <div className="flex justify-between font-semibold text-lg">
+                    <div className="border-t pt-2 mt-2">
+                      <div className="flex justify-between font-semibold">
                         <span>Total:</span>
                         <span className="text-blue-600">
                           {formatPrice(flight.price.breakdown.total)}
@@ -501,8 +501,6 @@ export default function FlightDetails({
                       </div>
                     </div>
                   </div>
-
-
 
                   <div className="text-xs text-gray-500 text-center">
                     Prices include all taxes and fees
