@@ -420,7 +420,7 @@ export default function FlightDetails({
                   className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
                   onClick={() => {
                     if (onBargain) {
-                      onBargain(flight);
+                      onBargain(displayFlight);
                     } else {
                       // For now, show an alert - you can implement bargain modal later
                       alert('Bargain functionality coming soon!');
