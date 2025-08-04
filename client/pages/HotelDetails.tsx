@@ -3140,6 +3140,9 @@ export default function HotelDetails() {
           </div>
         )}
       </div>
+
+      {/* Mobile Navigation */}
+      <MobileNavigation />
     </div>
   );
 }
