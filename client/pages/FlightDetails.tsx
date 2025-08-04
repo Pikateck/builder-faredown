@@ -270,26 +270,26 @@ export default function FlightDetails({
                   </TabsList>
 
                   <div className="p-4">
-                    <TabsContent value="overview" className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <TabsContent value="overview" className="space-y-3 mt-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">
+                          <h4 className="font-semibold text-gray-900 mb-2 text-sm">
                             Flight Information
                           </h4>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-sm">
                               <span className="text-gray-600">Aircraft:</span>
                               <span className="font-medium">
                                 {flight.aircraft}
                               </span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between text-sm">
                               <span className="text-gray-600">Class:</span>
                               <span className="font-medium">
                                 {flight.fareClass || "Economy"}
                               </span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between text-sm">
                               <span className="text-gray-600">Distance:</span>
                               <span className="font-medium">~2,200 km</span>
                             </div>
@@ -297,23 +297,23 @@ export default function FlightDetails({
                         </div>
 
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">
+                          <h4 className="font-semibold text-gray-900 mb-2 text-sm">
                             Baggage Allowance
                           </h4>
-                          <div className="space-y-2">
-                            <div className="flex justify-between">
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-sm">
                               <span className="text-gray-600">Cabin bag:</span>
                               <span className="font-medium">
                                 {flight.baggage?.carryOn?.weight || "7kg"}
                               </span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between text-sm">
                               <span className="text-gray-600">Check-in:</span>
                               <span className="font-medium">
                                 {flight.baggage?.checked?.weight || "20kg"}
                               </span>
                             </div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between text-sm">
                               <span className="text-gray-600">Dimensions:</span>
                               <span className="font-medium">
                                 {flight.baggage?.carryOn?.dimensions ||
