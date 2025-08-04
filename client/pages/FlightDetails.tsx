@@ -286,7 +286,7 @@ export default function FlightDetails({
 
                 {/* Carry-on */}
                 <div className="flex items-start space-x-3">
-                  <Suitcase className="w-6 h-6 text-gray-700 mt-1" />
+                  <Luggage className="w-6 h-6 text-gray-700 mt-1" />
                   <div className="flex-1">
                     <div className="font-semibold text-gray-900 mb-1">1 carry-on bag</div>
                     <div className="text-gray-600 mb-2">Up to 7 kg • 25 x 35 x 55 cm</div>
@@ -296,7 +296,7 @@ export default function FlightDetails({
 
                 {/* Checked Bag */}
                 <div className="flex items-start space-x-3">
-                  <Suitcase className="w-6 h-6 text-gray-700 mt-1" />
+                  <Luggage className="w-6 h-6 text-gray-700 mt-1" />
                   <div className="flex-1">
                     <div className="font-semibold text-gray-900 mb-1">1 checked bag</div>
                     <div className="text-gray-600 mb-2">Up to 15 kg</div>
