@@ -90,7 +90,8 @@ export default function FlightDetails({
   const finalFlightId = flightId || params.flightId;
 
   useEffect(() => {
-    if (!providedFlight && finalFlightId) {
+    // Only load if we have a specific flight ID and no provided flight
+    if (!providedFlight && finalFlightId && finalFlightId !== "fallback") {
       loadFlightDetails();
     }
   }, [finalFlightId, providedFlight]);
