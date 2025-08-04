@@ -99,6 +99,7 @@ import {
   CheckCircle,
   X,
   ChevronLeft,
+  TrendingDown,
 } from "lucide-react";
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
