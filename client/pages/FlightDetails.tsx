@@ -154,14 +154,7 @@ export default function FlightDetails({
                 <p className="text-xs sm:text-sm text-gray-600 font-medium">{flight.flightNumber}</p>
               </div>
             </div>
-            <div className="flex items-center justify-end sm:space-x-3">
-              <div className="text-right">
-                <div className="text-xl sm:text-2xl font-bold text-blue-600">
-                  {formatPrice(flight.price.amount)}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-500 font-medium">per person</div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
