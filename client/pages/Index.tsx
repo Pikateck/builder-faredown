@@ -99,6 +99,7 @@ import {
 } from "@/components/MobileDropdowns";
 
 export default function Index() {
+  useScrollToTop();
   const { isLoggedIn, user, login, logout } = useAuth();
   const { selectedCurrency, currencies, setCurrency } = useCurrency();
   const {
