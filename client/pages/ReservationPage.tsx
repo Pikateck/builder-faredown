@@ -761,21 +761,23 @@ export default function ReservationPage() {
                         </label>
 
                         <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300">
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value="pay_at_hotel"
-                            checked={
-                              paymentDetails.paymentMethod === "pay_at_hotel"
-                            }
-                            onChange={(e) =>
-                              setPaymentDetails((prev) => ({
-                                ...prev,
-                                paymentMethod: e.target.value,
-                              }))
-                            }
-                            className="mr-3"
-                          />
+                          <div className="w-4 h-4 flex items-center justify-center mr-3">
+                            <input
+                              type="radio"
+                              name="paymentMethod"
+                              value="pay_at_hotel"
+                              checked={
+                                paymentDetails.paymentMethod === "pay_at_hotel"
+                              }
+                              onChange={(e) =>
+                                setPaymentDetails((prev) => ({
+                                  ...prev,
+                                  paymentMethod: e.target.value,
+                                }))
+                              }
+                              className={`w-4 h-4 ${paymentDetails.paymentMethod === "pay_at_hotel" ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                            />
+                          </div>
                           <div className="flex items-center">
                             <div>
                               <div>Pay at Hotel</div>
