@@ -1011,18 +1011,6 @@ export default function HotelDetails() {
                             </Button>
 
                             <Button
-                              onClick={() => {
-                                setSelectedRoomType(room);
-                                if (navigator.vibrate) {
-                                  navigator.vibrate(50);
-                                }
-                              }}
-                              className="w-full bg-[#febb02] hover:bg-[#e6a502] text-[#003580] font-bold py-3 text-sm"
-                            >
-                              🎯 Bargain This Room
-                            </Button>
-
-                            <Button
                               onClick={() => setActiveTab("reviews")}
                               variant="outline"
                               className="w-full font-medium py-2 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
