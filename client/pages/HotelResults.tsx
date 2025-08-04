@@ -222,37 +222,17 @@ export default function HotelResults() {
       // Search hotels using the proper method with fallback
       const results = await hotelsService.searchHotels(searchRequest);
 
-      if (liveResults.length > 0) {
-        console.log(
-          "✅ Using LIVE Hotelbeds data:",
-          liveResults.length,
-          "hotels",
-        );
-        setHotels(transformHotelbedsData(liveResults));
-        setTotalResults(liveResults.length);
-        setIsLiveData(true);
+      if (results.length > 0) {
+        console.log("✅ Hotels loaded successfully:", results.length, "hotels");
+        setHotels(transformHotelbedsData(results));
+        setTotalResults(results.length);
+        setIsLiveData(true); // The service handles live vs fallback internally
       } else {
-        console.log("⚠️ No live data available, using enhanced mock data");
-        // Try fallback API first
-        const mockResults =
-          await hotelsService.searchHotelsFallback(searchRequest);
-
-        if (mockResults.length > 0) {
-          setHotels(transformHotelbedsData(mockResults));
-          setTotalResults(mockResults.length);
-          setIsLiveData(false);
-          console.log(
-            "✅ Using fallback API data:",
-            mockResults.length,
-            "hotels",
-          );
-        } else {
-          // If no fallback data, use static mock data
-          console.log("🔄 Using static mock data");
-          setHotels(getMockHotels());
-          setTotalResults(getMockHotels().length);
-          setIsLiveData(false);
-        }
+        // If no results from API, use static mock data as last resort
+        console.log("🔄 Using static mock data as fallback");
+        setHotels(getMockHotels());
+        setTotalResults(getMockHotels().length);
+        setIsLiveData(false);
       }
     } catch (err) {
       console.error("Live Hotelbeds search failed:", err);
