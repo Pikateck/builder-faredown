@@ -556,10 +556,12 @@ export function FlightStyleBargainModal({
 
             <Button
               onClick={() => {
+                // Close modal immediately to prevent double-click issues
+                onClose();
+
                 if (onBookingSuccess) {
                   onBookingSuccess(finalPrice);
                 } else {
-                  onClose();
                   const searchParams = new URLSearchParams({
                     hotelId: hotel?.id.toString() || "",
                     roomId: roomType?.id || "",
