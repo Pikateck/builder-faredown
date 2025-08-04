@@ -1559,14 +1559,15 @@ export default function HotelDetails() {
                             <span>Best value room available</span>
                           </div>
                           <Button
-                            className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 px-4 rounded-lg text-sm mb-3"
+                            className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-2 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2 min-h-[44px]"
                             onClick={() =>
                               roomTypes.length > 0 &&
                               handleBargainClick(roomTypes[0])
                             }
                             disabled={roomTypes.length === 0}
                           >
-                            Try Bargaining for Better Price
+                            <TrendingDown className="w-4 h-4" />
+                            Bargain Now
                           </Button>
                         </div>
                       </div>
