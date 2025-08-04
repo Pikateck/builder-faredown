@@ -1013,6 +1013,8 @@ export default function HotelDetails() {
                             <Button
                               onClick={() => {
                                 setSelectedRoomType(room);
+                                setIsBargainModalOpen(true);
+                                setBargainingRoomId(room.id);
                                 if (navigator.vibrate) {
                                   navigator.vibrate(50);
                                 }
