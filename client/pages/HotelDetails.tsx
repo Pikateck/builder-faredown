@@ -105,8 +105,10 @@ import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { hotelsService } from "@/services/hotelsService";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export default function HotelDetails() {
+  useScrollToTop();
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
