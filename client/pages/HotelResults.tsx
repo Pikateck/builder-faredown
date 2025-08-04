@@ -219,8 +219,8 @@ export default function HotelResults() {
         searchRequest,
       );
 
-      // Try live Hotelbeds API first
-      const liveResults = await hotelsService.searchHotelsLive(searchRequest);
+      // Search hotels using the proper method with fallback
+      const results = await hotelsService.searchHotels(searchRequest);
 
       if (liveResults.length > 0) {
         console.log(
