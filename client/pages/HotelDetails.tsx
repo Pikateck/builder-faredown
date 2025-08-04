@@ -1805,13 +1805,12 @@ export default function HotelDetails() {
                                   </Button>
                                   <Button
                                     onClick={() => handleBargainClick(room)}
-                                    variant="outline"
-                                    className={`w-full font-semibold py-3 text-sm transition-all duration-200 ${
+                                    className={`w-full font-semibold py-3 text-sm transition-all duration-200 flex items-center justify-center gap-2 min-h-[44px] ${
                                       bargainedRooms.has(room.id)
                                         ? "bg-green-500 border-green-600 text-white shadow-lg"
                                         : bargainingRoomId === room.id
                                           ? "bg-blue-500 border-blue-600 text-white shadow-lg animate-pulse"
-                                          : "border-blue-600 text-blue-600 hover:bg-blue-500 hover:text-white hover:border-blue-500 hover:shadow-md"
+                                          : "bg-[#febb02] hover:bg-[#e6a602] text-black border-[#febb02] hover:border-[#e6a602]"
                                     }`}
                                     style={{ display: "block" }}
                                   >
@@ -1823,7 +1822,10 @@ export default function HotelDetails() {
                                     ) : bargainingRoomId === room.id ? (
                                       "Bargaining..."
                                     ) : (
-                                      "Bargain This Room"
+                                      <>
+                                        <TrendingDown className="w-4 h-4" />
+                                        Bargain Now
+                                      </>
                                     )}
                                   </Button>
                                 </div>
