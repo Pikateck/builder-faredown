@@ -2394,7 +2394,7 @@ export default function FlightResults() {
           </div>
 
           {/* Flight Cards */}
-          <div className="space-y-0 md:space-y-4">
+          <div className="space-y-4">
             {/* Loading State */}
             {isLoading && (
               <div className="flex flex-col items-center justify-center py-12 space-y-4">
