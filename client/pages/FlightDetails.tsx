@@ -515,81 +515,56 @@ export default function FlightDetails({
         </div>
       </div>
 
-      {/* Bargain Modal */}
-      {showBargainModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Bargain for Better Price
-              </h3>
-              <button
-                onClick={() => setShowBargainModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-600 mb-2">
-                  Current price: <span className="font-semibold">{formatPrice(flight.price.amount)}</span>
-                </p>
-                <p className="text-sm text-gray-600 mb-4">
-                  Enter your desired price and we'll try to negotiate with the airline:
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Price
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={bargainPrice}
-                    onChange={(e) => setBargainPrice(e.target.value)}
-                    placeholder="Enter amount"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                  <span className="absolute right-3 top-2 text-gray-500">
-                    {selectedCurrency.code}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex space-x-3 pt-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowBargainModal(false)}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    // Here you would implement the actual bargain logic
-                    alert(`Bargain request submitted for ${selectedCurrency.symbol}${bargainPrice}`);
-                    setShowBargainModal(false);
-                    setBargainPrice("");
-                  }}
-                  className="flex-1 bg-amber-600 hover:bg-amber-700"
-                  disabled={!bargainPrice || parseInt(bargainPrice) >= flight.price.amount}
-                >
-                  Submit Bargain
-                </Button>
-              </div>
-
-              {bargainPrice && parseInt(bargainPrice) >= flight.price.amount && (
-                <p className="text-sm text-red-600 text-center">
-                  Bargain price must be lower than current price
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* FlightStyleBargainModal */}
+      <FlightStyleBargainModal
+        roomType={{
+          id: "flight-" + flight.flightNumber,
+          name: `${flight.departure.code} → ${flight.arrival.code}`,
+          description: `${flight.airline} Flight ${flight.flightNumber}`,
+          image: "",
+          marketPrice: flight.price.amount,
+          totalPrice: flight.price.amount,
+          features: [
+            flight.fareClass || "Economy",
+            flight.stops === 0 ? "Direct" : `${flight.stops} Stop${flight.stops > 1 ? "s" : ""}`,
+            flight.duration,
+            flight.aircraft
+          ],
+          maxOccupancy: 1,
+          bedType: "Flight Seat",
+          size: flight.fareClass || "Economy",
+          cancellation: "Terms apply"
+        }}
+        hotel={{
+          id: parseInt(flight.flightNumber?.replace(/[^0-9]/g, "") || "1"),
+          name: flight.airline,
+          location: `${flight.departure.city} to ${flight.arrival.city}`,
+          checkIn: flight.departureDate || new Date().toISOString().split('T')[0],
+          checkOut: flight.arrivalDate || new Date().toISOString().split('T')[0]
+        }}
+        isOpen={showBargainModal}
+        onClose={() => setShowBargainModal(false)}
+        checkInDate={new Date(flight.departureDate || new Date())}
+        checkOutDate={new Date(flight.arrivalDate || new Date())}
+        roomsCount={1}
+        onBookingSuccess={(finalPrice) => {
+          // Navigate to booking flow with bargained price
+          navigate("/booking-flow", {
+            state: {
+              selectedFlight: { ...flight, price: { ...flight.price, amount: finalPrice } },
+              selectedFareType: {
+                id: "bargained",
+                name: flight.fareClass || "Economy",
+                price: finalPrice,
+                refundability: "Non-Refundable",
+              },
+              negotiatedPrice: finalPrice,
+              passengers: { adults: 1, children: 0 },
+              isBargained: true,
+            },
+          });
+        }}
+      />
 
       {/* Fixed Footer with Action Buttons */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40">
