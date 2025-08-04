@@ -56,6 +56,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
