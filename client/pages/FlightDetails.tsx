@@ -133,31 +133,31 @@ export default function FlightDetails({
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 space-y-3 sm:space-y-0">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Button
                 variant="ghost"
-                size="sm"
+                className="min-h-[44px] px-3 py-2 font-semibold text-sm flex items-center gap-2"
                 onClick={() => navigate("/flights")}
-                className="flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Back to Results</span>
+                <span className="hidden sm:inline">Back to Results</span>
+                <span className="sm:hidden">Back</span>
               </Button>
-              <div className="h-6 w-px bg-gray-300" />
+              <div className="h-6 w-px bg-gray-300 hidden sm:block" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900">
                   Flight Details
                 </h1>
-                <p className="text-sm text-gray-600">{flight.flightNumber}</p>
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">{flight.flightNumber}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-end sm:space-x-3">
               <div className="text-right">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-xl sm:text-2xl font-bold text-blue-600">
                   {formatPrice(flight.price.amount)}
                 </div>
-                <div className="text-sm text-gray-500">per person</div>
+                <div className="text-xs sm:text-sm text-gray-500 font-medium">per person</div>
               </div>
             </div>
           </div>
