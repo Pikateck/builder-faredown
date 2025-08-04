@@ -482,7 +482,7 @@ export default function FlightDetails({
               {/* Price Summary */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Price Summary</CardTitle>
+                  <CardTitle className="text-lg font-bold text-gray-900">Price Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
