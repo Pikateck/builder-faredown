@@ -49,6 +49,7 @@ const formatINR = (amount: number): string => {
 };
 
 export default function ReservationPage() {
+  useScrollToTop();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
