@@ -571,19 +571,19 @@ export default function FlightDetails({
                   <div className="space-y-3">
                     <div className="flex items-center space-x-3">
                       <Star className="w-4 h-4 text-yellow-500" />
-                      <span className="text-sm">High customer rating</span>
+                      <span className="text-sm font-medium text-gray-700">High customer rating</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Clock className="w-4 h-4 text-green-500" />
-                      <span className="text-sm">On-time performance</span>
+                      <span className="text-sm font-medium text-gray-700">On-time performance</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Shield className="w-4 h-4 text-blue-500" />
-                      <span className="text-sm">Flexible booking</span>
+                      <span className="text-sm font-medium text-gray-700">Flexible booking</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Luggage className="w-4 h-4 text-purple-500" />
-                      <span className="text-sm">
+                      <span className="text-sm font-medium text-gray-700">
                         Generous baggage allowance
                       </span>
                     </div>
