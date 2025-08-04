@@ -2450,10 +2450,10 @@ export default function FlightResults() {
             {/* Flight Results */}
             {!isLoading &&
               !searchError &&
-              filteredFlights.map((flight) => (
+              filteredFlights.map((flight, index) => (
                 <div key={flight.id}>
                   {/* MOBILE CARD DESIGN (≤768px) - App Style */}
-                  <div className="block md:hidden bg-white border-b border-gray-100">
+                  <div className="block md:hidden bg-white border border-gray-200 rounded-lg mb-4 shadow-sm">
                     <div className="p-4">
                       {/* Flight Header */}
                       <div className="flex items-center justify-between mb-3">
