@@ -179,341 +179,147 @@ export default function FlightDetails({
         <div className="max-w-md mx-auto bg-white">
           {/* Flight to Dubai */}
           <div className="p-4">
-            {/* Round-Trip Flight Cards */}
-            <div className="space-y-4">
-              {/* Outbound Flight */}
-              <div>
-                {/* Header */}
-                <div className="flex items-center mb-4">
-                  <Plane className="w-4 h-4 mr-2 text-gray-700" />
-                  <h4 className="text-base font-semibold text-gray-900">
-                    Outbound • Mon, Aug 5
-                  </h4>
-                </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-1">Flight to Dubai</h2>
+            <p className="text-gray-600 text-sm mb-6">Direct • 3h • Economy</p>
 
-                {/* Flight Card */}
-                <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                  {/* Airline Info Header */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
-                        alt={flight.airline}
-                        className="w-8 h-6 object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈";
-                        }}
-                      />
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">
-                          {flight.airline}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {flight.flightNumber}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            {/* Outbound Flight Timeline */}
+            <div className="relative mb-8">
+              {/* Departure */}
+              <div className="flex items-start space-x-4 mb-6">
+                <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
+                <div className="flex-1">
+                  <div className="text-lg font-semibold text-gray-900 mb-1">Sat, Sep 6 • 08:10</div>
+                  <div className="font-bold text-gray-900 text-lg mb-1">BOM • Chhatrapati Shivaji International Airport Mumbai</div>
 
-                  {/* Flight Timeline */}
-                  <div className="flex items-center justify-between mb-4">
-                    {/* Departure */}
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-gray-900 mb-1">
-                        14:30
-                      </div>
-                      <div className="text-sm font-semibold text-gray-700 mb-1">
-                        BOM
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Mumbai
-                      </div>
-                    </div>
-
-                    {/* Connection Line */}
-                    <div className="flex-1 flex items-center mx-6">
-                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                      <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                          <div className="bg-white px-2">
-                            <div className="flex flex-col items-center">
-                              <div className="text-xs text-gray-500 mb-1">
-                                3h 30m
-                              </div>
-                              <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
-                              <div className="text-xs text-green-600 mt-1">
-                                Direct
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                    </div>
-
-                    {/* Arrival */}
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-gray-900 mb-1">
-                        16:00
-                      </div>
-                      <div className="text-sm font-semibold text-gray-700 mb-1">
-                        DXB
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Dubai
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Flight Details Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs border-t border-gray-100 pt-3">
+                  {/* Airline Info */}
+                  <div className="flex items-center space-x-3 mt-4 mb-4">
+                    <img
+                      src={`https://pics.avs.io/120/120/6E.png`}
+                      alt="IndiGo"
+                      className="w-8 h-8 object-contain"
+                    />
                     <div>
-                      <p className="text-gray-500 mb-1">Aircraft</p>
-                      <p className="font-medium text-gray-900">Airbus A320</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Class</p>
-                      <p className="font-medium text-gray-900">ECONOMY</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Flight time</p>
-                      <p className="font-medium text-gray-900">3h 30m</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Operated by</p>
-                      <p className="font-medium text-gray-900">IndiGo</p>
+                      <div className="font-medium text-gray-900">IndiGo</div>
+                      <div className="text-sm text-gray-600">Flight 6E1451</div>
+                      <div className="text-sm text-gray-600">Flight time 3h</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Return Flight */}
-              <div>
-                {/* Header */}
-                <div className="flex items-center mb-4">
-                  <Plane className="w-4 h-4 mr-2 text-gray-700 rotate-180" />
-                  <h4 className="text-base font-semibold text-gray-900">
-                    Return • Thu, Aug 8
-                  </h4>
-                </div>
+              {/* Connecting Line */}
+              <div className="absolute left-[5px] top-8 w-0.5 bg-gray-300 h-16"></div>
 
-                {/* Flight Card */}
-                <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                  {/* Airline Info Header */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
-                        alt={flight.airline}
-                        className="w-8 h-6 object-contain"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈";
-                        }}
-                      />
-                      <div>
-                        <div className="font-semibold text-gray-900 text-sm">
-                          {flight.airline}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          6E 1408
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Flight Timeline */}
-                  <div className="flex items-center justify-between mb-4">
-                    {/* Departure */}
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-gray-900 mb-1">
-                        18:45
-                      </div>
-                      <div className="text-sm font-semibold text-gray-700 mb-1">
-                        DXB
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Dubai
-                      </div>
-                    </div>
-
-                    {/* Connection Line */}
-                    <div className="flex-1 flex items-center mx-6">
-                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                      <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                          <div className="bg-white px-2">
-                            <div className="flex flex-col items-center">
-                              <div className="text-xs text-gray-500 mb-1">
-                                4h 30m
-                              </div>
-                              <div className="w-2 h-2 bg-[#003580] rounded-full"></div>
-                              <div className="text-xs text-green-600 mt-1">
-                                Direct
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                    </div>
-
-                    {/* Arrival */}
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-gray-900 mb-1">
-                        23:15
-                      </div>
-                      <div className="text-sm font-semibold text-gray-700 mb-1">
-                        BOM
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Mumbai
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Flight Details Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs border-t border-gray-100 pt-3">
-                    <div>
-                      <p className="text-gray-500 mb-1">Aircraft</p>
-                      <p className="font-medium text-gray-900">Airbus A320</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Class</p>
-                      <p className="font-medium text-gray-900">ECONOMY</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Flight time</p>
-                      <p className="font-medium text-gray-900">4h 30m</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500 mb-1">Operated by</p>
-                      <p className="font-medium text-gray-900">IndiGo</p>
-                    </div>
-                  </div>
+              {/* Arrival */}
+              <div className="flex items-start space-x-4 mb-8">
+                <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
+                <div className="flex-1">
+                  <div className="text-lg font-semibold text-gray-900 mb-1">Sat, Sep 6 • 09:40</div>
+                  <div className="font-bold text-gray-900 text-lg">DXB • Dubai International Airport</div>
                 </div>
               </div>
             </div>
 
-            {/* In-Flight Amenities */}
-            <Card>
-              <CardContent className="p-4">
-                <h4 className="font-semibold text-gray-900 mb-3 text-sm">
-                  In-Flight Amenities
-                </h4>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {flight.amenities?.map((amenity, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-2"
-                    >
-                      <CheckCircle className="w-3 h-3 text-green-600" />
-                      <span className="text-xs">{amenity}</span>
-                    </div>
-                  )) || (
-                    <div className="col-span-full text-center py-6 text-gray-500">
-                      <Coffee className="w-6 h-6 mx-auto mb-2 opacity-50" />
-                      <p className="text-xs">
-                        Amenity information will be available during
-                        booking
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            {/* Flight to Mumbai */}
+            <h2 className="text-xl font-bold text-gray-900 mb-1 mt-8">Flight to Mumbai</h2>
+            <p className="text-gray-600 text-sm mb-6">Direct • 3h 15m • Economy</p>
 
-            {/* Policies */}
-            <Card>
-              <CardContent className="p-4">
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2 text-sm">
-                      Cancellation Policy
-                    </h4>
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                      <p className="text-xs text-amber-800">
-                        This fare is non-refundable. Changes may be
-                        permitted with fees. Please review complete terms
-                        and conditions before booking.
-                      </p>
-                    </div>
-                  </div>
+            {/* Return Flight Timeline */}
+            <div className="relative mb-8">
+              {/* Departure */}
+              <div className="flex items-start space-x-4 mb-6">
+                <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
+                <div className="flex-1">
+                  <div className="text-lg font-semibold text-gray-900 mb-1">Sat, Sep 13 • 20:50</div>
+                  <div className="font-bold text-gray-900 text-lg mb-1">DXB • Dubai International Airport</div>
 
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2 text-sm">
-                      Check-in Requirements
-                    </h4>
-                    <div className="space-y-1 text-xs">
-                      <div className="flex items-start space-x-2">
-                        <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
-                        <span>
-                          Online check-in opens 24 hours before departure
-                        </span>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
-                        <span>
-                          Arrive at airport at least 2 hours before
-                          international flights
-                        </span>
-                      </div>
-                      <div className="flex items-start space-x-2">
-                        <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
-                        <span>
-                          Valid passport required for international travel
-                        </span>
-                      </div>
+                  {/* Airline Info */}
+                  <div className="flex items-center space-x-3 mt-4 mb-4">
+                    <img
+                      src={`https://pics.avs.io/120/120/6E.png`}
+                      alt="IndiGo"
+                      className="w-8 h-8 object-contain"
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900">IndiGo</div>
+                      <div className="text-sm text-gray-600">Flight 6E1456</div>
+                      <div className="text-sm text-gray-600">Flight time 3h 15m</div>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+
+              {/* Connecting Line */}
+              <div className="absolute left-[5px] top-8 w-0.5 bg-gray-300 h-16"></div>
+
+              {/* Arrival */}
+              <div className="flex items-start space-x-4 mb-8">
+                <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="text-lg font-semibold text-gray-900">Sun, Sep 14 • 01:35</span>
+                    <div className="flex items-center space-x-1 bg-gray-100 px-2 py-1 rounded">
+                      <Info className="w-3 h-3 text-gray-600" />
+                      <span className="text-xs text-gray-600">Arrive on a different day</span>
+                    </div>
+                  </div>
+                  <div className="font-bold text-gray-900 text-lg">BOM • Chhatrapati Shivaji International Airport Mumbai</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Included Baggage */}
+            <div className="border-t pt-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Included baggage</h3>
+              <p className="text-gray-600 text-sm mb-6">Total baggage allowance for each flight</p>
+
+              <div className="space-y-6">
+                {/* Personal Item */}
+                <div className="flex items-start space-x-3">
+                  <ShoppingBag className="w-6 h-6 text-gray-700 mt-1" />
+                  <div className="flex-1">
+                    <div className="font-semibold text-gray-900 mb-1">1 personal item</div>
+                    <div className="text-gray-600 mb-2">Fits under the seat in front of you</div>
+                    <div className="text-green-600 font-medium">Included</div>
+                  </div>
+                </div>
+
+                {/* Carry-on */}
+                <div className="flex items-start space-x-3">
+                  <Suitcase className="w-6 h-6 text-gray-700 mt-1" />
+                  <div className="flex-1">
+                    <div className="font-semibold text-gray-900 mb-1">1 carry-on bag</div>
+                    <div className="text-gray-600 mb-2">Up to 7 kg • 25 x 35 x 55 cm</div>
+                    <div className="text-green-600 font-medium">Included</div>
+                  </div>
+                </div>
+
+                {/* Checked Bag */}
+                <div className="flex items-start space-x-3">
+                  <Suitcase className="w-6 h-6 text-gray-700 mt-1" />
+                  <div className="flex-1">
+                    <div className="font-semibold text-gray-900 mb-1">1 checked bag</div>
+                    <div className="text-gray-600 mb-2">Up to 15 kg</div>
+                    <div className="text-green-600 font-medium">Included</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-4 space-y-4">
-              {/* Price Summary */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base font-bold text-gray-900">Price Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3 pt-0">
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Base fare:</span>
-                      <span>
-                        {formatPrice(flight.price.breakdown.baseFare)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Taxes & fees:</span>
-                      <span>
-                        {formatPrice(
-                          flight.price.breakdown.taxes +
-                            flight.price.breakdown.fees,
-                        )}
-                      </span>
-                    </div>
-                    <div className="border-t pt-2 mt-2">
-                      <div className="flex justify-between font-semibold">
-                        <span>Total:</span>
-                        <span className="text-blue-600">
-                          {formatPrice(flight.price.breakdown.total)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="text-xs text-gray-500 text-center">
-                    Prices include all taxes and fees
-                  </div>
-                </CardContent>
-              </Card>
-
-
+          {/* Price Footer */}
+          <div className="border-t bg-white p-4 fixed bottom-0 left-0 right-0 z-40">
+            <div className="max-w-md mx-auto flex items-center justify-between">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-2xl font-bold text-gray-900">₹ 24,216</span>
+                  <Info className="w-4 h-4 text-gray-500" />
+                </div>
+                <div className="text-sm text-gray-600">1 traveler</div>
+              </div>
+              <Button className="bg-[#0071c2] hover:bg-[#005bb5] text-white px-8 py-3 text-lg font-semibold rounded">
+                Select
+              </Button>
             </div>
           </div>
         </div>
