@@ -393,19 +393,19 @@ export default function FlightDetails({
                   className="min-h-[48px] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-2"
                   onClick={() => {
                     if (onBook) {
-                      onBook(flight);
+                      onBook(displayFlight);
                     } else {
                       // Navigate to booking flow with flight data
                       navigate("/booking-flow", {
                         state: {
-                          selectedFlight: flight,
+                          selectedFlight: displayFlight,
                           selectedFareType: {
                             id: "default",
-                            name: flight.fareClass || "Economy",
-                            price: flight.price.amount,
+                            name: displayFlight.fareClass || "Economy",
+                            price: displayFlight.price.amount,
                             refundability: "Non-Refundable",
                           },
-                          negotiatedPrice: flight.price.amount,
+                          negotiatedPrice: displayFlight.price.amount,
                           passengers: { adults: 1, children: 0 },
                         },
                       });
