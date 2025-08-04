@@ -2984,14 +2984,19 @@ export default function FlightResults() {
                           {/* Side-by-side buttons - Hotel Section Style */}
                           <div className="grid grid-cols-2 gap-2 mt-3">
                             <Button
-                              onClick={() =>
-                                handleToggleFlightDetails(
-                                  flight.id,
-                                  flight.fareTypes[0].id,
-                                )
-                              }
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log('Desktop View Details clicked for flight:', flight.id);
+                                navigate(`/flight-details/${flight.id}`, {
+                                  state: { flight }
+                                });
+                              }}
                               variant="outline"
-                              className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
+                              className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
+                              onTouchStart={(e) => {
+                                e.stopPropagation();
+                              }}
                             >
                               View Details
                             </Button>
