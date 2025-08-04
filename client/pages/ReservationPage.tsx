@@ -1075,6 +1075,9 @@ export default function ReservationPage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation Footer */}
+      <MobileNavigation />
     </div>
   );
 }
