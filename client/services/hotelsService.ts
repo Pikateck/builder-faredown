@@ -386,8 +386,10 @@ export class HotelsService {
               "���️ Live API returned non-JSON response (likely HTML error page)",
             );
           }
-        } else {
+        } else if (response) {
           console.warn(`⚠️ Live API returned status ${response.status}`);
+        } else {
+          console.log("🌐 Hotel search fetch failed, continuing to fallback");
         }
       } catch (fetchError) {
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
@@ -1094,7 +1096,7 @@ export class HotelsService {
         type: "city" as const,
         country: "France",
         code: "CDG",
-        flag: "����🇷",
+        flag: "�����🇷",
         popular: true,
       },
       {
