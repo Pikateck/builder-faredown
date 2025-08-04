@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 interface FlightDetailsProps {
