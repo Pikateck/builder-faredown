@@ -566,13 +566,9 @@ export default function HotelDetails() {
         image:
           "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop", // Deluxe suite
         features: [
-          "5.2 km from downtown",
-          "Max 4 guests",
-          "1 king bed + sofa bed",
-          "Ocean view",
-          "Separate living area",
-          "Free cancellation",
-          "Complimentary breakfast",
+          "Upgrade for +₹55",
+          "Ocean View Suite",
+          "Premium amenities",
         ],
       },
       {
