@@ -28,7 +28,7 @@ import {
   formatLocalPrice,
   PriceCalculation,
 } from "@/lib/pricing";
-import { numberToWords } from "@/lib/numberToWords";
+import { numberToWords, formatPriceInWords } from "@/lib/numberToWords";
 
 interface RoomType {
   id: string;
