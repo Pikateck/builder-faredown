@@ -23,6 +23,7 @@ import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 
 interface FlightDetailsProps {
   flightId?: string;
