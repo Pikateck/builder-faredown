@@ -479,9 +479,7 @@ export function FlightStyleBargainModal({
                 {(bargainState.currentCounterOffer || 0).toLocaleString()}
               </div>
               <p className="text-sm text-[#003580] font-medium mb-3">
-                {numberToWords(
-                  (bargainState.currentCounterOffer || 0).toString(),
-                )}
+                {formatPriceInWords(bargainState.currentCounterOffer || 0)}
               </p>
               <div className="text-center">
                 <span className="text-sm font-semibold text-[#003580] bg-[#003580]/10 px-4 py-2 rounded-full">
