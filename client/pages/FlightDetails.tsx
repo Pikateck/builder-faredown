@@ -102,12 +102,12 @@ export default function FlightDetails({
     try {
       setIsLoading(true);
       setError(null);
-      const flightDetails =
-        await flightsService.getFlightDetails(finalFlightId);
+      const flightDetails = await flightsService.getFlightDetails(finalFlightId);
       setFlight(flightDetails);
     } catch (err) {
       console.error("Failed to load flight details:", err);
-      setError("Failed to load flight details");
+      // Keep fallback data instead of showing error
+      console.log("Using fallback flight data");
     } finally {
       setIsLoading(false);
     }
