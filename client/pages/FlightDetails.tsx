@@ -167,126 +167,219 @@ export default function FlightDetails({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Flight Card - Matching FlightResults Design */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              {/* Airline Info Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-3">
-                  <img
-                    src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
-                    alt={flight.airline}
-                    className="w-10 h-8 object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "https://via.placeholder.com/40x32/E5E7EB/6B7280?text=✈";
-                    }}
-                  />
-                  <div>
-                    <div className="font-semibold text-gray-900 text-base">
-                      {flight.airline}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {flight.flightNumber}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-gray-900">
-                    ₹{flight.price.amount.toLocaleString("en-IN")}
-                  </div>
-                  <div className="text-xs text-gray-500">per person</div>
-                  <div className="text-xs font-medium text-blue-600">
-                    {flight.fareClass || "Economy"}
-                  </div>
-                </div>
-              </div>
-
-              {/* Flight Timeline - Matching FlightResults */}
-              <div className="flex items-center justify-between mb-6">
-                {/* Departure */}
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 mb-1">
-                    {flight.departureTime}
-                  </div>
-                  <div className="text-sm font-semibold text-gray-700 mb-1">
-                    {flight.departure.code}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {flight.departure.city}
-                  </div>
-                  {flight.departure.terminal && (
-                    <div className="text-xs text-blue-600 mt-1">
-                      Terminal {flight.departure.terminal}
-                    </div>
-                  )}
+            {/* Round-Trip Flight Cards */}
+            <div className="space-y-6">
+              {/* Outbound Flight */}
+              <div>
+                {/* Header */}
+                <div className="flex items-center mb-6">
+                  <Plane className="w-5 h-5 mr-2 text-gray-700" />
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    Outbound • Mon, Aug 5
+                  </h4>
                 </div>
 
-                {/* Connection Line */}
-                <div className="flex-1 flex items-center mx-8">
-                  <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
-                  <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
-                    {flight.stops > 0 && (
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div className="bg-gray-600 text-white text-xs px-2 py-1 rounded font-medium">
-                          {flight.stops} Stop{flight.stops > 1 ? "s" : ""}
+                {/* Flight Card */}
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                  {/* Airline Info Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                        alt={flight.airline}
+                        className="w-10 h-8 object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "https://via.placeholder.com/40x32/E5E7EB/6B7280?text=✈";
+                        }}
+                      />
+                      <div>
+                        <div className="font-semibold text-gray-900 text-base">
+                          {flight.airline}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {flight.flightNumber}
                         </div>
                       </div>
-                    )}
-                    {flight.stops === 0 && (
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <div className="bg-white px-2">
-                          <div className="flex flex-col items-center">
-                            <div className="text-xs text-gray-500 mb-1">
-                              {flight.duration}
-                            </div>
-                            <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
-                            <div className="text-xs text-green-600 mt-1">
-                              Direct
+                    </div>
+                  </div>
+
+                  {/* Flight Timeline */}
+                  <div className="flex items-center justify-between mb-6">
+                    {/* Departure */}
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-gray-900 mb-1">
+                        14:30
+                      </div>
+                      <div className="text-sm font-semibold text-gray-700 mb-1">
+                        BOM
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Mumbai
+                      </div>
+                    </div>
+
+                    {/* Connection Line */}
+                    <div className="flex-1 flex items-center mx-8">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
+                      <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          <div className="bg-white px-2">
+                            <div className="flex flex-col items-center">
+                              <div className="text-xs text-gray-500 mb-1">
+                                3h 30m
+                              </div>
+                              <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                              <div className="text-xs text-green-600 mt-1">
+                                Direct
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    )}
-                  </div>
-                  <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
-                </div>
-
-                {/* Arrival */}
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 mb-1">
-                    {flight.arrivalTime}
-                  </div>
-                  <div className="text-sm font-semibold text-gray-700 mb-1">
-                    {flight.arrival.code}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {flight.arrival.city}
-                  </div>
-                  {flight.arrival.terminal && (
-                    <div className="text-xs text-blue-600 mt-1">
-                      Terminal {flight.arrival.terminal}
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
-                  )}
+
+                    {/* Arrival */}
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-gray-900 mb-1">
+                        16:00
+                      </div>
+                      <div className="text-sm font-semibold text-gray-700 mb-1">
+                        DXB
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Dubai
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Flight Details Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
+                    <div>
+                      <p className="text-gray-500 mb-1">Aircraft</p>
+                      <p className="font-medium text-gray-900">{flight.aircraft}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 mb-1">Class</p>
+                      <p className="font-medium text-gray-900">{flight.fareClass || "Economy"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 mb-1">Flight time</p>
+                      <p className="font-medium text-gray-900">3h 30m</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 mb-1">Operated by</p>
+                      <p className="font-medium text-gray-900">{flight.airline}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Flight Details Grid - Matching FlightResults */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
-                <div>
-                  <p className="text-gray-500 mb-1">Aircraft</p>
-                  <p className="font-medium text-gray-900">{flight.aircraft}</p>
+              {/* Return Flight */}
+              <div>
+                {/* Header */}
+                <div className="flex items-center mb-6">
+                  <Plane className="w-5 h-5 mr-2 text-gray-700 rotate-180" />
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    Return • Thu, Aug 8
+                  </h4>
                 </div>
-                <div>
-                  <p className="text-gray-500 mb-1">Class</p>
-                  <p className="font-medium text-gray-900">{flight.fareClass || "Economy"}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 mb-1">Flight time</p>
-                  <p className="font-medium text-gray-900">{flight.duration}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500 mb-1">Operated by</p>
-                  <p className="font-medium text-gray-900">{flight.airline}</p>
+
+                {/* Flight Card */}
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                  {/* Airline Info Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                        alt={flight.airline}
+                        className="w-10 h-8 object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            "https://via.placeholder.com/40x32/E5E7EB/6B7280?text=✈";
+                        }}
+                      />
+                      <div>
+                        <div className="font-semibold text-gray-900 text-base">
+                          {flight.airline}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          6E 1408
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Flight Timeline */}
+                  <div className="flex items-center justify-between mb-6">
+                    {/* Departure */}
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-gray-900 mb-1">
+                        18:45
+                      </div>
+                      <div className="text-sm font-semibold text-gray-700 mb-1">
+                        DXB
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Dubai
+                      </div>
+                    </div>
+
+                    {/* Connection Line */}
+                    <div className="flex-1 flex items-center mx-8">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
+                      <div className="flex-1 h-0.5 bg-gray-300 mx-2 relative">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                          <div className="bg-white px-2">
+                            <div className="flex flex-col items-center">
+                              <div className="text-xs text-gray-500 mb-1">
+                                4h 30m
+                              </div>
+                              <div className="w-3 h-3 bg-[#003580] rounded-full"></div>
+                              <div className="text-xs text-green-600 mt-1">
+                                Direct
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
+                    </div>
+
+                    {/* Arrival */}
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-gray-900 mb-1">
+                        23:15
+                      </div>
+                      <div className="text-sm font-semibold text-gray-700 mb-1">
+                        BOM
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Mumbai
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Flight Details Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm border-t border-gray-100 pt-4">
+                    <div>
+                      <p className="text-gray-500 mb-1">Aircraft</p>
+                      <p className="font-medium text-gray-900">{flight.aircraft}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 mb-1">Class</p>
+                      <p className="font-medium text-gray-900">{flight.fareClass || "Economy"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 mb-1">Flight time</p>
+                      <p className="font-medium text-gray-900">4h 30m</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500 mb-1">Operated by</p>
+                      <p className="font-medium text-gray-900">{flight.airline}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
