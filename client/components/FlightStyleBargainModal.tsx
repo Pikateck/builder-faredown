@@ -542,7 +542,7 @@ export function FlightStyleBargainModal({
                 {finalPrice.toLocaleString()}
               </div>
               <p className="text-sm text-[#003580] font-medium">
-                {numberToWords(finalPrice.toString())}
+                {formatPriceInWords(finalPrice)}
               </p>
             </div>
 
