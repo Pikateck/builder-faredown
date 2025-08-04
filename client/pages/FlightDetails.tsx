@@ -513,8 +513,7 @@ export default function FlightDetails({
 
                   <div className="space-y-3 pt-4 border-t">
                     <Button
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                      size="lg"
+                      className="w-full min-h-[44px] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-2"
                       onClick={() => {
                         if (onBook) {
                           onBook(flight);
@@ -536,14 +535,12 @@ export default function FlightDetails({
                         }
                       }}
                     >
-                      <CreditCard className="w-4 h-4 mr-2" />
+                      <CreditCard className="w-4 h-4" />
                       Book Now
                     </Button>
 
                     <Button
-                      variant="outline"
-                      className="w-full border-amber-500 text-amber-700 hover:bg-amber-50"
-                      size="lg"
+                      className="w-full min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
                       onClick={() => {
                         if (onBargain) {
                           onBargain(flight);
@@ -552,8 +549,8 @@ export default function FlightDetails({
                         }
                       }}
                     >
-                      <TrendingDown className="w-4 h-4 mr-2" />
-                      Try to Bargain
+                      <TrendingDown className="w-4 h-4" />
+                      Bargain Now
                     </Button>
                   </div>
 
