@@ -351,7 +351,7 @@ export default function FlightDetails({
             <div className="max-w-md mx-auto">
               {/* Price Display */}
               <div className="flex items-center justify-center space-x-2 mb-3">
-                <span className="text-2xl font-bold text-gray-900">₹ 24,216</span>
+                <span className="text-2xl font-bold text-gray-900">₹ {displayFlight.price.amount.toLocaleString("en-IN")}</span>
                 <div className="relative group">
                   <Info className="w-4 h-4 text-gray-500 cursor-help" />
                   {/* Price Breakdown Tooltip */}
