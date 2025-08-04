@@ -302,7 +302,7 @@ export default function FlightDetails({
                       <span className="text-xs text-gray-600">Arrive on a different day</span>
                     </div>
                   </div>
-                  <div className="font-bold text-gray-900 text-lg">BOM • Chhatrapati Shivaji International Airport Mumbai</div>
+                  <div className="font-bold text-gray-900 text-lg">{displayFlight.departure.code} • {displayFlight.departure.name}</div>
                 </div>
               </div>
             </div>
