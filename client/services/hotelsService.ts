@@ -222,18 +222,24 @@ export class HotelsService {
         );
         return liveResults;
       }
-
-      // If no live results, fall back to regular API (which may use mock data)
-      console.log("⚠️ No live data available, using fallback");
-      return await this.searchHotelsFallback(searchParams);
     } catch (error) {
-      // Handle AbortError specifically to avoid console noise
+      // Handle AbortError specifically
       if (error instanceof Error && error.name === "AbortError") {
         console.log("⏰ Hotel search was aborted, returning empty results");
         return [];
       }
-      console.error("Hotel search error:", error);
-      return [];
+      // For other errors, log and continue to fallback
+      console.warn("Live API failed, trying fallback:", error instanceof Error ? error.message : "Unknown error");
+    }
+
+    try {
+      // If no live results or live API failed, fall back to regular API
+      console.log("⚠️ No live data available, using fallback");
+      return await this.searchHotelsFallback(searchParams);
+    } catch (fallbackError) {
+      console.error("Fallback API also failed:", fallbackError);
+      // Return static mock data as last resort
+      return this.getStaticMockHotels(searchParams);
     }
   }
 
