@@ -549,11 +549,9 @@ export default function HotelDetails() {
         image:
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop", // King room
         features: [
-          "6.7 km from downtown",
-          "Max 2 guests",
-          "1 king bed",
-          "Free cancellation",
-          "No prepayment needed",
+          "Upgrade for +₹18",
+          "King Room",
+          "Better city views",
         ],
       },
       {
