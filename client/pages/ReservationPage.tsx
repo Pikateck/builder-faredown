@@ -309,7 +309,7 @@ export default function ReservationPage() {
       <div className="bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-8 py-3">
         <div className="max-w-7xl mx-auto">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/hotels/${hotelData.id}`)}
             className="flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
