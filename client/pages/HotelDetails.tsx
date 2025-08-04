@@ -622,7 +622,7 @@ export default function HotelDetails() {
           "Best value option",
         ],
       },
-    ];
+    ].sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
 
   // Create final hotel object with calculated roomTypes
