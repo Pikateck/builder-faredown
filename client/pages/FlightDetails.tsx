@@ -645,13 +645,6 @@ export default function FlightDetails({
               Bargain Now
             </Button>
           </div>
-
-          <div className="text-center mt-2">
-            <span className="text-lg font-bold text-blue-600">
-              {formatPrice(flight.price.amount)}
-            </span>
-            <span className="text-sm text-gray-500 ml-1">per person</span>
-          </div>
         </div>
       </div>
 
