@@ -617,13 +617,9 @@ export default function HotelDetails() {
         image:
           "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Standard double
         features: [
-          "7.2 km from downtown",
-          "Max 2 guests",
-          "1 double bed",
-          "Standard amenities",
-          "Free Wi-Fi",
-          "Non-refundable rate",
-          "Best price guarantee",
+          "Save ₹15",
+          "Standard Room",
+          "Best value option",
         ],
       },
     ];
