@@ -262,14 +262,14 @@ export default function FlightDetails({
                   onValueChange={setSelectedTab}
                   className="w-full"
                 >
-                  <TabsList className="grid w-full grid-cols-4">
-                    <TabsTrigger value="overview">Overview</TabsTrigger>
-                    <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-                    <TabsTrigger value="amenities">Amenities</TabsTrigger>
-                    <TabsTrigger value="policies">Policies</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-4 h-10">
+                    <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
+                    <TabsTrigger value="itinerary" className="text-xs">Itinerary</TabsTrigger>
+                    <TabsTrigger value="amenities" className="text-xs">Amenities</TabsTrigger>
+                    <TabsTrigger value="policies" className="text-xs">Policies</TabsTrigger>
                   </TabsList>
 
-                  <div className="p-6">
+                  <div className="p-4">
                     <TabsContent value="overview" className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
