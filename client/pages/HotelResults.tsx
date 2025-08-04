@@ -44,6 +44,7 @@ import {
 } from "@/components/MobileDropdowns";
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 // Use the Hotel type from hotelsService for consistency
 interface Hotel extends HotelType {
@@ -52,6 +53,7 @@ interface Hotel extends HotelType {
 }
 
 export default function HotelResults() {
+  useScrollToTop();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
