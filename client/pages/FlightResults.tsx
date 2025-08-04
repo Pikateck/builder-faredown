@@ -2977,7 +2977,7 @@ export default function FlightResults() {
                           </div>
 
                           {/* Side-by-side buttons - Hotel Section Style */}
-                          <div className="flex gap-2 mt-3">
+                          <div className="flex gap-2 mt-3 items-center">
                             <Button
                               onClick={() =>
                                 handleToggleFlightDetails(
@@ -2986,7 +2986,7 @@ export default function FlightResults() {
                                 )
                               }
                               variant="outline"
-                              className="flex-1 min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation"
+                              className="flex-1 min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
                             >
                               View Details
                             </Button>
