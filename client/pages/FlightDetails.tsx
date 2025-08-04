@@ -384,147 +384,78 @@ export default function FlightDetails({
               </div>
             </div>
 
-            {/* Detailed Information Tabs */}
+            {/* In-Flight Amenities */}
             <Card>
-              <CardContent className="p-0">
-                <Tabs
-                  value={selectedTab}
-                  onValueChange={setSelectedTab}
-                  className="w-full"
-                >
-                  <TabsList className="grid w-full grid-cols-3 h-10">
-                    <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
-                    <TabsTrigger value="amenities" className="text-xs">Amenities</TabsTrigger>
-                    <TabsTrigger value="policies" className="text-xs">Policies</TabsTrigger>
-                  </TabsList>
+              <CardContent className="p-6">
+                <h4 className="font-semibold text-gray-900 mb-4">
+                  In-Flight Amenities
+                </h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {flight.amenities?.map((amenity, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2"
+                    >
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <span className="text-sm">{amenity}</span>
+                    </div>
+                  )) || (
+                    <div className="col-span-full text-center py-8 text-gray-500">
+                      <Coffee className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p>
+                        Amenity information will be available during
+                        booking
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
 
-                  <div className="p-4">
-                    <TabsContent value="overview" className="space-y-3 mt-0">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2 text-sm">
-                            Flight Information
-                          </h4>
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Aircraft:</span>
-                              <span className="font-medium">
-                                {flight.aircraft}
-                              </span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Class:</span>
-                              <span className="font-medium">
-                                {flight.fareClass || "Economy"}
-                              </span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Distance:</span>
-                              <span className="font-medium">~2,200 km</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-2 text-sm">
-                            Baggage Allowance
-                          </h4>
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Cabin bag:</span>
-                              <span className="font-medium">
-                                {flight.baggage?.carryOn?.weight || "7kg"}
-                              </span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Check-in:</span>
-                              <span className="font-medium">
-                                {flight.baggage?.checked?.weight || "20kg"}
-                              </span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Dimensions:</span>
-                              <span className="font-medium">
-                                {flight.baggage?.carryOn?.dimensions ||
-                                  "55x40x20cm"}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </TabsContent>
-
-
-                    <TabsContent value="amenities" className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 mb-4">
-                        In-Flight Amenities
-                      </h4>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {flight.amenities?.map((amenity, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center space-x-2"
-                          >
-                            <CheckCircle className="w-4 h-4 text-green-600" />
-                            <span className="text-sm">{amenity}</span>
-                          </div>
-                        )) || (
-                          <div className="col-span-full text-center py-8 text-gray-500">
-                            <Coffee className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                            <p>
-                              Amenity information will be available during
-                              booking
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="policies" className="space-y-4">
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">
-                            Cancellation Policy
-                          </h4>
-                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                            <p className="text-sm text-amber-800">
-                              This fare is non-refundable. Changes may be
-                              permitted with fees. Please review complete terms
-                              and conditions before booking.
-                            </p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">
-                            Check-in Requirements
-                          </h4>
-                          <div className="space-y-2 text-sm">
-                            <div className="flex items-start space-x-2">
-                              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                              <span>
-                                Online check-in opens 24 hours before departure
-                              </span>
-                            </div>
-                            <div className="flex items-start space-x-2">
-                              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                              <span>
-                                Arrive at airport at least 2 hours before
-                                international flights
-                              </span>
-                            </div>
-                            <div className="flex items-start space-x-2">
-                              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
-                              <span>
-                                Valid passport required for international travel
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </TabsContent>
+            {/* Policies */}
+            <Card>
+              <CardContent className="p-6">
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-3">
+                      Cancellation Policy
+                    </h4>
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                      <p className="text-sm text-amber-800">
+                        This fare is non-refundable. Changes may be
+                        permitted with fees. Please review complete terms
+                        and conditions before booking.
+                      </p>
+                    </div>
                   </div>
-                </Tabs>
+
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-3">
+                      Check-in Requirements
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-start space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                        <span>
+                          Online check-in opens 24 hours before departure
+                        </span>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                        <span>
+                          Arrive at airport at least 2 hours before
+                          international flights
+                        </span>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                        <span>
+                          Valid passport required for international travel
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
