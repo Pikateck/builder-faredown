@@ -318,6 +318,20 @@ export class HotelsService {
             "Content-Type": "application/json",
           },
           signal: controller.signal,
+        }).catch((fetchErr) => {
+          // Catch and handle fetch errors immediately to prevent propagation
+          if (fetchErr.name === "AbortError") {
+            console.log("⏰ Hotel search fetch was aborted");
+            throw fetchErr; // Re-throw AbortError to handle it properly
+          }
+          if (fetchErr.message?.includes("Failed to fetch") ||
+              fetchErr.name === "TypeError" ||
+              fetchErr.message?.includes("NetworkError")) {
+            console.log("🌐 Network connectivity issue during hotel search fetch");
+            return null; // Return null to indicate failure
+          }
+          console.warn("Hotel search fetch error:", fetchErr.message || "Unknown fetch error");
+          return null; // Return null for other fetch errors
         });
 
         if (response.ok) {
@@ -1319,7 +1333,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Thailand",
         code: "BKK",
-        flag: "🇹��",
+        flag: "🇹🇭",
         popular: true,
       },
       {
