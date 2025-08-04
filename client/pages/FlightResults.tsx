@@ -253,6 +253,7 @@ const flightData = [
 ];
 
 export default function FlightResults() {
+  useScrollToTop();
   const { isLoggedIn, user, login, logout } = useAuth();
   const {
     departureDate,
