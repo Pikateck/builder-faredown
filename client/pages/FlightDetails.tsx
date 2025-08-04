@@ -167,94 +167,86 @@ export default function FlightDetails({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Flight Overview Card */}
+            {/* Compact Flight Overview */}
             <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
+              <CardContent className="p-4">
+                {/* Airline Info */}
+                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <img
                       src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
                       alt={flight.airline}
-                      className="w-12 h-12 object-contain"
+                      className="w-8 h-8 object-contain"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
-                          "https://via.placeholder.com/48x48/E5E7EB/6B7280?text=���";
+                          "https://via.placeholder.com/32x32/E5E7EB/6B7280?text=���";
                       }}
                     />
                     <div>
-                      <CardTitle className="text-lg font-bold text-gray-900">
+                      <div className="font-semibold text-gray-900 text-sm">
                         {flight.airline}
-                      </CardTitle>
-                      <p className="text-sm text-gray-600">
+                      </div>
+                      <div className="text-xs text-gray-600">
                         {flight.flightNumber} • {flight.aircraft}
-                      </p>
+                      </div>
                     </div>
                   </div>
-                  <Badge variant={flight.stops === 0 ? "default" : "secondary"}>
-                    {flight.stops === 0
-                      ? "Direct"
-                      : `${flight.stops} Stop${flight.stops > 1 ? "s" : ""}`}
+                  <Badge variant={flight.stops === 0 ? "default" : "secondary"} className="text-xs">
+                    {flight.stops === 0 ? "Direct" : `${flight.stops} Stop${flight.stops > 1 ? "s" : ""}`}
                   </Badge>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                {/* Flight Route */}
+                <div className="grid grid-cols-3 items-center gap-2">
                   {/* Departure */}
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-900 mb-1">
+                    <div className="text-2xl font-bold text-gray-900">
                       {flight.departureTime}
                     </div>
-                    <div className="text-lg font-semibold text-gray-700 mb-1">
+                    <div className="text-sm font-semibold text-gray-700">
                       {flight.departure.code}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-xs text-gray-600">
                       {flight.departure.city}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {flight.departure.name}
-                    </div>
                     {flight.departure.terminal && (
-                      <div className="text-xs text-blue-600 mt-1">
-                        Terminal {flight.departure.terminal}
+                      <div className="text-xs text-blue-600">
+                        T{flight.departure.terminal}
                       </div>
                     )}
                   </div>
 
                   {/* Duration */}
-                  <div className="flex flex-col items-center justify-center">
+                  <div className="flex flex-col items-center">
                     <div className="relative w-full">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+                        <div className="w-full border-t border-dashed border-gray-300"></div>
                       </div>
                       <div className="relative flex justify-center">
-                        <div className="bg-white px-4">
-                          <Plane className="w-6 h-6 text-blue-600" />
+                        <div className="bg-white px-2">
+                          <Plane className="w-4 h-4 text-blue-600" />
                         </div>
                       </div>
                     </div>
-                    <div className="text-sm font-medium text-gray-700 mt-2">
+                    <div className="text-xs font-medium text-gray-700 mt-1">
                       {flight.duration}
                     </div>
-                    <div className="text-xs text-gray-500">Flight time</div>
                   </div>
 
                   {/* Arrival */}
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-900 mb-1">
+                    <div className="text-2xl font-bold text-gray-900">
                       {flight.arrivalTime}
                     </div>
-                    <div className="text-lg font-semibold text-gray-700 mb-1">
+                    <div className="text-sm font-semibold text-gray-700">
                       {flight.arrival.code}
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-xs text-gray-600">
                       {flight.arrival.city}
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {flight.arrival.name}
-                    </div>
                     {flight.arrival.terminal && (
-                      <div className="text-xs text-blue-600 mt-1">
-                        Terminal {flight.arrival.terminal}
+                      <div className="text-xs text-blue-600">
+                        T{flight.arrival.terminal}
                       </div>
                     )}
                   </div>
