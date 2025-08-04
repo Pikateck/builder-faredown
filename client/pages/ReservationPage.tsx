@@ -1064,7 +1064,7 @@ export default function ReservationPage() {
                   )}
                 </div>
 
-                <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                <div className="bg-green-50 p-3 rounded-lg border border-green-200 mb-4">
                   <div className="flex items-center text-green-800 text-sm">
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Free cancellation until 24 hours before check-in
@@ -1074,6 +1074,9 @@ export default function ReservationPage() {
             </Card>
           </div>
         </div>
+
+        {/* Additional bottom spacing for mobile */}
+        <div className="h-8 block sm:hidden"></div>
       </div>
 
       {/* Mobile Navigation Footer */}
