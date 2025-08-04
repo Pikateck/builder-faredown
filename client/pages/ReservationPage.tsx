@@ -913,7 +913,7 @@ export default function ReservationPage() {
                 {/* Navigation Buttons */}
                 <div className="flex justify-between pt-6 border-t border-gray-200">
                   {currentStep > 1 ? (
-                    <Button variant="outline" onClick={handlePrevStep}>
+                    <Button variant="outline" onClick={handlePrevStep} className="min-h-[44px] px-6 py-3 font-semibold">
                       <ArrowLeft className="w-4 h-4 mr-2" />
                       Previous
                     </Button>
@@ -922,7 +922,7 @@ export default function ReservationPage() {
                   )}
 
                   {currentStep < 3 ? (
-                    <Button onClick={handleNextStep} disabled={!isStepValid()}>
+                    <Button onClick={handleNextStep} disabled={!isStepValid()} className="min-h-[44px] px-6 py-3 font-semibold">
                       Continue
                       <ChevronRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -930,7 +930,7 @@ export default function ReservationPage() {
                     <Button
                       onClick={handlePayment}
                       disabled={!isStepValid() || isLoading}
-                      className="bg-green-600 hover:bg-green-700"
+                      className="bg-green-600 hover:bg-green-700 min-h-[44px] px-6 py-3 font-semibold"
                     >
                       {isLoading ? (
                         <>
