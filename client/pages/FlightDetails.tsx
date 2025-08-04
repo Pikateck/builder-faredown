@@ -385,23 +385,23 @@ export default function FlightDetails({
 
             {/* In-Flight Amenities */}
             <Card>
-              <CardContent className="p-6">
-                <h4 className="font-semibold text-gray-900 mb-4">
+              <CardContent className="p-4">
+                <h4 className="font-semibold text-gray-900 mb-3 text-sm">
                   In-Flight Amenities
                 </h4>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {flight.amenities?.map((amenity, index) => (
                     <div
                       key={index}
                       className="flex items-center space-x-2"
                     >
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="text-sm">{amenity}</span>
+                      <CheckCircle className="w-3 h-3 text-green-600" />
+                      <span className="text-xs">{amenity}</span>
                     </div>
                   )) || (
-                    <div className="col-span-full text-center py-8 text-gray-500">
-                      <Coffee className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                      <p>
+                    <div className="col-span-full text-center py-6 text-gray-500">
+                      <Coffee className="w-6 h-6 mx-auto mb-2 opacity-50" />
+                      <p className="text-xs">
                         Amenity information will be available during
                         booking
                       </p>
@@ -413,14 +413,14 @@ export default function FlightDetails({
 
             {/* Policies */}
             <Card>
-              <CardContent className="p-6">
-                <div className="space-y-6">
+              <CardContent className="p-4">
+                <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">
+                    <h4 className="font-semibold text-gray-900 mb-2 text-sm">
                       Cancellation Policy
                     </h4>
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                      <p className="text-sm text-amber-800">
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                      <p className="text-xs text-amber-800">
                         This fare is non-refundable. Changes may be
                         permitted with fees. Please review complete terms
                         and conditions before booking.
@@ -429,25 +429,25 @@ export default function FlightDetails({
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">
+                    <h4 className="font-semibold text-gray-900 mb-2 text-sm">
                       Check-in Requirements
                     </h4>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-1 text-xs">
                       <div className="flex items-start space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                        <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
                         <span>
                           Online check-in opens 24 hours before departure
                         </span>
                       </div>
                       <div className="flex items-start space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                        <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
                         <span>
                           Arrive at airport at least 2 hours before
                           international flights
                         </span>
                       </div>
                       <div className="flex items-start space-x-2">
-                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                        <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
                         <span>
                           Valid passport required for international travel
                         </span>
