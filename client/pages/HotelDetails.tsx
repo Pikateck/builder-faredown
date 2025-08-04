@@ -527,7 +527,7 @@ export default function HotelDetails() {
         type: "1 X Twin Classic",
         details: "Twin bed",
         pricePerNight: tempHotelData?.currentPrice || 167,
-        status: "Best Value - Start Here!",
+        status: "Base Price",
         statusColor: "green",
         nonRefundable: true,
         image:
