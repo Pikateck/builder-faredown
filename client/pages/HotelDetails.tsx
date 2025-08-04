@@ -611,7 +611,7 @@ export default function HotelDetails() {
         type: "1 X Standard Double",
         details: "Comfortable double room",
         pricePerNight: (tempHotelData?.currentPrice || 167) - 15,
-        status: "Economy Choice",
+        status: "Save ₹15",
         statusColor: "green",
         nonRefundable: true,
         image:
