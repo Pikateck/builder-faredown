@@ -3125,9 +3125,10 @@ export default function HotelDetails() {
                     navigator.vibrate(50);
                   }
                 }}
-                className="flex-1 bg-white border border-blue-600 text-blue-600 font-semibold py-3"
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 flex items-center justify-center gap-2 min-h-[44px]"
               >
-                Bargain
+                <TrendingDown className="w-4 h-4" />
+                Bargain Now
               </Button>
             </div>
           </div>
