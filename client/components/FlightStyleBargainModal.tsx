@@ -411,7 +411,7 @@ export function FlightStyleBargainModal({
                 </div>
                 {bargainPrice && (
                   <p className="text-center text-sm text-gray-600 mt-2 font-medium">
-                    {numberToWords(bargainPrice)}
+                    {formatPriceInWords(parseInt(bargainPrice))}
                   </p>
                 )}
               </div>
