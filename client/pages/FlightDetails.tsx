@@ -363,16 +363,16 @@ export default function FlightDetails({
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Base fare:</span>
-                          <span className="font-medium text-gray-900">₹ 18,120</span>
+                          <span className="font-medium text-gray-900">₹ {displayFlight.price.breakdown.baseFare.toLocaleString("en-IN")}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Taxes & fees:</span>
-                          <span className="font-medium text-gray-900">₹ 6,096</span>
+                          <span className="font-medium text-gray-900">₹ {(displayFlight.price.breakdown.taxes + displayFlight.price.breakdown.fees).toLocaleString("en-IN")}</span>
                         </div>
                         <div className="border-t border-gray-200 pt-2">
                           <div className="flex justify-between items-center font-semibold">
                             <span className="text-gray-900">Total:</span>
-                            <span className="text-blue-600">₹ 24,216</span>
+                            <span className="text-blue-600">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</span>
                           </div>
                         </div>
                       </div>
