@@ -577,7 +577,7 @@ export default function HotelDetails() {
         type: "1 X Family Room",
         details: "Spacious room for families",
         pricePerNight: (tempHotelData?.currentPrice || 167) + 35,
-        status: "Great for Families",
+        status: "Upgrade for +₹35",
         statusColor: "blue",
         nonRefundable: true,
         image:
@@ -2702,7 +2702,7 @@ export default function HotelDetails() {
                     </div>
                     <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center relative">
                       <div className="text-center">
-                        <div className="text-4xl mb-2">�����️</div>
+                        <div className="text-4xl mb-2">���️</div>
                         <div className="text-gray-600">Interactive Map</div>
                         <div className="text-sm text-gray-500">
                           Hotel location and nearby landmarks
