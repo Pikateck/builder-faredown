@@ -2698,16 +2698,17 @@ export default function FlightResults() {
                         <Link
                           to={`/flight-details/${flight.id}`}
                           state={{ flight }}
+                          className="flex-1"
                         >
                           <Button
                             variant="outline"
-                            className="flex-1 sm:flex-none touch-manipulation text-sm w-full"
+                            className="w-full min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation"
                           >
                             View Details
                           </Button>
                         </Link>
                         <Button
-                          className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold touch-manipulation text-sm sm:text-base"
+                          className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold min-h-[44px] px-6 py-3 text-sm touch-manipulation flex items-center justify-center gap-2"
                           onClick={() => {
                             setBargainFlight(flight);
                             setBargainFareType({
@@ -2720,8 +2721,8 @@ export default function FlightResults() {
                             setBargainStep("input");
                           }}
                         >
-                          <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                          <span>Bargain</span>
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
                         </Button>
                       </div>
                     </div>
