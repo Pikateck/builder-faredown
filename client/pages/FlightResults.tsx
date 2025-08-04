@@ -2694,7 +2694,7 @@ export default function FlightResults() {
                       </div>
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="grid grid-cols-2 gap-2 mt-3">
+                      <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
                         <Button
                           variant="outline"
                           className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
@@ -4122,7 +4122,7 @@ export default function FlightResults() {
           {/* Lucky Message */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 mx-4 md:mx-0 flex items-center space-x-3">
             <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
-              <span className="text-white text-sm">🍀</span>
+              <span className="text-white text-sm">����</span>
             </div>
             <div>
               <p className="font-medium text-[#003580]">
