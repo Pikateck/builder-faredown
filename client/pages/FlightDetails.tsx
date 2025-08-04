@@ -147,7 +147,15 @@ export default function FlightDetails({
                 <h1 className="text-lg sm:text-xl font-bold text-gray-900">
                   Flight Details
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-600 font-medium">{flight.flightNumber}</p>
+                <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600">
+                  <span className="font-medium">{flight.flightNumber}</span>
+                  <span>•</span>
+                  <span>Today, 15 Jan</span>
+                  <span>•</span>
+                  <span>1 Adult</span>
+                  <span>•</span>
+                  <span>Economy</span>
+                </div>
               </div>
             </div>
 
