@@ -533,12 +533,9 @@ export default function HotelDetails() {
         image:
           "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Twin room
         features: [
-          "6.7 km from downtown",
-          "Max 2 guests",
-          "2 twin beds",
-          "Free stay for your child",
-          "Free cancellation",
-          "No prepayment needed",
+          "No price change",
+          "Twin Classic",
+          "Complimentary breakfast",
         ],
       },
       {
