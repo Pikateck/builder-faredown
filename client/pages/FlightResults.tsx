@@ -2794,7 +2794,7 @@ export default function FlightResults() {
                                     {flight.arrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.arrivalCode} •{" "}
+                                    {flight.arrivalCode} ���{" "}
                                     {departureDate
                                       ? formatDisplayDate(
                                           departureDate,
@@ -2977,7 +2977,7 @@ export default function FlightResults() {
                           </div>
 
                           {/* Side-by-side buttons - Hotel Section Style */}
-                          <div className="flex gap-2 mt-3 items-center">
+                          <div className="flex gap-2 mt-3 items-stretch">
                             <Button
                               onClick={() =>
                                 handleToggleFlightDetails(
@@ -2986,7 +2986,7 @@ export default function FlightResults() {
                                 )
                               }
                               variant="outline"
-                              className="flex-1 min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
+                              className="flex-1 h-full min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
                             >
                               View Details
                             </Button>
@@ -2994,7 +2994,7 @@ export default function FlightResults() {
                               onClick={() =>
                                 handleBargain(flight, flight.fareTypes[0])
                               }
-                              className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold min-h-[44px] px-6 py-3 text-sm touch-manipulation flex items-center justify-center gap-2"
+                              className="flex-1 h-full min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
                             >
                               <TrendingDown className="w-4 h-4" />
                               Bargain Now
