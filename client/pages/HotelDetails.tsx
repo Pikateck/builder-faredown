@@ -594,7 +594,7 @@ export default function HotelDetails() {
         type: "1 X Executive Room",
         details: "Business-class accommodation",
         pricePerNight: (tempHotelData?.currentPrice || 167) + 42,
-        status: "Business Traveler",
+        status: "Upgrade for +₹42",
         statusColor: "blue",
         nonRefundable: false,
         image:
