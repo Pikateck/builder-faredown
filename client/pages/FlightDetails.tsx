@@ -20,7 +20,7 @@ import {
   X,
   Share2,
   Heart,
-  Suitcase,
+  Luggage,
   ShoppingBag,
   AlertCircle,
 } from "lucide-react";
