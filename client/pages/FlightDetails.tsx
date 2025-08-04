@@ -183,7 +183,7 @@ export default function FlightDetails({
                       }}
                     />
                     <div>
-                      <CardTitle className="text-lg">
+                      <CardTitle className="text-lg font-bold text-gray-900">
                         {flight.airline}
                       </CardTitle>
                       <p className="text-sm text-gray-600">
