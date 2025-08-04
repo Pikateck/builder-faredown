@@ -680,8 +680,7 @@ export default function FlightDetails({
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <MobileNavigation />
+
     </div>
   );
 }
