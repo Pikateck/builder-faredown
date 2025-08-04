@@ -76,6 +76,7 @@ import {
   MobileTravelers,
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 // Flight data with fare types
 const flightData = [
