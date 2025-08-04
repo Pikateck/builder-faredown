@@ -2701,9 +2701,12 @@ export default function FlightResults() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log('View Details clicked for flight:', flight.id);
+                            console.log(
+                              "View Details clicked for flight:",
+                              flight.id,
+                            );
                             navigate(`/flight-details/${flight.id}`, {
-                              state: { flight }
+                              state: { flight },
                             });
                           }}
                           onTouchStart={(e) => {
@@ -2987,9 +2990,12 @@ export default function FlightResults() {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log('Desktop View Details clicked for flight:', flight.id);
+                                console.log(
+                                  "Desktop View Details clicked for flight:",
+                                  flight.id,
+                                );
                                 navigate(`/flight-details/${flight.id}`, {
-                                  state: { flight }
+                                  state: { flight },
                                 });
                               }}
                               variant="outline"
