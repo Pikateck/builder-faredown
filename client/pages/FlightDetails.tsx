@@ -270,17 +270,17 @@ export default function FlightDetails({
                 <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
                 <div className="flex-1">
                   <div className="text-lg font-semibold text-gray-900 mb-1">Sat, Sep 13 • 20:50</div>
-                  <div className="font-bold text-gray-900 text-lg mb-1">DXB • Dubai International Airport</div>
+                  <div className="font-bold text-gray-900 text-lg mb-1">{displayFlight.arrival.code} • {displayFlight.arrival.name}</div>
 
                   {/* Airline Info */}
                   <div className="flex items-center space-x-3 mt-4 mb-4">
                     <img
-                      src={`https://pics.avs.io/120/120/6E.png`}
-                      alt="IndiGo"
+                      src={`https://pics.avs.io/120/120/${displayFlight.airlineCode}.png`}
+                      alt={displayFlight.airline}
                       className="w-8 h-8 object-contain"
                     />
                     <div>
-                      <div className="font-medium text-gray-900">IndiGo</div>
+                      <div className="font-medium text-gray-900">{displayFlight.airline}</div>
                       <div className="text-sm text-gray-600">Flight 6E1456</div>
                       <div className="text-sm text-gray-600">Flight time 3h 15m</div>
                     </div>
