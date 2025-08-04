@@ -2694,7 +2694,7 @@ export default function FlightResults() {
                       </div>
 
                       {/* Action Buttons - Hotel Section Style Mobile */}
-                      <div className="flex gap-2 mt-3">
+                      <div className="flex gap-2 mt-3 items-center">
                         <Link
                           to={`/flight-details/${flight.id}`}
                           state={{ flight }}
@@ -2702,7 +2702,7 @@ export default function FlightResults() {
                         >
                           <Button
                             variant="outline"
-                            className="w-full min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation"
+                            className="w-full min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center"
                           >
                             View Details
                           </Button>
