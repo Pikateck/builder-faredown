@@ -307,19 +307,60 @@ export default function FlightDetails({
             </div>
           </div>
 
-          {/* Price Footer */}
+          {/* Price Footer with Book Now and Bargain Now */}
           <div className="border-t bg-white p-4 fixed bottom-0 left-0 right-0 z-40">
-            <div className="max-w-md mx-auto flex items-center justify-between">
-              <div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-2xl font-bold text-gray-900">₹ 24,216</span>
-                  <Info className="w-4 h-4 text-gray-500" />
-                </div>
-                <div className="text-sm text-gray-600">1 traveler</div>
+            <div className="max-w-md mx-auto">
+              {/* Price Display */}
+              <div className="flex items-center justify-center space-x-2 mb-3">
+                <span className="text-2xl font-bold text-gray-900">₹ 24,216</span>
+                <Info className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-600">per person</span>
               </div>
-              <Button className="bg-[#0071c2] hover:bg-[#005bb5] text-white px-8 py-3 text-lg font-semibold rounded">
-                Select
-              </Button>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  className="min-h-[48px] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                  onClick={() => {
+                    if (onBook) {
+                      onBook(flight);
+                    } else {
+                      // Navigate to booking flow with flight data
+                      navigate("/booking-flow", {
+                        state: {
+                          selectedFlight: flight,
+                          selectedFareType: {
+                            id: "default",
+                            name: flight.fareClass || "Economy",
+                            price: flight.price.amount,
+                            refundability: "Non-Refundable",
+                          },
+                          negotiatedPrice: flight.price.amount,
+                          passengers: { adults: 1, children: 0 },
+                        },
+                      });
+                    }
+                  }}
+                >
+                  <CreditCard className="w-4 h-4" />
+                  Book Now
+                </Button>
+
+                <Button
+                  className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
+                  onClick={() => {
+                    if (onBargain) {
+                      onBargain(flight);
+                    } else {
+                      // For now, show an alert - you can implement bargain modal later
+                      alert('Bargain functionality coming soon!');
+                    }
+                  }}
+                >
+                  <TrendingDown className="w-4 h-4" />
+                  Bargain Now
+                </Button>
+              </div>
             </div>
           </div>
         </div>
