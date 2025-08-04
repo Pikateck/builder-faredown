@@ -313,7 +313,38 @@ export default function FlightDetails({
               {/* Price Display */}
               <div className="flex items-center justify-center space-x-2 mb-3">
                 <span className="text-2xl font-bold text-gray-900">₹ 24,216</span>
-                <Info className="w-4 h-4 text-gray-500" />
+                <div className="relative group">
+                  <Info className="w-4 h-4 text-gray-500 cursor-help" />
+                  {/* Price Breakdown Tooltip */}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div className="bg-white text-gray-800 text-sm rounded-xl p-4 shadow-xl border border-gray-100 min-w-[220px] backdrop-blur-sm">
+                      <div className="text-center font-semibold mb-3 text-gray-900 border-b border-gray-100 pb-2">
+                        Fare Breakdown
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Base fare:</span>
+                          <span className="font-medium text-gray-900">₹ 18,120</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Taxes & fees:</span>
+                          <span className="font-medium text-gray-900">₹ 6,096</span>
+                        </div>
+                        <div className="border-t border-gray-200 pt-2">
+                          <div className="flex justify-between items-center font-semibold">
+                            <span className="text-gray-900">Total:</span>
+                            <span className="text-blue-600">₹ 24,216</span>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500 text-center mt-3">
+                        All taxes and fees included
+                      </p>
+                      {/* Tooltip arrow pointing downward */}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+                    </div>
+                  </div>
+                </div>
                 <span className="text-sm text-gray-600">per person</span>
               </div>
 
