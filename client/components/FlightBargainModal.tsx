@@ -338,6 +338,13 @@ export function FlightBargainModal({
                     </span>
                   </div>
                 </div>
+
+                {/* Price in Words */}
+                {bargainPrice && (
+                  <p className="text-center text-sm text-gray-600 mt-2 font-medium">
+                    {numberToWords(parseInt(bargainPrice))} rupees only
+                  </p>
+                )}
               </div>
 
               <Button
