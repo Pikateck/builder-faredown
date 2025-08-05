@@ -169,9 +169,9 @@ export default function FlightDetails({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Booking.com Style Header */}
+      {/* Mobile Native Header */}
       <div className="bg-[#003580] text-white">
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between px-4 py-3 min-h-[56px]">
           <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
@@ -359,7 +359,7 @@ export default function FlightDetails({
                   <div className="flex justify-between items-center pt-2 border-t border-gray-200">
                     <span className="text-sm font-semibold text-gray-900">Total</span>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-gray-900">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
+                      <div className="text-lg font-bold text-gray-900">��� {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
                       <div className="text-xs text-gray-500">All inclusive</div>
                     </div>
                   </div>
