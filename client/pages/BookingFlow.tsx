@@ -2270,25 +2270,7 @@ export default function BookingFlow() {
                               : "bg-white border-[#f2f6fa] hover:border-[#003580] hover:shadow-sm"
                           }`}
                         >
-                          <input
-                            type="checkbox"
-                            className="w-3 h-3 text-[#003580]"
-                            checked={selectedOtherOptions.length === 6}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setSelectedOtherOptions([
-                                  "vpn",
-                                  "tea",
-                                  "weather",
-                                  "alerts",
-                                  "magazines",
-                                  "esim",
-                                ]);
-                              } else {
-                                setSelectedOtherOptions([]);
-                              }
-                            }}
-                          />
+
                           <span
                             className={`text-sm font-medium ${
                               selectedOtherOptions.length === 6
