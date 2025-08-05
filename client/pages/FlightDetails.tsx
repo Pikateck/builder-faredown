@@ -337,6 +337,61 @@ export default function FlightDetails({
                 <h4 className="text-sm font-semibold text-blue-900 mb-3">Standard fare (Price per traveler)</h4>
 
                 <div className="space-y-3">
+                  {/* Airline Fee */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Plane className="w-4 h-4 text-blue-600" />
+                      <span className="text-sm text-gray-700">Airline fee</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-gray-900">₹ {displayFlight.price.breakdown.baseFare.toLocaleString("en-IN")}</div>
+                      <div className="text-xs text-gray-500">Base fare</div>
+                    </div>
+                  </div>
+
+                  {/* Cleartrip fee */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <CreditCard className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-gray-700">Cleartrip fee</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-gray-900">₹ {displayFlight.price.breakdown.fees.toLocaleString("en-IN")}</div>
+                      <div className="text-xs text-gray-500">Service fee</div>
+                    </div>
+                  </div>
+
+                  {/* Taxes */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Info className="w-4 h-4 text-orange-600" />
+                      <span className="text-sm text-gray-700">Taxes</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-gray-900">₹ {displayFlight.price.breakdown.taxes.toLocaleString("en-IN")}</div>
+                      <div className="text-xs text-gray-500">Govt. taxes</div>
+                    </div>
+                  </div>
+
+                  {/* Total */}
+                  <div className="flex items-center justify-between pt-2 border-t border-blue-300">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600" />
+                      <span className="text-sm font-semibold text-gray-900">Total</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-blue-900">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
+                      <div className="text-xs text-gray-500">All inclusive</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cancellation & Change Policy */}
+              <div className="bg-white rounded-xl border border-gray-200 p-4 mb-3 shadow-sm">
+                <h4 className="text-sm font-semibold text-gray-900 mb-3">Cancellation & Change Policy</h4>
+
+                <div className="space-y-3">
                   {/* Cancellation Fee */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -360,13 +415,47 @@ export default function FlightDetails({
                       <div className="text-xs text-gray-500">+ fare difference</div>
                     </div>
                   </div>
-                </div>
 
-                {/* Important Notice */}
-                <div className="mt-4 pt-3 border-t border-blue-200">
-                  <p className="text-xs text-blue-800 italic">
-                    Cancellation/Flight change charges are indicative. Final charges will be as per airline policies.
-                  </p>
+                  {/* Seat Selection */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Users className="w-4 h-4 text-purple-600" />
+                      <span className="text-sm text-gray-700">Seat selection</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-purple-600">Chargeable</div>
+                      <div className="text-xs text-gray-500">As per airline policy</div>
+                    </div>
+                  </div>
+
+                  {/* Meal Selection */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Coffee className="w-4 h-4 text-green-600" />
+                      <span className="text-sm text-gray-700">Meal selection</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-green-600">Available</div>
+                      <div className="text-xs text-gray-500">At additional cost</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Important Terms */}
+              <div className="bg-amber-50 rounded-xl border border-amber-200 p-4 mb-3 shadow-sm">
+                <h4 className="text-sm font-semibold text-amber-900 mb-3 flex items-center">
+                  <AlertCircle className="w-4 h-4 text-amber-600 mr-2" />
+                  Important Terms
+                </h4>
+
+                <div className="space-y-2 text-xs text-amber-800">
+                  <div>• Cancellation/Flight change charges are indicative. Final charges will be as per airline policies.</div>
+                  <div>• 72 hours before departure of the flight, depending on aircraft and passenger requirements.</div>
+                  <div>• Name changes are not permitted after booking confirmation.</div>
+                  <div>• Flight timings are subject to change by the airline without prior notice.</div>
+                  <div>• Check-in baggage allowance and cabin baggage restrictions apply as per airline policy.</div>
+                  <div>• Web check-in is mandatory for all domestic flights.</div>
                 </div>
               </div>
             </div>
