@@ -1594,7 +1594,7 @@ export default function BookingFlow() {
                         { code: "GBP", symbol: "£", name: "British Pound" },
                         { code: "INR", symbol: "₹", name: "Indian Rupee" },
                         { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                        { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
+                        { code: "SAR", symbol: "���", name: "Saudi Riyal" },
                         { code: "JPY", symbol: "¥", name: "Japanese Yen" },
                         { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
                         { code: "KRW", symbol: "₩", name: "South Korean Won" },
@@ -2016,7 +2016,7 @@ export default function BookingFlow() {
                                   20kg - ₹ 5,500
                                 </SelectItem>
                                 <SelectItem value="25kg">
-                                  25kg - ₹ 6,800
+                                  25kg - ��� 6,800
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -2339,7 +2339,7 @@ export default function BookingFlow() {
                         >
                           <input
                             type="checkbox"
-                            className="w-5 h-5 text-[#003580] bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-[#003580] focus:ring-offset-2 checked:bg-[#003580] checked:border-[#003580] transition-colors"
+                            className="w-3 h-3 text-[#003580]"
                             checked={selectedOtherOptions.length === 6}
                             onChange={(e) => {
                               if (e.target.checked) {
