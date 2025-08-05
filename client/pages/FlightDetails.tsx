@@ -332,45 +332,34 @@ export default function FlightDetails({
             <div className="border-t pt-3 mt-3">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Ticket fare rules</h3>
 
-              {/* Standard Fare Summary */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-3 shadow-sm">
-                <h4 className="text-sm font-semibold text-blue-900 mb-3">Standard fare (Price per traveler)</h4>
+              {/* Standard Fare Summary - Plain Design */}
+              <div className="bg-white border border-gray-200 rounded-lg p-4 mb-3">
+                <h4 className="text-sm font-medium text-gray-900 mb-3">Standard fare (Price per traveler)</h4>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {/* Airline Fee */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Plane className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm text-gray-700">Airline fee</span>
-                    </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Airline fee</span>
                     <div className="text-right">
-                      <div className="text-sm font-semibold text-gray-900">₹ {displayFlight.price.breakdown.baseFare.toLocaleString("en-IN")}</div>
+                      <div className="text-sm font-medium text-gray-900">₹ {displayFlight.price.breakdown.baseFare.toLocaleString("en-IN")}</div>
                       <div className="text-xs text-gray-500">Base fare</div>
                     </div>
                   </div>
 
-
-
                   {/* Taxes */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Info className="w-4 h-4 text-orange-600" />
-                      <span className="text-sm text-gray-700">Taxes</span>
-                    </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-700">Taxes</span>
                     <div className="text-right">
-                      <div className="text-sm font-semibold text-gray-900">₹ {displayFlight.price.breakdown.taxes.toLocaleString("en-IN")}</div>
+                      <div className="text-sm font-medium text-gray-900">₹ {displayFlight.price.breakdown.taxes.toLocaleString("en-IN")}</div>
                       <div className="text-xs text-gray-500">Govt. taxes</div>
                     </div>
                   </div>
 
                   {/* Total */}
-                  <div className="flex items-center justify-between pt-2 border-t border-blue-300">
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm font-semibold text-gray-900">Total</span>
-                    </div>
+                  <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                    <span className="text-sm font-semibold text-gray-900">Total</span>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-blue-900">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
+                      <div className="text-lg font-bold text-gray-900">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
                       <div className="text-xs text-gray-500">All inclusive</div>
                     </div>
                   </div>
