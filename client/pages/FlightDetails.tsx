@@ -189,7 +189,7 @@ export default function FlightDetails({
           <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
-              className="text-white hover:bg-white/10 p-2"
+              className="text-white hover:bg-white/10 active:bg-white/20 p-3 min-w-[44px] min-h-[44px] rounded-full transition-colors"
               onClick={() => {
                 if (navigator.share) {
                   navigator.share({
@@ -204,7 +204,7 @@ export default function FlightDetails({
             </Button>
             <Button
               variant="ghost"
-              className="text-white hover:bg-white/10 p-2"
+              className="text-white hover:bg-white/10 active:bg-white/20 p-3 min-w-[44px] min-h-[44px] rounded-full transition-colors"
             >
               <Heart className="w-5 h-5" />
             </Button>
