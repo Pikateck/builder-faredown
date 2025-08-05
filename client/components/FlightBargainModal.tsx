@@ -474,7 +474,7 @@ export function FlightBargainModal({
 
             <Button
               onClick={handleBookDeal}
-              className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
+              className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] active:from-[#002447] active:to-[#004687] text-white py-5 text-xl font-bold rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation min-h-[52px]"
             >
               Book This Deal - {formatPrice(finalPrice)}
             </Button>
