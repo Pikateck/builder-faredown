@@ -87,6 +87,7 @@ export default function FlightDetails({
   const [isLoading, setIsLoading] = useState(false); // Start with false for immediate render
   const [error, setError] = useState<string | null>(null);
   const [showBargainModal, setShowBargainModal] = useState(false);
+  const [expandedRules, setExpandedRules] = useState<Record<string, boolean>>({});
 
 
   const finalFlightId = flightId || params.flightId;
@@ -374,7 +375,7 @@ export default function FlightDetails({
                       <div className="text-xs text-blue-700 space-y-1">
                         <div>• Changes subject to availability</div>
                         <div>• Airline approval required</div>
-                        <div>��� Fee applicable per passenger per sector</div>
+                        <div>• Fee applicable per passenger per sector</div>
                         <div>• Fare difference will be charged if applicable</div>
                       </div>
                     </div>
