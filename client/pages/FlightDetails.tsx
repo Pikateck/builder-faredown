@@ -510,8 +510,16 @@ export default function FlightDetails({
         </div>
       </div>
 
-
-
+      {/* Flight Bargain Modal */}
+      <FlightBargainModal
+        flight={displayFlight}
+        isOpen={showBargainModal}
+        onClose={() => setShowBargainModal(false)}
+        onBookingSuccess={(finalPrice) => {
+          console.log('Bargain booking success with price:', finalPrice);
+          setShowBargainModal(false);
+        }}
+      />
 
     </div>
   );
