@@ -2089,23 +2089,6 @@ export default function BookingFlow() {
                               className="flex items-center justify-between p-3 bg-white border rounded-lg cursor-pointer hover:bg-[#009fe3]/10"
                             >
                               <div className="flex items-center space-x-3">
-                                <input
-                                  type="checkbox"
-                                  className="w-3 h-3 text-[#003580]"
-                                  checked={selectedMealIds.includes(meal.id)}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setSelectedMealIds((prev) => [
-                                        ...prev,
-                                        meal.id,
-                                      ]);
-                                    } else {
-                                      setSelectedMealIds((prev) =>
-                                        prev.filter((id) => id !== meal.id),
-                                      );
-                                    }
-                                  }}
-                                />
                                 <span className="font-medium text-gray-900">
                                   {meal.name}
                                 </span>
