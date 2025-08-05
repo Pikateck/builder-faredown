@@ -412,7 +412,7 @@ export default function FlightDetails({
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-3">
                 <Button
-                  className="min-h-[48px] px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-2"
+                  className="min-h-[52px] px-6 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                   onClick={() => {
                     if (onBook) {
                       onBook(displayFlight);
