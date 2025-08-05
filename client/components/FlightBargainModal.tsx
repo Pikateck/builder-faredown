@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { Flight } from "@/services/flightsService";
+import { numberToWords } from "@/lib/numberToWords";
 
 interface FlightBargainModalProps {
   flight: Flight | null;
