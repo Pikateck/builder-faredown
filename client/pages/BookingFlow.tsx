@@ -677,7 +677,7 @@ const SeatMap = ({
         )}
         {renderFlightSegment(
           "Dubai-Mumbai",
-          "Dubai → Mumbai",
+          "Dubai ��� Mumbai",
           expandedFlight === "Dubai-Mumbai",
           selectedFlight,
           selectedFareType,
@@ -2349,7 +2349,27 @@ export default function BookingFlow() {
                               : "bg-white border-[#f2f6fa] hover:border-[#003580] hover:shadow-sm"
                           }`}
                         >
-
+                          <div className="w-4 h-4 flex items-center justify-center mr-2">
+                            <input
+                              type="checkbox"
+                              className="w-3 h-3 sm:w-4 sm:h-4 text-[#003580]"
+                              checked={selectedOtherOptions.length === 6}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedOtherOptions([
+                                    "vpn",
+                                    "tea",
+                                    "weather",
+                                    "alerts",
+                                    "magazines",
+                                    "esim",
+                                  ]);
+                                } else {
+                                  setSelectedOtherOptions([]);
+                                }
+                              }}
+                            />
+                          </div>
                           <span
                             className={`text-sm font-medium ${
                               selectedOtherOptions.length === 6
