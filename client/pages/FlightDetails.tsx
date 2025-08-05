@@ -386,23 +386,6 @@ export default function FlightDetails({
                   </div>
                 </div>
               </div>
-
-              {/* Important Terms */}
-              <div className="bg-amber-50 rounded-xl border border-amber-200 p-4 mb-3 shadow-sm">
-                <h4 className="text-sm font-semibold text-amber-900 mb-3 flex items-center">
-                  <AlertCircle className="w-4 h-4 text-amber-600 mr-2" />
-                  Important Terms
-                </h4>
-
-                <div className="space-y-2 text-xs text-amber-800">
-                  <div>• Cancellation/Flight change charges are indicative. Final charges will be as per airline policies.</div>
-                  <div>• 72 hours before departure of the flight, depending on aircraft and passenger requirements.</div>
-                  <div>• Name changes are not permitted after booking confirmation.</div>
-                  <div>• Flight timings are subject to change by the airline without prior notice.</div>
-                  <div>• Check-in baggage allowance and cabin baggage restrictions apply as per airline policy.</div>
-                  <div>• Web check-in is mandatory for all domestic flights.</div>
-                </div>
-              </div>
             </div>
           </div>
 
