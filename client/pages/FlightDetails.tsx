@@ -325,40 +325,108 @@ export default function FlightDetails({
               </div>
             </div>
 
-            {/* Ticket Fare Rules */}
+            {/* Ticket Fare Rules - Booking.com Style */}
             <div className="border-t pt-3 mt-3">
               <h3 className="text-lg font-bold text-gray-900 mb-3">Ticket fare rules</h3>
 
-              <div className="space-y-3">
-                {/* Compact Policy Grid */}
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Cancellation */}
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                    <div className="flex items-center mb-2">
-                      <AlertCircle className="w-4 h-4 text-amber-600 mr-2" />
-                      <span className="text-sm font-medium text-amber-800">Non-refundable</span>
-                    </div>
-                    <p className="text-xs text-amber-700">No cancellation allowed</p>
+              {/* Fare Breakdown Summary */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-blue-900">Base Fare</span>
+                  <span className="text-sm font-semibold text-blue-900">₹ {displayFlight.price.breakdown.baseFare.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-blue-800">Taxes & Fees</span>
+                  <span className="text-sm text-blue-800">₹ {(displayFlight.price.breakdown.taxes + displayFlight.price.breakdown.fees).toLocaleString("en-IN")}</span>
+                </div>
+                <div className="border-t border-blue-300 pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-blue-900">Total</span>
+                    <span className="text-sm font-bold text-blue-900">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</span>
                   </div>
+                </div>
+              </div>
 
-                  {/* Date Change */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <div className="flex items-center mb-2">
-                      <Calendar className="w-4 h-4 text-blue-600 mr-2" />
-                      <span className="text-sm font-medium text-blue-800">Changes</span>
+              <div className="space-y-3">
+                {/* Cancellation Rules */}
+                <div className="border-l-4 border-red-400 bg-red-50 p-3 rounded-r-lg">
+                  <div className="flex items-start space-x-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-red-900 mb-1">Cancellation</h4>
+                      <p className="text-xs text-red-800 mb-2">Non-refundable ticket</p>
+                      <div className="text-xs text-red-700 space-y-1">
+                        <div>• This ticket cannot be cancelled</div>
+                        <div>• No refund will be given for cancellation</div>
+                        <div>• Applicable cancellation charges will be deducted</div>
+                      </div>
                     </div>
-                    <p className="text-xs text-blue-700">₹3,000 + fare difference</p>
                   </div>
                 </div>
 
-                {/* Essential Info */}
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                  <div className="text-xs text-gray-700 space-y-1">
-                    <div className="flex items-center">
-                      <CheckCircle className="w-3 h-3 text-green-600 mr-2" />
-                      <span>Check-in: 24hrs before • Airport arrival: 2hrs before</span>
+                {/* Date Change Rules */}
+                <div className="border-l-4 border-blue-400 bg-blue-50 p-3 rounded-r-lg">
+                  <div className="flex items-start space-x-2">
+                    <Calendar className="w-4 h-4 text-blue-600 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-blue-900 mb-1">Date Change</h4>
+                      <p className="text-xs text-blue-800 mb-2">Change fee: ₹3,000 + fare difference</p>
+                      <div className="text-xs text-blue-700 space-y-1">
+                        <div>• Changes subject to availability</div>
+                        <div>• Airline approval required</div>
+                        <div>��� Fee applicable per passenger per sector</div>
+                        <div>• Fare difference will be charged if applicable</div>
+                      </div>
                     </div>
-                    <div>• Valid passport required • Visa may apply • Name changes not allowed</div>
+                  </div>
+                </div>
+
+                {/* Check-in & Travel Requirements */}
+                <div className="border-l-4 border-green-400 bg-green-50 p-3 rounded-r-lg">
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-green-900 mb-1">Check-in & Travel Requirements</h4>
+                      <div className="text-xs text-green-700 space-y-1">
+                        <div>• Online check-in opens 24 hours before departure</div>
+                        <div>• Airport arrival: 2 hours before international flights</div>
+                        <div>• Valid passport required for international travel</div>
+                        <div>• Visa requirements may apply - check destination rules</div>
+                        <div>• Dangerous goods restrictions as per IATA guidelines</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seat & Services */}
+                <div className="border-l-4 border-purple-400 bg-purple-50 p-3 rounded-r-lg">
+                  <div className="flex items-start space-x-2">
+                    <Users className="w-4 h-4 text-purple-600 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-purple-900 mb-1">Seat & Services</h4>
+                      <div className="text-xs text-purple-700 space-y-1">
+                        <div>• Seat selection subject to availability</div>
+                        <div>• Name changes not permitted after booking</div>
+                        <div>• Special assistance: 48-hour advance notice required</div>
+                        <div>• Meal preferences can be selected during check-in</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Important Notice */}
+                <div className="bg-gray-100 border border-gray-300 rounded-lg p-3">
+                  <div className="flex items-start space-x-2">
+                    <Info className="w-4 h-4 text-gray-600 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-gray-900 mb-1">Important Notice</h4>
+                      <div className="text-xs text-gray-700 space-y-1">
+                        <div>• Flight timings are subject to change by the airline</div>
+                        <div>• Please arrive at the airport with sufficient time</div>
+                        <div>• Keep all travel documents ready</div>
+                        <div>• Check airline website for latest updates</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
