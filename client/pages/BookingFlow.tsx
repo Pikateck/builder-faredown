@@ -1554,6 +1554,7 @@ export default function BookingFlow() {
 
   return (
     <div className="min-h-screen bg-[#f2f6fa]">
+      <style>{customStyles}</style>
       {/* Faredown Header */}
       <header className="bg-[#003580] text-white">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
