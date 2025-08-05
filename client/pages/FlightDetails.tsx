@@ -369,33 +369,6 @@ export default function FlightDetails({
                   </p>
                 </div>
               </div>
-
-              {/* Essential Travel Information */}
-              <div className="bg-gray-50 rounded-xl p-4 shadow-sm">
-                <h4 className="text-sm font-semibold text-gray-900 mb-3 flex items-center">
-                  <Info className="w-4 h-4 text-gray-600 mr-2" />
-                  Essential Information
-                </h4>
-
-                <div className="space-y-2 text-xs text-gray-700">
-                  <div className="flex items-start space-x-2">
-                    <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
-                    <span>Check-in opens 24 hours before departure</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
-                    <span>Arrive 2 hours before international flights</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <CheckCircle className="w-3 h-3 text-green-600 mt-0.5" />
-                    <span>Valid passport & visa (if required) needed</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <AlertCircle className="w-3 h-3 text-amber-600 mt-0.5" />
-                    <span>Name changes not permitted after booking</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
