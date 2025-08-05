@@ -212,9 +212,9 @@ export default function FlightDetails({
       <div className="bg-gray-50 min-h-screen pb-20">
         <div className="max-w-md mx-auto bg-white">
           {/* Flight to Dubai */}
-          <div className="p-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-1">Flight to Dubai</h2>
-            <p className="text-gray-600 text-sm mb-6">Direct • 3h • Economy</p>
+          <div className="p-3">
+            <h2 className="text-lg font-bold text-gray-900 mb-1">Flight to Dubai</h2>
+            <p className="text-gray-600 text-sm mb-3">Direct • 3h • Economy</p>
 
             {/* Outbound Flight Timeline */}
             <div className="relative mb-8">
