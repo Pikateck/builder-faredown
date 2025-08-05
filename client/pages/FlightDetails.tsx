@@ -369,7 +369,7 @@ export default function FlightDetails({
           </div>
 
           {/* Price Footer with Book Now and Bargain Now */}
-          <div className="border-t bg-white p-4 fixed bottom-0 left-0 right-0 z-40">
+          <div className="border-t bg-white p-4 pb-6 fixed bottom-0 left-0 right-0 z-40 safe-area-inset-bottom">
             <div className="max-w-md mx-auto">
               {/* Price Display */}
               <div className="flex items-center justify-center space-x-2 mb-3">
