@@ -742,7 +742,7 @@ const SeatMap = ({
         {/* Dubai-Mumbai Summary */}
         <div>
           <h5 className="text-sm font-medium text-gray-900 mb-2">
-            Dubai ��� Mumbai
+            Dubai → Mumbai
           </h5>
           <div className="space-y-2 text-sm">
             {travellers.map((traveller) => {
@@ -1043,7 +1043,7 @@ export default function BookingFlow() {
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
-    { name: "Japan", code: "+81", flag: "🇯��" },
+    { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
 
   const [showAdultFare, setShowAdultFare] = useState(true);
@@ -2134,23 +2134,13 @@ export default function BookingFlow() {
                           </div>
                         </div>
 
-                        <label className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-[#f2f6fa]">
-                          <input
-                            type="radio"
-                            name="baggageProtection"
-                            value="none"
-                            checked={selectedBaggageProtection === "none"}
-                            onChange={(e) =>
-                              setSelectedBaggageProtection(e.target.value)
-                            }
-                            className="w-3 h-3 text-[#003580]"
-                          />
+                        <div className="flex items-center space-x-3 p-4 border rounded-lg">
                           <div className="flex-1">
                             <span className="font-medium text-gray-900">
                               No, I will not buy baggage
                             </span>
                           </div>
-                        </label>
+                        </div>
                       </div>
 
                       <p className="text-xs text-gray-500 mt-4">
