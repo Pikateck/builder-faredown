@@ -2336,27 +2336,10 @@ export default function BookingFlow() {
                             price: 5,
                           },
                         ].map((option) => (
-                          <label
+                          <div
                             key={option.id}
-                            className="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-[#f2f6fa]"
+                            className="flex items-start space-x-3 p-4 border rounded-lg"
                           >
-                            <input
-                              type="checkbox"
-                              className="w-3 h-3 text-[#003580] mt-1"
-                              checked={selectedOtherOptions.includes(option.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedOtherOptions((prev) => [
-                                    ...prev,
-                                    option.id,
-                                  ]);
-                                } else {
-                                  setSelectedOtherOptions((prev) =>
-                                    prev.filter((id) => id !== option.id),
-                                  );
-                                }
-                              }}
-                            />
                             <div className="flex items-center space-x-3 w-full">
                               <div className="w-8 h-8 bg-[#f2f6fa] rounded-full flex items-center justify-center">
                                 <span className="text-[#003580] text-sm">
@@ -2380,7 +2363,7 @@ export default function BookingFlow() {
                                 ₹{option.price}
                               </div>
                             </div>
-                          </label>
+                          </div>
                         ))}
                       </div>
 
