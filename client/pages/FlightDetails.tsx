@@ -337,6 +337,86 @@ export default function FlightDetails({
                 </div>
               </div>
             </div>
+
+            {/* Ticket Fare Rules */}
+            <div className="border-t pt-6 mt-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Ticket fare rules</h3>
+
+              {/* Cancellation Policy */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                  <AlertCircle className="w-5 h-5 text-amber-600 mr-2" />
+                  Cancellation
+                </h4>
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-3">
+                  <p className="text-sm text-amber-800 mb-2">
+                    <strong>Non-refundable:</strong> This ticket cannot be cancelled. No refund will be given.
+                  </p>
+                  <p className="text-xs text-amber-700">
+                    In case of cancellation, applicable cancellation charges will be deducted.
+                  </p>
+                </div>
+              </div>
+
+              {/* Change/Rescheduling Policy */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                  <Calendar className="w-5 h-5 text-blue-600 mr-2" />
+                  Date Change
+                </h4>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3">
+                  <p className="text-sm text-blue-800 mb-2">
+                    <strong>Change fee:</strong> ₹3,000 + fare difference (if any)
+                  </p>
+                  <p className="text-xs text-blue-700">
+                    Changes are subject to availability and airline approval. Change fees are per passenger per sector.
+                  </p>
+                </div>
+              </div>
+
+              {/* Check-in Requirements */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                  <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                  Check-in Requirements
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <span>Online check-in opens 24 hours before departure</span>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <span>Arrive at airport at least 2 hours before international flights</span>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <span>Valid passport required for international travel</span>
+                  </div>
+                  <div className="flex items-start space-x-2">
+                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
+                    <span>Visa requirements may apply - check destination requirements</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Terms */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                  <Info className="w-5 h-5 text-gray-600 mr-2" />
+                  Important Terms
+                </h4>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div className="space-y-2 text-sm text-gray-700">
+                    <p>• Name changes are not permitted after booking</p>
+                    <p>• Seats are subject to availability and airline policies</p>
+                    <p>• Special assistance requests must be made 48 hours in advance</p>
+                    <p>• Dangerous goods restrictions apply as per IATA guidelines</p>
+                    <p>• Flight times are subject to change by the airline</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Price Footer with Book Now and Bargain Now */}
