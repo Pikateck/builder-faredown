@@ -259,7 +259,7 @@ export default function FlightDetails({
             <p className="text-gray-600 text-sm mb-3">Direct • 3h 15m • Economy</p>
 
             {/* Return Flight Timeline */}
-            <div className="relative mb-8">
+            <div className="relative mb-4">
               {/* Departure */}
               <div className="flex items-start space-x-4 mb-6">
                 <div className="w-3 h-3 border-2 border-gray-900 rounded-full bg-white mt-2"></div>
