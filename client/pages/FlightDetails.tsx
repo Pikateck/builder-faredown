@@ -387,61 +387,6 @@ export default function FlightDetails({
                 </div>
               </div>
 
-              {/* Cancellation & Change Policy */}
-              <div className="bg-white rounded-xl border border-gray-200 p-4 mb-3 shadow-sm">
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Cancellation & Change Policy</h4>
-
-                <div className="space-y-3">
-                  {/* Cancellation Fee */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <AlertCircle className="w-4 h-4 text-red-600" />
-                      <span className="text-sm text-gray-700">Cancellation fee</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold text-red-600">Non-refundable</div>
-                      <div className="text-xs text-gray-500">No cancellation allowed</div>
-                    </div>
-                  </div>
-
-                  {/* Date Change Fee */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm text-gray-700">Date change fee</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold text-blue-600">₹ 3,000</div>
-                      <div className="text-xs text-gray-500">+ fare difference</div>
-                    </div>
-                  </div>
-
-                  {/* Seat Selection */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Users className="w-4 h-4 text-purple-600" />
-                      <span className="text-sm text-gray-700">Seat selection</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold text-purple-600">Chargeable</div>
-                      <div className="text-xs text-gray-500">As per airline policy</div>
-                    </div>
-                  </div>
-
-                  {/* Meal Selection */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Coffee className="w-4 h-4 text-green-600" />
-                      <span className="text-sm text-gray-700">Meal selection</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold text-green-600">Available</div>
-                      <div className="text-xs text-gray-500">At additional cost</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Important Terms */}
               <div className="bg-amber-50 rounded-xl border border-amber-200 p-4 mb-3 shadow-sm">
                 <h4 className="text-sm font-semibold text-amber-900 mb-3 flex items-center">
