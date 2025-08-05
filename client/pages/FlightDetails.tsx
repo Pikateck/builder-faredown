@@ -303,39 +303,24 @@ export default function FlightDetails({
             </div>
 
             {/* Included Baggage */}
-            <div className="border-t pt-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Included baggage</h3>
-              <p className="text-gray-600 text-sm mb-6">Total baggage allowance for each flight</p>
+            <div className="border-t pt-3 mt-3">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Included baggage</h3>
 
-              <div className="space-y-6">
-                {/* Personal Item */}
-                <div className="flex items-start space-x-3">
-                  <ShoppingBag className="w-6 h-6 text-gray-700 mt-1" />
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-900 mb-1">1 personal item</div>
-                    <div className="text-gray-600 mb-2">Fits under the seat in front of you</div>
-                    <div className="text-green-600 font-medium">Included</div>
-                  </div>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="bg-gray-50 rounded-lg p-2">
+                  <ShoppingBag className="w-4 h-4 text-gray-700 mx-auto mb-1" />
+                  <div className="text-xs font-medium text-gray-900">Personal item</div>
+                  <div className="text-xs text-green-600">Included</div>
                 </div>
-
-                {/* Carry-on */}
-                <div className="flex items-start space-x-3">
-                  <Luggage className="w-6 h-6 text-gray-700 mt-1" />
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-900 mb-1">1 carry-on bag</div>
-                    <div className="text-gray-600 mb-2">Up to 7 kg • 25 x 35 x 55 cm</div>
-                    <div className="text-green-600 font-medium">Included</div>
-                  </div>
+                <div className="bg-gray-50 rounded-lg p-2">
+                  <Luggage className="w-4 h-4 text-gray-700 mx-auto mb-1" />
+                  <div className="text-xs font-medium text-gray-900">Carry-on 7kg</div>
+                  <div className="text-xs text-green-600">Included</div>
                 </div>
-
-                {/* Checked Bag */}
-                <div className="flex items-start space-x-3">
-                  <Luggage className="w-6 h-6 text-gray-700 mt-1" />
-                  <div className="flex-1">
-                    <div className="font-semibold text-gray-900 mb-1">1 checked bag</div>
-                    <div className="text-gray-600 mb-2">Up to 15 kg</div>
-                    <div className="text-green-600 font-medium">Included</div>
-                  </div>
+                <div className="bg-gray-50 rounded-lg p-2">
+                  <Luggage className="w-4 h-4 text-gray-700 mx-auto mb-1" />
+                  <div className="text-xs font-medium text-gray-900">Checked 15kg</div>
+                  <div className="text-xs text-green-600">Included</div>
                 </div>
               </div>
             </div>
