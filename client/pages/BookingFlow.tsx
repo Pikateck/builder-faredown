@@ -816,6 +816,25 @@ const SeatMap = ({
 
 export default function BookingFlow() {
   useScrollToTop();
+
+  // Custom CSS for consistent form control sizing
+  const customStyles = `
+    @media (max-width: 1023px) {
+      input[type="checkbox"], input[type="radio"] {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        min-height: 14px !important;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      input[type="checkbox"], input[type="radio"] {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  `;
   const location = useLocation();
   const navigate = useNavigate();
   const {
