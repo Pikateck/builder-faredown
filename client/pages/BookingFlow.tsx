@@ -2241,17 +2241,7 @@ export default function BookingFlow() {
                           </div>
                         </div>
 
-                        <label className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-[#f2f6fa]">
-                          <input
-                            type="radio"
-                            name="refundProtection"
-                            value="no"
-                            checked={selectedRefundProtection === "no"}
-                            onChange={(e) =>
-                              setSelectedRefundProtection(e.target.value)
-                            }
-                            className="w-3 h-3 text-[#003580]"
-                          />
+                        <div className="flex items-center space-x-3 p-4 border rounded-lg">
                           <div className="flex-1">
                             <span className="font-medium text-gray-900">
                               No, I don't want protection
@@ -2260,7 +2250,7 @@ export default function BookingFlow() {
                               You will not be covered
                             </p>
                           </div>
-                        </label>
+                        </div>
                       </div>
                     </div>
 
