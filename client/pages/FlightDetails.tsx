@@ -212,7 +212,7 @@ export default function FlightDetails({
         </div>
       </div>
 
-      <div className="bg-gray-50 min-h-screen pb-16">
+      <div className="bg-gray-50 min-h-screen pb-32">
         <div className="max-w-md mx-auto bg-white">
           {/* Flight to Dubai */}
           <div className="p-3">
