@@ -175,7 +175,7 @@ export default function FlightDetails({
           <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
-              className="text-white hover:bg-white/10 p-2"
+              className="text-white hover:bg-white/10 active:bg-white/20 p-3 min-w-[44px] min-h-[44px] rounded-full transition-colors"
               onClick={() => navigate("/flights")}
             >
               <ArrowLeft className="w-5 h-5" />
@@ -359,7 +359,7 @@ export default function FlightDetails({
                   <div className="flex justify-between items-center pt-2 border-t border-gray-200">
                     <span className="text-sm font-semibold text-gray-900">Total</span>
                     <div className="text-right">
-                      <div className="text-lg font-bold text-gray-900">��� {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
+                      <div className="text-lg font-bold text-gray-900">₹ {displayFlight.price.breakdown.total.toLocaleString("en-IN")}</div>
                       <div className="text-xs text-gray-500">All inclusive</div>
                     </div>
                   </div>
