@@ -255,8 +255,8 @@ export default function FlightDetails({
             </div>
 
             {/* Flight to Mumbai */}
-            <h2 className="text-xl font-bold text-gray-900 mb-1 mt-8">Flight to Mumbai</h2>
-            <p className="text-gray-600 text-sm mb-6">Direct • 3h 15m • Economy</p>
+            <h2 className="text-lg font-bold text-gray-900 mb-1 mt-4">Flight to Mumbai</h2>
+            <p className="text-gray-600 text-sm mb-3">Direct • 3h 15m • Economy</p>
 
             {/* Return Flight Timeline */}
             <div className="relative mb-8">
