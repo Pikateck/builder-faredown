@@ -259,7 +259,7 @@ const SeatMap = ({
               {flightTitle}
             </h3>
             <p className="text-sm text-[#666]">
-              {flightData?.duration || "3h 15m"} •{" "}
+              {flightData?.duration || "3h 15m"} ��{" "}
               {flightData?.airline || "Airlines"} •{" "}
               {fareData?.name || "Economy"}
             </p>
@@ -1036,7 +1036,7 @@ export default function BookingFlow() {
     { name: "India", code: "+91", flag: "🇮����" },
     { name: "Indonesia", code: "+62", flag: "�����🇩" },
     { name: "Iran", code: "+98", flag: "🇮🇷" },
-    { name: "Iraq", code: "+964", flag: "���🇶" },
+    { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
@@ -2427,7 +2427,7 @@ export default function BookingFlow() {
                           >
                             <input
                               type="checkbox"
-                              className="w-3 h-3 text-[#003580]"
+                              className="w-3 h-3 text-[#003580] mt-1"
                               checked={selectedOtherOptions.includes(option.id)}
                               onChange={(e) => {
                                 if (e.target.checked) {
@@ -2441,7 +2441,6 @@ export default function BookingFlow() {
                                   );
                                 }
                               }}
-                              className="w-4 h-4 mt-1"
                             />
                             <div className="flex items-center space-x-3 w-full">
                               <div className="w-8 h-8 bg-[#f2f6fa] rounded-full flex items-center justify-center">
