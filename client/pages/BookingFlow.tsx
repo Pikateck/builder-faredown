@@ -2285,7 +2285,19 @@ export default function BookingFlow() {
                       </div>
 
                       <div className="space-y-3">
-                        <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <label className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-[#f2f6fa]">
+                          <div className="w-4 h-4 flex items-center justify-center">
+                            <input
+                              type="radio"
+                              name="refundProtection"
+                              value="yes"
+                              checked={selectedRefundProtection === "yes"}
+                              onChange={(e) =>
+                                setSelectedRefundProtection(e.target.value)
+                              }
+                              className="w-3 h-3 sm:w-4 sm:h-4 text-[#003580]"
+                            />
+                          </div>
                           <div className="flex-1 flex justify-between items-center">
                             <span className="font-medium text-gray-900">
                               Yes, protect my booking
@@ -2294,7 +2306,7 @@ export default function BookingFlow() {
                               {formatCurrency(calculateRefundProtectionCost())}
                             </span>
                           </div>
-                        </div>
+                        </label>
 
                         <div className="flex items-center space-x-3 p-4 border rounded-lg">
                           <div className="flex-1">
