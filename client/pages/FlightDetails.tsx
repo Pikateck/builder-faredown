@@ -86,6 +86,7 @@ export default function FlightDetails({
   const [flight, setFlight] = useState<Flight | null>(providedFlight || fallbackFlight);
   const [isLoading, setIsLoading] = useState(false); // Start with false for immediate render
   const [error, setError] = useState<string | null>(null);
+  const [showBargainModal, setShowBargainModal] = useState(false);
 
 
   const finalFlightId = flightId || params.flightId;
