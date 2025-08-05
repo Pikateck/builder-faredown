@@ -2131,7 +2131,19 @@ export default function BookingFlow() {
                       </p>
 
                       <div className="space-y-3">
-                        <div className="flex items-center space-x-3 p-4 border rounded-lg">
+                        <label className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-[#f2f6fa]">
+                          <div className="w-4 h-4 flex items-center justify-center">
+                            <input
+                              type="radio"
+                              name="baggageProtection"
+                              value="bronze"
+                              checked={selectedBaggageProtection === "bronze"}
+                              onChange={(e) =>
+                                setSelectedBaggageProtection(e.target.value)
+                              }
+                              className="w-3 h-3 sm:w-4 sm:h-4 text-[#003580]"
+                            />
+                          </div>
                           <div className="flex-1 flex justify-between items-center">
                             <div>
                               <span className="font-medium text-gray-900">
@@ -2140,7 +2152,7 @@ export default function BookingFlow() {
                             </div>
                             <span className="font-semibold">₹49</span>
                           </div>
-                        </div>
+                        </label>
 
                         <div className="flex items-center space-x-3 p-4 border rounded-lg">
                           <div className="flex-1 flex justify-between items-center">
