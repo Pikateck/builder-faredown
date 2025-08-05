@@ -349,17 +349,7 @@ export default function FlightDetails({
                     </div>
                   </div>
 
-                  {/* Cleartrip fee */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <CreditCard className="w-4 h-4 text-green-600" />
-                      <span className="text-sm text-gray-700">Cleartrip fee</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold text-gray-900">₹ {displayFlight.price.breakdown.fees.toLocaleString("en-IN")}</div>
-                      <div className="text-xs text-gray-500">Service fee</div>
-                    </div>
-                  </div>
+
 
                   {/* Taxes */}
                   <div className="flex items-center justify-between">
