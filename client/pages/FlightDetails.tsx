@@ -226,7 +226,7 @@ export default function FlightDetails({
                   <div className="font-bold text-gray-900 text-lg mb-1">{displayFlight.departure.code} • {displayFlight.departure.name}</div>
 
                   {/* Airline Info */}
-                  <div className="flex items-center space-x-3 mt-4 mb-4">
+                  <div className="flex items-center space-x-3 mt-2 mb-2">
                     <img
                       src={`https://pics.avs.io/120/120/${displayFlight.airlineCode}.png`}
                       alt={displayFlight.airline}
