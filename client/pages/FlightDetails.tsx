@@ -497,8 +497,7 @@ export default function FlightDetails({
                     if (onBargain) {
                       onBargain(displayFlight);
                     } else {
-                      // For now, show an alert - you can implement bargain modal later
-                      alert('Bargain functionality coming soon!');
+                      setShowBargainModal(true);
                     }
                   }}
                 >
