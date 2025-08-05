@@ -439,7 +439,7 @@ export default function FlightDetails({
                 </Button>
 
                 <Button
-                  className="min-h-[48px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2"
+                  className="min-h-[52px] px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d4950b] text-black font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                   onClick={() => {
                     if (onBargain) {
                       onBargain(displayFlight);
