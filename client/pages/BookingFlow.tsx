@@ -370,7 +370,7 @@ const SeatMap = ({
                   <div className="flex items-center">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 bg-blue-600 mr-2"
+                      className="w-5 h-5 text-[#003580] bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-[#003580] focus:ring-offset-2 checked:bg-[#003580] checked:border-[#003580] transition-colors mr-2"
                       defaultChecked
                     />
                     <span>Economy Plus</span>
