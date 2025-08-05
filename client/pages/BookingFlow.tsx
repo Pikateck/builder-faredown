@@ -2138,7 +2138,7 @@ export default function BookingFlow() {
                             onChange={(e) =>
                               setSelectedBaggageProtection(e.target.value)
                             }
-                            className="w-4 h-4 text-[#003580]"
+                            className="w-5 h-5 text-[#003580] bg-white border-2 border-gray-300 rounded-full focus:ring-2 focus:ring-[#003580] focus:ring-offset-2 checked:bg-[#003580] checked:border-[#003580] transition-colors"
                           />
                           <div className="flex-1 flex justify-between items-center">
                             <div>
