@@ -1034,7 +1034,7 @@ export default function BookingFlow() {
     { name: "Hungary", code: "+36", flag: "🇭🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
     { name: "India", code: "+91", flag: "🇮����" },
-    { name: "Indonesia", code: "+62", flag: "����🇩" },
+    { name: "Indonesia", code: "+62", flag: "�����🇩" },
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
@@ -2339,7 +2339,7 @@ export default function BookingFlow() {
                         >
                           <input
                             type="checkbox"
-                            className={`w-4 h-4 ${selectedOtherOptions.length === 6 ? "bg-blue-600" : "bg-white border border-gray-400"}`}
+                            className="w-5 h-5 text-[#003580] bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-[#003580] focus:ring-offset-2 checked:bg-[#003580] checked:border-[#003580] transition-colors"
                             checked={selectedOtherOptions.length === 6}
                             onChange={(e) => {
                               if (e.target.checked) {
