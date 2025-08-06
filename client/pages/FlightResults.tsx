@@ -1526,7 +1526,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हि��्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -5865,7 +5865,7 @@ export default function FlightResults() {
                         <div className="flex justify-between">
                           <span className="text-blue-700">Check-in:</span>
                           <span className="font-medium">
-                            1 ���� 23 kg / Adult
+                            1 × 23 kg / Adult
                           </span>
                         </div>
                         <div className="flex justify-between">
