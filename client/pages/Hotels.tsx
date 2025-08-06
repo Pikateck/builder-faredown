@@ -269,46 +269,47 @@ export default function Hotels() {
             </div>
 
 
-            {/* Why Faredown Section */}
-            <div className="mt-8">
-              <h2 className="text-white text-lg font-semibold mb-4 text-center">
-                Why Faredown?
-              </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-sm mb-1">
-                    Live Bargaining
-                  </h3>
-                  <p className="text-xs text-gray-600">
-                    Negotiate real-time prices
-                  </p>
+          </div>
+        </div>
+
+        {/* Why Faredown Section */}
+        <div className="bg-gray-50 py-8">
+          <div className="px-4">
+            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
+              Why Faredown?
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Zap className="w-6 h-6 text-white" />
                 </div>
-                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <DollarSign className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
-                  <p className="text-xs text-gray-600">
-                    Pay what you feel is fair
-                  </p>
+                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
+                <p className="text-xs text-gray-600">
+                  Negotiate real-time prices
+                </p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Shield className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
-                  <p className="text-xs text-gray-600">Instant confirmations</p>
+                <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
+                <p className="text-xs text-gray-600">
+                  Pay what you feel is fair
+                </p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-6 h-6 text-white" />
                 </div>
-                <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                  <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Headphones className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
-                  <p className="text-xs text-gray-600">Always here to help</p>
+                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
+                <p className="text-xs text-gray-600">Instant confirmations</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Headphones className="w-6 h-6 text-white" />
                 </div>
+                <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
+                <p className="text-xs text-gray-600">Always here to help</p>
               </div>
             </div>
           </div>
@@ -405,7 +406,7 @@ export default function Hotels() {
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
-                          { code: "es", name: "Español", flag: "🇪🇸" },
+                          { code: "es", name: "Español", flag: "���🇸" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
