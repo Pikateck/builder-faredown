@@ -29,6 +29,7 @@ interface MobileCityDropdownProps {
   cities: Record<string, CityData>;
   selectedCity: string;
   onSelectCity: (city: string) => void;
+  context?: 'flights' | 'hotels'; // Add context to determine what to show
 }
 
 export function MobileCityDropdown({
