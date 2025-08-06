@@ -1586,7 +1586,7 @@ export default function BookingFlow() {
               {/* Currency section removed for cleaner booking flow */}
               <div className="flex items-center space-x-4 text-sm">
                 <div className="relative">
-                  {showCurrencyDropdown && (
+                  {false && (
                     <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
                       {[
                         {
