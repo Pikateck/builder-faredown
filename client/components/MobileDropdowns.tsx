@@ -39,6 +39,7 @@ export function MobileCityDropdown({
   cities,
   selectedCity,
   onSelectCity,
+  context = 'flights', // Default to flights for backward compatibility
 }: MobileCityDropdownProps) {
   if (!isOpen) return null;
 
