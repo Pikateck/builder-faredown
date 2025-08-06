@@ -62,6 +62,14 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
+// Airline Logo Mapping - Professional Logos
+const airlineLogos = {
+  "Emirates": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F3bd351e27a7d4538ad90ba788b3dc40c?format=webp&width=800",
+  "Air India": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F038ea94811c34637a2fa8500bcc79624?format=webp&width=800",
+  "Indigo": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
+  "IndiGo": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800"
+};
+
 // Utility function to format currency
 const formatCurrency = (amount: number) => {
   return `₹ ${amount.toLocaleString("en-IN")}`;
@@ -1058,7 +1066,7 @@ export default function BookingFlow() {
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
-    { name: "Israel", code: "+972", flag: "🇮🇱" },
+    { name: "Israel", code: "+972", flag: "���🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
