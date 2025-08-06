@@ -435,7 +435,7 @@ export function MobileDatePicker({
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                  <CalendarIcon className="w-4 h-4 text-white" />
+                  <Calendar className="w-4 h-4 text-white" />
                 </div>
                 <span className="text-sm font-medium text-blue-900">
                   {bookingType === 'hotels' ? 'Your Stay' : 'Your Trip'}
