@@ -486,12 +486,12 @@ export default function Hotels() {
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
-                          { code: "pt", name: "Português", flag: "���🇹" },
+                          { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "الع��بية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
-                          { code: "ko", name: "한국���", flag: "🇰🇷" },
-                          { code: "zh", name: "中文", flag: "🇨���" },
+                          { code: "ko", name: "한국어", flag: "🇰🇷" },
+                          { code: "zh", name: "中文", flag: "🇨🇳" },
                         ].map((language) => (
                           <DropdownMenuItem
                             key={language.code}
@@ -753,7 +753,7 @@ export default function Hotels() {
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">���</span>
+                  <span className="text-2xl">🎅</span>
                 </div>
                 <div className="text-sm font-medium text-gray-900">
                   24/7 Support
