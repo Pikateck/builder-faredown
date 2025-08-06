@@ -429,41 +429,64 @@ export function MobileDatePicker({
           </div>
         )}
 
-        {/* Current Selection Display */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div className="text-sm text-gray-600 mb-2">
-            {bookingType === 'hotels' ? 'Selected stay dates:' : 'Selected dates:'}
-          </div>
-          <div className="text-base font-medium text-gray-900">
-            {bookingType === 'hotels' ? (
-              // Hotel date display
-              selectedDepartureDate
-                ? `${formatDate(selectedDepartureDate)} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate)}` : "- Select check-out"}`
-                : "Select check-in and check-out dates"
-            ) : (
-              // Flight date display
-              tripType === "one-way"
-                ? formatDate(selectedDepartureDate) || "Select departure date"
-                : selectedDepartureDate
-                  ? `${formatDate(selectedDepartureDate)} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate)}` : "- Select return"}`
-                  : "Select departure and return dates"
-            )}
-          </div>
-          {bookingType === 'flights' && tripType === "round-trip" && (
-            <div className="text-xs text-gray-600 mt-1">
-              {selectingDeparture
-                ? "Select departure date"
-                : "Select return date"}
+        {/* Elegant Date Selection Display */}
+        {(selectedDepartureDate || selectedReturnDate) && (
+          <div className="mb-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <CalendarIcon className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-sm font-medium text-blue-900">
+                  {bookingType === 'hotels' ? 'Your Stay' : 'Your Trip'}
+                </span>
+              </div>
+              {(selectedDepartureDate && selectedReturnDate) && (
+                <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                  ✓ Complete
+                </div>
+              )}
             </div>
-          )}
-          {bookingType === 'hotels' && (
-            <div className="text-xs text-gray-600 mt-1">
-              {selectingDeparture
-                ? "Select check-in date"
-                : "Select check-out date"}
+
+            <div className="space-y-2">
+              {bookingType === 'hotels' ? (
+                // Hotel date display
+                <>
+                  <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
+                    <span className="text-sm text-gray-600">Check-in</span>
+                    <span className="font-semibold text-gray-900">
+                      {selectedDepartureDate ? formatDate(selectedDepartureDate) : "Select date"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
+                    <span className="text-sm text-gray-600">Check-out</span>
+                    <span className="font-semibold text-gray-900">
+                      {selectedReturnDate ? formatDate(selectedReturnDate) : "Select date"}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                // Flight date display
+                <>
+                  <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
+                    <span className="text-sm text-gray-600">Departure</span>
+                    <span className="font-semibold text-gray-900">
+                      {selectedDepartureDate ? formatDate(selectedDepartureDate) : "Select date"}
+                    </span>
+                  </div>
+                  {tripType === "round-trip" && (
+                    <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
+                      <span className="text-sm text-gray-600">Return</span>
+                      <span className="font-semibold text-gray-900">
+                        {selectedReturnDate ? formatDate(selectedReturnDate) : "Select date"}
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Professional Hotel-Style Calendar */}
         <div className="mb-6">
