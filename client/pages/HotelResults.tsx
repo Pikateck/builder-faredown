@@ -1025,15 +1025,16 @@ export default function HotelResults() {
 
                 {/* Filter Content - Scrollable */}
                 <div className="flex-1 overflow-y-auto min-h-0">
-                  <div className="p-4">
-                    <EnhancedFilters
+                  <div className="p-0">
+                    <ComprehensiveFilters
                       priceRange={priceRange}
                       setPriceRange={setPriceRange}
-                      selectedAmenities={selectedAmenities}
-                      setSelectedAmenities={setSelectedAmenities}
+                      selectedFilters={selectedFilters}
+                      setSelectedFilters={setSelectedFilters}
                       sortBy={sortBy}
                       setSortBy={setSortBy}
                       onClearFilters={handleClearFilters}
+                      className="h-full"
                     />
                   </div>
                 </div>
@@ -1104,11 +1105,11 @@ export default function HotelResults() {
                 <Filter className="w-5 h-5 mr-2 text-[#003580]" />
                 Filter by
               </div>
-              <EnhancedFilters
+              <ComprehensiveFilters
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
-                selectedAmenities={selectedAmenities}
-                setSelectedAmenities={setSelectedAmenities}
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
                 sortBy={sortBy}
                 setSortBy={setSortBy}
                 onClearFilters={handleClearFilters}
