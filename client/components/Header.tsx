@@ -15,6 +15,11 @@ import {
   BookOpen,
   Menu,
   ChevronDown,
+  Crown,
+  Sparkles,
+  Diamond,
+  Gem,
+  Plane,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
