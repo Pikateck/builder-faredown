@@ -411,7 +411,12 @@ export class HotelsService {
 
       return [];
     } catch (error) {
-      console.warn("Live hotel search failed:", error);
+      // This should rarely be hit now that we handle fetch errors properly
+      if (error instanceof Error && error.name === "AbortError") {
+        console.log("⏰ Outer catch: Hotel search was aborted");
+        return [];
+      }
+      console.warn("Live hotel search unexpected error:", error instanceof Error ? error.message : "Unknown error");
       return [];
     }
   }
@@ -1097,7 +1102,7 @@ export class HotelsService {
         type: "city" as const,
         country: "Saudi Arabia",
         code: "JED",
-        flag: "����🇦",
+        flag: "������🇦",
       },
       {
         id: "LHR",
