@@ -1058,7 +1058,7 @@ export default function BookingFlow() {
     { name: "Guernsey", code: "+44", flag: "🇬🇬" },
     { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "🇬🇼" },
-    { name: "Guyana", code: "+592", flag: "🇬🇾" },
+    { name: "Guyana", code: "+592", flag: "���🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
@@ -1582,7 +1582,7 @@ export default function BookingFlow() {
             </Link>
 
             {/* Centered Navigation */}
-            <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+            <nav className="hidden flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
               <Link
                 to="/flights"
                 className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
