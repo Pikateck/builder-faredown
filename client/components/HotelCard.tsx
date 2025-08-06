@@ -455,18 +455,18 @@ export function HotelCard({
                 </div>
               </div>
 
-              {/* Action Buttons - Same size and bigger */}
-              <div className="flex space-x-2">
+              {/* Action Buttons - Native App Optimized */}
+              <div className="flex space-x-3">
                 <Button
                   variant="outline"
-                  className="flex-1 py-3.5 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-colors min-h-[44px]"
+                  className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
                   onClick={handleViewDetails}
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-3.5 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px]"
+                  className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                 >
                   <TrendingDown className="w-4 h-4" />
                   Bargain Now
@@ -593,20 +593,20 @@ export function HotelCard({
                 </div>
               </div>
 
-              {/* Action Buttons - Same size and bigger */}
-              <div className="flex space-x-2">
+              {/* Action Buttons - Native App Optimized */}
+              <div className="flex space-x-3">
                 <Button
                   variant="outline"
-                  className="flex-1 py-3 text-sm font-semibold border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-colors min-h-[40px]"
+                  className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
                   onClick={handleViewDetails}
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-1 min-h-[40px]"
+                  className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                 >
-                  <TrendingDown className="w-3 h-3" />
+                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
                 </Button>
               </div>
@@ -732,19 +732,19 @@ export function HotelCard({
                 {formatPrice(currentPrice)} per room/night (incl. taxes)
               </div>
             </div>
-            <div className="flex gap-2 ml-3">
+            <div className="flex gap-3 ml-3">
               <Button
                 variant="outline"
-                className="text-sm px-4 py-2.5 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-colors font-semibold min-h-[40px]"
+                className="text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation"
                 onClick={handleViewDetails}
               >
                 View Details
               </Button>
               <Button
                 onClick={() => onBargainClick(hotel, searchParams)}
-                className="text-sm px-4 py-2.5 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold flex items-center gap-1 min-h-[40px]"
+                className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
               >
-                <TrendingDown className="w-3 h-3" />
+                <TrendingDown className="w-4 h-4" />
                 Bargain Now
               </Button>
             </div>
