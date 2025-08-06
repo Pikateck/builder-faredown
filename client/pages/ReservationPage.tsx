@@ -762,14 +762,16 @@ export default function ReservationPage() {
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
-                              <CreditCard className="w-5 h-5 text-blue-600" />
+                              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                                <CreditCard className="w-5 h-5 text-white" />
+                              </div>
                               <div>
                                 <div className="font-semibold text-gray-900">Pay Now with Card</div>
                                 <div className="text-sm text-gray-600">Instant confirmation</div>
                               </div>
                             </div>
                           </div>
-                          <div className="text-sm font-medium text-green-700 bg-green-100 px-2 py-1 rounded">
+                          <div className="text-sm font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
                             Recommended
                           </div>
                         </div>
@@ -801,8 +803,8 @@ export default function ReservationPage() {
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
-                              <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
-                                🏨
+                              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-sm">
+                                <Building2 className="w-5 h-5 text-white" />
                               </div>
                               <div>
                                 <div className="font-semibold text-gray-900">Pay at Hotel</div>
