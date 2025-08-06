@@ -325,8 +325,8 @@ export default function FlightResults() {
   const [editTripType, setEditTripType] = useState("round-trip");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
-  const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
-  const [selectedToCity, setSelectedToCity] = useState("Dubai");
+  const [selectedFromCity, setSelectedFromCity] = useState("");
+  const [selectedToCity, setSelectedToCity] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
@@ -1438,7 +1438,7 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "🇮���" },
+                      { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
