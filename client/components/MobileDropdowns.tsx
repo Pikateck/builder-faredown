@@ -474,13 +474,13 @@ export function MobileDatePicker({
                 selectedReturnDate ||
                 addDays(
                   selectedDepartureDate || new Date(),
-                  tripType === "one-way" ? 1 : 7,
+                  bookingType === 'hotels' ? 3 : (tripType === "one-way" ? 1 : 7),
                 ),
             }}
             onChange={handleCalendarChange}
             onClose={handleDoneClick} // Use custom handler for Done button
             className="w-full"
-            bookingType="flight"
+            bookingType={bookingType === 'hotels' ? "hotel" : "flight"}
           />
         </div>
 
