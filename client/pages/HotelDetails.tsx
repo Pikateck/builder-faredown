@@ -154,6 +154,13 @@ export default function HotelDetails() {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [hotelData, setHotelData] = useState<any>(null);
   const [isLoadingHotel, setIsLoadingHotel] = useState(true);
+
+  // Expand first room by default when room types are available
+  useEffect(() => {
+    if (roomTypes.length > 0) {
+      setExpandedRooms(new Set([roomTypes[0].id]));
+    }
+  }, [roomTypes.length]);
   const [selectedFilters, setSelectedFilters] = useState({
     popularFilters: new Set<string>(),
     propertyTypes: new Set<string>(),
