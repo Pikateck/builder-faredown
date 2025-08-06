@@ -622,6 +622,136 @@ export default function Index() {
           </div>
         )}
 
+        {/* Notifications Overlay */}
+        {showNotifications && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowNotifications(false)}
+            />
+            <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-xl">
+              <div className="flex items-center justify-between p-4 border-b bg-[#003580] text-white">
+                <h2 className="text-lg font-semibold">Notifications</h2>
+                <button
+                  onClick={() => setShowNotifications(false)}
+                  className="p-2 text-white hover:bg-white/20 rounded-lg"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-4 space-y-4">
+                <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                    <Bell className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">Welcome to Faredown!</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Start bargaining for your next flight and save up to 40% on travel costs.
+                    </p>
+                    <span className="text-xs text-gray-500 mt-2 block">Just now</span>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                    <DollarSign className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">Special Offer Available</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Extra 10% off on your first booking. Use code: FIRST10
+                    </p>
+                    <span className="text-xs text-gray-500 mt-2 block">2 hours ago</span>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                    <Plane className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900">Price Drop Alert</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      Flights to Dubai are now 25% cheaper than last week!
+                    </p>
+                    <span className="text-xs text-gray-500 mt-2 block">1 day ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Language/Currency Menu */}
+        {showLanguageMenu && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowLanguageMenu(false)}
+            />
+            <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-xl">
+              <div className="flex items-center justify-between p-4 border-b bg-[#003580] text-white">
+                <h2 className="text-lg font-semibold">Settings</h2>
+                <button
+                  onClick={() => setShowLanguageMenu(false)}
+                  className="p-2 text-white hover:bg-white/20 rounded-lg"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-4 space-y-6">
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-3">Language</h3>
+                  <div className="space-y-2">
+                    <button className="w-full flex items-center justify-between p-3 bg-[#003580] text-white rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">🇺🇸</span>
+                        <span>English (US)</span>
+                      </div>
+                      <Check className="w-4 h-4" />
+                    </button>
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">🇮🇳</span>
+                        <span>हिन्दी</span>
+                      </div>
+                    </button>
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">🇪🇸</span>
+                        <span>Español</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 mb-3">Currency</h3>
+                  <div className="space-y-2">
+                    <button className="w-full flex items-center justify-between p-3 bg-[#003580] text-white rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">₹</span>
+                        <span>Indian Rupee (INR)</span>
+                      </div>
+                      <Check className="w-4 h-4" />
+                    </button>
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">$</span>
+                        <span>US Dollar (USD)</span>
+                      </div>
+                    </button>
+                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-lg">€</span>
+                        <span>Euro (EUR)</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Mobile Hero Section */}
         <div className="bg-[#003580] text-white pb-8">
           <div className="px-4 pt-6">
