@@ -627,6 +627,13 @@ export default function HotelDetails() {
     ].sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
 
+  // Expand first room by default when room types are available
+  useEffect(() => {
+    if (roomTypes.length > 0) {
+      setExpandedRooms(new Set([roomTypes[0].id]));
+    }
+  }, [roomTypes.length]);
+
   // Create final hotel object with calculated roomTypes
   const hotel = tempHotelData
     ? {
