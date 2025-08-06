@@ -66,7 +66,7 @@ export default function HotelResults() {
     loadDatesFromParams,
   } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
-  const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (��0 - ₹25,000)
+  const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
@@ -1096,20 +1096,30 @@ export default function HotelResults() {
         <div className="flex gap-6">
           {/* Desktop Filters */}
           <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 sticky top-24">
-              <div className="text-lg font-semibold mb-4 flex items-center">
-                <Filter className="w-5 h-5 mr-2 text-[#003580]" />
-                Filter by
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24 overflow-hidden">
+              <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Filter className="w-5 h-5 mr-2 text-[#febb02]" />
+                    <h2 className="text-lg font-semibold">Filter Hotels</h2>
+                  </div>
+                  <div className="text-sm bg-white/20 px-2 py-1 rounded-lg">
+                    {filteredAndSortedHotels.length}
+                  </div>
+                </div>
               </div>
-              <ComprehensiveFilters
-                priceRange={priceRange}
-                setPriceRange={setPriceRange}
-                selectedFilters={selectedFilters}
-                setSelectedFilters={setSelectedFilters}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                onClearFilters={handleClearFilters}
-              />
+              <div className="h-[calc(100vh-200px)]">
+                <ComprehensiveFilters
+                  priceRange={priceRange}
+                  setPriceRange={setPriceRange}
+                  selectedFilters={selectedFilters}
+                  setSelectedFilters={setSelectedFilters}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  onClearFilters={handleClearFilters}
+                  className="h-full border-0"
+                />
+              </div>
             </div>
           </div>
 
