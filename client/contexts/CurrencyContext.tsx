@@ -80,6 +80,134 @@ export const CURRENCIES: Currency[] = [
     flag: "🇨🇳",
     decimalPlaces: 2,
   },
+  {
+    code: "CAD",
+    symbol: "C$",
+    name: "Canadian Dollar",
+    rate: 0.016,
+    flag: "🇨🇦",
+    decimalPlaces: 2,
+  },
+  {
+    code: "AUD",
+    symbol: "A$",
+    name: "Australian Dollar",
+    rate: 0.018,
+    flag: "🇦🇺",
+    decimalPlaces: 2,
+  },
+  {
+    code: "CHF",
+    symbol: "₣",
+    name: "Swiss Franc",
+    rate: 0.011,
+    flag: "🇨🇭",
+    decimalPlaces: 2,
+  },
+  {
+    code: "KRW",
+    symbol: "₩",
+    name: "South Korean Won",
+    rate: 16.2,
+    flag: "🇰🇷",
+    decimalPlaces: 0,
+  },
+  {
+    code: "THB",
+    symbol: "฿",
+    name: "Thai Baht",
+    rate: 0.42,
+    flag: "🇹🇭",
+    decimalPlaces: 2,
+  },
+  {
+    code: "MYR",
+    symbol: "RM",
+    name: "Malaysian Ringgit",
+    rate: 0.054,
+    flag: "🇲🇾",
+    decimalPlaces: 2,
+  },
+  {
+    code: "IDR",
+    symbol: "Rp",
+    name: "Indonesian Rupiah",
+    rate: 188,
+    flag: "🇮🇩",
+    decimalPlaces: 0,
+  },
+  {
+    code: "PHP",
+    symbol: "₱",
+    name: "Philippine Peso",
+    rate: 0.69,
+    flag: "🇵🇭",
+    decimalPlaces: 2,
+  },
+  {
+    code: "HKD",
+    symbol: "HK$",
+    name: "Hong Kong Dollar",
+    rate: 0.095,
+    flag: "🇭🇰",
+    decimalPlaces: 2,
+  },
+  {
+    code: "NZD",
+    symbol: "NZ$",
+    name: "New Zealand Dollar",
+    rate: 0.020,
+    flag: "🇳🇿",
+    decimalPlaces: 2,
+  },
+  {
+    code: "SAR",
+    symbol: "﷼",
+    name: "Saudi Riyal",
+    rate: 0.045,
+    flag: "🇸🇦",
+    decimalPlaces: 2,
+  },
+  {
+    code: "QAR",
+    symbol: "﷼",
+    name: "Qatari Riyal",
+    rate: 0.044,
+    flag: "🇶🇦",
+    decimalPlaces: 2,
+  },
+  {
+    code: "ZAR",
+    symbol: "R",
+    name: "South African Rand",
+    rate: 0.22,
+    flag: "🇿🇦",
+    decimalPlaces: 2,
+  },
+  {
+    code: "BRL",
+    symbol: "R$",
+    name: "Brazilian Real",
+    rate: 0.072,
+    flag: "🇧🇷",
+    decimalPlaces: 2,
+  },
+  {
+    code: "RUB",
+    symbol: "₽",
+    name: "Russian Ruble",
+    rate: 1.14,
+    flag: "🇷🇺",
+    decimalPlaces: 2,
+  },
+  {
+    code: "TRY",
+    symbol: "₺",
+    name: "Turkish Lira",
+    rate: 0.41,
+    flag: "🇹🇷",
+    decimalPlaces: 2,
+  },
 ];
 
 interface CurrencyContextType {
@@ -155,7 +283,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
       return () => clearInterval(interval);
     } catch (globalError) {
-      console.error("💰 CurrencyProvider useEffect failed:", globalError);
+      console.error("��� CurrencyProvider useEffect failed:", globalError);
       // Don't throw - just log and continue with static rates
     }
   }, []);
