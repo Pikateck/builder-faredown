@@ -3622,7 +3622,7 @@ export default function FlightResults() {
                                               </p>
                                               <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                                 <p>
-                                                  ��� Direct flights are usually
+                                                  • Direct flights are usually
                                                   cheaper than refundable
                                                   flights. However, you may have
                                                   to pay a large fee to cancel
@@ -5924,7 +5924,7 @@ export default function FlightResults() {
                             Faredown Fee:
                           </span>
                           <p className="text-yellow-600">
-                            ����500 per passenger
+                            ���500 per passenger
                           </p>
                         </div>
                         <p className="text-xs text-yellow-600 mt-2">
