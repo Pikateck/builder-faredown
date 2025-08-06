@@ -1032,6 +1032,7 @@ export default function Hotels() {
         cities={cityData}
         selectedCity={selectedFromCity}
         onSelectCity={setSelectedFromCity}
+        context="hotels"
       />
 
       <MobileDatePicker
