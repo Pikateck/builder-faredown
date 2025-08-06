@@ -29,6 +29,7 @@ import {
   Minus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ErrorBanner } from "@/components/ErrorBanner";
 
 interface GuestConfig {
   adults: number;
