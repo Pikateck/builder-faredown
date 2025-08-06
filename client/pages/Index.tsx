@@ -742,7 +742,7 @@ export default function Index() {
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-900 mb-3">Currency</h3>
-                  <div className="space-y-2">
+                  <div className="max-h-64 overflow-y-auto space-y-2 pr-2">
                     {currencies.map((currency) => (
                       <button
                         key={currency.code}
