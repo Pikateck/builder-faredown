@@ -119,9 +119,7 @@ export default function HotelDetails() {
   });
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const [expandedRooms, setExpandedRooms] = useState<Set<string>>(
-    new Set(["standard-double"]),
-  );
+  const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
