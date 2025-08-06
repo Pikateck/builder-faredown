@@ -5106,7 +5106,7 @@ export default function FlightResults() {
                     <div>
                       <div className="text-sm font-medium">Mumbai → Dubai</div>
                       <div className="text-xs text-blue-200">
-                        Emirates ����� Non-stop • 3h 30m
+                        Emirates • Non-stop • 3h 30m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹15500</div>
