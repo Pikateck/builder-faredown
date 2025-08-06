@@ -735,19 +735,10 @@ export default function Index() {
                       </div>
                       <Check className="w-4 h-4" />
                     </button>
-                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-lg">🇮🇳</span>
-                        <span>हिन्दी</span>
-                      </div>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-lg">🇪🇸</span>
-                        <span>Español</span>
-                      </div>
-                    </button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    More languages coming soon!
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-900 mb-3">Currency</h3>
