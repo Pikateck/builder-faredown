@@ -420,21 +420,33 @@ export default function Index() {
               </div>
               <div className="flex items-center space-x-3">
                 <button
-                  className="p-2 relative hover:bg-white/10 rounded-lg transition-colors"
-                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  onClick={() => {
+                    setShowLanguageMenu(!showLanguageMenu);
+                    setShowNotifications(false);
+                    setShowMobileMenu(false);
+                  }}
                 >
                   <Globe className="w-5 h-5" />
                 </button>
                 <button
-                  className="p-2 relative hover:bg-white/10 rounded-lg transition-colors"
-                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  onClick={() => {
+                    setShowNotifications(!showNotifications);
+                    setShowLanguageMenu(false);
+                    setShowMobileMenu(false);
+                  }}
                 >
                   <Bell className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                 </button>
                 <button
-                  onClick={() => setShowMobileMenu(!showMobileMenu)}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  onClick={() => {
+                    setShowMobileMenu(!showMobileMenu);
+                    setShowNotifications(false);
+                    setShowLanguageMenu(false);
+                  }}
+                  className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                 >
                   <Menu className="w-5 h-5" />
                 </button>
