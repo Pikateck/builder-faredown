@@ -2945,7 +2945,7 @@ export default function FlightResults() {
                                     {flight.arrivalTime}
                                   </div>
                                   <div className="text-sm text-gray-600">
-                                    {flight.arrivalCode} ���{" "}
+                                    {flight.arrivalCode} •{" "}
                                     {departureDate
                                       ? formatDisplayDate(
                                           departureDate,
@@ -5924,7 +5924,7 @@ export default function FlightResults() {
                             Faredown Fee:
                           </span>
                           <p className="text-yellow-600">
-                            ���500 per passenger
+                            ����500 per passenger
                           </p>
                         </div>
                         <p className="text-xs text-yellow-600 mt-2">
