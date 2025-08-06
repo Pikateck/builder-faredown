@@ -119,6 +119,8 @@ export default function Index() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [activeTab, setActiveTab] = useState("flights"); // Track active tab
 
   // Auth form states
