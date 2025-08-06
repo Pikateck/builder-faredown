@@ -2767,7 +2767,7 @@ export default function FlightResults() {
                             <div className="flex flex-col space-y-4">
                               <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                                 <img
-                                  src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                                  src={airlineLogos[flight.airline] || `https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
                                   alt={flight.airline}
                                   className="w-8 h-6 object-contain"
                                   onError={(e) => {
@@ -2778,9 +2778,13 @@ export default function FlightResults() {
                               </div>
                               <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                                 <img
-                                  src={`https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
-                                  alt={flight.airline}
+                                  src={airlineLogos[flight.returnAirline || flight.airline] || `https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                                  alt={flight.returnAirline || flight.airline}
                                   className="w-8 h-6 object-contain"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      "https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈";
+                                  }}
                                 />
                               </div>
                             </div>
