@@ -448,22 +448,22 @@ export default function HotelDetails() {
           // Always use our mapped names, fallback to API name only if not in our mapping
           return hotelNames[hotelId] || hotelData.name || "Premium Hotel Dubai";
         })(),
-        location:
-          typeof hotelData.location === "string"
-            ? hotelData.location
-            : hotelData.location?.address?.street ||
-              hotelData.address?.street ||
-              (() => {
-                const hotelLocations = {
-                  "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
-                  "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
-                  "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
-                  "htl-DXB-004": "Dubai Creek, Dubai, United Arab Emirates",
-                  "htl-DXB-005": "Near Dubai Mall, Dubai, United Arab Emirates",
-                  "htl-DXB-006": "Dubai International Airport, Dubai, United Arab Emirates",
-                };
-                return hotelLocations[hotelId] || "Dubai, United Arab Emirates";
-              })(),
+        location: (() => {
+          const hotelLocations = {
+            "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+            "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
+            "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
+            "htl-DXB-004": "Dubai Creek, Dubai, United Arab Emirates",
+            "htl-DXB-005": "Near Dubai Mall, Dubai, United Arab Emirates",
+            "htl-DXB-006": "Dubai International Airport, Dubai, United Arab Emirates",
+          };
+          // Always use our mapped locations first, fallback to API location
+          return hotelLocations[hotelId] ||
+                 (typeof hotelData.location === "string" ? hotelData.location :
+                  hotelData.location?.address?.street ||
+                  hotelData.address?.street ||
+                  "Dubai, United Arab Emirates");
+        })(),
         image:
           hotelData.images && hotelData.images.length > 0
             ? typeof hotelData.images[0] === "string"
