@@ -4,6 +4,7 @@ import {
   Search,
   Plane,
   Building,
+  Calendar,
   CalendarIcon,
   Users,
   ChevronLeft,
