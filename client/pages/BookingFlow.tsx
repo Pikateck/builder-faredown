@@ -943,6 +943,7 @@ export default function BookingFlow() {
   const [showTravellerDetails, setShowTravellerDetails] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [selectedMealIds, setSelectedMealIds] = useState([]);
