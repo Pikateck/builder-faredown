@@ -71,6 +71,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  Check,
   User,
   BookOpen,
   Award,
