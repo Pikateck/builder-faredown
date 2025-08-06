@@ -1497,6 +1497,7 @@ export default function HotelResults() {
         setSelectedReturnDate={setReturnDate}
         selectingDeparture={true}
         setSelectingDeparture={() => {}}
+        bookingType="hotels"
       />
 
       <MobileTravelers
