@@ -15,10 +15,6 @@ import {
   BookOpen,
   Menu,
   ChevronDown,
-  Crown,
-  Sparkles,
-  Diamond,
-  Gem,
   Plane,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -89,14 +85,11 @@ export function Header({ className }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center relative">
+            <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
               <Plane className="w-5 h-5 text-[#003580]" />
-              <Sparkles className="w-3 h-3 text-[#003580] absolute -top-1 -right-1" />
             </div>
-            <span className="text-lg sm:text-xl font-bold tracking-tight flex items-center gap-1">
-              <Crown className="w-4 h-4 text-[#febb02] group-hover:animate-pulse" />
+            <span className="text-lg sm:text-xl font-bold tracking-tight">
               faredown.com
-              <Diamond className="w-3 h-3 text-[#febb02] group-hover:animate-pulse" />
             </span>
           </Link>
           <div className="flex items-center space-x-2 md:space-x-6">
