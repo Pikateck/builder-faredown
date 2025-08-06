@@ -1013,7 +1013,7 @@ export default function Index() {
                       Mumbai → London
                     </h3>
                     <p className="text-xs text-gray-500">
-                      British Airways • Non-stop • 9h 25m
+                      British Airways • Non-stop ��� 9h 25m
                     </p>
                   </div>
                   <div className="text-right">
@@ -1581,10 +1581,10 @@ export default function Index() {
                             onClick={() => setShowCalendar(false)}
                           />
 
-                          {/* Calendar Container */}
-                          <div className="fixed top-16 left-4 right-4 bottom-16 z-[100000] sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:top-14 sm:bottom-auto sm:w-[700px] sm:max-w-[700px]">
-                            <div className="h-full overflow-y-auto sm:h-auto bg-white rounded-lg sm:rounded-lg shadow-2xl">
-                              <div className="p-0">
+                          {/* Calendar Container - Booking.com Style */}
+                          <div className="fixed top-16 left-4 right-4 bottom-16 z-[100000] sm:absolute sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 sm:top-14 sm:bottom-auto sm:w-[750px] sm:max-w-[750px]">
+                            <div className="h-full overflow-y-auto sm:h-auto bg-white rounded-2xl sm:rounded-2xl shadow-2xl border border-gray-100">
+                              <div className="p-6">
                                 <BookingCalendar
                                   bookingType="flight"
                                   initialRange={{
