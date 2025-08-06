@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Plane, Building2, Heart, User, Sparkles, Crown, Diamond, Gem } from "lucide-react";
+import { Plane, Building2, Heart, User } from "lucide-react";
 
 export function MobileNavigation() {
   const location = useLocation();
@@ -47,31 +47,17 @@ export function MobileNavigation() {
               to={item.path}
               className="flex flex-col items-center justify-center space-y-1 relative group"
             >
-              {active && (
-                <div className="absolute -top-1 right-3">
-                  <Sparkles className="w-3 h-3 text-[#febb02] animate-pulse" />
-                </div>
-              )}
-              <div className="relative">
-                <Icon
-                  className={`w-5 h-5 ${
-                    active ? "text-[#003580]" : "text-gray-400"
-                  }`}
-                />
-                {active && (
-                  <div className="absolute -top-1 -right-1">
-                    <Diamond className="w-2 h-2 text-[#febb02]" />
-                  </div>
-                )}
-              </div>
+              <Icon
+                className={`w-5 h-5 ${
+                  active ? "text-[#003580]" : "text-gray-400"
+                }`}
+              />
               <span
-                className={`text-xs flex items-center gap-1 ${
+                className={`text-xs ${
                   active ? "text-[#003580] font-medium" : "text-gray-500"
                 }`}
               >
-                {active && <Crown className="w-2 h-2 text-[#febb02]" />}
                 {item.label}
-                {active && <Gem className="w-2 h-2 text-[#febb02]" />}
               </span>
             </Link>
           );
