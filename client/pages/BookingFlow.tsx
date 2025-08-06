@@ -1581,12 +1581,39 @@ export default function BookingFlow() {
               </span>
             </Link>
 
+            {/* Centered Navigation */}
+            <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+              <Link
+                to="/flights"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
+              >
+                <span>Flights</span>
+              </Link>
+              <Link
+                to="/hotels"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
+              >
+                <span>Hotels</span>
+              </Link>
+            </nav>
 
             <div className="flex items-center space-x-2 md:space-x-6">
-              {/* Currency section removed for cleaner booking flow */}
+              {/* Currency Only - Language dropdown removed */}
               <div className="flex items-center space-x-4 text-sm">
                 <div className="relative">
-                  {false && (
+                  <button
+                    onClick={() =>
+                      setShowCurrencyDropdown(!showCurrencyDropdown)
+                    }
+                    className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
+                  >
+                    <span className="text-sm font-medium">Curr</span>
+                    <span>
+                      {selectedCurrency.symbol} {selectedCurrency.code}
+                    </span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                  {showCurrencyDropdown && (
                     <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
                       {[
                         {
