@@ -752,25 +752,28 @@ export default function Index() {
                 <div>
                   <h3 className="font-medium text-gray-900 mb-3">Currency</h3>
                   <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-3 bg-[#003580] text-white rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-lg">₹</span>
-                        <span>Indian Rupee (INR)</span>
-                      </div>
-                      <Check className="w-4 h-4" />
-                    </button>
-                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-lg">$</span>
-                        <span>US Dollar (USD)</span>
-                      </div>
-                    </button>
-                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-lg">€</span>
-                        <span>Euro (EUR)</span>
-                      </div>
-                    </button>
+                    {currencies.map((currency) => (
+                      <button
+                        key={currency.code}
+                        onClick={() => {
+                          setCurrency(currency);
+                          setShowLanguageMenu(false);
+                        }}
+                        className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
+                          selectedCurrency.code === currency.code
+                            ? "bg-[#003580] text-white"
+                            : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <span className="text-lg">{currency.symbol}</span>
+                          <span>{currency.name} ({currency.code})</span>
+                        </div>
+                        {selectedCurrency.code === currency.code && (
+                          <Check className="w-4 h-4" />
+                        )}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
