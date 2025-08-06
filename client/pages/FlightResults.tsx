@@ -4347,18 +4347,6 @@ export default function FlightResults() {
                           }
                           className="w-3 h-3 text-[#003580] rounded focus:ring-[#003580] focus:ring-1"
                         />
-                        {airlineLogos[airline] && (
-                          <div className="w-5 h-5 flex-shrink-0">
-                            <img
-                              src={airlineLogos[airline]}
-                              alt={`${airline} logo`}
-                              className="w-full h-full object-contain rounded-sm"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).style.display = 'none';
-                              }}
-                            />
-                          </div>
-                        )}
                         <span className="text-sm text-gray-900">{airline}</span>
                       </label>
                       <span className="text-xs text-gray-500 ml-2">
