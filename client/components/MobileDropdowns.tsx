@@ -61,7 +61,7 @@ export function MobileCityDropdown({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search airports, cities or countries"
+              placeholder={context === 'hotels' ? "Search cities, destinations or countries" : "Search airports, cities or countries"}
               className="w-full pl-10 pr-4 py-4 text-base border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
               autoFocus
             />
