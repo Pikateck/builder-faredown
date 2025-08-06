@@ -1599,7 +1599,7 @@ export default function BookingFlow() {
 
             <div className="flex items-center space-x-2 md:space-x-6">
               {/* Currency Only - Language dropdown removed */}
-              <div className="flex items-center space-x-4 text-sm">
+              <div className="hidden flex items-center space-x-4 text-sm">
                 <div className="relative">
                   <button
                     onClick={() =>
@@ -1961,7 +1961,7 @@ export default function BookingFlow() {
                                 1 carry-on bag
                               </p>
                               <p className="text-xs text-[#666]">
-                                22 x 55 x 40 cm • 7 kg
+                                22 x 55 x 40 cm ��� 7 kg
                               </p>
                             </div>
                           </div>
