@@ -1286,7 +1286,11 @@ export default function FlightResults() {
                   Flight Results
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  BOM → DXB •{" "}
+                  {(selectedFromCity && selectedToCity) ? (
+                    `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                  ) : (
+                    "Search Results • "
+                  )}
                   {tripType === "one-way"
                     ? "One way"
                     : tripType === "multi-city"
@@ -1314,7 +1318,11 @@ export default function FlightResults() {
                   </div>
                   <div>
                     <div className="text-sm font-medium text-gray-900">
-                      BOM → DXB
+                      {(selectedFromCity && selectedToCity) ? (
+                        `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
+                      ) : (
+                        "Flight Search Results"
+                      )}
                     </div>
                     <div className="text-xs text-gray-500">
                       {departureDate
@@ -1441,7 +1449,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
+                      { code: "hi", name: "���िन���दी", flag: "🇮���" },
                       { code: "ja", name: "日本����", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "�����🇳" },
