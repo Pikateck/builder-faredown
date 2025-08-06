@@ -252,6 +252,16 @@ export default function Hotels() {
         {/* Mobile Search Section */}
         <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
           <div className="px-4">
+            {/* Upgrade Message */}
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold mb-2">
+                Upgrade. Bargain. Book.
+              </h1>
+              <p className="text-blue-200 text-sm mb-3">
+                Control your price for flights & hotels — with live AI
+                bargaining.
+              </p>
+            </div>
 
             {/* Hotel Search Form with Hotelbeds Test Destinations */}
             <div className="mx-auto">
@@ -403,7 +413,7 @@ export default function Hotels() {
                           { code: "ar", name: "الع��بية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
-                          { code: "ko", name: "한국��", flag: "🇰🇷" },
+                          { code: "ko", name: "한국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
                         ].map((language) => (
                           <DropdownMenuItem
