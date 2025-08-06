@@ -723,32 +723,34 @@ export default function Index() {
               </div>
 
               {/* Dates */}
-              <div className="bg-white rounded-xl p-4 shadow-sm">
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <button
                   onClick={() => setShowCalendar(true)}
-                  className="w-full text-left"
+                  className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
                 >
-                  <div className="text-xs text-gray-500 mb-1">Dates</div>
-                  <div className="flex items-center space-x-2">
-                    <CalendarIcon className="w-5 h-5 text-[#003580]" />
-                    <div>
-                      <div className="font-medium text-gray-900">
+                  <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">Dates</div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <CalendarIcon className="w-5 h-5 text-[#003580]" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-gray-900 text-base leading-tight">
                         {departureDate
                           ? formatDisplayDate(departureDate, "dd MMM")
-                          : "Departure"}
+                          : "Select departure"}
                         {tripType === "round-trip" && (
                           <>
-                            {" - "}
+                            <span className="mx-2 text-gray-400">—</span>
                             {returnDate
                               ? formatDisplayDate(returnDate, "dd MMM")
-                              : "Return"}
+                              : "Select return"}
                           </>
                         )}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-sm text-gray-500 mt-1">
                         {tripType === "round-trip"
-                          ? "Choose departure & return"
-                          : "Choose departure"}
+                          ? "Add departure and return dates"
+                          : "Add departure date"}
                       </div>
                     </div>
                   </div>
