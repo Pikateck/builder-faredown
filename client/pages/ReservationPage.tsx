@@ -640,11 +640,13 @@ export default function ReservationPage() {
                         Additional Services
                       </h3>
                       <div className="space-y-3">
-                        <div className={`flex items-center justify-between py-3 px-4 border-2 rounded-xl cursor-pointer transition-all duration-200 active:scale-[0.98] touch-manipulation ${
-                          preferences.earlyCheckin
-                            ? "border-blue-500 bg-blue-50 shadow-sm"
-                            : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                        }`}>
+                        <div
+                          className={`flex items-center justify-between py-3 px-4 border-2 rounded-xl cursor-pointer transition-all duration-200 active:scale-[0.98] touch-manipulation ${
+                            preferences.earlyCheckin
+                              ? "border-blue-500 bg-blue-50 shadow-sm"
+                              : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+                          }`}
+                        >
                           <div className="flex items-center gap-3 flex-1">
                             <div className="relative">
                               <Checkbox
@@ -663,8 +665,12 @@ export default function ReservationPage() {
                                 <Clock className="w-4 h-4 text-blue-600" />
                               </div>
                               <div>
-                                <div className="font-semibold text-gray-900">Early Check-in</div>
-                                <div className="text-sm text-gray-600">Check-in before 3:00 PM</div>
+                                <div className="font-semibold text-gray-900">
+                                  Early Check-in
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  Check-in before 3:00 PM
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -675,11 +681,13 @@ export default function ReservationPage() {
                           </div>
                         </div>
 
-                        <div className={`flex items-center justify-between py-3 px-4 border-2 rounded-xl cursor-pointer transition-all duration-200 active:scale-[0.98] touch-manipulation ${
-                          preferences.lateCheckout
-                            ? "border-blue-500 bg-blue-50 shadow-sm"
-                            : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                        }`}>
+                        <div
+                          className={`flex items-center justify-between py-3 px-4 border-2 rounded-xl cursor-pointer transition-all duration-200 active:scale-[0.98] touch-manipulation ${
+                            preferences.lateCheckout
+                              ? "border-blue-500 bg-blue-50 shadow-sm"
+                              : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+                          }`}
+                        >
                           <div className="flex items-center gap-3 flex-1">
                             <div className="relative">
                               <Checkbox
@@ -698,8 +706,12 @@ export default function ReservationPage() {
                                 <Clock className="w-4 h-4 text-orange-600" />
                               </div>
                               <div>
-                                <div className="font-semibold text-gray-900">Late Check-out</div>
-                                <div className="text-sm text-gray-600">Check-out after 12:00 PM</div>
+                                <div className="font-semibold text-gray-900">
+                                  Late Check-out
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  Check-out after 12:00 PM
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -742,7 +754,9 @@ export default function ReservationPage() {
                                 type="radio"
                                 name="paymentMethod"
                                 value="card"
-                                checked={paymentDetails.paymentMethod === "card"}
+                                checked={
+                                  paymentDetails.paymentMethod === "card"
+                                }
                                 onChange={(e) =>
                                   setPaymentDetails((prev) => ({
                                     ...prev,
@@ -751,11 +765,13 @@ export default function ReservationPage() {
                                 }
                                 className="sr-only"
                               />
-                              <div className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
-                                paymentDetails.paymentMethod === "card"
-                                  ? "border-blue-600 bg-blue-600"
-                                  : "border-gray-400 bg-white"
-                              }`}>
+                              <div
+                                className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
+                                  paymentDetails.paymentMethod === "card"
+                                    ? "border-blue-600 bg-blue-600"
+                                    : "border-gray-400 bg-white"
+                                }`}
+                              >
                                 {paymentDetails.paymentMethod === "card" && (
                                   <div className="w-3 h-3 bg-white rounded-full m-0.5"></div>
                                 )}
@@ -766,8 +782,12 @@ export default function ReservationPage() {
                                 <CreditCard className="w-5 h-5 text-white" />
                               </div>
                               <div>
-                                <div className="font-semibold text-gray-900">Pay Now with Card</div>
-                                <div className="text-sm text-gray-600">Instant confirmation</div>
+                                <div className="font-semibold text-gray-900">
+                                  Pay Now with Card
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  Instant confirmation
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -783,7 +803,10 @@ export default function ReservationPage() {
                                 type="radio"
                                 name="paymentMethod"
                                 value="pay_at_hotel"
-                                checked={paymentDetails.paymentMethod === "pay_at_hotel"}
+                                checked={
+                                  paymentDetails.paymentMethod ===
+                                  "pay_at_hotel"
+                                }
                                 onChange={(e) =>
                                   setPaymentDetails((prev) => ({
                                     ...prev,
@@ -792,12 +815,16 @@ export default function ReservationPage() {
                                 }
                                 className="sr-only"
                               />
-                              <div className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
-                                paymentDetails.paymentMethod === "pay_at_hotel"
-                                  ? "border-blue-600 bg-blue-600"
-                                  : "border-gray-400 bg-white"
-                              }`}>
-                                {paymentDetails.paymentMethod === "pay_at_hotel" && (
+                              <div
+                                className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
+                                  paymentDetails.paymentMethod ===
+                                  "pay_at_hotel"
+                                    ? "border-blue-600 bg-blue-600"
+                                    : "border-gray-400 bg-white"
+                                }`}
+                              >
+                                {paymentDetails.paymentMethod ===
+                                  "pay_at_hotel" && (
                                   <div className="w-3 h-3 bg-white rounded-full m-0.5"></div>
                                 )}
                               </div>
@@ -807,8 +834,12 @@ export default function ReservationPage() {
                                 <Building2 className="w-5 h-5 text-white" />
                               </div>
                               <div>
-                                <div className="font-semibold text-gray-900">Pay at Hotel</div>
-                                <div className="text-sm text-gray-600">Pay during check-in</div>
+                                <div className="font-semibold text-gray-900">
+                                  Pay at Hotel
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  Pay during check-in
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -943,7 +974,11 @@ export default function ReservationPage() {
                 {/* Navigation Buttons */}
                 <div className="flex justify-between pt-6 border-t border-gray-200">
                   {currentStep > 1 ? (
-                    <Button variant="outline" onClick={handlePrevStep} className="min-h-[44px] px-6 py-3 font-semibold">
+                    <Button
+                      variant="outline"
+                      onClick={handlePrevStep}
+                      className="min-h-[44px] px-6 py-3 font-semibold"
+                    >
                       <ArrowLeft className="w-4 h-4 mr-2" />
                       Previous
                     </Button>
@@ -952,7 +987,11 @@ export default function ReservationPage() {
                   )}
 
                   {currentStep < 3 ? (
-                    <Button onClick={handleNextStep} disabled={!isStepValid()} className="min-h-[44px] px-6 py-3 font-semibold">
+                    <Button
+                      onClick={handleNextStep}
+                      disabled={!isStepValid()}
+                      className="min-h-[44px] px-6 py-3 font-semibold"
+                    >
                       Continue
                       <ChevronRight className="w-4 h-4 ml-2" />
                     </Button>

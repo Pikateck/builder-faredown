@@ -229,14 +229,21 @@ export class HotelsService {
         return [];
       }
       // Handle network errors gracefully
-      if (error instanceof Error &&
-          (error.message.includes("Failed to fetch") ||
-           error.name === "TypeError" ||
-           error.message.includes("NetworkError"))) {
-        console.log("🌐 Network connectivity issue in searchHotels - skipping to fallback");
+      if (
+        error instanceof Error &&
+        (error.message.includes("Failed to fetch") ||
+          error.name === "TypeError" ||
+          error.message.includes("NetworkError"))
+      ) {
+        console.log(
+          "🌐 Network connectivity issue in searchHotels - skipping to fallback",
+        );
       } else {
         // For other errors, log and continue to fallback
-        console.warn("Live API failed, trying fallback:", error instanceof Error ? error.message : "Unknown error");
+        console.warn(
+          "Live API failed, trying fallback:",
+          error instanceof Error ? error.message : "Unknown error",
+        );
       }
     }
 
@@ -246,17 +253,29 @@ export class HotelsService {
       return await this.searchHotelsFallback(searchParams);
     } catch (fallbackError) {
       // Handle fallback errors gracefully
-      if (fallbackError instanceof Error && fallbackError.name === "AbortError") {
+      if (
+        fallbackError instanceof Error &&
+        fallbackError.name === "AbortError"
+      ) {
         console.log("⏰ Fallback API was aborted, returning static data");
         return this.getStaticMockHotels(searchParams);
       }
-      if (fallbackError instanceof Error &&
-          (fallbackError.message.includes("Failed to fetch") ||
-           fallbackError.name === "TypeError" ||
-           fallbackError.message.includes("NetworkError"))) {
-        console.log("🌐 Fallback API also has network issues - using static mock data");
+      if (
+        fallbackError instanceof Error &&
+        (fallbackError.message.includes("Failed to fetch") ||
+          fallbackError.name === "TypeError" ||
+          fallbackError.message.includes("NetworkError"))
+      ) {
+        console.log(
+          "🌐 Fallback API also has network issues - using static mock data",
+        );
       } else {
-        console.warn("Fallback API failed:", fallbackError instanceof Error ? fallbackError.message : "Unknown error");
+        console.warn(
+          "Fallback API failed:",
+          fallbackError instanceof Error
+            ? fallbackError.message
+            : "Unknown error",
+        );
       }
       // Return static mock data as last resort
       return this.getStaticMockHotels(searchParams);
@@ -279,7 +298,9 @@ export class HotelsService {
 
       // Skip live API in development to prevent fetch errors
       if (isDevelopment) {
-        console.log("🔧 Development environment detected - skipping live API to prevent fetch errors");
+        console.log(
+          "🔧 Development environment detected - skipping live API to prevent fetch errors",
+        );
         return [];
       }
 
@@ -332,14 +353,23 @@ export class HotelsService {
             console.log("⏰ Hotel search fetch was aborted");
             return []; // Return empty array immediately on abort
           }
-          if (fetchErr instanceof Error &&
-              (fetchErr.message?.includes("Failed to fetch") ||
-               fetchErr.name === "TypeError" ||
-               fetchErr.message?.includes("NetworkError"))) {
-            console.log("🌐 Network connectivity issue during hotel search fetch - continuing gracefully");
+          if (
+            fetchErr instanceof Error &&
+            (fetchErr.message?.includes("Failed to fetch") ||
+              fetchErr.name === "TypeError" ||
+              fetchErr.message?.includes("NetworkError"))
+          ) {
+            console.log(
+              "🌐 Network connectivity issue during hotel search fetch - continuing gracefully",
+            );
             return []; // Return empty array to continue gracefully
           }
-          console.warn("Hotel search fetch error:", fetchErr instanceof Error ? fetchErr.message : "Unknown fetch error");
+          console.warn(
+            "Hotel search fetch error:",
+            fetchErr instanceof Error
+              ? fetchErr.message
+              : "Unknown fetch error",
+          );
           return []; // Return empty array for other fetch errors
         }
 
@@ -381,7 +411,9 @@ export class HotelsService {
               );
               console.log(`   Source: ${data.source || data.dataSource}`);
               if (data.searchMeta?.processingTime) {
-                console.log(`   Processing time: ${data.searchMeta.processingTime}`);
+                console.log(
+                  `   Processing time: ${data.searchMeta.processingTime}`,
+                );
               }
 
               return data.data;
@@ -398,7 +430,9 @@ export class HotelsService {
         } else if (response) {
           console.warn(`⚠️ Live API returned status ${response.status}`);
         } else {
-          console.log("🌐 Hotel search fetch returned null, continuing to fallback");
+          console.log(
+            "🌐 Hotel search fetch returned null, continuing to fallback",
+          );
         }
       } catch (fetchError) {
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
@@ -421,7 +455,10 @@ export class HotelsService {
         console.log("⏰ Outer catch: Hotel search was aborted");
         return [];
       }
-      console.warn("Live hotel search unexpected error:", error instanceof Error ? error.message : "Unknown error");
+      console.warn(
+        "Live hotel search unexpected error:",
+        error instanceof Error ? error.message : "Unknown error",
+      );
       return [];
     }
   }
@@ -461,14 +498,19 @@ export class HotelsService {
         console.log("⏰ Fallback hotel search was aborted");
         throw error; // Re-throw to handle at higher level
       }
-      if (error instanceof Error &&
-          (error.message.includes("Failed to fetch") ||
-           error.name === "TypeError" ||
-           error.message.includes("NetworkError"))) {
+      if (
+        error instanceof Error &&
+        (error.message.includes("Failed to fetch") ||
+          error.name === "TypeError" ||
+          error.message.includes("NetworkError"))
+      ) {
         console.log("🌐 Network connectivity issue in fallback hotel search");
         throw error; // Re-throw to trigger static mock data
       }
-      console.warn("Fallback hotel search error:", error instanceof Error ? error.message : "Unknown error");
+      console.warn(
+        "Fallback hotel search error:",
+        error instanceof Error ? error.message : "Unknown error",
+      );
       throw error; // Re-throw to trigger static mock data
     }
   }
@@ -1780,7 +1822,7 @@ export class HotelsService {
           street: "123 Main Street",
           city: destinationName,
           country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
-          postalCode: "12345"
+          postalCode: "12345",
         },
         location: {
           latitude: destination === "DXB" ? 25.2048 : 0,
@@ -1790,8 +1832,8 @@ export class HotelsService {
           country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
           landmarks: [
             { name: "Airport", distance: 5.2, type: "airport" },
-            { name: "City Center", distance: 1.1, type: "shopping" }
-          ]
+            { name: "City Center", distance: 1.1, type: "shopping" },
+          ],
         },
         rating: 4.5,
         starRating: 5,
@@ -1802,13 +1844,31 @@ export class HotelsService {
             url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
             caption: "Hotel Exterior",
             type: "exterior",
-            order: 1
-          }
+            order: 1,
+          },
         ],
         amenities: [
-          { id: "wifi", name: "Free WiFi", icon: "wifi", category: "general", available: true },
-          { id: "pool", name: "Swimming Pool", icon: "pool", category: "wellness", available: true },
-          { id: "gym", name: "Fitness Center", icon: "gym", category: "wellness", available: true }
+          {
+            id: "wifi",
+            name: "Free WiFi",
+            icon: "wifi",
+            category: "general",
+            available: true,
+          },
+          {
+            id: "pool",
+            name: "Swimming Pool",
+            icon: "pool",
+            category: "wellness",
+            available: true,
+          },
+          {
+            id: "gym",
+            name: "Fitness Center",
+            icon: "gym",
+            category: "wellness",
+            available: true,
+          },
         ],
         roomTypes: [
           {
@@ -1819,14 +1879,16 @@ export class HotelsService {
             size: "25 sqm",
             bedTypes: ["1 Double Bed"],
             amenities: ["Free WiFi", "Air Conditioning", "TV"],
-            images: ["https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300"],
+            images: [
+              "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300",
+            ],
             pricePerNight: 129,
             availability: 5,
             features: [
               { name: "Free WiFi", icon: "wifi", included: true },
-              { name: "Air Conditioning", icon: "ac", included: true }
-            ]
-          }
+              { name: "Air Conditioning", icon: "ac", included: true },
+            ],
+          },
         ],
         policies: {
           checkIn: "3:00 PM",
@@ -1834,18 +1896,18 @@ export class HotelsService {
           cancellation: "Free cancellation up to 24 hours before check-in",
           children: "Children welcome",
           pets: "Pets not allowed",
-          smoking: "Non-smoking property"
+          smoking: "Non-smoking property",
         },
         contact: {
           phone: "+971-4-123-4567",
           email: "info@grandhotel.com",
-          website: "https://grandhotel.com"
+          website: "https://grandhotel.com",
         },
         priceRange: {
           min: 99,
           max: 299,
-          currency: searchParams.currencyCode || "INR"
-        }
+          currency: searchParams.currencyCode || "INR",
+        },
       },
       {
         id: "hotel-2",
@@ -1855,7 +1917,7 @@ export class HotelsService {
           street: "456 Business District",
           city: destinationName,
           country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
-          postalCode: "12346"
+          postalCode: "12346",
         },
         location: {
           latitude: destination === "DXB" ? 25.2148 : 0,
@@ -1865,8 +1927,8 @@ export class HotelsService {
           country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
           landmarks: [
             { name: "Business Center", distance: 0.5, type: "shopping" },
-            { name: "Metro Station", distance: 0.3, type: "transport" }
-          ]
+            { name: "Metro Station", distance: 0.3, type: "transport" },
+          ],
         },
         rating: 4.2,
         starRating: 4,
@@ -1877,13 +1939,31 @@ export class HotelsService {
             url: "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&h=600&fit=crop",
             caption: "Business Hotel",
             type: "exterior",
-            order: 1
-          }
+            order: 1,
+          },
         ],
         amenities: [
-          { id: "wifi", name: "Free WiFi", icon: "wifi", category: "general", available: true },
-          { id: "parking", name: "Free Parking", icon: "parking", category: "general", available: true },
-          { id: "restaurant", name: "Restaurant", icon: "restaurant", category: "dining", available: true }
+          {
+            id: "wifi",
+            name: "Free WiFi",
+            icon: "wifi",
+            category: "general",
+            available: true,
+          },
+          {
+            id: "parking",
+            name: "Free Parking",
+            icon: "parking",
+            category: "general",
+            available: true,
+          },
+          {
+            id: "restaurant",
+            name: "Restaurant",
+            icon: "restaurant",
+            category: "dining",
+            available: true,
+          },
         ],
         roomTypes: [
           {
@@ -1894,14 +1974,16 @@ export class HotelsService {
             size: "30 sqm",
             bedTypes: ["1 King Bed"],
             amenities: ["Free WiFi", "Work Desk", "Coffee Machine"],
-            images: ["https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=300"],
+            images: [
+              "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400&h=300",
+            ],
             pricePerNight: 99,
             availability: 8,
             features: [
               { name: "Work Desk", icon: "desk", included: true },
-              { name: "Coffee Machine", icon: "coffee", included: true }
-            ]
-          }
+              { name: "Coffee Machine", icon: "coffee", included: true },
+            ],
+          },
         ],
         policies: {
           checkIn: "2:00 PM",
@@ -1909,17 +1991,17 @@ export class HotelsService {
           cancellation: "Free cancellation up to 48 hours before check-in",
           children: "Children welcome",
           pets: "Pets not allowed",
-          smoking: "Smoking rooms available"
+          smoking: "Smoking rooms available",
         },
         contact: {
           phone: "+971-4-987-6543",
-          email: "reservations@businesshotel.com"
+          email: "reservations@businesshotel.com",
         },
         priceRange: {
           min: 79,
           max: 199,
-          currency: searchParams.currencyCode || "INR"
-        }
+          currency: searchParams.currencyCode || "INR",
+        },
       },
       {
         id: "hotel-3",
@@ -1929,7 +2011,7 @@ export class HotelsService {
           street: "789 Heritage Street",
           city: destinationName,
           country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
-          postalCode: "12347"
+          postalCode: "12347",
         },
         location: {
           latitude: destination === "DXB" ? 25.1948 : 0,
@@ -1939,8 +2021,8 @@ export class HotelsService {
           country: destination === "DXB" ? "United Arab Emirates" : "Unknown",
           landmarks: [
             { name: "Heritage Museum", distance: 0.2, type: "attraction" },
-            { name: "Traditional Market", distance: 0.4, type: "shopping" }
-          ]
+            { name: "Traditional Market", distance: 0.4, type: "shopping" },
+          ],
         },
         rating: 4.7,
         starRating: 4,
@@ -1951,13 +2033,31 @@ export class HotelsService {
             url: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop",
             caption: "Boutique Hotel",
             type: "exterior",
-            order: 1
-          }
+            order: 1,
+          },
         ],
         amenities: [
-          { id: "wifi", name: "Free WiFi", icon: "wifi", category: "general", available: true },
-          { id: "spa", name: "Spa Services", icon: "spa", category: "wellness", available: true },
-          { id: "breakfast", name: "Complimentary Breakfast", icon: "breakfast", category: "dining", available: true }
+          {
+            id: "wifi",
+            name: "Free WiFi",
+            icon: "wifi",
+            category: "general",
+            available: true,
+          },
+          {
+            id: "spa",
+            name: "Spa Services",
+            icon: "spa",
+            category: "wellness",
+            available: true,
+          },
+          {
+            id: "breakfast",
+            name: "Complimentary Breakfast",
+            icon: "breakfast",
+            category: "dining",
+            available: true,
+          },
         ],
         roomTypes: [
           {
@@ -1968,14 +2068,16 @@ export class HotelsService {
             size: "28 sqm",
             bedTypes: ["1 Queen Bed"],
             amenities: ["Free WiFi", "Minibar", "Balcony"],
-            images: ["https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300"],
+            images: [
+              "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&h=300",
+            ],
             pricePerNight: 149,
             availability: 3,
             features: [
               { name: "Minibar", icon: "minibar", included: true },
-              { name: "Balcony", icon: "balcony", included: true }
-            ]
-          }
+              { name: "Balcony", icon: "balcony", included: true },
+            ],
+          },
         ],
         policies: {
           checkIn: "3:00 PM",
@@ -1983,19 +2085,19 @@ export class HotelsService {
           cancellation: "Free cancellation up to 24 hours before check-in",
           children: "Children over 12 welcome",
           pets: "Small pets allowed with fee",
-          smoking: "Non-smoking property"
+          smoking: "Non-smoking property",
         },
         contact: {
           phone: "+971-4-555-0123",
           email: "stay@boutiquehotel.com",
-          website: "https://boutiquehotel.com"
+          website: "https://boutiquehotel.com",
         },
         priceRange: {
           min: 120,
           max: 250,
-          currency: searchParams.currencyCode || "INR"
-        }
-      }
+          currency: searchParams.currencyCode || "INR",
+        },
+      },
     ];
   }
 }

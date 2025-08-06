@@ -65,10 +65,14 @@ import AdminTestButton from "@/components/AdminTestButton";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
-  "Emirates": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F3bd351e27a7d4538ad90ba788b3dc40c?format=webp&width=800",
-  "Air India": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F038ea94811c34637a2fa8500bcc79624?format=webp&width=800",
-  "Indigo": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
-  "IndiGo": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800"
+  Emirates:
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F3bd351e27a7d4538ad90ba788b3dc40c?format=webp&width=800",
+  "Air India":
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F038ea94811c34637a2fa8500bcc79624?format=webp&width=800",
+  Indigo:
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
+  IndiGo:
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
 };
 
 // Utility function to format currency
@@ -1610,21 +1614,91 @@ export default function BookingFlow() {
                   {showCurrencyDropdown && (
                     <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
                       {[
-                        { code: "USD", symbol: "$", name: "US Dollar", flag: "🇺🇸" },
+                        {
+                          code: "USD",
+                          symbol: "$",
+                          name: "US Dollar",
+                          flag: "🇺🇸",
+                        },
                         { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
-                        { code: "GBP", symbol: "£", name: "British Pound", flag: "🇬🇧" },
-                        { code: "INR", symbol: "₹", name: "Indian Rupee", flag: "🇮🇳" },
-                        { code: "AED", symbol: "د.إ", name: "UAE Dirham", flag: "🇦🇪" },
-                        { code: "SAR", symbol: "﷼", name: "Saudi Riyal", flag: "🇸🇦" },
-                        { code: "JPY", symbol: "¥", name: "Japanese Yen", flag: "🇯🇵" },
-                        { code: "CNY", symbol: "¥", name: "Chinese Yuan", flag: "🇨🇳" },
-                        { code: "KRW", symbol: "₩", name: "South Korean Won", flag: "🇰🇷" },
-                        { code: "SGD", symbol: "S$", name: "Singapore Dollar", flag: "🇸🇬" },
-                        { code: "AUD", symbol: "A$", name: "Australian Dollar", flag: "🇦🇺" },
-                        { code: "CAD", symbol: "C$", name: "Canadian Dollar", flag: "🇨🇦" },
-                        { code: "CHF", symbol: "CHF", name: "Swiss Franc", flag: "🇨🇭" },
-                        { code: "THB", symbol: "฿", name: "Thai Baht", flag: "🇹🇭" },
-                        { code: "MYR", symbol: "RM", name: "Malaysian Ringgit", flag: "🇲🇾" },
+                        {
+                          code: "GBP",
+                          symbol: "£",
+                          name: "British Pound",
+                          flag: "🇬🇧",
+                        },
+                        {
+                          code: "INR",
+                          symbol: "₹",
+                          name: "Indian Rupee",
+                          flag: "🇮🇳",
+                        },
+                        {
+                          code: "AED",
+                          symbol: "د.إ",
+                          name: "UAE Dirham",
+                          flag: "🇦🇪",
+                        },
+                        {
+                          code: "SAR",
+                          symbol: "﷼",
+                          name: "Saudi Riyal",
+                          flag: "🇸🇦",
+                        },
+                        {
+                          code: "JPY",
+                          symbol: "¥",
+                          name: "Japanese Yen",
+                          flag: "🇯🇵",
+                        },
+                        {
+                          code: "CNY",
+                          symbol: "¥",
+                          name: "Chinese Yuan",
+                          flag: "🇨🇳",
+                        },
+                        {
+                          code: "KRW",
+                          symbol: "₩",
+                          name: "South Korean Won",
+                          flag: "🇰🇷",
+                        },
+                        {
+                          code: "SGD",
+                          symbol: "S$",
+                          name: "Singapore Dollar",
+                          flag: "🇸🇬",
+                        },
+                        {
+                          code: "AUD",
+                          symbol: "A$",
+                          name: "Australian Dollar",
+                          flag: "🇦🇺",
+                        },
+                        {
+                          code: "CAD",
+                          symbol: "C$",
+                          name: "Canadian Dollar",
+                          flag: "🇨🇦",
+                        },
+                        {
+                          code: "CHF",
+                          symbol: "CHF",
+                          name: "Swiss Franc",
+                          flag: "🇨🇭",
+                        },
+                        {
+                          code: "THB",
+                          symbol: "฿",
+                          name: "Thai Baht",
+                          flag: "🇹🇭",
+                        },
+                        {
+                          code: "MYR",
+                          symbol: "RM",
+                          name: "Malaysian Ringgit",
+                          flag: "🇲🇾",
+                        },
                       ].map((currency) => (
                         <button
                           key={currency.code}
@@ -1679,13 +1753,19 @@ export default function BookingFlow() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Link to="/account/settings" className="flex items-center">
+                        <Link
+                          to="/account/settings"
+                          className="flex items-center"
+                        >
                           <Settings className="w-4 h-4 mr-2" />
                           Settings
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Link to="/account/loyalty" className="flex items-center">
+                        <Link
+                          to="/account/loyalty"
+                          className="flex items-center"
+                        >
                           <Award className="w-4 h-4 mr-2" />
                           Loyalty program
                         </Link>
@@ -2473,7 +2553,9 @@ export default function BookingFlow() {
                               <input
                                 type="checkbox"
                                 className="w-3 h-3 sm:w-4 sm:h-4 text-[#003580]"
-                                checked={selectedOtherOptions.includes(option.id)}
+                                checked={selectedOtherOptions.includes(
+                                  option.id,
+                                )}
                                 onChange={(e) => {
                                   if (e.target.checked) {
                                     setSelectedOtherOptions((prev) => [

@@ -154,7 +154,9 @@ export function HotelCard({
         .filter(Boolean) as string[];
 
       if (processedImages.length > 0) {
-        console.log(`📸 Hotel ${hotel.name} has ${processedImages.length} images`);
+        console.log(
+          `📸 Hotel ${hotel.name} has ${processedImages.length} images`,
+        );
         return processedImages;
       }
     }
@@ -168,12 +170,18 @@ export function HotelCard({
     ];
 
     // Return at least one image, but if we have hotel-specific fallbacks, use those
-    if (hotel.name?.toLowerCase().includes('grand')) {
-      return ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format"];
-    } else if (hotel.name?.toLowerCase().includes('business')) {
-      return ["https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&h=600&fit=crop&auto=format"];
-    } else if (hotel.name?.toLowerCase().includes('boutique')) {
-      return ["https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop&auto=format"];
+    if (hotel.name?.toLowerCase().includes("grand")) {
+      return [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
+      ];
+    } else if (hotel.name?.toLowerCase().includes("business")) {
+      return [
+        "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&h=600&fit=crop&auto=format",
+      ];
+    } else if (hotel.name?.toLowerCase().includes("boutique")) {
+      return [
+        "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&fit=crop&auto=format",
+      ];
     }
 
     return [fallbackImages[0]];

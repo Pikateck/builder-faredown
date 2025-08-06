@@ -80,10 +80,14 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
-  "Emirates": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F3bd351e27a7d4538ad90ba788b3dc40c?format=webp&width=800",
-  "Air India": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F038ea94811c34637a2fa8500bcc79624?format=webp&width=800",
-  "Indigo": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
-  "IndiGo": "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800"
+  Emirates:
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F3bd351e27a7d4538ad90ba788b3dc40c?format=webp&width=800",
+  "Air India":
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F038ea94811c34637a2fa8500bcc79624?format=webp&width=800",
+  Indigo:
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
+  IndiGo:
+    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
 };
 
 // Flight data with fare types
@@ -292,7 +296,8 @@ export default function FlightResults() {
       flightNumber: "EK 500",
       returnFlightNumber: "EK 501",
       logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
-      returnLogo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
+      returnLogo:
+        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
       aircraft: "Boeing 777-300ER",
       returnAircraft: "Boeing 777-200LR",
       flightType: "Direct",
@@ -342,14 +347,18 @@ export default function FlightResults() {
 
     // Find matching city names from codes
     if (fromParam) {
-      const fromCity = Object.entries(cityData).find(([city, data]) => data.code === fromParam)?.[0];
+      const fromCity = Object.entries(cityData).find(
+        ([city, data]) => data.code === fromParam,
+      )?.[0];
       if (fromCity) {
         setSelectedFromCity(fromCity);
       }
     }
 
     if (toParam) {
-      const toCity = Object.entries(cityData).find(([city, data]) => data.code === toParam)?.[0];
+      const toCity = Object.entries(cityData).find(
+        ([city, data]) => data.code === toParam,
+      )?.[0];
       if (toCity) {
         setSelectedToCity(toCity);
       }
@@ -1356,11 +1365,9 @@ export default function FlightResults() {
                   Flight Results
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  {(selectedFromCity && selectedToCity) ? (
-                    `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
-                  ) : (
-                    "Search Results • "
-                  )}
+                  {selectedFromCity && selectedToCity
+                    ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                    : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
                     : tripType === "multi-city"
@@ -1389,11 +1396,9 @@ export default function FlightResults() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-base font-semibold text-gray-900">
-                        {(selectedFromCity && selectedToCity) ? (
-                          `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
-                        ) : (
-                          "Flight Search"
-                        )}
+                        {selectedFromCity && selectedToCity
+                          ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
+                          : "Flight Search"}
                       </span>
                       <div className="flex items-center gap-1">
                         <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
@@ -1516,7 +1521,7 @@ export default function FlightResults() {
 
               {/* Right: Currency + Auth */}
               <div className="flex items-center space-x-4">
-                <DropdownMenu style={{ display: 'none' }}>
+                <DropdownMenu style={{ display: "none" }}>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
                       { code: "en", name: "English", flag: "🇬🇧" },
@@ -2584,7 +2589,10 @@ export default function FlightResults() {
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-white rounded-lg border shadow-sm flex items-center justify-center">
                             <img
-                              src={airlineLogos[flight.airline] || `https://pics.avs.io/60/60/${flight.airlineCode || "XX"}.png`}
+                              src={
+                                airlineLogos[flight.airline] ||
+                                `https://pics.avs.io/60/60/${flight.airlineCode || "XX"}.png`
+                              }
                               alt={flight.airline}
                               className="w-6 h-6 object-contain"
                               onError={(e) => {
@@ -2883,7 +2891,10 @@ export default function FlightResults() {
                             <div className="flex flex-col space-y-4">
                               <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                                 <img
-                                  src={airlineLogos[flight.airline] || `https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                                  src={
+                                    airlineLogos[flight.airline] ||
+                                    `https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`
+                                  }
                                   alt={flight.airline}
                                   className="w-8 h-6 object-contain"
                                   onError={(e) => {
@@ -2894,7 +2905,12 @@ export default function FlightResults() {
                               </div>
                               <div className="w-12 h-12 bg-white rounded border border-gray-200 flex items-center justify-center">
                                 <img
-                                  src={airlineLogos[flight.returnAirline || flight.airline] || `https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`}
+                                  src={
+                                    airlineLogos[
+                                      flight.returnAirline || flight.airline
+                                    ] ||
+                                    `https://pics.avs.io/120/120/${flight.airlineCode || "XX"}.png`
+                                  }
                                   alt={flight.returnAirline || flight.airline}
                                   className="w-8 h-6 object-contain"
                                   onError={(e) => {
@@ -5025,15 +5041,21 @@ export default function FlightResults() {
                       <Calendar className="w-5 h-5 text-[#003580]" />
                       <div>
                         <div className="font-semibold text-gray-900">
-                          {departureDate && returnDate && tripType === "round-trip"
+                          {departureDate &&
+                          returnDate &&
+                          tripType === "round-trip"
                             ? `${formatDisplayDate(departureDate, "d MMM")} - ${formatDisplayDate(returnDate, "d MMM")}`
                             : departureDate
-                              ? formatDisplayDate(departureDate, "d MMM") + (tripType === "one-way" ? "" : " - Select return")
-                              : "Select dates"
-                          }
+                              ? formatDisplayDate(departureDate, "d MMM") +
+                                (tripType === "one-way"
+                                  ? ""
+                                  : " - Select return")
+                              : "Select dates"}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {tripType === "one-way" ? "One-way trip" : "Choose departure & return"}
+                          {tripType === "one-way"
+                            ? "One-way trip"
+                            : "Choose departure & return"}
                         </div>
                       </div>
                     </div>
@@ -5864,9 +5886,7 @@ export default function FlightResults() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-blue-700">Check-in:</span>
-                          <span className="font-medium">
-                            1 × 23 kg / Adult
-                          </span>
+                          <span className="font-medium">1 × 23 kg / Adult</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-blue-700">Cabin:</span>
@@ -5923,9 +5943,7 @@ export default function FlightResults() {
                           <span className="text-yellow-700 font-medium">
                             Faredown Fee:
                           </span>
-                          <p className="text-yellow-600">
-                            ₹500 per passenger
-                          </p>
+                          <p className="text-yellow-600">₹500 per passenger</p>
                         </div>
                         <p className="text-xs text-yellow-600 mt-2">
                           Date change charges are indicated per traveller.

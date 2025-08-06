@@ -413,9 +413,7 @@ export default function Index() {
                 <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
                   <Plane className="w-5 h-5 text-[#003580]" />
                 </div>
-                <span className="text-lg font-bold">
-                  faredown.com
-                </span>
+                <span className="text-lg font-bold">faredown.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <button className="p-2">
@@ -682,19 +680,19 @@ export default function Index() {
                         </div>
                         <div>
                           {selectedFromCity ? (
-                          <>
-                            <div className="font-medium text-gray-900">
-                              {cityData[selectedFromCity]?.code}
+                            <>
+                              <div className="font-medium text-gray-900">
+                                {cityData[selectedFromCity]?.code}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {cityData[selectedFromCity]?.name}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-sm text-gray-500">
+                              Leaving from
                             </div>
-                            <div className="text-xs text-gray-500">
-                              {cityData[selectedFromCity]?.name}
-                            </div>
-                          </>
-                        ) : (
-                          <div className="text-sm text-gray-500">
-                            Leaving from
-                          </div>
-                        )}
+                          )}
                         </div>
                       </div>
                     </button>
@@ -723,19 +721,19 @@ export default function Index() {
                         </div>
                         <div>
                           {selectedToCity ? (
-                          <>
-                            <div className="font-medium text-gray-900">
-                              {cityData[selectedToCity]?.code}
+                            <>
+                              <div className="font-medium text-gray-900">
+                                {cityData[selectedToCity]?.code}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {cityData[selectedToCity]?.name}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-sm text-gray-500">
+                              Going to
                             </div>
-                            <div className="text-xs text-gray-500">
-                              {cityData[selectedToCity]?.name}
-                            </div>
-                          </>
-                        ) : (
-                          <div className="text-sm text-gray-500">
-                            Going to
-                          </div>
-                        )}
+                          )}
                         </div>
                       </div>
                     </button>
@@ -749,7 +747,9 @@ export default function Index() {
                   onClick={() => setShowCalendar(true)}
                   className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
                 >
-                  <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">Dates</div>
+                  <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
+                    Dates
+                  </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <CalendarIcon className="w-5 h-5 text-[#003580]" />
@@ -989,9 +989,7 @@ export default function Index() {
                 <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">
-                  Live Bargaining
-                </h3>
+                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
                 <p className="text-xs text-gray-600">
                   Negotiate real-time prices
                 </p>
@@ -1000,9 +998,7 @@ export default function Index() {
                 <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">
-                  Best Prices
-                </h3>
+                <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
                 <p className="text-xs text-gray-600">
                   Pay what you feel is fair
                 </p>
@@ -1011,18 +1007,14 @@ export default function Index() {
                 <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <Shield className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">
-                  Secure Booking
-                </h3>
+                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
                 <p className="text-xs text-gray-600">Instant confirmations</p>
               </div>
               <div className="bg-white rounded-xl p-4 text-center shadow-sm">
                 <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <Headphones className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">
-                  24/7 Support
-                </h3>
+                <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
                 <p className="text-xs text-gray-600">Always here to help</p>
               </div>
             </div>

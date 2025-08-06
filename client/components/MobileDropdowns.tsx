@@ -30,7 +30,7 @@ interface MobileCityDropdownProps {
   cities: Record<string, CityData>;
   selectedCity: string;
   onSelectCity: (city: string) => void;
-  context?: 'flights' | 'hotels'; // Add context to determine what to show
+  context?: "flights" | "hotels"; // Add context to determine what to show
 }
 
 export function MobileCityDropdown({
@@ -40,7 +40,7 @@ export function MobileCityDropdown({
   cities,
   selectedCity,
   onSelectCity,
-  context = 'flights', // Default to flights for backward compatibility
+  context = "flights", // Default to flights for backward compatibility
 }: MobileCityDropdownProps) {
   if (!isOpen) return null;
 
@@ -61,7 +61,11 @@ export function MobileCityDropdown({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder={context === 'hotels' ? "Search cities, destinations or countries" : "Search airports, cities or countries"}
+              placeholder={
+                context === "hotels"
+                  ? "Search cities, destinations or countries"
+                  : "Search airports, cities or countries"
+              }
               className="w-full pl-10 pr-4 py-4 text-base border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
               autoFocus
             />
@@ -71,150 +75,157 @@ export function MobileCityDropdown({
         <div className="mb-6">
           <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
             <h3 className="text-sm font-semibold text-blue-800">
-              {context === 'hotels' ? 'Popular Hotel Destinations' : 'Popular Flight Destinations'}
+              {context === "hotels"
+                ? "Popular Hotel Destinations"
+                : "Popular Flight Destinations"}
             </h3>
             <p className="text-xs text-blue-600">
-              {context === 'hotels' ? 'Top destinations for hotel bookings' : 'Popular airports and cities worldwide'}
+              {context === "hotels"
+                ? "Top destinations for hotel bookings"
+                : "Popular airports and cities worldwide"}
             </p>
           </div>
           <div className="space-y-2">
-            {(context === 'hotels' ? [
-              {
-                id: "Dubai",
-                code: "DXB",
-                name: "Dubai",
-                country: "United Arab Emirates",
-                airport: "Downtown Dubai, Marina, Business Bay",
-                description: "Luxury hotels, beaches, shopping malls",
-              },
-              {
-                id: "Mumbai",
-                code: "BOM",
-                name: "Mumbai",
-                country: "India",
-                airport: "Bandra, Andheri, South Mumbai",
-                description: "Business hotels, city center locations",
-              },
-              {
-                id: "Delhi",
-                code: "DEL",
-                name: "Delhi",
-                country: "India",
-                airport: "Connaught Place, Gurgaon, Airport area",
-                description: "Heritage hotels, business districts",
-              },
-              {
-                id: "Singapore",
-                code: "SIN",
-                name: "Singapore",
-                country: "Singapore",
-                airport: "Marina Bay, Orchard Road, Sentosa",
-                description: "Luxury resorts, city center hotels",
-              },
-              {
-                id: "Bangkok",
-                code: "BKK",
-                name: "Bangkok",
-                country: "Thailand",
-                airport: "Sukhumvit, Silom, Chatuchak",
-                description: "Budget to luxury hotels, city center",
-              },
-              {
-                id: "London",
-                code: "LON",
-                name: "London",
-                country: "United Kingdom",
-                airport: "Westminster, Kensington, Canary Wharf",
-                description: "Historic hotels, business districts",
-              },
-              {
-                id: "Paris",
-                code: "PAR",
-                name: "Paris",
-                country: "France",
-                airport: "Champs-Élysées, Le Marais, Montmartre",
-                description: "Boutique hotels, romantic locations",
-              },
-              {
-                id: "New York",
-                code: "NYC",
-                name: "New York",
-                country: "United States",
-                airport: "Manhattan, Times Square, Central Park",
-                description: "Luxury hotels, iconic locations",
-              },
-            ] : [
-              {
-                id: "DXB",
-                code: "DXB",
-                name: "Dubai",
-                country: "United Arab Emirates",
-                airport: "Dubai International Airport",
-              },
-              {
-                id: "BCN",
-                code: "BCN",
-                name: "Barcelona",
-                country: "Spain",
-                airport: "Barcelona-El Prat Airport",
-              },
-              {
-                id: "LON",
-                code: "LON",
-                name: "London",
-                country: "United Kingdom",
-                airport: "Heathrow Airport",
-              },
-              {
-                id: "PAR",
-                code: "PAR",
-                name: "Paris",
-                country: "France",
-                airport: "Charles de Gaulle Airport",
-              },
-              {
-                id: "ROM",
-                code: "ROM",
-                name: "Rome",
-                country: "Italy",
-                airport: "Fiumicino Airport",
-              },
-              {
-                id: "NYC",
-                code: "NYC",
-                name: "New York",
-                country: "United States",
-                airport: "John F. Kennedy Airport",
-              },
-              {
-                id: "BKK",
-                code: "BKK",
-                name: "Bangkok",
-                country: "Thailand",
-                airport: "Suvarnabhumi Airport",
-              },
-              {
-                id: "SIN",
-                code: "SIN",
-                name: "Singapore",
-                country: "Singapore",
-                airport: "Changi Airport",
-              },
-              {
-                id: "TKO",
-                code: "TKO",
-                name: "Tokyo",
-                country: "Japan",
-                airport: "Haneda Airport",
-              },
-              {
-                id: "SYD",
-                code: "SYD",
-                name: "Sydney",
-                country: "Australia",
-                airport: "Kingsford Smith Airport",
-              },
-            ]).map((dest) => (
+            {(context === "hotels"
+              ? [
+                  {
+                    id: "Dubai",
+                    code: "DXB",
+                    name: "Dubai",
+                    country: "United Arab Emirates",
+                    airport: "Downtown Dubai, Marina, Business Bay",
+                    description: "Luxury hotels, beaches, shopping malls",
+                  },
+                  {
+                    id: "Mumbai",
+                    code: "BOM",
+                    name: "Mumbai",
+                    country: "India",
+                    airport: "Bandra, Andheri, South Mumbai",
+                    description: "Business hotels, city center locations",
+                  },
+                  {
+                    id: "Delhi",
+                    code: "DEL",
+                    name: "Delhi",
+                    country: "India",
+                    airport: "Connaught Place, Gurgaon, Airport area",
+                    description: "Heritage hotels, business districts",
+                  },
+                  {
+                    id: "Singapore",
+                    code: "SIN",
+                    name: "Singapore",
+                    country: "Singapore",
+                    airport: "Marina Bay, Orchard Road, Sentosa",
+                    description: "Luxury resorts, city center hotels",
+                  },
+                  {
+                    id: "Bangkok",
+                    code: "BKK",
+                    name: "Bangkok",
+                    country: "Thailand",
+                    airport: "Sukhumvit, Silom, Chatuchak",
+                    description: "Budget to luxury hotels, city center",
+                  },
+                  {
+                    id: "London",
+                    code: "LON",
+                    name: "London",
+                    country: "United Kingdom",
+                    airport: "Westminster, Kensington, Canary Wharf",
+                    description: "Historic hotels, business districts",
+                  },
+                  {
+                    id: "Paris",
+                    code: "PAR",
+                    name: "Paris",
+                    country: "France",
+                    airport: "Champs-Élysées, Le Marais, Montmartre",
+                    description: "Boutique hotels, romantic locations",
+                  },
+                  {
+                    id: "New York",
+                    code: "NYC",
+                    name: "New York",
+                    country: "United States",
+                    airport: "Manhattan, Times Square, Central Park",
+                    description: "Luxury hotels, iconic locations",
+                  },
+                ]
+              : [
+                  {
+                    id: "DXB",
+                    code: "DXB",
+                    name: "Dubai",
+                    country: "United Arab Emirates",
+                    airport: "Dubai International Airport",
+                  },
+                  {
+                    id: "BCN",
+                    code: "BCN",
+                    name: "Barcelona",
+                    country: "Spain",
+                    airport: "Barcelona-El Prat Airport",
+                  },
+                  {
+                    id: "LON",
+                    code: "LON",
+                    name: "London",
+                    country: "United Kingdom",
+                    airport: "Heathrow Airport",
+                  },
+                  {
+                    id: "PAR",
+                    code: "PAR",
+                    name: "Paris",
+                    country: "France",
+                    airport: "Charles de Gaulle Airport",
+                  },
+                  {
+                    id: "ROM",
+                    code: "ROM",
+                    name: "Rome",
+                    country: "Italy",
+                    airport: "Fiumicino Airport",
+                  },
+                  {
+                    id: "NYC",
+                    code: "NYC",
+                    name: "New York",
+                    country: "United States",
+                    airport: "John F. Kennedy Airport",
+                  },
+                  {
+                    id: "BKK",
+                    code: "BKK",
+                    name: "Bangkok",
+                    country: "Thailand",
+                    airport: "Suvarnabhumi Airport",
+                  },
+                  {
+                    id: "SIN",
+                    code: "SIN",
+                    name: "Singapore",
+                    country: "Singapore",
+                    airport: "Changi Airport",
+                  },
+                  {
+                    id: "TKO",
+                    code: "TKO",
+                    name: "Tokyo",
+                    country: "Japan",
+                    airport: "Haneda Airport",
+                  },
+                  {
+                    id: "SYD",
+                    code: "SYD",
+                    name: "Sydney",
+                    country: "Australia",
+                    airport: "Kingsford Smith Airport",
+                  },
+                ]
+            ).map((dest) => (
               <button
                 key={dest.id}
                 onClick={() => {
@@ -225,7 +236,7 @@ export function MobileCityDropdown({
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                    {context === 'hotels' ? (
+                    {context === "hotels" ? (
                       <Building className="w-5 h-5 text-blue-600" />
                     ) : (
                       <Plane className="w-5 h-5 text-blue-600" />
@@ -234,7 +245,7 @@ export function MobileCityDropdown({
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-base font-medium text-gray-900">
-                        {context === 'hotels' ? (
+                        {context === "hotels" ? (
                           dest.name
                         ) : (
                           <>
@@ -248,7 +259,9 @@ export function MobileCityDropdown({
                       </span>
                     </div>
                     <div className="text-sm text-gray-500">
-                      {context === 'hotels' && dest.description ? dest.description : dest.airport}
+                      {context === "hotels" && dest.description
+                        ? dest.description
+                        : dest.airport}
                     </div>
                     <div className="text-xs text-gray-400">{dest.country}</div>
                   </div>
@@ -310,7 +323,7 @@ interface MobileDatePickerProps {
   setSelectedReturnDate: (date: Date | null) => void;
   selectingDeparture: boolean;
   setSelectingDeparture: (selecting: boolean) => void;
-  bookingType?: 'flights' | 'hotels'; // Add booking type context
+  bookingType?: "flights" | "hotels"; // Add booking type context
 }
 
 export function MobileDatePicker({
@@ -324,7 +337,7 @@ export function MobileDatePicker({
   setSelectedReturnDate,
   selectingDeparture,
   setSelectingDeparture,
-  bookingType = 'flights', // Default to flights for backward compatibility
+  bookingType = "flights", // Default to flights for backward compatibility
 }: MobileDatePickerProps) {
   if (!isOpen) return null;
 
@@ -348,7 +361,7 @@ export function MobileDatePicker({
     // Always update the local state first
     setSelectedDepartureDate(range.startDate);
 
-    if (bookingType === 'hotels') {
+    if (bookingType === "hotels") {
       // For hotels, always set both check-in and check-out dates
       setSelectedReturnDate(range.endDate);
       console.log("Hotel booking: Set check-out date:", range.endDate);
@@ -373,7 +386,7 @@ export function MobileDatePicker({
     // Ensure dates are saved before closing
     setSelectedDepartureDate(selectedDepartureDate);
 
-    if (bookingType === 'hotels') {
+    if (bookingType === "hotels") {
       // For hotels, always require check-out date
       setSelectedReturnDate(selectedReturnDate);
     } else if (tripType === "round-trip") {
@@ -402,7 +415,7 @@ export function MobileDatePicker({
       </div>
       <div className="p-4">
         {/* Trip Type Selector - Only show for flights */}
-        {bookingType === 'flights' && (
+        {bookingType === "flights" && (
           <div className="flex space-x-4 mb-6">
             <button
               onClick={() => setTripType("round-trip")}
@@ -438,10 +451,10 @@ export function MobileDatePicker({
                   <Calendar className="w-4 h-4 text-white" />
                 </div>
                 <span className="text-sm font-medium text-blue-900">
-                  {bookingType === 'hotels' ? 'Your Stay' : 'Your Trip'}
+                  {bookingType === "hotels" ? "Your Stay" : "Your Trip"}
                 </span>
               </div>
-              {(selectedDepartureDate && selectedReturnDate) && (
+              {selectedDepartureDate && selectedReturnDate && (
                 <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                   ✓ Complete
                 </div>
@@ -449,19 +462,23 @@ export function MobileDatePicker({
             </div>
 
             <div className="space-y-2">
-              {bookingType === 'hotels' ? (
+              {bookingType === "hotels" ? (
                 // Hotel date display
                 <>
                   <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
                     <span className="text-sm text-gray-600">Check-in</span>
                     <span className="font-semibold text-gray-900">
-                      {selectedDepartureDate ? formatDate(selectedDepartureDate) : "Select date"}
+                      {selectedDepartureDate
+                        ? formatDate(selectedDepartureDate)
+                        : "Select date"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
                     <span className="text-sm text-gray-600">Check-out</span>
                     <span className="font-semibold text-gray-900">
-                      {selectedReturnDate ? formatDate(selectedReturnDate) : "Select date"}
+                      {selectedReturnDate
+                        ? formatDate(selectedReturnDate)
+                        : "Select date"}
                     </span>
                   </div>
                 </>
@@ -471,14 +488,18 @@ export function MobileDatePicker({
                   <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
                     <span className="text-sm text-gray-600">Departure</span>
                     <span className="font-semibold text-gray-900">
-                      {selectedDepartureDate ? formatDate(selectedDepartureDate) : "Select date"}
+                      {selectedDepartureDate
+                        ? formatDate(selectedDepartureDate)
+                        : "Select date"}
                     </span>
                   </div>
                   {tripType === "round-trip" && (
                     <div className="flex items-center justify-between py-2 px-3 bg-white rounded-lg">
                       <span className="text-sm text-gray-600">Return</span>
                       <span className="font-semibold text-gray-900">
-                        {selectedReturnDate ? formatDate(selectedReturnDate) : "Select date"}
+                        {selectedReturnDate
+                          ? formatDate(selectedReturnDate)
+                          : "Select date"}
                       </span>
                     </div>
                   )}
@@ -497,13 +518,13 @@ export function MobileDatePicker({
                 selectedReturnDate ||
                 addDays(
                   selectedDepartureDate || new Date(),
-                  bookingType === 'hotels' ? 3 : (tripType === "one-way" ? 1 : 7),
+                  bookingType === "hotels" ? 3 : tripType === "one-way" ? 1 : 7,
                 ),
             }}
             onChange={handleCalendarChange}
             onClose={handleDoneClick} // Use custom handler for Done button
             className="w-full"
-            bookingType={bookingType === 'hotels' ? "hotel" : "flight"}
+            bookingType={bookingType === "hotels" ? "hotel" : "flight"}
           />
         </div>
 

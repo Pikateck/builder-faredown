@@ -188,9 +188,7 @@ export function BookingCalendar({
                   <div className="text-xs font-semibold uppercase tracking-wide">
                     NIGHTS
                   </div>
-                  <div className="text-lg font-bold">
-                    {dateInfo.nights}
-                  </div>
+                  <div className="text-lg font-bold">{dateInfo.nights}</div>
                 </div>
               </div>
             )}

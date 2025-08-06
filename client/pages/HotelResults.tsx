@@ -67,7 +67,9 @@ export default function HotelResults() {
   } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string[]>
+  >({});
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -242,7 +244,10 @@ export default function HotelResults() {
         if (err.name === "AbortError") {
           console.log("⏰ Hotel search was aborted");
           setError("Search was cancelled");
-        } else if (err.message.includes("Failed to fetch") || err.name === "TypeError") {
+        } else if (
+          err.message.includes("Failed to fetch") ||
+          err.name === "TypeError"
+        ) {
           console.log("🌐 Network connectivity issue - using mock data");
           setError(null); // Don't show error for network issues
         } else {
@@ -506,11 +511,11 @@ export default function HotelResults() {
             const amenityMap: Record<string, string> = {
               "swimming-pool": "Pool",
               "free-wifi": "WiFi",
-              "parking": "Parking",
-              "restaurant": "Restaurant",
+              parking: "Parking",
+              restaurant: "Restaurant",
               "fitness-center": "Gym",
-              "spa": "Spa",
-              "bar": "Bar",
+              spa: "Spa",
+              bar: "Bar",
             };
             return hotelAmenities.includes(amenityMap[filterId] || filterId);
           });
@@ -1045,7 +1050,8 @@ export default function HotelResults() {
                     onClick={() => setShowFilters(false)}
                     className="w-full bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 rounded-xl"
                   >
-                    Show {filteredAndSortedHotels.length} Hotel{filteredAndSortedHotels.length !== 1 ? 's' : ''}
+                    Show {filteredAndSortedHotels.length} Hotel
+                    {filteredAndSortedHotels.length !== 1 ? "s" : ""}
                   </Button>
                 </div>
               </div>

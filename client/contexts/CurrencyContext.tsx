@@ -225,8 +225,13 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         });
       } catch (fetchError: any) {
         // Catch any network errors immediately and handle gracefully
-        console.warn("📈 Network error fetching exchange rates:", fetchError?.message || "Unknown error");
-        throw new Error(`Network error: ${fetchError?.message || "Failed to fetch"}`);
+        console.warn(
+          "📈 Network error fetching exchange rates:",
+          fetchError?.message || "Unknown error",
+        );
+        throw new Error(
+          `Network error: ${fetchError?.message || "Failed to fetch"}`,
+        );
       }
 
       clearTimeout(timeoutId);

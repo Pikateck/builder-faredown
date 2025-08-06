@@ -455,14 +455,18 @@ export default function HotelDetails() {
             "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
             "htl-DXB-004": "Dubai Creek, Dubai, United Arab Emirates",
             "htl-DXB-005": "Near Dubai Mall, Dubai, United Arab Emirates",
-            "htl-DXB-006": "Dubai International Airport, Dubai, United Arab Emirates",
+            "htl-DXB-006":
+              "Dubai International Airport, Dubai, United Arab Emirates",
           };
           // Always use our mapped locations first, fallback to API location
-          return hotelLocations[hotelId] ||
-                 (typeof hotelData.location === "string" ? hotelData.location :
-                  hotelData.location?.address?.street ||
-                  hotelData.address?.street ||
-                  "Dubai, United Arab Emirates");
+          return (
+            hotelLocations[hotelId] ||
+            (typeof hotelData.location === "string"
+              ? hotelData.location
+              : hotelData.location?.address?.street ||
+                hotelData.address?.street ||
+                "Dubai, United Arab Emirates")
+          );
         })(),
         image:
           hotelData.images && hotelData.images.length > 0
@@ -581,11 +585,7 @@ export default function HotelDetails() {
         statusColor: "yellow",
         image:
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop", // King room
-        features: [
-          "Upgrade for +₹18",
-          "King Room",
-          "Better city views",
-        ],
+        features: ["Upgrade for +₹18", "King Room", "Better city views"],
       },
       {
         id: "deluxe-suite",
@@ -598,11 +598,7 @@ export default function HotelDetails() {
         nonRefundable: false,
         image:
           "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop", // Deluxe suite
-        features: [
-          "Upgrade for +₹55",
-          "Ocean View Suite",
-          "Premium amenities",
-        ],
+        features: ["Upgrade for +₹55", "Ocean View Suite", "Premium amenities"],
       },
       {
         id: "family-room",
@@ -615,11 +611,7 @@ export default function HotelDetails() {
         nonRefundable: true,
         image:
           "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop", // Family room
-        features: [
-          "Upgrade for +₹35",
-          "Family Room",
-          "Kid-friendly space",
-        ],
+        features: ["Upgrade for +₹35", "Family Room", "Kid-friendly space"],
       },
       {
         id: "executive-room",
@@ -632,11 +624,7 @@ export default function HotelDetails() {
         nonRefundable: false,
         image:
           "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&q=80&auto=format&fit=crop", // Executive room
-        features: [
-          "Upgrade for +₹42",
-          "Executive Access",
-          "Business lounge",
-        ],
+        features: ["Upgrade for +₹42", "Executive Access", "Business lounge"],
       },
       {
         id: "standard-double",
@@ -649,11 +637,7 @@ export default function HotelDetails() {
         nonRefundable: true,
         image:
           "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Standard double
-        features: [
-          "Save ₹15",
-          "Standard Room",
-          "Best value option",
-        ],
+        features: ["Save ₹15", "Standard Room", "Best value option"],
       },
     ].sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
@@ -1008,7 +992,8 @@ export default function HotelDetails() {
                         )}
                         {index > 0 && (
                           <div className="bg-orange-500 text-white px-3 py-1 text-xs font-medium">
-                            Upgrade for +₹{room.pricePerNight - roomTypes[0].pricePerNight}
+                            Upgrade for +₹
+                            {room.pricePerNight - roomTypes[0].pricePerNight}
                           </div>
                         )}
 
@@ -1074,19 +1059,19 @@ export default function HotelDetails() {
                             </Button>
 
                             <Button
-                            onClick={() => {
-                              setSelectedRoomType(room);
-                              setIsBargainModalOpen(true);
-                              setBargainingRoomId(room.id);
-                              if (navigator.vibrate) {
-                                navigator.vibrate(50);
-                              }
-                            }}
-                            className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-medium py-2 text-sm flex items-center justify-center gap-2"
-                          >
-                            <TrendingDown className="w-4 h-4" />
-                            Bargain Now
-                          </Button>
+                              onClick={() => {
+                                setSelectedRoomType(room);
+                                setIsBargainModalOpen(true);
+                                setBargainingRoomId(room.id);
+                                if (navigator.vibrate) {
+                                  navigator.vibrate(50);
+                                }
+                              }}
+                              className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-medium py-2 text-sm flex items-center justify-center gap-2"
+                            >
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
+                            </Button>
 
                             <Button
                               onClick={() => setActiveTab("reviews")}
@@ -1451,9 +1436,7 @@ export default function HotelDetails() {
               <span className="text-sm font-medium text-blue-600">
                 {hotel.rating}
               </span>
-              <h1 className="text-xl font-bold text-gray-900">
-                {hotel.name}
-              </h1>
+              <h1 className="text-xl font-bold text-gray-900">{hotel.name}</h1>
               <div className="flex items-center text-gray-600">
                 <MapPin className="w-4 h-4 text-gray-400 mr-1" />
                 <span className="text-sm">{hotel.location}</span>
@@ -1646,7 +1629,6 @@ export default function HotelDetails() {
                       </Button>
                     </div>
                   </div>
-
                 </div>
 
                 {/* Available Rooms Section */}
@@ -1687,7 +1669,9 @@ export default function HotelDetails() {
                               )}
                               {index > 0 && (
                                 <Badge className="bg-orange-100 text-orange-800 border border-orange-200 text-xs font-semibold px-3 py-1">
-                                  Upgrade for +₹{room.pricePerNight - roomTypes[0].pricePerNight}
+                                  Upgrade for +₹
+                                  {room.pricePerNight -
+                                    roomTypes[0].pricePerNight}
                                 </Badge>
                               )}
                             </div>
@@ -2955,7 +2939,9 @@ export default function HotelDetails() {
                         key={category}
                         className="flex items-center justify-between py-1"
                       >
-                        <span className="text-sm font-medium text-gray-700">{category}</span>
+                        <span className="text-sm font-medium text-gray-700">
+                          {category}
+                        </span>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <Star
@@ -2976,7 +2962,9 @@ export default function HotelDetails() {
                       key={category}
                       className="flex items-center justify-between py-1"
                     >
-                      <span className="text-sm font-medium text-gray-700">{category}</span>
+                      <span className="text-sm font-medium text-gray-700">
+                        {category}
+                      </span>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
