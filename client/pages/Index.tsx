@@ -418,15 +418,22 @@ export default function Index() {
                 <span className="text-lg font-bold">faredown.com</span>
               </div>
               <div className="flex items-center space-x-3">
-                <button className="p-2">
+                <button
+                  className="p-2 relative hover:bg-white/10 rounded-lg transition-colors"
+                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                >
                   <Globe className="w-5 h-5" />
                 </button>
-                <button className="p-2">
+                <button
+                  className="p-2 relative hover:bg-white/10 rounded-lg transition-colors"
+                  onClick={() => setShowNotifications(!showNotifications)}
+                >
                   <Bell className="w-5 h-5" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
                 <button
                   onClick={() => setShowMobileMenu(!showMobileMenu)}
-                  className="p-2"
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                 >
                   <Menu className="w-5 h-5" />
                 </button>
