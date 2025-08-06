@@ -1031,7 +1031,6 @@ export default function Index() {
           </div>
         </div>
 
-
         {/* Mobile Features Section */}
         <div className="bg-gray-50 py-8">
           <div className="px-4">
