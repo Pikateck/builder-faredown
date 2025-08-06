@@ -206,14 +206,15 @@ export function BookingCalendar({
         </div>
       </div>
 
-      {/* Custom CSS for react-date-range styling */}
+      {/* Custom CSS for Booking.com-style classy calendar */}
       <style>{`
-                .booking-calendar .rdrCalendarWrapper {
+        .booking-calendar .rdrCalendarWrapper {
           background: white;
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+          border-radius: 16px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
           border: 1px solid #e5e7eb;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          overflow: hidden;
         }
 
         .booking-calendar .rdrDateRangeWrapper {
@@ -228,14 +229,17 @@ export function BookingCalendar({
           display: none;
         }
 
-                .booking-calendar .rdrMonthAndYearWrapper {
-          padding: 16px 20px 8px;
+        .booking-calendar .rdrMonthAndYearWrapper {
+          padding: 24px 32px 16px;
           position: relative;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          border-bottom: 1px solid #e5e7eb;
         }
 
         .booking-calendar .rdrMonthAndYearPickers {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 700;
+          color: #1e293b;
+          font-size: 18px;
           pointer-events: none;
         }
 
@@ -244,24 +248,92 @@ export function BookingCalendar({
           display: none !important;
         }
 
-                .booking-calendar .rdrNextPrevButton {
+        .booking-calendar .rdrNextPrevButton {
           background: #ffffff;
-          border: 1px solid #d1d5db;
-          color: #374151;
-          border-radius: 6px;
-          width: 36px;
-          height: 36px;
+          border: 2px solid #e2e8f0;
+          color: #475569;
+          border-radius: 12px;
+          width: 44px;
+          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          transition: all 0.2s ease;
         }
 
         .booking-calendar .rdrNextPrevButton:hover {
+          background: #003580;
+          border-color: #003580;
+          color: white;
+          box-shadow: 0 6px 20px rgba(0, 53, 128, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .booking-calendar .rdrWeekDaysWrapper {
+          padding: 16px 24px 8px;
           background: #f8fafc;
-          border-color: #9ca3af;
-          color: #111827;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-calendar .rdrWeekDay {
+          color: #64748b;
+          font-weight: 600;
+          font-size: 13px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          padding: 8px 0;
+        }
+
+        .booking-calendar .rdrDays {
+          padding: 16px 24px 24px;
+        }
+
+        .booking-calendar .rdrDayNumber {
+          font-weight: 500;
+          font-size: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          transition: all 0.2s ease;
+        }
+
+        .booking-calendar .rdrDayToday .rdrDayNumber {
+          background: #dbeafe;
+          color: #1d4ed8;
+          font-weight: 700;
+        }
+
+        .booking-calendar .rdrDayHovered .rdrDayNumber {
+          background: #e0e7ff;
+          color: #3730a3;
+        }
+
+        .booking-calendar .rdrDaySelected .rdrDayNumber {
+          background: #003580 !important;
+          color: white !important;
+          font-weight: 700;
+          box-shadow: 0 4px 12px rgba(0, 53, 128, 0.4);
+        }
+
+        .booking-calendar .rdrInRange .rdrDayNumber {
+          background: #e0f2fe !important;
+          color: #0284c7 !important;
+        }
+
+        .booking-calendar .rdrStartEdge .rdrDayNumber,
+        .booking-calendar .rdrEndEdge .rdrDayNumber {
+          background: #003580 !important;
+          color: white !important;
+          font-weight: 700;
+          box-shadow: 0 4px 12px rgba(0, 53, 128, 0.4);
+        }
+
+        .booking-calendar .rdrDayDisabled .rdrDayNumber {
+          color: #cbd5e1;
+          background: transparent;
         }
 
                 .booking-calendar .rdrMonthWrapper {
