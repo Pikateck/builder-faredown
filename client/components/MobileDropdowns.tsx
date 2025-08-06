@@ -368,12 +368,19 @@ export function MobileDatePicker({
     console.log("selectedDepartureDate:", selectedDepartureDate);
     console.log("selectedReturnDate:", selectedReturnDate);
     console.log("tripType:", tripType);
+    console.log("bookingType:", bookingType);
 
     // Ensure dates are saved before closing
     setSelectedDepartureDate(selectedDepartureDate);
-    if (tripType === "round-trip") {
+
+    if (bookingType === 'hotels') {
+      // For hotels, always require check-out date
+      setSelectedReturnDate(selectedReturnDate);
+    } else if (tripType === "round-trip") {
+      // For flights round-trip
       setSelectedReturnDate(selectedReturnDate);
     } else {
+      // For flights one-way
       setSelectedReturnDate(null);
     }
 
