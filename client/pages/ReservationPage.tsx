@@ -62,7 +62,7 @@ export default function ReservationPage() {
     lastName: "",
     email: "",
     phone: "",
-    country: "",
+    country: "in",
     address: "",
     city: "",
     zipCode: "",
