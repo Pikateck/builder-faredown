@@ -1526,7 +1526,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -5989,7 +5989,7 @@ export default function FlightResults() {
                         • Infant fares (below 2 years) have separate terms
                       </li>
                       <li>
-                        ��� Group bookings may have different cancellation terms
+                        • Group bookings may have different cancellation terms
                       </li>
                     </ul>
                   </div>
