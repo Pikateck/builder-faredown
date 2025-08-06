@@ -1014,19 +1014,19 @@ export default function HotelDetails() {
                             </Button>
 
                             <Button
-                              onClick={() => {
-                                setSelectedRoomType(room);
-                                setIsBargainModalOpen(true);
-                                setBargainingRoomId(room.id);
-                                if (navigator.vibrate) {
-                                  navigator.vibrate(50);
-                                }
-                              }}
-                              className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 text-sm flex items-center justify-center gap-2 min-h-[44px]"
-                            >
-                              <TrendingDown className="w-4 h-4" />
-                              Bargain Now
-                            </Button>
+                            onClick={() => {
+                              setSelectedRoomType(room);
+                              setIsBargainModalOpen(true);
+                              setBargainingRoomId(room.id);
+                              if (navigator.vibrate) {
+                                navigator.vibrate(50);
+                              }
+                            }}
+                            className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 text-sm flex items-center justify-center gap-2"
+                          >
+                            <TrendingDown className="w-4 h-4" />
+                            Bargain Now
+                          </Button>
 
                             <Button
                               onClick={() => setActiveTab("reviews")}
@@ -1561,7 +1561,7 @@ export default function HotelDetails() {
                             <span>Best value room available</span>
                           </div>
                           <Button
-                            className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-2 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2 min-h-[44px]"
+                            className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2"
                             onClick={() =>
                               roomTypes.length > 0 &&
                               handleBargainClick(roomTypes[0])
@@ -1807,14 +1807,13 @@ export default function HotelDetails() {
                                   </Button>
                                   <Button
                                     onClick={() => handleBargainClick(room)}
-                                    className={`w-full font-semibold py-3 text-sm transition-all duration-200 flex items-center justify-center gap-2 min-h-[44px] ${
+                                    className={`w-full font-medium py-2 text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
                                       bargainedRooms.has(room.id)
-                                        ? "bg-green-500 border-green-600 text-white shadow-lg"
+                                        ? "bg-green-600 text-white"
                                         : bargainingRoomId === room.id
-                                          ? "bg-blue-500 border-blue-600 text-white shadow-lg animate-pulse"
-                                          : "bg-[#febb02] hover:bg-[#e6a602] text-black border-[#febb02] hover:border-[#e6a602]"
+                                          ? "bg-blue-600 text-white animate-pulse"
+                                          : "bg-[#003580] hover:bg-[#002a66] text-white"
                                     }`}
-                                    style={{ display: "block" }}
                                   >
                                     {bargainedRooms.has(room.id) ? (
                                       <span className="flex items-center justify-center">
@@ -1832,19 +1831,15 @@ export default function HotelDetails() {
                                   </Button>
                                 </div>
 
-                                <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3">
-                                  <div className="space-y-2">
-                                    <div className="flex items-center text-xs text-green-700">
-                                      <span className="font-medium">
-                                        No prepayment needed
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center text-xs text-green-700">
-                                      <span className="font-medium">
-                                        Free cancellation
-                                      </span>
-                                    </div>
-                                  </div>
+                                <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
+                                  <span className="flex items-center gap-1">
+                                    <CheckCircle className="w-3 h-3 text-green-600" />
+                                    No prepayment
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <CheckCircle className="w-3 h-3 text-green-600" />
+                                    Free cancellation
+                                  </span>
                                 </div>
                               </div>
                             </div>
