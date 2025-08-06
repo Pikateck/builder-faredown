@@ -343,16 +343,23 @@ export function MobileDatePicker({
   const handleCalendarChange = (range: { startDate: Date; endDate: Date }) => {
     console.log("Mobile calendar range selected:", range);
     console.log("Current tripType:", tripType);
+    console.log("Current bookingType:", bookingType);
 
     // Always update the local state first
     setSelectedDepartureDate(range.startDate);
-    if (tripType === "round-trip") {
+
+    if (bookingType === 'hotels') {
+      // For hotels, always set both check-in and check-out dates
       setSelectedReturnDate(range.endDate);
-      console.log("Set return date:", range.endDate);
+      console.log("Hotel booking: Set check-out date:", range.endDate);
+    } else if (tripType === "round-trip") {
+      // For flights round-trip
+      setSelectedReturnDate(range.endDate);
+      console.log("Flight round-trip: Set return date:", range.endDate);
     } else {
-      // For one-way trips, clear the return date
+      // For flights one-way, clear the return date
       setSelectedReturnDate(null);
-      console.log("One-way trip, cleared return date");
+      console.log("Flight one-way: cleared return date");
     }
   };
 
