@@ -427,7 +427,17 @@ export default function HotelDetails() {
   const tempHotelData = hotelData
     ? {
         id: parseInt(hotelId || "1"),
-        name: hotelData.name || "Grand Hyatt Dubai",
+        name: hotelData.name || (() => {
+          const hotelNames = {
+            "htl-DXB-001": "Grand Hyatt Dubai",
+            "htl-DXB-002": "Business Hotel Dubai Marina",
+            "htl-DXB-003": "Boutique Hotel Downtown Dubai",
+            "htl-DXB-004": "Premium Hotel Dubai Creek",
+            "htl-DXB-005": "City Hotel Dubai Mall",
+            "htl-DXB-006": "Express Hotel Dubai Airport",
+          };
+          return hotelNames[hotelId] || "Premium Hotel Dubai";
+        })(),
         location:
           typeof hotelData.location === "string"
             ? hotelData.location
