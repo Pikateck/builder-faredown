@@ -1392,7 +1392,7 @@ export default function Index() {
                   </div>
 
                   {/* Desktop Search inputs */}
-                  <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 w-full max-w-5xl overflow-visible">
+                  <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-3 mt-2 w-full max-w-5xl overflow-visible">
                     <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
                       <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                         Leaving from
@@ -1537,7 +1537,7 @@ export default function Index() {
                     </div>
 
                     <div className="relative overflow-visible lg:max-w-[250px] w-full lg:w-auto">
-                      <label className="absolute -top-2 left-4 bg-white px-2 text-xs text-blue-600 font-semibold z-10 uppercase tracking-wide">
+                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                         Travel dates
                       </label>
                       <button
@@ -1549,7 +1549,7 @@ export default function Index() {
                           }
                           setShowCalendar(!showCalendar);
                         }}
-                        className="flex items-center bg-white rounded-xl border-2 border-gray-200 px-4 py-3 h-14 w-full min-w-[220px] hover:border-blue-500 hover:shadow-md transition-all duration-200 touch-manipulation"
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[220px] hover:border-blue-500 touch-manipulation"
                       >
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
                           <svg
