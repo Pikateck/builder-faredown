@@ -339,7 +339,8 @@ export function BookingSearchForm() {
       navigate(url);
     } catch (error) {
       console.error("🚨 Error in handleSearch:", error);
-      alert("Search failed. Please try again.");
+      setErrorMessage("Search failed. Please try again.");
+      setShowError(true);
     }
   };
 
