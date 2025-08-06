@@ -281,7 +281,7 @@ export default function FlightDetails({
                   {/* Airline Info */}
                   <div className="flex items-center space-x-3 mt-4 mb-4">
                     <img
-                      src={`https://pics.avs.io/120/120/${displayFlight.airlineCode}.png`}
+                      src={airlineLogos[displayFlight.airline] || `https://pics.avs.io/120/120/${displayFlight.airlineCode}.png`}
                       alt={displayFlight.airline}
                       className="w-8 h-8 object-contain"
                     />
