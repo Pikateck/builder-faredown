@@ -68,10 +68,10 @@ export function MobileCityDropdown({
         <div className="mb-6">
           <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
             <h3 className="text-sm font-semibold text-blue-800">
-              🏨 Hotelbeds Test Destinations
+              ✈️ Popular Flight Destinations
             </h3>
             <p className="text-xs text-blue-600">
-              Available cities for testing with live API data
+              Popular airports and cities worldwide
             </p>
           </div>
           <div className="space-y-2">
