@@ -2914,51 +2914,53 @@ export default function HotelDetails() {
         />
       )}
 
-      {/* Write Review Modal */}
+      {/* Write Review Modal - Optimized for Mobile/Native */}
       <Dialog
         open={isWriteReviewModalOpen}
         onOpenChange={setIsWriteReviewModalOpen}
       >
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold flex items-center">
-              <MessageSquare className="w-5 h-5 mr-2" />
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-4">
+            <DialogTitle className="text-lg md:text-xl font-bold flex items-center">
+              <MessageSquare className="w-5 h-5 mr-2 text-blue-600" />
               Write a review for {hotel.name}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-6">
+          <div className="space-y-5 pb-4">
+            {/* Overall Rating - Larger touch targets for mobile */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-3 text-gray-900">
                 Overall rating *
               </label>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
                     key={star}
-                    className="w-6 h-6 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                    className="w-8 h-8 md:w-6 md:h-6 text-gray-300 hover:text-yellow-400 cursor-pointer touch-manipulation active:scale-95 transition-all duration-150"
                   />
                 ))}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* Category Ratings - Mobile responsive grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-3 text-gray-900">
                   Rate your experience
                 </label>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {["Staff", "Cleanliness", "Value for money", "Free WiFi"].map(
                     (category) => (
                       <div
                         key={category}
-                        className="flex items-center justify-between"
+                        className="flex items-center justify-between py-1"
                       >
-                        <span className="text-sm">{category}</span>
+                        <span className="text-sm font-medium text-gray-700">{category}</span>
                         <div className="flex items-center gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <Star
                               key={star}
-                              className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                              className="w-6 h-6 md:w-4 md:h-4 text-gray-300 hover:text-yellow-400 cursor-pointer touch-manipulation active:scale-95 transition-all duration-150"
                             />
                           ))}
                         </div>
@@ -2967,19 +2969,19 @@ export default function HotelDetails() {
                   )}
                 </div>
               </div>
-              <div>
-                <div className="space-y-3">
+              <div className="md:mt-[28px]">
+                <div className="space-y-4">
                   {["Facilities", "Comfort", "Location"].map((category) => (
                     <div
                       key={category}
-                      className="flex items-center justify-between"
+                      className="flex items-center justify-between py-1"
                     >
-                      <span className="text-sm">{category}</span>
+                      <span className="text-sm font-medium text-gray-700">{category}</span>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
-                            className="w-4 h-4 text-gray-300 hover:text-yellow-400 cursor-pointer"
+                            className="w-6 h-6 md:w-4 md:h-4 text-gray-300 hover:text-yellow-400 cursor-pointer touch-manipulation active:scale-95 transition-all duration-150"
                           />
                         ))}
                       </div>
@@ -2989,86 +2991,93 @@ export default function HotelDetails() {
               </div>
             </div>
 
+            {/* Review Title - Enhanced for mobile */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-900">
                 Review title *
               </label>
               <input
                 type="text"
                 placeholder="Give your review a title"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
               />
             </div>
 
+            {/* Review Text - Enhanced for mobile */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-2 text-gray-900">
                 Tell us about your experience *
               </label>
               <textarea
                 placeholder="Share your experience to help other travelers"
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base resize-none"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* Personal Details - Responsive grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 text-gray-900">
                   Your name *
                 </label>
                 <input
                   type="text"
                   placeholder="Enter your name"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 text-gray-900">
                   Country *
                 </label>
                 <input
                   type="text"
                   placeholder="Enter your country"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* Stay Details - Responsive grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 text-gray-900">
                   Room type
                 </label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base appearance-none bg-white">
                   <option>Select room type</option>
-                  <option>Twin Room with Skyline View</option>
-                  <option>King Room with Skyline View</option>
-                  <option>Superior King Room</option>
+                  {hotel.roomTypes.map((room) => (
+                    <option key={room.id} value={room.name}>
+                      {room.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium mb-2 text-gray-900">
                   Date of stay
                 </label>
                 <input
                   type="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  defaultValue={hotel.checkIn}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
                 />
               </div>
             </div>
 
+            {/* Trip Type - Enhanced buttons for mobile */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-medium mb-3 text-gray-900">
                 Type of trip
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {["Leisure", "Business", "Family", "Couple", "Solo travel"].map(
                   (type) => (
                     <Button
                       key={type}
                       variant="outline"
-                      size="sm"
-                      className="text-xs"
+                      className="px-4 py-2 text-sm min-h-[44px] border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 active:scale-95 transition-all duration-200 touch-manipulation"
                     >
                       {type}
                     </Button>
@@ -3077,11 +3086,12 @@ export default function HotelDetails() {
               </div>
             </div>
 
-            <div className="flex gap-3 pt-4">
+            {/* Action Buttons - Enhanced for mobile */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
               <Button
                 onClick={() => setIsWriteReviewModalOpen(false)}
                 variant="outline"
-                className="flex-1"
+                className="flex-1 min-h-[48px] border-2 border-gray-300 text-gray-700 hover:bg-gray-50 active:scale-95 transition-all duration-200 touch-manipulation font-medium"
               >
                 Cancel
               </Button>
@@ -3089,8 +3099,11 @@ export default function HotelDetails() {
                 onClick={() => {
                   setIsWriteReviewModalOpen(false);
                   // Handle review submission here
+                  if (navigator.vibrate) {
+                    navigator.vibrate(100);
+                  }
                 }}
-                className="flex-1 bg-blue-700 hover:bg-blue-800 text-white"
+                className="flex-1 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white active:scale-95 transition-all duration-200 touch-manipulation font-medium"
               >
                 Submit Review
               </Button>
