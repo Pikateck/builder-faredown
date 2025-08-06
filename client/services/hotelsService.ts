@@ -277,7 +277,12 @@ export class HotelsService {
           window.location.hostname.includes(".local") ||
           window.location.port !== "");
 
-      // Enable live API for development too since we have test credentials
+      // Skip live API in development to prevent fetch errors
+      if (isDevelopment) {
+        console.log("🔧 Development environment detected - skipping live API to prevent fetch errors");
+        return [];
+      }
+
       console.log(
         "🔍 Searching hotels with enhanced Hotelbeds API integration",
       );
