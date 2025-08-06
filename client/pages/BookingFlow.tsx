@@ -1563,83 +1563,67 @@ export default function BookingFlow() {
   return (
     <div className="min-h-screen bg-[#f2f6fa]">
       <style>{customStyles}</style>
-      {/* Faredown Header */}
+      {/* Comprehensive Header - Matching Index Page */}
       <header className="bg-[#003580] text-white">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
+            {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
               <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
               </span>
             </Link>
-            <div className="flex items-center space-x-2 md:space-x-6">
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="md:hidden text-white p-2"
+
+            {/* Centered Navigation */}
+            <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+              <Link
+                to="/flights"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
               >
-                <Menu className="w-6 h-6" />
-              </button>
+                <span>Flights</span>
+              </Link>
+              <Link
+                to="/hotels"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
+              >
+                <span>Hotels</span>
+              </Link>
+            </nav>
 
-              <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <Link
-                  to="/flights"
-                  className="text-white hover:text-blue-100 cursor-pointer flex items-center font-semibold border-b-2 border-white py-4"
-                >
-                  <span>Flights</span>
-                </Link>
-                <Link
-                  to="/hotels"
-                  className="text-white hover:text-blue-100 cursor-pointer flex items-center py-4"
-                >
-                  <span>Hotels</span>
-                </Link>
-              </nav>
-
-              {/* Language and Currency */}
-              <div className="hidden md:flex items-center space-x-4 text-sm">
-                <button className="text-white hover:text-blue-100 cursor-pointer flex items-center space-x-1">
-                  <span>🌐</span>
-                  <span>English (UK)</span>
-                </button>
+            <div className="flex items-center space-x-2 md:space-x-6">
+              {/* Currency Only - Language dropdown removed */}
+              <div className="flex items-center space-x-4 text-sm">
                 <div className="relative">
                   <button
                     onClick={() =>
                       setShowCurrencyDropdown(!showCurrencyDropdown)
                     }
-                    className="text-white hover:text-blue-100 cursor-pointer flex items-center space-x-1"
+                    className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
                   >
+                    <span className="text-sm font-medium">Curr</span>
                     <span>
                       {selectedCurrency.symbol} {selectedCurrency.code}
                     </span>
                     <ChevronDown className="w-4 h-4" />
                   </button>
                   {showCurrencyDropdown && (
-                    <div className="absolute top-8 right-0 bg-white border border-[#f2f6fa] rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
+                    <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
                       {[
-                        { code: "USD", symbol: "$", name: "US Dollar" },
-                        { code: "EUR", symbol: "€", name: "Euro" },
-                        { code: "GBP", symbol: "£", name: "British Pound" },
-                        { code: "INR", symbol: "₹", name: "Indian Rupee" },
-                        { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                        { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
-                        { code: "JPY", symbol: "¥", name: "Japanese Yen" },
-                        { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
-                        { code: "KRW", symbol: "₩", name: "South Korean Won" },
-                        { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
-                        {
-                          code: "AUD",
-                          symbol: "A$",
-                          name: "Australian Dollar",
-                        },
-                        { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
-                        { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-                        { code: "THB", symbol: "฿", name: "Thai Baht" },
-                        {
-                          code: "MYR",
-                          symbol: "RM",
-                          name: "Malaysian Ringgit",
-                        },
+                        { code: "USD", symbol: "$", name: "US Dollar", flag: "🇺🇸" },
+                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
+                        { code: "GBP", symbol: "£", name: "British Pound", flag: "🇬🇧" },
+                        { code: "INR", symbol: "₹", name: "Indian Rupee", flag: "🇮🇳" },
+                        { code: "AED", symbol: "د.إ", name: "UAE Dirham", flag: "🇦🇪" },
+                        { code: "SAR", symbol: "﷼", name: "Saudi Riyal", flag: "🇸🇦" },
+                        { code: "JPY", symbol: "¥", name: "Japanese Yen", flag: "🇯🇵" },
+                        { code: "CNY", symbol: "¥", name: "Chinese Yuan", flag: "🇨🇳" },
+                        { code: "KRW", symbol: "₩", name: "South Korean Won", flag: "🇰🇷" },
+                        { code: "SGD", symbol: "S$", name: "Singapore Dollar", flag: "🇸🇬" },
+                        { code: "AUD", symbol: "A$", name: "Australian Dollar", flag: "🇦🇺" },
+                        { code: "CAD", symbol: "C$", name: "Canadian Dollar", flag: "🇨🇦" },
+                        { code: "CHF", symbol: "CHF", name: "Swiss Franc", flag: "🇨🇭" },
+                        { code: "THB", symbol: "฿", name: "Thai Baht", flag: "🇹🇭" },
+                        { code: "MYR", symbol: "RM", name: "Malaysian Ringgit", flag: "🇲🇾" },
                       ].map((currency) => (
                         <button
                           key={currency.code}
@@ -1647,9 +1631,16 @@ export default function BookingFlow() {
                             setSelectedCurrency(currency);
                             setShowCurrencyDropdown(false);
                           }}
-                          className="w-full text-left px-3 py-2 hover:bg-[#f2f6fa] rounded text-sm text-gray-900 flex items-center justify-between"
+                          className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
+                            selectedCurrency.code === currency.code
+                              ? "bg-blue-50 text-blue-600"
+                              : "text-gray-900"
+                          }`}
                         >
-                          <span>{currency.name}</span>
+                          <div className="flex items-center space-x-2">
+                            <span>{currency.flag}</span>
+                            <span>{currency.name}</span>
+                          </div>
                           <span className="font-medium">
                             {currency.symbol} {currency.code}
                           </span>
@@ -1659,11 +1650,15 @@ export default function BookingFlow() {
                   )}
                 </div>
               </div>
+
               <div className="flex items-center space-x-3">
+                {/* Admin Test Button */}
+                <AdminTestButton variant="desktop" />
+
                 {isLoggedIn ? (
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center space-x-2 bg-[#003580] rounded-full px-2 md:px-3 py-2 hover:bg-[#009fe3]">
-                      <div className="w-6 h-6 bg-[#feba02] rounded-full flex items-center justify-center">
+                    <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
+                      <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
                         <span className="text-xs font-bold text-black">
                           {userName.charAt(0)}
                         </span>
@@ -1671,7 +1666,7 @@ export default function BookingFlow() {
                       <span className="text-sm text-white hidden sm:inline">
                         {userName}
                       </span>
-                      <span className="text-xs text-[#feba02] hidden md:inline">
+                      <span className="text-xs text-yellow-300 hidden md:inline">
                         Loyalty Level 1
                       </span>
                     </DropdownMenuTrigger>
@@ -1683,26 +1678,31 @@ export default function BookingFlow() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Link to="/account/trips" className="flex items-center">
-                          <BookOpen className="w-4 h-4 mr-2" />
-                          Bookings & Trips
+                        <Link to="/account/settings" className="flex items-center">
+                          <Settings className="w-4 h-4 mr-2" />
+                          Settings
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Award className="w-4 h-4 mr-2" />
-                        Rewards (Level 1)
+                        <Link to="/account/loyalty" className="flex items-center">
+                          <Award className="w-4 h-4 mr-2" />
+                          Loyalty program
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Heart className="w-4 h-4 mr-2" />
-                        Saved
+                        <Link
+                          to="/account/payment"
+                          className="flex items-center"
+                        >
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          Rewards & Wallet
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        Payment methods
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Settings className="w-4 h-4 mr-2" />
-                        Account settings
+                        <Link to="/my-trips" className="flex items-center">
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Completed trips
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => {
@@ -1716,22 +1716,23 @@ export default function BookingFlow() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <div className="flex items-center space-x-2">
+                  <>
                     <Button
-                      variant="ghost"
+                      size="sm"
+                      variant="outline"
+                      className="bg-white text-blue-700 border-white hover:bg-gray-100 rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
                       onClick={() => setShowRegister(true)}
-                      className="text-white hover:text-blue-100 hover:bg-[#003580]"
                     >
                       Register
                     </Button>
                     <Button
-                      variant="ghost"
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-800 text-white rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
                       onClick={() => setShowSignIn(true)}
-                      className="text-white hover:text-blue-100 hover:bg-[#003580]"
                     >
                       Sign in
                     </Button>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
