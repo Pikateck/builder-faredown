@@ -1714,21 +1714,42 @@ export default function FlightResults() {
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Leaving from
               </label>
-              <button
-                onClick={() => setShowFromCities(!showFromCities)}
-                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation"
-              >
-                <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2 min-w-0">
-                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                    {cityData[selectedFromCity]?.code || "BOM"}
+              <div className="relative">
+                <button
+                  onClick={() => setShowFromCities(!showFromCities)}
+                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+                >
+                  <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                  <div className="flex items-center space-x-2 min-w-0">
+                    {selectedFromCity ? (
+                      <>
+                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                          {cityData[selectedFromCity]?.code}
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium truncate">
+                          {cityData[selectedFromCity]?.airport}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-sm text-gray-500 font-medium">
+                        Leaving from
+                      </span>
+                    )}
                   </div>
-                  <span className="text-sm text-gray-700 font-medium truncate">
-                    {cityData[selectedFromCity]?.airport ||
-                      "Chhatrapati Shivaji International"}
-                  </span>
-                </div>
-              </button>
+                </button>
+                {selectedFromCity && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedFromCity("");
+                    }}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Clear departure city"
+                  >
+                    <X className="w-4 h-4 text-gray-400" />
+                  </button>
+                )}
+              </div>
 
               {showFromCities && (
                 <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
@@ -1783,21 +1804,42 @@ export default function FlightResults() {
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Going to
               </label>
-              <button
-                onClick={() => setShowToCities(!showToCities)}
-                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation"
-              >
-                <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2 min-w-0">
-                  <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                    {cityData[selectedToCity]?.code || "DXB"}
+              <div className="relative">
+                <button
+                  onClick={() => setShowToCities(!showToCities)}
+                  className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
+                >
+                  <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                  <div className="flex items-center space-x-2 min-w-0">
+                    {selectedToCity ? (
+                      <>
+                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                          {cityData[selectedToCity]?.code}
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium truncate">
+                          {cityData[selectedToCity]?.airport}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-sm text-gray-500 font-medium">
+                        Going to
+                      </span>
+                    )}
                   </div>
-                  <span className="text-sm text-gray-700 font-medium truncate">
-                    {cityData[selectedToCity]?.airport ||
-                      "Dubai International Airport"}
-                  </span>
-                </div>
-              </button>
+                </button>
+                {selectedToCity && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedToCity("");
+                    }}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Clear destination city"
+                  >
+                    <X className="w-4 h-4 text-gray-400" />
+                  </button>
+                )}
+              </div>
 
               {showToCities && (
                 <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
@@ -5833,7 +5875,7 @@ export default function FlightResults() {
                         • Infant fares (below 2 years) have separate terms
                       </li>
                       <li>
-                        • Group bookings may have different cancellation terms
+                        ��� Group bookings may have different cancellation terms
                       </li>
                     </ul>
                   </div>
