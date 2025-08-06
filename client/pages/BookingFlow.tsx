@@ -1730,9 +1730,6 @@ export default function BookingFlow() {
               </div>
 
               <div className="flex items-center space-x-3">
-                {/* Admin Test Button */}
-                <AdminTestButton variant="desktop" />
-
                 {isLoggedIn ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
@@ -3710,7 +3707,7 @@ export default function BookingFlow() {
                       )}
                       {calculateSeatTotal("Dubai-Mumbai") > 0 && (
                         <div className="flex justify-between">
-                          <span>Dubai → Mumbai</span>
+                          <span>Dubai �� Mumbai</span>
                           <span>
                             {formatCurrency(calculateSeatTotal("Dubai-Mumbai"))}
                           </span>
