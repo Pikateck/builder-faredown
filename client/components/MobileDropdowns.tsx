@@ -224,19 +224,31 @@ export function MobileCityDropdown({
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                    <Plane className="w-5 h-5 text-blue-600" />
+                    {context === 'hotels' ? (
+                      <Building className="w-5 h-5 text-blue-600" />
+                    ) : (
+                      <Plane className="w-5 h-5 text-blue-600" />
+                    )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-base font-medium text-gray-900">
-                        <span className="font-semibold">{dest.code}</span> •{" "}
-                        {dest.name}
+                        {context === 'hotels' ? (
+                          dest.name
+                        ) : (
+                          <>
+                            <span className="font-semibold">{dest.code}</span> •{" "}
+                            {dest.name}
+                          </>
+                        )}
                       </span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                         Popular
                       </span>
                     </div>
-                    <div className="text-sm text-gray-500">{dest.airport}</div>
+                    <div className="text-sm text-gray-500">
+                      {context === 'hotels' && dest.description ? dest.description : dest.airport}
+                    </div>
                     <div className="text-xs text-gray-400">{dest.country}</div>
                   </div>
                 </div>
