@@ -740,55 +740,82 @@ export default function ReservationPage() {
                         Payment Method
                       </Label>
                       <div className="space-y-3">
-                        <label className="flex items-center min-h-[44px] px-6 py-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 font-semibold">
-                          <div className="w-4 h-4 flex items-center justify-center mr-3">
-                            <input
-                              type="radio"
-                              name="paymentMethod"
-                              value="card"
-                              checked={paymentDetails.paymentMethod === "card"}
-                              onChange={(e) =>
-                                setPaymentDetails((prev) => ({
-                                  ...prev,
-                                  paymentMethod: e.target.value,
-                                }))
-                              }
-                              className={`w-4 h-4 ${paymentDetails.paymentMethod === "card" ? "bg-blue-600" : "bg-white border border-gray-400"}`}
-                            />
-                          </div>
-                          <div className="flex items-center">
-                            <CreditCard className="w-5 h-5 mr-2 text-gray-600" />
-                            <span>Pay Now with Card</span>
-                          </div>
-                        </label>
-
-                        <label className="flex items-center min-h-[44px] px-6 py-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 font-semibold">
-                          <div className="w-4 h-4 flex items-center justify-center mr-3">
-                            <input
-                              type="radio"
-                              name="paymentMethod"
-                              value="pay_at_hotel"
-                              checked={
-                                paymentDetails.paymentMethod === "pay_at_hotel"
-                              }
-                              onChange={(e) =>
-                                setPaymentDetails((prev) => ({
-                                  ...prev,
-                                  paymentMethod: e.target.value,
-                                }))
-                              }
-                              className={`w-4 h-4 ${paymentDetails.paymentMethod === "pay_at_hotel" ? "bg-blue-600" : "bg-white border border-gray-400"}`}
-                            />
-                          </div>
-                          <div className="flex items-center">
-                            <div>
-                              <div>Pay at Hotel</div>
-                              <div className="text-xs text-gray-500">
-                                Pay during check-in
+                        <div className="flex items-center justify-between py-2 min-h-[48px] px-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 active:scale-[0.98] touch-manipulation">
+                          <div className="flex items-center gap-3 flex-1">
+                            <div className="relative">
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="card"
+                                checked={paymentDetails.paymentMethod === "card"}
+                                onChange={(e) =>
+                                  setPaymentDetails((prev) => ({
+                                    ...prev,
+                                    paymentMethod: e.target.value,
+                                  }))
+                                }
+                                className="sr-only"
+                              />
+                              <div className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
+                                paymentDetails.paymentMethod === "card"
+                                  ? "border-blue-600 bg-blue-600"
+                                  : "border-gray-400 bg-white"
+                              }`}>
+                                {paymentDetails.paymentMethod === "card" && (
+                                  <div className="w-3 h-3 bg-white rounded-full m-0.5"></div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <CreditCard className="w-5 h-5 text-blue-600" />
+                              <div>
+                                <div className="font-semibold text-gray-900">Pay Now with Card</div>
+                                <div className="text-sm text-gray-600">Instant confirmation</div>
                               </div>
                             </div>
                           </div>
-                        </label>
+                          <div className="text-sm font-medium text-green-700 bg-green-100 px-2 py-1 rounded">
+                            Recommended
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between py-2 min-h-[48px] px-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 active:scale-[0.98] touch-manipulation">
+                          <div className="flex items-center gap-3 flex-1">
+                            <div className="relative">
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="pay_at_hotel"
+                                checked={paymentDetails.paymentMethod === "pay_at_hotel"}
+                                onChange={(e) =>
+                                  setPaymentDetails((prev) => ({
+                                    ...prev,
+                                    paymentMethod: e.target.value,
+                                  }))
+                                }
+                                className="sr-only"
+                              />
+                              <div className={`w-5 h-5 rounded-full border-2 transition-all duration-200 ${
+                                paymentDetails.paymentMethod === "pay_at_hotel"
+                                  ? "border-blue-600 bg-blue-600"
+                                  : "border-gray-400 bg-white"
+                              }`}>
+                                {paymentDetails.paymentMethod === "pay_at_hotel" && (
+                                  <div className="w-3 h-3 bg-white rounded-full m-0.5"></div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                                🏨
+                              </div>
+                              <div>
+                                <div className="font-semibold text-gray-900">Pay at Hotel</div>
+                                <div className="text-sm text-gray-600">Pay during check-in</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
