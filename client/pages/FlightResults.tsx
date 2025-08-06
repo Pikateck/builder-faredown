@@ -2480,7 +2480,7 @@ export default function FlightResults() {
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-white rounded-lg border shadow-sm flex items-center justify-center">
                             <img
-                              src={`https://pics.avs.io/60/60/${flight.airlineCode || "XX"}.png`}
+                              src={airlineLogos[flight.airline] || `https://pics.avs.io/60/60/${flight.airlineCode || "XX"}.png`}
                               alt={flight.airline}
                               className="w-6 h-6 object-contain"
                               onError={(e) => {
