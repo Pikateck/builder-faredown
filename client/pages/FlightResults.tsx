@@ -1378,46 +1378,53 @@ export default function FlightResults() {
             </div>
           </div>
 
-          {/* Mobile Search Summary Bar */}
-          <div className="bg-white border-b border-gray-200 px-4 py-3">
+          {/* Enhanced Mobile Search Summary */}
+          <div className="bg-white border-b border-gray-200 px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3 flex-1">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                    <Plane className="w-4 h-4 text-blue-600" />
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                    <Plane className="w-5 h-5 text-white" />
                   </div>
-                  <div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {(selectedFromCity && selectedToCity) ? (
-                        `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
-                      ) : (
-                        "Flight Search Results"
-                      )}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-base font-semibold text-gray-900">
+                        {(selectedFromCity && selectedToCity) ? (
+                          `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
+                        ) : (
+                          "Flight Search"
+                        )}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                        <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                          {adults} adult{adults > 1 ? "s" : ""}
+                        </span>
+                      </div>
                     </div>
-                    <div className="text-xs text-gray-500">
-                      {departureDate
-                        ? formatDisplayDate(departureDate, "MMM d")
-                        : "Select date"}
-                      {tripType === "round-trip" && returnDate
-                        ? ` - ${formatDisplayDate(returnDate, "MMM d")}`
-                        : ""}
+                    <div className="flex items-center gap-2">
+                      <CalendarIcon className="w-3 h-3 text-blue-600" />
+                      <span className="text-sm text-gray-600 font-medium">
+                        {departureDate
+                          ? formatDisplayDate(departureDate, "MMM d")
+                          : "Select date"}
+                        {tripType === "round-trip" && returnDate
+                          ? ` - ${formatDisplayDate(returnDate, "MMM d")}`
+                          : tripType === "round-trip"
+                            ? " - Return"
+                            : ""}
+                      </span>
                     </div>
                   </div>
-                </div>
-                <div className="text-gray-300">•</div>
-                <div className="text-sm text-gray-700">
-                  {adults} adult{adults > 1 ? "s" : ""}
-                  {children > 0
-                    ? `, ${children} child${children > 1 ? "ren" : ""}`
-                    : ""}
                 </div>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-blue-600 font-medium px-3 py-1 h-auto"
+                className="text-blue-600 hover:bg-blue-50 font-medium px-4 py-2 h-auto rounded-lg border border-blue-200 active:scale-95 transition-all duration-200 touch-manipulation"
                 onClick={() => setShowSearchEdit(true)}
               >
+                <Settings className="w-3 h-3 mr-1" />
                 Edit
               </Button>
             </div>
@@ -4214,7 +4221,7 @@ export default function FlightResults() {
                                       </p>
                                       <div className="text-xs text-gray-700 space-y-1">
                                         <p>
-                                          • Direct flights are usually cheaper
+                                          �� Direct flights are usually cheaper
                                           than refundable flights. However, you
                                           may have to pay a large fee to cancel
                                           or change your flight.
@@ -4582,7 +4589,7 @@ export default function FlightResults() {
                 {/* Quick Time Slots */}
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
-                    { label: "Morning", range: [6, 12], icon: "����" },
+                    { label: "Morning", range: [6, 12], icon: "☀��" },
                     { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
