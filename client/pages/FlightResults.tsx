@@ -1433,12 +1433,6 @@ export default function FlightResults() {
               <div className="flex items-center space-x-4">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-white hover:bg-blue-600 border border-blue-400 px-3 py-1 h-8 font-medium"
-                    >
-                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
