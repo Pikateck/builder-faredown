@@ -342,12 +342,21 @@ export default function HotelDetails() {
             ? `Boutique Hotel ${hotelCode}`
             : `Premium Hotel ${hotelCode}`);
 
+    // Hotel-specific locations
+    const hotelLocations = {
+      "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+      "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
+      "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
+      "htl-DXB-004": "Dubai Creek, Dubai, United Arab Emirates",
+      "htl-DXB-005": "Near Dubai Mall, Dubai, United Arab Emirates",
+      "htl-DXB-006": "Dubai International Airport, Dubai, United Arab Emirates",
+    };
+
     return {
       id: parseInt(hotelCode.replace(/\D/g, "")) || 1,
       code: hotelCode,
       name: defaultName,
-      location:
-        "Near Sheikh Zayed Road & Dubai Mall, Dubai, United Arab Emirates",
+      location: hotelLocations[hotelCode] || "Dubai, United Arab Emirates",
       images: (() => {
         // Hotel-specific images based on hotel code and type
         const imageCollections = {
@@ -443,7 +452,17 @@ export default function HotelDetails() {
             ? hotelData.location
             : hotelData.location?.address?.street ||
               hotelData.address?.street ||
-              "Near Sheikh Zayed Road & Mall Mall, Dubai, United Arab Emirates",
+              (() => {
+                const hotelLocations = {
+                  "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+                  "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
+                  "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
+                  "htl-DXB-004": "Dubai Creek, Dubai, United Arab Emirates",
+                  "htl-DXB-005": "Near Dubai Mall, Dubai, United Arab Emirates",
+                  "htl-DXB-006": "Dubai International Airport, Dubai, United Arab Emirates",
+                };
+                return hotelLocations[hotelId] || "Dubai, United Arab Emirates";
+              })(),
         image:
           hotelData.images && hotelData.images.length > 0
             ? typeof hotelData.images[0] === "string"
