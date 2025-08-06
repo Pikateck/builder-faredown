@@ -446,7 +446,7 @@ export default function HotelResults() {
       rating: 4.9,
       reviews: 567,
       originalPrice: 7500, // ₹7,500 per night
-      currentPrice: 5800, // ���5,800 per night
+      currentPrice: 5800, // ₹5,800 per night
       description: `Charming boutique hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with unique character and personalized service.`,
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
       features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
@@ -1076,7 +1076,7 @@ export default function HotelResults() {
           <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
             <div className="flex items-center text-sm text-gray-600">
               <span>🌍 Global</span>
-              <span className="mx-2">���</span>
+              <span className="mx-2">•</span>
               <span>
                 {searchParams.get("destinationName") || destination || "Dubai"}
               </span>
