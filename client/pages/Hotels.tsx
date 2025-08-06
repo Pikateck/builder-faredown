@@ -139,122 +139,52 @@ export default function Hotels() {
 
       {/* Mobile Layout (≤768px) - Match Index.tsx exactly */}
       <div className="md:hidden">
-        {/* Mobile Top Header */}
-        <div
-          className="text-white py-3 px-4"
-          style={{ backgroundColor: "#003580" }}
-        >
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                <Plane className="w-4 h-4 text-[#003580]" />
+        {/* Mobile Header */}
+        <header className="bg-[#003580] text-white">
+          <div className="px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                  <Plane className="w-4 h-4 text-[#003580]" />
+                </div>
+                <span className="text-lg font-bold">faredown.com</span>
               </div>
-              <span className="text-lg font-bold tracking-tight">
-                faredown.com
-              </span>
-            </Link>
-            <div className="flex items-center space-x-3">
-              {/* Hamburger Menu */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="p-2 hover:bg-white/10 rounded">
-                  <div className="w-5 h-5 flex flex-col justify-between">
-                    <div className="w-full h-0.5 bg-white"></div>
-                    <div className="w-full h-0.5 bg-white"></div>
-                    <div className="w-full h-0.5 bg-white"></div>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem>
-                    <Link to="/" className="flex items-center">
-                      <Plane className="w-4 h-4 mr-2" />
-                      Flights
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/hotels" className="flex items-center">
-                      <Hotel className="w-4 h-4 mr-2" />
-                      Hotels
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/account" className="flex items-center">
-                      <User className="w-4 h-4 mr-2" />
-                      My Account
-                    </Link>
-                  </DropdownMenuItem>
-
-                  {/* Currency Selection Tab */}
-                  <div className="border-t border-gray-200 my-1"></div>
-                  <div className="px-2 py-2">
-                    <div className="text-xs font-semibold text-gray-700 px-2 py-1 mb-2 flex items-center">
-                      <DollarSign className="w-3 h-3 mr-2" />
-                      Currency
-                    </div>
-                    <div className="space-y-1 max-h-32 overflow-y-auto">
-                      {currencies.map((currency) => (
-                        <button
-                          key={currency.code}
-                          onClick={() => {
-                            setCurrency(currency);
-                          }}
-                          className={`w-full text-left px-2 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
-                            selectedCurrency.code === currency.code
-                              ? "bg-blue-50 text-blue-600 border border-blue-200"
-                              : "text-gray-900"
-                          }`}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <span className="text-base">{currency.flag}</span>
-                            <span className="font-medium">{currency.name}</span>
-                          </div>
-                          <span className="font-semibold text-xs">
-                            {currency.symbol} {currency.code}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="border-t border-gray-200 my-1"></div>
-
-                  <DropdownMenuItem>
-                    <Link to="/saved" className="flex items-center">
-                      <Heart className="w-4 h-4 mr-2" />
-                      Saved
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link to="/help" className="flex items-center">
-                      <Headphones className="w-4 h-4 mr-2" />
-                      Help & Support
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link
-                      to="/account?tab=settings"
-                      className="flex items-center"
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem>
-                    <div className="flex items-center">
-                      <User className="w-4 h-4 mr-2" />
-                      Zubin Aibara
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button className="flex items-center text-red-600">
-                      <ArrowRight className="w-4 h-4 mr-2" />
-                      Sign Out
-                    </button>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center space-x-3">
+                <button
+                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  onClick={() => {
+                    setShowLanguageMenu(!showLanguageMenu);
+                    setShowNotifications(false);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <Globe className="w-5 h-5" />
+                </button>
+                <button
+                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  onClick={() => {
+                    setShowNotifications(!showNotifications);
+                    setShowLanguageMenu(false);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <Bell className="w-5 h-5" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg"></span>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMobileMenu(!showMobileMenu);
+                    setShowNotifications(false);
+                    setShowLanguageMenu(false);
+                  }}
+                  className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* Mobile Search Section */}
         <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
@@ -413,7 +343,7 @@ export default function Hotels() {
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
-                          { code: "es", name: "Español", flag: "🇪🇸" },
+                          { code: "es", name: "Español", flag: "🇪���" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
