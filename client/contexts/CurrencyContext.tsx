@@ -186,6 +186,16 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
   const refreshRates = async () => {
     try {
+      // Additional safety wrapper to prevent any unhandled errors
+      await _refreshRatesInternal();
+    } catch (error) {
+      // Final safety net - never let errors escape from refreshRates
+      console.warn("📈 Currency refresh failed with unexpected error:", error);
+    }
+  };
+
+  const _refreshRatesInternal = async () => {
+    try {
       setIsLoading(true);
 
       // Early exit if fetch is not available (shouldn't happen in modern browsers)
