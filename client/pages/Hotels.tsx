@@ -37,6 +37,7 @@ import {
   Search,
   X,
   Globe,
+  Zap,
 } from "lucide-react";
 import {
   MobileCityDropdown,
@@ -402,7 +403,7 @@ export default function Hotels() {
                           { code: "ar", name: "الع��بية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
-                          { code: "ko", name: "한국어", flag: "🇰🇷" },
+                          { code: "ko", name: "한국��", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
                         ].map((language) => (
                           <DropdownMenuItem
