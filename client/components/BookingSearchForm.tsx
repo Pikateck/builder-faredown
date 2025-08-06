@@ -291,16 +291,15 @@ export function BookingSearchForm() {
       guests,
     });
 
-    if (!destination || !destinationCode || !checkInDate || !checkOutDate) {
+    // Only validate dates, destination is optional for browsing
+    if (!checkInDate || !checkOutDate) {
       console.log("⚠️ Missing required fields:", {
-        destination,
-        destinationCode,
         checkInDate,
         checkOutDate,
       });
 
       // Show user-friendly error
-      setErrorMessage("Enter a destination to start searching");
+      setErrorMessage("Please select check-in and check-out dates");
       setShowError(true);
       return;
     }
