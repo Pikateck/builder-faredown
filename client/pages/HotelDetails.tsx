@@ -1239,9 +1239,19 @@ export default function HotelDetails() {
 
             {activeTab === "reviews" && (
               <div className="bg-white rounded-lg p-4">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">
-                  Guest Reviews
-                </h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-bold text-gray-900">
+                    Guest Reviews
+                  </h2>
+                  <Button
+                    onClick={() => setIsWriteReviewModalOpen(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg min-h-[44px] active:scale-95 transition-all duration-200 touch-manipulation"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Write Review
+                  </Button>
+                </div>
+
                 <div className="bg-gray-50 rounded-lg p-4 text-center mb-4">
                   <div className="text-2xl font-bold text-gray-900">
                     {hotel.rating}
@@ -1315,6 +1325,18 @@ export default function HotelDetails() {
                       <p className="text-sm text-gray-700">{review.comment}</p>
                     </div>
                   ))}
+                </div>
+
+                {/* Write Another Review Button for bottom of reviews */}
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <Button
+                    onClick={() => setIsWriteReviewModalOpen(true)}
+                    variant="outline"
+                    className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 font-medium py-3 min-h-[48px] active:scale-95 transition-all duration-200 touch-manipulation"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Share Your Experience
+                  </Button>
                 </div>
               </div>
             )}
