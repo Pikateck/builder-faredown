@@ -170,39 +170,6 @@ export function BookingCalendar({
 
   return (
     <div className={cn("booking-calendar", className)}>
-      {/* Date Selection Header - Booking.com Style */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100 p-6 rounded-t-2xl">
-        <div className="flex flex-col space-y-3">
-          <div className="flex justify-between items-center">
-            <div className="flex-1 bg-white rounded-xl p-4 mr-2 shadow-sm border border-blue-100">
-              <div className="text-xs text-blue-600 font-semibold uppercase tracking-wide mb-1">
-                {bookingType === "flight" ? "DEPARTURE" : "CHECK-IN"}
-              </div>
-              <div className="text-base font-bold text-gray-900">
-                {dateInfo.checkIn || "Select date"}
-              </div>
-            </div>
-            {bookingType === "hotel" && dateInfo.nights > 0 && (
-              <div className="flex-shrink-0 mx-3 text-center">
-                <div className="bg-blue-600 text-white rounded-lg px-3 py-2">
-                  <div className="text-xs font-semibold uppercase tracking-wide">
-                    NIGHTS
-                  </div>
-                  <div className="text-lg font-bold">{dateInfo.nights}</div>
-                </div>
-              </div>
-            )}
-            <div className="flex-1 bg-white rounded-xl p-4 ml-2 shadow-sm border border-blue-100">
-              <div className="text-xs text-blue-600 font-semibold uppercase tracking-wide mb-1 text-right">
-                {bookingType === "flight" ? "RETURN" : "CHECK-OUT"}
-              </div>
-              <div className="text-base font-bold text-gray-900 text-right">
-                {dateInfo.checkOut || "Select date"}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Custom CSS for Booking.com-style classy calendar */}
       <style>{`
