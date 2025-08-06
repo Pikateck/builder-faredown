@@ -3911,7 +3911,7 @@ export default function FlightResults() {
                                     </p>
                                     <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                       <p>
-                                        ��� Direct flights are usually cheaper
+                                        • Direct flights are usually cheaper
                                         than refundable flights. However, you
                                         may have to pay a large fee to cancel or
                                         change your flight.
@@ -5118,7 +5118,7 @@ export default function FlightResults() {
                         Delhi → Singapore
                       </div>
                       <div className="text-xs text-blue-200">
-                        Air India • 1 stop ��� 8h 45m
+                        Air India • 1 stop • 8h 45m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹22800</div>
