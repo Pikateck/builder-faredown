@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
-import { EnhancedFilters } from "@/components/EnhancedFilters";
+import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { hotelsService } from "@/services/hotelsService";
@@ -67,8 +67,7 @@ export default function HotelResults() {
   } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
-  const [selectedRating, setSelectedRating] = useState<number[]>([]);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -467,22 +466,53 @@ export default function HotelResults() {
         0;
       if (price < priceRange[0] || price > priceRange[1]) return false;
 
-      // Rating filter
-      if (
-        selectedRating.length > 0 &&
-        !selectedRating.includes(Math.floor(hotel.rating))
-      )
-        return false;
+      // Apply comprehensive filters
+      for (const [categoryId, filterIds] of Object.entries(selectedFilters)) {
+        if (filterIds.length === 0) continue;
 
-      // Amenities filter - handle both string arrays and object arrays
-      if (selectedAmenities.length > 0) {
-        const hotelAmenities =
-          hotel.amenities?.map((a) => (typeof a === "string" ? a : a.name)) ||
-          [];
-        if (
-          !selectedAmenities.some((amenity) => hotelAmenities.includes(amenity))
-        )
-          return false;
+        // Example filter logic - you can expand this based on your needs
+        if (categoryId === "review-score") {
+          const hasMatchingRating = filterIds.some((filterId) => {
+            const rating = Math.floor(hotel.rating);
+            if (filterId === "wonderful-9" && rating >= 9) return true;
+            if (filterId === "very-good-8" && rating >= 8) return true;
+            if (filterId === "good-7" && rating >= 7) return true;
+            if (filterId === "pleasant-6" && rating >= 6) return true;
+            return false;
+          });
+          if (!hasMatchingRating) return false;
+        }
+
+        if (categoryId === "facilities" || categoryId === "popular") {
+          const hotelAmenities =
+            hotel.amenities?.map((a) => (typeof a === "string" ? a : a.name)) ||
+            [];
+          const hasMatchingAmenity = filterIds.some((filterId) => {
+            // Map filter IDs to amenity names
+            const amenityMap: Record<string, string> = {
+              "swimming-pool": "Pool",
+              "free-wifi": "WiFi",
+              "parking": "Parking",
+              "restaurant": "Restaurant",
+              "fitness-center": "Gym",
+              "spa": "Spa",
+              "bar": "Bar",
+            };
+            return hotelAmenities.includes(amenityMap[filterId] || filterId);
+          });
+          if (!hasMatchingAmenity) return false;
+        }
+
+        if (categoryId === "property-rating") {
+          const hasMatchingStars = filterIds.some((filterId) => {
+            const stars = Math.floor(hotel.rating);
+            if (filterId === "5-stars" && stars === 5) return true;
+            if (filterId === "4-stars" && stars === 4) return true;
+            if (filterId === "3-stars" && stars === 3) return true;
+            return false;
+          });
+          if (!hasMatchingStars) return false;
+        }
       }
 
       return true;
@@ -530,8 +560,7 @@ export default function HotelResults() {
 
   const handleClearFilters = () => {
     setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
-    setSelectedRating([]);
-    setSelectedAmenities([]);
+    setSelectedFilters({});
     setSortBy("recommended");
   };
 
