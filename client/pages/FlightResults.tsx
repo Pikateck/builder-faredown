@@ -1403,7 +1403,7 @@ export default function FlightResults() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <CalendarIcon className="w-3 h-3 text-blue-600" />
+                      <Calendar className="w-3 h-3 text-blue-600" />
                       <span className="text-sm text-gray-600 font-medium">
                         {departureDate
                           ? formatDisplayDate(departureDate, "MMM d")
