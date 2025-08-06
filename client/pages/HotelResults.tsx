@@ -548,7 +548,7 @@ export default function HotelResults() {
     }
 
     return filtered;
-  }, [hotels, priceRange, selectedRating, selectedAmenities, sortBy]);
+  }, [hotels, priceRange, selectedFilters, sortBy]);
 
   const handleBargainClick = (
     hotel: Hotel,
