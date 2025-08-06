@@ -204,16 +204,20 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-      const response = await fetch("/api/currency/rates", {
-        signal: controller.signal,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }).catch((fetchError) => {
-        // Catch any network errors immediately
-        throw new Error(`Network error: ${fetchError.message}`);
-      });
+      let response;
+      try {
+        response = await fetch("/api/currency/rates", {
+          signal: controller.signal,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (fetchError: any) {
+        // Catch any network errors immediately and handle gracefully
+        console.warn("📈 Network error fetching exchange rates:", fetchError?.message || "Unknown error");
+        throw new Error(`Network error: ${fetchError?.message || "Failed to fetch"}`);
+      }
 
       clearTimeout(timeoutId);
 
