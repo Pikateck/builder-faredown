@@ -102,7 +102,7 @@ import {
 export default function Index() {
   useScrollToTop();
   const { isLoggedIn, user, login, logout } = useAuth();
-  const { selectedCurrency, currencies, setCurrency } = useCurrency();
+  const { selectedCurrency, currencies, setCurrency, lastUpdated, isLoading } = useCurrency();
   const {
     departureDate,
     returnDate,
