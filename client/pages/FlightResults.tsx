@@ -262,6 +262,52 @@ const flightData = [
       },
     ],
   },
+  {
+    id: 5,
+    departureTime: "16:45",
+    arrivalTime: "18:25",
+    departureCode: "BOM",
+    arrivalCode: "DXB",
+    duration: "3h 40m",
+    returnDepartureTime: "20:15",
+    returnArrivalTime: "01:30",
+    returnDuration: "5h 15m",
+    airline: "Air India",
+    returnAirline: "Indigo",
+    flightNumber: "AI 995",
+    returnFlightNumber: "6E 1205",
+    logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F5ced42d744ea46f9b9a1e71f3ee70d15?format=webp&width=800",
+    returnLogo:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fde5fb672c9d04b3f8118cb8a0874235a?format=webp&width=800",
+    aircraft: "Boeing 787-8 Dreamliner",
+    returnAircraft: "Airbus A320neo",
+    flightType: "Direct",
+    stops: 0,
+    refundability: "Refundable",
+    fareTypes: [
+      {
+        name: "Economy",
+        price: 26750,
+        features: ["Carry-on included", "In-flight meal"],
+        baggage: "23kg",
+        refundability: "Non-Refundable",
+      },
+      {
+        name: "Premium Economy",
+        price: 30200,
+        features: ["Carry-on + checked bag", "Priority boarding", "Extra legroom"],
+        baggage: "30kg",
+        refundability: "Refundable",
+      },
+      {
+        name: "Business",
+        price: 42800,
+        features: ["Lie-flat seats", "Premium dining", "Priority check-in"],
+        baggage: "40kg",
+        refundability: "Refundable",
+      },
+    ],
+  },
 ];
 
 export default function FlightResults() {
