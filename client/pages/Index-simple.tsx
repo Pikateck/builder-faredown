@@ -190,7 +190,12 @@ export default function Index() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h3 className="text-xl font-bold mb-2">faredown.com</h3>
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+              <Plane className="w-4 h-4 text-[#003580]" />
+            </div>
+            <h3 className="text-xl font-bold">faredown.com</h3>
+          </div>
           <p className="text-gray-400 mb-4">
             The World's First Online Travel Bargain Portal™
           </p>
