@@ -3,6 +3,7 @@ import {
   X,
   Search,
   Plane,
+  Building,
   CalendarIcon,
   Users,
   ChevronLeft,
