@@ -757,8 +757,11 @@ export default function Index() {
                         }`}
                       >
                         <div className="flex items-center space-x-3">
-                          <span className="text-lg">{currency.symbol}</span>
-                          <span>{currency.name} ({currency.code})</span>
+                          <span className="text-lg">{currency.flag}</span>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{currency.name}</span>
+                            <span className="text-xs text-gray-500">{currency.symbol} • {currency.code}</span>
+                          </div>
                         </div>
                         {selectedCurrency.code === currency.code && (
                           <Check className="w-4 h-4" />
