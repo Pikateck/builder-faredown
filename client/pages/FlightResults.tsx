@@ -2944,6 +2944,9 @@ export default function FlightResults() {
                                         )
                                       : "Select date"}
                                   </div>
+                                  <div className="text-xs text-gray-500">
+                                    {flight.arrival?.city || "Dubai"}
+                                  </div>
                                 </div>
                               </div>
 
