@@ -1074,18 +1074,30 @@ export default function Index() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded-xl p-4 shadow-sm">
+              <div className="bg-white rounded-xl p-4 shadow-sm relative overflow-hidden">
+                <div className="absolute top-2 right-2">
+                  <Sparkles className="w-3 h-3 text-[#febb02]" />
+                </div>
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-semibold text-sm text-gray-900">
-                      Delhi → Singapore
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Air India • 1 stop • 8h 45m
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                      <Plane className="w-4 h-4 text-green-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm text-gray-900 flex items-center gap-1">
+                        <Building className="w-3 h-3 text-blue-500" />
+                        Delhi → Singapore
+                        <TreePine className="w-3 h-3 text-green-500" />
+                      </h3>
+                      <p className="text-xs text-gray-500 flex items-center gap-1">
+                        <Badge className="w-3 h-3 text-red-500" />
+                        Air India • 1 stop • 8h 45m
+                      </p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-[#003580]">
+                    <div className="text-sm font-bold text-[#003580] flex items-center gap-1">
+                      <Gem className="w-3 h-3 text-[#febb02]" />
                       {selectedCurrency.symbol}
                       {(22800 * selectedCurrency.rate).toFixed(
                         selectedCurrency.decimalPlaces,
