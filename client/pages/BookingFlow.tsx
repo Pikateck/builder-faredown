@@ -943,7 +943,6 @@ export default function BookingFlow() {
   const [showTravellerDetails, setShowTravellerDetails] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [selectedMealIds, setSelectedMealIds] = useState([]);
@@ -2101,7 +2100,7 @@ export default function BookingFlow() {
                                   5kg - ₹ 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
-                                  10kg - ₹ 2,800
+                                  10kg - ��� 2,800
                                 </SelectItem>
                                 <SelectItem value="15kg">
                                   15kg - ₹ 4,200
