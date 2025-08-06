@@ -267,6 +267,8 @@ export default function FlightResults() {
     departureDate,
     returnDate,
     tripType,
+    setDepartureDate,
+    setReturnDate,
     setTripType,
     formatDisplayDate,
     loadDatesFromParams,
