@@ -312,27 +312,31 @@ export class HotelsService {
           }
         });
 
-        const response = await fetch(`/api/hotels-live/search?${params}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          signal: controller.signal,
-        }).catch((fetchErr) => {
-          // Catch and handle fetch errors immediately to prevent propagation
-          if (fetchErr.name === "AbortError") {
+        let response = null;
+        try {
+          response = await fetch(`/api/hotels-live/search?${params}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            signal: controller.signal,
+          });
+        } catch (fetchErr) {
+          // Handle fetch errors more explicitly to prevent propagation
+          if (fetchErr instanceof Error && fetchErr.name === "AbortError") {
             console.log("⏰ Hotel search fetch was aborted");
-            throw fetchErr; // Re-throw AbortError to handle it properly
+            return []; // Return empty array immediately on abort
           }
-          if (fetchErr.message?.includes("Failed to fetch") ||
-              fetchErr.name === "TypeError" ||
-              fetchErr.message?.includes("NetworkError")) {
-            console.log("🌐 Network connectivity issue during hotel search fetch");
-            return null; // Return null to indicate failure
+          if (fetchErr instanceof Error &&
+              (fetchErr.message?.includes("Failed to fetch") ||
+               fetchErr.name === "TypeError" ||
+               fetchErr.message?.includes("NetworkError"))) {
+            console.log("🌐 Network connectivity issue during hotel search fetch - continuing gracefully");
+            return []; // Return empty array to continue gracefully
           }
-          console.warn("Hotel search fetch error:", fetchErr.message || "Unknown fetch error");
-          return null; // Return null for other fetch errors
-        });
+          console.warn("Hotel search fetch error:", fetchErr instanceof Error ? fetchErr.message : "Unknown fetch error");
+          return []; // Return empty array for other fetch errors
+        }
 
         if (response && response.ok) {
           // Check if response is JSON
@@ -745,7 +749,7 @@ export class HotelsService {
           error.name === "TypeError")
       ) {
         console.log(
-          `🌐 All network requests failed - using emergency destinations for query: "${query}"`,
+          `�� All network requests failed - using emergency destinations for query: "${query}"`,
         );
       } else if (error instanceof Error && error.name === "AbortError") {
         console.log(`⏰ Destination search was aborted for query: "${query}"`);
