@@ -644,13 +644,26 @@ export default function Index() {
             />
             <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-xl">
               <div className="flex items-center justify-between p-4 border-b bg-[#003580] text-white">
-                <h2 className="text-lg font-semibold">Notifications</h2>
-                <button
-                  onClick={() => setShowNotifications(false)}
-                  className="p-2 text-white hover:bg-white/20 rounded-lg"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <div>
+                  <h2 className="text-lg font-semibold">Notifications</h2>
+                  <p className="text-xs text-blue-200">3 new messages</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    className="text-xs text-blue-200 hover:text-white transition-colors"
+                    onClick={() => {
+                      // Clear notifications logic would go here
+                    }}
+                  >
+                    Clear all
+                  </button>
+                  <button
+                    onClick={() => setShowNotifications(false)}
+                    className="p-2 text-white hover:bg-white/20 rounded-lg"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
               <div className="p-4 space-y-4">
                 <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
