@@ -61,7 +61,7 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import { AdminTestButton } from "@/components/AdminTestButton";
+import AdminTestButton from "@/components/AdminTestButton";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -1621,7 +1621,7 @@ export default function BookingFlow() {
                         { code: "KRW", symbol: "₩", name: "South Korean Won", flag: "🇰🇷" },
                         { code: "SGD", symbol: "S$", name: "Singapore Dollar", flag: "🇸🇬" },
                         { code: "AUD", symbol: "A$", name: "Australian Dollar", flag: "🇦🇺" },
-                        { code: "CAD", symbol: "C$", name: "Canadian Dollar", flag: "���🇦" },
+                        { code: "CAD", symbol: "C$", name: "Canadian Dollar", flag: "🇨🇦" },
                         { code: "CHF", symbol: "CHF", name: "Swiss Franc", flag: "🇨🇭" },
                         { code: "THB", symbol: "฿", name: "Thai Baht", flag: "🇹🇭" },
                         { code: "MYR", symbol: "RM", name: "Malaysian Ringgit", flag: "🇲🇾" },
