@@ -94,7 +94,6 @@ import {
   Gem,
   Telescope,
   Rocket,
-  Zap,
   Lightbulb,
   Trophy,
   Medal,
