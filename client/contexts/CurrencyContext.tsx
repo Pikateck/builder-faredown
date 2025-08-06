@@ -283,7 +283,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
       return () => clearInterval(interval);
     } catch (globalError) {
-      console.error("��� CurrencyProvider useEffect failed:", globalError);
+      console.error("💰 CurrencyProvider useEffect failed:", globalError);
       // Don't throw - just log and continue with static rates
     }
   }, []);
