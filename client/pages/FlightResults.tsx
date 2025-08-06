@@ -4582,7 +4582,7 @@ export default function FlightResults() {
                 {/* Quick Time Slots */}
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
-                    { label: "Morning", range: [6, 12], icon: "☀��" },
+                    { label: "Morning", range: [6, 12], icon: "����" },
                     { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
@@ -5018,10 +5018,15 @@ export default function FlightResults() {
                       <Calendar className="w-5 h-5 text-[#003580]" />
                       <div>
                         <div className="font-semibold text-gray-900">
-                          31 Jul - 03 Aug
+                          {departureDate && returnDate && tripType === "round-trip"
+                            ? `${formatDisplayDate(departureDate, "d MMM")} - ${formatDisplayDate(returnDate, "d MMM")}`
+                            : departureDate
+                              ? formatDisplayDate(departureDate, "d MMM") + (tripType === "one-way" ? "" : " - Select return")
+                              : "Select dates"
+                          }
                         </div>
                         <div className="text-xs text-gray-500">
-                          Choose departure & return
+                          {tripType === "one-way" ? "One-way trip" : "Choose departure & return"}
                         </div>
                       </div>
                     </div>
