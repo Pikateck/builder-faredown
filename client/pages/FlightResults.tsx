@@ -2611,7 +2611,7 @@ export default function FlightResults() {
                                 {flight.departureTime}
                               </div>
                               <div className="text-sm text-gray-600">
-                                {flight.departureCode}
+                                {flight.departureCode || "BOM"}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
@@ -2641,7 +2641,7 @@ export default function FlightResults() {
                                 {flight.arrivalTime}
                               </div>
                               <div className="text-sm text-gray-600">
-                                {flight.arrivalCode}
+                                {flight.arrivalCode || "DXB"}
                               </div>
                             </div>
                           </div>
@@ -2659,7 +2659,7 @@ export default function FlightResults() {
                                   {flight.returnDepartureTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.arrivalCode}
+                                  {flight.arrivalCode || "DXB"}
                                 </div>
                               </div>
                               <div className="flex-1 mx-4">
@@ -2687,7 +2687,7 @@ export default function FlightResults() {
                                   {flight.returnArrivalTime}
                                 </div>
                                 <div className="text-sm text-gray-600">
-                                  {flight.departureCode}
+                                  {flight.departureCode || "BOM"}
                                 </div>
                               </div>
                             </div>
