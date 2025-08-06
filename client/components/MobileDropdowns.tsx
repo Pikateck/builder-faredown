@@ -639,9 +639,9 @@ export function MobileTravelers({
                   Child {index + 1}
                 </span>
                 <select
-                  value={travelers.childAges[index] || 10}
+                  value={travelers.childAges?.[index] || 10}
                   onChange={(e) => {
-                    const newAges = [...travelers.childAges];
+                    const newAges = [...(travelers.childAges || [])];
                     newAges[index] = parseInt(e.target.value);
                     setTravelers((prev) => ({
                       ...prev,
