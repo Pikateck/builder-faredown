@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
