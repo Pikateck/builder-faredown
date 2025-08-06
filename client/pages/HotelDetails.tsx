@@ -106,6 +106,7 @@ import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { hotelsService } from "@/services/hotelsService";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { BookingSearchForm } from "@/components/BookingSearchForm";
 
 export default function HotelDetails() {
   useScrollToTop();
@@ -805,7 +806,7 @@ export default function HotelDetails() {
       {/* Mobile-First Layout */}
       <div className="md:hidden min-h-screen bg-gray-50">
         <MobileNavBar
-          title={hotel.name}
+          title="Hotel Details"
           rating={hotel.rating}
           reviewCount={hotel.reviews}
           showBookmark={true}
@@ -818,6 +819,13 @@ export default function HotelDetails() {
             navigate("/hotels");
           }}
         />
+
+        {/* Mobile Search Bar */}
+        <div className="bg-white border-b border-gray-200 px-4 py-3">
+          <div className="max-w-md mx-auto">
+            <BookingSearchForm />
+          </div>
+        </div>
 
         {/* Mobile Content */}
         <div className="pb-24">
@@ -856,8 +864,25 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Clean Hotel Info */}
+          {/* Hotel Info with Star Rating */}
           <div className="bg-white p-4 border-b border-gray-100">
+            <div className="flex items-center mb-2">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(hotel.rating)
+                        ? "text-blue-600 fill-current"
+                        : "text-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="ml-2 text-sm font-medium text-blue-600">
+                {hotel.rating}
+              </span>
+            </div>
             <h1 className="text-xl font-bold text-gray-900 mb-2">
               {hotel.name}
             </h1>
@@ -1348,32 +1373,62 @@ export default function HotelDetails() {
       <div className="hidden md:block">
         <Header />
 
-        {/* Desktop Mobile Header Bar */}
-        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-[64px] z-40">
-          <div className="flex items-center justify-between">
+        {/* Desktop Search Bar */}
+        <div className="bg-white border-b border-gray-200 px-4 py-4">
+          <div className="max-w-6xl mx-auto">
+            <BookingSearchForm />
+          </div>
+        </div>
+
+        {/* Desktop Hotel Info Bar */}
+        <div className="bg-white border-b border-gray-200 px-4 py-4">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < Math.floor(hotel.rating)
+                        ? "text-blue-600 fill-current"
+                        : "text-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-sm font-medium text-blue-600">
+                {hotel.rating}
+              </span>
+              <h1 className="text-xl font-bold text-gray-900">
+                {hotel.name}
+              </h1>
+              <div className="flex items-center text-gray-600">
+                <MapPin className="w-4 h-4 text-gray-400 mr-1" />
+                <span className="text-sm">{hotel.location}</span>
+              </div>
+            </div>
             <div className="flex items-center space-x-3">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="flex items-center gap-2 px-3 py-2"
+                className="lg:hidden flex items-center gap-2 px-3 py-2"
               >
                 <Filter className="w-4 h-4" />
                 <span className="text-sm font-medium">Filters</span>
               </Button>
-              <div className="h-4 w-px bg-gray-300"></div>
               <span className="text-sm text-gray-600">
                 ₹{lowestPrice}+ per night
               </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center gap-1 px-3 py-2"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm font-medium">Map</span>
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-1 px-3 py-2"
-            >
-              <MapPin className="w-4 h-4" />
-              <span className="text-sm font-medium">Map</span>
-            </Button>
           </div>
         </div>
       </div>
