@@ -387,31 +387,33 @@ export function MobileDatePicker({
         </button>
       </div>
       <div className="p-4">
-        {/* Trip Type Selector */}
-        <div className="flex space-x-4 mb-6">
-          <button
-            onClick={() => setTripType("round-trip")}
-            className={cn(
-              "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
-              tripType === "round-trip"
-                ? "border-blue-600 bg-blue-50 text-blue-700"
-                : "border-gray-300 text-gray-700",
-            )}
-          >
-            Round trip
-          </button>
-          <button
-            onClick={() => setTripType("one-way")}
-            className={cn(
-              "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
-              tripType === "one-way"
-                ? "border-blue-600 bg-blue-50 text-blue-700"
-                : "border-gray-300 text-gray-700",
-            )}
-          >
-            One way
-          </button>
-        </div>
+        {/* Trip Type Selector - Only show for flights */}
+        {bookingType === 'flights' && (
+          <div className="flex space-x-4 mb-6">
+            <button
+              onClick={() => setTripType("round-trip")}
+              className={cn(
+                "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
+                tripType === "round-trip"
+                  ? "border-blue-600 bg-blue-50 text-blue-700"
+                  : "border-gray-300 text-gray-700",
+              )}
+            >
+              Round trip
+            </button>
+            <button
+              onClick={() => setTripType("one-way")}
+              className={cn(
+                "flex-1 py-3 px-4 rounded-lg border-2 text-sm font-medium touch-manipulation",
+                tripType === "one-way"
+                  ? "border-blue-600 bg-blue-50 text-blue-700"
+                  : "border-gray-300 text-gray-700",
+              )}
+            >
+              One way
+            </button>
+          </div>
+        )}
 
         {/* Current Selection Display */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
