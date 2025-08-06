@@ -1438,9 +1438,6 @@ export default function FlightResults() {
                       size="sm"
                       className="text-white hover:bg-blue-600 border border-blue-400 px-3 py-1 h-8 font-medium"
                     >
-                      <Globe className="w-3 h-3 mr-1" />
-                      English
-                      <ChevronDown className="w-3 h-3 ml-1" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
