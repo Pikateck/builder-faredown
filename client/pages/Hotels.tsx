@@ -479,7 +479,7 @@ export default function Hotels() {
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "���🇹" },
-                          { code: "ar", name: "العربية", flag: "🇸🇦" },
+                          { code: "ar", name: "العربي��", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
                           { code: "ko", name: "한국���", flag: "🇰🇷" },
@@ -1046,6 +1046,7 @@ export default function Hotels() {
         setSelectedReturnDate={setReturnDate}
         selectingDeparture={selectingDeparture}
         setSelectingDeparture={setSelectingDeparture}
+        bookingType="hotels"
       />
 
       <MobileTravelers
