@@ -138,8 +138,13 @@ export default function Hotels() {
           style={{ backgroundColor: "#003580" }}
         >
           <div className="flex items-center justify-between">
-            <Link to="/" className="text-lg font-bold tracking-tight">
-              faredown.com
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                <Plane className="w-4 h-4 text-[#003580]" />
+              </div>
+              <span className="text-lg font-bold tracking-tight">
+                faredown.com
+              </span>
             </Link>
             <div className="flex items-center space-x-3">
               {/* Hamburger Menu */}
@@ -479,7 +484,7 @@ export default function Hotels() {
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "���🇹" },
-                          { code: "ar", name: "العربي��", flag: "🇸🇦" },
+                          { code: "ar", name: "الع��بية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
                           { code: "ko", name: "한국���", flag: "🇰🇷" },
