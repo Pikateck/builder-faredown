@@ -47,6 +47,7 @@ import MyTrips from "./pages/MyTrips";
 import ApiTestPanel from "./components/ApiTestPanel";
 import BackendTestDashboard from "./components/BackendTestDashboard";
 import AmadeusTestPanel from "./components/AmadeusTestPanel";
+import LogoDesignOptions from "./components/LogoDesignOptions";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
