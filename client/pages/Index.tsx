@@ -1296,8 +1296,6 @@ export default function Index() {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  {/* Admin Test Button */}
-                  <AdminTestButton variant="desktop" />
 
                   {isLoggedIn ? (
                     <DropdownMenu>
