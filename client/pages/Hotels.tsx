@@ -254,7 +254,7 @@ export default function Hotels() {
           <div className="px-4">
             {/* Upgrade Message */}
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2">
+              <h1 className="text-2xl font-bold mb-2 text-white">
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-blue-200 text-sm mb-3">
@@ -406,7 +406,7 @@ export default function Hotels() {
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
-                          { code: "es", name: "Español", flag: "���🇸" },
+                          { code: "es", name: "Español", flag: "🇪🇸" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
