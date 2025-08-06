@@ -3844,7 +3844,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ���0
+                                          ₹0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
@@ -5118,7 +5118,7 @@ export default function FlightResults() {
                         Delhi → Singapore
                       </div>
                       <div className="text-xs text-blue-200">
-                        Air India • 1 stop • 8h 45m
+                        Air India • 1 stop ��� 8h 45m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹22800</div>
