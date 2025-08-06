@@ -2231,7 +2231,7 @@ export default function BookingFlow() {
                       <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6 mb-6">
                         <div className="flex items-center space-x-3 mb-4">
                           <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                            <span className="text-xl">♾️</span>
+                            <span className="text-xl"></span>
                           </div>
                           <h4 className="text-lg font-semibold text-gray-900">
                             Receive 10% of total booking value refund if you
