@@ -156,8 +156,8 @@ export function MobileCityDropdown({
                 className="w-full text-left px-4 py-4 hover:bg-blue-50 rounded-lg border border-gray-100 touch-manipulation"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
-                    <Plane className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
+                    <Plane className="w-5 h-5 text-blue-600" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
