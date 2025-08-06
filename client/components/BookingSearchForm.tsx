@@ -300,9 +300,8 @@ export function BookingSearchForm() {
       });
 
       // Show user-friendly error
-      alert(
-        "Please complete all search fields:\n- Destination\n- Check-in date\n- Check-out date",
-      );
+      setErrorMessage("Enter a destination to start searching");
+      setShowError(true);
       return;
     }
 
