@@ -175,12 +175,14 @@ export function BookingCalendar({
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between items-center">
             <div className="flex-1">
-              <div className="text-xs text-gray-600 font-medium">CHECK-IN</div>
+              <div className="text-xs text-gray-600 font-medium">
+                {bookingType === "flight" ? "DEPARTURE" : "CHECK-IN"}
+              </div>
               <div className="text-sm font-semibold text-gray-900">
                 {dateInfo.checkIn || "Select date"}
               </div>
             </div>
-            {dateInfo.nights > 0 && (
+            {bookingType === "hotel" && dateInfo.nights > 0 && (
               <div className="flex-shrink-0 mx-4">
                 <div className="text-xs text-gray-600 font-medium text-center">
                   NIGHTS
@@ -191,7 +193,9 @@ export function BookingCalendar({
               </div>
             )}
             <div className="flex-1 text-right">
-              <div className="text-xs text-gray-600 font-medium">CHECK-OUT</div>
+              <div className="text-xs text-gray-600 font-medium">
+                {bookingType === "flight" ? "ARRIVAL" : "CHECK-OUT"}
+              </div>
               <div className="text-sm font-semibold text-gray-900">
                 {dateInfo.checkOut || "Select date"}
               </div>
