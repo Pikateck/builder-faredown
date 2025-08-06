@@ -50,6 +50,8 @@ interface DestinationOption {
 
 export function BookingSearchForm() {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showError, setShowError] = useState(false);
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState(""); // Store destination code
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
