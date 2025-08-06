@@ -67,8 +67,9 @@ export function MobileCityDropdown({
         {/* Hotelbeds Test Destinations */}
         <div className="mb-6">
           <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
-            <h3 className="text-sm font-semibold text-blue-800">
-              ✈️ Popular Flight Destinations
+            <h3 className="text-sm font-semibold text-blue-800 flex items-center gap-2">
+              <Crown className="w-4 h-4 text-[#febb02]" />
+              Popular Flight Destinations
             </h3>
             <p className="text-xs text-blue-600">
               Popular airports and cities worldwide
