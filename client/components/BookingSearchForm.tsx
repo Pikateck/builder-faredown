@@ -404,7 +404,13 @@ export function BookingSearchForm() {
   };
 
   return (
-    <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
+    <>
+      <ErrorBanner
+        message={errorMessage}
+        isVisible={showError}
+        onClose={() => setShowError(false)}
+      />
+      <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
       {/* Main Search Form */}
       <div className="flex flex-col lg:flex-row gap-2 mb-4">
         {/* Destination */}
@@ -1150,6 +1156,7 @@ export function BookingSearchForm() {
         selectingDeparture={true}
         setSelectingDeparture={() => {}}
       />
-    </div>
+      </div>
+    </>
   );
 }
