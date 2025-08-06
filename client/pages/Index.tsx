@@ -195,8 +195,8 @@ export default function Index() {
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
-  const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
-  const [selectedToCity, setSelectedToCity] = useState("Dubai");
+  const [selectedFromCity, setSelectedFromCity] = useState("");
+  const [selectedToCity, setSelectedToCity] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
@@ -1403,14 +1403,20 @@ export default function Index() {
                       >
                         <Plane className="w-4 h-4 text-gray-500 mr-2" />
                         <div className="flex items-center space-x-2">
-                          <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                            {cityData[selectedFromCity]?.code || "BOM"}
-                          </div>
-                          <span className="text-sm text-gray-700 font-medium">
-                            {cityData[selectedFromCity]?.airport ||
-                              "Chhatrapati Shivaji International"}
-                            ...
-                          </span>
+                          {selectedFromCity ? (
+                            <>
+                              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                                {cityData[selectedFromCity]?.code}
+                              </div>
+                              <span className="text-sm text-gray-700 font-medium">
+                                {cityData[selectedFromCity]?.airport}...
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-sm text-gray-500 font-medium">
+                              Leaving from
+                            </span>
+                          )}
                         </div>
                       </button>
 
@@ -1475,13 +1481,20 @@ export default function Index() {
                       >
                         <Plane className="w-4 h-4 text-gray-500 mr-2" />
                         <div className="flex items-center space-x-2">
-                          <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                            {cityData[selectedToCity]?.code || "DXB"}
-                          </div>
-                          <span className="text-sm text-gray-700 font-medium">
-                            {cityData[selectedToCity]?.airport ||
-                              "Dubai International Airport"}
-                          </span>
+                          {selectedToCity ? (
+                            <>
+                              <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                                {cityData[selectedToCity]?.code}
+                              </div>
+                              <span className="text-sm text-gray-700 font-medium">
+                                {cityData[selectedToCity]?.airport}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-sm text-gray-500 font-medium">
+                              Going to
+                            </span>
+                          )}
                         </div>
                       </button>
 
