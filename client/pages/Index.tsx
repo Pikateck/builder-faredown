@@ -1112,8 +1112,10 @@ export default function Index() {
         {/* Mobile Features Section */}
         <div className="bg-gray-50 py-8">
           <div className="px-4">
-            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
+            <h2 className="text-xl font-bold text-center mb-6 text-gray-900 flex items-center justify-center gap-2">
+              <Crown className="w-6 h-6 text-[#febb02]" />
               Why Faredown?
+              <Sparkles className="w-6 h-6 text-[#febb02]" />
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-xl p-4 text-center shadow-sm">
