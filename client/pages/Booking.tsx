@@ -491,9 +491,14 @@ export default function Booking() {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold tracking-tight">
-                faredown.com
-              </span>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                  <Plane className="w-4 h-4 text-[#003580]" />
+                </div>
+                <span className="text-xl font-bold tracking-tight">
+                  faredown.com
+                </span>
+              </div>
             </Link>
             <div className="flex items-center space-x-6">
               <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
