@@ -48,6 +48,7 @@ import ApiTestPanel from "./components/ApiTestPanel";
 import BackendTestDashboard from "./components/BackendTestDashboard";
 import AmadeusTestPanel from "./components/AmadeusTestPanel";
 import LogoDesignOptions from "./components/LogoDesignOptions";
+import FaredownColorPalette from "./components/FaredownColorPalette";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
