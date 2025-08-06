@@ -1154,11 +1154,20 @@ export default function Index() {
                   Pay what you feel is fair
                 </p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
+                <div className="absolute top-1 right-1">
+                  <Fingerprint className="w-3 h-3 text-[#febb02]" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
+                <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0056b3] rounded-xl flex items-center justify-center mx-auto mb-3 relative">
+                  <BadgeCheck className="w-6 h-6 text-white" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#febb02] rounded-full flex items-center justify-center">
+                    <Shield className="w-2 h-2 text-[#003580]" />
+                  </div>
+                </div>
+                <h3 className="font-semibold text-sm mb-1 flex items-center justify-center gap-1">
+                  <CheckCircle className="w-3 h-3 text-green-500" />
+                  Secure Booking
+                </h3>
                 <p className="text-xs text-gray-600">Instant confirmations</p>
               </div>
               <div className="bg-white rounded-xl p-4 text-center shadow-sm">
@@ -2822,7 +2831,7 @@ export default function Index() {
                 variant="outline"
                 className="w-full py-3 flex items-center justify-center space-x-2"
               >
-                <span>📧</span>
+                <span>��</span>
                 <span>Sign up with Apple</span>
               </Button>
 
