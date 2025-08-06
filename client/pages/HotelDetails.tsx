@@ -1381,8 +1381,8 @@ export default function HotelDetails() {
         </div>
 
         {/* Desktop Hotel Info Bar */}
-        <div className="bg-white border-b border-gray-200 px-4 py-4">
-          <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="bg-white border-b border-gray-200 px-4 py-3">
+          <div className="max-w-6xl mx-auto">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
@@ -1407,28 +1407,35 @@ export default function HotelDetails() {
                 <span className="text-sm">{hotel.location}</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Desktop Mobile Header Bar - for tablet view */}
+        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-[64px] z-40">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-2 px-3 py-2"
+                className="flex items-center gap-2 px-3 py-2"
               >
                 <Filter className="w-4 h-4" />
                 <span className="text-sm font-medium">Filters</span>
               </Button>
+              <div className="h-4 w-px bg-gray-300"></div>
               <span className="text-sm text-gray-600">
                 ₹{lowestPrice}+ per night
               </span>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-1 px-3 py-2"
-              >
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm font-medium">Map</span>
-              </Button>
             </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-1 px-3 py-2"
+            >
+              <MapPin className="w-4 h-4" />
+              <span className="text-sm font-medium">Map</span>
+            </Button>
           </div>
         </div>
       </div>
