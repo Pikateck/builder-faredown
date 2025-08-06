@@ -1438,7 +1438,7 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "🇮🇹" },
+                      { code: "it", name: "Italiano", flag: "🇮���" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
@@ -2603,7 +2603,7 @@ export default function FlightResults() {
                                 {flight.departureTime}
                               </div>
                               <div className="text-sm text-gray-600">
-                                {flight.departure.code}
+                                {flight.departureCode}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
@@ -2633,7 +2633,7 @@ export default function FlightResults() {
                                 {flight.arrivalTime}
                               </div>
                               <div className="text-sm text-gray-600">
-                                {flight.arrival.code}
+                                {flight.arrivalCode}
                               </div>
                             </div>
                           </div>
