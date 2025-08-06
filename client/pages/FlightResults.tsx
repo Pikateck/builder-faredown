@@ -1432,8 +1432,6 @@ export default function FlightResults() {
               {/* Right: Currency + Auth */}
               <div className="flex items-center space-x-4">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                  </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
                       { code: "en", name: "English", flag: "🇬���" },
@@ -4952,7 +4950,7 @@ export default function FlightResults() {
                     <div>
                       <div className="text-sm font-medium">Mumbai → Dubai</div>
                       <div className="text-xs text-blue-200">
-                        Emirates ��� Non-stop • 3h 30m
+                        Emirates ����� Non-stop • 3h 30m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹15500</div>
