@@ -2525,10 +2525,10 @@ export default function HotelDetails() {
                   </h2>
                   <Button
                     onClick={() => setIsWriteReviewModalOpen(true)}
-                    className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium min-h-[44px] active:scale-95 transition-all duration-200 touch-manipulation"
                   >
-                    <MessageSquare className="w-4 h-4 mr-1" />
-                    Write a review
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Write Review
                   </Button>
                 </div>
 
