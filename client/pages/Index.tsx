@@ -1584,6 +1584,7 @@ export default function Index() {
                             <div className="h-full overflow-y-auto sm:h-auto bg-white rounded-lg sm:rounded-lg shadow-2xl">
                               <div className="p-0">
                                 <BookingCalendar
+                                  bookingType="flight"
                                   initialRange={{
                                     startDate: departureDate || new Date(),
                                     endDate:
