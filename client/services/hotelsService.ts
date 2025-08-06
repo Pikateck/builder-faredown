@@ -393,7 +393,7 @@ export class HotelsService {
         } else if (response) {
           console.warn(`⚠️ Live API returned status ${response.status}`);
         } else {
-          console.log("🌐 Hotel search fetch failed, continuing to fallback");
+          console.log("🌐 Hotel search fetch returned null, continuing to fallback");
         }
       } catch (fetchError) {
         if (fetchError instanceof Error && fetchError.name === "AbortError") {
@@ -1204,7 +1204,7 @@ export class HotelsService {
         type: "city" as const,
         country: "United States",
         code: "LAX",
-        flag: "🇺🇸",
+        flag: "🇺��",
         popular: true,
       },
       {
