@@ -614,7 +614,7 @@ export function MobileTravelers({
                 setTravelers((prev) => ({
                   ...prev,
                   children: prev.children + 1,
-                  childAges: [...prev.childAges, 10], // Default age 10
+                  childAges: [...(prev.childAges || []), 10], // Default age 10
                 }))
               }
               className="w-12 h-12 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold text-xl touch-manipulation"
