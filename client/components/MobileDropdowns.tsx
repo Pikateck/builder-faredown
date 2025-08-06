@@ -324,6 +324,7 @@ export function MobileDatePicker({
   setSelectedReturnDate,
   selectingDeparture,
   setSelectingDeparture,
+  bookingType = 'flights', // Default to flights for backward compatibility
 }: MobileDatePickerProps) {
   if (!isOpen) return null;
 
