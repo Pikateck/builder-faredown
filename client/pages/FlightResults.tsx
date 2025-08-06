@@ -296,6 +296,16 @@ export default function FlightResults() {
       flightType: "Direct",
       stops: 0,
       refundability: "Refundable",
+      price: {
+        amount: 32168,
+        currency: "INR",
+        breakdown: {
+          baseFare: 25000,
+          taxes: 5168,
+          fees: 2000,
+          total: 32168,
+        },
+      },
       fareTypes: [
         {
           name: "Eco Saver",
