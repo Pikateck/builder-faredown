@@ -1574,6 +1574,9 @@ export default function BookingFlow() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                <Plane className="w-4 h-4 text-[#003580]" />
+              </div>
               <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
               </span>
