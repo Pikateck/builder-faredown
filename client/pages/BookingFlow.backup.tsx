@@ -1838,6 +1838,9 @@ export default function BookingFlow() {
                 className="flex items-center text-blue-600 hover:text-blue-700"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
+                <div className="w-6 h-6 bg-[#febb02] rounded-lg flex items-center justify-center mr-1">
+                  <Plane className="w-3 h-3 text-[#003580]" />
+                </div>
                 <span className="font-medium">faredown.com</span>
               </Link>
               <div className="text-sm text-gray-600">
