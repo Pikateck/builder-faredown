@@ -1438,7 +1438,7 @@ export default function FlightResults() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "🇬��" },
+                      { code: "en", name: "English", flag: "🇬���" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
@@ -4128,7 +4128,7 @@ export default function FlightResults() {
           {/* Lucky Message */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6 mx-4 md:mx-0 flex items-center space-x-3">
             <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
-              <span className="text-white text-sm">🍀</span>
+              <span className="text-white text-sm"></span>
             </div>
             <div>
               <p className="font-medium text-[#003580]">
