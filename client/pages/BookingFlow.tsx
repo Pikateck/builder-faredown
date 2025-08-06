@@ -2683,8 +2683,8 @@ export default function BookingFlow() {
                     </h3>
                     <div className="space-y-2 text-sm text-gray-700">
                       <p>
-                        • Select a traveller first, then click on any
-                        available seat
+                        • Select a traveller first, then click on any available
+                        seat
                       </p>
                       <p>
                         • Seat prices vary by location - hover to see pricing

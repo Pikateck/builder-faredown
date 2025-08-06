@@ -204,8 +204,6 @@ export default function Hotels() {
             <div className="mx-auto">
               <BookingSearchForm />
             </div>
-
-
           </div>
         </div>
 
@@ -407,7 +405,6 @@ export default function Hotels() {
                 </div>
 
                 <div className="flex items-center space-x-3">
-
                   {!isLoggedIn && (
                     <>
                       <Button

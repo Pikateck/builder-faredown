@@ -101,7 +101,8 @@ import {
 export default function Index() {
   useScrollToTop();
   const { isLoggedIn, user, login, logout } = useAuth();
-  const { selectedCurrency, currencies, setCurrency, lastUpdated, isLoading } = useCurrency();
+  const { selectedCurrency, currencies, setCurrency, lastUpdated, isLoading } =
+    useCurrency();
   const {
     departureDate,
     returnDate,
@@ -1295,7 +1296,6 @@ export default function Index() {
                 </div>
 
                 <div className="flex items-center space-x-3">
-
                   {isLoggedIn ? (
                     <DropdownMenu>
                       <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">

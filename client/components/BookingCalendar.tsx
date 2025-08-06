@@ -170,7 +170,6 @@ export function BookingCalendar({
 
   return (
     <div className={cn("booking-calendar", className)}>
-
       {/* Custom CSS for Booking.com-style classy calendar */}
       <style>{`
         .booking-calendar .rdrCalendarWrapper {
