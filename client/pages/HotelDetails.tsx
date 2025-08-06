@@ -1797,11 +1797,7 @@ export default function HotelDetails() {
                                   <Button
                                     onClick={() => handleBooking(room)}
                                     variant="outline"
-                                    className={`w-full font-semibold py-3 text-sm transition-all duration-200 ${
-                                      room.statusColor === "green"
-                                        ? "border-green-600 text-green-600 hover:bg-green-600 hover:text-white hover:shadow-md"
-                                        : "border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
-                                    }`}
+                                    className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
                                   >
                                     Reserve Room
                                   </Button>
