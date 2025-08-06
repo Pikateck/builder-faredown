@@ -1456,7 +1456,7 @@ export default function FlightResults() {
                       { code: "hi", name: "���िन���दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本����", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
-                      { code: "zh", name: "中文", flag: "����🇳" },
+                      { code: "zh", name: "中文", flag: "�����🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
                         key={language.code}
@@ -1883,6 +1883,7 @@ export default function FlightResults() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <BookingCalendar
+                    bookingType="flight"
                     initialRange={{
                       startDate: departureDate || new Date(),
                       endDate:
@@ -4961,7 +4962,7 @@ export default function FlightResults() {
                     <div>
                       <div className="text-sm font-medium">Mumbai → Dubai</div>
                       <div className="text-xs text-blue-200">
-                        Emirates • Non-stop • 3h 30m
+                        Emirates ��� Non-stop • 3h 30m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹15500</div>
