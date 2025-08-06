@@ -61,7 +61,6 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import AdminTestButton from "@/components/AdminTestButton";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -3707,7 +3706,7 @@ export default function BookingFlow() {
                       )}
                       {calculateSeatTotal("Dubai-Mumbai") > 0 && (
                         <div className="flex justify-between">
-                          <span>Dubai �� Mumbai</span>
+                          <span>Dubai → Mumbai</span>
                           <span>
                             {formatCurrency(calculateSeatTotal("Dubai-Mumbai"))}
                           </span>
