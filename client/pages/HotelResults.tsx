@@ -66,7 +66,7 @@ export default function HotelResults() {
     loadDatesFromParams,
   } = useDateContext();
   const [sortBy, setSortBy] = useState("recommended");
-  const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
+  const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (��0 - ₹25,000)
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
@@ -989,54 +989,50 @@ export default function HotelResults() {
               onClick={() => setShowFilters(false)}
             />
             <div className="fixed inset-0 z-50 flex items-end">
-              <div className="w-full bg-white rounded-t-3xl shadow-2xl h-[85vh] flex flex-col">
+              <div className="w-full bg-white rounded-t-3xl shadow-2xl h-[90vh] flex flex-col">
                 {/* Filter Header */}
-                <div className="bg-[#003580] text-white p-4 rounded-t-3xl flex-shrink-0">
+                <div className="bg-[#003580] text-white p-4 rounded-t-3xl flex-shrink-0 border-b border-blue-600">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <Filter className="w-5 h-5 mr-2" />
+                      <Filter className="w-5 h-5 mr-2 text-[#febb02]" />
                       <h2 className="text-lg font-bold">Filter Hotels</h2>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="text-sm font-normal opacity-80">
-                        {filteredAndSortedHotels.length} hotels
+                      <div className="text-sm font-normal opacity-90 bg-white/10 px-2 py-1 rounded-lg">
+                        {filteredAndSortedHotels.length} found
                       </div>
                       <button
                         onClick={() => setShowFilters(false)}
                         className="p-2 hover:bg-white/20 rounded-lg transition-colors"
                       >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
+                        <X className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Filter Content - Scrollable */}
-                <div className="flex-1 overflow-y-auto min-h-0">
-                  <div className="p-0">
-                    <ComprehensiveFilters
-                      priceRange={priceRange}
-                      setPriceRange={setPriceRange}
-                      selectedFilters={selectedFilters}
-                      setSelectedFilters={setSelectedFilters}
-                      sortBy={sortBy}
-                      setSortBy={setSortBy}
-                      onClearFilters={handleClearFilters}
-                      className="h-full"
-                    />
-                  </div>
+                <div className="flex-1 overflow-hidden">
+                  <ComprehensiveFilters
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
+                    selectedFilters={selectedFilters}
+                    setSelectedFilters={setSelectedFilters}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    onClearFilters={handleClearFilters}
+                    className="h-full border-0"
+                  />
+                </div>
+
+                {/* Action Button */}
+                <div className="flex-shrink-0 p-4 bg-gray-50 border-t border-gray-200">
+                  <Button
+                    onClick={() => setShowFilters(false)}
+                    className="w-full bg-[#003580] hover:bg-[#0071c2] text-white font-semibold py-3 rounded-xl"
+                  >
+                    Show {filteredAndSortedHotels.length} Hotel{filteredAndSortedHotels.length !== 1 ? 's' : ''}
+                  </Button>
                 </div>
               </div>
             </div>
