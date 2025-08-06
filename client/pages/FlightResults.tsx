@@ -295,7 +295,11 @@ const flightData = [
       {
         name: "Premium Economy",
         price: 30200,
-        features: ["Carry-on + checked bag", "Priority boarding", "Extra legroom"],
+        features: [
+          "Carry-on + checked bag",
+          "Priority boarding",
+          "Extra legroom",
+        ],
         baggage: "30kg",
         refundability: "Refundable",
       },
@@ -1548,9 +1552,7 @@ export default function FlightResults() {
                   <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
                     <Plane className="w-4 h-4 text-[#003580]" />
                   </div>
-                  <span className="text-2xl font-bold">
-                    faredown.com
-                  </span>
+                  <span className="text-2xl font-bold">faredown.com</span>
                 </Link>
               </div>
 

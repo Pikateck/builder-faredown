@@ -39,9 +39,7 @@ export default function AccountDashboard() {
               <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
                 <Plane className="w-4 h-4 text-[#003580]" />
               </div>
-              <span className="text-xl font-bold">
-                faredown.com
-              </span>
+              <span className="text-xl font-bold">faredown.com</span>
             </Link>
 
             <div className="flex items-center space-x-4">

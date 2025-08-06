@@ -671,11 +671,16 @@ export default function Index() {
                     <Bell className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">Welcome to Faredown!</h3>
+                    <h3 className="font-medium text-gray-900">
+                      Welcome to Faredown!
+                    </h3>
                     <p className="text-sm text-gray-600 mt-1">
-                      Start bargaining for your next flight and save up to 40% on travel costs.
+                      Start bargaining for your next flight and save up to 40%
+                      on travel costs.
                     </p>
-                    <span className="text-xs text-gray-500 mt-2 block">Just now</span>
+                    <span className="text-xs text-gray-500 mt-2 block">
+                      Just now
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
@@ -683,11 +688,15 @@ export default function Index() {
                     <DollarSign className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">Special Offer Available</h3>
+                    <h3 className="font-medium text-gray-900">
+                      Special Offer Available
+                    </h3>
                     <p className="text-sm text-gray-600 mt-1">
                       Extra 10% off on your first booking. Use code: FIRST10
                     </p>
-                    <span className="text-xs text-gray-500 mt-2 block">2 hours ago</span>
+                    <span className="text-xs text-gray-500 mt-2 block">
+                      2 hours ago
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
@@ -695,11 +704,15 @@ export default function Index() {
                     <Plane className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">Price Drop Alert</h3>
+                    <h3 className="font-medium text-gray-900">
+                      Price Drop Alert
+                    </h3>
                     <p className="text-sm text-gray-600 mt-1">
                       Flights to Dubai are now 25% cheaper than last week!
                     </p>
-                    <span className="text-xs text-gray-500 mt-2 block">1 day ago</span>
+                    <span className="text-xs text-gray-500 mt-2 block">
+                      1 day ago
+                    </span>
                   </div>
                 </div>
               </div>
@@ -760,7 +773,9 @@ export default function Index() {
                           <span className="text-lg">{currency.flag}</span>
                           <div className="flex flex-col">
                             <span className="font-medium">{currency.name}</span>
-                            <span className="text-xs text-gray-500">{currency.symbol} • {currency.code}</span>
+                            <span className="text-xs text-gray-500">
+                              {currency.symbol} • {currency.code}
+                            </span>
                           </div>
                         </div>
                         {selectedCurrency.code === currency.code && (
@@ -772,7 +787,9 @@ export default function Index() {
                   <div className="mt-3 pt-3 border-t border-gray-200">
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">
-                        {lastUpdated ? `Updated: ${new Date(lastUpdated).toLocaleTimeString()}` : 'Using static rates'}
+                        {lastUpdated
+                          ? `Updated: ${new Date(lastUpdated).toLocaleTimeString()}`
+                          : "Using static rates"}
                       </span>
                       {isLoading && (
                         <div className="w-3 h-3 border border-blue-500 border-t-transparent rounded-full animate-spin"></div>

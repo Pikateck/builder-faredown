@@ -129,7 +129,10 @@ function App() {
                   />
                   <Route path="/amadeus-test" element={<AmadeusTestPanel />} />
                   <Route path="/logo-designs" element={<LogoDesignOptions />} />
-                  <Route path="/color-palette" element={<FaredownColorPalette />} />
+                  <Route
+                    path="/color-palette"
+                    element={<FaredownColorPalette />}
+                  />
 
                   {/* Admin CMS Routes */}
                   <Route path="/admin/login" element={<AdminLogin />} />

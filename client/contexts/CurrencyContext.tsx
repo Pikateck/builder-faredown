@@ -156,7 +156,7 @@ export const CURRENCIES: Currency[] = [
     code: "NZD",
     symbol: "NZ$",
     name: "New Zealand Dollar",
-    rate: 0.020,
+    rate: 0.02,
     flag: "🇳🇿",
     decimalPlaces: 2,
   },

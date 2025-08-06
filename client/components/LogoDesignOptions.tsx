@@ -1,5 +1,16 @@
-import React from 'react';
-import { Plane, TrendingDown, Handshake, Target, Zap, DollarSign, ArrowDown, Compass, Globe, Award } from 'lucide-react';
+import React from "react";
+import {
+  Plane,
+  TrendingDown,
+  Handshake,
+  Target,
+  Zap,
+  DollarSign,
+  ArrowDown,
+  Compass,
+  Globe,
+  Award,
+} from "lucide-react";
 
 const LogoDesignOptions = () => {
   const logoOptions = [
@@ -19,7 +30,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 2,
@@ -35,7 +46,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 3,
@@ -49,7 +60,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 4,
@@ -65,7 +76,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 5,
@@ -79,7 +90,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 6,
@@ -97,7 +108,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 7,
@@ -113,7 +124,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 8,
@@ -129,7 +140,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 9,
@@ -143,7 +154,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">faredown</span>
         </div>
-      )
+      ),
     },
     {
       id: 10,
@@ -158,7 +169,7 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-bold text-[#003580]">down</span>
         </div>
-      )
+      ),
     },
     {
       id: 11,
@@ -173,7 +184,7 @@ const LogoDesignOptions = () => {
             <span className="text-xs font-bold text-[#003580]">FARE↓</span>
           </div>
         </div>
-      )
+      ),
     },
     {
       id: 12,
@@ -189,8 +200,8 @@ const LogoDesignOptions = () => {
           </div>
           <span className="text-xl font-light text-[#003580]">down</span>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -222,11 +233,11 @@ const LogoDesignOptions = () => {
                   {option.description}
                 </p>
               </div>
-              
+
               <div className="flex justify-center items-center h-20 bg-gray-50 rounded-lg mb-4">
                 {option.component}
               </div>
-              
+
               <div className="flex justify-center space-x-4 text-xs text-gray-500">
                 <div className="flex items-center space-x-1">
                   <div className="w-3 h-3 bg-[#003580] rounded"></div>
@@ -245,10 +256,12 @@ const LogoDesignOptions = () => {
           <h2 className="text-2xl font-bold text-[#003580] mb-6 text-center">
             Logo Usage Examples
           </h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-700">Header Usage</h3>
+              <h3 className="text-lg font-semibold text-gray-700">
+                Header Usage
+              </h3>
               <div className="bg-[#003580] p-4 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -257,13 +270,17 @@ const LogoDesignOptions = () => {
                     </div>
                     <span className="text-white font-bold">faredown.com</span>
                   </div>
-                  <div className="text-white text-sm">Bargain • Book • Travel</div>
+                  <div className="text-white text-sm">
+                    Bargain • Book • Travel
+                  </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-700">App Icon Style</h3>
+              <h3 className="text-lg font-semibold text-gray-700">
+                App Icon Style
+              </h3>
               <div className="flex space-x-4">
                 <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center shadow-lg">
                   <Plane className="w-8 h-8 text-[#febb02]" />
@@ -286,18 +303,24 @@ const LogoDesignOptions = () => {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
               <div>
-                <strong>Primary Color:</strong><br />
-                Blue #003580<br />
+                <strong>Primary Color:</strong>
+                <br />
+                Blue #003580
+                <br />
                 Authority, Trust, Travel
               </div>
               <div>
-                <strong>Accent Color:</strong><br />
-                Yellow #febb02<br />
+                <strong>Accent Color:</strong>
+                <br />
+                Yellow #febb02
+                <br />
                 Energy, Deals, Savings
               </div>
               <div>
-                <strong>Core Message:</strong><br />
-                Bargain Platform<br />
+                <strong>Core Message:</strong>
+                <br />
+                Bargain Platform
+                <br />
                 Control Your Price
               </div>
             </div>

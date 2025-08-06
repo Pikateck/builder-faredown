@@ -1,5 +1,5 @@
-import React from 'react';
-import { Copy, Check, Palette, Code, Monitor, Smartphone } from 'lucide-react';
+import React from "react";
+import { Copy, Check, Palette, Code, Monitor, Smartphone } from "lucide-react";
 
 const FaredownColorPalette = () => {
   const [copiedColor, setCopiedColor] = React.useState<string | null>(null);
@@ -10,12 +10,12 @@ const FaredownColorPalette = () => {
     setTimeout(() => setCopiedColor(null), 2000);
   };
 
-  const ColorCard = ({ 
-    name, 
-    color, 
-    usage, 
-    textColor = 'text-white',
-    category 
+  const ColorCard = ({
+    name,
+    color,
+    usage,
+    textColor = "text-white",
+    category,
   }: {
     name: string;
     color: string;
@@ -24,12 +24,14 @@ const FaredownColorPalette = () => {
     category: string;
   }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-      <div 
+      <div
         className={`h-24 flex items-center justify-center cursor-pointer transition-transform hover:scale-105 relative group`}
         style={{ backgroundColor: color }}
         onClick={() => copyToClipboard(color)}
       >
-        <div className={`${textColor} font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity`}>
+        <div
+          className={`${textColor} font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity`}
+        >
           Click to copy
         </div>
         {copiedColor === color && (
@@ -50,8 +52,12 @@ const FaredownColorPalette = () => {
         </div>
         <p className="text-xs text-gray-600 mb-2">{usage}</p>
         <div className="flex items-center justify-between">
-          <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono">{color}</code>
-          <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">{category}</span>
+          <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono">
+            {color}
+          </code>
+          <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">
+            {category}
+          </span>
         </div>
       </div>
     </div>
@@ -62,28 +68,28 @@ const FaredownColorPalette = () => {
       name: "Primary Blue",
       color: "#003580",
       usage: "Headers, primary buttons, main branding",
-      category: "Brand"
+      category: "Brand",
     },
     {
       name: "Secondary Blue",
       color: "#0071c2",
       usage: "Hover states, secondary actions",
-      category: "Brand"
+      category: "Brand",
     },
     {
       name: "Primary Yellow",
       color: "#febb02",
       usage: "CTA buttons, highlights, accent elements",
       category: "Brand",
-      textColor: "text-black"
+      textColor: "text-black",
     },
     {
       name: "Yellow Hover",
       color: "#e6a602",
       usage: "Button hover states",
       category: "Brand",
-      textColor: "text-black"
-    }
+      textColor: "text-black",
+    },
   ];
 
   const supportingColors = [
@@ -92,29 +98,29 @@ const FaredownColorPalette = () => {
       color: "#e7f0fa",
       usage: "Light backgrounds, cards",
       category: "Supporting",
-      textColor: "text-gray-800"
+      textColor: "text-gray-800",
     },
     {
       name: "Text Gray",
       color: "#6b6b6b",
       usage: "Secondary text, descriptions",
       category: "Supporting",
-      textColor: "text-white"
+      textColor: "text-white",
     },
     {
       name: "Light Gray",
       color: "#f2f2f2",
       usage: "Backgrounds, separators",
       category: "Supporting",
-      textColor: "text-gray-800"
+      textColor: "text-gray-800",
     },
     {
       name: "Border Gray",
       color: "#d1d5db",
       usage: "Borders, dividers",
       category: "Supporting",
-      textColor: "text-gray-800"
-    }
+      textColor: "text-gray-800",
+    },
   ];
 
   const systemColors = [
@@ -122,27 +128,27 @@ const FaredownColorPalette = () => {
       name: "Success Green",
       color: "#16a34a",
       usage: "Success messages, confirmations",
-      category: "System"
+      category: "System",
     },
     {
       name: "Error Red",
       color: "#dc2626",
       usage: "Error messages, warnings",
-      category: "System"
+      category: "System",
     },
     {
       name: "Info Blue",
       color: "#3b82f6",
       usage: "Information, system messages",
-      category: "System"
+      category: "System",
     },
     {
       name: "Warning Orange",
       color: "#f59e0b",
       usage: "Warnings, alerts",
       category: "System",
-      textColor: "text-black"
-    }
+      textColor: "text-black",
+    },
   ];
 
   const neutralColors = [
@@ -151,27 +157,27 @@ const FaredownColorPalette = () => {
       color: "#ffffff",
       usage: "Backgrounds, text on dark",
       category: "Neutral",
-      textColor: "text-gray-800"
+      textColor: "text-gray-800",
     },
     {
       name: "Black",
       color: "#000000",
       usage: "Text, dark backgrounds",
-      category: "Neutral"
+      category: "Neutral",
     },
     {
       name: "Dark Gray",
       color: "#374151",
       usage: "Primary text, headings",
-      category: "Neutral"
+      category: "Neutral",
     },
     {
       name: "Medium Gray",
       color: "#9ca3af",
       usage: "Placeholder text, icons",
       category: "Neutral",
-      textColor: "text-white"
-    }
+      textColor: "text-white",
+    },
   ];
 
   const hslColors = [
@@ -179,27 +185,27 @@ const FaredownColorPalette = () => {
       name: "HSL Primary",
       color: "hsl(217, 100%, 50%)",
       usage: "CSS custom property primary",
-      category: "HSL"
+      category: "HSL",
     },
     {
       name: "HSL Accent",
       color: "hsl(30, 100%, 55%)",
       usage: "CSS custom property accent",
       category: "HSL",
-      textColor: "text-black"
+      textColor: "text-black",
     },
     {
       name: "HSL Green",
       color: "hsl(142, 70%, 45%)",
       usage: "Success states",
-      category: "HSL"
+      category: "HSL",
     },
     {
       name: "HSL Red",
       color: "hsl(0, 75%, 55%)",
       usage: "Error states",
-      category: "HSL"
-    }
+      category: "HSL",
+    },
   ];
 
   return (
@@ -290,8 +296,10 @@ const FaredownColorPalette = () => {
 
         {/* Usage Examples */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Usage Examples</h2>
-          
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Usage Examples
+          </h2>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Desktop Example */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -313,7 +321,9 @@ const FaredownColorPalette = () => {
                     </button>
                   </div>
                   <div className="bg-[#e7f0fa] p-4 rounded-lg">
-                    <p className="text-[#6b6b6b]">Content area with accent background and gray text</p>
+                    <p className="text-[#6b6b6b]">
+                      Content area with accent background and gray text
+                    </p>
                   </div>
                 </div>
               </div>
@@ -335,7 +345,9 @@ const FaredownColorPalette = () => {
                       Book Now
                     </button>
                     <div className="bg-[#f2f2f2] p-3 rounded-lg">
-                      <p className="text-[#374151] text-sm">Card content with neutral background</p>
+                      <p className="text-[#374151] text-sm">
+                        Card content with neutral background
+                      </p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-[#16a34a] rounded-full"></div>
@@ -350,20 +362,33 @@ const FaredownColorPalette = () => {
 
         {/* Color Guidelines */}
         <section className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Color Usage Guidelines</h2>
-          
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Color Usage Guidelines
+          </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-[#003580]">Primary Colors</h3>
+              <h3 className="text-lg font-semibold text-[#003580]">
+                Primary Colors
+              </h3>
               <ul className="space-y-2 text-sm text-gray-700">
-                <li><strong>#003580:</strong> Main brand color, headers, primary buttons</li>
-                <li><strong>#febb02:</strong> Call-to-action buttons, highlights</li>
-                <li><strong>#0071c2:</strong> Hover states, secondary actions</li>
+                <li>
+                  <strong>#003580:</strong> Main brand color, headers, primary
+                  buttons
+                </li>
+                <li>
+                  <strong>#febb02:</strong> Call-to-action buttons, highlights
+                </li>
+                <li>
+                  <strong>#0071c2:</strong> Hover states, secondary actions
+                </li>
               </ul>
             </div>
-            
+
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-[#003580]">Accessibility</h3>
+              <h3 className="text-lg font-semibold text-[#003580]">
+                Accessibility
+              </h3>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li>• All text meets WCAG AA contrast ratios</li>
                 <li>• Color is never the only indicator</li>
@@ -371,9 +396,11 @@ const FaredownColorPalette = () => {
                 <li>• Interactive elements have sufficient contrast</li>
               </ul>
             </div>
-            
+
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-[#003580]">Implementation</h3>
+              <h3 className="text-lg font-semibold text-[#003580]">
+                Implementation
+              </h3>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li>• Use Tailwind CSS classes when possible</li>
                 <li>• HSL values for CSS custom properties</li>
@@ -391,22 +418,24 @@ const FaredownColorPalette = () => {
             <div>
               <h3 className="font-semibold mb-2">CSS Variables</h3>
               <code className="text-sm bg-black/20 p-2 rounded block">
-                --primary: #003580;<br/>
+                --primary: #003580;
+                <br />
                 --accent: #febb02;
               </code>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Tailwind Config</h3>
               <code className="text-sm bg-black/20 p-2 rounded block">
-                colors: {'{'}
-                  'faredown-blue': '#003580'
-                {'}'}
+                colors: {"{"}
+                'faredown-blue': '#003580'
+                {"}"}
               </code>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Design Tokens</h3>
               <code className="text-sm bg-black/20 p-2 rounded block">
-                brand.primary.value<br/>
+                brand.primary.value
+                <br />
                 brand.accent.value
               </code>
             </div>
