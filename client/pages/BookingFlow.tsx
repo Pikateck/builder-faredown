@@ -690,7 +690,7 @@ const SeatMap = ({
         )}
         {renderFlightSegment(
           "Dubai-Mumbai",
-          "Dubai ��� Mumbai",
+          "Dubai • Mumbai",
           expandedFlight === "Dubai-Mumbai",
           selectedFlight,
           selectedFareType,
@@ -978,7 +978,7 @@ export default function BookingFlow() {
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
-    symbol: "���",
+    symbol: "₹",
     name: "Indian Rupee",
   });
 
@@ -1065,13 +1065,13 @@ export default function BookingFlow() {
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
     { name: "Hungary", code: "+36", flag: "🇭🇺" },
     { name: "Iceland", code: "+354", flag: "🇮🇸" },
-    { name: "India", code: "+91", flag: "🇮����" },
-    { name: "Indonesia", code: "+62", flag: "�����🇩" },
+    { name: "India", code: "+91", flag: "🇮🇳" },
+    { name: "Indonesia", code: "+62", flag: "🇮🇩" },
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
-    { name: "Israel", code: "+972", flag: "���🇱" },
+    { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
@@ -2073,7 +2073,7 @@ export default function BookingFlow() {
                                   20kg - ₹ 5,500
                                 </SelectItem>
                                 <SelectItem value="25kg">
-                                  25kg - ��� 6,800
+                                  25kg - ₹ 6,800
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -2684,7 +2684,7 @@ export default function BookingFlow() {
                     </h3>
                     <div className="space-y-2 text-sm text-gray-700">
                       <p>
-                        ��� Select a traveller first, then click on any
+                        • Select a traveller first, then click on any
                         available seat
                       </p>
                       <p>
