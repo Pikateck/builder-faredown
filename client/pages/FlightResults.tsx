@@ -5779,7 +5779,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return �����{" "}
+                          Return •{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d, yyyy")
                             : "Select date"}
