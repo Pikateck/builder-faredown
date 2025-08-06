@@ -40,8 +40,13 @@ export default function OtherTravelers() {
       <header className="bg-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <Link to="/" className="text-xl font-bold">
-              faredown.com
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                <Plane className="w-4 h-4 text-[#003580]" />
+              </div>
+              <span className="text-xl font-bold">
+                faredown.com
+              </span>
             </Link>
 
             <div className="flex items-center space-x-4">
