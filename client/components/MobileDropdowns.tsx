@@ -598,7 +598,7 @@ export function MobileTravelers({
                 setTravelers((prev) => ({
                   ...prev,
                   children: Math.max(0, prev.children - 1),
-                  childAges: prev.childAges.slice(0, -1), // Remove last age
+                  childAges: (prev.childAges || []).slice(0, -1), // Remove last age
                 }))
               }
               disabled={travelers.children <= 0}
