@@ -1022,7 +1022,7 @@ export default function HotelDetails() {
                                 navigator.vibrate(50);
                               }
                             }}
-                            className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 text-sm flex items-center justify-center gap-2"
+                            className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-medium py-2 text-sm flex items-center justify-center gap-2"
                           >
                             <TrendingDown className="w-4 h-4" />
                             Bargain Now
@@ -1561,7 +1561,7 @@ export default function HotelDetails() {
                             <span>Best value room available</span>
                           </div>
                           <Button
-                            className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-2 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2"
+                            className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-medium py-2 px-4 rounded-lg text-sm mb-3 flex items-center justify-center gap-2"
                             onClick={() =>
                               roomTypes.length > 0 &&
                               handleBargainClick(roomTypes[0])
@@ -1812,7 +1812,7 @@ export default function HotelDetails() {
                                         ? "bg-green-600 text-white"
                                         : bargainingRoomId === room.id
                                           ? "bg-blue-600 text-white animate-pulse"
-                                          : "bg-[#003580] hover:bg-[#002a66] text-white"
+                                          : "bg-[#febb02] hover:bg-[#e6a602] text-black"
                                     }`}
                                   >
                                     {bargainedRooms.has(room.id) ? (
