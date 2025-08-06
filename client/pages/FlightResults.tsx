@@ -1497,9 +1497,14 @@ export default function FlightResults() {
               <div className="flex items-center">
                 <Link
                   to="/"
-                  className="text-2xl font-bold text-white hover:text-blue-200 transition-colors"
+                  className="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors"
                 >
-                  faredown.com
+                  <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                    <Plane className="w-4 h-4 text-[#003580]" />
+                  </div>
+                  <span className="text-2xl font-bold">
+                    faredown.com
+                  </span>
                 </Link>
               </div>
 
@@ -3645,7 +3650,7 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  • Cancellation/Flight change
+                                                  �� Cancellation/Flight change
                                                   charges are indicated per
                                                   traveller. Clearing will stop
                                                   accepting cancellation/change
