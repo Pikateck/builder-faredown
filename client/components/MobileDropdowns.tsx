@@ -66,18 +66,83 @@ export function MobileCityDropdown({
             />
           </div>
         </div>
-        {/* Hotelbeds Test Destinations */}
+        {/* Popular Destinations */}
         <div className="mb-6">
           <div className="px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg mb-3">
             <h3 className="text-sm font-semibold text-blue-800">
-              Popular Flight Destinations
+              {context === 'hotels' ? 'Popular Hotel Destinations' : 'Popular Flight Destinations'}
             </h3>
             <p className="text-xs text-blue-600">
-              Popular airports and cities worldwide
+              {context === 'hotels' ? 'Top destinations for hotel bookings' : 'Popular airports and cities worldwide'}
             </p>
           </div>
           <div className="space-y-2">
-            {[
+            {(context === 'hotels' ? [
+              {
+                id: "Dubai",
+                code: "DXB",
+                name: "Dubai",
+                country: "United Arab Emirates",
+                airport: "Downtown Dubai, Marina, Business Bay",
+                description: "Luxury hotels, beaches, shopping malls",
+              },
+              {
+                id: "Mumbai",
+                code: "BOM",
+                name: "Mumbai",
+                country: "India",
+                airport: "Bandra, Andheri, South Mumbai",
+                description: "Business hotels, city center locations",
+              },
+              {
+                id: "Delhi",
+                code: "DEL",
+                name: "Delhi",
+                country: "India",
+                airport: "Connaught Place, Gurgaon, Airport area",
+                description: "Heritage hotels, business districts",
+              },
+              {
+                id: "Singapore",
+                code: "SIN",
+                name: "Singapore",
+                country: "Singapore",
+                airport: "Marina Bay, Orchard Road, Sentosa",
+                description: "Luxury resorts, city center hotels",
+              },
+              {
+                id: "Bangkok",
+                code: "BKK",
+                name: "Bangkok",
+                country: "Thailand",
+                airport: "Sukhumvit, Silom, Chatuchak",
+                description: "Budget to luxury hotels, city center",
+              },
+              {
+                id: "London",
+                code: "LON",
+                name: "London",
+                country: "United Kingdom",
+                airport: "Westminster, Kensington, Canary Wharf",
+                description: "Historic hotels, business districts",
+              },
+              {
+                id: "Paris",
+                code: "PAR",
+                name: "Paris",
+                country: "France",
+                airport: "Champs-Élysées, Le Marais, Montmartre",
+                description: "Boutique hotels, romantic locations",
+              },
+              {
+                id: "New York",
+                code: "NYC",
+                name: "New York",
+                country: "United States",
+                airport: "Manhattan, Times Square, Central Park",
+                description: "Luxury hotels, iconic locations",
+              },
+            ] : [
               {
                 id: "DXB",
                 code: "DXB",
@@ -148,7 +213,7 @@ export function MobileCityDropdown({
                 country: "Australia",
                 airport: "Kingsford Smith Airport",
               },
-            ].map((dest) => (
+            ]).map((dest) => (
               <button
                 key={dest.id}
                 onClick={() => {
