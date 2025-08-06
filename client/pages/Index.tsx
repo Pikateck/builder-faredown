@@ -469,14 +469,20 @@ export default function Index() {
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                <button className="p-2">
+                <button className="p-2 relative">
                   <Globe className="w-5 h-5" />
+                  <Diamond className="w-2 h-2 text-[#febb02] absolute -top-0.5 -right-0.5" />
+                </button>
+                <button className="p-2 relative">
+                  <Bell className="w-5 h-5" />
+                  <Sparkles className="w-2 h-2 text-[#febb02] absolute -top-0.5 -right-0.5" />
                 </button>
                 <button
                   onClick={() => setShowMobileMenu(!showMobileMenu)}
-                  className="p-2"
+                  className="p-2 relative"
                 >
                   <Menu className="w-5 h-5" />
+                  <Gem className="w-2 h-2 text-[#febb02] absolute -top-0.5 -right-0.5" />
                 </button>
               </div>
             </div>
