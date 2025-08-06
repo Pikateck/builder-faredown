@@ -321,8 +321,6 @@ export function BookingSearchForm() {
 
     try {
       const searchParams = new URLSearchParams({
-        destination: destinationCode, // Use destination code for Hotelbeds API
-        destinationName: destination, // Keep display name for UI
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
         adults: guests.adults.toString(),
@@ -332,6 +330,12 @@ export function BookingSearchForm() {
         searchType: "live", // Flag to indicate live API search preference
         searchId: Date.now().toString(), // Unique search identifier
       });
+
+      // Only add destination if it exists
+      if (destination && destinationCode) {
+        searchParams.set("destination", destinationCode);
+        searchParams.set("destinationName", destination);
+      }
 
       const url = `/hotels/results?${searchParams.toString()}`;
       console.log("�� Navigating to live Hotelbeds search:", url);
