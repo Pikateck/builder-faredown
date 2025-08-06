@@ -330,9 +330,28 @@ export default function FlightResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Load dates from URL parameters when component mounts
+  // Load dates and city selections from URL parameters when component mounts
   useEffect(() => {
     loadDatesFromParams(searchParams);
+
+    // Load city selections from URL parameters
+    const fromParam = searchParams.get("from");
+    const toParam = searchParams.get("to");
+
+    // Find matching city names from codes
+    if (fromParam) {
+      const fromCity = Object.entries(cityData).find(([city, data]) => data.code === fromParam)?.[0];
+      if (fromCity) {
+        setSelectedFromCity(fromCity);
+      }
+    }
+
+    if (toParam) {
+      const toCity = Object.entries(cityData).find(([city, data]) => data.code === toParam)?.[0];
+      if (toCity) {
+        setSelectedToCity(toCity);
+      }
+    }
   }, [searchParams, loadDatesFromParams]);
 
   // Get passenger data from URL params
@@ -2659,8 +2678,11 @@ export default function FlightResults() {
                               <div className="text-xl font-bold text-gray-900">
                                 {flight.departureTime}
                               </div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-gray-600 font-medium">
                                 {flight.departureCode || "BOM"}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {flight.departure?.city || "Mumbai"}
                               </div>
                             </div>
                             <div className="flex-1 mx-4">
@@ -2689,8 +2711,11 @@ export default function FlightResults() {
                               <div className="text-xl font-bold text-gray-900">
                                 {flight.arrivalTime}
                               </div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-gray-600 font-medium">
                                 {flight.arrivalCode || "DXB"}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {flight.arrival?.city || "Dubai"}
                               </div>
                             </div>
                           </div>
@@ -2707,8 +2732,11 @@ export default function FlightResults() {
                                 <div className="text-xl font-bold text-gray-900">
                                   {flight.returnDepartureTime}
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-gray-600 font-medium">
                                   {flight.arrivalCode || "DXB"}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {flight.arrival?.city || "Dubai"}
                                 </div>
                               </div>
                               <div className="flex-1 mx-4">
@@ -2735,8 +2763,11 @@ export default function FlightResults() {
                                 <div className="text-xl font-bold text-gray-900">
                                   {flight.returnArrivalTime}
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-sm text-gray-600 font-medium">
                                   {flight.departureCode || "BOM"}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {flight.departure?.city || "Mumbai"}
                                 </div>
                               </div>
                             </div>
