@@ -1483,6 +1483,7 @@ export default function HotelResults() {
         cities={cityData}
         selectedCity={editDestination}
         onSelectCity={setEditDestination}
+        context="hotels"
       />
 
       <MobileDatePicker
