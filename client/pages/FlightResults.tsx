@@ -2154,6 +2154,18 @@ export default function FlightResults() {
                           className={`w-3 h-3 sm:w-4 sm:h-4 ${selectedAirlines.has(airline) ? "bg-blue-600" : "bg-white border border-gray-400"}`}
                         />
                       </div>
+                      {airlineLogos[airline] && (
+                        <div className="w-5 h-5 mr-2 flex-shrink-0">
+                          <img
+                            src={airlineLogos[airline]}
+                            alt={`${airline} logo`}
+                            className="w-full h-full object-contain rounded-sm"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      )}
                       <span
                         className={`transition-colors ${hoveredAirline === airline ? "text-blue-600 font-medium" : "text-gray-700"}`}
                       >
