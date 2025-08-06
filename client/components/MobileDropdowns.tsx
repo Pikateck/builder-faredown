@@ -417,19 +417,36 @@ export function MobileDatePicker({
 
         {/* Current Selection Display */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div className="text-sm text-gray-600 mb-2">Selected dates:</div>
-          <div className="text-base font-medium text-gray-900">
-            {tripType === "one-way"
-              ? formatDate(selectedDepartureDate) || "Select departure date"
-              : selectedDepartureDate
-                ? `${formatDate(selectedDepartureDate)} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate)}` : "- Select return"}`
-                : "Select departure and return dates"}
+          <div className="text-sm text-gray-600 mb-2">
+            {bookingType === 'hotels' ? 'Selected stay dates:' : 'Selected dates:'}
           </div>
-          {tripType === "round-trip" && (
+          <div className="text-base font-medium text-gray-900">
+            {bookingType === 'hotels' ? (
+              // Hotel date display
+              selectedDepartureDate
+                ? `${formatDate(selectedDepartureDate)} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate)}` : "- Select check-out"}`
+                : "Select check-in and check-out dates"
+            ) : (
+              // Flight date display
+              tripType === "one-way"
+                ? formatDate(selectedDepartureDate) || "Select departure date"
+                : selectedDepartureDate
+                  ? `${formatDate(selectedDepartureDate)} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate)}` : "- Select return"}`
+                  : "Select departure and return dates"
+            )}
+          </div>
+          {bookingType === 'flights' && tripType === "round-trip" && (
             <div className="text-xs text-gray-600 mt-1">
               {selectingDeparture
                 ? "Select departure date"
                 : "Select return date"}
+            </div>
+          )}
+          {bookingType === 'hotels' && (
+            <div className="text-xs text-gray-600 mt-1">
+              {selectingDeparture
+                ? "Select check-in date"
+                : "Select check-out date"}
             </div>
           )}
         </div>
