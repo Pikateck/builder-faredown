@@ -38,6 +38,8 @@ import {
   X,
   Globe,
   Zap,
+  Bell,
+  Menu,
 } from "lucide-react";
 import {
   MobileCityDropdown,
@@ -91,6 +93,11 @@ export default function Hotels() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userName] = useState("Zubin Aibara");
+
+  // Mobile menu states to match flights page
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
   // City data for hotels
   const cityData = {
