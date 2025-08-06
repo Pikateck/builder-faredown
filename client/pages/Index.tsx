@@ -1118,11 +1118,20 @@ export default function Index() {
               <Sparkles className="w-6 h-6 text-[#febb02]" />
             </h2>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <TrendingUp className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
+                <div className="absolute top-1 right-1">
+                  <Sparkles className="w-3 h-3 text-[#febb02]" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
+                <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0056b3] rounded-xl flex items-center justify-center mx-auto mb-3 relative">
+                  <Rocket className="w-6 h-6 text-white" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#febb02] rounded-full flex items-center justify-center">
+                    <Diamond className="w-2 h-2 text-[#003580]" />
+                  </div>
+                </div>
+                <h3 className="font-semibold text-sm mb-1 flex items-center justify-center gap-1">
+                  <Zap className="w-3 h-3 text-[#febb02]" />
+                  Live Bargaining
+                </h3>
                 <p className="text-xs text-gray-600">
                   Negotiate real-time prices
                 </p>
