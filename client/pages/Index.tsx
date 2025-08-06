@@ -1129,8 +1129,10 @@ export default function Index() {
                 </div>
               </div>
             </div>
-            <p className="text-center text-xs text-blue-200 mt-3">
-              ✨ Prices automatically convert to your selected currency
+            <p className="text-center text-xs text-blue-200 mt-3 flex items-center justify-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#febb02]" />
+              Prices automatically convert to your selected currency
+              <Gem className="w-4 h-4 text-[#febb02]" />
             </p>
           </div>
         </div>
