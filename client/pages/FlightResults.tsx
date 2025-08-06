@@ -1514,8 +1514,8 @@ export default function FlightResults() {
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                      { code: "it", name: "Italiano", flag: "���🇹" },
-                      { code: "pt", name: "Português", flag: "🇵🇹" },
+                      { code: "it", name: "Italiano", flag: "🇮🇹" },
+                      { code: "pt", name: "Português", flag: "���🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "���िन���दी", flag: "🇮���" },
                       { code: "ja", name: "日本����", flag: "🇯🇵" },
@@ -2985,11 +2985,14 @@ export default function FlightResults() {
                                     <div className="text-xl font-bold text-gray-900">
                                       {flight.returnArrivalTime}
                                     </div>
-                                    <div className="text-sm text-gray-600">
+                                    <div className="text-sm text-gray-600 font-medium">
                                       {flight.departureCode} •{" "}
                                       {returnDate
                                         ? formatDisplayDate(returnDate, "MMM d")
                                         : "Select return date"}
+                                    </div>
+                                    <div className="text-xs text-gray-500">
+                                      {flight.departure?.city || "Mumbai"}
                                     </div>
                                   </div>
                                 </div>
