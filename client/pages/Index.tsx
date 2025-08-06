@@ -1536,8 +1536,8 @@ export default function Index() {
                       )}
                     </div>
 
-                    <div className="relative overflow-visible lg:max-w-[200px] w-full lg:w-auto">
-                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                    <div className="relative overflow-visible lg:max-w-[250px] w-full lg:w-auto">
+                      <label className="absolute -top-2 left-4 bg-white px-2 text-xs text-blue-600 font-semibold z-10 uppercase tracking-wide">
                         Travel dates
                       </label>
                       <button
@@ -1549,26 +1549,28 @@ export default function Index() {
                           }
                           setShowCalendar(!showCalendar);
                         }}
-                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[180px] hover:border-blue-500 touch-manipulation"
+                        className="flex items-center bg-white rounded-xl border-2 border-gray-200 px-4 py-3 h-14 w-full min-w-[220px] hover:border-blue-500 hover:shadow-md transition-all duration-200 touch-manipulation"
                       >
-                        <svg
-                          className="w-4 h-4 text-gray-500 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"
-                          />
-                        </svg>
-                        <span className="text-sm text-gray-700 font-medium truncate">
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                          <svg
+                            className="w-4 h-4 text-blue-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-sm text-gray-900 font-semibold truncate">
                           {tripType === "one-way"
                             ? formatDisplayDate(departureDate) || "Select date"
                             : departureDate
-                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` - ${formatDisplayDate(returnDate)}` : " - Return"}`
+                              ? `${formatDisplayDate(departureDate)}${returnDate ? ` — ${formatDisplayDate(returnDate)}` : " — Return"}`
                               : "Select dates"}
                         </span>
                       </button>
