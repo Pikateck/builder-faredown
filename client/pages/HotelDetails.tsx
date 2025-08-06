@@ -436,7 +436,7 @@ export default function HotelDetails() {
   const tempHotelData = hotelData
     ? {
         id: parseInt(hotelId || "1"),
-        name: hotelData.name || (() => {
+        name: (() => {
           const hotelNames = {
             "htl-DXB-001": "Grand Hyatt Dubai",
             "htl-DXB-002": "Business Hotel Dubai Marina",
@@ -445,7 +445,8 @@ export default function HotelDetails() {
             "htl-DXB-005": "City Hotel Dubai Mall",
             "htl-DXB-006": "Express Hotel Dubai Airport",
           };
-          return hotelNames[hotelId] || "Premium Hotel Dubai";
+          // Always use our mapped names, fallback to API name only if not in our mapping
+          return hotelNames[hotelId] || hotelData.name || "Premium Hotel Dubai";
         })(),
         location:
           typeof hotelData.location === "string"
