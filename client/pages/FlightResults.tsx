@@ -1431,7 +1431,6 @@ export default function FlightResults() {
 
               {/* Right: Currency + Auth */}
               <div className="flex items-center space-x-4">
-                {/* Language Dropdown */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
