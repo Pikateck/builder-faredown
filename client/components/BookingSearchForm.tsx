@@ -310,11 +310,13 @@ export function BookingSearchForm() {
       (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
     );
     if (daysBetween < 1) {
-      alert("Check-out date must be after check-in date");
+      setErrorMessage("Check-out date must be after check-in date");
+      setShowError(true);
       return;
     }
     if (daysBetween > 30) {
-      alert("Maximum stay duration is 30 days");
+      setErrorMessage("Maximum stay duration is 30 days");
+      setShowError(true);
       return;
     }
 
