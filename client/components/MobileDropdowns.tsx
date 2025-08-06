@@ -310,6 +310,7 @@ interface MobileDatePickerProps {
   setSelectedReturnDate: (date: Date | null) => void;
   selectingDeparture: boolean;
   setSelectingDeparture: (selecting: boolean) => void;
+  bookingType?: 'flights' | 'hotels'; // Add booking type context
 }
 
 export function MobileDatePicker({
