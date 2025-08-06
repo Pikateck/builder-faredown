@@ -769,6 +769,16 @@ export default function Index() {
                       </button>
                     ))}
                   </div>
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        {lastUpdated ? `Updated: ${new Date(lastUpdated).toLocaleTimeString()}` : 'Using static rates'}
+                      </span>
+                      {isLoading && (
+                        <div className="w-3 h-3 border border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
