@@ -141,7 +141,7 @@ export function BookingSearchForm() {
         );
       } catch (error) {
         console.error(
-          "���️ Failed to load popular destinations, using fallback:",
+          "⚠️ Failed to load popular destinations, using fallback:",
           error,
         );
         // Static fallback if database fails
@@ -231,7 +231,7 @@ export function BookingSearchForm() {
             country: dest.country,
             type: dest.type as "city" | "region" | "country" | "landmark",
             popular: (dest as any).popular || false,
-            flag: (dest as any).flag || "🌍",
+            flag: (dest as any).flag || "����",
           }));
 
           setDestinationSuggestions(formattedResults);
