@@ -546,8 +546,6 @@ export default function Hotels() {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  {/* Admin Test Button */}
-                  <AdminTestButton variant="desktop" />
 
                   {!isLoggedIn && (
                     <>
