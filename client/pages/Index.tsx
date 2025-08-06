@@ -1035,8 +1035,10 @@ export default function Index() {
         {/* Sample Flight Prices with Currency Conversion */}
         <div className="bg-[#003580] py-6">
           <div className="px-4">
-            <h2 className="text-white text-lg font-semibold mb-4 text-center">
+            <h2 className="text-white text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2">
+              <Ticket className="w-5 h-5 text-[#febb02]" />
               Sample Flight Prices in {selectedCurrency.name}
+              <Sparkles className="w-5 h-5 text-[#febb02]" />
             </h2>
             <div className="grid grid-cols-1 gap-3">
               <div className="bg-white rounded-xl p-4 shadow-sm">
