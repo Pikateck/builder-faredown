@@ -88,54 +88,6 @@ import {
   Minus,
   Navigation,
   Compass,
-  Sparkles,
-  Crown,
-  Diamond,
-  Gem,
-  Telescope,
-  Rocket,
-  Lightbulb,
-  Trophy,
-  Medal,
-  BadgeCheck,
-  Fingerprint,
-  Eye,
-  Cpu,
-  Wifi,
-  Radio,
-  Satellite,
-  Monitor,
-  Palette,
-  Layers,
-  Feather,
-  Wind,
-  Sun,
-  Moon,
-  Stars,
-  Flame,
-  Coffee,
-  Wine,
-  Cake,
-  PartyPopper,
-  Ticket,
-  Luggage,
-  Briefcase,
-  Camera,
-  Map,
-  Bookmark,
-  Flag,
-  Mountain,
-  Sunset,
-  Waves,
-  TreePine,
-  Palmtree,
-  Flower,
-  Leaf,
-  Shell,
-  Fish,
-  Bird,
-  Butterfly,
-  Rainbow,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import AdminTestButton from "@/components/AdminTestButton";
@@ -458,30 +410,25 @@ export default function Index() {
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center relative">
+                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
                   <Plane className="w-5 h-5 text-[#003580]" />
-                  <Sparkles className="w-3 h-3 text-[#003580] absolute -top-1 -right-1" />
                 </div>
-                <span className="text-lg font-bold flex items-center gap-1">
-                  <Crown className="w-4 h-4 text-[#febb02]" />
+                <span className="text-lg font-bold">
                   faredown.com
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                <button className="p-2 relative">
+                <button className="p-2">
                   <Globe className="w-5 h-5" />
-                  <Diamond className="w-2 h-2 text-[#febb02] absolute -top-0.5 -right-0.5" />
                 </button>
-                <button className="p-2 relative">
+                <button className="p-2">
                   <Bell className="w-5 h-5" />
-                  <Sparkles className="w-2 h-2 text-[#febb02] absolute -top-0.5 -right-0.5" />
                 </button>
                 <button
                   onClick={() => setShowMobileMenu(!showMobileMenu)}
-                  className="p-2 relative"
+                  className="p-2"
                 >
                   <Menu className="w-5 h-5" />
-                  <Gem className="w-2 h-2 text-[#febb02] absolute -top-0.5 -right-0.5" />
                 </button>
               </div>
             </div>
@@ -1034,76 +981,46 @@ export default function Index() {
         {/* Mobile Features Section */}
         <div className="bg-gray-50 py-8">
           <div className="px-4">
-            <h2 className="text-xl font-bold text-center mb-6 text-gray-900 flex items-center justify-center gap-2">
-              <Crown className="w-6 h-6 text-[#febb02]" />
+            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
               Why Faredown?
-              <Sparkles className="w-6 h-6 text-[#febb02]" />
             </h2>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
-                <div className="absolute top-1 right-1">
-                  <Sparkles className="w-3 h-3 text-[#febb02]" />
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Zap className="w-6 h-6 text-white" />
                 </div>
-                <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0056b3] rounded-xl flex items-center justify-center mx-auto mb-3 relative">
-                  <Rocket className="w-6 h-6 text-white" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#febb02] rounded-full flex items-center justify-center">
-                    <Diamond className="w-2 h-2 text-[#003580]" />
-                  </div>
-                </div>
-                <h3 className="font-semibold text-sm mb-1 flex items-center justify-center gap-1">
-                  <Zap className="w-3 h-3 text-[#febb02]" />
+                <h3 className="font-semibold text-sm mb-1">
                   Live Bargaining
                 </h3>
                 <p className="text-xs text-gray-600">
                   Negotiate real-time prices
                 </p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
-                <div className="absolute top-1 right-1">
-                  <Crown className="w-3 h-3 text-[#febb02]" />
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <TrendingUp className="w-6 h-6 text-white" />
                 </div>
-                <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0056b3] rounded-xl flex items-center justify-center mx-auto mb-3 relative">
-                  <Trophy className="w-6 h-6 text-white" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#febb02] rounded-full flex items-center justify-center">
-                    <Gem className="w-2 h-2 text-[#003580]" />
-                  </div>
-                </div>
-                <h3 className="font-semibold text-sm mb-1 flex items-center justify-center gap-1">
-                  <Medal className="w-3 h-3 text-[#febb02]" />
+                <h3 className="font-semibold text-sm mb-1">
                   Best Prices
                 </h3>
                 <p className="text-xs text-gray-600">
                   Pay what you feel is fair
                 </p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
-                <div className="absolute top-1 right-1">
-                  <Fingerprint className="w-3 h-3 text-[#febb02]" />
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-6 h-6 text-white" />
                 </div>
-                <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0056b3] rounded-xl flex items-center justify-center mx-auto mb-3 relative">
-                  <BadgeCheck className="w-6 h-6 text-white" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#febb02] rounded-full flex items-center justify-center">
-                    <Shield className="w-2 h-2 text-[#003580]" />
-                  </div>
-                </div>
-                <h3 className="font-semibold text-sm mb-1 flex items-center justify-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-green-500" />
+                <h3 className="font-semibold text-sm mb-1">
                   Secure Booking
                 </h3>
                 <p className="text-xs text-gray-600">Instant confirmations</p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
-                <div className="absolute top-1 right-1">
-                  <Heart className="w-3 h-3 text-red-500" />
-                </div>
-                <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0056b3] rounded-xl flex items-center justify-center mx-auto mb-3 relative">
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <Headphones className="w-6 h-6 text-white" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#febb02] rounded-full flex items-center justify-center">
-                    <MessageCircle className="w-2 h-2 text-[#003580]" />
-                  </div>
                 </div>
-                <h3 className="font-semibold text-sm mb-1 flex items-center justify-center gap-1">
-                  <Clock className="w-3 h-3 text-[#febb02]" />
+                <h3 className="font-semibold text-sm mb-1">
                   24/7 Support
                 </h3>
                 <p className="text-xs text-gray-600">Always here to help</p>
