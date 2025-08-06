@@ -1031,7 +1031,6 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Sample Flight Prices with Currency Conversion */}
         <div className="bg-[#003580] py-6">
           <div className="px-4">
             <h2 className="text-white text-lg font-semibold mb-4 text-center flex items-center justify-center gap-2">
