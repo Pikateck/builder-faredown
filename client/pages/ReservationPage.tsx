@@ -33,6 +33,8 @@ import {
   Coffee,
   Utensils,
   ChevronRight,
+  Banknote,
+  Building2,
   ArrowLeft,
   Lock,
 } from "lucide-react";
