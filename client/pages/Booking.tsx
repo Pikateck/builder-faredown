@@ -1676,7 +1676,7 @@ export default function Booking() {
                   </div>
 
                   <div className="flex items-center justify-center space-x-4 text-xs text-gray-500">
-                    <span>���� SSL Secured</span>
+                    <span>🔒 SSL Secured</span>
                     <span>•</span>
                     <span>💳 PCI Compliant</span>
                     <span>•</span>
@@ -1934,7 +1934,7 @@ export default function Booking() {
                     className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 text-lg"
                     onClick={() => handleRazorpayPayment()}
                   >
-                    💳 Skip & Pay ���{finalAmount.toLocaleString()} Now
+                    💳 Skip & Pay ₹{finalAmount.toLocaleString()} Now
                   </Button>
                   <div className="text-center">
                     <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
