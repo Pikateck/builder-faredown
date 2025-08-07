@@ -40,6 +40,7 @@ import {
   Zap,
   Bell,
   Menu,
+  LogOut,
 } from "lucide-react";
 import {
   MobileCityDropdown,
