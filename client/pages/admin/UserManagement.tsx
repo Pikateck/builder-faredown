@@ -802,14 +802,30 @@ export default function UserManagement() {
             </DialogDescription>
           </DialogHeader>
           <UserForm isEdit={true} />
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3 mx-6">
+              <p className="text-red-800 text-sm">{error}</p>
+            </div>
+          )}
+
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setIsEditDialogOpen(false)}
+              onClick={() => {
+                setIsEditDialogOpen(false);
+                setError(null);
+              }}
+              disabled={saving}
             >
               Cancel
             </Button>
-            <Button onClick={handleSaveUser}>Update User</Button>
+            <Button
+              onClick={handleSaveUser}
+              disabled={saving || !formData.firstName || !formData.lastName || !formData.email}
+            >
+              {saving ? "Updating..." : "Update User"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
