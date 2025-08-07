@@ -52,6 +52,7 @@ import { BookingSearchForm } from "@/components/BookingSearchForm";
 
 export default function Hotels() {
   const navigate = useNavigate();
+  const { isLoggedIn, user, logout } = useAuth();
   const {
     departureDate,
     returnDate,
