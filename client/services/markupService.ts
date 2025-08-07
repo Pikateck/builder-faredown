@@ -107,6 +107,12 @@ export interface CreateHotelMarkupRequest {
   markupValue: number;
   minAmount: number;
   maxAmount: number;
+  // Current Fare Range fields
+  currentFareMin: number; // Min markup percentage for user-visible hotel rates
+  currentFareMax: number; // Max markup percentage for user-visible hotel rates
+  // Bargain Fare Range fields
+  bargainFareMin: number; // Min acceptable bargain percentage for hotels
+  bargainFareMax: number; // Max acceptable bargain percentage for hotels
   validFrom: string;
   validTo: string;
   seasonType: "Peak Season" | "Off Season" | "Regular";
