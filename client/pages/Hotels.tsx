@@ -42,6 +42,7 @@ import {
   Bell,
   Menu,
   LogOut,
+  Code,
 } from "lucide-react";
 import {
   MobileCityDropdown,
