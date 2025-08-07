@@ -1447,55 +1447,8 @@ export default function HotelResults() {
         </div>
       </div>
 
-      <FlightStyleBargainModal
-        roomType={
-          selectedHotel
-            ? {
-                id: "standard",
-                name: "Standard Room",
-                description: "Comfortable standard room",
-                image: selectedHotel.images[0],
-                marketPrice: selectedHotel.originalPrice,
-                totalPrice: selectedHotel.currentPrice,
-                features: selectedHotel.features || [],
-                maxOccupancy: 2,
-                bedType: "1 double bed",
-                size: "6.7 km from downtown",
-                cancellation: "Free cancellation",
-              }
-            : null
-        }
-        hotel={
-          selectedHotel
-            ? {
-                id: selectedHotel.id,
-                name: selectedHotel.name,
-                location: selectedHotel.location,
-                checkIn:
-                  searchParams.get("checkIn") || new Date().toISOString(),
-                checkOut:
-                  searchParams.get("checkOut") ||
-                  new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-              }
-            : null
-        }
-        isOpen={isBargainModalOpen}
-        onClose={() => {
-          setIsBargainModalOpen(false);
-          setSelectedHotel(null);
-        }}
-        checkInDate={
-          searchParams.get("checkIn")
-            ? new Date(searchParams.get("checkIn")!)
-            : new Date()
-        }
-        checkOutDate={
-          searchParams.get("checkOut")
-            ? new Date(searchParams.get("checkOut")!)
-            : new Date(Date.now() + 24 * 60 * 60 * 1000)
-        }
-        roomsCount={parseInt(searchParams.get("rooms") || "1")}
-      />
+      {/* Phase 1 Bargain Modal for Hotels */}
+      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
 
       {/* Mobile Dropdown Components for Edit Search */}
       <MobileCityDropdown
