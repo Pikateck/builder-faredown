@@ -471,7 +471,7 @@ export default function MarkupManagementHotel() {
               onValueChange={(value) =>
                 setFormData({
                   ...formData,
-                  markupType: value as HotelMarkup["markupType"],
+                  markupType: value as "percentage" | "fixed",
                 })
               }
             >
@@ -500,9 +500,10 @@ export default function MarkupManagementHotel() {
                   markupValue: parseFloat(e.target.value) || 0,
                 })
               }
+              step="0.01"
               placeholder={
                 formData.markupType === "percentage"
-                  ? "e.g., 8.5"
+                  ? "5.00, 5.15, 5.25, etc."
                   : "e.g., 2500"
               }
             />
@@ -876,8 +877,8 @@ export default function MarkupManagementHotel() {
                                 {markup.roomCategory}
                               </Badge>
                               <div className="text-xs text-gray-600 capitalize">
-                                {markup.seasonType} season
-                              </div>
+                {markup.seasonType}
+              </div>
                             </div>
                           </TableCell>
                           <TableCell>
@@ -892,8 +893,7 @@ export default function MarkupManagementHotel() {
                                 {markup.markupType === "percentage" ? "%" : "₹"}
                               </div>
                               <div className="text-xs text-gray-600">
-                                Min: ₹{markup.minAmount} | Max: ₹
-                                {markup.maxAmount}
+                                Min: ₹{markup.minAmount} | Max: ₹{markup.maxAmount}
                               </div>
                             </div>
                           </TableCell>
