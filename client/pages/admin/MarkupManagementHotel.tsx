@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { markupService, type HotelMarkup, type CreateHotelMarkupRequest } from "@/services/markupService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -65,32 +66,11 @@ import {
   Coffee,
 } from "lucide-react";
 
-interface HotelMarkup {
-  id: string;
-  name: string;
-  description: string;
-  city: string;
-  hotelName: string;
-  hotelChain: string;
-  starRating: number;
-  roomCategory: "standard" | "deluxe" | "suite" | "all";
-  markupType: "percentage" | "fixed";
-  markupValue: number;
-  minAmount: number;
-  maxAmount: number;
-  validFrom: string;
-  validTo: string;
-  checkInDays: string[];
-  minStay: number;
-  maxStay: number;
-  status: "active" | "inactive" | "expired";
-  priority: number;
-  userType: "all" | "b2c" | "b2b";
-  seasonType: "all" | "peak" | "off-peak" | "festival";
-  specialConditions: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Using HotelMarkup from markupService
+// Local type extensions for UI
+type UIHotelMarkup = HotelMarkup & {
+  checkInDays?: string[];
+};
 
 const POPULAR_CITIES = [
   { code: "BOM", name: "Mumbai", country: "India" },
@@ -138,10 +118,9 @@ const ROOM_CATEGORIES = [
 ];
 
 const SEASON_TYPES = [
-  { value: "all", label: "All Seasons" },
-  { value: "peak", label: "Peak Season" },
-  { value: "off-peak", label: "Off-Peak Season" },
-  { value: "festival", label: "Festival Season" },
+  { value: "Regular", label: "Regular Season" },
+  { value: "Peak Season", label: "Peak Season" },
+  { value: "Off Season", label: "Off Season" },
 ];
 
 const DAYS_OF_WEEK = [
@@ -154,74 +133,23 @@ const DAYS_OF_WEEK = [
   { value: "sunday", label: "Sunday" },
 ];
 
-// Mock data
-const mockMarkups: HotelMarkup[] = [
-  {
-    id: "1",
-    name: "Mumbai Luxury Hotels Markup",
-    description: "Standard markup for luxury hotels in Mumbai",
-    city: "Mumbai",
-    hotelName: "Taj Hotel",
-    hotelChain: "Taj Hotels",
-    starRating: 5,
-    roomCategory: "deluxe",
-    markupType: "percentage",
-    markupValue: 8.5,
-    minAmount: 1000,
-    maxAmount: 5000,
-    validFrom: "2024-01-01",
-    validTo: "2024-12-31",
-    checkInDays: ["friday", "saturday", "sunday"],
-    minStay: 1,
-    maxStay: 7,
-    status: "active",
-    priority: 1,
-    userType: "all",
-    seasonType: "peak",
-    specialConditions: "Valid for weekend bookings only",
-    createdAt: "2024-01-15T10:00:00Z",
-    updatedAt: "2024-01-20T15:30:00Z",
-  },
-  {
-    id: "2",
-    name: "Delhi Business Hotels Markup",
-    description: "Corporate markup for business hotels in Delhi",
-    city: "Delhi",
-    hotelName: "ITC Maurya",
-    hotelChain: "ITC Hotels",
-    starRating: 5,
-    roomCategory: "suite",
-    markupType: "fixed",
-    markupValue: 2500,
-    minAmount: 1500,
-    maxAmount: 8000,
-    validFrom: "2024-02-01",
-    validTo: "2024-11-30",
-    checkInDays: ["monday", "tuesday", "wednesday", "thursday"],
-    minStay: 2,
-    maxStay: 14,
-    status: "active",
-    priority: 2,
-    userType: "b2b",
-    seasonType: "all",
-    specialConditions: "Applies to corporate bookings with minimum 2 nights",
-    createdAt: "2024-01-10T09:00:00Z",
-    updatedAt: "2024-01-18T12:15:00Z",
-  },
-];
+// Service integration - no more mock data
 
 export default function MarkupManagementHotel() {
-  const [markups, setMarkups] = useState<HotelMarkup[]>(mockMarkups);
+  const [markups, setMarkups] = useState<UIHotelMarkup[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedMarkup, setSelectedMarkup] = useState<HotelMarkup | null>(
+  const [selectedMarkup, setSelectedMarkup] = useState<UIHotelMarkup | null>(
     null,
   );
-  const [formData, setFormData] = useState<Partial<HotelMarkup>>({});
+  const [formData, setFormData] = useState<Partial<CreateHotelMarkupRequest>>({});
   const [activeTab, setActiveTab] = useState("list");
 
   // Filter markups
