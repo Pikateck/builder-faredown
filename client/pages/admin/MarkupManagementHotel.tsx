@@ -1001,6 +1001,30 @@ export default function MarkupManagementHotel() {
         </TabsContent>
       </Tabs>
 
+      {/* Create Markup Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Hotel Markup Rule</DialogTitle>
+            <DialogDescription>
+              Create a new markup configuration for hotel bookings.
+            </DialogDescription>
+          </DialogHeader>
+          <MarkupForm />
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsCreateDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleSaveMarkup} disabled={saving}>
+              {saving ? 'Creating...' : 'Create Markup'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Edit Markup Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
