@@ -210,6 +210,12 @@ export default function MarkupManagementHotel() {
       markupValue: 0,
       minAmount: 0,
       maxAmount: 0,
+      // Current Fare Range defaults for hotels
+      currentFareMin: 10.00, // 10% minimum markup for user-visible hotel rates
+      currentFareMax: 15.00, // 15% maximum markup for user-visible hotel rates
+      // Bargain Fare Range defaults for hotels
+      bargainFareMin: 5.00,  // 5% minimum acceptable hotel bargain
+      bargainFareMax: 15.00, // 15% maximum acceptable hotel bargain
       validFrom: "",
       validTo: "",
       seasonType: "Regular",
