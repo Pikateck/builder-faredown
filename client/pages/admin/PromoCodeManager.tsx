@@ -953,6 +953,44 @@ export default function PromoCodeManager() {
         </TabsContent>
       </Tabs>
 
+      {/* Create Promo Code Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Promo Code</DialogTitle>
+            <DialogDescription>
+              Create a new promo code with discounts and conditions.
+            </DialogDescription>
+          </DialogHeader>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <p className="text-red-800 text-sm">{error}</p>
+            </div>
+          )}
+
+          <PromoCodeForm isEdit={false} />
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCreateDialogOpen(false);
+                setError(null);
+              }}
+              disabled={saving}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSavePromoCode}
+              disabled={saving || !formData.code || !formData.description}
+            >
+              {saving ? "Creating..." : "Create Promo Code"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Edit Promo Code Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -962,15 +1000,31 @@ export default function PromoCodeManager() {
               Update promo code configuration and settings.
             </DialogDescription>
           </DialogHeader>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <p className="text-red-800 text-sm">{error}</p>
+            </div>
+          )}
+
           <PromoCodeForm isEdit={true} />
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setIsEditDialogOpen(false)}
+              onClick={() => {
+                setIsEditDialogOpen(false);
+                setError(null);
+              }}
+              disabled={saving}
             >
               Cancel
             </Button>
-            <Button onClick={handleSavePromoCode}>Update Promo Code</Button>
+            <Button
+              onClick={handleSavePromoCode}
+              disabled={saving || !formData.code || !formData.description}
+            >
+              {saving ? "Updating..." : "Update Promo Code"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
