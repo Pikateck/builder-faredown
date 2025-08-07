@@ -147,9 +147,40 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // In production, always use fallback mode to avoid fetch errors
+    // Try real API first, even in production
     if (this.isProduction) {
-      console.log(`🔄 Production mode: Using fallback for ${endpoint}`);
+      console.log(`🌐 Production mode: Trying real API first for ${endpoint}`);
+      // Try real API first with quick timeout
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+
+        const url = new URL(`${this.baseURL}${endpoint}`);
+        if (params) {
+          Object.keys(params).forEach((key) => {
+            if (params[key] !== undefined && params[key] !== null) {
+              url.searchParams.append(key, String(params[key]));
+            }
+          });
+        }
+
+        const response = await fetch(url.toString(), {
+          method: "GET",
+          headers: this.getHeaders(),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          console.log(`✅ Real API success: ${endpoint}`);
+          return this.handleResponse<T>(response);
+        }
+      } catch (error) {
+        console.log(`⚠️ Real API failed for ${endpoint}, using fallback`);
+      }
+
+      // Fallback to dev client if real API fails
       return this.devClient.get<T>(endpoint, params);
     }
 
