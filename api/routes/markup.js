@@ -399,9 +399,22 @@ router.post("/hotel", authenticateToken, (req, res) => {
       markupValue,
       minAmount,
       maxAmount,
+      // Current Fare Range fields for hotels
+      currentFareMin,
+      currentFareMax,
+      // Bargain Fare Range fields for hotels
+      bargainFareMin,
+      bargainFareMax,
+      // Additional fare range fields
+      highFareMin,
+      highFareMax,
+      lowFareMin,
+      lowFareMax,
+      hotelCode,
       validFrom,
       validTo,
       checkInDays,
+      applicableDays,
       minStay,
       maxStay,
       status,
