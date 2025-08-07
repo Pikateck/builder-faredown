@@ -89,7 +89,6 @@ import {
   Minus,
   Navigation,
   Compass,
-  Shield,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
