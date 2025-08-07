@@ -19,6 +19,12 @@ export interface AirMarkup {
   markupValue: number;
   minAmount: number;
   maxAmount: number;
+  // Current Fare Range (existing functionality)
+  currentFareMin: number; // Min markup percentage for user-visible fare
+  currentFareMax: number; // Max markup percentage for user-visible fare
+  // New Bargain Fare Range fields
+  bargainFareMin: number; // Min acceptable bargain percentage
+  bargainFareMax: number; // Max acceptable bargain percentage
   validFrom: string;
   validTo: string;
   status: "active" | "inactive" | "expired";
