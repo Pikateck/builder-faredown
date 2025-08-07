@@ -104,6 +104,62 @@ let promoCodes = [
     createdAt: "2025-01-01T00:00:00Z",
     createdBy: "admin",
   },
+  // Zubin's Sample Data - FAREDOWNBONUS Promo Code for Flights
+  {
+    id: "promo_004",
+    code: "FAREDOWNBONUS",
+    name: "FAREDOWNBONUS Flight Discount",
+    type: "fixed", // INR (Flat) as per Zubin's spec
+    discountFrom: 2000, // Min Discount: ₹2,000
+    discountTo: 5000,   // Max Discount: ₹5,000
+    applicableTo: "flights",
+    filters: {
+      // Universal for flights - no specific filters
+      minFare: 10500, // Min Fare: ₹10,500 from Zubin's spec
+    },
+    travelPeriod: {
+      from: "2025-01-01",
+      to: "2025-12-31",
+    },
+    validity: {
+      startDate: "2025-01-01",
+      endDate: "2025-12-31",
+    },
+    marketingBudget: 100000, // Budget: ₹100,000 from Zubin's spec
+    budgetUsed: 0,
+    status: "active", // Status: Active from Zubin's spec
+    usageCount: 0,
+    createdAt: new Date().toISOString(),
+    createdBy: "admin",
+  },
+  // Zubin's Sample Data - FAREDOWNBONUS Promo Code for Hotels
+  {
+    id: "promo_005",
+    code: "FAREDOWNBONUS",
+    name: "FAREDOWNBONUS Hotel Discount",
+    type: "fixed", // INR (Flat) as per Zubin's spec
+    discountFrom: 2000, // Min Discount: ₹2,000
+    discountTo: 5000,   // Max Discount: ₹5,000
+    applicableTo: "hotels",
+    filters: {
+      // Universal for hotels - no specific filters
+      minFare: 10500, // Min Fare: ₹10,500 from Zubin's spec
+    },
+    travelPeriod: {
+      from: "2025-01-01",
+      to: "2025-12-31",
+    },
+    validity: {
+      startDate: "2025-01-01",
+      endDate: "2025-12-31",
+    },
+    marketingBudget: 100000, // Budget: ₹100,000 from Zubin's spec
+    budgetUsed: 0,
+    status: "active", // Status: Active from Zubin's spec
+    usageCount: 0,
+    createdAt: new Date().toISOString(),
+    createdBy: "admin",
+  },
 ];
 
 let bargainSessions = new Map();
