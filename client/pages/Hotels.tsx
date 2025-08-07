@@ -610,7 +610,64 @@ export default function Hotels() {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  {!isLoggedIn && (
+                  {isLoggedIn ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="flex items-center space-x-2 text-white hover:text-blue-200 px-3 py-2 rounded-lg transition-colors">
+                          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                            <span className="text-[#003580] font-bold text-sm">
+                              {userName.charAt(0)}
+                            </span>
+                          </div>
+                          <span className="font-medium">{userName}</span>
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48" align="end">
+                        <DropdownMenuItem>
+                          <Link to="/account" className="flex items-center">
+                            <User className="w-4 h-4 mr-2" />
+                            My account
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/account/trips" className="flex items-center">
+                            <Plane className="w-4 h-4 mr-2" />
+                            Bookings & Trips
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/account/loyalty" className="flex items-center">
+                            <Heart className="w-4 h-4 mr-2" />
+                            Loyalty program
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/account/payment" className="flex items-center">
+                            <DollarSign className="w-4 h-4 mr-2" />
+                            Rewards & Wallet
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/my-trips" className="flex items-center">
+                            <Settings className="w-4 h-4 mr-2" />
+                            Completed trips
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleSignOut}>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign out
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => window.open('/admin/login', '_blank')}
+                          className="border-t mt-1 pt-2"
+                        >
+                          <Shield className="w-4 h-4 mr-2" />
+                          Admin Panel
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
                     <>
                       <Button
                         variant="outline"
@@ -856,7 +913,7 @@ export default function Hotels() {
                 </div>
                 <p className="text-gray-700 text-sm">
                   "Saved ₹15,000 on my Dubai trip! The bargaining feature is
-                  amazing. Got business class hotel using Bargain™. Faredown is
+                  amazing. Got business class hotel using Bargain��. Faredown is
                   revolutionary! Customer service is excellent."
                 </p>
                 <div className="mt-4 text-xs text-gray-500">
