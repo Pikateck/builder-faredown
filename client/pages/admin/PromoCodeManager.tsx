@@ -266,10 +266,10 @@ export default function PromoCodeManager() {
       description: "",
       category: "flight",
       discountType: "percentage",
-      discountMinValue: 0,
-      discountMaxValue: 0,
-      minimumFareAmount: 0,
-      marketingBudget: 0,
+      discountMinValue: 5.00,
+      discountMaxValue: 25.00,
+      minimumFareAmount: 1000,
+      marketingBudget: 10000,
       expiryDate: "",
       promoCodeImage: "",
       displayOnHomePage: "yes",
@@ -290,56 +290,59 @@ export default function PromoCodeManager() {
     setIsEditDialogOpen(true);
   };
 
-  const handleSavePromoCode = () => {
-    if (selectedPromoCode) {
-      // Update existing promo code
-      setPromoCodes(
-        promoCodes.map((p) =>
-          p.id === selectedPromoCode.id
-            ? {
-                ...p,
-                ...formData,
-                updatedOn: new Date().toLocaleString(),
-                module: formData.category as "flight" | "hotel",
-              }
-            : p,
-        ),
-      );
-      setIsEditDialogOpen(false);
-    } else {
-      // Create new promo code
-      const newPromoCode: PromoCode = {
-        ...(formData as PromoCode),
-        id: Date.now().toString(),
-        createdOn: new Date().toLocaleString(),
-        updatedOn: new Date().toLocaleString(),
-        module: formData.category as "flight" | "hotel",
-      };
-      setPromoCodes([...promoCodes, newPromoCode]);
-      setIsCreateDialogOpen(false);
+  const handleSavePromoCode = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+
+      if (selectedPromoCode) {
+        // Update existing promo code
+        await promoCodeService.updatePromoCode(selectedPromoCode.id, formData as Partial<CreatePromoCodeRequest>);
+        setIsEditDialogOpen(false);
+      } else {
+        // Create new promo code
+        if (!formData.code || !formData.description) {
+          setError("Code and description are required");
+          return;
+        }
+
+        await promoCodeService.createPromoCode(formData as CreatePromoCodeRequest);
+        setIsCreateDialogOpen(false);
+        // Switch back to list tab after successful creation
+        setActiveTab("list");
+      }
+
+      // Reload promo codes to reflect changes
+      await loadPromoCodes();
+      setFormData({});
+      setSelectedPromoCode(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save promo code');
+    } finally {
+      setSaving(false);
     }
-    setFormData({});
-    setSelectedPromoCode(null);
   };
 
-  const handleDeletePromoCode = (promoId: string) => {
+  const handleDeletePromoCode = async (promoId: string) => {
     if (confirm("Are you sure you want to delete this promo code?")) {
-      setPromoCodes(promoCodes.filter((p) => p.id !== promoId));
+      try {
+        setError(null);
+        await promoCodeService.deletePromoCode(promoId);
+        await loadPromoCodes(); // Reload list
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete promo code');
+      }
     }
   };
 
-  const togglePromoCodeStatus = (promoId: string) => {
-    setPromoCodes(
-      promoCodes.map((p) =>
-        p.id === promoId
-          ? {
-              ...p,
-              status: p.status === "active" ? "pending" : "active",
-              updatedOn: new Date().toLocaleString(),
-            }
-          : p,
-      ),
-    );
+  const togglePromoCodeStatus = async (promoId: string) => {
+    try {
+      setError(null);
+      await promoCodeService.togglePromoCodeStatus(promoId);
+      await loadPromoCodes(); // Reload list to reflect changes
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update promo code status');
+    }
   };
 
   const StatusBadge = ({ status }: { status: PromoCode["status"] }) => {
