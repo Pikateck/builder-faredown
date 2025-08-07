@@ -543,6 +543,116 @@ export default function MarkupManagementHotel() {
             />
           </div>
         </div>
+
+        {/* Current Fare Range (Min/Max) for Hotels */}
+        <div className="bg-blue-50 p-4 rounded-lg">
+          <h4 className="text-md font-semibold text-blue-800 mb-3">
+            Current Fare Range (User-Visible Hotel Rates)
+          </h4>
+          <p className="text-sm text-blue-700 mb-4">
+            The markup percentage range applied on top of net hotel rate from suppliers (Hotelbeds, TBO, etc.). Hotel prices will randomly fluctuate within this range per session.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="currentFareMin">Current Fare Min (%)</Label>
+              <Input
+                id="currentFareMin"
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                value={formData.currentFareMin || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    currentFareMin: parseFloat(e.target.value) || 0,
+                  })
+                }
+                placeholder="e.g., 10.00"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Minimum markup percentage for user-visible hotel rates
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="currentFareMax">Current Fare Max (%)</Label>
+              <Input
+                id="currentFareMax"
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                value={formData.currentFareMax || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    currentFareMax: parseFloat(e.target.value) || 0,
+                  })
+                }
+                placeholder="e.g., 15.00"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Maximum markup percentage for user-visible hotel rates
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bargain Fare Range (Min/Max) for Hotels */}
+        <div className="bg-green-50 p-4 rounded-lg">
+          <h4 className="text-md font-semibold text-green-800 mb-3">
+            Bargain Fare Range (Acceptable Hotel Bargain Pricing)
+          </h4>
+          <p className="text-sm text-green-700 mb-4">
+            When users enter a custom hotel price, if it falls within this range, show "Your price is matched!". Otherwise, provide counter-offers within Current Fare range.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="bargainFareMin">Bargain Fare Min (%)</Label>
+              <Input
+                id="bargainFareMin"
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                value={formData.bargainFareMin || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    bargainFareMin: parseFloat(e.target.value) || 0,
+                  })
+                }
+                placeholder="e.g., 5.00"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Minimum acceptable bargain percentage for hotels
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="bargainFareMax">Bargain Fare Max (%)</Label>
+              <Input
+                id="bargainFareMax"
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                value={formData.bargainFareMax || ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    bargainFareMax: parseFloat(e.target.value) || 0,
+                  })
+                }
+                placeholder="e.g., 15.00"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Maximum acceptable bargain percentage for hotels
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Booking Conditions */}
