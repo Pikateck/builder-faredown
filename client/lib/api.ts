@@ -90,7 +90,7 @@ class ApiClient {
 
     if (this.isProduction) {
       console.log(
-        "🌐 Production mode detected - using fallback for all API calls",
+        "🌐 Production mode detected - using fallback for all API calls to prevent fetch errors",
       );
     }
   }
