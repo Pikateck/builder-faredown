@@ -89,6 +89,7 @@ import {
   Minus,
   Navigation,
   Compass,
+  Shield,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
@@ -604,6 +605,21 @@ export default function Index() {
                           <LogOut className="w-4 h-4" />
                           <span className="text-sm font-medium">Sign Out</span>
                         </button>
+
+                        {/* Admin Panel Access */}
+                        <div className="border-t border-gray-200 pt-4 mt-4">
+                          <button
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                            onClick={() => {
+                              // Navigate to admin panel
+                              window.open('/admin/login', '_blank');
+                              setShowMobileMenu(false);
+                            }}
+                          >
+                            <Shield className="w-4 h-4" />
+                            <span className="text-sm font-medium">Admin Panel</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ) : (
