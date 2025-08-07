@@ -36,7 +36,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { bargainPricingService, type BargainPricingRequest, type BargainPricingResult, type CounterOfferResponse } from '@/services/bargainPricingService';
-import { formatPriceNoDecimals } from '@/lib/formatPrice';
+import { formatPriceNoDecimalsNoDecimals } from '@/lib/formatPriceNoDecimals';
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
@@ -226,7 +226,7 @@ export default function BargainModalPhase1({
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-2">Current Price</p>
               <p className="text-3xl font-bold text-blue-600 mb-2">
-                {formatPrice(pricingResult.finalPrice)}
+                {formatPriceNoDecimals(pricingResult.finalPrice)}
               </p>
               {pricingResult.promoDetails && (
                 <div className="flex items-center justify-center gap-2 mb-2">
@@ -235,7 +235,7 @@ export default function BargainModalPhase1({
                     Promo Applied: {pricingResult.promoDetails.code}
                   </Badge>
                   <span className="text-sm text-green-600">
-                    -{formatPrice(pricingResult.promoDetails.discountAmount)}
+                    -{formatPriceNoDecimals(pricingResult.promoDetails.discountAmount)}
                   </span>
                 </div>
               )}
@@ -265,24 +265,24 @@ export default function BargainModalPhase1({
               <div className="grid gap-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Base Price:</span>
-                  <span>{formatPrice(pricingResult.originalPrice)}</span>
+                  <span>{formatPriceNoDecimals(pricingResult.originalPrice)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">
                     Markup ({pricingResult.markupDetails.markupPercentage.toFixed(2)}%):
                   </span>
-                  <span>+{formatPrice(pricingResult.markupDetails.markupAmount)}</span>
+                  <span>+{formatPriceNoDecimals(pricingResult.markupDetails.markupAmount)}</span>
                 </div>
                 {pricingResult.promoDetails && (
                   <div className="flex justify-between text-green-600">
                     <span>Promo Discount:</span>
-                    <span>-{formatPrice(pricingResult.promoDetails.discountAmount)}</span>
+                    <span>-{formatPriceNoDecimals(pricingResult.promoDetails.discountAmount)}</span>
                   </div>
                 )}
                 <hr className="my-2" />
                 <div className="flex justify-between font-semibold">
                   <span>Final Price:</span>
-                  <span>{formatPrice(pricingResult.finalPrice)}</span>
+                  <span>{formatPriceNoDecimals(pricingResult.finalPrice)}</span>
                 </div>
               </div>
               <div className="bg-blue-50 p-3 rounded-lg">
@@ -324,10 +324,10 @@ export default function BargainModalPhase1({
             
             <div className="bg-yellow-50 p-3 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>Bargain Range:</strong> {formatPrice(pricingResult.bargainRange.minimumAcceptable)} - {formatPrice(pricingResult.bargainRange.maximumCounterOffer)}
+                <strong>Bargain Range:</strong> {formatPriceNoDecimals(pricingResult.bargainRange.minimumAcceptable)} - {formatPriceNoDecimals(pricingResult.bargainRange.maximumCounterOffer)}
               </p>
               <p className="text-xs text-yellow-700 mt-1">
-                Recommended target: {formatPrice(pricingResult.bargainRange.recommendedTarget)}
+                Recommended target: {formatPriceNoDecimals(pricingResult.bargainRange.recommendedTarget)}
               </p>
             </div>
 
@@ -375,7 +375,7 @@ export default function BargainModalPhase1({
               <h3 className="text-lg font-semibold text-orange-800 mb-2">Counter Offer!</h3>
               {counterOfferResponse.counterOffer && (
                 <p className="text-2xl font-bold text-orange-600 mb-2">
-                  {formatPrice(counterOfferResponse.counterOffer)}
+                  {formatPriceNoDecimals(counterOfferResponse.counterOffer)}
                 </p>
               )}
               <p className="text-sm text-orange-700">{counterOfferResponse.reasoning}</p>
@@ -393,7 +393,7 @@ export default function BargainModalPhase1({
                   <span className="font-medium text-green-800">Potential Savings</span>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-green-600">{formatPrice(savingsInfo.savings)}</p>
+                  <p className="font-bold text-green-600">{formatPriceNoDecimals(savingsInfo.savings)}</p>
                   <p className="text-sm text-green-600">{savingsInfo.savingsPercentage.toFixed(1)}% off</p>
                 </div>
               </div>
@@ -438,13 +438,13 @@ export default function BargainModalPhase1({
         <div className="py-8">
           <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-green-800 mb-2">Bargain Successful!</h3>
-          <p className="text-3xl font-bold text-green-600 mb-2">{formatPrice(finalPrice)}</p>
+          <p className="text-3xl font-bold text-green-600 mb-2">{formatPriceNoDecimals(finalPrice)}</p>
           
           {savingsInfo && savingsInfo.savings > 0 && (
             <div className="bg-green-50 p-4 rounded-lg">
               <p className="text-green-800">
                 <Award className="w-4 h-4 inline mr-1" />
-                You saved <strong>{formatPrice(savingsInfo.savings)}</strong> ({savingsInfo.savingsPercentage.toFixed(1)}% off)!
+                You saved <strong>{formatPriceNoDecimals(savingsInfo.savings)}</strong> ({savingsInfo.savingsPercentage.toFixed(1)}% off)!
               </p>
             </div>
           )}
@@ -452,7 +452,7 @@ export default function BargainModalPhase1({
 
         <Button onClick={handleBookNow} className="w-full bg-green-600 hover:bg-green-700">
           <CheckCircle className="w-4 h-4 mr-2" />
-          Confirm Booking at {formatPrice(finalPrice)}
+          Confirm Booking at {formatPriceNoDecimals(finalPrice)}
         </Button>
       </div>
     );
@@ -467,7 +467,7 @@ export default function BargainModalPhase1({
           We couldn't reach an agreement this time, but you can still book at the current price.
         </p>
         {pricingResult && (
-          <p className="text-2xl font-bold text-blue-600">{formatPrice(pricingResult.finalPrice)}</p>
+          <p className="text-2xl font-bold text-blue-600">{formatPriceNoDecimals(pricingResult.finalPrice)}</p>
         )}
       </div>
 
