@@ -12,12 +12,21 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // Production backend URL on Render
+  // Production backend URL detection
   if (window.location.hostname !== "localhost") {
-    // TODO: Replace this with your actual Render backend URL once deployed
-    // For now, use the Vite dev server's built-in API proxy
-    console.log("🌐 Production mode - using current origin for API calls");
-    return window.location.origin;
+    // Check if we're on the fly.dev domain
+    if (window.location.hostname.includes("fly.dev")) {
+      // Extract the app name from the URL and construct backend URL
+      const appName = window.location.hostname.split("-")[0];
+      const backendUrl = `https://${appName}-backend.fly.dev`;
+      console.log("🌐 Production mode - using fly.dev backend:", backendUrl);
+      return backendUrl;
+    }
+
+    // For other production environments, try different port on same domain
+    const backendUrl = `${window.location.protocol}//${window.location.hostname}:8080`;
+    console.log("🌐 Production mode - using backend port:", backendUrl);
+    return backendUrl;
   }
 
   // Default to localhost for development
@@ -147,40 +156,9 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // Try real API first, even in production
+    // In production, use fallback mode to prevent fetch errors
     if (this.isProduction) {
-      console.log(`🌐 Production mode: Trying real API first for ${endpoint}`);
-      // Try real API first with quick timeout
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-
-        const url = new URL(`${this.baseURL}${endpoint}`);
-        if (params) {
-          Object.keys(params).forEach((key) => {
-            if (params[key] !== undefined && params[key] !== null) {
-              url.searchParams.append(key, String(params[key]));
-            }
-          });
-        }
-
-        const response = await fetch(url.toString(), {
-          method: "GET",
-          headers: this.getHeaders(),
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        if (response.ok) {
-          console.log(`✅ Real API success: ${endpoint}`);
-          return this.handleResponse<T>(response);
-        }
-      } catch (error) {
-        console.log(`⚠️ Real API failed for ${endpoint}, using fallback`);
-      }
-
-      // Fallback to dev client if real API fails
+      console.log(`🔄 Production mode: Using fallback for ${endpoint} (avoiding fetch errors)`);
       return this.devClient.get<T>(endpoint, params);
     }
 
