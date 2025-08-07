@@ -215,24 +215,8 @@ export default function MarkupManagementAir() {
     }
   };
 
-  // Filter markups
-  const filteredMarkups = markups.filter((markup) => {
-    const matchesSearch =
-      markup.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      markup.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      `${markup.route.from}-${markup.route.to}`
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-
-    const matchesAirline =
-      selectedAirline === "all" || markup.airline === selectedAirline;
-    const matchesClass =
-      selectedClass === "all" || markup.class === selectedClass;
-    const matchesStatus =
-      selectedStatus === "all" || markup.status === selectedStatus;
-
-    return matchesSearch && matchesAirline && matchesClass && matchesStatus;
-  });
+  // Use server-filtered markups directly
+  const filteredMarkups = markups;
 
   const handleCreateMarkup = () => {
     setFormData({
