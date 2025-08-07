@@ -644,108 +644,145 @@ export default function UserManagement() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredUsers.map((user) => {
-                      const roleConfig = ROLES[user.role];
-                      const RoleIcon = roleConfig.icon;
-
-                      return (
-                        <TableRow key={user.id}>
-                          <TableCell>
-                            <div className="flex items-center space-x-3">
-                              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                                <span className="text-blue-600 font-medium">
-                                  {user.firstName.charAt(0)}
-                                  {user.lastName.charAt(0)}
-                                </span>
-                              </div>
-                              <div>
-                                <p className="font-medium">
-                                  {user.title} {user.firstName} {user.lastName}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  {user.email}
-                                </p>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm">
-                                <Phone className="w-3 h-3 mr-1" />
-                                {user.phone}
-                              </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="w-3 h-3 mr-1" />
-                                {user.address}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge
-                              className={`${roleConfig.color} flex items-center gap-1 w-fit`}
+                    {loading ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8">
+                          <div className="flex items-center justify-center space-x-2">
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                            <span>Loading users...</span>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : error ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8">
+                          <div className="text-red-600 text-center">
+                            <AlertCircle className="w-6 h-6 mx-auto mb-2" />
+                            <p>{error}</p>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={loadUsers}
+                              className="mt-2"
                             >
-                              <RoleIcon className="w-3 h-3" />
-                              {roleConfig.name}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <StatusBadge status={user.status} />
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center text-sm">
-                              <Clock className="w-3 h-3 mr-1" />
-                              {user.lastLogin
-                                ? new Date(user.lastLogin).toLocaleDateString()
-                                : "Never"}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreVertical className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleEditUser(user)}
-                                >
-                                  <Edit className="w-4 h-4 mr-2" />
-                                  Edit User
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => toggleUserStatus(user.id)}
-                                >
-                                  {user.status === "active" ? (
-                                    <>
-                                      <UserX className="w-4 h-4 mr-2" />
-                                      Deactivate
-                                    </>
-                                  ) : (
-                                    <>
-                                      <UserCheck className="w-4 h-4 mr-2" />
-                                      Activate
-                                    </>
-                                  )}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Key className="w-4 h-4 mr-2" />
-                                  Reset Password
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDeleteUser(user.id)}
-                                  className="text-red-600"
-                                  disabled={user.role === "super_admin"}
-                                >
-                                  <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete User
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                              Retry
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredUsers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8">
+                          <div className="text-gray-500 text-center">
+                            <Users className="w-6 h-6 mx-auto mb-2" />
+                            <p>No users found</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredUsers.map((user) => {
+                        const roleConfig = ROLES[user.role];
+                        const RoleIcon = roleConfig.icon;
+
+                        return (
+                          <TableRow key={user.id}>
+                            <TableCell>
+                              <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                  <span className="text-blue-600 font-medium">
+                                    {user.firstName.charAt(0)}
+                                    {user.lastName.charAt(0)}
+                                  </span>
+                                </div>
+                                <div>
+                                  <p className="font-medium">
+                                    {user.title} {user.firstName} {user.lastName}
+                                  </p>
+                                  <p className="text-sm text-gray-600">
+                                    {user.email}
+                                  </p>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm">
+                                  <Phone className="w-3 h-3 mr-1" />
+                                  {user.phone}
+                                </div>
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <MapPin className="w-3 h-3 mr-1" />
+                                  {user.address}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                className={`${roleConfig.color} flex items-center gap-1 w-fit`}
+                              >
+                                <RoleIcon className="w-3 h-3" />
+                                {roleConfig.name}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <StatusBadge status={user.status} />
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center text-sm">
+                                <Clock className="w-3 h-3 mr-1" />
+                                {user.lastLogin
+                                  ? new Date(user.lastLogin).toLocaleDateString()
+                                  : "Never"}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreVertical className="w-4 h-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    onClick={() => handleEditUser(user)}
+                                  >
+                                    <Edit className="w-4 h-4 mr-2" />
+                                    Edit User
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => toggleUserStatus(user.id)}
+                                  >
+                                    {user.status === "active" ? (
+                                      <>
+                                        <UserX className="w-4 h-4 mr-2" />
+                                        Deactivate
+                                      </>
+                                    ) : (
+                                      <>
+                                        <UserCheck className="w-4 h-4 mr-2" />
+                                        Activate
+                                      </>
+                                    )}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Key className="w-4 h-4 mr-2" />
+                                    Reset Password
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => handleDeleteUser(user.id)}
+                                    className="text-red-600"
+                                    disabled={user.role === "super_admin"}
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete User
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
                   </TableBody>
                 </Table>
               </div>
