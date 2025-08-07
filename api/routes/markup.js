@@ -78,18 +78,67 @@ let hotelMarkups = [
     markupValue: 8.5,
     minAmount: 1000,
     maxAmount: 5000,
+    // Current Fare Range (for dynamic pricing display)
+    currentFareMin: 10.00, // Min markup percentage for user-visible hotel rates
+    currentFareMax: 15.00, // Max markup percentage for user-visible hotel rates
+    // Bargain Fare Range (for user-entered price validation)
+    bargainFareMin: 5.00,  // Min acceptable bargain percentage for hotels
+    bargainFareMax: 15.00, // Max acceptable bargain percentage for hotels
     validFrom: "2024-01-01",
     validTo: "2024-12-31",
     checkInDays: ["friday", "saturday", "sunday"],
+    applicableDays: ["friday", "saturday", "sunday"], // Alias for checkInDays
     minStay: 1,
     maxStay: 7,
     status: "active",
     priority: 1,
     userType: "all",
-    seasonType: "peak",
+    seasonType: "Peak Season",
     specialConditions: "Valid for weekend bookings only",
     createdAt: "2024-01-15T10:00:00Z",
     updatedAt: "2024-01-20T15:30:00Z",
+  },
+  // Zubin's Sample Data - Hotel Markup (Hotelbeds)
+  {
+    id: "2",
+    name: "Hotelbeds Taj Mahal Palace Mumbai",
+    description: "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
+    city: "Mumbai", // From Zubin's spec: Mumbai
+    hotelName: "Taj Mahal Palace", // From Zubin's spec: 53331 (Taj Mahal Palace)
+    hotelChain: "Taj Hotels",
+    starRating: 5,
+    roomCategory: "deluxe",
+    markupType: "percentage",
+    markupValue: 12.00, // Average of the ranges
+    minAmount: 1000,
+    maxAmount: 8000,
+    // Hotel No reference from spec
+    hotelCode: "53331", // From Zubin's spec
+    // High Fare Range
+    highFareMin: 20.00,
+    highFareMax: 25.00,
+    // Low Fare Range
+    lowFareMin: 15.00,
+    lowFareMax: 20.00,
+    // Current Fare Range (Min/Max) - User-visible hotel rates
+    currentFareMin: 10.00, // From Zubin's spec
+    currentFareMax: 12.00, // From Zubin's spec
+    // Discount Fare Range (Min/Max) - Used for hotel bargain logic
+    bargainFareMin: 10.00, // From Zubin's spec (Discount Fare Min)
+    bargainFareMax: 20.00, // From Zubin's spec (Discount Fare Max)
+    validFrom: "2025-01-01",
+    validTo: "2025-12-31",
+    checkInDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    applicableDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    minStay: 1,
+    maxStay: 30,
+    status: "active",
+    priority: 1,
+    userType: "all",
+    seasonType: "Regular",
+    specialConditions: "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
 
