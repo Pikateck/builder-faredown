@@ -162,7 +162,7 @@ const mockMarkups: AirMarkup[] = [
 ];
 
 export default function MarkupManagementAir() {
-  const [markups, setMarkups] = useState<AirMarkup[]>(mockMarkups);
+  const [markups, setMarkups] = useState<AirMarkup[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAirline, setSelectedAirline] = useState<string>("all");
   const [selectedClass, setSelectedClass] = useState<string>("all");
@@ -172,6 +172,47 @@ export default function MarkupManagementAir() {
   const [selectedMarkup, setSelectedMarkup] = useState<AirMarkup | null>(null);
   const [formData, setFormData] = useState<Partial<AirMarkup>>({});
   const [activeTab, setActiveTab] = useState("list");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    total: 0,
+  });
+
+  // Load markups on component mount and when filters change
+  useEffect(() => {
+    loadMarkups();
+  }, [searchTerm, selectedAirline, selectedClass, selectedStatus, pagination.page]);
+
+  const loadMarkups = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await markupService.getAirMarkups({
+        search: searchTerm || undefined,
+        airline: selectedAirline,
+        class: selectedClass,
+        status: selectedStatus,
+        page: pagination.page,
+        limit: 10,
+      });
+
+      setMarkups(result.markups);
+      setPagination({
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load air markups');
+      console.error('Error loading air markups:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter markups
   const filteredMarkups = markups.filter((markup) => {
