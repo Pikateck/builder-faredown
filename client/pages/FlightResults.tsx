@@ -1597,7 +1597,7 @@ export default function FlightResults() {
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
-                      { code: "ja", name: "日本語", flag: "🇯🇵" },
+                      { code: "ja", name: "日��語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
@@ -3863,8 +3863,38 @@ export default function FlightResults() {
                                         </div>
                                       </div>
 
-                                      {/* Book Now Button - Prominent & Intuitive */}
-                                      <div className="border-t border-gray-200 pt-4 mt-4">
+                                      {/* Book Now & Start Bargain Buttons - Mobile */}
+                                      <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
+                                        {/* Start Bargain Button - Phase 1 Mobile */}
+                                        <Button
+                                          onClick={() => {
+                                            const [flightId, fareTypeId] =
+                                              detailKey.split("-");
+                                            const fareType =
+                                              flight.fareTypes.find(
+                                                (ft) => ft.id === fareTypeId,
+                                              ) || flight.fareTypes[0];
+
+                                            const bargainItem = createFlightBargainItem({
+                                              id: flight.id,
+                                              airline: flight.airline,
+                                              route: {
+                                                from: selectedFromCity || flight.origin,
+                                                to: selectedToCity || flight.destination
+                                              },
+                                              class: selectedClass,
+                                              price: fareType.price || flight.price?.amount || 0,
+                                            });
+
+                                            bargainHook.startBargain(bargainItem);
+                                          }}
+                                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
+                                        >
+                                          <span className="text-lg">🎯</span>
+                                          Start Bargain
+                                        </Button>
+
+                                        {/* Book Now Button Mobile */}
                                         <Button
                                           onClick={() => {
                                             // Find the fare type for this detail key
