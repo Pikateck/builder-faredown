@@ -98,6 +98,25 @@ export default function BargainModalPhase1({
     }
   }, [isOpen]);
 
+  // 30-second countdown timer for counter-offers
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (counterOfferTimer > 0 && step === 'negotiating') {
+      interval = setInterval(() => {
+        setCounterOfferTimer(prev => {
+          if (prev <= 1) {
+            setIsCounterOfferExpired(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [counterOfferTimer, step]);
+
   const initializeBargainSession = async () => {
     try {
       setError(null);
