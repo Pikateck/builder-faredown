@@ -242,19 +242,8 @@ export default function UserManagement() {
     }
   };
 
-  // Filter users based on search and filters
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesRole = selectedRole === "all" || user.role === selectedRole;
-    const matchesStatus =
-      selectedStatus === "all" || user.status === selectedStatus;
-
-    return matchesSearch && matchesRole && matchesStatus;
-  });
+  // Use server-filtered users directly
+  const filteredUsers = users;
 
   const handleCreateUser = () => {
     setFormData({
