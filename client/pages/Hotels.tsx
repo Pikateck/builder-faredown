@@ -196,6 +196,201 @@ export default function Hotels() {
           </div>
         </header>
 
+        {/* Mobile Menu Overlay */}
+        {showMobileMenu && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowMobileMenu(false)}
+            />
+
+            {/* Menu Panel */}
+            <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl">
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-[#003580]">
+                  <span className="text-lg font-bold text-white">Menu</span>
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="p-2 text-white hover:bg-blue-700 rounded-lg"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Menu Items */}
+                <div className="flex-1 py-4">
+                  <nav className="space-y-1 px-4">
+                    <Link
+                      to="/"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <Plane className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Flights</span>
+                    </Link>
+
+                    <Link
+                      to="/hotels"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <Hotel className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Hotels</span>
+                    </Link>
+
+                    <Link
+                      to="/account"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <User className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">My Account</span>
+                    </Link>
+
+                    {/* Currency Selection Tab */}
+                    <div className="border-t border-gray-200 my-4"></div>
+                    <div className="px-4 py-2">
+                      <div className="text-xs font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center">
+                        <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
+                        Currency
+                      </div>
+                      <div className="space-y-1 max-h-32 overflow-y-auto">
+                        {currencies.map((currency) => (
+                          <button
+                            key={currency.code}
+                            onClick={() => {
+                              setCurrency(currency);
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors ${
+                              selectedCurrency.code === currency.code
+                                ? "bg-blue-50 text-blue-600 border border-blue-200"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <span className="text-base">{currency.flag}</span>
+                              <span className="font-medium">
+                                {currency.name}
+                              </span>
+                            </div>
+                            <span className="font-semibold text-xs">
+                              {currency.symbol} {currency.code}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="border-t border-gray-200 my-4"></div>
+
+                    <button
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                    >
+                      <Heart className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Saved</span>
+                    </button>
+
+                    <button
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                    >
+                      <Headphones className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Help & Support</span>
+                    </button>
+
+                    <button
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
+                      onClick={() => {
+                        setShowMobileMenu(false);
+                      }}
+                    >
+                      <Settings className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Settings</span>
+                    </button>
+                  </nav>
+
+                  {/* User Section */}
+                  {isLoggedIn ? (
+                    <div className="mt-8 px-4">
+                      <div className="bg-blue-50 rounded-lg p-4">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              {userName.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900">
+                              {userName}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Loyalty Level 1
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          className="flex items-center space-x-2 text-red-600 hover:text-red-700 w-full"
+                          onClick={() => {
+                            handleSignOut();
+                            setShowMobileMenu(false);
+                          }}
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span className="text-sm font-medium">Sign Out</span>
+                        </button>
+
+                        {/* Admin Panel Access */}
+                        <div className="border-t border-gray-200 pt-4 mt-4">
+                          <button
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                            onClick={() => {
+                              // Navigate to admin panel
+                              window.open('/admin/login', '_blank');
+                              setShowMobileMenu(false);
+                            }}
+                          >
+                            <Shield className="w-4 h-4" />
+                            <span className="text-sm font-medium">Admin Panel</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-8 px-4 space-y-3">
+                      <Button
+                        className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
+                        onClick={() => {
+                          setShowSignIn(true);
+                          setShowMobileMenu(false);
+                        }}
+                      >
+                        Sign In
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
+                        onClick={() => {
+                          setShowRegister(true);
+                          setShowMobileMenu(false);
+                        }}
+                      >
+                        Register
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Mobile Search Section */}
         <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
           <div className="px-4">
