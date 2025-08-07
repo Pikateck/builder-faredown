@@ -156,13 +156,22 @@ export default function BargainModalPhase1({
     try {
       setIsNegotiating(true);
       setError(null);
-      
+
       const offerPrice = parseFloat(userOfferPrice);
-      
+
       if (isNaN(offerPrice) || offerPrice <= 0) {
         setError('Please enter a valid price');
         return;
       }
+
+      // Zubin's Requirement: Prevent repeat price entries
+      if (usedPrices.has(offerPrice)) {
+        setError('You cannot re-enter the same price. Please try a different amount.');
+        return;
+      }
+
+      // Add to used prices
+      setUsedPrices(prev => new Set(prev).add(offerPrice));
 
       const counterOfferRequest = {
         sessionId,
@@ -181,10 +190,11 @@ export default function BargainModalPhase1({
         setStep('success');
       } else {
         setStep('negotiating');
-        // Update user offer with counter-offer for next round
-        if (response.counterOffer) {
-          setUserOfferPrice(response.counterOffer.toString());
-        }
+        // Start 30-second timer for counter-offer (Zubin's requirement)
+        setCounterOfferTimer(30);
+        setIsCounterOfferExpired(false);
+        // Clear the input for next attempt
+        setUserOfferPrice('');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to process your offer');
