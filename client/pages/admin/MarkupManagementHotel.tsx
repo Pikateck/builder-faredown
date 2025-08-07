@@ -152,6 +152,32 @@ export default function MarkupManagementHotel() {
   const [formData, setFormData] = useState<Partial<CreateHotelMarkupRequest>>({});
   const [activeTab, setActiveTab] = useState("list");
 
+  // Load markups from API
+  const loadMarkups = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const result = await markupService.getHotelMarkups({
+        search: searchTerm,
+        city: selectedCity !== 'all' ? selectedCity : undefined,
+        status: selectedStatus !== 'all' ? selectedStatus : undefined,
+      });
+      setMarkups(result.markups.map(markup => ({
+        ...markup,
+        checkInDays: markup.applicableDays || []
+      })));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load markups');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load markups on component mount and when filters change
+  useEffect(() => {
+    loadMarkups();
+  }, [searchTerm, selectedCity, selectedStatus]);
+
   // Filter markups
   const filteredMarkups = markups.filter((markup) => {
     const matchesSearch =
@@ -178,7 +204,7 @@ export default function MarkupManagementHotel() {
       city: "",
       hotelName: "",
       hotelChain: "",
-      starRating: 3,
+      starRating: "3",
       roomCategory: "standard",
       markupType: "percentage",
       markupValue: 0,
@@ -186,78 +212,83 @@ export default function MarkupManagementHotel() {
       maxAmount: 0,
       validFrom: "",
       validTo: "",
-      checkInDays: [],
+      seasonType: "Regular",
+      applicableDays: [],
       minStay: 1,
       maxStay: 30,
       status: "active",
       priority: 1,
       userType: "all",
-      seasonType: "all",
       specialConditions: "",
     });
     setIsCreateDialogOpen(true);
   };
 
-  const handleEditMarkup = (markup: HotelMarkup) => {
+  const handleEditMarkup = (markup: UIHotelMarkup) => {
     setSelectedMarkup(markup);
-    setFormData({ ...markup });
+    setFormData({
+      ...markup,
+      applicableDays: markup.checkInDays || markup.applicableDays || []
+    });
     setIsEditDialogOpen(true);
   };
 
-  const handleSaveMarkup = () => {
-    if (selectedMarkup) {
-      // Update existing markup
-      setMarkups(
-        markups.map((m) =>
-          m.id === selectedMarkup.id
-            ? { ...m, ...formData, updatedAt: new Date().toISOString() }
-            : m,
-        ),
-      );
-      setIsEditDialogOpen(false);
-    } else {
-      // Create new markup
-      const newMarkup: HotelMarkup = {
-        ...(formData as HotelMarkup),
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setMarkups([...markups, newMarkup]);
-      setIsCreateDialogOpen(false);
+  const handleSaveMarkup = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+
+      if (selectedMarkup) {
+        // Update existing markup
+        await markupService.updateHotelMarkup(selectedMarkup.id, formData as Partial<CreateHotelMarkupRequest>);
+        setIsEditDialogOpen(false);
+      } else {
+        // Create new markup
+        if (!formData.name || !formData.description) {
+          setError("Name and description are required");
+          return;
+        }
+        await markupService.createHotelMarkup(formData as CreateHotelMarkupRequest);
+        setIsCreateDialogOpen(false);
+        setActiveTab("list");
+      }
+
+      await loadMarkups();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save markup');
+    } finally {
+      setSaving(false);
     }
-    setFormData({});
-    setSelectedMarkup(null);
   };
 
-  const handleDeleteMarkup = (markupId: string) => {
+  const handleDeleteMarkup = async (markupId: string) => {
     if (confirm("Are you sure you want to delete this markup rule?")) {
-      setMarkups(markups.filter((m) => m.id !== markupId));
+      try {
+        await markupService.deleteHotelMarkup(markupId);
+        await loadMarkups();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete markup');
+      }
     }
   };
 
-  const toggleMarkupStatus = (markupId: string) => {
-    setMarkups(
-      markups.map((m) =>
-        m.id === markupId
-          ? {
-              ...m,
-              status: m.status === "active" ? "inactive" : "active",
-              updatedAt: new Date().toISOString(),
-            }
-          : m,
-      ),
-    );
+  const toggleMarkupStatus = async (markupId: string) => {
+    try {
+      await markupService.toggleHotelMarkupStatus(markupId);
+      await loadMarkups();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to toggle status');
+    }
   };
 
   const handleCheckInDaysChange = (day: string, checked: boolean) => {
-    const currentDays = formData.checkInDays || [];
+    const currentDays = formData.applicableDays || [];
     if (checked) {
-      setFormData({ ...formData, checkInDays: [...currentDays, day] });
+      setFormData({ ...formData, applicableDays: [...currentDays, day] });
     } else {
       setFormData({
         ...formData,
-        checkInDays: currentDays.filter((d) => d !== day),
+        applicableDays: currentDays.filter((d) => d !== day),
       });
     }
   };
