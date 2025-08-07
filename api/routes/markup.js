@@ -442,15 +442,28 @@ router.post("/hotel", authenticateToken, (req, res) => {
       markupValue,
       minAmount: minAmount || 0,
       maxAmount: maxAmount || 0,
+      // Current Fare Range (for dynamic pricing display)
+      currentFareMin: currentFareMin || 10.00, // Default Min markup percentage for user-visible hotel rates
+      currentFareMax: currentFareMax || 15.00, // Default Max markup percentage for user-visible hotel rates
+      // Bargain Fare Range (for user-entered price validation)
+      bargainFareMin: bargainFareMin || 5.00,  // Default Min acceptable bargain percentage for hotels
+      bargainFareMax: bargainFareMax || 15.00, // Default Max acceptable bargain percentage for hotels
+      // Additional fare ranges if provided
+      ...(highFareMin && { highFareMin }),
+      ...(highFareMax && { highFareMax }),
+      ...(lowFareMin && { lowFareMin }),
+      ...(lowFareMax && { lowFareMax }),
+      ...(hotelCode && { hotelCode }),
       validFrom: validFrom || new Date().toISOString().split("T")[0],
-      validTo: validTo || "2024-12-31",
+      validTo: validTo || "2025-12-31",
       checkInDays: checkInDays || [],
+      applicableDays: applicableDays || checkInDays || [],
       minStay: minStay || 1,
       maxStay: maxStay || 30,
       status: status || "active",
       priority: priority || 1,
       userType: userType || "all",
-      seasonType: seasonType || "all",
+      seasonType: seasonType || "Regular",
       specialConditions: specialConditions || "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
