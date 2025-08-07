@@ -266,8 +266,19 @@ router.post("/air", authenticateToken, (req, res) => {
       markupValue,
       minAmount: minAmount || 0,
       maxAmount: maxAmount || 0,
+      // Current Fare Range (existing functionality)
+      currentFareMin: currentFareMin || 10.00, // Default Min markup percentage for user-visible fare
+      currentFareMax: currentFareMax || 15.00, // Default Max markup percentage for user-visible fare
+      // Bargain Fare Range fields
+      bargainFareMin: bargainFareMin || 5.00,  // Default Min acceptable bargain percentage
+      bargainFareMax: bargainFareMax || 15.00, // Default Max acceptable bargain percentage
+      // Additional fare ranges if provided
+      ...(highFareMin && { highFareMin }),
+      ...(highFareMax && { highFareMax }),
+      ...(lowFareMin && { lowFareMin }),
+      ...(lowFareMax && { lowFareMax }),
       validFrom: validFrom || new Date().toISOString().split("T")[0],
-      validTo: validTo || "2024-12-31",
+      validTo: validTo || "2025-12-31",
       status: status || "active",
       priority: priority || 1,
       userType: userType || "all",
