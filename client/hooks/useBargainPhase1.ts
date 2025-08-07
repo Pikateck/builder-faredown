@@ -4,15 +4,15 @@
  * Handles modal state and booking flow integration
  */
 
-import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface BargainItem {
-  type: 'flight' | 'hotel';
+  type: "flight" | "hotel";
   itemId: string;
   title: string;
   basePrice: number;
-  userType?: 'b2c' | 'b2b';
+  userType?: "b2c" | "b2b";
   // Flight specific
   airline?: string;
   route?: { from: string; to: string };
@@ -29,12 +29,13 @@ interface UseBargainPhase1Options {
   redirectToBooking?: boolean;
   promoCode?: string;
   userLocation?: string;
-  deviceType?: 'mobile' | 'desktop';
+  deviceType?: "mobile" | "desktop";
 }
 
 export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const [currentBargainItem, setCurrentBargainItem] = useState<BargainItem | null>(null);
+  const [currentBargainItem, setCurrentBargainItem] =
+    useState<BargainItem | null>(null);
   const navigate = useNavigate();
 
   const startBargain = useCallback((item: BargainItem) => {
@@ -47,53 +48,56 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
     setCurrentBargainItem(null);
   }, []);
 
-  const handleBookingConfirmed = useCallback((finalPrice: number) => {
-    if (!currentBargainItem) return;
+  const handleBookingConfirmed = useCallback(
+    (finalPrice: number) => {
+      if (!currentBargainItem) return;
 
-    // Call custom handler if provided
-    if (options.onBookingConfirmed) {
-      options.onBookingConfirmed(currentBargainItem, finalPrice);
-    }
-
-    // Default behavior: redirect to booking flow
-    if (options.redirectToBooking !== false) {
-      const bookingParams = new URLSearchParams({
-        type: currentBargainItem.type,
-        itemId: currentBargainItem.itemId,
-        finalPrice: finalPrice.toString(),
-        bargainApplied: 'true',
-        promoCode: options.promoCode || '',
-      });
-
-      if (currentBargainItem.type === 'flight') {
-        navigate(`/booking/flight?${bookingParams.toString()}`);
-      } else {
-        navigate(`/booking/hotel?${bookingParams.toString()}`);
+      // Call custom handler if provided
+      if (options.onBookingConfirmed) {
+        options.onBookingConfirmed(currentBargainItem, finalPrice);
       }
-    }
 
-    closeBargainModal();
-  }, [currentBargainItem, options, navigate, closeBargainModal]);
+      // Default behavior: redirect to booking flow
+      if (options.redirectToBooking !== false) {
+        const bookingParams = new URLSearchParams({
+          type: currentBargainItem.type,
+          itemId: currentBargainItem.itemId,
+          finalPrice: finalPrice.toString(),
+          bargainApplied: "true",
+          promoCode: options.promoCode || "",
+        });
+
+        if (currentBargainItem.type === "flight") {
+          navigate(`/booking/flight?${bookingParams.toString()}`);
+        } else {
+          navigate(`/booking/hotel?${bookingParams.toString()}`);
+        }
+      }
+
+      closeBargainModal();
+    },
+    [currentBargainItem, options, navigate, closeBargainModal],
+  );
 
   return {
     // State
     isBargainModalOpen,
     currentBargainItem,
-    
+
     // Actions
     startBargain,
     closeBargainModal,
     handleBookingConfirmed,
-    
+
     // Modal props helper
     getBargainModalProps: () => ({
       isOpen: isBargainModalOpen,
       onClose: closeBargainModal,
       onBookingConfirmed: handleBookingConfirmed,
       itemDetails: currentBargainItem || {
-        type: 'flight' as const,
-        itemId: '',
-        title: '',
+        type: "flight" as const,
+        itemId: "",
+        title: "",
         basePrice: 0,
       },
       promoCode: options.promoCode,
@@ -113,14 +117,14 @@ export function createFlightBargainItem(flight: {
   [key: string]: any;
 }): BargainItem {
   return {
-    type: 'flight',
+    type: "flight",
     itemId: flight.id,
     title: `${flight.airline} • ${flight.route.from} → ${flight.route.to}`,
     basePrice: flight.price,
     airline: flight.airline,
     route: flight.route,
     class: flight.class,
-    userType: 'b2c', // Default, can be overridden
+    userType: "b2c", // Default, can be overridden
   };
 }
 
@@ -135,7 +139,7 @@ export function createHotelBargainItem(hotel: {
   [key: string]: any;
 }): BargainItem {
   return {
-    type: 'hotel',
+    type: "hotel",
     itemId: hotel.id,
     title: `${hotel.name} • ${hotel.city}`,
     basePrice: hotel.price,
@@ -143,7 +147,7 @@ export function createHotelBargainItem(hotel: {
     hotelName: hotel.name,
     starRating: hotel.starRating?.toString(),
     roomCategory: hotel.roomCategory,
-    userType: 'b2c', // Default, can be overridden
+    userType: "b2c", // Default, can be overridden
   };
 }
 

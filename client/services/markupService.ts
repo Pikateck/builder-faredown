@@ -3,7 +3,7 @@
  * Handles all markup-related API operations for admin panel
  */
 
-import { apiClient } from '@/lib/api';
+import { apiClient } from "@/lib/api";
 
 export interface AirMarkup {
   id: string;
@@ -137,7 +137,7 @@ export interface MarkupFilters {
 }
 
 class MarkupService {
-  private baseUrl = '/api/markup';
+  private baseUrl = "/api/markup";
 
   /**
    * Get all air markups with optional filters
@@ -150,23 +150,28 @@ class MarkupService {
   }> {
     try {
       const params = new URLSearchParams();
-      
-      if (filters.search) params.append('search', filters.search);
-      if (filters.airline && filters.airline !== 'all') params.append('airline', filters.airline);
-      if (filters.class && filters.class !== 'all') params.append('class', filters.class);
-      if (filters.status && filters.status !== 'all') params.append('status', filters.status);
-      if (filters.page) params.append('page', filters.page.toString());
-      if (filters.limit) params.append('limit', filters.limit.toString());
 
-      const response = await apiClient.get(`${this.baseUrl}/air?${params.toString()}`);
-      
+      if (filters.search) params.append("search", filters.search);
+      if (filters.airline && filters.airline !== "all")
+        params.append("airline", filters.airline);
+      if (filters.class && filters.class !== "all")
+        params.append("class", filters.class);
+      if (filters.status && filters.status !== "all")
+        params.append("status", filters.status);
+      if (filters.page) params.append("page", filters.page.toString());
+      if (filters.limit) params.append("limit", filters.limit.toString());
+
+      const response = await apiClient.get(
+        `${this.baseUrl}/air?${params.toString()}`,
+      );
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch air markups');
+        throw new Error(response.error || "Failed to fetch air markups");
       }
     } catch (error) {
-      console.error('Error fetching air markups:', error);
+      console.error("Error fetching air markups:", error);
       throw error;
     }
   }
@@ -182,23 +187,28 @@ class MarkupService {
   }> {
     try {
       const params = new URLSearchParams();
-      
-      if (filters.search) params.append('search', filters.search);
-      if (filters.city && filters.city !== 'all') params.append('city', filters.city);
-      if (filters.starRating && filters.starRating !== 'all') params.append('starRating', filters.starRating);
-      if (filters.status && filters.status !== 'all') params.append('status', filters.status);
-      if (filters.page) params.append('page', filters.page.toString());
-      if (filters.limit) params.append('limit', filters.limit.toString());
 
-      const response = await apiClient.get(`${this.baseUrl}/hotel?${params.toString()}`);
-      
+      if (filters.search) params.append("search", filters.search);
+      if (filters.city && filters.city !== "all")
+        params.append("city", filters.city);
+      if (filters.starRating && filters.starRating !== "all")
+        params.append("starRating", filters.starRating);
+      if (filters.status && filters.status !== "all")
+        params.append("status", filters.status);
+      if (filters.page) params.append("page", filters.page.toString());
+      if (filters.limit) params.append("limit", filters.limit.toString());
+
+      const response = await apiClient.get(
+        `${this.baseUrl}/hotel?${params.toString()}`,
+      );
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch hotel markups');
+        throw new Error(response.error || "Failed to fetch hotel markups");
       }
     } catch (error) {
-      console.error('Error fetching hotel markups:', error);
+      console.error("Error fetching hotel markups:", error);
       throw error;
     }
   }
@@ -206,17 +216,19 @@ class MarkupService {
   /**
    * Create a new air markup
    */
-  async createAirMarkup(markupData: CreateAirMarkupRequest): Promise<AirMarkup> {
+  async createAirMarkup(
+    markupData: CreateAirMarkupRequest,
+  ): Promise<AirMarkup> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/air`, markupData);
-      
+
       if (response.ok) {
         return response.data.markup;
       } else {
-        throw new Error(response.error || 'Failed to create air markup');
+        throw new Error(response.error || "Failed to create air markup");
       }
     } catch (error) {
-      console.error('Error creating air markup:', error);
+      console.error("Error creating air markup:", error);
       throw error;
     }
   }
@@ -224,17 +236,22 @@ class MarkupService {
   /**
    * Create a new hotel markup
    */
-  async createHotelMarkup(markupData: CreateHotelMarkupRequest): Promise<HotelMarkup> {
+  async createHotelMarkup(
+    markupData: CreateHotelMarkupRequest,
+  ): Promise<HotelMarkup> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/hotel`, markupData);
-      
+      const response = await apiClient.post(
+        `${this.baseUrl}/hotel`,
+        markupData,
+      );
+
       if (response.ok) {
         return response.data.markup;
       } else {
-        throw new Error(response.error || 'Failed to create hotel markup');
+        throw new Error(response.error || "Failed to create hotel markup");
       }
     } catch (error) {
-      console.error('Error creating hotel markup:', error);
+      console.error("Error creating hotel markup:", error);
       throw error;
     }
   }
@@ -242,17 +259,23 @@ class MarkupService {
   /**
    * Update an existing air markup
    */
-  async updateAirMarkup(markupId: string, markupData: Partial<CreateAirMarkupRequest>): Promise<AirMarkup> {
+  async updateAirMarkup(
+    markupId: string,
+    markupData: Partial<CreateAirMarkupRequest>,
+  ): Promise<AirMarkup> {
     try {
-      const response = await apiClient.put(`${this.baseUrl}/air/${markupId}`, markupData);
-      
+      const response = await apiClient.put(
+        `${this.baseUrl}/air/${markupId}`,
+        markupData,
+      );
+
       if (response.ok) {
         return response.data.markup;
       } else {
-        throw new Error(response.error || 'Failed to update air markup');
+        throw new Error(response.error || "Failed to update air markup");
       }
     } catch (error) {
-      console.error('Error updating air markup:', error);
+      console.error("Error updating air markup:", error);
       throw error;
     }
   }
@@ -260,17 +283,23 @@ class MarkupService {
   /**
    * Update an existing hotel markup
    */
-  async updateHotelMarkup(markupId: string, markupData: Partial<CreateHotelMarkupRequest>): Promise<HotelMarkup> {
+  async updateHotelMarkup(
+    markupId: string,
+    markupData: Partial<CreateHotelMarkupRequest>,
+  ): Promise<HotelMarkup> {
     try {
-      const response = await apiClient.put(`${this.baseUrl}/hotel/${markupId}`, markupData);
-      
+      const response = await apiClient.put(
+        `${this.baseUrl}/hotel/${markupId}`,
+        markupData,
+      );
+
       if (response.ok) {
         return response.data.markup;
       } else {
-        throw new Error(response.error || 'Failed to update hotel markup');
+        throw new Error(response.error || "Failed to update hotel markup");
       }
     } catch (error) {
-      console.error('Error updating hotel markup:', error);
+      console.error("Error updating hotel markup:", error);
       throw error;
     }
   }
@@ -280,13 +309,15 @@ class MarkupService {
    */
   async deleteAirMarkup(markupId: string): Promise<void> {
     try {
-      const response = await apiClient.delete(`${this.baseUrl}/air/${markupId}`);
-      
+      const response = await apiClient.delete(
+        `${this.baseUrl}/air/${markupId}`,
+      );
+
       if (!response.ok) {
-        throw new Error(response.error || 'Failed to delete air markup');
+        throw new Error(response.error || "Failed to delete air markup");
       }
     } catch (error) {
-      console.error('Error deleting air markup:', error);
+      console.error("Error deleting air markup:", error);
       throw error;
     }
   }
@@ -296,13 +327,15 @@ class MarkupService {
    */
   async deleteHotelMarkup(markupId: string): Promise<void> {
     try {
-      const response = await apiClient.delete(`${this.baseUrl}/hotel/${markupId}`);
-      
+      const response = await apiClient.delete(
+        `${this.baseUrl}/hotel/${markupId}`,
+      );
+
       if (!response.ok) {
-        throw new Error(response.error || 'Failed to delete hotel markup');
+        throw new Error(response.error || "Failed to delete hotel markup");
       }
     } catch (error) {
-      console.error('Error deleting hotel markup:', error);
+      console.error("Error deleting hotel markup:", error);
       throw error;
     }
   }
@@ -312,15 +345,17 @@ class MarkupService {
    */
   async toggleAirMarkupStatus(markupId: string): Promise<AirMarkup> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/air/${markupId}/toggle-status`);
-      
+      const response = await apiClient.post(
+        `${this.baseUrl}/air/${markupId}/toggle-status`,
+      );
+
       if (response.ok) {
         return response.data.markup;
       } else {
-        throw new Error(response.error || 'Failed to toggle air markup status');
+        throw new Error(response.error || "Failed to toggle air markup status");
       }
     } catch (error) {
-      console.error('Error toggling air markup status:', error);
+      console.error("Error toggling air markup status:", error);
       throw error;
     }
   }
@@ -330,15 +365,19 @@ class MarkupService {
    */
   async toggleHotelMarkupStatus(markupId: string): Promise<HotelMarkup> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/hotel/${markupId}/toggle-status`);
-      
+      const response = await apiClient.post(
+        `${this.baseUrl}/hotel/${markupId}/toggle-status`,
+      );
+
       if (response.ok) {
         return response.data.markup;
       } else {
-        throw new Error(response.error || 'Failed to toggle hotel markup status');
+        throw new Error(
+          response.error || "Failed to toggle hotel markup status",
+        );
       }
     } catch (error) {
-      console.error('Error toggling hotel markup status:', error);
+      console.error("Error toggling hotel markup status:", error);
       throw error;
     }
   }
@@ -347,7 +386,7 @@ class MarkupService {
    * Calculate markup for a specific booking (used in bargain engine)
    */
   async calculateMarkup(bookingDetails: {
-    type: 'air' | 'hotel';
+    type: "air" | "hotel";
     basePrice: number;
     // Air-specific
     airline?: string;
@@ -357,7 +396,7 @@ class MarkupService {
     city?: string;
     hotelName?: string;
     starRating?: string;
-    userType?: 'b2c' | 'b2b';
+    userType?: "b2c" | "b2b";
   }): Promise<{
     applicableMarkups: (AirMarkup | HotelMarkup)[];
     selectedMarkup: AirMarkup | HotelMarkup;
@@ -366,15 +405,18 @@ class MarkupService {
     markupRange: { min: number; max: number };
   }> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/calculate`, bookingDetails);
-      
+      const response = await apiClient.post(
+        `${this.baseUrl}/calculate`,
+        bookingDetails,
+      );
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to calculate markup');
+        throw new Error(response.error || "Failed to calculate markup");
       }
     } catch (error) {
-      console.error('Error calculating markup:', error);
+      console.error("Error calculating markup:", error);
       throw error;
     }
   }

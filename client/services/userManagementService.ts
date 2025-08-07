@@ -3,7 +3,7 @@
  * Handles all user-related API operations for admin panel
  */
 
-import { apiClient } from '@/lib/api';
+import { apiClient } from "@/lib/api";
 
 export interface AdminUser {
   id: string;
@@ -15,8 +15,8 @@ export interface AdminUser {
   address: string;
   dateOfBirth: string;
   countryCode: string;
-  role: 'super_admin' | 'finance' | 'sales' | 'marketing';
-  status: 'active' | 'inactive' | 'pending';
+  role: "super_admin" | "finance" | "sales" | "marketing";
+  status: "active" | "inactive" | "pending";
   lastLogin: string;
   createdAt: string;
   permissions: string[];
@@ -46,7 +46,7 @@ export interface UserFilters {
 }
 
 class UserManagementService {
-  private baseUrl = '/api/users';
+  private baseUrl = "/api/users";
 
   /**
    * Get all users with optional filters
@@ -59,22 +59,26 @@ class UserManagementService {
   }> {
     try {
       const params = new URLSearchParams();
-      
-      if (filters.search) params.append('search', filters.search);
-      if (filters.role && filters.role !== 'all') params.append('role', filters.role);
-      if (filters.status && filters.status !== 'all') params.append('status', filters.status);
-      if (filters.page) params.append('page', filters.page.toString());
-      if (filters.limit) params.append('limit', filters.limit.toString());
 
-      const response = await apiClient.get(`${this.baseUrl}?${params.toString()}`);
-      
+      if (filters.search) params.append("search", filters.search);
+      if (filters.role && filters.role !== "all")
+        params.append("role", filters.role);
+      if (filters.status && filters.status !== "all")
+        params.append("status", filters.status);
+      if (filters.page) params.append("page", filters.page.toString());
+      if (filters.limit) params.append("limit", filters.limit.toString());
+
+      const response = await apiClient.get(
+        `${this.baseUrl}?${params.toString()}`,
+      );
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch users');
+        throw new Error(response.error || "Failed to fetch users");
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
       throw error;
     }
   }
@@ -85,14 +89,14 @@ class UserManagementService {
   async createUser(userData: CreateUserRequest): Promise<AdminUser> {
     try {
       const response = await apiClient.post(this.baseUrl, userData);
-      
+
       if (response.ok) {
         return response.data.user;
       } else {
-        throw new Error(response.error || 'Failed to create user');
+        throw new Error(response.error || "Failed to create user");
       }
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error("Error creating user:", error);
       throw error;
     }
   }
@@ -100,17 +104,23 @@ class UserManagementService {
   /**
    * Update an existing user
    */
-  async updateUser(userId: string, userData: Partial<CreateUserRequest>): Promise<AdminUser> {
+  async updateUser(
+    userId: string,
+    userData: Partial<CreateUserRequest>,
+  ): Promise<AdminUser> {
     try {
-      const response = await apiClient.put(`${this.baseUrl}/${userId}`, userData);
-      
+      const response = await apiClient.put(
+        `${this.baseUrl}/${userId}`,
+        userData,
+      );
+
       if (response.ok) {
         return response.data.user;
       } else {
-        throw new Error(response.error || 'Failed to update user');
+        throw new Error(response.error || "Failed to update user");
       }
     } catch (error) {
-      console.error('Error updating user:', error);
+      console.error("Error updating user:", error);
       throw error;
     }
   }
@@ -121,12 +131,12 @@ class UserManagementService {
   async deleteUser(userId: string): Promise<void> {
     try {
       const response = await apiClient.delete(`${this.baseUrl}/${userId}`);
-      
+
       if (!response.ok) {
-        throw new Error(response.error || 'Failed to delete user');
+        throw new Error(response.error || "Failed to delete user");
       }
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error("Error deleting user:", error);
       throw error;
     }
   }
@@ -136,15 +146,17 @@ class UserManagementService {
    */
   async toggleUserStatus(userId: string): Promise<AdminUser> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/${userId}/toggle-status`);
-      
+      const response = await apiClient.post(
+        `${this.baseUrl}/${userId}/toggle-status`,
+      );
+
       if (response.ok) {
         return response.data.user;
       } else {
-        throw new Error(response.error || 'Failed to toggle user status');
+        throw new Error(response.error || "Failed to toggle user status");
       }
     } catch (error) {
-      console.error('Error toggling user status:', error);
+      console.error("Error toggling user status:", error);
       throw error;
     }
   }
@@ -154,15 +166,18 @@ class UserManagementService {
    */
   async resetUserPassword(userId: string, newPassword: string): Promise<void> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/${userId}/reset-password`, {
-        password: newPassword
-      });
-      
+      const response = await apiClient.post(
+        `${this.baseUrl}/${userId}/reset-password`,
+        {
+          password: newPassword,
+        },
+      );
+
       if (!response.ok) {
-        throw new Error(response.error || 'Failed to reset password');
+        throw new Error(response.error || "Failed to reset password");
       }
     } catch (error) {
-      console.error('Error resetting password:', error);
+      console.error("Error resetting password:", error);
       throw error;
     }
   }
@@ -179,14 +194,14 @@ class UserManagementService {
   }> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/stats`);
-      
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch user statistics');
+        throw new Error(response.error || "Failed to fetch user statistics");
       }
     } catch (error) {
-      console.error('Error fetching user stats:', error);
+      console.error("Error fetching user stats:", error);
       throw error;
     }
   }

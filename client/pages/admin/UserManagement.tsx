@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { userManagementService, type AdminUser, type CreateUserRequest } from "@/services/userManagementService";
+import {
+  userManagementService,
+  type AdminUser,
+  type CreateUserRequest,
+} from "@/services/userManagementService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -212,7 +216,7 @@ export default function UserManagement() {
   // Reset to page 1 when filters change
   useEffect(() => {
     if (pagination.page !== 1) {
-      setPagination(prev => ({ ...prev, page: 1 }));
+      setPagination((prev) => ({ ...prev, page: 1 }));
     } else {
       loadUsers();
     }
@@ -243,8 +247,8 @@ export default function UserManagement() {
         total: result.total,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load users');
-      console.error('Error loading users:', err);
+      setError(err instanceof Error ? err.message : "Failed to load users");
+      console.error("Error loading users:", err);
     } finally {
       setLoading(false);
     }
@@ -283,7 +287,10 @@ export default function UserManagement() {
 
       if (selectedUser) {
         // Update existing user
-        await userManagementService.updateUser(selectedUser.id, formData as Partial<CreateUserRequest>);
+        await userManagementService.updateUser(
+          selectedUser.id,
+          formData as Partial<CreateUserRequest>,
+        );
         setIsEditDialogOpen(false);
       } else {
         // Create new user
@@ -301,7 +308,7 @@ export default function UserManagement() {
       setFormData({});
       setSelectedUser(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save user');
+      setError(err instanceof Error ? err.message : "Failed to save user");
     } finally {
       setSaving(false);
     }
@@ -314,7 +321,7 @@ export default function UserManagement() {
         await userManagementService.deleteUser(userId);
         await loadUsers(); // Reload users
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete user');
+        setError(err instanceof Error ? err.message : "Failed to delete user");
       }
     }
   };
@@ -325,7 +332,9 @@ export default function UserManagement() {
       await userManagementService.toggleUserStatus(userId);
       await loadUsers(); // Reload users to reflect changes
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update user status');
+      setError(
+        err instanceof Error ? err.message : "Failed to update user status",
+      );
     }
   };
 
@@ -693,7 +702,8 @@ export default function UserManagement() {
                                 </div>
                                 <div>
                                   <p className="font-medium">
-                                    {user.title} {user.firstName} {user.lastName}
+                                    {user.title} {user.firstName}{" "}
+                                    {user.lastName}
                                   </p>
                                   <p className="text-sm text-gray-600">
                                     {user.email}
@@ -728,7 +738,9 @@ export default function UserManagement() {
                               <div className="flex items-center text-sm">
                                 <Clock className="w-3 h-3 mr-1" />
                                 {user.lastLogin
-                                  ? new Date(user.lastLogin).toLocaleDateString()
+                                  ? new Date(
+                                      user.lastLogin,
+                                    ).toLocaleDateString()
                                   : "Never"}
                               </div>
                             </TableCell>
@@ -816,7 +828,13 @@ export default function UserManagement() {
                 </Button>
                 <Button
                   onClick={handleSaveUser}
-                  disabled={saving || !formData.firstName || !formData.lastName || !formData.email || !formData.password}
+                  disabled={
+                    saving ||
+                    !formData.firstName ||
+                    !formData.lastName ||
+                    !formData.email ||
+                    !formData.password
+                  }
                 >
                   {saving ? "Saving..." : "Save User"}
                 </Button>
@@ -856,7 +874,12 @@ export default function UserManagement() {
             </Button>
             <Button
               onClick={handleSaveUser}
-              disabled={saving || !formData.firstName || !formData.lastName || !formData.email}
+              disabled={
+                saving ||
+                !formData.firstName ||
+                !formData.lastName ||
+                !formData.email
+              }
             >
               {saving ? "Updating..." : "Update User"}
             </Button>

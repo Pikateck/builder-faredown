@@ -3,9 +3,9 @@
  * Ensures promo codes apply after bargain logic but respect minimum markup thresholds
  */
 
-import { bargainPricingService } from '@/services/bargainPricingService';
-import { promoCodeService } from '@/services/promoCodeService';
-import { markupService } from '@/services/markupService';
+import { bargainPricingService } from "@/services/bargainPricingService";
+import { promoCodeService } from "@/services/promoCodeService";
+import { markupService } from "@/services/markupService";
 
 export interface PromoIntegrationTestCase {
   scenario: string;
@@ -13,7 +13,7 @@ export interface PromoIntegrationTestCase {
   markupRange: { min: number; max: number };
   promoCode: string;
   promoDiscount: number; // Expected discount amount
-  expectedBehavior: 'apply_full' | 'apply_partial' | 'reject';
+  expectedBehavior: "apply_full" | "apply_partial" | "reject";
   expectedFinalPrice?: number;
   description: string;
 }
@@ -35,48 +35,49 @@ export interface PromoIntegrationTestResult {
  * Test suite for validating promo code integration with bargain engine
  */
 export class BargainPromoValidator {
-  
   /**
    * Run comprehensive test suite for promo code integration
    */
   async runIntegrationTests(): Promise<PromoIntegrationTestResult[]> {
     const testCases: PromoIntegrationTestCase[] = [
       {
-        scenario: 'normal_promo_application',
+        scenario: "normal_promo_application",
         basePrice: 10000,
         markupRange: { min: 5, max: 15 },
-        promoCode: 'SAVE500',
+        promoCode: "SAVE500",
         promoDiscount: 500,
-        expectedBehavior: 'apply_full',
-        description: 'Normal promo application that respects minimum markup'
+        expectedBehavior: "apply_full",
+        description: "Normal promo application that respects minimum markup",
       },
       {
-        scenario: 'promo_violates_minimum_markup',
+        scenario: "promo_violates_minimum_markup",
         basePrice: 10000,
         markupRange: { min: 8, max: 15 },
-        promoCode: 'BIGSAVE2000',
+        promoCode: "BIGSAVE2000",
         promoDiscount: 2000,
-        expectedBehavior: 'apply_partial',
-        description: 'Large promo discount adjusted to respect minimum markup threshold'
+        expectedBehavior: "apply_partial",
+        description:
+          "Large promo discount adjusted to respect minimum markup threshold",
       },
       {
-        scenario: 'promo_exactly_at_minimum',
+        scenario: "promo_exactly_at_minimum",
         basePrice: 10000,
         markupRange: { min: 10, max: 20 },
-        promoCode: 'EXACT1000',
+        promoCode: "EXACT1000",
         promoDiscount: 1000,
-        expectedBehavior: 'apply_full',
-        description: 'Promo discount that brings price exactly to minimum markup threshold'
+        expectedBehavior: "apply_full",
+        description:
+          "Promo discount that brings price exactly to minimum markup threshold",
       },
       {
-        scenario: 'small_promo_on_high_markup',
+        scenario: "small_promo_on_high_markup",
         basePrice: 5000,
         markupRange: { min: 12, max: 25 },
-        promoCode: 'SMALL100',
+        promoCode: "SMALL100",
         promoDiscount: 100,
-        expectedBehavior: 'apply_full',
-        description: 'Small promo discount on item with high markup range'
-      }
+        expectedBehavior: "apply_full",
+        description: "Small promo discount on item with high markup range",
+      },
     ];
 
     const results: PromoIntegrationTestResult[] = [];
@@ -95,8 +96,8 @@ export class BargainPromoValidator {
           expectedDiscount: testCase.promoDiscount,
           minimumMarkupRespected: false,
           promoAppliedAfterMarkup: false,
-          details: 'Test execution failed',
-          error: error instanceof Error ? error.message : 'Unknown error'
+          details: "Test execution failed",
+          error: error instanceof Error ? error.message : "Unknown error",
         });
       }
     }
@@ -107,16 +108,18 @@ export class BargainPromoValidator {
   /**
    * Run a single test case
    */
-  private async runSingleTest(testCase: PromoIntegrationTestCase): Promise<PromoIntegrationTestResult> {
+  private async runSingleTest(
+    testCase: PromoIntegrationTestCase,
+  ): Promise<PromoIntegrationTestResult> {
     // Simulate bargain pricing request
     const request = {
-      type: 'flight' as const,
+      type: "flight" as const,
       itemId: `test_${testCase.scenario}`,
       basePrice: testCase.basePrice,
-      userType: 'b2c' as const,
-      airline: 'Test Airline',
-      route: { from: 'DEL', to: 'BOM' },
-      class: 'economy',
+      userType: "b2c" as const,
+      airline: "Test Airline",
+      route: { from: "DEL", to: "BOM" },
+      class: "economy",
       promoCode: testCase.promoCode,
     };
 
@@ -124,27 +127,29 @@ export class BargainPromoValidator {
     const mockMarkupResult = {
       applicableMarkups: [],
       selectedMarkup: {
-        id: 'test_markup',
-        markupType: 'percentage' as const,
-        markupValue: (testCase.markupRange.min + testCase.markupRange.max) / 2
+        id: "test_markup",
+        markupType: "percentage" as const,
+        markupValue: (testCase.markupRange.min + testCase.markupRange.max) / 2,
       },
       markupAmount: 0,
       finalPrice: 0,
-      markupRange: testCase.markupRange
+      markupRange: testCase.markupRange,
     };
 
     // Calculate expected values
-    const randomizedMarkup = (testCase.markupRange.min + testCase.markupRange.max) / 2; // Simulate average
+    const randomizedMarkup =
+      (testCase.markupRange.min + testCase.markupRange.max) / 2; // Simulate average
     const markedUpPrice = testCase.basePrice * (1 + randomizedMarkup / 100);
-    const minimumPrice = testCase.basePrice * (1 + testCase.markupRange.min / 100);
-    
+    const minimumPrice =
+      testCase.basePrice * (1 + testCase.markupRange.min / 100);
+
     let expectedFinalPrice: number;
     let expectedDiscount: number;
 
-    if (testCase.expectedBehavior === 'apply_full') {
+    if (testCase.expectedBehavior === "apply_full") {
       expectedFinalPrice = markedUpPrice - testCase.promoDiscount;
       expectedDiscount = testCase.promoDiscount;
-    } else if (testCase.expectedBehavior === 'apply_partial') {
+    } else if (testCase.expectedBehavior === "apply_partial") {
       expectedFinalPrice = minimumPrice;
       expectedDiscount = markedUpPrice - minimumPrice;
     } else {
@@ -155,7 +160,8 @@ export class BargainPromoValidator {
     // Test the actual implementation
     let actualResult;
     try {
-      actualResult = await bargainPricingService.calculateInitialPricing(request);
+      actualResult =
+        await bargainPricingService.calculateInitialPricing(request);
     } catch (error) {
       // If API fails, simulate the expected behavior
       actualResult = {
@@ -166,29 +172,38 @@ export class BargainPromoValidator {
           markupRange: testCase.markupRange,
           markupPercentage: randomizedMarkup,
         },
-        promoDetails: testCase.expectedBehavior !== 'reject' ? {
-          code: testCase.promoCode,
-          discountAmount: expectedDiscount,
-          isValid: true,
-          appliedAfterMarkup: true,
-        } : null,
+        promoDetails:
+          testCase.expectedBehavior !== "reject"
+            ? {
+                code: testCase.promoCode,
+                discountAmount: expectedDiscount,
+                isValid: true,
+                appliedAfterMarkup: true,
+              }
+            : null,
       };
     }
 
     // Validate results
     const minimumMarkupRespected = actualResult.finalPrice >= minimumPrice;
-    const promoAppliedAfterMarkup = actualResult.promoDetails?.appliedAfterMarkup || false;
+    const promoAppliedAfterMarkup =
+      actualResult.promoDetails?.appliedAfterMarkup || false;
     const actualDiscount = actualResult.promoDetails?.discountAmount || 0;
-    
-    const priceDifference = Math.abs(actualResult.finalPrice - expectedFinalPrice);
+
+    const priceDifference = Math.abs(
+      actualResult.finalPrice - expectedFinalPrice,
+    );
     const discountDifference = Math.abs(actualDiscount - expectedDiscount);
-    
+
     // Allow for small rounding differences
     const priceMatches = priceDifference <= 1;
     const discountMatches = discountDifference <= 1;
-    
-    const passed = priceMatches && discountMatches && minimumMarkupRespected && 
-                  (testCase.expectedBehavior === 'reject' || promoAppliedAfterMarkup);
+
+    const passed =
+      priceMatches &&
+      discountMatches &&
+      minimumMarkupRespected &&
+      (testCase.expectedBehavior === "reject" || promoAppliedAfterMarkup);
 
     return {
       scenario: testCase.scenario,
@@ -199,7 +214,12 @@ export class BargainPromoValidator {
       expectedDiscount,
       minimumMarkupRespected,
       promoAppliedAfterMarkup,
-      details: this.generateTestDetails(testCase, actualResult, expectedFinalPrice, expectedDiscount),
+      details: this.generateTestDetails(
+        testCase,
+        actualResult,
+        expectedFinalPrice,
+        expectedDiscount,
+      ),
     };
   }
 
@@ -207,28 +227,36 @@ export class BargainPromoValidator {
    * Generate detailed test results description
    */
   private generateTestDetails(
-    testCase: PromoIntegrationTestCase, 
-    actualResult: any, 
-    expectedFinalPrice: number, 
-    expectedDiscount: number
+    testCase: PromoIntegrationTestCase,
+    actualResult: any,
+    expectedFinalPrice: number,
+    expectedDiscount: number,
   ): string {
     const details = [];
-    
+
     details.push(`Base Price: ₹${testCase.basePrice.toLocaleString()}`);
-    details.push(`Markup Range: ${testCase.markupRange.min}% - ${testCase.markupRange.max}%`);
-    details.push(`Marked-up Price: ₹${actualResult.markedUpPrice.toLocaleString()}`);
-    details.push(`Minimum Acceptable: ₹${(testCase.basePrice * (1 + testCase.markupRange.min / 100)).toLocaleString()}`);
-    
+    details.push(
+      `Markup Range: ${testCase.markupRange.min}% - ${testCase.markupRange.max}%`,
+    );
+    details.push(
+      `Marked-up Price: ₹${actualResult.markedUpPrice.toLocaleString()}`,
+    );
+    details.push(
+      `Minimum Acceptable: ₹${(testCase.basePrice * (1 + testCase.markupRange.min / 100)).toLocaleString()}`,
+    );
+
     if (actualResult.promoDetails) {
       details.push(`Promo Applied: ${actualResult.promoDetails.code}`);
-      details.push(`Actual Discount: ₹${actualResult.promoDetails.discountAmount.toLocaleString()}`);
+      details.push(
+        `Actual Discount: ₹${actualResult.promoDetails.discountAmount.toLocaleString()}`,
+      );
       details.push(`Expected Discount: ₹${expectedDiscount.toLocaleString()}`);
     }
-    
+
     details.push(`Final Price: ₹${actualResult.finalPrice.toLocaleString()}`);
     details.push(`Expected Final: ₹${expectedFinalPrice.toLocaleString()}`);
-    
-    return details.join(' | ');
+
+    return details.join(" | ");
   }
 
   /**
@@ -236,36 +264,40 @@ export class BargainPromoValidator {
    */
   generateSummaryReport(results: PromoIntegrationTestResult[]): string {
     const totalTests = results.length;
-    const passedTests = results.filter(r => r.passed).length;
+    const passedTests = results.filter((r) => r.passed).length;
     const failedTests = totalTests - passedTests;
-    
+
     const report = [];
-    report.push('='.repeat(80));
-    report.push('BARGAIN ENGINE & PROMO CODE INTEGRATION TEST RESULTS');
-    report.push('='.repeat(80));
+    report.push("=".repeat(80));
+    report.push("BARGAIN ENGINE & PROMO CODE INTEGRATION TEST RESULTS");
+    report.push("=".repeat(80));
     report.push(`Total Tests: ${totalTests}`);
     report.push(`Passed: ${passedTests}`);
     report.push(`Failed: ${failedTests}`);
-    report.push(`Success Rate: ${((passedTests / totalTests) * 100).toFixed(1)}%`);
-    report.push('');
-    
-    results.forEach(result => {
-      const status = result.passed ? '✅ PASS' : '❌ FAIL';
+    report.push(
+      `Success Rate: ${((passedTests / totalTests) * 100).toFixed(1)}%`,
+    );
+    report.push("");
+
+    results.forEach((result) => {
+      const status = result.passed ? "✅ PASS" : "❌ FAIL";
       report.push(`${status} ${result.scenario}`);
       report.push(`    ${result.details}`);
       if (result.error) {
         report.push(`    Error: ${result.error}`);
       }
-      report.push('');
+      report.push("");
     });
-    
+
     if (failedTests === 0) {
-      report.push('🎉 ALL TESTS PASSED! Promo code integration working correctly.');
+      report.push(
+        "🎉 ALL TESTS PASSED! Promo code integration working correctly.",
+      );
     } else {
-      report.push('⚠️  Some tests failed. Review implementation for issues.');
+      report.push("⚠️  Some tests failed. Review implementation for issues.");
     }
-    
-    return report.join('\n');
+
+    return report.join("\n");
   }
 }
 

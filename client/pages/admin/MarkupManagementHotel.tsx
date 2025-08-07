@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { markupService, type HotelMarkup, type CreateHotelMarkupRequest } from "@/services/markupService";
+import {
+  markupService,
+  type HotelMarkup,
+  type CreateHotelMarkupRequest,
+} from "@/services/markupService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -149,7 +153,9 @@ export default function MarkupManagementHotel() {
   const [selectedMarkup, setSelectedMarkup] = useState<UIHotelMarkup | null>(
     null,
   );
-  const [formData, setFormData] = useState<Partial<CreateHotelMarkupRequest>>({});
+  const [formData, setFormData] = useState<Partial<CreateHotelMarkupRequest>>(
+    {},
+  );
   const [activeTab, setActiveTab] = useState("list");
 
   // Load markups from API
@@ -159,15 +165,17 @@ export default function MarkupManagementHotel() {
       setError(null);
       const result = await markupService.getHotelMarkups({
         search: searchTerm,
-        city: selectedCity !== 'all' ? selectedCity : undefined,
-        status: selectedStatus !== 'all' ? selectedStatus : undefined,
+        city: selectedCity !== "all" ? selectedCity : undefined,
+        status: selectedStatus !== "all" ? selectedStatus : undefined,
       });
-      setMarkups(result.markups.map(markup => ({
-        ...markup,
-        checkInDays: markup.applicableDays || []
-      })));
+      setMarkups(
+        result.markups.map((markup) => ({
+          ...markup,
+          checkInDays: markup.applicableDays || [],
+        })),
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load markups');
+      setError(err instanceof Error ? err.message : "Failed to load markups");
     } finally {
       setLoading(false);
     }
@@ -211,11 +219,11 @@ export default function MarkupManagementHotel() {
       minAmount: 0,
       maxAmount: 0,
       // Current Fare Range defaults for hotels
-      currentFareMin: 10.00, // 10% minimum markup for user-visible hotel rates
-      currentFareMax: 15.00, // 15% maximum markup for user-visible hotel rates
+      currentFareMin: 10.0, // 10% minimum markup for user-visible hotel rates
+      currentFareMax: 15.0, // 15% maximum markup for user-visible hotel rates
       // Bargain Fare Range defaults for hotels
-      bargainFareMin: 5.00,  // 5% minimum acceptable hotel bargain
-      bargainFareMax: 15.00, // 15% maximum acceptable hotel bargain
+      bargainFareMin: 5.0, // 5% minimum acceptable hotel bargain
+      bargainFareMax: 15.0, // 15% maximum acceptable hotel bargain
       validFrom: "",
       validTo: "",
       seasonType: "Regular",
@@ -234,7 +242,7 @@ export default function MarkupManagementHotel() {
     setSelectedMarkup(markup);
     setFormData({
       ...markup,
-      applicableDays: markup.checkInDays || markup.applicableDays || []
+      applicableDays: markup.checkInDays || markup.applicableDays || [],
     });
     setIsEditDialogOpen(true);
   };
@@ -246,7 +254,10 @@ export default function MarkupManagementHotel() {
 
       if (selectedMarkup) {
         // Update existing markup
-        await markupService.updateHotelMarkup(selectedMarkup.id, formData as Partial<CreateHotelMarkupRequest>);
+        await markupService.updateHotelMarkup(
+          selectedMarkup.id,
+          formData as Partial<CreateHotelMarkupRequest>,
+        );
         setIsEditDialogOpen(false);
       } else {
         // Create new markup
@@ -254,14 +265,16 @@ export default function MarkupManagementHotel() {
           setError("Name and description are required");
           return;
         }
-        await markupService.createHotelMarkup(formData as CreateHotelMarkupRequest);
+        await markupService.createHotelMarkup(
+          formData as CreateHotelMarkupRequest,
+        );
         setIsCreateDialogOpen(false);
         setActiveTab("list");
       }
 
       await loadMarkups();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save markup');
+      setError(err instanceof Error ? err.message : "Failed to save markup");
     } finally {
       setSaving(false);
     }
@@ -273,7 +286,9 @@ export default function MarkupManagementHotel() {
         await markupService.deleteHotelMarkup(markupId);
         await loadMarkups();
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete markup');
+        setError(
+          err instanceof Error ? err.message : "Failed to delete markup",
+        );
       }
     }
   };
@@ -283,7 +298,7 @@ export default function MarkupManagementHotel() {
       await markupService.toggleHotelMarkupStatus(markupId);
       await loadMarkups();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to toggle status');
+      setError(err instanceof Error ? err.message : "Failed to toggle status");
     }
   };
 
@@ -556,7 +571,9 @@ export default function MarkupManagementHotel() {
             Current Fare Range (User-Visible Hotel Rates)
           </h4>
           <p className="text-sm text-blue-700 mb-4">
-            The markup percentage range applied on top of net hotel rate from suppliers (Hotelbeds, TBO, etc.). Hotel prices will randomly fluctuate within this range per session.
+            The markup percentage range applied on top of net hotel rate from
+            suppliers (Hotelbeds, TBO, etc.). Hotel prices will randomly
+            fluctuate within this range per session.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -611,7 +628,9 @@ export default function MarkupManagementHotel() {
             Bargain Fare Range (Acceptable Hotel Bargain Pricing)
           </h4>
           <p className="text-sm text-green-700 mb-4">
-            When users enter a custom hotel price, if it falls within this range, show "Your price is matched!". Otherwise, provide counter-offers within Current Fare range.
+            When users enter a custom hotel price, if it falls within this
+            range, show "Your price is matched!". Otherwise, provide
+            counter-offers within Current Fare range.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -955,140 +974,149 @@ export default function MarkupManagementHotel() {
                   <div className="text-gray-500">Loading markups...</div>
                 </div>
               ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Markup Rule</TableHead>
-                      <TableHead>Hotel Details</TableHead>
-                      <TableHead>Room & Season</TableHead>
-                      <TableHead>Markup</TableHead>
-                      <TableHead>Validity</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredMarkups.map((markup) => {
-                      return (
-                        <TableRow key={markup.id}>
-                          <TableCell>
-                            <div>
-                              <p className="font-medium">{markup.name}</p>
-                              <p className="text-sm text-gray-600 truncate max-w-48">
-                                {markup.description}
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm">
-                                <Building className="w-3 h-3 mr-1" />
-                                {markup.hotelName}
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Markup Rule</TableHead>
+                        <TableHead>Hotel Details</TableHead>
+                        <TableHead>Room & Season</TableHead>
+                        <TableHead>Markup</TableHead>
+                        <TableHead>Validity</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredMarkups.map((markup) => {
+                        return (
+                          <TableRow key={markup.id}>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{markup.name}</p>
+                                <p className="text-sm text-gray-600 truncate max-w-48">
+                                  {markup.description}
+                                </p>
                               </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <MapPin className="w-3 h-3 mr-1" />
-                                {markup.city}
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm">
+                                  <Building className="w-3 h-3 mr-1" />
+                                  {markup.hotelName}
+                                </div>
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <MapPin className="w-3 h-3 mr-1" />
+                                  {markup.city}
+                                </div>
+                                <StarRating rating={markup.starRating} />
                               </div>
-                              <StarRating rating={markup.starRating} />
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <Badge
-                                variant="outline"
-                                className="capitalize flex items-center gap-1"
-                              >
-                                <Bed className="w-3 h-3" />
-                                {markup.roomCategory}
-                              </Badge>
-                              <div className="text-xs text-gray-600 capitalize">
-                {markup.seasonType}
-              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm font-medium">
-                                {markup.markupType === "percentage" ? (
-                                  <Percent className="w-3 h-3 mr-1" />
-                                ) : (
-                                  <DollarSign className="w-3 h-3 mr-1" />
-                                )}
-                                {markup.markupValue}
-                                {markup.markupType === "percentage" ? "%" : "₹"}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                Min: ₹{markup.minAmount} | Max: ₹{markup.maxAmount}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm">
-                                <Calendar className="w-3 h-3 mr-1" />
-                                {new Date(
-                                  markup.validFrom,
-                                ).toLocaleDateString()}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                to{" "}
-                                {new Date(markup.validTo).toLocaleDateString()}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <StatusBadge status={markup.status} />
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreVertical className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleEditMarkup(markup)}
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Badge
+                                  variant="outline"
+                                  className="capitalize flex items-center gap-1"
                                 >
-                                  <Edit className="w-4 h-4 mr-2" />
-                                  Edit Markup
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => toggleMarkupStatus(markup.id)}
-                                >
-                                  {markup.status === "active" ? (
-                                    <>
-                                      <AlertCircle className="w-4 h-4 mr-2" />
-                                      Deactivate
-                                    </>
+                                  <Bed className="w-3 h-3" />
+                                  {markup.roomCategory}
+                                </Badge>
+                                <div className="text-xs text-gray-600 capitalize">
+                                  {markup.seasonType}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm font-medium">
+                                  {markup.markupType === "percentage" ? (
+                                    <Percent className="w-3 h-3 mr-1" />
                                   ) : (
-                                    <>
-                                      <CheckCircle className="w-4 h-4 mr-2" />
-                                      Activate
-                                    </>
+                                    <DollarSign className="w-3 h-3 mr-1" />
                                   )}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Activity className="w-4 h-4 mr-2" />
-                                  View Stats
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDeleteMarkup(markup.id)}
-                                  className="text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete Markup
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
+                                  {markup.markupValue}
+                                  {markup.markupType === "percentage"
+                                    ? "%"
+                                    : "₹"}
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  Min: ₹{markup.minAmount} | Max: ₹
+                                  {markup.maxAmount}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm">
+                                  <Calendar className="w-3 h-3 mr-1" />
+                                  {new Date(
+                                    markup.validFrom,
+                                  ).toLocaleDateString()}
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  to{" "}
+                                  {new Date(
+                                    markup.validTo,
+                                  ).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <StatusBadge status={markup.status} />
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreVertical className="w-4 h-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    onClick={() => handleEditMarkup(markup)}
+                                  >
+                                    <Edit className="w-4 h-4 mr-2" />
+                                    Edit Markup
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      toggleMarkupStatus(markup.id)
+                                    }
+                                  >
+                                    {markup.status === "active" ? (
+                                      <>
+                                        <AlertCircle className="w-4 h-4 mr-2" />
+                                        Deactivate
+                                      </>
+                                    ) : (
+                                      <>
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        Activate
+                                      </>
+                                    )}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Activity className="w-4 h-4 mr-2" />
+                                    View Stats
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleDeleteMarkup(markup.id)
+                                    }
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete Markup
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -1109,7 +1137,7 @@ export default function MarkupManagementHotel() {
                   Reset
                 </Button>
                 <Button onClick={handleSaveMarkup} disabled={saving}>
-                  {saving ? 'Saving...' : 'Save Markup'}
+                  {saving ? "Saving..." : "Save Markup"}
                 </Button>
               </div>
             </CardContent>
@@ -1135,7 +1163,7 @@ export default function MarkupManagementHotel() {
               Cancel
             </Button>
             <Button onClick={handleSaveMarkup} disabled={saving}>
-              {saving ? 'Creating...' : 'Create Markup'}
+              {saving ? "Creating..." : "Create Markup"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1159,7 +1187,7 @@ export default function MarkupManagementHotel() {
               Cancel
             </Button>
             <Button onClick={handleSaveMarkup} disabled={saving}>
-              {saving ? 'Updating...' : 'Update Markup'}
+              {saving ? "Updating..." : "Update Markup"}
             </Button>
           </DialogFooter>
         </DialogContent>

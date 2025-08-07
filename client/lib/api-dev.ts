@@ -19,7 +19,7 @@ export class DevApiClient {
       const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
 
       const response = await fetch(`${this.baseUrl}/health`, {
-        method: 'GET',
+        method: "GET",
         signal: controller.signal,
       });
 
@@ -481,7 +481,11 @@ export class DevApiClient {
       // Return detailed flight information based on flightId
       let flightDetails;
 
-      if (flightId.includes("emirates") || flightId.includes("EK") || flightId.includes("fallback_flight_1")) {
+      if (
+        flightId.includes("emirates") ||
+        flightId.includes("EK") ||
+        flightId.includes("fallback_flight_1")
+      ) {
         flightDetails = {
           id: flightId,
           airline: "Emirates",
@@ -516,7 +520,12 @@ export class DevApiClient {
               total: 25890,
             },
           },
-          amenities: ["WiFi", "Entertainment System", "Premium Meals", "Lounge Access"],
+          amenities: [
+            "WiFi",
+            "Entertainment System",
+            "Premium Meals",
+            "Lounge Access",
+          ],
           baggage: {
             carryOn: {
               weight: "7kg",
@@ -549,7 +558,11 @@ export class DevApiClient {
             },
           ],
         };
-      } else if (flightId.includes("indigo") || flightId.includes("6E") || flightId.includes("fallback_flight_2")) {
+      } else if (
+        flightId.includes("indigo") ||
+        flightId.includes("6E") ||
+        flightId.includes("fallback_flight_2")
+      ) {
         flightDetails = {
           id: flightId,
           airline: "IndiGo",
@@ -711,10 +724,10 @@ export class DevApiClient {
             markupValue: 5.5,
             minAmount: 500,
             maxAmount: 2000,
-            currentFareMin: 10.00,
-            currentFareMax: 12.00,
-            bargainFareMin: 5.00,
-            bargainFareMax: 15.00,
+            currentFareMin: 10.0,
+            currentFareMax: 12.0,
+            bargainFareMin: 5.0,
+            bargainFareMax: 15.0,
             validFrom: "2024-01-01",
             validTo: "2024-12-31",
             status: "active",
@@ -727,28 +740,30 @@ export class DevApiClient {
           {
             id: "2",
             name: "Amadeus Emirates BOM-DXB Economy",
-            description: "Airline Markup for BOM to DXB route with Emirates via Amadeus",
+            description:
+              "Airline Markup for BOM to DXB route with Emirates via Amadeus",
             airline: "EK",
             route: { from: "BOM", to: "DXB" },
             class: "economy",
             markupType: "percentage",
-            markupValue: 12.00,
+            markupValue: 12.0,
             minAmount: 500,
             maxAmount: 5000,
-            highFareMin: 20.00,
-            highFareMax: 25.00,
-            lowFareMin: 15.00,
-            lowFareMax: 20.00,
-            currentFareMin: 10.00,
-            currentFareMax: 12.00,
-            bargainFareMin: 5.00,
-            bargainFareMax: 15.00,
+            highFareMin: 20.0,
+            highFareMax: 25.0,
+            lowFareMin: 15.0,
+            lowFareMax: 20.0,
+            currentFareMin: 10.0,
+            currentFareMax: 12.0,
+            bargainFareMin: 5.0,
+            bargainFareMax: 15.0,
             validFrom: "2025-01-01",
             validTo: "2025-12-31",
             status: "active",
             priority: 1,
             userType: "all",
-            specialConditions: "Sample data as per Zubin's specifications for Amadeus Emirates route",
+            specialConditions:
+              "Sample data as per Zubin's specifications for Amadeus Emirates route",
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
@@ -778,10 +793,10 @@ export class DevApiClient {
             markupValue: 8.5,
             minAmount: 1000,
             maxAmount: 5000,
-            currentFareMin: 10.00,
-            currentFareMax: 15.00,
-            bargainFareMin: 5.00,
-            bargainFareMax: 15.00,
+            currentFareMin: 10.0,
+            currentFareMax: 15.0,
+            bargainFareMin: 5.0,
+            bargainFareMax: 15.0,
             validFrom: "2024-01-01",
             validTo: "2024-12-31",
             checkInDays: ["friday", "saturday", "sunday"],
@@ -799,36 +814,54 @@ export class DevApiClient {
           {
             id: "2",
             name: "Hotelbeds Taj Mahal Palace Mumbai",
-            description: "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
+            description:
+              "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
             city: "Mumbai",
             hotelName: "Taj Mahal Palace",
             hotelChain: "Taj Hotels",
             starRating: 5,
             roomCategory: "deluxe",
             markupType: "percentage",
-            markupValue: 12.00,
+            markupValue: 12.0,
             minAmount: 1000,
             maxAmount: 8000,
             hotelCode: "53331",
-            highFareMin: 20.00,
-            highFareMax: 25.00,
-            lowFareMin: 15.00,
-            lowFareMax: 20.00,
-            currentFareMin: 10.00,
-            currentFareMax: 12.00,
-            bargainFareMin: 10.00,
-            bargainFareMax: 20.00,
+            highFareMin: 20.0,
+            highFareMax: 25.0,
+            lowFareMin: 15.0,
+            lowFareMax: 20.0,
+            currentFareMin: 10.0,
+            currentFareMax: 12.0,
+            bargainFareMin: 10.0,
+            bargainFareMax: 20.0,
             validFrom: "2025-01-01",
             validTo: "2025-12-31",
-            checkInDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-            applicableDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+            checkInDays: [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ],
+            applicableDays: [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday",
+            ],
             minStay: 1,
             maxStay: 30,
             status: "active",
             priority: 1,
             userType: "all",
             seasonType: "Regular",
-            specialConditions: "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
+            specialConditions:
+              "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
@@ -841,7 +874,10 @@ export class DevApiClient {
     }
 
     // Promo Code endpoints
-    if (endpoint.includes("/promo/admin/all") || endpoint.includes("/promo/logs")) {
+    if (
+      endpoint.includes("/promo/admin/all") ||
+      endpoint.includes("/promo/logs")
+    ) {
       return {
         success: true,
         data: [

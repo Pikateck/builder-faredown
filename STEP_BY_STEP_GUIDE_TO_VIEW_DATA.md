@@ -3,6 +3,7 @@
 ## 🎯 What We've Fixed
 
 Your admin panels were showing empty because:
+
 1. **API Client Issue**: The frontend was always using fallback/mock mode
 2. **Missing API Routes**: The server didn't have markup/promo endpoints
 3. **Authentication**: Admin routes required authentication that wasn't set up
@@ -14,7 +15,9 @@ Your admin panels were showing empty because:
 ## 🚀 Step-by-Step Instructions
 
 ### **Step 1: Verify Server is Running**
+
 You should see this in your terminal:
+
 ```
 VITE v6.3.5  ready in 565 ms
 ➜  Local:   http://localhost:8080/
@@ -23,18 +26,21 @@ VITE v6.3.5  ready in 565 ms
 ### **Step 2: Open Your Browser and Navigate to Admin Panels**
 
 #### **For Airline Markup Management:**
+
 1. Go to: `http://localhost:8080/admin/markup-air`
 2. You should now see **2 entries**:
    - "Mumbai-Dubai Economy Markup" (basic entry)
    - "Amadeus Emirates BOM-DXB Economy" (Zubin's sample data)
 
 #### **For Hotel Markup Management:**
+
 1. Go to: `http://localhost:8080/admin/markup-hotel`
 2. You should now see **2 entries**:
-   - "Mumbai Luxury Hotels Markup" (basic entry) 
+   - "Mumbai Luxury Hotels Markup" (basic entry)
    - "Hotelbeds Taj Mahal Palace Mumbai" (Zubin's sample data)
 
 #### **For Promo Code Management:**
+
 1. Go to: `http://localhost:8080/admin/promo-codes`
 2. You should now see **3 entries**:
    - "FLYHIGH100" (flights)
@@ -46,6 +52,7 @@ VITE v6.3.5  ready in 565 ms
 ## 📊 Sample Data Details
 
 ### **Zubin's Airline Data (Emirates BOM→DXB)**
+
 - **Route**: Mumbai (BOM) → Dubai (DXB)
 - **Airline**: Emirates (EK)
 - **Class**: Economy
@@ -54,6 +61,7 @@ VITE v6.3.5  ready in 565 ms
 - **Status**: Active
 
 ### **Zubin's Hotel Data (Taj Mahal Palace)**
+
 - **City**: Mumbai
 - **Hotel**: Taj Mahal Palace (Code: 53331)
 - **Chain**: Taj Hotels
@@ -62,6 +70,7 @@ VITE v6.3.5  ready in 565 ms
 - **Status**: Active
 
 ### **Zubin's FAREDOWNBONUS Promo Codes**
+
 - **Code**: FAREDOWNBONUS (both flights & hotels)
 - **Type**: Fixed Amount (INR)
 - **Discount**: ₹2,000 - ₹5,000
@@ -105,21 +114,25 @@ VITE v6.3.5  ready in 565 ms
 ## 🎯 Expected Behavior After Fix
 
 ### **✅ Airline Markup Management**
+
 - Displays 2 markup rules in the table
 - Shows Zubin's Emirates sample data with all fare ranges
 - Create/Edit forms include Current Fare Range and Bargain Fare Range sections
 
-### **✅ Hotel Markup Management**  
+### **✅ Hotel Markup Management**
+
 - Displays 2 markup rules in the table
 - Shows Zubin's Taj Mahal Palace sample data
 - Forms include hotel-specific fare range configuration
 
 ### **✅ Promo Code Management**
+
 - Displays 3 promo codes in the table
 - Shows FAREDOWNBONUS codes for both flights and hotels
 - Displays correct discount amounts and budgets
 
 ### **✅ Integration with Bargain Engine**
+
 - All sample data is now available for bargain pricing calculations
 - Current Fare Range controls user-visible pricing
 - Bargain Fare Range controls "Your price is matched!" logic
@@ -134,7 +147,7 @@ VITE v6.3.5  ready in 565 ms
 ✅ **Admin CMS**: Markup and promo management panels fully functional  
 ✅ **Bargain Engine**: Integrated with new fare range fields  
 ✅ **Database Ready**: Structure compatible with Render PostgreSQL  
-✅ **No Design Changes**: All existing UI preserved exactly  
+✅ **No Design Changes**: All existing UI preserved exactly
 
 ---
 

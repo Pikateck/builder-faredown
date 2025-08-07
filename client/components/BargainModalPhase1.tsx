@@ -4,20 +4,20 @@
  * User Flow: User sees marked-up fare → Enters desired price → System responds with match or counter-offer
  */
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   AlertTriangle,
   CheckCircle,
@@ -34,20 +34,25 @@ import {
   Award,
   Info,
   Sparkles,
-} from 'lucide-react';
-import { bargainPricingService, type BargainPricingRequest, type BargainPricingResult, type CounterOfferResponse } from '@/services/bargainPricingService';
-import { formatPriceNoDecimalsNoDecimals } from '@/lib/formatPriceNoDecimals';
+} from "lucide-react";
+import {
+  bargainPricingService,
+  type BargainPricingRequest,
+  type BargainPricingResult,
+  type CounterOfferResponse,
+} from "@/services/bargainPricingService";
+import { formatPriceNoDecimalsNoDecimals } from "@/lib/formatPriceNoDecimals";
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
   onClose: () => void;
   onBookingConfirmed: (finalPrice: number) => void;
   itemDetails: {
-    type: 'flight' | 'hotel';
+    type: "flight" | "hotel";
     itemId: string;
     title: string;
     basePrice: number;
-    userType?: 'b2c' | 'b2b';
+    userType?: "b2c" | "b2b";
     // Flight specific
     airline?: string;
     route?: { from: string; to: string };
@@ -60,10 +65,15 @@ interface BargainModalPhase1Props {
   };
   promoCode?: string;
   userLocation?: string;
-  deviceType?: 'mobile' | 'desktop';
+  deviceType?: "mobile" | "desktop";
 }
 
-type BargainStep = 'loading' | 'initial' | 'negotiating' | 'success' | 'rejected';
+type BargainStep =
+  | "loading"
+  | "initial"
+  | "negotiating"
+  | "success"
+  | "rejected";
 
 export default function BargainModalPhase1({
   isOpen,
@@ -72,13 +82,17 @@ export default function BargainModalPhase1({
   itemDetails,
   promoCode,
   userLocation,
-  deviceType = 'desktop',
+  deviceType = "desktop",
 }: BargainModalPhase1Props) {
-  const [step, setStep] = useState<BargainStep>('loading');
-  const [pricingResult, setPricingResult] = useState<BargainPricingResult | null>(null);
-  const [userOfferPrice, setUserOfferPrice] = useState('');
-  const [counterOfferResponse, setCounterOfferResponse] = useState<CounterOfferResponse | null>(null);
-  const [sessionId] = useState(`bargain_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [step, setStep] = useState<BargainStep>("loading");
+  const [pricingResult, setPricingResult] =
+    useState<BargainPricingResult | null>(null);
+  const [userOfferPrice, setUserOfferPrice] = useState("");
+  const [counterOfferResponse, setCounterOfferResponse] =
+    useState<CounterOfferResponse | null>(null);
+  const [sessionId] = useState(
+    `bargain_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+  );
   const [isNegotiating, setIsNegotiating] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -93,7 +107,7 @@ export default function BargainModalPhase1({
 
   // Initialize bargain session when modal opens
   useEffect(() => {
-    if (isOpen && step === 'loading') {
+    if (isOpen && step === "loading") {
       initializeBargainSession();
     }
   }, [isOpen]);
@@ -102,9 +116,9 @@ export default function BargainModalPhase1({
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
-    if (counterOfferTimer > 0 && step === 'negotiating') {
+    if (counterOfferTimer > 0 && step === "negotiating") {
       interval = setInterval(() => {
-        setCounterOfferTimer(prev => {
+        setCounterOfferTimer((prev) => {
           if (prev <= 1) {
             setIsCounterOfferExpired(true);
             return 0;
@@ -120,12 +134,12 @@ export default function BargainModalPhase1({
   const initializeBargainSession = async () => {
     try {
       setError(null);
-      
+
       const request: BargainPricingRequest = {
         type: itemDetails.type,
         itemId: itemDetails.itemId,
         basePrice: itemDetails.basePrice,
-        userType: itemDetails.userType || 'b2c',
+        userType: itemDetails.userType || "b2c",
         airline: itemDetails.airline,
         route: itemDetails.route,
         class: itemDetails.class,
@@ -138,15 +152,20 @@ export default function BargainModalPhase1({
         deviceType,
       };
 
-      const result = await bargainPricingService.calculateInitialPricing(request);
+      const result =
+        await bargainPricingService.calculateInitialPricing(request);
       setPricingResult(result);
-      setStep('initial');
-      
+      setStep("initial");
+
       // Set suggested target price as default
       setUserOfferPrice(result.bargainRange.recommendedTarget.toString());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to initialize bargain session');
-      setStep('rejected');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to initialize bargain session",
+      );
+      setStep("rejected");
     }
   };
 
@@ -160,18 +179,20 @@ export default function BargainModalPhase1({
       const offerPrice = parseFloat(userOfferPrice);
 
       if (isNaN(offerPrice) || offerPrice <= 0) {
-        setError('Please enter a valid price');
+        setError("Please enter a valid price");
         return;
       }
 
       // Zubin's Requirement: Prevent repeat price entries
       if (usedPrices.has(offerPrice)) {
-        setError('You cannot re-enter the same price. Please try a different amount.');
+        setError(
+          "You cannot re-enter the same price. Please try a different amount.",
+        );
         return;
       }
 
       // Add to used prices
-      setUsedPrices(prev => new Set(prev).add(offerPrice));
+      setUsedPrices((prev) => new Set(prev).add(offerPrice));
 
       const counterOfferRequest = {
         sessionId,
@@ -182,22 +203,25 @@ export default function BargainModalPhase1({
         promoDetails: pricingResult.promoDetails,
       };
 
-      const response = await bargainPricingService.processCounterOffer(counterOfferRequest);
+      const response =
+        await bargainPricingService.processCounterOffer(counterOfferRequest);
       setCounterOfferResponse(response);
-      setAttemptCount(prev => prev + 1);
+      setAttemptCount((prev) => prev + 1);
 
       if (response.accepted) {
-        setStep('success');
+        setStep("success");
       } else {
-        setStep('negotiating');
+        setStep("negotiating");
         // Start 30-second timer for counter-offer (Zubin's requirement)
         setCounterOfferTimer(30);
         setIsCounterOfferExpired(false);
         // Clear the input for next attempt
-        setUserOfferPrice('');
+        setUserOfferPrice("");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to process your offer');
+      setError(
+        err instanceof Error ? err.message : "Failed to process your offer",
+      );
     } finally {
       setIsNegotiating(false);
     }
@@ -205,14 +229,14 @@ export default function BargainModalPhase1({
 
   const handleAcceptCounterOffer = () => {
     if (counterOfferResponse?.counterOffer) {
-      setStep('success');
+      setStep("success");
       onBookingConfirmed(counterOfferResponse.counterOffer);
     }
   };
 
   const handleRejectCounterOffer = () => {
     if (attemptCount >= 3) {
-      setStep('rejected');
+      setStep("rejected");
     } else {
       // Allow user to make another offer
       setCounterOfferResponse(null);
@@ -220,7 +244,7 @@ export default function BargainModalPhase1({
   };
 
   const handleBookNow = () => {
-    if (step === 'success' && counterOfferResponse?.finalPrice) {
+    if (step === "success" && counterOfferResponse?.finalPrice) {
       onBookingConfirmed(counterOfferResponse.finalPrice);
     } else if (pricingResult) {
       onBookingConfirmed(pricingResult.finalPrice);
@@ -229,8 +253,12 @@ export default function BargainModalPhase1({
 
   const getSavingsInfo = () => {
     if (!pricingResult) return null;
-    
-    const currentPrice = counterOfferResponse?.finalPrice || counterOfferResponse?.counterOffer || parseFloat(userOfferPrice) || pricingResult.finalPrice;
+
+    const currentPrice =
+      counterOfferResponse?.finalPrice ||
+      counterOfferResponse?.counterOffer ||
+      parseFloat(userOfferPrice) ||
+      pricingResult.finalPrice;
     const originalDisplayPrice = pricingResult.finalPrice;
     const savings = originalDisplayPrice - currentPrice;
     const savingsPercentage = (savings / originalDisplayPrice) * 100;
@@ -244,14 +272,18 @@ export default function BargainModalPhase1({
   const renderLoadingStep = () => (
     <div className="text-center py-8">
       <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-      <p className="text-gray-600">Analyzing pricing and preparing your bargain session...</p>
-      <p className="text-sm text-gray-500 mt-2">Calculating optimal markup ranges and promo applications</p>
+      <p className="text-gray-600">
+        Analyzing pricing and preparing your bargain session...
+      </p>
+      <p className="text-sm text-gray-500 mt-2">
+        Calculating optimal markup ranges and promo applications
+      </p>
     </div>
   );
 
   const renderInitialStep = () => {
     if (!pricingResult) return null;
-    
+
     const savingsInfo = getSavingsInfo();
 
     return (
@@ -271,7 +303,10 @@ export default function BargainModalPhase1({
                     Promo Applied: {pricingResult.promoDetails.code}
                   </Badge>
                   <span className="text-sm text-green-600">
-                    -{formatPriceNoDecimals(pricingResult.promoDetails.discountAmount)}
+                    -
+                    {formatPriceNoDecimals(
+                      pricingResult.promoDetails.discountAmount,
+                    )}
                   </span>
                 </div>
               )}
@@ -282,7 +317,7 @@ export default function BargainModalPhase1({
                 className="text-xs"
               >
                 <Info className="w-3 h-3 mr-1" />
-                {showPricingDetails ? 'Hide' : 'Show'} Pricing Details
+                {showPricingDetails ? "Hide" : "Show"} Pricing Details
               </Button>
             </div>
           </CardContent>
@@ -301,18 +336,31 @@ export default function BargainModalPhase1({
               <div className="grid gap-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Base Price:</span>
-                  <span>{formatPriceNoDecimals(pricingResult.originalPrice)}</span>
+                  <span>
+                    {formatPriceNoDecimals(pricingResult.originalPrice)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">
-                    Markup ({pricingResult.markupDetails.markupPercentage.toFixed(2)}%):
+                    Markup (
+                    {pricingResult.markupDetails.markupPercentage.toFixed(2)}%):
                   </span>
-                  <span>+{formatPriceNoDecimals(pricingResult.markupDetails.markupAmount)}</span>
+                  <span>
+                    +
+                    {formatPriceNoDecimals(
+                      pricingResult.markupDetails.markupAmount,
+                    )}
+                  </span>
                 </div>
                 {pricingResult.promoDetails && (
                   <div className="flex justify-between text-green-600">
                     <span>Promo Discount:</span>
-                    <span>-{formatPriceNoDecimals(pricingResult.promoDetails.discountAmount)}</span>
+                    <span>
+                      -
+                      {formatPriceNoDecimals(
+                        pricingResult.promoDetails.discountAmount,
+                      )}
+                    </span>
                   </div>
                 )}
                 <hr className="my-2" />
@@ -323,8 +371,10 @@ export default function BargainModalPhase1({
               </div>
               <div className="bg-blue-50 p-3 rounded-lg">
                 <p className="text-xs text-blue-800">
-                  <strong>Randomized Markup:</strong> {pricingResult.markupDetails.markupPercentage.toFixed(2)}% 
-                  (Range: {pricingResult.markupDetails.markupRange.min}% - {pricingResult.markupDetails.markupRange.max}%)
+                  <strong>Randomized Markup:</strong>{" "}
+                  {pricingResult.markupDetails.markupPercentage.toFixed(2)}%
+                  (Range: {pricingResult.markupDetails.markupRange.min}% -{" "}
+                  {pricingResult.markupDetails.markupRange.max}%)
                 </p>
               </div>
             </CardContent>
@@ -357,13 +407,23 @@ export default function BargainModalPhase1({
                 />
               </div>
             </div>
-            
+
             <div className="bg-yellow-50 p-3 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>Bargain Range:</strong> {formatPriceNoDecimals(pricingResult.bargainRange.minimumAcceptable)} - {formatPriceNoDecimals(pricingResult.bargainRange.maximumCounterOffer)}
+                <strong>Bargain Range:</strong>{" "}
+                {formatPriceNoDecimals(
+                  pricingResult.bargainRange.minimumAcceptable,
+                )}{" "}
+                -{" "}
+                {formatPriceNoDecimals(
+                  pricingResult.bargainRange.maximumCounterOffer,
+                )}
               </p>
               <p className="text-xs text-yellow-700 mt-1">
-                Recommended target: {formatPriceNoDecimals(pricingResult.bargainRange.recommendedTarget)}
+                Recommended target:{" "}
+                {formatPriceNoDecimals(
+                  pricingResult.bargainRange.recommendedTarget,
+                )}
               </p>
             </div>
 
@@ -398,30 +458,44 @@ export default function BargainModalPhase1({
 
   const renderNegotiatingStep = () => {
     if (!counterOfferResponse) return null;
-    
+
     const savingsInfo = getSavingsInfo();
 
     return (
       <div className="space-y-6">
         {/* Counter Offer Response with 30-Second Timer */}
-        <Card className={`border-orange-200 ${isCounterOfferExpired ? 'bg-red-50' : 'bg-orange-50'}`}>
+        <Card
+          className={`border-orange-200 ${isCounterOfferExpired ? "bg-red-50" : "bg-orange-50"}`}
+        >
           <CardContent className="p-6">
             <div className="text-center">
-              <MessageCircle className={`w-8 h-8 mx-auto mb-3 ${isCounterOfferExpired ? 'text-red-600' : 'text-orange-600'}`} />
-              <h3 className={`text-lg font-semibold mb-2 ${isCounterOfferExpired ? 'text-red-800' : 'text-orange-800'}`}>
-                {isCounterOfferExpired ? 'Offer Expired!' : 'Counter Offer!'}
+              <MessageCircle
+                className={`w-8 h-8 mx-auto mb-3 ${isCounterOfferExpired ? "text-red-600" : "text-orange-600"}`}
+              />
+              <h3
+                className={`text-lg font-semibold mb-2 ${isCounterOfferExpired ? "text-red-800" : "text-orange-800"}`}
+              >
+                {isCounterOfferExpired ? "Offer Expired!" : "Counter Offer!"}
               </h3>
 
               {/* 30-Second Timer Display (Zubin's requirement) */}
               {counterOfferTimer > 0 && !isCounterOfferExpired && (
                 <div className="mb-3">
-                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
-                    counterOfferTimer <= 10 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                  }`}>
+                  <div
+                    className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+                      counterOfferTimer <= 10
+                        ? "bg-red-100 text-red-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
                     <Clock className="w-4 h-4" />
-                    <span className="font-mono font-bold">{counterOfferTimer}s</span>
+                    <span className="font-mono font-bold">
+                      {counterOfferTimer}s
+                    </span>
                   </div>
-                  <p className="text-xs text-gray-600 mt-1">Offer valid for {counterOfferTimer} seconds</p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Offer valid for {counterOfferTimer} seconds
+                  </p>
                 </div>
               )}
 
@@ -431,11 +505,12 @@ export default function BargainModalPhase1({
                 </p>
               )}
 
-              <p className={`text-sm ${isCounterOfferExpired ? 'text-red-700' : 'text-orange-700'}`}>
+              <p
+                className={`text-sm ${isCounterOfferExpired ? "text-red-700" : "text-orange-700"}`}
+              >
                 {isCounterOfferExpired
-                  ? 'This counter-offer has expired. You can make a new offer below.'
-                  : counterOfferResponse.reasoning
-                }
+                  ? "This counter-offer has expired. You can make a new offer below."
+                  : counterOfferResponse.reasoning}
               </p>
             </div>
           </CardContent>
@@ -448,11 +523,17 @@ export default function BargainModalPhase1({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <TrendingDown className="w-5 h-5 text-green-600" />
-                  <span className="font-medium text-green-800">Potential Savings</span>
+                  <span className="font-medium text-green-800">
+                    Potential Savings
+                  </span>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-green-600">{formatPriceNoDecimals(savingsInfo.savings)}</p>
-                  <p className="text-sm text-green-600">{savingsInfo.savingsPercentage.toFixed(1)}% off</p>
+                  <p className="font-bold text-green-600">
+                    {formatPriceNoDecimals(savingsInfo.savings)}
+                  </p>
+                  <p className="text-sm text-green-600">
+                    {savingsInfo.savingsPercentage.toFixed(1)}% off
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -468,7 +549,8 @@ export default function BargainModalPhase1({
               disabled={isCounterOfferExpired}
             >
               <ThumbsUp className="w-4 h-4 mr-2" />
-              Accept Offer (₹{formatPriceNoDecimals(counterOfferResponse.counterOffer)})
+              Accept Offer (₹
+              {formatPriceNoDecimals(counterOfferResponse.counterOffer)})
             </Button>
             <Button
               onClick={handleRejectCounterOffer}
@@ -486,7 +568,9 @@ export default function BargainModalPhase1({
         {(isCounterOfferExpired || attemptCount < 3) && (
           <Card className="bg-gray-50 border-gray-200">
             <CardContent className="p-4">
-              <h4 className="font-medium text-gray-800 mb-3">Make Another Offer</h4>
+              <h4 className="font-medium text-gray-800 mb-3">
+                Make Another Offer
+              </h4>
               <div className="space-y-3">
                 <div>
                   <Label htmlFor="newOffer">Your New Price</Label>
@@ -503,7 +587,10 @@ export default function BargainModalPhase1({
                   </div>
                   {usedPrices.size > 0 && (
                     <p className="text-xs text-gray-500 mt-1">
-                      Previously tried: {Array.from(usedPrices).map(p => `₹${p.toLocaleString()}`).join(', ')}
+                      Previously tried:{" "}
+                      {Array.from(usedPrices)
+                        .map((p) => `₹${p.toLocaleString()}`)
+                        .join(", ")}
                     </p>
                   )}
                 </div>
@@ -532,7 +619,8 @@ export default function BargainModalPhase1({
 
         <div className="text-center">
           <p className="text-sm text-gray-600">
-            Attempts: {attemptCount}/3 • {counterOfferResponse.nextRecommendation}
+            Attempts: {attemptCount}/3 •{" "}
+            {counterOfferResponse.nextRecommendation}
           </p>
           {usedPrices.size > 0 && (
             <p className="text-xs text-gray-500 mt-1">
@@ -545,27 +633,39 @@ export default function BargainModalPhase1({
   };
 
   const renderSuccessStep = () => {
-    const finalPrice = counterOfferResponse?.finalPrice || counterOfferResponse?.counterOffer || parseFloat(userOfferPrice);
+    const finalPrice =
+      counterOfferResponse?.finalPrice ||
+      counterOfferResponse?.counterOffer ||
+      parseFloat(userOfferPrice);
     const savingsInfo = getSavingsInfo();
 
     return (
       <div className="space-y-6 text-center">
         <div className="py-8">
           <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-green-800 mb-2">Bargain Successful!</h3>
-          <p className="text-3xl font-bold text-green-600 mb-2">{formatPriceNoDecimals(finalPrice)}</p>
-          
+          <h3 className="text-2xl font-bold text-green-800 mb-2">
+            Bargain Successful!
+          </h3>
+          <p className="text-3xl font-bold text-green-600 mb-2">
+            {formatPriceNoDecimals(finalPrice)}
+          </p>
+
           {savingsInfo && savingsInfo.savings > 0 && (
             <div className="bg-green-50 p-4 rounded-lg">
               <p className="text-green-800">
                 <Award className="w-4 h-4 inline mr-1" />
-                You saved <strong>{formatPriceNoDecimals(savingsInfo.savings)}</strong> ({savingsInfo.savingsPercentage.toFixed(1)}% off)!
+                You saved{" "}
+                <strong>{formatPriceNoDecimals(savingsInfo.savings)}</strong> (
+                {savingsInfo.savingsPercentage.toFixed(1)}% off)!
               </p>
             </div>
           )}
         </div>
 
-        <Button onClick={handleBookNow} className="w-full bg-green-600 hover:bg-green-700">
+        <Button
+          onClick={handleBookNow}
+          className="w-full bg-green-600 hover:bg-green-700"
+        >
           <CheckCircle className="w-4 h-4 mr-2" />
           Confirm Booking at {formatPriceNoDecimals(finalPrice)}
         </Button>
@@ -577,12 +677,17 @@ export default function BargainModalPhase1({
     <div className="space-y-6 text-center">
       <div className="py-8">
         <AlertTriangle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <h3 className="text-2xl font-bold text-red-800 mb-2">Bargaining Session Ended</h3>
+        <h3 className="text-2xl font-bold text-red-800 mb-2">
+          Bargaining Session Ended
+        </h3>
         <p className="text-gray-600 mb-4">
-          We couldn't reach an agreement this time, but you can still book at the current price.
+          We couldn't reach an agreement this time, but you can still book at
+          the current price.
         </p>
         {pricingResult && (
-          <p className="text-2xl font-bold text-blue-600">{formatPriceNoDecimals(pricingResult.finalPrice)}</p>
+          <p className="text-2xl font-bold text-blue-600">
+            {formatPriceNoDecimals(pricingResult.finalPrice)}
+          </p>
         )}
       </div>
 
@@ -606,16 +711,17 @@ export default function BargainModalPhase1({
             Bargain Engine - Phase 1
           </DialogTitle>
           <DialogDescription>
-            {itemDetails.title} • Base Price + Randomized Markup + Counter-offers
+            {itemDetails.title} • Base Price + Randomized Markup +
+            Counter-offers
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-4">
-          {step === 'loading' && renderLoadingStep()}
-          {step === 'initial' && renderInitialStep()}
-          {step === 'negotiating' && renderNegotiatingStep()}
-          {step === 'success' && renderSuccessStep()}
-          {step === 'rejected' && renderRejectedStep()}
+          {step === "loading" && renderLoadingStep()}
+          {step === "initial" && renderInitialStep()}
+          {step === "negotiating" && renderNegotiatingStep()}
+          {step === "success" && renderSuccessStep()}
+          {step === "rejected" && renderRejectedStep()}
         </div>
       </DialogContent>
     </Dialog>

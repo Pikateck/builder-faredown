@@ -111,8 +111,11 @@ class LoyaltyService {
       throw new Error(errorMessage);
     } catch (error) {
       // Don't log AbortErrors or fetch errors in production
-      if (error instanceof Error &&
-          (error.name === "AbortError" || error.message.includes("Failed to fetch"))) {
+      if (
+        error instanceof Error &&
+        (error.name === "AbortError" ||
+          error.message.includes("Failed to fetch"))
+      ) {
         console.log("Loyalty API unavailable, fallback should handle this");
       } else {
         console.error("Error fetching loyalty profile:", error);

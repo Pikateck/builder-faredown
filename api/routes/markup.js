@@ -15,11 +15,11 @@ let airMarkups = [
     minAmount: 500,
     maxAmount: 2000,
     // Current Fare Range (existing functionality)
-    currentFareMin: 10.00, // Min markup percentage for user-visible fare
-    currentFareMax: 12.00, // Max markup percentage for user-visible fare
+    currentFareMin: 10.0, // Min markup percentage for user-visible fare
+    currentFareMax: 12.0, // Max markup percentage for user-visible fare
     // New Bargain Fare Range fields
-    bargainFareMin: 5.00,  // Min acceptable bargain percentage
-    bargainFareMax: 15.00, // Max acceptable bargain percentage
+    bargainFareMin: 5.0, // Min acceptable bargain percentage
+    bargainFareMax: 15.0, // Max acceptable bargain percentage
     validFrom: "2024-01-01",
     validTo: "2024-12-31",
     status: "active",
@@ -33,32 +33,34 @@ let airMarkups = [
   {
     id: "2",
     name: "Amadeus Emirates BOM-DXB Economy",
-    description: "Airline Markup for BOM to DXB route with Emirates via Amadeus",
+    description:
+      "Airline Markup for BOM to DXB route with Emirates via Amadeus",
     airline: "EK", // Emirates
     route: { from: "BOM", to: "DXB" },
     class: "economy",
     markupType: "percentage",
-    markupValue: 12.00, // Average of the ranges
+    markupValue: 12.0, // Average of the ranges
     minAmount: 500,
     maxAmount: 5000,
     // High Fare Range
-    highFareMin: 20.00,
-    highFareMax: 25.00,
+    highFareMin: 20.0,
+    highFareMax: 25.0,
     // Low Fare Range
-    lowFareMin: 15.00,
-    lowFareMax: 20.00,
+    lowFareMin: 15.0,
+    lowFareMax: 20.0,
     // Current Fare Range (Min/Max) - User-visible pricing
-    currentFareMin: 10.00, // From Zubin's spec
-    currentFareMax: 12.00, // From Zubin's spec
+    currentFareMin: 10.0, // From Zubin's spec
+    currentFareMax: 12.0, // From Zubin's spec
     // Discount Fare Range (Min/Max) - Used for bargain logic
-    bargainFareMin: 5.00,  // From Zubin's spec (Discount Fare Min)
-    bargainFareMax: 15.00, // From Zubin's spec (Discount Fare Max)
+    bargainFareMin: 5.0, // From Zubin's spec (Discount Fare Min)
+    bargainFareMax: 15.0, // From Zubin's spec (Discount Fare Max)
     validFrom: "2025-01-01",
     validTo: "2025-12-31",
     status: "active",
     priority: 1,
     userType: "all",
-    specialConditions: "Sample data as per Zubin's specifications for Amadeus Emirates route",
+    specialConditions:
+      "Sample data as per Zubin's specifications for Amadeus Emirates route",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -79,11 +81,11 @@ let hotelMarkups = [
     minAmount: 1000,
     maxAmount: 5000,
     // Current Fare Range (for dynamic pricing display)
-    currentFareMin: 10.00, // Min markup percentage for user-visible hotel rates
-    currentFareMax: 15.00, // Max markup percentage for user-visible hotel rates
+    currentFareMin: 10.0, // Min markup percentage for user-visible hotel rates
+    currentFareMax: 15.0, // Max markup percentage for user-visible hotel rates
     // Bargain Fare Range (for user-entered price validation)
-    bargainFareMin: 5.00,  // Min acceptable bargain percentage for hotels
-    bargainFareMax: 15.00, // Max acceptable bargain percentage for hotels
+    bargainFareMin: 5.0, // Min acceptable bargain percentage for hotels
+    bargainFareMax: 15.0, // Max acceptable bargain percentage for hotels
     validFrom: "2024-01-01",
     validTo: "2024-12-31",
     checkInDays: ["friday", "saturday", "sunday"],
@@ -109,34 +111,51 @@ let hotelMarkups = [
     starRating: 5,
     roomCategory: "deluxe",
     markupType: "percentage",
-    markupValue: 12.00, // Average of the ranges
+    markupValue: 12.0, // Average of the ranges
     minAmount: 1000,
     maxAmount: 8000,
     // Hotel No reference from spec
     hotelCode: "53331", // From Zubin's spec
     // High Fare Range
-    highFareMin: 20.00,
-    highFareMax: 25.00,
+    highFareMin: 20.0,
+    highFareMax: 25.0,
     // Low Fare Range
-    lowFareMin: 15.00,
-    lowFareMax: 20.00,
+    lowFareMin: 15.0,
+    lowFareMax: 20.0,
     // Current Fare Range (Min/Max) - User-visible hotel rates
-    currentFareMin: 10.00, // From Zubin's spec
-    currentFareMax: 12.00, // From Zubin's spec
+    currentFareMin: 10.0, // From Zubin's spec
+    currentFareMax: 12.0, // From Zubin's spec
     // Discount Fare Range (Min/Max) - Used for hotel bargain logic
-    bargainFareMin: 10.00, // From Zubin's spec (Discount Fare Min)
-    bargainFareMax: 20.00, // From Zubin's spec (Discount Fare Max)
+    bargainFareMin: 10.0, // From Zubin's spec (Discount Fare Min)
+    bargainFareMax: 20.0, // From Zubin's spec (Discount Fare Max)
     validFrom: "2025-01-01",
     validTo: "2025-12-31",
-    checkInDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
-    applicableDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+    checkInDays: [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ],
+    applicableDays: [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ],
     minStay: 1,
     maxStay: 30,
     status: "active",
     priority: 1,
     userType: "all",
     seasonType: "Regular",
-    specialConditions: "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
+    specialConditions:
+      "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -267,11 +286,11 @@ router.post("/air", authenticateToken, (req, res) => {
       minAmount: minAmount || 0,
       maxAmount: maxAmount || 0,
       // Current Fare Range (existing functionality)
-      currentFareMin: currentFareMin || 10.00, // Default Min markup percentage for user-visible fare
-      currentFareMax: currentFareMax || 15.00, // Default Max markup percentage for user-visible fare
+      currentFareMin: currentFareMin || 10.0, // Default Min markup percentage for user-visible fare
+      currentFareMax: currentFareMax || 15.0, // Default Max markup percentage for user-visible fare
       // Bargain Fare Range fields
-      bargainFareMin: bargainFareMin || 5.00,  // Default Min acceptable bargain percentage
-      bargainFareMax: bargainFareMax || 15.00, // Default Max acceptable bargain percentage
+      bargainFareMin: bargainFareMin || 5.0, // Default Min acceptable bargain percentage
+      bargainFareMax: bargainFareMax || 15.0, // Default Max acceptable bargain percentage
       // Additional fare ranges if provided
       ...(highFareMin && { highFareMin }),
       ...(highFareMax && { highFareMax }),
@@ -443,11 +462,11 @@ router.post("/hotel", authenticateToken, (req, res) => {
       minAmount: minAmount || 0,
       maxAmount: maxAmount || 0,
       // Current Fare Range (for dynamic pricing display)
-      currentFareMin: currentFareMin || 10.00, // Default Min markup percentage for user-visible hotel rates
-      currentFareMax: currentFareMax || 15.00, // Default Max markup percentage for user-visible hotel rates
+      currentFareMin: currentFareMin || 10.0, // Default Min markup percentage for user-visible hotel rates
+      currentFareMax: currentFareMax || 15.0, // Default Max markup percentage for user-visible hotel rates
       // Bargain Fare Range (for user-entered price validation)
-      bargainFareMin: bargainFareMin || 5.00,  // Default Min acceptable bargain percentage for hotels
-      bargainFareMax: bargainFareMax || 15.00, // Default Max acceptable bargain percentage for hotels
+      bargainFareMin: bargainFareMin || 5.0, // Default Min acceptable bargain percentage for hotels
+      bargainFareMax: bargainFareMax || 15.0, // Default Max acceptable bargain percentage for hotels
       // Additional fare ranges if provided
       ...(highFareMin && { highFareMin }),
       ...(highFareMax && { highFareMax }),

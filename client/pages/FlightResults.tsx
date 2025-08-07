@@ -10,7 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import { useBargainPhase1, createFlightBargainItem } from "@/hooks/useBargainPhase1";
+import {
+  useBargainPhase1,
+  createFlightBargainItem,
+} from "@/hooks/useBargainPhase1";
 import {
   Dialog,
   DialogContent,
@@ -453,10 +456,10 @@ export default function FlightResults() {
   const bargainHook = useBargainPhase1({
     onBookingConfirmed: (item, finalPrice) => {
       // Custom handling after bargain success
-      console.log('Bargain successful!', { item, finalPrice });
+      console.log("Bargain successful!", { item, finalPrice });
     },
     redirectToBooking: true,
-    deviceType: window.innerWidth <= 768 ? 'mobile' : 'desktop',
+    deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
   });
 
   // Search panel states
@@ -3590,18 +3593,28 @@ export default function FlightResults() {
                                                 (ft) => ft.id === fareTypeId,
                                               ) || flight.fareTypes[0];
 
-                                            const bargainItem = createFlightBargainItem({
-                                              id: flight.id,
-                                              airline: flight.airline,
-                                              route: {
-                                                from: selectedFromCity || flight.origin,
-                                                to: selectedToCity || flight.destination
-                                              },
-                                              class: selectedClass,
-                                              price: fareType.price || flight.price?.amount || 0,
-                                            });
+                                            const bargainItem =
+                                              createFlightBargainItem({
+                                                id: flight.id,
+                                                airline: flight.airline,
+                                                route: {
+                                                  from:
+                                                    selectedFromCity ||
+                                                    flight.origin,
+                                                  to:
+                                                    selectedToCity ||
+                                                    flight.destination,
+                                                },
+                                                class: selectedClass,
+                                                price:
+                                                  fareType.price ||
+                                                  flight.price?.amount ||
+                                                  0,
+                                              });
 
-                                            bargainHook.startBargain(bargainItem);
+                                            bargainHook.startBargain(
+                                              bargainItem,
+                                            );
                                           }}
                                           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
                                         >
@@ -3875,18 +3888,28 @@ export default function FlightResults() {
                                                 (ft) => ft.id === fareTypeId,
                                               ) || flight.fareTypes[0];
 
-                                            const bargainItem = createFlightBargainItem({
-                                              id: flight.id,
-                                              airline: flight.airline,
-                                              route: {
-                                                from: selectedFromCity || flight.origin,
-                                                to: selectedToCity || flight.destination
-                                              },
-                                              class: selectedClass,
-                                              price: fareType.price || flight.price?.amount || 0,
-                                            });
+                                            const bargainItem =
+                                              createFlightBargainItem({
+                                                id: flight.id,
+                                                airline: flight.airline,
+                                                route: {
+                                                  from:
+                                                    selectedFromCity ||
+                                                    flight.origin,
+                                                  to:
+                                                    selectedToCity ||
+                                                    flight.destination,
+                                                },
+                                                class: selectedClass,
+                                                price:
+                                                  fareType.price ||
+                                                  flight.price?.amount ||
+                                                  0,
+                                              });
 
-                                            bargainHook.startBargain(bargainItem);
+                                            bargainHook.startBargain(
+                                              bargainItem,
+                                            );
                                           }}
                                           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
                                         >
@@ -4403,7 +4426,8 @@ export default function FlightResults() {
                                     • Group bookings may have different terms
                                   </li>
                                   <li>
-                                    �� Check-in required 2 hours before departure
+                                    �� Check-in required 2 hours before
+                                    departure
                                   </li>
                                 </ul>
                               </div>
@@ -6114,7 +6138,9 @@ export default function FlightResults() {
                       Important Terms & Conditions
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
-                      <li>�� Passenger names cannot be changed after booking</li>
+                      <li>
+                        �� Passenger names cannot be changed after booking
+                      </li>
                       <li>
                         �� Check-in must be completed 2 hours before departure
                       </li>

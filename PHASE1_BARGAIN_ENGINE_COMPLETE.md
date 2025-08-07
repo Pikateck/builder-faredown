@@ -13,6 +13,7 @@ The Phase 1 Bargain Engine implements the core bargaining logic as specified by 
 ### 1. Core Services
 
 #### `bargainPricingService.ts`
+
 - **Purpose**: Core Phase 1 bargain pricing logic
 - **Key Features**:
   - Randomized markup within configured ranges
@@ -21,6 +22,7 @@ The Phase 1 Bargain Engine implements the core bargaining logic as specified by 
   - Counter-offer processing logic
 
 #### `markupService.ts` (Enhanced)
+
 - **Purpose**: Markup calculation and management
 - **Key Features**:
   - Decimal precision support (step="0.01")
@@ -29,6 +31,7 @@ The Phase 1 Bargain Engine implements the core bargaining logic as specified by 
   - Real-time markup calculation API
 
 #### `promoCodeService.ts` (Enhanced)
+
 - **Purpose**: Promo code validation and application
 - **Key Features**:
   - Minimum markup threshold integration
@@ -39,6 +42,7 @@ The Phase 1 Bargain Engine implements the core bargaining logic as specified by 
 ### 2. User Interface Components
 
 #### `BargainModalPhase1.tsx`
+
 - **Purpose**: Main bargaining interface for users
 - **Flow**:
   1. Display current price (Base + Randomized Markup)
@@ -48,6 +52,7 @@ The Phase 1 Bargain Engine implements the core bargaining logic as specified by 
   5. Complete successful bargain or rejection
 
 #### `useBargainPhase1.ts`
+
 - **Purpose**: React hook for easy integration
 - **Features**:
   - Modal state management
@@ -57,6 +62,7 @@ The Phase 1 Bargain Engine implements the core bargaining logic as specified by 
 ### 3. Integration Points
 
 #### Flight Results Integration
+
 - **File**: `FlightResults.tsx`
 - **Features**:
   - "Start Bargain" buttons alongside "Book Now"
@@ -80,7 +86,7 @@ const markupRange = await markupService.calculateMarkup({
 
 // 3. Randomize markup within range (Phase 1 core feature)
 const randomizedMarkup = randomizeMarkupInRange(
-  markupRange.min, 
+  markupRange.min,
   markupRange.max
 );
 
@@ -94,13 +100,13 @@ const markedUpPrice = basePrice * (1 + randomizedMarkup / 100);
 // 5. Apply promo code if provided
 if (promoCode) {
   const minimumPrice = basePrice * (1 + markupRange.min / 100);
-  
+
   const promoResult = await promoCodeService.applyPromoCode(
     promoCode,
     markedUpPrice,
-    { minimumMarkupThreshold: minimumPrice }
+    { minimumMarkupThreshold: minimumPrice },
   );
-  
+
   // Ensure final price respects minimum markup
   finalPrice = Math.max(promoResult.finalAmount, minimumPrice);
 }
@@ -114,7 +120,10 @@ const processCounterOffer = (userOffer) => {
   if (userOffer >= minimumAcceptablePrice) {
     return { accepted: true, finalPrice: userOffer };
   } else if (userOffer >= minimumAcceptablePrice * 0.9) {
-    const counterOffer = calculateMiddleGround(userOffer, minimumAcceptablePrice);
+    const counterOffer = calculateMiddleGround(
+      userOffer,
+      minimumAcceptablePrice,
+    );
     return { accepted: false, counterOffer, reasoning: "..." };
   } else {
     return { accepted: false, reasoning: "Below minimum threshold" };
@@ -170,19 +179,21 @@ Base Price (₹10,000)
 ## Decimal Precision Implementation
 
 ### Markup Configuration
+
 - **Admin Panel**: Input fields use `step="0.01"` for decimal precision
 - **Placeholders**: Show examples like "5.00, 5.15, 5.25, etc."
 - **Storage**: Database stores markup values with 2 decimal places
 - **Calculation**: JavaScript calculations maintain precision with `Math.round(value * 100) / 100`
 
 ### Randomization with Precision
+
 ```typescript
 const randomizeMarkupInRange = (min: number, max: number): number => {
   const range = max - min;
   const randomFactor = Math.random();
   const biasedFactor = Math.pow(randomFactor, 0.8); // Bias toward middle
-  const randomizedMarkup = min + (range * biasedFactor);
-  
+  const randomizedMarkup = min + range * biasedFactor;
+
   // Round to 2 decimal places for precision
   return Math.round(randomizedMarkup * 100) / 100;
 };
@@ -191,6 +202,7 @@ const randomizeMarkupInRange = (min: number, max: number): number => {
 ## Testing and Validation
 
 ### Integration Test Suite
+
 - **File**: `bargainPromoValidator.ts`
 - **Test Cases**:
   - Normal promo application within markup limits
@@ -199,6 +211,7 @@ const randomizeMarkupInRange = (min: number, max: number): number => {
   - Edge cases with various markup ranges
 
 ### Test Results Validation
+
 ```typescript
 const results = await validatePromoIntegration();
 console.log(results);
@@ -208,6 +221,7 @@ console.log(results);
 ## API Endpoints
 
 ### Bargain Pricing API
+
 ```
 POST /api/bargain-pricing/calculate
 POST /api/bargain-pricing/counter-offer
@@ -215,6 +229,7 @@ GET  /api/bargain-pricing/recommendations
 ```
 
 ### Markup Management API
+
 ```
 GET    /api/markup/air
 POST   /api/markup/air
@@ -224,6 +239,7 @@ POST   /api/markup/calculate
 ```
 
 ### Promo Code API
+
 ```
 POST /api/promo-codes/validate
 POST /api/promo-codes/apply
@@ -232,26 +248,31 @@ POST /api/promo-codes/apply
 ## User Experience Flow
 
 ### 1. User Sees Initial Price
+
 - Display: Marked-up price (Base + Randomized Markup)
 - Context: Show pricing breakdown on demand
 - Action: "Start Bargain" button prominently displayed
 
 ### 2. User Enters Target Price
+
 - Input: Target price field with suggestions
 - Guidance: Show bargain range and recommended target
 - Validation: Real-time price validation
 
 ### 3. System Responds
+
 - **Accept**: If user offer meets minimum threshold
 - **Counter**: If user offer is close but below minimum
 - **Reject**: If user offer is significantly below minimum
 
 ### 4. Negotiation Continues
+
 - Multiple rounds allowed (up to 3 attempts)
 - Clear reasoning provided for each response
 - Savings calculations displayed
 
 ### 5. Final Booking
+
 - Successful bargain proceeds to booking
 - Failed bargain offers original price booking
 - Promo codes automatically applied in booking flow
@@ -259,21 +280,25 @@ POST /api/promo-codes/apply
 ## Compliance with Requirements
 
 ### ✅ Phase 1 Bargain Engine Logic
+
 - ✅ Base Price + Markup calculation
 - ✅ Randomized markup within configured range
 - ✅ Counter-offer processing and negotiation
 
 ### ✅ Promo Code Integration
+
 - ✅ Promo codes apply after bargain logic
 - ✅ Minimum markup thresholds respected
 - ✅ Automatic adjustment of excessive discounts
 
 ### ✅ Decimal Precision
+
 - ✅ Markup percentages support decimal precision
 - ✅ Admin interface allows decimal input
 - ✅ Calculations maintain precision throughout
 
 ### ✅ Admin Panel Fixes
+
 - ✅ Promo Code Management working
 - ✅ Air Markup Management working
 - ✅ Hotel Markup Management working
@@ -281,16 +306,19 @@ POST /api/promo-codes/apply
 ## Production Deployment Notes
 
 ### Database Requirements
+
 - Markup tables with decimal precision columns
 - Promo code tracking with usage limits
 - Bargain session logging for analytics
 
 ### Performance Considerations
+
 - Markup calculations cached for popular routes
 - Promo code validation optimized for speed
 - Real-time pricing updates via WebSocket (future)
 
 ### Monitoring and Analytics
+
 - Track bargain success rates by route/hotel
 - Monitor promo code effectiveness
 - Analyze markup randomization impact on conversion
@@ -298,12 +326,14 @@ POST /api/promo-codes/apply
 ## Future Enhancements (Post-Phase 1)
 
 ### Phase 2 Considerations
+
 - AI-powered dynamic markup adjustment
 - Market-based pricing intelligence
 - Advanced negotiation strategies
 - Real-time competitor price monitoring
 
 ### User Experience Improvements
+
 - Saved bargain preferences
 - Personalized target price suggestions
 - Gamification elements for negotiations

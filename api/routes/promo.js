@@ -111,7 +111,7 @@ let promoCodes = [
     name: "FAREDOWNBONUS Flight Discount",
     type: "fixed", // INR (Flat) as per Zubin's spec
     discountFrom: 2000, // Min Discount: ₹2,000
-    discountTo: 5000,   // Max Discount: ₹5,000
+    discountTo: 5000, // Max Discount: ₹5,000
     applicableTo: "flights",
     filters: {
       // Universal for flights - no specific filters
@@ -139,7 +139,7 @@ let promoCodes = [
     name: "FAREDOWNBONUS Hotel Discount",
     type: "fixed", // INR (Flat) as per Zubin's spec
     discountFrom: 2000, // Min Discount: ₹2,000
-    discountTo: 5000,   // Max Discount: ₹5,000
+    discountTo: 5000, // Max Discount: ₹5,000
     applicableTo: "hotels",
     filters: {
       // Universal for hotels - no specific filters

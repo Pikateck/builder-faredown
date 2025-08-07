@@ -5,7 +5,10 @@ import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import { useBargainPhase1, createHotelBargainItem } from "@/hooks/useBargainPhase1";
+import {
+  useBargainPhase1,
+  createHotelBargainItem,
+} from "@/hooks/useBargainPhase1";
 import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -75,10 +78,12 @@ export default function HotelResults() {
   const bargainHook = useBargainPhase1({
     onBookingConfirmed: (item, finalPrice) => {
       // Navigate to hotel booking with bargained price
-      navigate(`/hotel-booking-confirmation?itemId=${item.itemId}&finalPrice=${finalPrice}&bargainApplied=true`);
+      navigate(
+        `/hotel-booking-confirmation?itemId=${item.itemId}&finalPrice=${finalPrice}&bargainApplied=true`,
+      );
     },
     redirectToBooking: true,
-    deviceType: window.innerWidth <= 768 ? 'mobile' : 'desktop',
+    deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
   });
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -586,7 +591,7 @@ export default function HotelResults() {
       name: hotel.name,
       city: hotel.location || destination,
       starRating: hotel.starRating,
-      roomCategory: 'standard', // Default, could be extracted from hotel data
+      roomCategory: "standard", // Default, could be extracted from hotel data
       price: hotel.pricePerNight,
     });
 

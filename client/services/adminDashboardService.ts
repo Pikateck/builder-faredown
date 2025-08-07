@@ -3,7 +3,7 @@
  * Handles all dashboard-related API operations for admin panel
  */
 
-import { apiClient } from '@/lib/api';
+import { apiClient } from "@/lib/api";
 
 export interface DashboardStats {
   totalBookings: number;
@@ -24,10 +24,10 @@ export interface TopDestination {
 
 export interface RecentBooking {
   id: string;
-  type: 'Flight' | 'Hotel';
+  type: "Flight" | "Hotel";
   customer: string;
   amount: number;
-  status: 'Confirmed' | 'Pending' | 'Cancelled';
+  status: "Confirmed" | "Pending" | "Cancelled";
   date: string;
   destination: string;
 }
@@ -58,7 +58,7 @@ export interface DashboardData {
 }
 
 class AdminDashboardService {
-  private baseUrl = '/api/admin';
+  private baseUrl = "/api/admin";
 
   /**
    * Get complete dashboard data
@@ -66,14 +66,14 @@ class AdminDashboardService {
   async getDashboardData(): Promise<DashboardData> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/dashboard`);
-      
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch dashboard data');
+        throw new Error(response.error || "Failed to fetch dashboard data");
       }
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      console.error("Error fetching dashboard data:", error);
       throw error;
     }
   }
@@ -81,17 +81,21 @@ class AdminDashboardService {
   /**
    * Get real-time statistics
    */
-  async getStats(period: 'today' | 'week' | 'month' | 'year' = 'today'): Promise<DashboardStats> {
+  async getStats(
+    period: "today" | "week" | "month" | "year" = "today",
+  ): Promise<DashboardStats> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/stats?period=${period}`);
-      
+      const response = await apiClient.get(
+        `${this.baseUrl}/stats?period=${period}`,
+      );
+
       if (response.ok) {
         return response.data.stats;
       } else {
-        throw new Error(response.error || 'Failed to fetch statistics');
+        throw new Error(response.error || "Failed to fetch statistics");
       }
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error("Error fetching stats:", error);
       throw error;
     }
   }
@@ -99,12 +103,14 @@ class AdminDashboardService {
   /**
    * Get analytics data with filters
    */
-  async getAnalytics(params: {
-    startDate?: string;
-    endDate?: string;
-    type?: 'revenue' | 'bookings' | 'users';
-    granularity?: 'day' | 'week' | 'month';
-  } = {}): Promise<{
+  async getAnalytics(
+    params: {
+      startDate?: string;
+      endDate?: string;
+      type?: "revenue" | "bookings" | "users";
+      granularity?: "day" | "week" | "month";
+    } = {},
+  ): Promise<{
     revenue: { date: string; amount: number }[];
     bookings: { date: string; count: number }[];
     users: { date: string; count: number }[];
@@ -116,20 +122,22 @@ class AdminDashboardService {
   }> {
     try {
       const queryParams = new URLSearchParams();
-      
+
       Object.entries(params).forEach(([key, value]) => {
         if (value) queryParams.append(key, value);
       });
 
-      const response = await apiClient.get(`${this.baseUrl}/analytics?${queryParams.toString()}`);
-      
+      const response = await apiClient.get(
+        `${this.baseUrl}/analytics?${queryParams.toString()}`,
+      );
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch analytics');
+        throw new Error(response.error || "Failed to fetch analytics");
       }
     } catch (error) {
-      console.error('Error fetching analytics:', error);
+      console.error("Error fetching analytics:", error);
       throw error;
     }
   }
@@ -138,23 +146,23 @@ class AdminDashboardService {
    * Get system health and status
    */
   async getSystemStatus(): Promise<{
-    database: { status: 'healthy' | 'warning' | 'error'; latency: number };
-    api: { status: 'healthy' | 'warning' | 'error'; responseTime: number };
-    cache: { status: 'healthy' | 'warning' | 'error'; hitRate: number };
+    database: { status: "healthy" | "warning" | "error"; latency: number };
+    api: { status: "healthy" | "warning" | "error"; responseTime: number };
+    cache: { status: "healthy" | "warning" | "error"; hitRate: number };
     storage: { used: number; total: number; percentage: number };
     uptime: number;
     lastUpdated: string;
   }> {
     try {
       const response = await apiClient.get(`${this.baseUrl}/system`);
-      
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch system status');
+        throw new Error(response.error || "Failed to fetch system status");
       }
     } catch (error) {
-      console.error('Error fetching system status:', error);
+      console.error("Error fetching system status:", error);
       throw error;
     }
   }
@@ -162,25 +170,28 @@ class AdminDashboardService {
   /**
    * Generate and download reports
    */
-  async generateReport(type: 'financial' | 'bookings' | 'users' | 'performance', options: {
-    format: 'json' | 'csv' | 'excel' | 'pdf';
-    startDate?: string;
-    endDate?: string;
-    filters?: Record<string, any>;
-  }): Promise<{ downloadUrl: string; fileName: string }> {
+  async generateReport(
+    type: "financial" | "bookings" | "users" | "performance",
+    options: {
+      format: "json" | "csv" | "excel" | "pdf";
+      startDate?: string;
+      endDate?: string;
+      filters?: Record<string, any>;
+    },
+  ): Promise<{ downloadUrl: string; fileName: string }> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/reports`, {
         type,
         ...options,
       });
-      
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to generate report');
+        throw new Error(response.error || "Failed to generate report");
       }
     } catch (error) {
-      console.error('Error generating report:', error);
+      console.error("Error generating report:", error);
       throw error;
     }
   }
@@ -188,14 +199,16 @@ class AdminDashboardService {
   /**
    * Get audit trail
    */
-  async getAuditLogs(filters: {
-    userId?: string;
-    actionType?: string;
-    startDate?: string;
-    endDate?: string;
-    page?: number;
-    limit?: number;
-  } = {}): Promise<{
+  async getAuditLogs(
+    filters: {
+      userId?: string;
+      actionType?: string;
+      startDate?: string;
+      endDate?: string;
+      page?: number;
+      limit?: number;
+    } = {},
+  ): Promise<{
     logs: {
       id: string;
       userId: string;
@@ -213,20 +226,22 @@ class AdminDashboardService {
   }> {
     try {
       const queryParams = new URLSearchParams();
-      
+
       Object.entries(filters).forEach(([key, value]) => {
         if (value) queryParams.append(key, value.toString());
       });
 
-      const response = await apiClient.get(`${this.baseUrl}/audit?${queryParams.toString()}`);
-      
+      const response = await apiClient.get(
+        `${this.baseUrl}/audit?${queryParams.toString()}`,
+      );
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to fetch audit logs');
+        throw new Error(response.error || "Failed to fetch audit logs");
       }
     } catch (error) {
-      console.error('Error fetching audit logs:', error);
+      console.error("Error fetching audit logs:", error);
       throw error;
     }
   }
@@ -237,14 +252,14 @@ class AdminDashboardService {
   async refreshData(): Promise<DashboardData> {
     try {
       const response = await apiClient.post(`${this.baseUrl}/refresh`);
-      
+
       if (response.ok) {
         return response.data;
       } else {
-        throw new Error(response.error || 'Failed to refresh dashboard data');
+        throw new Error(response.error || "Failed to refresh dashboard data");
       }
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      console.error("Error refreshing data:", error);
       throw error;
     }
   }

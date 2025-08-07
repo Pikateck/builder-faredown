@@ -611,23 +611,27 @@ export default function Index() {
                             className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                             onClick={() => {
                               // Navigate to admin panel
-                              window.open('/admin/login', '_blank');
+                              window.open("/admin/login", "_blank");
                               setShowMobileMenu(false);
                             }}
                           >
                             <Shield className="w-4 h-4" />
-                            <span className="text-sm font-medium">Admin Panel</span>
+                            <span className="text-sm font-medium">
+                              Admin Panel
+                            </span>
                           </button>
                           <button
                             className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                             onClick={() => {
                               // Navigate to live API
-                              window.open('/admin/api', '_blank');
+                              window.open("/admin/api", "_blank");
                               setShowMobileMenu(false);
                             }}
                           >
                             <Code className="w-4 h-4" />
-                            <span className="text-sm font-medium">Live API</span>
+                            <span className="text-sm font-medium">
+                              Live API
+                            </span>
                           </button>
                         </div>
                       </div>
@@ -1389,14 +1393,14 @@ export default function Index() {
                           Sign out
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => window.open('/admin/login', '_blank')}
+                          onClick={() => window.open("/admin/login", "_blank")}
                           className="border-t mt-1 pt-2"
                         >
                           <Shield className="w-4 h-4 mr-2" />
                           Admin Panel
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => window.open('/admin/api', '_blank')}
+                          onClick={() => window.open("/admin/api", "_blank")}
                         >
                           <Code className="w-4 h-4 mr-2" />
                           Live API

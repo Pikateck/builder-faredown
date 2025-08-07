@@ -158,7 +158,9 @@ class ApiClient {
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     // In production, use fallback mode to prevent fetch errors
     if (this.isProduction) {
-      console.log(`🔄 Production mode: Using fallback for ${endpoint} (avoiding fetch errors)`);
+      console.log(
+        `🔄 Production mode: Using fallback for ${endpoint} (avoiding fetch errors)`,
+      );
       return this.devClient.get<T>(endpoint, params);
     }
 

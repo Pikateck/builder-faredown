@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { markupService, type AirMarkup, type CreateAirMarkupRequest } from "@/services/markupService";
+import {
+  markupService,
+  type AirMarkup,
+  type CreateAirMarkupRequest,
+} from "@/services/markupService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -184,7 +188,13 @@ export default function MarkupManagementAir() {
   // Load markups on component mount and when filters change
   useEffect(() => {
     loadMarkups();
-  }, [searchTerm, selectedAirline, selectedClass, selectedStatus, pagination.page]);
+  }, [
+    searchTerm,
+    selectedAirline,
+    selectedClass,
+    selectedStatus,
+    pagination.page,
+  ]);
 
   const loadMarkups = async () => {
     try {
@@ -207,8 +217,10 @@ export default function MarkupManagementAir() {
         total: result.total,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load air markups');
-      console.error('Error loading air markups:', err);
+      setError(
+        err instanceof Error ? err.message : "Failed to load air markups",
+      );
+      console.error("Error loading air markups:", err);
     } finally {
       setLoading(false);
     }
@@ -225,15 +237,15 @@ export default function MarkupManagementAir() {
       route: { from: "", to: "" },
       class: "economy",
       markupType: "percentage",
-      markupValue: 5.00, // Default with decimal precision
+      markupValue: 5.0, // Default with decimal precision
       minAmount: 100,
       maxAmount: 5000,
       // Current Fare Range defaults
-      currentFareMin: 10.00, // 10% minimum markup for user-visible fare
-      currentFareMax: 15.00, // 15% maximum markup for user-visible fare
+      currentFareMin: 10.0, // 10% minimum markup for user-visible fare
+      currentFareMax: 15.0, // 15% maximum markup for user-visible fare
       // Bargain Fare Range defaults
-      bargainFareMin: 5.00,  // 5% minimum acceptable bargain
-      bargainFareMax: 15.00, // 15% maximum acceptable bargain
+      bargainFareMin: 5.0, // 5% minimum acceptable bargain
+      bargainFareMax: 15.0, // 15% maximum acceptable bargain
       validFrom: "",
       validTo: "",
       status: "active",
@@ -257,7 +269,10 @@ export default function MarkupManagementAir() {
 
       if (selectedMarkup) {
         // Update existing markup
-        await markupService.updateAirMarkup(selectedMarkup.id, formData as Partial<CreateAirMarkupRequest>);
+        await markupService.updateAirMarkup(
+          selectedMarkup.id,
+          formData as Partial<CreateAirMarkupRequest>,
+        );
         setIsEditDialogOpen(false);
       } else {
         // Create new markup
@@ -277,7 +292,9 @@ export default function MarkupManagementAir() {
       setFormData({});
       setSelectedMarkup(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save air markup');
+      setError(
+        err instanceof Error ? err.message : "Failed to save air markup",
+      );
     } finally {
       setSaving(false);
     }
@@ -290,7 +307,9 @@ export default function MarkupManagementAir() {
         await markupService.deleteAirMarkup(markupId);
         await loadMarkups(); // Reload list
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete air markup');
+        setError(
+          err instanceof Error ? err.message : "Failed to delete air markup",
+        );
       }
     }
   };
@@ -301,7 +320,11 @@ export default function MarkupManagementAir() {
       await markupService.toggleAirMarkupStatus(markupId);
       await loadMarkups(); // Reload list to reflect changes
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update air markup status');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to update air markup status",
+      );
     }
   };
 
@@ -548,7 +571,8 @@ export default function MarkupManagementAir() {
             Current Fare Range (User-Visible Pricing)
           </h4>
           <p className="text-sm text-blue-700 mb-4">
-            The markup percentage range applied on top of net fare. User-visible fare will randomly fluctuate within this range.
+            The markup percentage range applied on top of net fare. User-visible
+            fare will randomly fluctuate within this range.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -603,7 +627,8 @@ export default function MarkupManagementAir() {
             Bargain Fare Range (Acceptable Bargain Pricing)
           </h4>
           <p className="text-sm text-green-700 mb-4">
-            When users enter a desired price, if it falls within this range, show "Your price is matched!". Otherwise, provide counter-offers.
+            When users enter a desired price, if it falls within this range,
+            show "Your price is matched!". Otherwise, provide counter-offers.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -1014,7 +1039,8 @@ export default function MarkupManagementAir() {
           <DialogHeader>
             <DialogTitle>Create New Air Markup Rule</DialogTitle>
             <DialogDescription>
-              Create a new markup rule for flight bookings with decimal precision.
+              Create a new markup rule for flight bookings with decimal
+              precision.
             </DialogDescription>
           </DialogHeader>
 

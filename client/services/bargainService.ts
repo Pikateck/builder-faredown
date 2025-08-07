@@ -321,15 +321,17 @@ export class BargainService {
     markupDetails: any;
     promoDetails?: any;
   }> {
-    const response = await apiClient.post<ApiResponse<{
-      sessionId: string;
-      initialPrice: number;
-      markedUpPrice: number;
-      bargainRange: { min: number; max: number };
-      recommendedTarget: number;
-      markupDetails: any;
-      promoDetails?: any;
-    }>>(`${this.baseUrl}/phase1/start`, request);
+    const response = await apiClient.post<
+      ApiResponse<{
+        sessionId: string;
+        initialPrice: number;
+        markedUpPrice: number;
+        bargainRange: { min: number; max: number };
+        recommendedTarget: number;
+        markupDetails: any;
+        promoDetails?: any;
+      }>
+    >(`${this.baseUrl}/phase1/start`, request);
 
     if (response.data) {
       return response.data;
@@ -354,15 +356,17 @@ export class BargainService {
     savingsAmount?: number;
     savingsPercentage?: number;
   }> {
-    const response = await apiClient.post<ApiResponse<{
-      accepted: boolean;
-      counterOffer?: number;
-      finalPrice?: number;
-      reasoning: string;
-      nextAction: "accept" | "counter" | "reject";
-      savingsAmount?: number;
-      savingsPercentage?: number;
-    }>>(`${this.baseUrl}/phase1/counter-offer`, request);
+    const response = await apiClient.post<
+      ApiResponse<{
+        accepted: boolean;
+        counterOffer?: number;
+        finalPrice?: number;
+        reasoning: string;
+        nextAction: "accept" | "counter" | "reject";
+        savingsAmount?: number;
+        savingsPercentage?: number;
+      }>
+    >(`${this.baseUrl}/phase1/counter-offer`, request);
 
     if (response.data) {
       return response.data;

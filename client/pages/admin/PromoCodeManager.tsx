@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { promoCodeService, type PromoCode, type CreatePromoCodeRequest } from "@/services/promoCodeService";
+import {
+  promoCodeService,
+  type PromoCode,
+  type CreatePromoCodeRequest,
+} from "@/services/promoCodeService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -202,7 +206,9 @@ export default function PromoCodeManager() {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
+  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(
+    null,
+  );
   const [formData, setFormData] = useState<Partial<PromoCode>>({});
   const [activeTab, setActiveTab] = useState("list");
   const [loading, setLoading] = useState(true);
@@ -239,8 +245,10 @@ export default function PromoCodeManager() {
         total: result.total,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load promo codes');
-      console.error('Error loading promo codes:', err);
+      setError(
+        err instanceof Error ? err.message : "Failed to load promo codes",
+      );
+      console.error("Error loading promo codes:", err);
     } finally {
       setLoading(false);
     }
@@ -255,8 +263,8 @@ export default function PromoCodeManager() {
       description: "",
       category: "flight",
       discountType: "percentage",
-      discountMinValue: 5.00,
-      discountMaxValue: 25.00,
+      discountMinValue: 5.0,
+      discountMaxValue: 25.0,
       minimumFareAmount: 1000,
       marketingBudget: 10000,
       expiryDate: "",
@@ -286,7 +294,10 @@ export default function PromoCodeManager() {
 
       if (selectedPromoCode) {
         // Update existing promo code
-        await promoCodeService.updatePromoCode(selectedPromoCode.id, formData as Partial<CreatePromoCodeRequest>);
+        await promoCodeService.updatePromoCode(
+          selectedPromoCode.id,
+          formData as Partial<CreatePromoCodeRequest>,
+        );
         setIsEditDialogOpen(false);
       } else {
         // Create new promo code
@@ -295,7 +306,9 @@ export default function PromoCodeManager() {
           return;
         }
 
-        await promoCodeService.createPromoCode(formData as CreatePromoCodeRequest);
+        await promoCodeService.createPromoCode(
+          formData as CreatePromoCodeRequest,
+        );
         setIsCreateDialogOpen(false);
         // Switch back to list tab after successful creation
         setActiveTab("list");
@@ -306,7 +319,9 @@ export default function PromoCodeManager() {
       setFormData({});
       setSelectedPromoCode(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save promo code');
+      setError(
+        err instanceof Error ? err.message : "Failed to save promo code",
+      );
     } finally {
       setSaving(false);
     }
@@ -319,7 +334,9 @@ export default function PromoCodeManager() {
         await promoCodeService.deletePromoCode(promoId);
         await loadPromoCodes(); // Reload list
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete promo code');
+        setError(
+          err instanceof Error ? err.message : "Failed to delete promo code",
+        );
       }
     }
   };
@@ -330,7 +347,11 @@ export default function PromoCodeManager() {
       await promoCodeService.togglePromoCodeStatus(promoId);
       await loadPromoCodes(); // Reload list to reflect changes
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update promo code status');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to update promo code status",
+      );
     }
   };
 
@@ -597,7 +618,9 @@ export default function PromoCodeManager() {
                     discountMinValue: parseFloat(e.target.value) || 0,
                   })
                 }
-                placeholder={formData.discountType === "percentage" ? "5.00" : "100"}
+                placeholder={
+                  formData.discountType === "percentage" ? "5.00" : "100"
+                }
               />
             </div>
           </div>
@@ -620,7 +643,9 @@ export default function PromoCodeManager() {
                     discountMaxValue: parseFloat(e.target.value) || 0,
                   })
                 }
-                placeholder={formData.discountType === "percentage" ? "25.00" : "2000"}
+                placeholder={
+                  formData.discountType === "percentage" ? "25.00" : "2000"
+                }
               />
             </div>
 
