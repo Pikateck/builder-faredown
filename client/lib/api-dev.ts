@@ -441,6 +441,38 @@ export class DevApiClient {
       };
     }
 
+    // Loyalty redemption endpoints
+    if (endpoint.includes("/loyalty/quote-redeem")) {
+      return {
+        success: true,
+        data: {
+          maxPoints: 2000,
+          rupeeValue: 200,
+          capReason: "20% of booking value limit",
+        },
+        message: "Fallback redemption quote (API offline)",
+      };
+    }
+
+    if (endpoint.includes("/loyalty/apply")) {
+      return {
+        success: true,
+        data: {
+          lockedId: `lock_${Date.now()}`,
+          pointsApplied: params?.points || 1000,
+          rupeeValue: (params?.points || 1000) * 0.1,
+        },
+        message: "Fallback redemption application (API offline)",
+      };
+    }
+
+    if (endpoint.includes("/loyalty/cancel-redemption")) {
+      return {
+        success: true,
+        message: "Fallback redemption cancellation (API offline)",
+      };
+    }
+
     // Flight details endpoint
     if (endpoint.includes("/flights/") && !endpoint.includes("/search")) {
       const flightId = endpoint.split("/flights/")[1];
