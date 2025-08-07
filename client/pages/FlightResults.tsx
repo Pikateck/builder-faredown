@@ -3578,8 +3578,38 @@ export default function FlightResults() {
                                         </div>
                                       )}
 
-                                      {/* Book Now Button - Prominent & Intuitive */}
-                                      <div className="border-t border-gray-200 pt-4 mt-6">
+                                      {/* Book Now & Start Bargain Buttons */}
+                                      <div className="border-t border-gray-200 pt-4 mt-6 space-y-3">
+                                        {/* Start Bargain Button - Phase 1 */}
+                                        <Button
+                                          onClick={() => {
+                                            const [flightId, fareTypeId] =
+                                              detailKey.split("-");
+                                            const fareType =
+                                              flight.fareTypes.find(
+                                                (ft) => ft.id === fareTypeId,
+                                              ) || flight.fareTypes[0];
+
+                                            const bargainItem = createFlightBargainItem({
+                                              id: flight.id,
+                                              airline: flight.airline,
+                                              route: {
+                                                from: selectedFromCity || flight.origin,
+                                                to: selectedToCity || flight.destination
+                                              },
+                                              class: selectedClass,
+                                              price: fareType.price || flight.price?.amount || 0,
+                                            });
+
+                                            bargainHook.startBargain(bargainItem);
+                                          }}
+                                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
+                                        >
+                                          <span className="text-lg">🎯</span>
+                                          Start Bargain • Get Better Price
+                                        </Button>
+
+                                        {/* Book Now Button */}
                                         <Button
                                           onClick={() => {
                                             // Find the fare type for this detail key
@@ -4343,7 +4373,7 @@ export default function FlightResults() {
                                     • Group bookings may have different terms
                                   </li>
                                   <li>
-                                    • Check-in required 2 hours before departure
+                                    �� Check-in required 2 hours before departure
                                   </li>
                                 </ul>
                               </div>
