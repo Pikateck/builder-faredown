@@ -194,10 +194,13 @@ class BargainPricingService {
         }
       }
 
-      // Step 4: Calculate bargain range for counter-offers
+      // Step 4: Calculate bargain range using Bargain Fare Range for counter-offers
+      const bargainFareMin = markupResult.selectedMarkup?.bargainFareMin || 5.00;
+      const bargainFareMax = markupResult.selectedMarkup?.bargainFareMax || 15.00;
+
       const bargainRange = this.calculateBargainRange(
         request.basePrice,
-        markupResult.markupRange,
+        { min: bargainFareMin, max: bargainFareMax },
         promoDetails?.discountAmount || 0
       );
 
