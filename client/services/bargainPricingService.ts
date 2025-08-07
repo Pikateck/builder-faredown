@@ -102,10 +102,13 @@ class BargainPricingService {
         userType: request.userType,
       });
 
-      // Step 2: Randomize markup within configured range (Phase 1 requirement)
+      // Step 2: Randomize markup within Current Fare Range (user-visible pricing)
+      const currentFareMin = markupResult.selectedMarkup?.currentFareMin || markupResult.markupRange.min;
+      const currentFareMax = markupResult.selectedMarkup?.currentFareMax || markupResult.markupRange.max;
+
       const randomizedMarkup = this.randomizeMarkupInRange(
-        markupResult.markupRange.min,
-        markupResult.markupRange.max
+        currentFareMin,
+        currentFareMax
       );
 
       // Calculate marked up price with randomized markup
