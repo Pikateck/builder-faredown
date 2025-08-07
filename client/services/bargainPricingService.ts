@@ -343,52 +343,56 @@ class BargainPricingService {
   }
 
   /**
-   * Local counter-offer processing logic (fallback)
+   * Airline Fare Bargain Logic as specified by Zubin Aibara
+   * Implements: Bargain Fare Range validation + Counter-offer logic + 30-second timer
    */
   private processCounterOfferLocally(request: CounterOfferRequest): CounterOfferResponse {
-    const { userOfferPrice, currentMarkedUpPrice, markupDetails } = request;
-    const minimumAcceptable = markupDetails.markupRange.min;
-    const maximumPrice = currentMarkedUpPrice;
-    
-    // Calculate acceptable range
+    const { userOfferPrice, currentMarkedUpPrice, markupDetails, originalPrice } = request;
+
+    // Get bargain fare range from markup details
+    const bargainFareMin = markupDetails.selectedMarkup?.bargainFareMin || 5.00;
+    const bargainFareMax = markupDetails.selectedMarkup?.bargainFareMax || 15.00;
+
+    // Calculate bargain acceptable range based on net fare (originalPrice)
+    const bargainMinPrice = originalPrice * (1 + bargainFareMin / 100);
+    const bargainMaxPrice = originalPrice * (1 + bargainFareMax / 100);
+
+    // Current Fare Range for counter-offers
+    const currentFareMin = markupDetails.selectedMarkup?.currentFareMin || 10.00;
+    const currentFareMax = markupDetails.selectedMarkup?.currentFareMax || 15.00;
+
     const discountRequested = currentMarkedUpPrice - userOfferPrice;
     const discountPercentage = (discountRequested / currentMarkedUpPrice) * 100;
 
-    // Phase 1 counter-offer logic
-    if (userOfferPrice >= minimumAcceptable) {
-      // Accept the offer
+    // Zubin's Logic: Check if user offer falls within Bargain Range
+    if (userOfferPrice >= bargainMinPrice && userOfferPrice <= bargainMaxPrice) {
+      // ✅ User price is within bargain range - MATCH!
       return {
         accepted: true,
         negotiationStrategy: 'accept',
         finalPrice: userOfferPrice,
         savingsAmount: discountRequested,
         savingsPercentage: discountPercentage,
-        reasoning: `Offer accepted! Price of ₹${userOfferPrice.toLocaleString()} meets our minimum threshold and provides good value.`,
-        nextRecommendation: 'Proceed to booking confirmation.',
+        reasoning: `✅ Your price is matched! ₹${userOfferPrice.toLocaleString()} is within our acceptable bargain range.`,
+        nextRecommendation: 'Proceed to booking confirmation at your desired price.',
       };
-    } else if (userOfferPrice >= minimumAcceptable * 0.9) {
-      // Make a counter-offer
-      const counterOffer = Math.round(minimumAcceptable + (userOfferPrice - minimumAcceptable) * 0.5);
-      
+    } else {
+      // ❌ User price is outside bargain range - Provide counter-offer
+      // Generate random counter-offer within Current Fare Range (Min-Max)
+      const counterOfferMarkup = this.randomizeMarkupInRange(currentFareMin, currentFareMax);
+      const counterOffer = Math.round(originalPrice * (1 + counterOfferMarkup / 100));
+
+      const counterSavings = currentMarkedUpPrice - counterOffer;
+      const counterSavingsPercentage = (counterSavings / currentMarkedUpPrice) * 100;
+
       return {
         accepted: false,
         counterOffer,
         negotiationStrategy: 'counter',
-        savingsAmount: currentMarkedUpPrice - counterOffer,
-        savingsPercentage: ((currentMarkedUpPrice - counterOffer) / currentMarkedUpPrice) * 100,
-        reasoning: `Your offer is close! How about ₹${counterOffer.toLocaleString()}? This gives you significant savings while ensuring quality service.`,
-        nextRecommendation: 'Consider our counter-offer for the best balance of price and value.',
-      };
-    } else {
-      // Reject the offer but suggest alternatives
-      const suggestedPrice = Math.round(minimumAcceptable * 1.05);
-      
-      return {
-        accepted: false,
-        counterOffer: suggestedPrice,
-        negotiationStrategy: 'reject',
-        reasoning: `We appreciate your interest, but ₹${userOfferPrice.toLocaleString()} is below our minimum threshold. Our best offer is ₹${suggestedPrice.toLocaleString()}.`,
-        nextRecommendation: 'Try our suggested price for guaranteed booking confirmation.',
+        savingsAmount: counterSavings,
+        savingsPercentage: counterSavingsPercentage,
+        reasoning: `We hear you! How about ₹${counterOffer.toLocaleString()}? This offer is valid for 30 seconds. Accept or reject.`,
+        nextRecommendation: `Save ₹${counterSavings.toLocaleString()} with our counter-offer! Valid for 30 seconds only.`,
       };
     }
   }
