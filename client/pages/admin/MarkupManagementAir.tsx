@@ -260,50 +260,59 @@ export default function MarkupManagementAir() {
     setIsEditDialogOpen(true);
   };
 
-  const handleSaveMarkup = () => {
-    if (selectedMarkup) {
-      // Update existing markup
-      setMarkups(
-        markups.map((m) =>
-          m.id === selectedMarkup.id
-            ? { ...m, ...formData, updatedAt: new Date().toISOString() }
-            : m,
-        ),
-      );
-      setIsEditDialogOpen(false);
-    } else {
-      // Create new markup
-      const newMarkup: AirMarkup = {
-        ...(formData as AirMarkup),
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setMarkups([...markups, newMarkup]);
-      setIsCreateDialogOpen(false);
+  const handleSaveMarkup = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+
+      if (selectedMarkup) {
+        // Update existing markup
+        await markupService.updateAirMarkup(selectedMarkup.id, formData as Partial<CreateAirMarkupRequest>);
+        setIsEditDialogOpen(false);
+      } else {
+        // Create new markup
+        if (!formData.name || !formData.airline) {
+          setError("Name and airline are required");
+          return;
+        }
+
+        await markupService.createAirMarkup(formData as CreateAirMarkupRequest);
+        setIsCreateDialogOpen(false);
+        // Switch back to list tab after successful creation
+        setActiveTab("list");
+      }
+
+      // Reload markups to reflect changes
+      await loadMarkups();
+      setFormData({});
+      setSelectedMarkup(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save air markup');
+    } finally {
+      setSaving(false);
     }
-    setFormData({});
-    setSelectedMarkup(null);
   };
 
-  const handleDeleteMarkup = (markupId: string) => {
+  const handleDeleteMarkup = async (markupId: string) => {
     if (confirm("Are you sure you want to delete this markup rule?")) {
-      setMarkups(markups.filter((m) => m.id !== markupId));
+      try {
+        setError(null);
+        await markupService.deleteAirMarkup(markupId);
+        await loadMarkups(); // Reload list
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete air markup');
+      }
     }
   };
 
-  const toggleMarkupStatus = (markupId: string) => {
-    setMarkups(
-      markups.map((m) =>
-        m.id === markupId
-          ? {
-              ...m,
-              status: m.status === "active" ? "inactive" : "active",
-              updatedAt: new Date().toISOString(),
-            }
-          : m,
-      ),
-    );
+  const toggleMarkupStatus = async (markupId: string) => {
+    try {
+      setError(null);
+      await markupService.toggleAirMarkupStatus(markupId);
+      await loadMarkups(); // Reload list to reflect changes
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update air markup status');
+    }
   };
 
   const StatusBadge = ({ status }: { status: AirMarkup["status"] }) => {
