@@ -1377,6 +1377,13 @@ export default function Index() {
                           <LogOut className="w-4 h-4 mr-2" />
                           Sign out
                         </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => window.open('/admin/login', '_blank')}
+                          className="border-t mt-1 pt-2"
+                        >
+                          <Shield className="w-4 h-4 mr-2" />
+                          Admin Panel
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   ) : (
