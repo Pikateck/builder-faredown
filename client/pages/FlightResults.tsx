@@ -9,6 +9,8 @@ import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import BargainModalPhase1 from "@/components/BargainModalPhase1";
+import { useBargainPhase1, createFlightBargainItem } from "@/hooks/useBargainPhase1";
 import {
   Dialog,
   DialogContent,
