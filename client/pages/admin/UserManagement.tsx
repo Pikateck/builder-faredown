@@ -210,10 +210,19 @@ export default function UserManagement() {
     total: 0,
   });
 
-  // Load users on component mount and when filters change
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (pagination.page !== 1) {
+      setPagination(prev => ({ ...prev, page: 1 }));
+    } else {
+      loadUsers();
+    }
+  }, [searchTerm, selectedRole, selectedStatus]);
+
+  // Load users when page changes
   useEffect(() => {
     loadUsers();
-  }, [searchTerm, selectedRole, selectedStatus, pagination.page]);
+  }, [pagination.page]);
 
   const loadUsers = async () => {
     try {
