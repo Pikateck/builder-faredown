@@ -191,7 +191,7 @@ const mockUsers: User[] = [
 ];
 
 export default function UserManagement() {
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
@@ -201,6 +201,46 @@ export default function UserManagement() {
   const [formData, setFormData] = useState<Partial<User>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("list");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    total: 0,
+  });
+
+  // Load users on component mount and when filters change
+  useEffect(() => {
+    loadUsers();
+  }, [searchTerm, selectedRole, selectedStatus, pagination.page]);
+
+  const loadUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await userManagementService.getUsers({
+        search: searchTerm || undefined,
+        role: selectedRole,
+        status: selectedStatus,
+        page: pagination.page,
+        limit: 10,
+      });
+
+      setUsers(result.users);
+      setPagination({
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load users');
+      console.error('Error loading users:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter users based on search and filters
   const filteredUsers = users.filter((user) => {
