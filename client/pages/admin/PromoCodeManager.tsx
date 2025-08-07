@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { promoCodeService, type PromoCode, type CreatePromoCodeRequest } from "@/services/promoCodeService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
