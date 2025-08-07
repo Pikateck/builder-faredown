@@ -1684,7 +1684,7 @@ export function createServer() {
 
   // MARKUP MANAGEMENT API ROUTES
 
-  // Air markups endpoint
+  // Air markups endpoint (no auth for testing)
   app.get("/api/markup/air", (_req, res) => {
     console.log("📊 Fetching air markups");
 
