@@ -666,6 +666,12 @@ export default function Hotels() {
                           <Shield className="w-4 h-4 mr-2" />
                           Admin Panel
                         </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => window.open('/admin/api', '_blank')}
+                        >
+                          <Code className="w-4 h-4 mr-2" />
+                          Live API
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   ) : (
