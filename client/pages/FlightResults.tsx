@@ -1597,7 +1597,7 @@ export default function FlightResults() {
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
-                      { code: "ja", name: "日��語", flag: "🇯🇵" },
+                      { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
@@ -6255,6 +6255,9 @@ export default function FlightResults() {
       />
 
       <MobileNavigation />
+
+      {/* Phase 1 Bargain Modal */}
+      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
     </div>
   );
 }
