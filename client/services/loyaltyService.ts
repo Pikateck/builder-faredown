@@ -103,14 +103,20 @@ class LoyaltyService {
         return response.data.data;
       }
 
-      // If no valid response structure, throw error
+      // If no valid response structure, throw error (but this shouldn't happen with fallback)
       const errorMessage =
         (response && response.error) ||
         (response && response.data && response.data.error) ||
         "Failed to fetch loyalty profile";
       throw new Error(errorMessage);
     } catch (error) {
-      console.error("Error fetching loyalty profile:", error);
+      // Don't log AbortErrors or fetch errors in production
+      if (error instanceof Error &&
+          (error.name === "AbortError" || error.message.includes("Failed to fetch"))) {
+        console.log("Loyalty API unavailable, fallback should handle this");
+      } else {
+        console.error("Error fetching loyalty profile:", error);
+      }
       throw error;
     }
   }
