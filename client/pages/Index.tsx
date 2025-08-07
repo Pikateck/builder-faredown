@@ -618,6 +618,17 @@ export default function Index() {
                             <Shield className="w-4 h-4" />
                             <span className="text-sm font-medium">Admin Panel</span>
                           </button>
+                          <button
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                            onClick={() => {
+                              // Navigate to live API
+                              window.open('/admin/api', '_blank');
+                              setShowMobileMenu(false);
+                            }}
+                          >
+                            <Code className="w-4 h-4" />
+                            <span className="text-sm font-medium">Live API</span>
+                          </button>
                         </div>
                       </div>
                     </div>
