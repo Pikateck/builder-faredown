@@ -907,6 +907,44 @@ export default function MarkupManagementAir() {
         </TabsContent>
       </Tabs>
 
+      {/* Create Markup Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Create New Air Markup Rule</DialogTitle>
+            <DialogDescription>
+              Create a new markup rule for flight bookings with decimal precision.
+            </DialogDescription>
+          </DialogHeader>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <p className="text-red-800 text-sm">{error}</p>
+            </div>
+          )}
+
+          <MarkupForm isEdit={false} />
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCreateDialogOpen(false);
+                setError(null);
+              }}
+              disabled={saving}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSaveMarkup}
+              disabled={saving || !formData.name || !formData.airline}
+            >
+              {saving ? "Creating..." : "Create Markup"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Edit Markup Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -916,15 +954,31 @@ export default function MarkupManagementAir() {
               Update markup configuration for flight bookings.
             </DialogDescription>
           </DialogHeader>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <p className="text-red-800 text-sm">{error}</p>
+            </div>
+          )}
+
           <MarkupForm isEdit={true} />
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setIsEditDialogOpen(false)}
+              onClick={() => {
+                setIsEditDialogOpen(false);
+                setError(null);
+              }}
+              disabled={saving}
             >
               Cancel
             </Button>
-            <Button onClick={handleSaveMarkup}>Update Markup</Button>
+            <Button
+              onClick={handleSaveMarkup}
+              disabled={saving || !formData.name || !formData.airline}
+            >
+              {saving ? "Updating..." : "Update Markup"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
