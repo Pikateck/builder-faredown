@@ -449,6 +449,16 @@ export default function FlightResults() {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
+  // Phase 1 Bargain Engine integration
+  const bargainHook = useBargainPhase1({
+    onBookingConfirmed: (item, finalPrice) => {
+      // Custom handling after bargain success
+      console.log('Bargain successful!', { item, finalPrice });
+    },
+    redirectToBooking: true,
+    deviceType: window.innerWidth <= 768 ? 'mobile' : 'desktop',
+  });
+
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
@@ -6044,7 +6054,7 @@ export default function FlightResults() {
                       Important Terms & Conditions
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
-                      <li>• Passenger names cannot be changed after booking</li>
+                      <li>�� Passenger names cannot be changed after booking</li>
                       <li>
                         �� Check-in must be completed 2 hours before departure
                       </li>
