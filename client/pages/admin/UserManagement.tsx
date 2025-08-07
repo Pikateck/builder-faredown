@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { userManagementService, type AdminUser, type CreateUserRequest } from "@/services/userManagementService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
