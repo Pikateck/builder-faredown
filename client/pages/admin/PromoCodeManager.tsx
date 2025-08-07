@@ -589,6 +589,8 @@ export default function PromoCodeManager() {
               <Input
                 id="discountMinValue"
                 type="number"
+                step="0.01"
+                min="0"
                 value={formData.discountMinValue || ""}
                 onChange={(e) =>
                   setFormData({
@@ -596,7 +598,7 @@ export default function PromoCodeManager() {
                     discountMinValue: parseFloat(e.target.value) || 0,
                   })
                 }
-                placeholder="Enter minimum discount value"
+                placeholder={formData.discountType === "percentage" ? "5.00" : "100"}
               />
             </div>
           </div>
