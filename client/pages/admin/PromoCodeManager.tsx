@@ -607,11 +607,13 @@ export default function PromoCodeManager() {
             <div>
               <Label htmlFor="discountMaxValue">
                 Discount Max Value*{" "}
-                {formData.discountType === "percentage" ? "(₹)" : "(₹)"}
+                {formData.discountType === "percentage" ? "(%)" : "(₹)"}
               </Label>
               <Input
                 id="discountMaxValue"
                 type="number"
+                step="0.01"
+                min="0"
                 value={formData.discountMaxValue || ""}
                 onChange={(e) =>
                   setFormData({
@@ -619,7 +621,7 @@ export default function PromoCodeManager() {
                     discountMaxValue: parseFloat(e.target.value) || 0,
                   })
                 }
-                placeholder="Enter maximum discount value"
+                placeholder={formData.discountType === "percentage" ? "25.00" : "2000"}
               />
             </div>
 
