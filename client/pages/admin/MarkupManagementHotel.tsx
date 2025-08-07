@@ -765,6 +765,11 @@ export default function MarkupManagementHotel() {
               </CardTitle>
             </CardHeader>
             <CardContent>
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                  {error}
+                </div>
+              )}
               <div className="flex flex-col md:flex-row gap-4 mb-6">
                 <div className="flex-1">
                   <div className="relative">
@@ -829,6 +834,11 @@ export default function MarkupManagementHotel() {
               </div>
 
               {/* Markups Table */}
+              {loading ? (
+                <div className="flex justify-center items-center py-8">
+                  <div className="text-gray-500">Loading markups...</div>
+                </div>
+              ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
@@ -963,6 +973,7 @@ export default function MarkupManagementHotel() {
                   </TableBody>
                 </Table>
               </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -981,7 +992,9 @@ export default function MarkupManagementHotel() {
                 <Button variant="outline" onClick={() => setFormData({})}>
                   Reset
                 </Button>
-                <Button onClick={handleSaveMarkup}>Save Markup</Button>
+                <Button onClick={handleSaveMarkup} disabled={saving}>
+                  {saving ? 'Saving...' : 'Save Markup'}
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -1005,7 +1018,9 @@ export default function MarkupManagementHotel() {
             >
               Cancel
             </Button>
-            <Button onClick={handleSaveMarkup}>Update Markup</Button>
+            <Button onClick={handleSaveMarkup} disabled={saving}>
+              {saving ? 'Updating...' : 'Update Markup'}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
