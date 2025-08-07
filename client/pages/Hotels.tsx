@@ -94,13 +94,20 @@ export default function Hotels() {
   );
   const [selectingDeparture, setSelectingDeparture] = useState(true);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [userName] = useState("Zubin Aibara");
-
   // Mobile menu states to match flights page
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
+  // User state
+  const userName = user?.name || "Zubin Aibara";
+
+  // Handle sign out
+  const handleSignOut = () => {
+    logout();
+  };
 
   // City data for hotels
   const cityData = {
