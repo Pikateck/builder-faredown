@@ -501,6 +501,8 @@ export default function MarkupManagementAir() {
             <Input
               id="markupValue"
               type="number"
+              step="0.01"
+              min="0"
               value={formData.markupValue || ""}
               onChange={(e) =>
                 setFormData({
@@ -510,8 +512,8 @@ export default function MarkupManagementAir() {
               }
               placeholder={
                 formData.markupType === "percentage"
-                  ? "e.g., 5.5"
-                  : "e.g., 1500"
+                  ? "5.00, 5.15, 5.25, etc."
+                  : "1500"
               }
             />
           </div>
