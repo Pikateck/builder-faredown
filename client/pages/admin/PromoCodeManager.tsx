@@ -247,19 +247,8 @@ export default function PromoCodeManager() {
     }
   };
 
-  // Filter promo codes
-  const filteredPromoCodes = promoCodes.filter((promo) => {
-    const matchesSearch =
-      promo.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      promo.description.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesModule =
-      selectedModule === "all" || promo.module === selectedModule;
-    const matchesStatus =
-      selectedStatus === "all" || promo.status === selectedStatus;
-
-    return matchesSearch && matchesModule && matchesStatus;
-  });
+  // Use server-filtered promo codes directly
+  const filteredPromoCodes = promoCodes;
 
   const handleCreatePromoCode = () => {
     setFormData({
