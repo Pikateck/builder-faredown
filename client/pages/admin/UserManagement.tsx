@@ -763,11 +763,29 @@ export default function UserManagement() {
             </CardHeader>
             <CardContent>
               <UserForm />
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-md p-3 mt-4">
+                  <p className="text-red-800 text-sm">{error}</p>
+                </div>
+              )}
+
               <div className="flex justify-end space-x-2 mt-6">
-                <Button variant="outline" onClick={() => setFormData({})}>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setFormData({});
+                    setError(null);
+                  }}
+                  disabled={saving}
+                >
                   Reset
                 </Button>
-                <Button onClick={handleSaveUser}>Save User</Button>
+                <Button
+                  onClick={handleSaveUser}
+                  disabled={saving || !formData.firstName || !formData.lastName || !formData.email || !formData.password}
+                >
+                  {saving ? "Saving..." : "Save User"}
+                </Button>
               </div>
             </CardContent>
           </Card>
