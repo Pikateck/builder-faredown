@@ -36,7 +36,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { bargainPricingService, type BargainPricingRequest, type BargainPricingResult, type CounterOfferResponse } from '@/services/bargainPricingService';
-import { formatPrice } from '@/lib/formatPrice';
+import { formatPriceNoDecimals } from '@/lib/formatPrice';
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
