@@ -118,43 +118,76 @@ class BargainPricingService {
 
       if (request.promoCode) {
         try {
-          const promoValidation = await promoCodeService.validatePromoCode(request.promoCode, {
-            bookingType: request.type,
-            amount: markedUpPrice,
-            userType: request.userType,
-          });
+          // Calculate minimum acceptable price based on minimum markup
+          const minimumPrice = this.calculateMinimumPrice(request.basePrice, markupResult.markupRange.min);
 
-          if (promoValidation.isValid) {
-            const discountAmount = promoValidation.discountAmount || 0;
-            const proposedFinalPrice = markedUpPrice - discountAmount;
-            
-            // Ensure final price respects minimum markup threshold
-            const minimumPrice = this.calculateMinimumPrice(request.basePrice, markupResult.markupRange.min);
-            
-            if (proposedFinalPrice >= minimumPrice) {
-              finalPrice = proposedFinalPrice;
-              promoDetails = {
-                code: request.promoCode,
-                discountAmount,
-                discountPercentage: (discountAmount / markedUpPrice) * 100,
-                isValid: true,
-                appliedAfterMarkup: true,
-              };
-            } else {
-              // Promo would violate minimum markup, adjust discount
-              const adjustedDiscount = markedUpPrice - minimumPrice;
-              finalPrice = minimumPrice;
-              promoDetails = {
-                code: request.promoCode,
-                discountAmount: adjustedDiscount,
-                discountPercentage: (adjustedDiscount / markedUpPrice) * 100,
-                isValid: true,
-                appliedAfterMarkup: true,
-              };
+          // Apply promo code with minimum markup threshold protection
+          const promoApplication = await promoCodeService.applyPromoCode(
+            request.promoCode,
+            markedUpPrice,
+            {
+              category: request.type,
+              origin: request.route?.from || request.userLocation,
+              destination: request.route?.to || request.city,
+              hotelCity: request.city,
+              minimumMarkupThreshold: minimumPrice,
             }
+          );
+
+          if (promoApplication.success) {
+            finalPrice = promoApplication.finalAmount;
+            promoDetails = {
+              code: request.promoCode,
+              discountAmount: promoApplication.discount,
+              discountPercentage: (promoApplication.discount / markedUpPrice) * 100,
+              isValid: true,
+              appliedAfterMarkup: true,
+            };
+          } else {
+            console.warn('Promo code application failed:', promoApplication.message);
           }
         } catch (error) {
           console.warn('Promo code validation failed:', error);
+
+          // Fallback validation if API fails
+          try {
+            const promoValidation = await promoCodeService.validatePromoCode(request.promoCode, {
+              amount: markedUpPrice,
+              category: request.type,
+              origin: request.route?.from || request.userLocation,
+              destination: request.route?.to || request.city,
+              hotelCity: request.city,
+            });
+
+            if (promoValidation.valid) {
+              const minimumPrice = this.calculateMinimumPrice(request.basePrice, markupResult.markupRange.min);
+              const proposedFinalPrice = markedUpPrice - promoValidation.discount;
+
+              if (proposedFinalPrice >= minimumPrice) {
+                finalPrice = proposedFinalPrice;
+                promoDetails = {
+                  code: request.promoCode,
+                  discountAmount: promoValidation.discount,
+                  discountPercentage: (promoValidation.discount / markedUpPrice) * 100,
+                  isValid: true,
+                  appliedAfterMarkup: true,
+                };
+              } else {
+                // Promo would violate minimum markup, adjust discount to respect threshold
+                const adjustedDiscount = markedUpPrice - minimumPrice;
+                finalPrice = minimumPrice;
+                promoDetails = {
+                  code: request.promoCode,
+                  discountAmount: adjustedDiscount,
+                  discountPercentage: (adjustedDiscount / markedUpPrice) * 100,
+                  isValid: true,
+                  appliedAfterMarkup: true,
+                };
+              }
+            }
+          } catch (fallbackError) {
+            console.warn('Fallback promo validation also failed:', fallbackError);
+          }
         }
       }
 
