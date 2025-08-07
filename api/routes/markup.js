@@ -231,6 +231,17 @@ router.post("/air", authenticateToken, (req, res) => {
       markupValue,
       minAmount,
       maxAmount,
+      // Current Fare Range fields
+      currentFareMin,
+      currentFareMax,
+      // Bargain Fare Range fields
+      bargainFareMin,
+      bargainFareMax,
+      // Additional fare range fields
+      highFareMin,
+      highFareMax,
+      lowFareMin,
+      lowFareMax,
       validFrom,
       validTo,
       status,
