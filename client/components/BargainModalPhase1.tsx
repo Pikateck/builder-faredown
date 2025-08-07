@@ -459,29 +459,86 @@ export default function BargainModalPhase1({
           </Card>
         )}
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button
-            onClick={handleAcceptCounterOffer}
-            className="flex-1 bg-green-600 hover:bg-green-700"
-          >
-            <ThumbsUp className="w-4 h-4 mr-2" />
-            Accept Offer
-          </Button>
-          <Button
-            onClick={handleRejectCounterOffer}
-            variant="outline"
-            className="flex-1"
-          >
-            <ThumbsDown className="w-4 h-4 mr-2" />
-            Make Another Offer
-          </Button>
-        </div>
+        {/* Action Buttons for Active Counter-Offer */}
+        {!isCounterOfferExpired && counterOfferResponse.counterOffer && (
+          <div className="flex gap-3">
+            <Button
+              onClick={handleAcceptCounterOffer}
+              className="flex-1 bg-green-600 hover:bg-green-700"
+              disabled={isCounterOfferExpired}
+            >
+              <ThumbsUp className="w-4 h-4 mr-2" />
+              Accept Offer (₹{formatPriceNoDecimals(counterOfferResponse.counterOffer)})
+            </Button>
+            <Button
+              onClick={handleRejectCounterOffer}
+              variant="outline"
+              className="flex-1"
+              disabled={isCounterOfferExpired}
+            >
+              <ThumbsDown className="w-4 h-4 mr-2" />
+              Reject & Try Again
+            </Button>
+          </div>
+        )}
+
+        {/* New Offer Input (for expired offers or after rejection) */}
+        {(isCounterOfferExpired || attemptCount < 3) && (
+          <Card className="bg-gray-50 border-gray-200">
+            <CardContent className="p-4">
+              <h4 className="font-medium text-gray-800 mb-3">Make Another Offer</h4>
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor="newOffer">Your New Price</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Input
+                      id="newOffer"
+                      type="number"
+                      value={userOfferPrice}
+                      onChange={(e) => setUserOfferPrice(e.target.value)}
+                      placeholder="Enter your desired price"
+                      className="pl-10"
+                    />
+                  </div>
+                  {usedPrices.size > 0 && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Previously tried: {Array.from(usedPrices).map(p => `₹${p.toLocaleString()}`).join(', ')}
+                    </p>
+                  )}
+                </div>
+
+                <Button
+                  onClick={handleUserOffer}
+                  disabled={isNegotiating || !userOfferPrice}
+                  className="w-full"
+                >
+                  {isNegotiating ? (
+                    <>
+                      <Clock className="w-4 h-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Target className="w-4 h-4 mr-2" />
+                      Submit New Offer
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="text-center">
           <p className="text-sm text-gray-600">
             Attempts: {attemptCount}/3 • {counterOfferResponse.nextRecommendation}
           </p>
+          {usedPrices.size > 0 && (
+            <p className="text-xs text-gray-500 mt-1">
+              Note: You cannot re-enter the same price
+            </p>
+          )}
         </div>
       </div>
     );
