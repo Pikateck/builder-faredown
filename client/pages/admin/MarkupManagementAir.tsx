@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { markupService, type AirMarkup, type CreateAirMarkupRequest } from "@/services/markupService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
