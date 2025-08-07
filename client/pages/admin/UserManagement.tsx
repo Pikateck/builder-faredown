@@ -279,46 +279,57 @@ export default function UserManagement() {
     setIsEditDialogOpen(true);
   };
 
-  const handleSaveUser = () => {
-    if (selectedUser) {
-      // Update existing user
-      setUsers(
-        users.map((u) =>
-          u.id === selectedUser.id ? { ...u, ...formData } : u,
-        ),
-      );
-      setIsEditDialogOpen(false);
-    } else {
-      // Create new user
-      const newUser: User = {
-        ...(formData as User),
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        lastLogin: "",
-        permissions:
-          ROLES[formData.role as keyof typeof ROLES]?.permissions || [],
-      };
-      setUsers([...users, newUser]);
-      setIsCreateDialogOpen(false);
+  const handleSaveUser = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+
+      if (selectedUser) {
+        // Update existing user
+        await userManagementService.updateUser(selectedUser.id, formData as Partial<CreateUserRequest>);
+        setIsEditDialogOpen(false);
+      } else {
+        // Create new user
+        if (!formData.password) {
+          setError("Password is required for new users");
+          return;
+        }
+
+        await userManagementService.createUser(formData as CreateUserRequest);
+        setIsCreateDialogOpen(false);
+      }
+
+      // Reload users to reflect changes
+      await loadUsers();
+      setFormData({});
+      setSelectedUser(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save user');
+    } finally {
+      setSaving(false);
     }
-    setFormData({});
-    setSelectedUser(null);
   };
 
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (userId: string) => {
     if (confirm("Are you sure you want to delete this user?")) {
-      setUsers(users.filter((u) => u.id !== userId));
+      try {
+        setError(null);
+        await userManagementService.deleteUser(userId);
+        await loadUsers(); // Reload users
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to delete user');
+      }
     }
   };
 
-  const toggleUserStatus = (userId: string) => {
-    setUsers(
-      users.map((u) =>
-        u.id === userId
-          ? { ...u, status: u.status === "active" ? "inactive" : "active" }
-          : u,
-      ),
-    );
+  const toggleUserStatus = async (userId: string) => {
+    try {
+      setError(null);
+      await userManagementService.toggleUserStatus(userId);
+      await loadUsers(); // Reload users to reflect changes
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update user status');
+    }
   };
 
   const UserForm = ({ isEdit = false }) => (
