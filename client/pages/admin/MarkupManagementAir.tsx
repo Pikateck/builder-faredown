@@ -241,9 +241,9 @@ export default function MarkupManagementAir() {
       route: { from: "", to: "" },
       class: "economy",
       markupType: "percentage",
-      markupValue: 0,
-      minAmount: 0,
-      maxAmount: 0,
+      markupValue: 5.00, // Default with decimal precision
+      minAmount: 100,
+      maxAmount: 5000,
       validFrom: "",
       validTo: "",
       status: "active",
