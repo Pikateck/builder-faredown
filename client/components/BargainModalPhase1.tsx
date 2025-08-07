@@ -84,6 +84,13 @@ export default function BargainModalPhase1({
   const [error, setError] = useState<string | null>(null);
   const [showPricingDetails, setShowPricingDetails] = useState(false);
 
+  // 30-second timer for counter-offers (Zubin's requirement)
+  const [counterOfferTimer, setCounterOfferTimer] = useState(0);
+  const [isCounterOfferExpired, setIsCounterOfferExpired] = useState(false);
+
+  // Prevent repeat price entries (Zubin's requirement)
+  const [usedPrices, setUsedPrices] = useState<Set<number>>(new Set());
+
   // Initialize bargain session when modal opens
   useEffect(() => {
     if (isOpen && step === 'loading') {
