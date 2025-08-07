@@ -69,22 +69,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-interface User {
-  id: string;
-  title: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  dateOfBirth: string;
-  countryCode: string;
-  role: "super_admin" | "finance" | "sales" | "marketing";
-  status: "active" | "inactive" | "pending";
-  lastLogin: string;
-  createdAt: string;
-  permissions: string[];
-}
+// Use AdminUser type from service
+type User = AdminUser;
 
 const ROLES = {
   super_admin: {
