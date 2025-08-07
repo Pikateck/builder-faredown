@@ -228,6 +228,12 @@ export default function MarkupManagementAir() {
       markupValue: 5.00, // Default with decimal precision
       minAmount: 100,
       maxAmount: 5000,
+      // Current Fare Range defaults
+      currentFareMin: 10.00, // 10% minimum markup for user-visible fare
+      currentFareMax: 15.00, // 15% maximum markup for user-visible fare
+      // Bargain Fare Range defaults
+      bargainFareMin: 5.00,  // 5% minimum acceptable bargain
+      bargainFareMax: 15.00, // 15% maximum acceptable bargain
       validFrom: "",
       validTo: "",
       status: "active",
