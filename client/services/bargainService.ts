@@ -294,6 +294,84 @@ export class BargainService {
   }
 
   /**
+   * Phase 1: Start bargain session with Base + Markup + Counter-offer logic
+   */
+  async startPhase1Bargain(request: {
+    type: "flight" | "hotel";
+    itemId: string;
+    itemTitle: string;
+    basePrice: number;
+    userType?: "b2c" | "b2b";
+    promoCode?: string;
+    // Flight specific
+    airline?: string;
+    route?: { from: string; to: string };
+    class?: string;
+    // Hotel specific
+    city?: string;
+    hotelName?: string;
+    starRating?: string;
+    roomCategory?: string;
+  }): Promise<{
+    sessionId: string;
+    initialPrice: number;
+    markedUpPrice: number;
+    bargainRange: { min: number; max: number };
+    recommendedTarget: number;
+    markupDetails: any;
+    promoDetails?: any;
+  }> {
+    const response = await apiClient.post<ApiResponse<{
+      sessionId: string;
+      initialPrice: number;
+      markedUpPrice: number;
+      bargainRange: { min: number; max: number };
+      recommendedTarget: number;
+      markupDetails: any;
+      promoDetails?: any;
+    }>>(`${this.baseUrl}/phase1/start`, request);
+
+    if (response.data) {
+      return response.data;
+    }
+
+    throw new Error("Failed to start Phase 1 bargain session");
+  }
+
+  /**
+   * Phase 1: Process user counter-offer
+   */
+  async processPhase1CounterOffer(request: {
+    sessionId: string;
+    userOfferPrice: number;
+    currentPrice: number;
+  }): Promise<{
+    accepted: boolean;
+    counterOffer?: number;
+    finalPrice?: number;
+    reasoning: string;
+    nextAction: "accept" | "counter" | "reject";
+    savingsAmount?: number;
+    savingsPercentage?: number;
+  }> {
+    const response = await apiClient.post<ApiResponse<{
+      accepted: boolean;
+      counterOffer?: number;
+      finalPrice?: number;
+      reasoning: string;
+      nextAction: "accept" | "counter" | "reject";
+      savingsAmount?: number;
+      savingsPercentage?: number;
+    }>>(`${this.baseUrl}/phase1/counter-offer`, request);
+
+    if (response.data) {
+      return response.data;
+    }
+
+    throw new Error("Failed to process Phase 1 counter offer");
+  }
+
+  /**
    * Get real-time bargain activity (WebSocket endpoint info)
    */
   getBargainWebSocketUrl(sessionId: string): string {
