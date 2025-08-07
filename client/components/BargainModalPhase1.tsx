@@ -403,18 +403,40 @@ export default function BargainModalPhase1({
 
     return (
       <div className="space-y-6">
-        {/* Counter Offer Response */}
-        <Card className="border-orange-200 bg-orange-50">
+        {/* Counter Offer Response with 30-Second Timer */}
+        <Card className={`border-orange-200 ${isCounterOfferExpired ? 'bg-red-50' : 'bg-orange-50'}`}>
           <CardContent className="p-6">
             <div className="text-center">
-              <MessageCircle className="w-8 h-8 text-orange-600 mx-auto mb-3" />
-              <h3 className="text-lg font-semibold text-orange-800 mb-2">Counter Offer!</h3>
-              {counterOfferResponse.counterOffer && (
+              <MessageCircle className={`w-8 h-8 mx-auto mb-3 ${isCounterOfferExpired ? 'text-red-600' : 'text-orange-600'}`} />
+              <h3 className={`text-lg font-semibold mb-2 ${isCounterOfferExpired ? 'text-red-800' : 'text-orange-800'}`}>
+                {isCounterOfferExpired ? 'Offer Expired!' : 'Counter Offer!'}
+              </h3>
+
+              {/* 30-Second Timer Display (Zubin's requirement) */}
+              {counterOfferTimer > 0 && !isCounterOfferExpired && (
+                <div className="mb-3">
+                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+                    counterOfferTimer <= 10 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    <Clock className="w-4 h-4" />
+                    <span className="font-mono font-bold">{counterOfferTimer}s</span>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1">Offer valid for {counterOfferTimer} seconds</p>
+                </div>
+              )}
+
+              {counterOfferResponse.counterOffer && !isCounterOfferExpired && (
                 <p className="text-2xl font-bold text-orange-600 mb-2">
                   {formatPriceNoDecimals(counterOfferResponse.counterOffer)}
                 </p>
               )}
-              <p className="text-sm text-orange-700">{counterOfferResponse.reasoning}</p>
+
+              <p className={`text-sm ${isCounterOfferExpired ? 'text-red-700' : 'text-orange-700'}`}>
+                {isCounterOfferExpired
+                  ? 'This counter-offer has expired. You can make a new offer below.'
+                  : counterOfferResponse.reasoning
+                }
+              </p>
             </div>
           </CardContent>
         </Card>
