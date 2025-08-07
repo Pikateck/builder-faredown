@@ -13,10 +13,22 @@ export class DevApiClient {
   }
 
   private async quickConnectivityCheck(): Promise<boolean> {
-    // For development mode, assume server is always offline to avoid fetch errors
-    // This method exists for future enhancement but currently returns false
-    // to force fallback mode and avoid any network requests
-    return false;
+    // Try to check if the real API server is available
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
+      const response = await fetch(`${this.baseUrl}/health`, {
+        method: 'GET',
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      return response.ok;
+    } catch (error) {
+      // Server is not available, use fallback
+      return false;
+    }
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
