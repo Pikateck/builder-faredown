@@ -14,6 +14,12 @@ let airMarkups = [
     markupValue: 5.5,
     minAmount: 500,
     maxAmount: 2000,
+    // Current Fare Range (existing functionality)
+    currentFareMin: 10.00, // Min markup percentage for user-visible fare
+    currentFareMax: 12.00, // Max markup percentage for user-visible fare
+    // New Bargain Fare Range fields
+    bargainFareMin: 5.00,  // Min acceptable bargain percentage
+    bargainFareMax: 15.00, // Max acceptable bargain percentage
     validFrom: "2024-01-01",
     validTo: "2024-12-31",
     status: "active",
@@ -22,6 +28,39 @@ let airMarkups = [
     specialConditions: "Valid for advance bookings only",
     createdAt: "2024-01-15T10:00:00Z",
     updatedAt: "2024-01-20T15:30:00Z",
+  },
+  // Zubin's Sample Data - Airline Markup (Amadeus)
+  {
+    id: "2",
+    name: "Amadeus Emirates BOM-DXB Economy",
+    description: "Airline Markup for BOM to DXB route with Emirates via Amadeus",
+    airline: "EK", // Emirates
+    route: { from: "BOM", to: "DXB" },
+    class: "economy",
+    markupType: "percentage",
+    markupValue: 12.00, // Average of the ranges
+    minAmount: 500,
+    maxAmount: 5000,
+    // High Fare Range
+    highFareMin: 20.00,
+    highFareMax: 25.00,
+    // Low Fare Range
+    lowFareMin: 15.00,
+    lowFareMax: 20.00,
+    // Current Fare Range (Min/Max) - User-visible pricing
+    currentFareMin: 10.00, // From Zubin's spec
+    currentFareMax: 12.00, // From Zubin's spec
+    // Discount Fare Range (Min/Max) - Used for bargain logic
+    bargainFareMin: 5.00,  // From Zubin's spec (Discount Fare Min)
+    bargainFareMax: 15.00, // From Zubin's spec (Discount Fare Max)
+    validFrom: "2025-01-01",
+    validTo: "2025-12-31",
+    status: "active",
+    priority: 1,
+    userType: "all",
+    specialConditions: "Sample data as per Zubin's specifications for Amadeus Emirates route",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
 
