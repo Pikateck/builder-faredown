@@ -384,6 +384,36 @@ router.post(
 
 // GET /api/users/stats - Get user statistics
 router.get(
+  "/stats",
+  authenticateToken,
+  checkPermission("view_dashboard"),
+  (req, res) => {
+    try {
+      const totalUsers = users.length;
+      const activeUsers = users.filter((u) => u.status === "active").length;
+      const inactiveUsers = users.filter((u) => u.status === "inactive").length;
+      const pendingUsers = users.filter((u) => u.status === "pending").length;
+
+      const roleDistribution = users.reduce((acc, user) => {
+        acc[user.role] = (acc[user.role] || 0) + 1;
+        return acc;
+      }, {});
+
+      res.json({
+        totalUsers,
+        activeUsers,
+        inactiveUsers,
+        pendingUsers,
+        roleDistribution,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch user statistics" });
+    }
+  },
+);
+
+// GET /api/users/stats/overview - Get user statistics (legacy route)
+router.get(
   "/stats/overview",
   authenticateToken,
   checkPermission("view_dashboard"),
