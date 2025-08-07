@@ -483,6 +483,10 @@ export default function UserManagement() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={formData.password || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   placeholder="Enter password"
                 />
                 <Button
@@ -499,15 +503,6 @@ export default function UserManagement() {
                   )}
                 </Button>
               </div>
-            </div>
-
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Confirm password"
-              />
             </div>
           </>
         )}
