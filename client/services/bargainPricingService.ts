@@ -219,12 +219,12 @@ class BargainPricingService {
         promoDetails,
         bargainRange,
         phase1Logic: {
-          baseCalculation: `Base Price (₹${request.basePrice}) from supplier/inventory`,
-          markupLogic: `Applied randomized markup of ${randomizedMarkup.toFixed(2)}% (range: ${markupResult.markupRange.min}%-${markupResult.markupRange.max}%)`,
-          promoApplication: promoDetails 
-            ? `Promo "${request.promoCode}" applied after markup, respecting ${markupResult.markupRange.min}% minimum markup`
+          baseCalculation: `Net Fare: ₹${request.basePrice} from supplier (TBO/Amadeus/Hotelbeds)`,
+          markupLogic: `Current Fare Range: ${currentFareMin}%-${currentFareMax}% → Applied ${randomizedMarkup.toFixed(2)}% → ₹${markedUpPrice.toLocaleString()}`,
+          promoApplication: promoDetails
+            ? `Promo "${request.promoCode}" applied after bargain logic: -₹${promoDetails.discountAmount.toLocaleString()}`
             : 'No promo code applied',
-          counterOfferStrategy: `Bargain range: ₹${bargainRange.minimumAcceptable} - ₹${bargainRange.maximumCounterOffer}`,
+          counterOfferStrategy: `Bargain Range: ${bargainFareMin}%-${bargainFareMax}% (₹${bargainRange.minimumAcceptable}-₹${bargainRange.maximumCounterOffer})`,
         },
       };
     } catch (error) {
