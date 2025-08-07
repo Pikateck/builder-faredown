@@ -71,8 +71,15 @@ export default function HotelResults() {
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
   >({});
-  const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
-  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  // Phase 1 Bargain Engine integration for hotels
+  const bargainHook = useBargainPhase1({
+    onBookingConfirmed: (item, finalPrice) => {
+      // Navigate to hotel booking with bargained price
+      navigate(`/hotel-booking-confirmation?itemId=${item.itemId}&finalPrice=${finalPrice}&bargainApplied=true`);
+    },
+    redirectToBooking: true,
+    deviceType: window.innerWidth <= 768 ? 'mobile' : 'desktop',
+  });
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [loading, setLoading] = useState(true);
