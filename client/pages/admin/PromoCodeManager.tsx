@@ -196,17 +196,55 @@ const mockPromoCodes: PromoCode[] = [
 ];
 
 export default function PromoCodeManager() {
-  const [promoCodes, setPromoCodes] = useState<PromoCode[]>(mockPromoCodes);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedModule, setSelectedModule] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(
-    null,
-  );
+  const [selectedPromoCode, setSelectedPromoCode] = useState<PromoCode | null>(null);
   const [formData, setFormData] = useState<Partial<PromoCode>>({});
   const [activeTab, setActiveTab] = useState("list");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    total: 0,
+  });
+
+  // Load promo codes on component mount and when filters change
+  useEffect(() => {
+    loadPromoCodes();
+  }, [searchTerm, selectedModule, selectedStatus, pagination.page]);
+
+  const loadPromoCodes = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await promoCodeService.getPromoCodes({
+        search: searchTerm || undefined,
+        module: selectedModule,
+        status: selectedStatus,
+        page: pagination.page,
+        limit: 10,
+      });
+
+      setPromoCodes(result.promoCodes);
+      setPagination({
+        page: result.page,
+        totalPages: result.totalPages,
+        total: result.total,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load promo codes');
+      console.error('Error loading promo codes:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter promo codes
   const filteredPromoCodes = promoCodes.filter((promo) => {
