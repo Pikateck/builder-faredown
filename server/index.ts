@@ -1682,6 +1682,268 @@ export function createServer() {
     }
   });
 
+  // MARKUP MANAGEMENT API ROUTES
+
+  // Air markups endpoint
+  app.get("/api/markup/air", (_req, res) => {
+    console.log("📊 Fetching air markups");
+
+    const mockAirMarkups = [
+      {
+        id: "1",
+        name: "Mumbai-Dubai Economy Markup",
+        description: "Standard markup for Mumbai to Dubai economy flights",
+        airline: "EK",
+        route: { from: "BOM", to: "DXB" },
+        class: "economy",
+        markupType: "percentage",
+        markupValue: 5.5,
+        minAmount: 500,
+        maxAmount: 2000,
+        currentFareMin: 10.00,
+        currentFareMax: 12.00,
+        bargainFareMin: 5.00,
+        bargainFareMax: 15.00,
+        validFrom: "2024-01-01",
+        validTo: "2024-12-31",
+        status: "active",
+        priority: 1,
+        userType: "all",
+        specialConditions: "Valid for advance bookings only",
+        createdAt: "2024-01-15T10:00:00Z",
+        updatedAt: "2024-01-20T15:30:00Z",
+      },
+      {
+        id: "2",
+        name: "Amadeus Emirates BOM-DXB Economy",
+        description: "Airline Markup for BOM to DXB route with Emirates via Amadeus",
+        airline: "EK",
+        route: { from: "BOM", to: "DXB" },
+        class: "economy",
+        markupType: "percentage",
+        markupValue: 12.00,
+        minAmount: 500,
+        maxAmount: 5000,
+        highFareMin: 20.00,
+        highFareMax: 25.00,
+        lowFareMin: 15.00,
+        lowFareMax: 20.00,
+        currentFareMin: 10.00,
+        currentFareMax: 12.00,
+        bargainFareMin: 5.00,
+        bargainFareMax: 15.00,
+        validFrom: "2025-01-01",
+        validTo: "2025-12-31",
+        status: "active",
+        priority: 1,
+        userType: "all",
+        specialConditions: "Sample data as per Zubin's specifications for Amadeus Emirates route",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+
+    res.json({
+      success: true,
+      markups: mockAirMarkups,
+      total: mockAirMarkups.length,
+      page: 1,
+      totalPages: 1,
+    });
+  });
+
+  // Hotel markups endpoint
+  app.get("/api/markup/hotel", (_req, res) => {
+    console.log("🏨 Fetching hotel markups");
+
+    const mockHotelMarkups = [
+      {
+        id: "1",
+        name: "Mumbai Luxury Hotels Markup",
+        description: "Standard markup for luxury hotels in Mumbai",
+        city: "Mumbai",
+        hotelName: "Taj Hotel",
+        hotelChain: "Taj Hotels",
+        starRating: 5,
+        roomCategory: "deluxe",
+        markupType: "percentage",
+        markupValue: 8.5,
+        minAmount: 1000,
+        maxAmount: 5000,
+        currentFareMin: 10.00,
+        currentFareMax: 15.00,
+        bargainFareMin: 5.00,
+        bargainFareMax: 15.00,
+        validFrom: "2024-01-01",
+        validTo: "2024-12-31",
+        checkInDays: ["friday", "saturday", "sunday"],
+        applicableDays: ["friday", "saturday", "sunday"],
+        minStay: 1,
+        maxStay: 7,
+        status: "active",
+        priority: 1,
+        userType: "all",
+        seasonType: "Peak Season",
+        specialConditions: "Valid for weekend bookings only",
+        createdAt: "2024-01-15T10:00:00Z",
+        updatedAt: "2024-01-20T15:30:00Z",
+      },
+      {
+        id: "2",
+        name: "Hotelbeds Taj Mahal Palace Mumbai",
+        description: "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
+        city: "Mumbai",
+        hotelName: "Taj Mahal Palace",
+        hotelChain: "Taj Hotels",
+        starRating: 5,
+        roomCategory: "deluxe",
+        markupType: "percentage",
+        markupValue: 12.00,
+        minAmount: 1000,
+        maxAmount: 8000,
+        hotelCode: "53331",
+        highFareMin: 20.00,
+        highFareMax: 25.00,
+        lowFareMin: 15.00,
+        lowFareMax: 20.00,
+        currentFareMin: 10.00,
+        currentFareMax: 12.00,
+        bargainFareMin: 10.00,
+        bargainFareMax: 20.00,
+        validFrom: "2025-01-01",
+        validTo: "2025-12-31",
+        checkInDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+        applicableDays: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+        minStay: 1,
+        maxStay: 30,
+        status: "active",
+        priority: 1,
+        userType: "all",
+        seasonType: "Regular",
+        specialConditions: "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+
+    res.json({
+      success: true,
+      markups: mockHotelMarkups,
+      total: mockHotelMarkups.length,
+      page: 1,
+      totalPages: 1,
+    });
+  });
+
+  // Promo codes endpoint
+  app.get("/api/promo/admin/all", (_req, res) => {
+    console.log("🎫 Fetching promo codes");
+
+    const mockPromoCodes = [
+      {
+        id: "promo_001",
+        code: "FLYHIGH100",
+        name: "Fly High Discount",
+        type: "percent",
+        discountFrom: 5,
+        discountTo: 15,
+        applicableTo: "flights",
+        filters: {
+          fromCity: "Mumbai",
+          toCity: "Dubai",
+          airlines: ["Emirates", "Air India"],
+          cabinClass: ["Economy", "Business"],
+        },
+        travelPeriod: {
+          from: "2025-02-01",
+          to: "2025-12-31",
+        },
+        validity: {
+          startDate: "2025-01-15",
+          endDate: "2025-12-31",
+        },
+        marketingBudget: 100000,
+        budgetUsed: 15750,
+        status: "active",
+        usageCount: 157,
+        createdAt: "2025-01-15T00:00:00Z",
+        createdBy: "admin",
+      },
+      {
+        id: "promo_004",
+        code: "FAREDOWNBONUS",
+        name: "FAREDOWNBONUS Flight Discount",
+        type: "fixed",
+        discountFrom: 2000,
+        discountTo: 5000,
+        applicableTo: "flights",
+        filters: {
+          minFare: 10500,
+        },
+        travelPeriod: {
+          from: "2025-01-01",
+          to: "2025-12-31",
+        },
+        validity: {
+          startDate: "2025-01-01",
+          endDate: "2025-12-31",
+        },
+        marketingBudget: 100000,
+        budgetUsed: 0,
+        status: "active",
+        usageCount: 0,
+        createdAt: new Date().toISOString(),
+        createdBy: "admin",
+      },
+      {
+        id: "promo_005",
+        code: "FAREDOWNBONUS",
+        name: "FAREDOWNBONUS Hotel Discount",
+        type: "fixed",
+        discountFrom: 2000,
+        discountTo: 5000,
+        applicableTo: "hotels",
+        filters: {
+          minFare: 10500,
+        },
+        travelPeriod: {
+          from: "2025-01-01",
+          to: "2025-12-31",
+        },
+        validity: {
+          startDate: "2025-01-01",
+          endDate: "2025-12-31",
+        },
+        marketingBudget: 100000,
+        budgetUsed: 0,
+        status: "active",
+        usageCount: 0,
+        createdAt: new Date().toISOString(),
+        createdBy: "admin",
+      },
+    ];
+
+    res.json({
+      success: true,
+      data: mockPromoCodes,
+    });
+  });
+
+  // API health check
+  app.get("/api/health", (_req, res) => {
+    res.json({
+      status: "healthy",
+      database: "connected (simulation)",
+      timestamp: new Date().toISOString(),
+      services: {
+        amadeus: "connected",
+        hotelbeds: "connected",
+        markup: "active",
+        promo: "active",
+      }
+    });
+  });
+
   // Enhanced live hotel search with Hotelbeds API integration
   app.get("/api/hotels-live/search", async (_req, res) => {
     // Set proper headers for JSON response
