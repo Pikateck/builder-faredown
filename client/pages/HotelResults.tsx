@@ -574,16 +574,8 @@ export default function HotelResults() {
     hotel: Hotel,
     currentSearchParams?: URLSearchParams,
   ) => {
-    const bargainItem = createHotelBargainItem({
-      id: hotel.id,
-      name: hotel.name,
-      city: hotel.location || destination,
-      starRating: hotel.starRating,
-      roomCategory: "standard", // Default, could be extracted from hotel data
-      price: hotel.pricePerNight,
-    });
-
-    bargainHook.startBargain(bargainItem);
+    setSelectedHotel(hotel);
+    setIsBargainModalOpen(true);
   };
 
   const handleClearFilters = () => {
