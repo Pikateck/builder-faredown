@@ -44,6 +44,7 @@ const reportsRoutes = require("./routes/reports");
 const suppliersRoutes = require("./routes/suppliers");
 const voucherRoutes = require("./routes/vouchers");
 const adminBookingsRoutes = require("./routes/admin-bookings");
+const adminSightseeingRoutes = require("./routes/admin-sightseeing");
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
