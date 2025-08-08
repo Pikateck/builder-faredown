@@ -255,6 +255,20 @@ export function SightseeingSearchForm() {
     setIsUserTyping(false);
   };
 
+  // Handle date selection for mobile calendar
+  const handleMobileDateSelect = (date: Date | undefined) => {
+    console.log('📅 Mobile date selected:', date);
+    setVisitDate(date);
+    setIsCalendarOpenMobile(false);
+  };
+
+  // Handle date selection for desktop calendar
+  const handleDesktopDateSelect = (date: Date | undefined) => {
+    console.log('📅 Desktop date selected:', date);
+    setVisitDate(date);
+    setIsCalendarOpenDesktop(false);
+  };
+
 
   // Search validation and execution
   const validateAndSearch = () => {
@@ -516,7 +530,7 @@ export function SightseeingSearchForm() {
                 <BookingCalendar
                   mode="single"
                   selected={visitDate}
-                  onSelect={setVisitDate}
+                  onSelect={handleMobileDateSelect}
                   disabled={(date) =>
                     date < new Date(new Date().setHours(0, 0, 0, 0))
                   }
@@ -682,7 +696,7 @@ export function SightseeingSearchForm() {
               <BookingCalendar
                 mode="single"
                 selected={visitDate}
-                onSelect={setVisitDate}
+                onSelect={handleDesktopDateSelect}
                 disabled={(date) =>
                   date < new Date(new Date().setHours(0, 0, 0, 0))
                 }
