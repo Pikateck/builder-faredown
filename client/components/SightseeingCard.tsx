@@ -271,11 +271,7 @@ export function SightseeingCard({
                   {attraction.name}
                 </h3>
                 <div className="text-right">
-                  {savings > 0 && (
-                    <div className="text-sm text-gray-500 line-through">
-                      {formatPrice(originalTotalPrice)}
-                    </div>
-                  )}
+                  {/* Original price display removed per user request */}
                   {/* Price display removed per user request */}
                 </div>
               </div>
