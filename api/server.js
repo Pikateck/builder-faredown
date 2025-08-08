@@ -214,6 +214,7 @@ app.use("/api/test-live", testLiveRoutes);
 app.use("/api/test-hotelbeds", testHotelbedsRoutes);
 app.use("/api/test-live-hotel", testLiveHotelRoutes);
 app.use("/api/sightseeing", sightseeingRoutes);
+app.use("/api/sightseeing-search", sightseeingSearchRoutes);
 
 // New admin module routes
 app.use("/api/markup", authenticateToken, markupRoutes);
