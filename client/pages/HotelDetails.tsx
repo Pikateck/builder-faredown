@@ -2850,8 +2850,55 @@ export default function HotelDetails() {
         </DialogContent>
       </Dialog>
 
-      {/* Standardized Bargain Modal */}
-      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
+      {/* Hotel Bargain Modal */}
+      {selectedRoomType && (
+        <FlightStyleBargainModal
+          roomType={{
+            id: selectedRoomType.id,
+            name: selectedRoomType.name,
+            description:
+              selectedRoomType.features?.join(", ") ||
+              "Comfortable room with great amenities",
+            image: selectedRoomType.image || hotel.image,
+            marketPrice: selectedRoomType.pricePerNight * 1.2,
+            totalPrice: selectedRoomType.pricePerNight,
+            total: selectedRoomType.pricePerNight,
+            features: selectedRoomType.features || ["City View", "Free WiFi"],
+            maxOccupancy: 2,
+            bedType: selectedRoomType.details || "Comfortable bed",
+            size: "Standard size",
+            cancellation: "Free cancellation",
+          }}
+          hotel={{
+            id: hotel.id,
+            name: hotel.name,
+            location: hotel.location,
+            rating: hotel.rating,
+            image: hotel.image,
+          }}
+          isOpen={isBargainModalOpen}
+          onClose={() => {
+            setIsBargainModalOpen(false);
+            setSelectedRoomType(null);
+            setBargainingRoomId(null);
+          }}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+          roomsCount={parseInt(roomsParam || "1")}
+          onBookingSuccess={(finalPrice) => {
+            setIsBargainModalOpen(false);
+            handleBooking(selectedRoomType, finalPrice);
+            // Mark room as successfully bargained
+            if (selectedRoomType) {
+              setBargainedRooms(
+                (prev) => new Set([...prev, selectedRoomType.id]),
+              );
+            }
+            setSelectedRoomType(null);
+            setBargainingRoomId(null);
+          }}
+        />
+      )}
 
       {/* Write Review Modal - Optimized for Mobile/Native */}
       <Dialog
