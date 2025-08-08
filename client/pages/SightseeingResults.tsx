@@ -582,18 +582,16 @@ export default function SightseeingResults() {
 
   // Handle bargain click
   const handleBargainClick = (attraction: SightseeingAttraction, searchParams: URLSearchParams) => {
-    // Create proper sightseeing bargain item
-    const item = {
-      type: "sightseeing" as const,
-      itemId: attraction.id,
-      title: attraction.name,
-      basePrice: attraction.currentPrice,
+    // Create proper sightseeing bargain item using helper function
+    const item = createSightseeingBargainItem({
+      id: attraction.id,
+      name: attraction.name,
       location: attraction.location,
       category: attraction.category,
       duration: attraction.duration,
-      activityName: attraction.name,
-      starRating: attraction.rating.toString(),
-    };
+      rating: attraction.rating,
+      price: attraction.currentPrice,
+    });
 
     bargainHook.startBargain(item);
   };
