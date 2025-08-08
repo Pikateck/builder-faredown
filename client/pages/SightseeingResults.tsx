@@ -368,9 +368,9 @@ export default function SightseeingResults() {
             name: "Dubai Food Walking Tour",
             location: `${destinationName || "Dubai"} Food District, UAE`,
             images: [
-              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F53166dc2901947d19c1ae7dd0bea1869?format=webp&width=800",
-              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F53166dc2901947d19c1ae7dd0bea1869?format=webp&width=800",
-              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F53166dc2901947d19c1ae7dd0bea1869?format=webp&width=800",
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F53a6698a49774839a2b5f17c03e154be?format=webp&width=800",
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F53a6698a49774839a2b5f17c03e154be?format=webp&width=800",
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F53a6698a49774839a2b5f17c03e154be?format=webp&width=800",
             ],
             rating: 4.8,
             reviews: 5432,
@@ -643,7 +643,7 @@ export default function SightseeingResults() {
                   <Users className="w-4 h-4" />
                   {adults} adult{parseInt(adults) !== 1 ? 's' : ''}{parseInt(children) > 0 ? `, ${children} child${parseInt(children) !== 1 ? 'ren' : ''}` : ''}
                 </span>
-                <span className="text-gray-400">•</span>
+                <span className="text-gray-400">���</span>
                 <span>{filteredAndSortedAttractions.length} experiences found</span>
               </div>
             </div>
