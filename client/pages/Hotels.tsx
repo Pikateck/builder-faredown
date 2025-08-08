@@ -1088,98 +1088,87 @@ export default function Hotels() {
         </section>
 
         {/* Footer */}
-        <footer className="bg-gray-800 text-white py-12">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <footer className="bg-[#1a1a2e] text-white py-8">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
-                <h3 className="text-lg font-bold mb-4">Faredown</h3>
+                <h3 className="text-lg font-bold mb-3">Faredown</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  The world's first travel portal where you control the price.
-                  Bargain for better deals on hotels and hotels.
+                  The world's first travel portal where you can negotiate and bargain for better deals.
                 </p>
+                <div className="flex space-x-3">
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+                    <Twitter className="w-4 h-4" />
+                  </a>
+                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                    <Linkedin className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
 
               <div>
-                <h4 className="font-semibold mb-4">Quick Links</h4>
-                <ul className="space-y-2 text-gray-400 text-sm">
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      How it Works
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      Help Center
-                    </Link>
-                  </li>
+                <h4 className="font-semibold mb-3">Quick Links</h4>
+                <ul className="space-y-1 text-sm text-gray-400">
+                  <li><Link to="/about" className="hover:text-white">About Us</Link></li>
+                  <li><Link to="/how-it-works" className="hover:text-white">How It Works</Link></li>
+                  <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
+                  <li><Link to="/help" className="hover:text-white">Help Center</Link></li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold mb-4">Services</h4>
-                <ul className="space-y-2 text-gray-400 text-sm">
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      Hotels
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/hotels" className="hover:text-white">
-                      Hotels
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      Car Rentals
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/" className="hover:text-white">
-                      Travel Insurance
-                    </Link>
-                  </li>
+                <h4 className="font-semibold mb-3">Services</h4>
+                <ul className="space-y-1 text-sm text-gray-400">
+                  <li><Link to="/flights" className="hover:text-white">Flights</Link></li>
+                  <li><Link to="/hotels" className="hover:text-white">Hotels</Link></li>
+                  <li><Link to="/sightseeing" className="hover:text-white">Sightseeing</Link></li>
+                  <li><Link to="/car-rental" className="hover:text-white">Car Rental</Link></li>
+                  <li><Link to="/travel-insurance" className="hover:text-white">Travel Insurance</Link></li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 text-gray-400 text-sm">
-                  <li>
-                    <Link to="/privacy-policy" className="hover:text-white">
-                      Privacy Policy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/terms-conditions" className="hover:text-white">
-                      Terms of Service
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/cookie-policy" className="hover:text-white">
-                      Cookie Policy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/refund-policy" className="hover:text-white">
-                      Refund Policy
-                    </Link>
-                  </li>
+                <h4 className="font-semibold mb-3">Legal</h4>
+                <ul className="space-y-1 text-sm text-gray-400">
+                  <li><Link to="/privacy" className="hover:text-white">Privacy Policy</Link></li>
+                  <li><Link to="/terms" className="hover:text-white">Terms of Service</Link></li>
+                  <li><Link to="/refund" className="hover:text-white">Refund Policy</Link></li>
                 </ul>
               </div>
             </div>
 
-            <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-              © 2024 Faredown.com. All rights reserved.
+            <div className="border-t border-gray-700 mt-6 pt-6">
+              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div className="flex items-center space-x-6">
+                  <div className="flex items-center space-x-3 text-xs text-gray-400">
+                    <span className="font-semibold">Certified by:</span>
+                    <div className="flex items-center space-x-4">
+                      <div className="bg-white rounded px-2 py-1">
+                        <span className="text-[#003580] font-bold text-xs">TAAI</span>
+                      </div>
+                      <div className="bg-white rounded px-2 py-1">
+                        <span className="text-[#003580] font-bold text-xs">TAAFI</span>
+                      </div>
+                      <div className="bg-white rounded px-2 py-1">
+                        <span className="text-[#003580] font-bold text-xs">IATA</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-400 text-sm">
+                  © 2024 Faredown.com. All rights reserved.
+                </p>
+              </div>
             </div>
           </div>
         </footer>
