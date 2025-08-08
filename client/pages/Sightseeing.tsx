@@ -271,6 +271,7 @@ export default function Sightseeing() {
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <Link
                   to="/flights"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className={cn(
                     "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
                     false ? "font-semibold border-b-2 border-white" : "",
@@ -280,6 +281,7 @@ export default function Sightseeing() {
                 </Link>
                 <Link
                   to="/hotels"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className={cn(
                     "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
                     false ? "font-semibold border-b-2 border-white" : "",
@@ -289,6 +291,7 @@ export default function Sightseeing() {
                 </Link>
                 <Link
                   to="/sightseeing"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className={cn(
                     "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
                     true ? "font-semibold border-b-2 border-white" : "",
