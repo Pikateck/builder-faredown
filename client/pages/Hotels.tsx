@@ -566,7 +566,7 @@ export default function Hotels() {
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
-                          { code: "es", name: "Español", flag: "🇪���" },
+                          { code: "es", name: "Español", flag: "🇪����" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
@@ -1166,7 +1166,7 @@ export default function Hotels() {
                   </div>
                 </div>
                 <p className="text-gray-400 text-sm">
-                  © 2024 Faredown.com. All rights reserved.
+                  © 2025 Faredown.com. All rights reserved.
                 </p>
               </div>
             </div>
