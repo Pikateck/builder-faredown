@@ -701,6 +701,17 @@ export default function HotelDetails() {
     setIsBargainModalOpen(true);
   };
 
+  const handleStarClick = () => {
+    setActiveTab("reviews");
+    // Scroll to reviews section smoothly
+    setTimeout(() => {
+      const reviewsSection = document.getElementById("reviews-section");
+      if (reviewsSection) {
+        reviewsSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
   const handleFilterChange = (category: string, filterName: string) => {
     setSelectedFilters((prev) => {
       const newFilters = { ...prev };
