@@ -1596,7 +1596,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫🇷" },
+                      { code: "fr", name: "Français", flag: "🇫����" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
@@ -3618,10 +3618,10 @@ export default function FlightResults() {
                                               bargainItem,
                                             );
                                           }}
-                                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
+                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
                                         >
-                                          <span className="text-lg">🎯</span>
-                                          Start Bargain • Get Better Price
+                                          <TrendingDown className="w-4 h-4" />
+                                          Bargain Now
                                         </Button>
 
                                         {/* Book Now Button */}
