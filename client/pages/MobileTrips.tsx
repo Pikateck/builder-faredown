@@ -227,7 +227,7 @@ const MobileTrips = () => {
           >
             <Icon className="w-5 h-5 text-gray-600" />
             <span className="flex-1 text-left text-gray-800">{label}</span>
-            <span className="text-gray-400">›</span>
+            <span className="text-gray-400">���</span>
           </button>
         ))}
       </div>
@@ -252,7 +252,7 @@ const MobileTrips = () => {
         </button>
 
         <h1 className="font-semibold text-lg text-gray-800">
-          {activeTab === "trips" ? "My Trips" : "Profile"}
+          {activeTab === "trips" ? "My Bookings" : "Profile"}
         </h1>
 
         <div className="w-8"></div>
