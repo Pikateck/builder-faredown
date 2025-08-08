@@ -508,10 +508,29 @@ export function SightseeingSearchForm() {
     ? destinationSuggestions
     : popularDestinations;
 
-  // Get appropriate icon for destination type
-  const getDestinationIcon = (type: string) => {
+  // Get appropriate icon for destination type with specific Dubai attraction icons
+  const getDestinationIcon = (type: string, name?: string) => {
+    // Specific icons for Dubai attractions
+    if (name) {
+      const lowerName = name.toLowerCase();
+      if (lowerName.includes('fountain')) return Sparkles;
+      if (lowerName.includes('burj khalifa')) return Crown;
+      if (lowerName.includes('mall')) return ShoppingBag;
+      if (lowerName.includes('frame')) return Camera;
+      if (lowerName.includes('atlantis') || lowerName.includes('palm')) return Palmtree;
+      if (lowerName.includes('miracle garden') || lowerName.includes('garden')) return Trees;
+      if (lowerName.includes('legoland') || lowerName.includes('img worlds')) return Gamepad2;
+      if (lowerName.includes('aquarium') || lowerName.includes('underwater')) return Fish;
+      if (lowerName.includes('souks') || lowerName.includes('souk')) return ShoppingBag;
+      if (lowerName.includes('marina')) return Palmtree;
+      if (lowerName.includes('jbr') || lowerName.includes('jumeirah')) return Home;
+    }
+
+    // General type-based icons
     switch (type.toLowerCase()) {
       case 'city':
+        return Building2;
+      case 'district':
         return Building2;
       case 'airport':
         return Plane;
@@ -521,6 +540,10 @@ export function SightseeingSearchForm() {
         return Globe;
       case 'landmark':
         return Landmark;
+      case 'attraction':
+        return Camera;
+      case 'theme-park':
+        return Gamepad2;
       default:
         return MapPin;
     }
