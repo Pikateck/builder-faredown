@@ -271,7 +271,7 @@ const MobileConfirmation = () => {
             onClick={() => navigate("/mobile-trips")}
             className="bg-blue-600 text-white py-3 rounded-lg font-medium"
           >
-            My Trips
+            My Bookings
           </button>
         </div>
       </div>
