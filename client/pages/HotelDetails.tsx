@@ -59,7 +59,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import BargainModalPhase1 from "@/components/BargainModalPhase1";
+import { useBargainPhase1, createHotelBargainItem } from "@/hooks/useBargainPhase1";
 import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
@@ -3169,7 +3170,7 @@ export default function HotelDetails() {
                   Total Price (All Inclusive)
                 </div>
                 <div className="text-xs text-gray-500">
-                  ₹{lowestPrice.toLocaleString()} per room per night
+                  ��{lowestPrice.toLocaleString()} per room per night
                 </div>
               </div>
               <div>
