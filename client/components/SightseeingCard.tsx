@@ -478,11 +478,7 @@ export function SightseeingCard({
 
               {/* Right Content - Pricing & Actions */}
               <div className="w-64 flex flex-col justify-between">
-                {/* Pricing */}
-                <div className="text-right mb-4">
-                  {/* Original price removed per user request */}
-                  {/* Price display and savings removed per user request */}
-                </div>
+                {/* Pricing removed per user request */}
 
                 {/* Available Times */}
                 <div className="mb-4">
