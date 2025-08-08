@@ -21,6 +21,8 @@ export interface HotelSearchRequest {
   rating?: number;
   sortBy?: "price" | "rating" | "distance" | "popularity";
   currencyCode?: string;
+  promoCode?: string;
+  userId?: string;
 }
 
 export interface Hotel {
