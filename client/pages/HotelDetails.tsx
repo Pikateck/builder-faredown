@@ -2547,7 +2547,7 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "reviews" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <div id="reviews-section-desktop" className="bg-white rounded-lg border border-gray-200 p-4">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold">
                     Guest reviews for {hotel.name}
