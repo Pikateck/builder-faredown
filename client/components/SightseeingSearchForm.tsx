@@ -185,6 +185,127 @@ export function SightseeingSearchForm() {
     loadPopularDestinations();
   }, []);
 
+  // Get Dubai-specific attractions when searching for Dubai
+  const getDubaiAttractions = (): DestinationOption[] => {
+    return [
+      // Main Dubai destinations
+      {
+        id: "DXB-CITY",
+        code: "DXB",
+        name: "Dubai",
+        country: "United Arab Emirates",
+        type: "city",
+        flag: "🇦🇪",
+        popular: true
+      },
+      {
+        id: "DXB-MARINA",
+        code: "DXB-MARINA",
+        name: "Dubai Marina",
+        country: "United Arab Emirates",
+        type: "district",
+        flag: "🇦🇪"
+      },
+      {
+        id: "DXB-DOWNTOWN",
+        code: "DXB-DOWNTOWN",
+        name: "Downtown Dubai",
+        country: "United Arab Emirates",
+        type: "district",
+        flag: "🇦🇪"
+      },
+      {
+        id: "DXB-JBR",
+        code: "DXB-JBR",
+        name: "JBR - Jumeirah Beach Residence",
+        country: "United Arab Emirates",
+        type: "district",
+        flag: "🇦🇪"
+      },
+      // Top attractions
+      {
+        id: "DUBAI-FOUNTAIN",
+        code: "DUBAI-FOUNTAIN",
+        name: "The Dubai Fountain",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "BURJ-KHALIFA",
+        code: "BURJ-KHALIFA",
+        name: "Burj Khalifa",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "DUBAI-MALL",
+        code: "DUBAI-MALL",
+        name: "The Dubai Mall",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "DUBAI-FRAME",
+        code: "DUBAI-FRAME",
+        name: "Dubai Frame",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "ATLANTIS-PALM",
+        code: "ATLANTIS-PALM",
+        name: "Atlantis The Palm",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "DUBAI-MIRACLE-GARDEN",
+        code: "DUBAI-MIRACLE-GARDEN",
+        name: "Dubai Miracle Garden",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "GOLD-SOUKS",
+        code: "GOLD-SOUKS",
+        name: "Gold & Spice Souks",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      },
+      {
+        id: "LEGOLAND-DUBAI",
+        code: "LEGOLAND-DUBAI",
+        name: "Legoland Dubai",
+        country: "United Arab Emirates",
+        type: "theme-park",
+        flag: "🇦🇪"
+      },
+      {
+        id: "IMG-WORLDS",
+        code: "IMG-WORLDS",
+        name: "IMG Worlds of Adventure",
+        country: "United Arab Emirates",
+        type: "theme-park",
+        flag: "🇦🇪"
+      },
+      {
+        id: "DUBAI-AQUARIUM",
+        code: "DUBAI-AQUARIUM",
+        name: "Dubai Aquarium & Underwater Zoo",
+        country: "United Arab Emirates",
+        type: "attraction",
+        flag: "🇦🇪"
+      }
+    ];
+  };
+
   // Debounced destination search
   const searchDestinations = useCallback(
     async (query: string) => {
@@ -196,6 +317,22 @@ export function SightseeingSearchForm() {
       setLoadingDestinations(true);
       try {
         console.log("🔍 Searching sightseeing destinations for:", query);
+
+        // Check if searching for Dubai - show specific attractions
+        const lowerQuery = query.toLowerCase();
+        if (lowerQuery.includes('dubai') || lowerQuery.includes('dxb')) {
+          const dubaiAttractions = getDubaiAttractions();
+          // Filter attractions based on query
+          const filteredAttractions = dubaiAttractions.filter(attraction =>
+            attraction.name.toLowerCase().includes(lowerQuery) ||
+            attraction.country.toLowerCase().includes(lowerQuery)
+          );
+          setDestinationSuggestions(filteredAttractions);
+          console.log("✅ Found", filteredAttractions.length, "Dubai sightseeing destinations");
+          return;
+        }
+
+        // Fallback to regular search
         const results = await hotelsService.searchDestinations(query, 10);
         const formattedResults = results.map((dest) => ({
           id: dest.id,
