@@ -189,7 +189,7 @@ export function SightseeingCard({
               alt={attraction.name}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            
+
             {/* Image navigation */}
             {attraction.images.length > 1 && (
               <>
@@ -205,7 +205,7 @@ export function SightseeingCard({
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
-                
+
                 {/* Image indicators */}
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
                   {attraction.images.map((_, index) => (
@@ -226,7 +226,8 @@ export function SightseeingCard({
             {/* Overlays */}
             <div className="absolute top-3 left-3 flex flex-col gap-2">
               <Badge className={categoryInfo.color}>
-                {categoryInfo.icon} {categoryInfo.label}
+                <categoryInfo.IconComponent className="w-3 h-3 mr-1 inline-block" />
+                {categoryInfo.label}
               </Badge>
               {savings > 0 && (
                 <Badge className="bg-red-500 text-white">
