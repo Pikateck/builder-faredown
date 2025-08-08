@@ -109,6 +109,11 @@ export default function Hotels() {
   // User state
   const userName = user?.name || "Zubin Aibara";
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // Handle sign out
   const handleSignOut = () => {
     logout();
