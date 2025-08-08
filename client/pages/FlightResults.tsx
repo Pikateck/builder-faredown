@@ -589,6 +589,8 @@ export default function FlightResults() {
           children,
           cabinClass: cabinClass as any,
           tripType: searchTripType,
+          promoCode: searchParams.get("promoCode") || undefined,
+          userId: user?.id || undefined,
         };
 
         const flightResults = await flightsService.searchFlights(searchRequest);
