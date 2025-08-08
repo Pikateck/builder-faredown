@@ -305,7 +305,7 @@ export default function Sightseeing() {
                       variant="ghost"
                       className="text-white hover:text-[#e7f0fa] hover:bg-blue-600 text-sm px-3 py-2"
                     >
-                      {selectedCurrency}
+                      {selectedCurrency.symbol} {selectedCurrency.code}
                       <ChevronDown className="ml-1 h-3 w-3" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -314,7 +314,7 @@ export default function Sightseeing() {
                       <DropdownMenuItem
                         key={currency.code}
                         onClick={() => {
-                          setCurrency(currency.code);
+                          setCurrency(currency);
                           setShowCurrencyDropdown(false);
                         }}
                         className={cn(
