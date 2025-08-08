@@ -1240,6 +1240,83 @@ export default function Index() {
             </div>
           </div>
         </div>
+
+        {/* Mobile Sightseeing Section */}
+        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "sightseeing" ? "" : "hidden"}`}>
+          <div className="px-4 pt-6">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold mb-2">
+                Discover Amazing Experiences
+              </h1>
+              <p className="text-blue-200 text-sm mb-3">
+                Explore fascinating attractions, cultural landmarks, and exciting activities...
+              </p>
+            </div>
+
+            {/* Mobile Sightseeing Search Form */}
+            <SightseeingSearchForm />
+          </div>
+        </div>
+
+        {/* Mobile Hotels Section */}
+        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}>
+          <div className="px-4 pt-6">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold mb-2">
+                Find your next stay
+              </h1>
+              <p className="text-blue-200 text-sm mb-3">
+                Search low prices on hotels, homes and much more...
+              </p>
+            </div>
+
+            {/* Mobile Hotel Search Form */}
+            <BookingSearchForm />
+          </div>
+        </div>
+
+        {/* Mobile Features Section */}
+        <div className="bg-gray-50 py-8">
+          <div className="px-4">
+            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
+              Why Faredown?
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
+                <p className="text-xs text-gray-600">
+                  Negotiate real-time prices
+                </p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <TrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
+                <p className="text-xs text-gray-600">
+                  Pay what you feel is fair
+                </p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
+                <p className="text-xs text-gray-600">Instant confirmations</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
+                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Headphones className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
+                <p className="text-xs text-gray-600">Always here to help</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Mobile Navigation */}
