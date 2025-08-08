@@ -847,12 +847,12 @@ export function SightseeingSearchForm() {
           <label className="text-sm font-medium text-gray-700">
             Guests
           </label>
-          <Popover open={isGuestPopoverOpen} onOpenChange={setIsGuestPopoverOpen}>
+          <Popover open={isGuestPopoverOpenDesktop} onOpenChange={setIsGuestPopoverOpenDesktop}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-sm px-3"
-                onClick={() => setIsGuestPopoverOpen(true)}
+                onClick={() => setIsGuestPopoverOpenDesktop(true)}
               >
                 <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate text-sm">
