@@ -59,6 +59,7 @@ import {
   MobileTravelers,
 } from "@/components/MobileDropdowns";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
+import { scrollToTopOnRouteChange } from "@/utils/scrollUtils";
 
 export default function Sightseeing() {
   const navigate = useNavigate();
