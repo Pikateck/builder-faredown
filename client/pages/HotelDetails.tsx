@@ -150,6 +150,9 @@ export default function HotelDetails() {
   }, [showSaveDropdown]);
   const [bargainingRoomId, setBargainingRoomId] = useState<string | null>(null);
   const [bargainedRooms, setBargainedRooms] = useState<Set<string>>(new Set());
+
+  // Initialize bargain hook for consistent UI
+  const bargainHook = useBargainPhase1();
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState(100);
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
