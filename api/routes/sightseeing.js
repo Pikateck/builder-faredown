@@ -639,4 +639,179 @@ router.get('/bookings', async (req, res) => {
   }
 });
 
+// Import voucher service
+const SightseeingVoucherService = require('../services/sightseeingVoucherService');
+const voucherService = new SightseeingVoucherService();
+
+// Route: Generate voucher for booking
+router.post('/voucher/generate/:bookingId', async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    const result = await voucherService.generateVoucher(bookingId);
+
+    if (result.success) {
+      res.json({
+        success: true,
+        message: 'Voucher generated successfully',
+        voucher: result.voucher,
+        qr_code: result.qr_code
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        error: 'Failed to generate voucher'
+      });
+    }
+
+  } catch (error) {
+    console.error('Generate voucher error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate voucher',
+      details: error.message
+    });
+  }
+});
+
+// Route: Get voucher by booking ID
+router.get('/voucher/:bookingId', async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    const result = await voucherService.getVoucherByBookingId(bookingId);
+
+    if (result.success) {
+      res.json({
+        success: true,
+        voucher: result.voucher,
+        pdf_exists: result.pdf_exists
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        error: result.error
+      });
+    }
+
+  } catch (error) {
+    console.error('Get voucher error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get voucher',
+      details: error.message
+    });
+  }
+});
+
+// Route: Download voucher PDF
+router.get('/voucher/:bookingId/download', async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    const result = await voucherService.getVoucherByBookingId(bookingId);
+
+    if (!result.success || !result.voucher) {
+      return res.status(404).json({
+        success: false,
+        error: 'Voucher not found'
+      });
+    }
+
+    const fs = require('fs');
+    if (!fs.existsSync(result.voucher.pdf_path)) {
+      return res.status(404).json({
+        success: false,
+        error: 'Voucher PDF file not found'
+      });
+    }
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="sightseeing-voucher-${result.voucher.voucher_number}.pdf"`);
+
+    const fileStream = fs.createReadStream(result.voucher.pdf_path);
+    fileStream.pipe(res);
+
+  } catch (error) {
+    console.error('Download voucher error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to download voucher',
+      details: error.message
+    });
+  }
+});
+
+// Route: Verify voucher by QR code
+router.post('/voucher/verify', async (req, res) => {
+  try {
+    const { qr_data } = req.body;
+
+    if (!qr_data) {
+      return res.status(400).json({
+        success: false,
+        error: 'QR code data is required'
+      });
+    }
+
+    const result = await voucherService.verifyVoucher(qr_data);
+
+    res.json(result);
+
+  } catch (error) {
+    console.error('Verify voucher error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to verify voucher',
+      details: error.message
+    });
+  }
+});
+
+// Route: Verify voucher by booking reference (simple verification)
+router.get('/voucher/verify/:bookingRef', async (req, res) => {
+  try {
+    const { bookingRef } = req.params;
+
+    const booking = await voucherService.getBookingDetailsByRef(bookingRef);
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        error: 'Booking not found'
+      });
+    }
+
+    const visitDate = new Date(booking.visit_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    visitDate.setHours(0, 0, 0, 0);
+
+    const isValidDate = visitDate >= today;
+
+    res.json({
+      success: true,
+      booking: {
+        booking_ref: booking.booking_ref,
+        activity_name: booking.activity_name,
+        guest_name: booking.guest_name,
+        visit_date: booking.visit_date,
+        visit_time: booking.visit_time,
+        guest_count: booking.adults_count + booking.children_count,
+        status: booking.status
+      },
+      valid_for_today: isValidDate,
+      verification_time: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Verify voucher by ref error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to verify voucher',
+      details: error.message
+    });
+  }
+});
+
 module.exports = router;
