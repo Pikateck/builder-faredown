@@ -293,12 +293,12 @@ export function SightseeingCard({
             </div>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
               {attraction.description}
             </p>
 
             {/* Features */}
-            <div className="flex flex-wrap gap-1 mb-4">
+            <div className="flex flex-wrap gap-1 mb-3">
               {attraction.features.slice(0, 3).map((feature, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
                   {feature}
