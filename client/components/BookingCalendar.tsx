@@ -492,7 +492,7 @@ export function BookingCalendar({
             inputRanges={[]}
             preventSnapRefocus={true}
             calendarFocus="forwards"
-            minDate={new Date()}
+            minDate={tomorrow}
           />
         </div>
 
