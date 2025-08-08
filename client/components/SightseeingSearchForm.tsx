@@ -74,7 +74,13 @@ export function SightseeingSearchForm() {
     DestinationOption[]
   >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  const [visitDate, setVisitDate] = useState<Date | undefined>(new Date());
+  // Set default dates to future dates (tomorrow and day after)
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const dayAfterTomorrow = new Date();
+  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+
+  const [visitDate, setVisitDate] = useState<Date | undefined>(tomorrow);
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [experienceType, setExperienceType] = useState("any");
   const [duration, setDuration] = useState("any");
