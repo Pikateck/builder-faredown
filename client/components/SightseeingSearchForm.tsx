@@ -237,10 +237,15 @@ export function SightseeingSearchForm() {
     setDestination(value);
     setIsUserTyping(true);
 
-    // Ensure popovers stay open when typing
+    // Keep the appropriate popover open when typing
+    // Only open if neither is already open to avoid conflicts
     if (!isDestinationOpenMobile && !isDestinationOpenDesktop) {
-      setIsDestinationOpenMobile(true);
-      setIsDestinationOpenDesktop(true);
+      // Open the appropriate one based on screen size
+      if (window.innerWidth < 768) {
+        setIsDestinationOpenMobile(true);
+      } else {
+        setIsDestinationOpenDesktop(true);
+      }
     }
 
     // Clear previous timeout
