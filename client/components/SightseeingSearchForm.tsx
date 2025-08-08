@@ -441,9 +441,9 @@ export function SightseeingSearchForm() {
             What would you like to see?
           </label>
           <Popover open={isDestinationOpenMobile} onOpenChange={setIsDestinationOpenMobile}>
-            <PopoverTrigger asChild>
-              <div className="relative cursor-pointer w-full">
-                <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
+            <div className="relative w-full">
+              <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
+              <PopoverTrigger asChild>
                 <Input
                   className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation cursor-pointer"
                   placeholder="Enter destination or attraction"
@@ -452,21 +452,21 @@ export function SightseeingSearchForm() {
                   onFocus={() => setIsDestinationOpenMobile(true)}
                   onClick={() => setIsDestinationOpenMobile(true)}
                 />
-                {inputValue && (
-                  <span
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setInputValue("");
-                      setDestination("");
-                      setDestinationCode("");
-                    }}
-                  >
-                    <X className="w-4 h-4" />
-                  </span>
-                )}
-              </div>
-            </PopoverTrigger>
+              </PopoverTrigger>
+              {inputValue && (
+                <span
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setInputValue("");
+                    setDestination("");
+                    setDestinationCode("");
+                  }}
+                >
+                  <X className="w-4 h-4" />
+                </span>
+              )}
+            </div>
             <PopoverContent className="w-80 p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white">
               <div className="max-h-80 overflow-y-auto">
                 {loadingDestinations ? (
@@ -721,9 +721,9 @@ export function SightseeingSearchForm() {
             Destination
           </label>
           <Popover open={isDestinationOpenDesktop} onOpenChange={setIsDestinationOpenDesktop}>
-            <PopoverTrigger asChild>
-              <div className="relative cursor-pointer w-full">
-                <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
+            <div className="relative w-full">
+              <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
+              <PopoverTrigger asChild>
                 <Input
                   className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm cursor-pointer"
                   placeholder="Where do you want to explore?"
@@ -732,21 +732,21 @@ export function SightseeingSearchForm() {
                   onFocus={() => setIsDestinationOpenDesktop(true)}
                   onClick={() => setIsDestinationOpenDesktop(true)}
                 />
-                {inputValue && (
-                  <span
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setInputValue("");
-                      setDestination("");
-                      setDestinationCode("");
-                    }}
-                  >
-                    <X className="w-4 h-4" />
-                  </span>
-                )}
-              </div>
-            </PopoverTrigger>
+              </PopoverTrigger>
+              {inputValue && (
+                <span
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setInputValue("");
+                    setDestination("");
+                    setDestinationCode("");
+                  }}
+                >
+                  <X className="w-4 h-4" />
+                </span>
+              )}
+            </div>
             <PopoverContent className="w-[520px] p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white">
               <div className="max-h-80 overflow-y-auto">
                 {loadingDestinations ? (
