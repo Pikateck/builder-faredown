@@ -259,9 +259,9 @@ export function SightseeingCard({
           </div>
 
           {/* Content Section */}
-          <div className="p-4">
+          <div className="p-3">
             {/* Header */}
-            <div className="mb-3">
+            <div className="mb-2">
               <div className="flex items-start justify-between mb-2">
                 <h3 className="text-lg font-bold text-gray-900 line-clamp-2 pr-2">
                   {attraction.name}
