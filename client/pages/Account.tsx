@@ -309,7 +309,7 @@ export default function Account() {
                       </h4>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <MapPin className="w-4 h-4" />
-                        <span>BOM → DXB</span>
+                        <span>BOM ��� DXB</span>
                       </div>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <Calendar className="w-4 h-4" />
@@ -1376,15 +1376,9 @@ Please keep this ticket for your records.
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuItem>
-                        <Link to="/my-account" className="flex items-center">
-                          <User className="w-4 h-4 mr-2" />
-                          My account
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link to="/account/trips" className="flex items-center">
+                        <Link to="/bookings" className="flex items-center">
                           <BookOpen className="w-4 h-4 mr-2" />
-                          Bookings & Trips
+                          My Bookings
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
