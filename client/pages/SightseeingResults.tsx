@@ -768,13 +768,14 @@ export default function SightseeingResults() {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {filteredAndSortedAttractions.map((attraction) => (
                   <SightseeingCard
                     key={attraction.id}
                     attraction={attraction}
                     onBargainClick={() => handleBargainClick(attraction, searchParams)}
                     searchParams={searchParams}
+                    className="transition-all hover:shadow-md"
                   />
                 ))}
               </div>
