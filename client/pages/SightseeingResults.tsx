@@ -272,9 +272,9 @@ export default function SightseeingResults() {
             name: "Dubai Marina Yacht Cruise",
             location: `${destinationName || "Dubai"} Marina, UAE`,
             images: [
-              "/api/placeholder/400/300",
-              "/api/placeholder/400/300",
-              "/api/placeholder/400/300",
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F0e24b4a5623f4ee6ae7ed5c2b64e2e73?format=webp&width=800",
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F0e24b4a5623f4ee6ae7ed5c2b64e2e73?format=webp&width=800",
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F0e24b4a5623f4ee6ae7ed5c2b64e2e73?format=webp&width=800",
             ],
             rating: 4.5,
             reviews: 12487,
