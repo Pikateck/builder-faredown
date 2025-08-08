@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { BookingCalendar } from "@/components/BookingCalendar";
+import { Calendar } from "@/components/ui/calendar";
 import { MobileDatePicker } from "@/components/MobileDropdowns";
 import {
   Select,
