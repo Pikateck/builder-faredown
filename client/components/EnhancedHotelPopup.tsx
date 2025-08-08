@@ -265,6 +265,7 @@ export function EnhancedHotelPopup({
                     for {nights} {nights === 1 ? "night" : "nights"}
                   </span>
                 </div>
+                
               </div>
               <p className="text-sm text-gray-600 mt-1">
                 Includes taxes and fees
@@ -407,7 +408,7 @@ export function EnhancedHotelPopup({
                     </div>
                     <div className="text-xs text-gray-600">
                       <p>• Walking distance to major attractions</p>
-                      <p>• Close to public transportation</p>
+                      <p>�� Close to public transportation</p>
                       <p>• Easy airport access</p>
                     </div>
                   </div>
@@ -438,7 +439,7 @@ export function EnhancedHotelPopup({
                   });
                   navigate(`/reserve?${params.toString()}`);
                 }}
-                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold"
               >
                 <TrendingDown className="w-4 h-4 mr-2" />
                 Bargain
