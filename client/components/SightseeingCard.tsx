@@ -374,7 +374,8 @@ export function SightseeingCard({
             {/* Overlays */}
             <div className="absolute top-3 left-3 flex flex-col gap-2">
               <Badge className={categoryInfo.color}>
-                {categoryInfo.icon} {categoryInfo.label}
+                <categoryInfo.IconComponent className="w-3 h-3 mr-1 inline-block" />
+                {categoryInfo.label}
               </Badge>
               {savings > 0 && (
                 <Badge className="bg-red-500 text-white">
