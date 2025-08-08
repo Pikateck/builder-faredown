@@ -41,7 +41,7 @@ import {
   type BargainPricingResult,
   type CounterOfferResponse,
 } from "@/services/bargainPricingService";
-import { formatPriceNoDecimalsNoDecimals } from "@/lib/formatPriceNoDecimals";
+import { formatPriceNoDecimals } from "@/lib/formatPrice";
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
