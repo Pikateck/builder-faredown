@@ -28,7 +28,9 @@ export function BookingCalendar({
 }: BookingCalendarProps) {
   const [selection, setSelection] = useState(() => {
     const startDate = initialRange?.startDate || new Date();
-    const endDate = initialRange?.endDate || addDays(startDate, 3);
+    // For sightseeing, default to same day (single day activity)
+    const defaultDays = bookingType === "sightseeing" ? 1 : 3;
+    const endDate = initialRange?.endDate || addDays(startDate, defaultDays);
 
     console.log("Initial calendar range:", { startDate, endDate, bookingType });
 
