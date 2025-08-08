@@ -120,7 +120,6 @@ export default function HotelDetails() {
     return tabParam || "overview";
   });
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
-  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
