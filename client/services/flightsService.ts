@@ -165,6 +165,8 @@ export class FlightsService {
       children: searchParams.children || 0,
       cabinClass: searchParams.cabinClass?.toUpperCase() || "ECONOMY",
       tripType: searchParams.tripType || "one_way", // Ensure trip type is passed
+      promoCode: searchParams.promoCode,
+      userId: searchParams.userId,
     };
 
     const response = await apiClient.get<ApiResponse<Flight[]>>(
