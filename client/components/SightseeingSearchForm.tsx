@@ -183,7 +183,7 @@ export function SightseeingSearchForm() {
             name: "Mumbai",
             country: "India",
             type: "city",
-            flag: "🇮��",
+            flag: "🇮🇳",
           },
         ]);
         setPopularDestinationsLoaded(true);
@@ -298,11 +298,6 @@ export function SightseeingSearchForm() {
       return;
     }
 
-    if (guests.adults === 0) {
-      setErrorMessage("At least 1 adult is required");
-      setShowError(true);
-      return;
-    }
 
     // Build search parameters
     const searchParams = new URLSearchParams({
