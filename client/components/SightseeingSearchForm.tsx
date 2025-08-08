@@ -707,7 +707,7 @@ export function SightseeingSearchForm() {
           <label className="text-sm font-medium text-gray-700">
             Destination
           </label>
-          <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
+          <Popover open={isDestinationOpenDesktop} onOpenChange={setIsDestinationOpenDesktop}>
             <PopoverTrigger asChild>
               <div className="relative cursor-pointer w-full">
                 <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
