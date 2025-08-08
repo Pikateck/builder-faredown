@@ -352,7 +352,16 @@ export function SightseeingSearchForm() {
     }
 
     console.log("🎭 Searching sightseeing with params:", searchParams.toString());
-    navigate(`/sightseeing/results?${searchParams.toString()}`);
+    console.log("🎭 Navigating to:", `/sightseeing/results?${searchParams.toString()}`);
+
+    try {
+      navigate(`/sightseeing/results?${searchParams.toString()}`);
+      console.log("✅ Navigation successful");
+    } catch (error) {
+      console.error("❌ Navigation failed:", error);
+      setErrorMessage("Navigation failed. Please try again.");
+      setShowError(true);
+    }
   };
 
   const handleSearch = () => {
