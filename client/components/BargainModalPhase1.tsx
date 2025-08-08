@@ -48,7 +48,7 @@ interface BargainModalPhase1Props {
   onClose: () => void;
   onBookingConfirmed: (finalPrice: number) => void;
   itemDetails: {
-    type: "flight" | "hotel";
+    type: "flight" | "hotel" | "sightseeing";
     itemId: string;
     title: string;
     basePrice: number;
@@ -62,6 +62,11 @@ interface BargainModalPhase1Props {
     hotelName?: string;
     starRating?: string;
     roomCategory?: string;
+    // Sightseeing specific
+    location?: string;
+    category?: string;
+    duration?: string;
+    activityName?: string;
   };
   promoCode?: string;
   userLocation?: string;
