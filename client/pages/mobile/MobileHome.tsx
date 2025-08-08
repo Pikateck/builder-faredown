@@ -227,7 +227,7 @@ const MobileHome = () => {
                 { icon: Plane, label: "Flights", path: "/flights" },
                 { icon: Hotel, label: "Hotels", path: "/hotels" },
                 { icon: Car, label: "Transfers", path: "/transfers" },
-                { icon: User, label: "My Account", path: "/account" },
+                { icon: BookOpen, label: "My Bookings", path: "/bookings" },
                 {
                   icon: Settings,
                   label: "Settings",
