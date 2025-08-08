@@ -676,18 +676,9 @@ export default function HotelDetails() {
 
   const handleBargainClick = (roomType: any) => {
     console.log("Bargain clicked for room:", roomType.id);
-    const bargainItem = createHotelBargainItem({
-      id: hotel.id,
-      name: hotel.name,
-      city: hotel.location,
-      starRating: hotel.rating?.toString() || "4",
-      roomCategory: roomType.name || "Standard Room",
-      price: roomType.pricePerNight || roomType.totalPrice || 0,
-    });
-
-    bargainHook.startBargain(bargainItem);
     setSelectedRoomType(roomType);
     setBargainingRoomId(roomType.id);
+    setIsBargainModalOpen(true);
   };
 
   const handleFilterChange = (category: string, filterName: string) => {
