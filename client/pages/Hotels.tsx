@@ -43,6 +43,10 @@ import {
   Menu,
   LogOut,
   Code,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
 import {
   MobileCityDropdown,
