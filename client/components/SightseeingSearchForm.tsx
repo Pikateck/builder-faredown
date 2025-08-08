@@ -341,6 +341,13 @@ export function SightseeingSearchForm() {
   };
 
   const handleSearch = () => {
+    console.log("🔍 Search button clicked!", {
+      destination,
+      destinationCode,
+      inputValue,
+      visitDate,
+      guests
+    });
     validateAndSearch();
   };
 
