@@ -158,7 +158,7 @@ export function SightseeingSearchForm() {
             name: "London",
             country: "United Kingdom",
             type: "city",
-            flag: "🇬🇧",
+            flag: "🇬��",
           },
           {
             id: "BCN",
@@ -451,7 +451,13 @@ export function SightseeingSearchForm() {
           <label className="text-sm font-medium text-gray-700">
             What would you like to see?
           </label>
-          <Popover open={isDestinationOpenMobile} onOpenChange={setIsDestinationOpenMobile}>
+          <Popover
+            open={isDestinationOpenMobile}
+            onOpenChange={(open) => {
+              console.log('🎯 Mobile destination popover state changed:', open);
+              setIsDestinationOpenMobile(open);
+            }}
+          >
             <div className="relative w-full">
               <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
               <PopoverTrigger asChild>
