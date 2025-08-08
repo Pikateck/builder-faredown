@@ -77,7 +77,7 @@ export default function SightseeingResults() {
   const [error, setError] = useState("");
 
   // Filter and sort states
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [sortBy, setSortBy] = useState("recommended");
@@ -656,22 +656,8 @@ export default function SightseeingResults() {
               </div>
             </div>
             
-            {/* Desktop: Filter and Sort */}
+            {/* Desktop: Sort only (filters always visible) */}
             <div className="hidden md:flex items-center gap-3">
-              <Button
-                variant="outline"
-                onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2"
-              >
-                <Filter className="w-4 h-4" />
-                Filters
-                {getActiveFilterCount() > 0 && (
-                  <Badge variant="secondary" className="ml-1">
-                    {getActiveFilterCount()}
-                  </Badge>
-                )}
-              </Button>
-              
               <div className="relative">
                 <select
                   value={sortBy}
@@ -720,9 +706,8 @@ export default function SightseeingResults() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Desktop Filters Sidebar */}
-          {showFilters && (
-            <div className="hidden md:block w-80 bg-white rounded-lg shadow-sm border h-fit sticky top-24">
+          {/* Desktop Filters Sidebar - Always visible */}
+          <div className="hidden md:block w-80 bg-white rounded-lg shadow-sm border h-fit sticky top-24">
               <div className="p-4 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-gray-900">Filters</h3>
@@ -785,7 +770,6 @@ export default function SightseeingResults() {
                 ))}
               </div>
             </div>
-          )}
 
           {/* Attractions List */}
           <div className="flex-1">
