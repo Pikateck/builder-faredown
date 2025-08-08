@@ -247,12 +247,12 @@ export function Header({ className }: HeaderProps) {
                       variant="ghost"
                       className="w-full justify-start text-white hover:text-blue-200 hover:bg-blue-600"
                       onClick={() => {
-                        navigate("/my-trips");
+                        navigate("/bookings");
                         setShowMobileMenu(false);
                       }}
                     >
                       <BookOpen className="w-4 h-4 mr-2" />
-                      My Trips
+                      My Bookings
                     </Button>
                     <Button
                       variant="ghost"
