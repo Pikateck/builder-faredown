@@ -79,6 +79,11 @@ export function SightseeingCard({
   const savings = attraction.originalPrice - attraction.currentPrice;
   const savingsPercentage = Math.round((savings / attraction.originalPrice) * 100);
 
+  // Handle star/reviews click to navigate to details with reviews tab
+  const handleReviewsClick = () => {
+    navigate(`/sightseeing/${attraction.id}?tab=reviews`);
+  };
+
   // Get category display info - matches filter icons exactly
   const getCategoryInfo = (category: string) => {
     switch (category) {
