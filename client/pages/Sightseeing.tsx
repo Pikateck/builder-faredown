@@ -276,7 +276,7 @@ export default function Sightseeing() {
               {/* CENTERED NAVIGATION */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <Link
-                  to="/flights"
+                  to="/?tab=flights"
                   onClick={scrollToTopOnRouteChange}
                   className={cn(
                     "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
@@ -286,7 +286,7 @@ export default function Sightseeing() {
                   <span>Flights</span>
                 </Link>
                 <Link
-                  to="/hotels"
+                  to="/?tab=hotels"
                   onClick={scrollToTopOnRouteChange}
                   className={cn(
                     "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
@@ -296,7 +296,7 @@ export default function Sightseeing() {
                   <span>Hotels</span>
                 </Link>
                 <Link
-                  to="/sightseeing"
+                  to="/?tab=sightseeing"
                   onClick={scrollToTopOnRouteChange}
                   className={cn(
                     "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
