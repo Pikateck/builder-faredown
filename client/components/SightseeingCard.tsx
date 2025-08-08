@@ -18,6 +18,10 @@ import {
   Ticket,
   CheckCircle,
   Info,
+  Building2,
+  Mountain,
+  Utensils,
+  Music,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
