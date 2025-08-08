@@ -436,8 +436,8 @@ export function SightseeingSearchForm() {
                   placeholder="Enter destination or attraction"
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
-                  onFocus={() => setIsDestinationOpen(true)}
-                  onClick={() => setIsDestinationOpen(true)}
+                  onFocus={() => setIsDestinationOpenMobile(true)}
+                  onClick={() => setIsDestinationOpenMobile(true)}
                 />
                 {inputValue && (
                   <span
