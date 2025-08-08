@@ -1,438 +1,524 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Calendar,
-  Clock,
-  MapPin,
-  Star,
-  Users,
-  Camera,
-  Building2,
-  Ticket,
-  Mountain,
-  Utensils,
-  Music,
-  Edit3,
-  Trash2,
-  Plus,
-  Filter,
-  Search,
-  Download,
-  Upload,
-  Eye,
-  Settings,
-  TrendingUp,
-  DollarSign,
-  Activity,
-  Tag
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { Textarea } from '../../components/ui/textarea';
+import { Switch } from '../../components/ui/switch';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
+import { Plus, Edit, Trash2, Search, Filter, MoreHorizontal, Calendar, DollarSign, MapPin, Users } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 
 interface SightseeingItem {
   id: string;
-  activity_code: string;
-  activity_name: string;
-  activity_description: string;
+  activity_id: string;
+  name: string;
   category: string;
-  destination_name: string;
-  duration_text: string;
-  base_price: number;
+  destination: string;
+  duration: number;
+  price: number;
   currency: string;
   rating: number;
-  review_count: number;
-  is_active: boolean;
-  is_featured: boolean;
-  main_image_url: string;
+  image_url: string;
+  description: string;
+  inclusions: string[];
+  exclusions: string[];
+  available_times: string[];
+  min_capacity: number;
+  max_capacity: number;
+  status: 'active' | 'inactive';
   created_at: string;
+  updated_at: string;
 }
 
 interface SightseeingBooking {
   id: string;
-  booking_ref: string;
+  booking_reference: string;
+  activity_id: string;
   activity_name: string;
-  destination_name: string;
-  visit_date: string;
-  visit_time: string;
-  adults_count: number;
-  total_amount: number;
-  status: string;
+  user_id: string;
   guest_name: string;
   guest_email: string;
-  booking_date: string;
+  guest_phone: string;
+  visit_date: string;
+  selected_time: string;
+  guest_count: number;
+  total_price: number;
+  currency: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  payment_status: 'pending' | 'paid' | 'failed';
+  voucher_code: string;
+  special_requests: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface MarkupRule {
   id: string;
-  rule_name: string;
-  rule_type: string;
-  destination_code: string;
-  category: string;
-  markup_type: string;
-  markup_value: number;
+  name: string;
+  type: 'percentage' | 'fixed';
+  value: number;
+  conditions: {
+    destination?: string;
+    category?: string;
+    price_range?: { min: number; max: number };
+    date_range?: { start: string; end: string };
+  };
+  priority: number;
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 interface PromoCode {
   id: string;
   code: string;
-  title: string;
-  discount_type: string;
-  discount_value: number;
-  usage_count: number;
+  type: 'percentage' | 'fixed';
+  value: number;
+  min_booking_amount: number;
+  max_discount_amount: number;
   usage_limit: number;
+  used_count: number;
   valid_from: string;
-  valid_to: string;
+  valid_until: string;
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
-export default function SightseeingManagement() {
+const SightseeingManagement: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('activities');
   const [activities, setActivities] = useState<SightseeingItem[]>([]);
   const [bookings, setBookings] = useState<SightseeingBooking[]>([]);
   const [markupRules, setMarkupRules] = useState<MarkupRule[]>([]);
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  // Modal states
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [isMarkupModalOpen, setIsMarkupModalOpen] = useState(false);
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
+  const [editingActivity, setEditingActivity] = useState<SightseeingItem | null>(null);
+  const [editingMarkup, setEditingMarkup] = useState<MarkupRule | null>(null);
+  const [editingPromo, setEditingPromo] = useState<PromoCode | null>(null);
 
   // Form states
-  const [showAddActivity, setShowAddActivity] = useState(false);
-  const [showAddMarkup, setShowAddMarkup] = useState(false);
-  const [showAddPromo, setShowAddPromo] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
-
-  const [newActivity, setNewActivity] = useState({
-    activity_code: "",
-    activity_name: "",
-    activity_description: "",
-    category: "",
-    destination_name: "",
-    duration_text: "",
-    base_price: 0,
-    main_image_url: "",
-    is_active: true,
-    is_featured: false
+  const [activityForm, setActivityForm] = useState({
+    name: '',
+    category: '',
+    destination: '',
+    duration: 0,
+    price: 0,
+    currency: 'USD',
+    description: '',
+    inclusions: '',
+    exclusions: '',
+    available_times: '',
+    min_capacity: 1,
+    max_capacity: 10,
+    status: 'active' as 'active' | 'inactive'
   });
 
-  const [newMarkupRule, setNewMarkupRule] = useState({
-    rule_name: "",
-    rule_type: "destination",
-    destination_code: "",
-    category: "",
-    markup_type: "percentage",
-    markup_value: 15,
+  const [markupForm, setMarkupForm] = useState({
+    name: '',
+    type: 'percentage' as 'percentage' | 'fixed',
+    value: 0,
+    destination: '',
+    category: '',
+    price_min: 0,
+    price_max: 0,
+    date_start: '',
+    date_end: '',
+    priority: 1,
     is_active: true
   });
 
-  const [newPromoCode, setNewPromoCode] = useState({
-    code: "",
-    title: "",
-    description: "",
-    discount_type: "percentage",
-    discount_value: 10,
-    maximum_discount: 500,
-    minimum_booking_amount: 100,
+  const [promoForm, setPromoForm] = useState({
+    code: '',
+    type: 'percentage' as 'percentage' | 'fixed',
+    value: 0,
+    min_booking_amount: 0,
+    max_discount_amount: 0,
     usage_limit: 100,
-    valid_from: "",
-    valid_to: "",
+    valid_from: '',
+    valid_until: '',
     is_active: true
   });
 
-  // Load data
-  useEffect(() => {
-    loadData();
-  }, []);
+  // Statistics
+  const [stats, setStats] = useState({
+    totalActivities: 0,
+    activeActivities: 0,
+    totalBookings: 0,
+    pendingBookings: 0,
+    totalRevenue: 0,
+    activePromoCodes: 0
+  });
 
-  const loadData = async () => {
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
+
+  const fetchData = async () => {
     setLoading(true);
     try {
-      // Load sample data (in production, these would be API calls)
-      setActivities([
-        {
-          id: "1",
-          activity_code: "burj-khalifa",
-          activity_name: "Burj Khalifa: Floors 124 and 125",
-          activity_description: "Skip the line and enjoy breathtaking views from the world's tallest building",
-          category: "landmark",
-          destination_name: "Dubai",
-          duration_text: "1-2 hours",
-          base_price: 149,
-          currency: "INR",
-          rating: 4.6,
-          review_count: 45879,
-          is_active: true,
-          is_featured: true,
-          main_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fadc752b547864028b3c403d353c64fe5?format=webp&width=800",
-          created_at: "2025-01-15T10:00:00Z"
-        },
-        {
-          id: "2",
-          activity_code: "dubai-aquarium",
-          activity_name: "Dubai Aquarium & Underwater Zoo",
-          activity_description: "Explore one of the world's largest suspended aquariums",
-          category: "museum",
-          destination_name: "Dubai",
-          duration_text: "2-3 hours",
-          base_price: 89,
-          currency: "INR",
-          rating: 4.4,
-          review_count: 23156,
-          is_active: true,
-          is_featured: false,
-          main_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb08adc2a1406489eb370c69caa7f37ee?format=webp&width=800",
-          created_at: "2025-01-15T10:00:00Z"
-        }
-      ]);
-
-      setBookings([
-        {
-          id: "1",
-          booking_ref: "SG12345678",
-          activity_name: "Burj Khalifa: Floors 124 and 125",
-          destination_name: "Dubai",
-          visit_date: "2025-08-16",
-          visit_time: "14:30",
-          adults_count: 2,
-          total_amount: 298,
-          status: "confirmed",
-          guest_name: "John Doe",
-          guest_email: "john@example.com",
-          booking_date: "2025-01-15T10:00:00Z"
-        }
-      ]);
-
-      setMarkupRules([
-        {
-          id: "1",
-          rule_name: "Dubai Premium Markup",
-          rule_type: "destination",
-          destination_code: "Dubai",
-          category: "",
-          markup_type: "percentage",
-          markup_value: 18,
-          is_active: true
-        }
-      ]);
-
-      setPromoCodes([
-        {
-          id: "1",
-          code: "SIGHTSEEING10",
-          title: "10% Off Sightseeing",
-          discount_type: "percentage",
-          discount_value: 10,
-          usage_count: 25,
-          usage_limit: 100,
-          valid_from: "2025-01-01",
-          valid_to: "2025-12-31",
-          is_active: true
-        }
-      ]);
+      switch (activeTab) {
+        case 'activities':
+          await fetchActivities();
+          break;
+        case 'bookings':
+          await fetchBookings();
+          break;
+        case 'markup':
+          await fetchMarkupRules();
+          break;
+        case 'promos':
+          await fetchPromoCodes();
+          break;
+      }
+      await fetchStats();
     } catch (error) {
-      console.error("Failed to load data:", error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "landmark": return <Building2 className="w-4 h-4" />;
-      case "museum": return <Camera className="w-4 h-4" />;
-      case "tour": return <Ticket className="w-4 h-4" />;
-      case "adventure": return <Mountain className="w-4 h-4" />;
-      case "food": return <Utensils className="w-4 h-4" />;
-      case "culture": return <Music className="w-4 h-4" />;
-      default: return <Activity className="w-4 h-4" />;
+  const fetchActivities = async () => {
+    try {
+      const response = await fetch('/api/admin/sightseeing/activities');
+      const data = await response.json();
+      setActivities(data);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    const colors = {
-      confirmed: "bg-green-100 text-green-800",
-      pending: "bg-yellow-100 text-yellow-800",
-      cancelled: "bg-red-100 text-red-800",
-      completed: "bg-blue-100 text-blue-800"
-    };
-    return <Badge className={colors[status as keyof typeof colors] || "bg-gray-100 text-gray-800"}>{status}</Badge>;
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch('/api/admin/sightseeing/bookings');
+      const data = await response.json();
+      setBookings(data);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+    }
   };
 
-  const handleAddActivity = () => {
-    // In production, this would make an API call
-    const activity: SightseeingItem = {
-      id: (activities.length + 1).toString(),
-      ...newActivity,
-      rating: 4.5,
-      review_count: 0,
-      currency: "INR",
-      created_at: new Date().toISOString()
-    };
-    setActivities([...activities, activity]);
-    setNewActivity({
-      activity_code: "",
-      activity_name: "",
-      activity_description: "",
-      category: "",
-      destination_name: "",
-      duration_text: "",
-      base_price: 0,
-      main_image_url: "",
-      is_active: true,
-      is_featured: false
-    });
-    setShowAddActivity(false);
+  const fetchMarkupRules = async () => {
+    try {
+      const response = await fetch('/api/admin/sightseeing/markup-rules');
+      const data = await response.json();
+      setMarkupRules(data);
+    } catch (error) {
+      console.error('Error fetching markup rules:', error);
+    }
   };
 
-  const handleAddMarkupRule = () => {
-    const rule: MarkupRule = {
-      id: (markupRules.length + 1).toString(),
-      ...newMarkupRule
-    };
-    setMarkupRules([...markupRules, rule]);
-    setNewMarkupRule({
-      rule_name: "",
-      rule_type: "destination",
-      destination_code: "",
-      category: "",
-      markup_type: "percentage",
-      markup_value: 15,
-      is_active: true
-    });
-    setShowAddMarkup(false);
+  const fetchPromoCodes = async () => {
+    try {
+      const response = await fetch('/api/admin/sightseeing/promo-codes');
+      const data = await response.json();
+      setPromoCodes(data);
+    } catch (error) {
+      console.error('Error fetching promo codes:', error);
+    }
   };
 
-  const handleAddPromoCode = () => {
-    const promo: PromoCode = {
-      id: (promoCodes.length + 1).toString(),
-      usage_count: 0,
-      usage_limit: newPromoCode.usage_limit,
-      ...newPromoCode
-    };
-    setPromoCodes([...promoCodes, promo]);
-    setNewPromoCode({
-      code: "",
-      title: "",
-      description: "",
-      discount_type: "percentage",
-      discount_value: 10,
-      maximum_discount: 500,
-      minimum_booking_amount: 100,
-      usage_limit: 100,
-      valid_from: "",
-      valid_to: "",
-      is_active: true
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/admin/sightseeing/stats');
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
+  const handleSaveActivity = async () => {
+    try {
+      const url = editingActivity 
+        ? `/api/admin/sightseeing/activities/${editingActivity.id}`
+        : '/api/admin/sightseeing/activities';
+      
+      const method = editingActivity ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...activityForm,
+          inclusions: activityForm.inclusions.split(',').map(i => i.trim()),
+          exclusions: activityForm.exclusions.split(',').map(i => i.trim()),
+          available_times: activityForm.available_times.split(',').map(i => i.trim())
+        })
+      });
+
+      if (response.ok) {
+        setIsActivityModalOpen(false);
+        setEditingActivity(null);
+        setActivityForm({
+          name: '', category: '', destination: '', duration: 0, price: 0,
+          currency: 'USD', description: '', inclusions: '', exclusions: '',
+          available_times: '', min_capacity: 1, max_capacity: 10, status: 'active'
+        });
+        await fetchActivities();
+      }
+    } catch (error) {
+      console.error('Error saving activity:', error);
+    }
+  };
+
+  const handleSaveMarkupRule = async () => {
+    try {
+      const url = editingMarkup 
+        ? `/api/admin/sightseeing/markup-rules/${editingMarkup.id}`
+        : '/api/admin/sightseeing/markup-rules';
+      
+      const method = editingMarkup ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...markupForm,
+          conditions: {
+            destination: markupForm.destination || undefined,
+            category: markupForm.category || undefined,
+            price_range: markupForm.price_min > 0 || markupForm.price_max > 0 
+              ? { min: markupForm.price_min, max: markupForm.price_max } 
+              : undefined,
+            date_range: markupForm.date_start && markupForm.date_end 
+              ? { start: markupForm.date_start, end: markupForm.date_end }
+              : undefined
+          }
+        })
+      });
+
+      if (response.ok) {
+        setIsMarkupModalOpen(false);
+        setEditingMarkup(null);
+        setMarkupForm({
+          name: '', type: 'percentage', value: 0, destination: '', category: '',
+          price_min: 0, price_max: 0, date_start: '', date_end: '', priority: 1, is_active: true
+        });
+        await fetchMarkupRules();
+      }
+    } catch (error) {
+      console.error('Error saving markup rule:', error);
+    }
+  };
+
+  const handleSavePromoCode = async () => {
+    try {
+      const url = editingPromo 
+        ? `/api/admin/sightseeing/promo-codes/${editingPromo.id}`
+        : '/api/admin/sightseeing/promo-codes';
+      
+      const method = editingPromo ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(promoForm)
+      });
+
+      if (response.ok) {
+        setIsPromoModalOpen(false);
+        setEditingPromo(null);
+        setPromoForm({
+          code: '', type: 'percentage', value: 0, min_booking_amount: 0,
+          max_discount_amount: 0, usage_limit: 100, valid_from: '', valid_until: '', is_active: true
+        });
+        await fetchPromoCodes();
+      }
+    } catch (error) {
+      console.error('Error saving promo code:', error);
+    }
+  };
+
+  const handleDeleteActivity = async (id: string) => {
+    if (confirm('Are you sure you want to delete this activity?')) {
+      try {
+        const response = await fetch(`/api/admin/sightseeing/activities/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          await fetchActivities();
+        }
+      } catch (error) {
+        console.error('Error deleting activity:', error);
+      }
+    }
+  };
+
+  const handleDeleteMarkupRule = async (id: string) => {
+    if (confirm('Are you sure you want to delete this markup rule?')) {
+      try {
+        const response = await fetch(`/api/admin/sightseeing/markup-rules/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          await fetchMarkupRules();
+        }
+      } catch (error) {
+        console.error('Error deleting markup rule:', error);
+      }
+    }
+  };
+
+  const handleDeletePromoCode = async (id: string) => {
+    if (confirm('Are you sure you want to delete this promo code?')) {
+      try {
+        const response = await fetch(`/api/admin/sightseeing/promo-codes/${id}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          await fetchPromoCodes();
+        }
+      } catch (error) {
+        console.error('Error deleting promo code:', error);
+      }
+    }
+  };
+
+  const editActivity = (activity: SightseeingItem) => {
+    setEditingActivity(activity);
+    setActivityForm({
+      name: activity.name,
+      category: activity.category,
+      destination: activity.destination,
+      duration: activity.duration,
+      price: activity.price,
+      currency: activity.currency,
+      description: activity.description,
+      inclusions: activity.inclusions.join(', '),
+      exclusions: activity.exclusions.join(', '),
+      available_times: activity.available_times.join(', '),
+      min_capacity: activity.min_capacity,
+      max_capacity: activity.max_capacity,
+      status: activity.status
     });
-    setShowAddPromo(false);
+    setIsActivityModalOpen(true);
+  };
+
+  const editMarkupRule = (rule: MarkupRule) => {
+    setEditingMarkup(rule);
+    setMarkupForm({
+      name: rule.name,
+      type: rule.type,
+      value: rule.value,
+      destination: rule.conditions.destination || '',
+      category: rule.conditions.category || '',
+      price_min: rule.conditions.price_range?.min || 0,
+      price_max: rule.conditions.price_range?.max || 0,
+      date_start: rule.conditions.date_range?.start || '',
+      date_end: rule.conditions.date_range?.end || '',
+      priority: rule.priority,
+      is_active: rule.is_active
+    });
+    setIsMarkupModalOpen(true);
+  };
+
+  const editPromoCode = (promo: PromoCode) => {
+    setEditingPromo(promo);
+    setPromoForm({
+      code: promo.code,
+      type: promo.type,
+      value: promo.value,
+      min_booking_amount: promo.min_booking_amount,
+      max_discount_amount: promo.max_discount_amount,
+      usage_limit: promo.usage_limit,
+      valid_from: promo.valid_from,
+      valid_until: promo.valid_until,
+      is_active: promo.is_active
+    });
+    setIsPromoModalOpen(true);
   };
 
   const filteredActivities = activities.filter(activity => {
-    const matchesSearch = activity.activity_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         activity.destination_name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || activity.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesSearch = activity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         activity.destination.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || activity.status === statusFilter;
+    return matchesSearch && matchesStatus;
   });
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  const filteredBookings = bookings.filter(booking => {
+    const matchesSearch = booking.booking_reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         booking.guest_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         booking.activity_name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || booking.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Sightseeing Management</h1>
-          <p className="text-gray-600">Manage activities, bookings, markup rules, and promotions</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Download className="w-4 h-4 mr-2" />
-            Export Data
-          </Button>
-          <Button variant="outline">
-            <Upload className="w-4 h-4 mr-2" />
-            Import Activities
-          </Button>
-        </div>
+        <h1 className="text-3xl font-bold">Sightseeing Management</h1>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Activities</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <MapPin className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{activities.length}</div>
-            <p className="text-xs text-muted-foreground">+2 from last month</p>
+            <div className="text-2xl font-bold">{stats.totalActivities}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.activeActivities} active
+            </p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Bookings</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{bookings.length}</div>
-            <p className="text-xs text-muted-foreground">+12% from last month</p>
+            <div className="text-2xl font-bold">{stats.totalBookings}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.pendingBookings} pending
+            </p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹45,231</div>
-            <p className="text-xs text-muted-foreground">+8% from last month</p>
+            <div className="text-2xl font-bold">${stats.totalRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              All time
+            </p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Promos</CardTitle>
-            <Tag className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{promoCodes.filter(p => p.is_active).length}</div>
-            <p className="text-xs text-muted-foreground">2 expiring soon</p>
+            <div className="text-2xl font-bold">{stats.activePromoCodes}</div>
+            <p className="text-xs text-muted-foreground">
+              Currently available
+            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="activities" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="activities">Activities</TabsTrigger>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
@@ -441,141 +527,33 @@ export default function SightseeingManagement() {
         </TabsList>
 
         {/* Activities Tab */}
-        <TabsContent value="activities" className="space-y-6">
+        <TabsContent value="activities" className="space-y-4">
           <div className="flex justify-between items-center">
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search activities..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-64"
+                  className="pl-8 w-[300px]"
                 />
               </div>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Filter by category" />
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="landmark">Landmarks</SelectItem>
-                  <SelectItem value="museum">Museums</SelectItem>
-                  <SelectItem value="tour">Tours</SelectItem>
-                  <SelectItem value="adventure">Adventure</SelectItem>
-                  <SelectItem value="food">Food & Dining</SelectItem>
-                  <SelectItem value="culture">Culture</SelectItem>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <Dialog open={showAddActivity} onOpenChange={setShowAddActivity}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Activity
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Add New Activity</DialogTitle>
-                  <DialogDescription>Create a new sightseeing activity</DialogDescription>
-                </DialogHeader>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="activity_code">Activity Code</Label>
-                    <Input
-                      id="activity_code"
-                      value={newActivity.activity_code}
-                      onChange={(e) => setNewActivity({...newActivity, activity_code: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="category">Category</Label>
-                    <Select value={newActivity.category} onValueChange={(value) => setNewActivity({...newActivity, category: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="landmark">Landmarks</SelectItem>
-                        <SelectItem value="museum">Museums</SelectItem>
-                        <SelectItem value="tour">Tours</SelectItem>
-                        <SelectItem value="adventure">Adventure</SelectItem>
-                        <SelectItem value="food">Food & Dining</SelectItem>
-                        <SelectItem value="culture">Culture</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="col-span-2">
-                    <Label htmlFor="activity_name">Activity Name</Label>
-                    <Input
-                      id="activity_name"
-                      value={newActivity.activity_name}
-                      onChange={(e) => setNewActivity({...newActivity, activity_name: e.target.value})}
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      value={newActivity.activity_description}
-                      onChange={(e) => setNewActivity({...newActivity, activity_description: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="destination">Destination</Label>
-                    <Input
-                      id="destination"
-                      value={newActivity.destination_name}
-                      onChange={(e) => setNewActivity({...newActivity, destination_name: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="duration">Duration</Label>
-                    <Input
-                      id="duration"
-                      value={newActivity.duration_text}
-                      onChange={(e) => setNewActivity({...newActivity, duration_text: e.target.value})}
-                      placeholder="e.g., 2-3 hours"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="price">Base Price (₹)</Label>
-                    <Input
-                      id="price"
-                      type="number"
-                      value={newActivity.base_price}
-                      onChange={(e) => setNewActivity({...newActivity, base_price: Number(e.target.value)})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="image_url">Main Image URL</Label>
-                    <Input
-                      id="image_url"
-                      value={newActivity.main_image_url}
-                      onChange={(e) => setNewActivity({...newActivity, main_image_url: e.target.value})}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={newActivity.is_featured}
-                      onCheckedChange={(checked) => setNewActivity({...newActivity, is_featured: checked})}
-                    />
-                    <Label>Featured Activity</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={newActivity.is_active}
-                      onCheckedChange={(checked) => setNewActivity({...newActivity, is_active: checked})}
-                    />
-                    <Label>Active</Label>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowAddActivity(false)}>Cancel</Button>
-                  <Button onClick={handleAddActivity}>Create Activity</Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+            <Button onClick={() => setIsActivityModalOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Activity
+            </Button>
           </div>
 
           <Card>
@@ -587,7 +565,6 @@ export default function SightseeingManagement() {
                   <TableHead>Destination</TableHead>
                   <TableHead>Duration</TableHead>
                   <TableHead>Price</TableHead>
-                  <TableHead>Rating</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -596,70 +573,50 @@ export default function SightseeingManagement() {
                 {filteredActivities.map((activity) => (
                   <TableRow key={activity.id}>
                     <TableCell>
-                      <div className="flex items-center space-x-3">
-                        <img
-                          src={activity.main_image_url}
-                          alt={activity.activity_name}
-                          className="w-12 h-12 rounded-lg object-cover"
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={activity.image_url} 
+                          alt={activity.name}
+                          className="w-10 h-10 rounded-lg object-cover"
                         />
                         <div>
-                          <div className="font-medium">{activity.activity_name}</div>
-                          <div className="text-sm text-gray-500">{activity.activity_code}</div>
+                          <div className="font-medium">{activity.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            Rating: {activity.rating}/5
+                          </div>
                         </div>
                       </div>
                     </TableCell>
+                    <TableCell>{activity.category}</TableCell>
+                    <TableCell>{activity.destination}</TableCell>
+                    <TableCell>{activity.duration}h</TableCell>
+                    <TableCell>{activity.currency} {activity.price}</TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        {getCategoryIcon(activity.category)}
-                        <span className="capitalize">{activity.category}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{activity.destination_name}</TableCell>
-                    <TableCell>{activity.duration_text}</TableCell>
-                    <TableCell>₹{activity.base_price}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span>{activity.rating}</span>
-                        <span className="text-gray-500">({activity.review_count})</span>
-                      </div>
+                      <Badge variant={activity.status === 'active' ? 'default' : 'secondary'}>
+                        {activity.status}
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        {activity.is_featured && <Badge variant="secondary">Featured</Badge>}
-                        <Badge className={activity.is_active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
-                          {activity.is_active ? "Active" : "Inactive"}
-                        </Badge>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Edit3 className="w-4 h-4" />
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Activity</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Are you sure you want to delete this activity? This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction>Delete</AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => editActivity(activity)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleDeleteActivity(activity.id)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -669,183 +626,107 @@ export default function SightseeingManagement() {
         </TabsContent>
 
         {/* Bookings Tab */}
-        <TabsContent value="bookings" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Bookings</CardTitle>
-              <CardDescription>Manage sightseeing bookings and customer information</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Booking Ref</TableHead>
-                    <TableHead>Activity</TableHead>
-                    <TableHead>Guest</TableHead>
-                    <TableHead>Visit Date</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {bookings.map((booking) => (
-                    <TableRow key={booking.id}>
-                      <TableCell className="font-medium">{booking.booking_ref}</TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{booking.activity_name}</div>
-                          <div className="text-sm text-gray-500">{booking.destination_name}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <div className="font-medium">{booking.guest_name}</div>
-                          <div className="text-sm text-gray-500">{booking.guest_email}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          <div>{booking.visit_date}</div>
-                          <div className="text-sm text-gray-500">{booking.visit_time}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>₹{booking.total_amount}</TableCell>
-                      <TableCell>{getStatusBadge(booking.status)}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Download className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Markup Rules Tab */}
-        <TabsContent value="markup" className="space-y-6">
+        <TabsContent value="bookings" className="space-y-4">
           <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold">Markup Rules</h3>
-              <p className="text-gray-600">Configure pricing markup rules for different destinations and categories</p>
+            <div className="flex gap-2">
+              <div className="relative">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search bookings..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-8 w-[300px]"
+                />
+              </div>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="confirmed">Confirmed</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Dialog open={showAddMarkup} onOpenChange={setShowAddMarkup}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Markup Rule
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add Markup Rule</DialogTitle>
-                  <DialogDescription>Create a new pricing markup rule</DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="rule_name">Rule Name</Label>
-                    <Input
-                      id="rule_name"
-                      value={newMarkupRule.rule_name}
-                      onChange={(e) => setNewMarkupRule({...newMarkupRule, rule_name: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="rule_type">Rule Type</Label>
-                    <Select value={newMarkupRule.rule_type} onValueChange={(value) => setNewMarkupRule({...newMarkupRule, rule_type: value})}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="destination">Destination</SelectItem>
-                        <SelectItem value="category">Category</SelectItem>
-                        <SelectItem value="global">Global</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {newMarkupRule.rule_type === "destination" && (
-                    <div>
-                      <Label htmlFor="destination_code">Destination</Label>
-                      <Input
-                        id="destination_code"
-                        value={newMarkupRule.destination_code}
-                        onChange={(e) => setNewMarkupRule({...newMarkupRule, destination_code: e.target.value})}
-                      />
-                    </div>
-                  )}
-                  {newMarkupRule.rule_type === "category" && (
-                    <div>
-                      <Label htmlFor="category">Category</Label>
-                      <Select value={newMarkupRule.category} onValueChange={(value) => setNewMarkupRule({...newMarkupRule, category: value})}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="landmark">Landmarks</SelectItem>
-                          <SelectItem value="museum">Museums</SelectItem>
-                          <SelectItem value="tour">Tours</SelectItem>
-                          <SelectItem value="adventure">Adventure</SelectItem>
-                          <SelectItem value="food">Food & Dining</SelectItem>
-                          <SelectItem value="culture">Culture</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                  <div>
-                    <Label htmlFor="markup_type">Markup Type</Label>
-                    <Select value={newMarkupRule.markup_type} onValueChange={(value) => setNewMarkupRule({...newMarkupRule, markup_type: value})}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="percentage">Percentage</SelectItem>
-                        <SelectItem value="fixed">Fixed Amount</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="markup_value">
-                      Markup Value {newMarkupRule.markup_type === "percentage" ? "(%)" : "(₹)"}
-                    </Label>
-                    <Input
-                      id="markup_value"
-                      type="number"
-                      value={newMarkupRule.markup_value}
-                      onChange={(e) => setNewMarkupRule({...newMarkupRule, markup_value: Number(e.target.value)})}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={newMarkupRule.is_active}
-                      onCheckedChange={(checked) => setNewMarkupRule({...newMarkupRule, is_active: checked})}
-                    />
-                    <Label>Active</Label>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowAddMarkup(false)}>Cancel</Button>
-                  <Button onClick={handleAddMarkupRule}>Create Rule</Button>
-                </div>
-              </DialogContent>
-            </Dialog>
           </div>
 
           <Card>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rule Name</TableHead>
+                  <TableHead>Reference</TableHead>
+                  <TableHead>Guest</TableHead>
+                  <TableHead>Activity</TableHead>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead>Guests</TableHead>
+                  <TableHead>Total</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Payment</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredBookings.map((booking) => (
+                  <TableRow key={booking.id}>
+                    <TableCell className="font-mono">{booking.booking_reference}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{booking.guest_name}</div>
+                        <div className="text-sm text-muted-foreground">{booking.guest_email}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{booking.activity_name}</TableCell>
+                    <TableCell>
+                      <div>
+                        <div>{new Date(booking.visit_date).toLocaleDateString()}</div>
+                        <div className="text-sm text-muted-foreground">{booking.selected_time}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{booking.guest_count}</TableCell>
+                    <TableCell>{booking.currency} {booking.total_price}</TableCell>
+                    <TableCell>
+                      <Badge variant={
+                        booking.status === 'confirmed' ? 'default' :
+                        booking.status === 'pending' ? 'secondary' : 'destructive'
+                      }>
+                        {booking.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={
+                        booking.payment_status === 'paid' ? 'default' :
+                        booking.payment_status === 'pending' ? 'secondary' : 'destructive'
+                      }>
+                        {booking.payment_status}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        </TabsContent>
+
+        {/* Markup Rules Tab */}
+        <TabsContent value="markup" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold">Markup Rules</h2>
+            <Button onClick={() => setIsMarkupModalOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Markup Rule
+            </Button>
+          </div>
+
+          <Card>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
                   <TableHead>Type</TableHead>
-                  <TableHead>Target</TableHead>
-                  <TableHead>Markup</TableHead>
+                  <TableHead>Value</TableHead>
+                  <TableHead>Conditions</TableHead>
+                  <TableHead>Priority</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -853,26 +734,55 @@ export default function SightseeingManagement() {
               <TableBody>
                 {markupRules.map((rule) => (
                   <TableRow key={rule.id}>
-                    <TableCell className="font-medium">{rule.rule_name}</TableCell>
-                    <TableCell className="capitalize">{rule.rule_type}</TableCell>
-                    <TableCell>{rule.destination_code || rule.category || "All"}</TableCell>
+                    <TableCell className="font-medium">{rule.name}</TableCell>
                     <TableCell>
-                      {rule.markup_value}{rule.markup_type === "percentage" ? "%" : " ₹"}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={rule.is_active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
-                        {rule.is_active ? "Active" : "Inactive"}
+                      <Badge variant="outline">
+                        {rule.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm">
-                          <Edit3 className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                      {rule.type === 'percentage' ? `${rule.value}%` : `$${rule.value}`}
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm">
+                        {rule.conditions.destination && (
+                          <div>Destination: {rule.conditions.destination}</div>
+                        )}
+                        {rule.conditions.category && (
+                          <div>Category: {rule.conditions.category}</div>
+                        )}
+                        {rule.conditions.price_range && (
+                          <div>Price: ${rule.conditions.price_range.min} - ${rule.conditions.price_range.max}</div>
+                        )}
                       </div>
+                    </TableCell>
+                    <TableCell>{rule.priority}</TableCell>
+                    <TableCell>
+                      <Badge variant={rule.is_active ? 'default' : 'secondary'}>
+                        {rule.is_active ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => editMarkupRule(rule)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleDeleteMarkupRule(rule.id)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -882,123 +792,13 @@ export default function SightseeingManagement() {
         </TabsContent>
 
         {/* Promo Codes Tab */}
-        <TabsContent value="promos" className="space-y-6">
+        <TabsContent value="promos" className="space-y-4">
           <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold">Promotional Codes</h3>
-              <p className="text-gray-600">Manage discount codes and promotional offers</p>
-            </div>
-            <Dialog open={showAddPromo} onOpenChange={setShowAddPromo}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Promo Code
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Add Promotional Code</DialogTitle>
-                  <DialogDescription>Create a new discount code for sightseeing bookings</DialogDescription>
-                </DialogHeader>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="code">Promo Code</Label>
-                    <Input
-                      id="code"
-                      value={newPromoCode.code}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, code: e.target.value.toUpperCase()})}
-                      placeholder="e.g., SUMMER20"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="title">Title</Label>
-                    <Input
-                      id="title"
-                      value={newPromoCode.title}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, title: e.target.value})}
-                    />
-                  </div>
-                  <div className="col-span-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      value={newPromoCode.description}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, description: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="discount_type">Discount Type</Label>
-                    <Select value={newPromoCode.discount_type} onValueChange={(value) => setNewPromoCode({...newPromoCode, discount_type: value})}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="percentage">Percentage</SelectItem>
-                        <SelectItem value="fixed">Fixed Amount</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="discount_value">
-                      Discount Value {newPromoCode.discount_type === "percentage" ? "(%)" : "(₹)"}
-                    </Label>
-                    <Input
-                      id="discount_value"
-                      type="number"
-                      value={newPromoCode.discount_value}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, discount_value: Number(e.target.value)})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="usage_limit">Usage Limit</Label>
-                    <Input
-                      id="usage_limit"
-                      type="number"
-                      value={newPromoCode.usage_limit}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, usage_limit: Number(e.target.value)})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="minimum_amount">Minimum Booking Amount (₹)</Label>
-                    <Input
-                      id="minimum_amount"
-                      type="number"
-                      value={newPromoCode.minimum_booking_amount}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, minimum_booking_amount: Number(e.target.value)})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="valid_from">Valid From</Label>
-                    <Input
-                      id="valid_from"
-                      type="date"
-                      value={newPromoCode.valid_from}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, valid_from: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="valid_to">Valid To</Label>
-                    <Input
-                      id="valid_to"
-                      type="date"
-                      value={newPromoCode.valid_to}
-                      onChange={(e) => setNewPromoCode({...newPromoCode, valid_to: e.target.value})}
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      checked={newPromoCode.is_active}
-                      onCheckedChange={(checked) => setNewPromoCode({...newPromoCode, is_active: checked})}
-                    />
-                    <Label>Active</Label>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowAddPromo(false)}>Cancel</Button>
-                  <Button onClick={handleAddPromoCode}>Create Promo Code</Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+            <h2 className="text-xl font-semibold">Promo Codes</h2>
+            <Button onClick={() => setIsPromoModalOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Promo Code
+            </Button>
           </div>
 
           <Card>
@@ -1006,8 +806,8 @@ export default function SightseeingManagement() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Code</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Discount</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Value</TableHead>
                   <TableHead>Usage</TableHead>
                   <TableHead>Valid Period</TableHead>
                   <TableHead>Status</TableHead>
@@ -1017,34 +817,57 @@ export default function SightseeingManagement() {
               <TableBody>
                 {promoCodes.map((promo) => (
                   <TableRow key={promo.id}>
-                    <TableCell className="font-mono font-medium">{promo.code}</TableCell>
-                    <TableCell>{promo.title}</TableCell>
+                    <TableCell className="font-mono font-bold">{promo.code}</TableCell>
                     <TableCell>
-                      {promo.discount_value}{promo.discount_type === "percentage" ? "%" : " ₹"}
-                    </TableCell>
-                    <TableCell>
-                      {promo.usage_count} / {promo.usage_limit || "∞"}
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div>{promo.valid_from}</div>
-                        <div className="text-gray-500">to {promo.valid_to}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={promo.is_active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
-                        {promo.is_active ? "Active" : "Inactive"}
+                      <Badge variant="outline">
+                        {promo.type === 'percentage' ? 'Percentage' : 'Fixed Amount'}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="ghost" size="sm">
-                          <Edit3 className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                      {promo.type === 'percentage' ? `${promo.value}%` : `$${promo.value}`}
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm">
+                        <div>{promo.used_count}/{promo.usage_limit}</div>
+                        <div className="text-muted-foreground">
+                          {Math.round((promo.used_count / promo.usage_limit) * 100)}% used
+                        </div>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-sm">
+                        <div>{new Date(promo.valid_from).toLocaleDateString()}</div>
+                        <div className="text-muted-foreground">
+                          to {new Date(promo.valid_until).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={promo.is_active ? 'default' : 'secondary'}>
+                        {promo.is_active ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => editPromoCode(promo)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleDeletePromoCode(promo.id)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -1053,6 +876,391 @@ export default function SightseeingManagement() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Activity Modal */}
+      <Dialog open={isActivityModalOpen} onOpenChange={setIsActivityModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {editingActivity ? 'Edit Activity' : 'Add New Activity'}
+            </DialogTitle>
+            <DialogDescription>
+              Configure activity details and availability.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Activity Name</Label>
+                <Input
+                  id="name"
+                  value={activityForm.name}
+                  onChange={(e) => setActivityForm({...activityForm, name: e.target.value})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="category">Category</Label>
+                <Select 
+                  value={activityForm.category} 
+                  onValueChange={(value) => setActivityForm({...activityForm, category: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="tours">Tours</SelectItem>
+                    <SelectItem value="attractions">Attractions</SelectItem>
+                    <SelectItem value="experiences">Experiences</SelectItem>
+                    <SelectItem value="adventure">Adventure</SelectItem>
+                    <SelectItem value="cultural">Cultural</SelectItem>
+                    <SelectItem value="food">Food & Drink</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="destination">Destination</Label>
+                <Input
+                  id="destination"
+                  value={activityForm.destination}
+                  onChange={(e) => setActivityForm({...activityForm, destination: e.target.value})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="duration">Duration (hours)</Label>
+                <Input
+                  id="duration"
+                  type="number"
+                  value={activityForm.duration}
+                  onChange={(e) => setActivityForm({...activityForm, duration: Number(e.target.value)})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="price">Price</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  value={activityForm.price}
+                  onChange={(e) => setActivityForm({...activityForm, price: Number(e.target.value)})}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                id="description"
+                value={activityForm.description}
+                onChange={(e) => setActivityForm({...activityForm, description: e.target.value})}
+                rows={3}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="inclusions">Inclusions (comma-separated)</Label>
+                <Textarea
+                  id="inclusions"
+                  value={activityForm.inclusions}
+                  onChange={(e) => setActivityForm({...activityForm, inclusions: e.target.value})}
+                  rows={2}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="exclusions">Exclusions (comma-separated)</Label>
+                <Textarea
+                  id="exclusions"
+                  value={activityForm.exclusions}
+                  onChange={(e) => setActivityForm({...activityForm, exclusions: e.target.value})}
+                  rows={2}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="available_times">Available Times (comma-separated)</Label>
+              <Input
+                id="available_times"
+                value={activityForm.available_times}
+                onChange={(e) => setActivityForm({...activityForm, available_times: e.target.value})}
+                placeholder="09:00, 11:00, 14:00, 16:00"
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="min_capacity">Min Capacity</Label>
+                <Input
+                  id="min_capacity"
+                  type="number"
+                  value={activityForm.min_capacity}
+                  onChange={(e) => setActivityForm({...activityForm, min_capacity: Number(e.target.value)})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="max_capacity">Max Capacity</Label>
+                <Input
+                  id="max_capacity"
+                  type="number"
+                  value={activityForm.max_capacity}
+                  onChange={(e) => setActivityForm({...activityForm, max_capacity: Number(e.target.value)})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="status">Status</Label>
+                <Select 
+                  value={activityForm.status} 
+                  onValueChange={(value: 'active' | 'inactive') => setActivityForm({...activityForm, status: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsActivityModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveActivity}>
+              {editingActivity ? 'Update' : 'Create'} Activity
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Markup Rule Modal */}
+      <Dialog open={isMarkupModalOpen} onOpenChange={setIsMarkupModalOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {editingMarkup ? 'Edit Markup Rule' : 'Add New Markup Rule'}
+            </DialogTitle>
+            <DialogDescription>
+              Create rules to automatically adjust pricing.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="markup-name">Rule Name</Label>
+              <Input
+                id="markup-name"
+                value={markupForm.name}
+                onChange={(e) => setMarkupForm({...markupForm, name: e.target.value})}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="markup-type">Type</Label>
+                <Select 
+                  value={markupForm.type} 
+                  onValueChange={(value: 'percentage' | 'fixed') => setMarkupForm({...markupForm, type: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="percentage">Percentage</SelectItem>
+                    <SelectItem value="fixed">Fixed Amount</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="markup-value">Value</Label>
+                <Input
+                  id="markup-value"
+                  type="number"
+                  value={markupForm.value}
+                  onChange={(e) => setMarkupForm({...markupForm, value: Number(e.target.value)})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="markup-destination">Destination (optional)</Label>
+                <Input
+                  id="markup-destination"
+                  value={markupForm.destination}
+                  onChange={(e) => setMarkupForm({...markupForm, destination: e.target.value})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="markup-category">Category (optional)</Label>
+                <Input
+                  id="markup-category"
+                  value={markupForm.category}
+                  onChange={(e) => setMarkupForm({...markupForm, category: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="price-min">Min Price (optional)</Label>
+                <Input
+                  id="price-min"
+                  type="number"
+                  value={markupForm.price_min}
+                  onChange={(e) => setMarkupForm({...markupForm, price_min: Number(e.target.value)})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="price-max">Max Price (optional)</Label>
+                <Input
+                  id="price-max"
+                  type="number"
+                  value={markupForm.price_max}
+                  onChange={(e) => setMarkupForm({...markupForm, price_max: Number(e.target.value)})}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="priority">Priority</Label>
+              <Input
+                id="priority"
+                type="number"
+                value={markupForm.priority}
+                onChange={(e) => setMarkupForm({...markupForm, priority: Number(e.target.value)})}
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="markup-active"
+                checked={markupForm.is_active}
+                onCheckedChange={(checked) => setMarkupForm({...markupForm, is_active: checked})}
+              />
+              <Label htmlFor="markup-active">Active</Label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsMarkupModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveMarkupRule}>
+              {editingMarkup ? 'Update' : 'Create'} Markup Rule
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Promo Code Modal */}
+      <Dialog open={isPromoModalOpen} onOpenChange={setIsPromoModalOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {editingPromo ? 'Edit Promo Code' : 'Add New Promo Code'}
+            </DialogTitle>
+            <DialogDescription>
+              Create promotional codes for discounts.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="promo-code">Promo Code</Label>
+              <Input
+                id="promo-code"
+                value={promoForm.code}
+                onChange={(e) => setPromoForm({...promoForm, code: e.target.value.toUpperCase()})}
+                placeholder="SUMMER20"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="promo-type">Type</Label>
+                <Select 
+                  value={promoForm.type} 
+                  onValueChange={(value: 'percentage' | 'fixed') => setPromoForm({...promoForm, type: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="percentage">Percentage</SelectItem>
+                    <SelectItem value="fixed">Fixed Amount</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="promo-value">Value</Label>
+                <Input
+                  id="promo-value"
+                  type="number"
+                  value={promoForm.value}
+                  onChange={(e) => setPromoForm({...promoForm, value: Number(e.target.value)})}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="min-booking">Min Booking Amount</Label>
+                <Input
+                  id="min-booking"
+                  type="number"
+                  value={promoForm.min_booking_amount}
+                  onChange={(e) => setPromoForm({...promoForm, min_booking_amount: Number(e.target.value)})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="max-discount">Max Discount Amount</Label>
+                <Input
+                  id="max-discount"
+                  type="number"
+                  value={promoForm.max_discount_amount}
+                  onChange={(e) => setPromoForm({...promoForm, max_discount_amount: Number(e.target.value)})}
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="usage-limit">Usage Limit</Label>
+              <Input
+                id="usage-limit"
+                type="number"
+                value={promoForm.usage_limit}
+                onChange={(e) => setPromoForm({...promoForm, usage_limit: Number(e.target.value)})}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="valid-from">Valid From</Label>
+                <Input
+                  id="valid-from"
+                  type="date"
+                  value={promoForm.valid_from}
+                  onChange={(e) => setPromoForm({...promoForm, valid_from: e.target.value})}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="valid-until">Valid Until</Label>
+                <Input
+                  id="valid-until"
+                  type="date"
+                  value={promoForm.valid_until}
+                  onChange={(e) => setPromoForm({...promoForm, valid_until: e.target.value})}
+                />
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="promo-active"
+                checked={promoForm.is_active}
+                onCheckedChange={(checked) => setPromoForm({...promoForm, is_active: checked})}
+              />
+              <Label htmlFor="promo-active">Active</Label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsPromoModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSavePromoCode}>
+              {editingPromo ? 'Update' : 'Create'} Promo Code
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
-}
+};
+
+export default SightseeingManagement;
