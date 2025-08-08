@@ -69,8 +69,6 @@ export function SightseeingSearchForm() {
   const [isDestinationOpenDesktop, setIsDestinationOpenDesktop] = useState(false);
   const [isCalendarOpenMobile, setIsCalendarOpenMobile] = useState(false);
   const [isCalendarOpenDesktop, setIsCalendarOpenDesktop] = useState(false);
-  const [isGuestPopoverOpenMobile, setIsGuestPopoverOpenMobile] = useState(false);
-  const [isGuestPopoverOpenDesktop, setIsGuestPopoverOpenDesktop] = useState(false);
 
   const [destinationSuggestions, setDestinationSuggestions] = useState<
     DestinationOption[]
