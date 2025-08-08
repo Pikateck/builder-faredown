@@ -125,6 +125,17 @@ export function Header({ className }: HeaderProps) {
                 <span>Hotels</span>
               </Link>
               <Link
+                to="/sightseeing"
+                className={cn(
+                  "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
+                  location.pathname === "/sightseeing"
+                    ? "font-semibold border-b-2 border-white"
+                    : "",
+                )}
+              >
+                <span>Sightseeing</span>
+              </Link>
+              <Link
                 to="/admin/testing"
                 className={cn(
                   "text-red-300 hover:text-red-100 cursor-pointer flex items-center py-4 bg-red-500/20 px-3 rounded-md",
@@ -210,6 +221,13 @@ export function Header({ className }: HeaderProps) {
                 onClick={() => setShowMobileMenu(false)}
               >
                 Hotels
+              </Link>
+              <Link
+                to="/sightseeing"
+                className="hover:text-blue-200 transition-colors py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Sightseeing
               </Link>
               <Link
                 to="/admin/testing"
