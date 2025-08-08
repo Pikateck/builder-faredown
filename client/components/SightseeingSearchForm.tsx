@@ -59,6 +59,9 @@ export function SightseeingSearchForm() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
+
+  // Debug: Log component initialization
+  console.log("🎭 SightseeingSearchForm initialized");
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState(""); // Store destination code
   // Separate states for mobile and desktop popovers
