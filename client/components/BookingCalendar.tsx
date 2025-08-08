@@ -469,7 +469,7 @@ export function BookingCalendar({
         </div>
 
         {/* Calendar component */}
-        <div className="p-0" onClick={(e) => console.log("🗓️ Calendar container clicked", e.target)}>
+        <div className="p-0" style={{ pointerEvents: 'auto', position: 'relative', zIndex: 1 }}>
           <DateRange
             ranges={selection}
             onChange={handleSelect}
