@@ -293,8 +293,8 @@ export function SightseeingSearchForm() {
     setErrorMessage("");
 
     // Validation checks
-    if (!destination || !destinationCode) {
-      setErrorMessage("Please select a destination");
+    if (!destination && !inputValue) {
+      setErrorMessage("Please enter a destination");
       setShowError(true);
       return;
     }
