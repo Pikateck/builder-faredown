@@ -262,9 +262,19 @@ export function SightseeingCard({
           <div className="p-3 flex flex-col h-full">
             {/* Header */}
             <div className="mb-3">
-              <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2">
-                {attraction.name}
-              </h3>
+              <div className="flex items-start justify-between mb-2">
+                <h3 className="text-lg font-bold text-gray-900 line-clamp-2 pr-2 flex-1">
+                  {attraction.name}
+                </h3>
+                <div className="text-right flex-shrink-0">
+                  <div className="text-xs text-gray-500 line-through">
+                    {formatPrice(attraction.originalPrice * adults)}
+                  </div>
+                  <div className="text-lg font-bold text-gray-900">
+                    {formatPrice(attraction.currentPrice * adults)}
+                  </div>
+                </div>
+              </div>
 
               <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
                 <div className="flex items-center gap-1">
@@ -277,16 +287,21 @@ export function SightseeingCard({
                 </div>
               </div>
 
-              <div
-                className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={handleReviewsClick}
-                title="Click to view reviews"
-              >
-                <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                <span className="font-medium text-gray-900">{attraction.rating}</span>
-                <span className="text-sm text-gray-500">
-                  ({attraction.reviews.toLocaleString()} reviews)
-                </span>
+              <div className="flex items-center justify-between">
+                <div
+                  className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={handleReviewsClick}
+                  title="Click to view reviews"
+                >
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <span className="font-medium text-gray-900">{attraction.rating}</span>
+                  <span className="text-sm text-gray-500">
+                    ({attraction.reviews.toLocaleString()} reviews)
+                  </span>
+                </div>
+                <div className="text-xs text-green-600 font-medium">
+                  Save {formatPrice((attraction.originalPrice - attraction.currentPrice) * adults)}
+                </div>
               </div>
             </div>
 
