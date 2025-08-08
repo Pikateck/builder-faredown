@@ -259,7 +259,7 @@ export function SightseeingSearchForm() {
   const handleMobileDateSelect = (range: { startDate: Date; endDate: Date }) => {
     console.log('📅 Mobile date range selected:', range);
     setVisitDate(range.startDate);
-    // For sightseeing, we only need the start date (visit date)
+    setEndDate(range.endDate);
     setIsCalendarOpenMobile(false);
   };
 
@@ -267,7 +267,7 @@ export function SightseeingSearchForm() {
   const handleDesktopDateSelect = (range: { startDate: Date; endDate: Date }) => {
     console.log('📅 Desktop date range selected:', range);
     setVisitDate(range.startDate);
-    // For sightseeing, we only need the start date (visit date)
+    setEndDate(range.endDate);
     setIsCalendarOpenDesktop(false);
   };
 
