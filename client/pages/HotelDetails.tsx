@@ -238,33 +238,51 @@ export default function HotelDetails() {
             `🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`,
           );
 
-          // Build API URL with search parameters for availability
-          const apiUrl = new URL(
-            `/api/hotels-live/hotel/${hotelId}`,
-            window.location.origin,
-          );
-          if (checkInParam) apiUrl.searchParams.set("checkIn", checkInParam);
-          if (checkOutParam) apiUrl.searchParams.set("checkOut", checkOutParam);
+          // Try using the hotels service first for proper API integration
+          try {
+            const searchParams = {
+              checkIn: checkInParam,
+              checkOut: checkOutParam,
+              rooms: parseInt(roomsParam || "1"),
+              adults: parseInt(adultsParam || "2"),
+              children: parseInt(childrenParam || "0"),
+            };
 
-          const response = await fetchWithTimeout(apiUrl.toString(), {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          });
+            console.log("🔍 Using hotelsService.getHotelDetails:", hotelId, searchParams);
+            const hotel = await hotelsService.getHotelDetails(hotelId, searchParams);
+            console.log("✅ Hotel data received via service:", hotel);
+            return hotel;
+          } catch (serviceError) {
+            console.warn("⚠️ Service failed, trying direct API:", serviceError);
 
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-          }
+            // Fallback to direct API call
+            const apiUrl = new URL(
+              `/api/hotels-live/hotel/${hotelId}`,
+              window.location.origin,
+            );
+            if (checkInParam) apiUrl.searchParams.set("checkIn", checkInParam);
+            if (checkOutParam) apiUrl.searchParams.set("checkOut", checkOutParam);
 
-          const data = await response.json();
+            const response = await fetchWithTimeout(apiUrl.toString(), {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            });
 
-          if (data.success && data.hotel) {
-            console.log("✅ Live hotel data received:", data.hotel);
-            return data.hotel;
-          } else {
-            throw new Error("Invalid response structure or no hotel data");
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            if (data.success && data.hotel) {
+              console.log("✅ Live hotel data received via direct API:", data.hotel);
+              return data.hotel;
+            } else {
+              throw new Error("Invalid response structure or no hotel data");
+            }
           }
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
