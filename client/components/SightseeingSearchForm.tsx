@@ -390,14 +390,27 @@ export function SightseeingSearchForm() {
   };
 
   // Handle destination selection
-  const handleDestinationSelect = (selectedDestination: DestinationOption) => {
+  const handleDestinationSelect = (selectedDestination: DestinationOption, event?: React.MouseEvent) => {
+    console.log('🎯 Destination selected:', selectedDestination.name);
+
+    // Prevent event propagation to avoid conflicts
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    // Update state immediately
     setDestination(selectedDestination.name);
     setDestinationCode(selectedDestination.code);
     setInputValue(selectedDestination.name);
-    setIsDestinationOpenMobile(false);
-    setIsDestinationOpenDesktop(false);
     setDestinationSuggestions([]);
     setIsUserTyping(false);
+
+    // Force close both popovers immediately
+    setIsDestinationOpenMobile(false);
+    setIsDestinationOpenDesktop(false);
+
+    console.log('🎯 Destination selection complete, popovers closed');
   };
 
   // Handle date selection for mobile calendar (don't close calendar here)
