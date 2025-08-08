@@ -96,7 +96,9 @@ class BargainPricingService {
     request: BargainPricingRequest,
   ): Promise<BargainPricingResult> {
     try {
-      // Step 1: Get applicable markups for the item
+      console.log("🎯 Starting bargain pricing calculation...");
+
+      // Step 1: Get applicable markups for the item (with fallback support)
       const markupResult = await markupService.calculateMarkup({
         type: request.type,
         basePrice: request.basePrice,
@@ -107,6 +109,9 @@ class BargainPricingService {
         hotelName: request.hotelName,
         starRating: request.starRating,
         userType: request.userType,
+        location: request.location,
+        category: request.category,
+        duration: request.duration,
       });
 
       // Step 2: Randomize markup within Current Fare Range (user-visible pricing)
