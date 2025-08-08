@@ -386,7 +386,7 @@ class MarkupService {
    * Calculate markup for a specific booking (used in bargain engine)
    */
   async calculateMarkup(bookingDetails: {
-    type: "air" | "hotel";
+    type: "air" | "hotel" | "sightseeing";
     basePrice: number;
     // Air-specific
     airline?: string;
@@ -397,6 +397,10 @@ class MarkupService {
     hotelName?: string;
     starRating?: string;
     userType?: "b2c" | "b2b";
+    // Sightseeing-specific
+    location?: string;
+    category?: string;
+    duration?: string;
   }): Promise<{
     applicableMarkups: (AirMarkup | HotelMarkup)[];
     selectedMarkup: AirMarkup | HotelMarkup;
@@ -405,20 +409,130 @@ class MarkupService {
     markupRange: { min: number; max: number };
   }> {
     try {
+      console.log("🔍 Attempting to calculate markup via API...");
+
       const response = await apiClient.post(
         `${this.baseUrl}/calculate`,
         bookingDetails,
       );
 
       if (response.ok) {
+        console.log("✅ Markup calculated successfully via API");
         return response.data;
       } else {
-        throw new Error(response.error || "Failed to calculate markup");
+        console.warn("⚠️ API markup calculation failed, using fallback");
+        return this.getFallbackMarkupCalculation(bookingDetails);
       }
     } catch (error) {
-      console.error("Error calculating markup:", error);
-      throw error;
+      console.warn("⚠️ API server unavailable, using fallback markup calculation:", error.message);
+      return this.getFallbackMarkupCalculation(bookingDetails);
     }
+  }
+
+  /**
+   * Fallback markup calculation when API is unavailable
+   */
+  private getFallbackMarkupCalculation(bookingDetails: {
+    type: "air" | "hotel" | "sightseeing";
+    basePrice: number;
+    airline?: string;
+    route?: { from: string; to: string };
+    class?: string;
+    city?: string;
+    hotelName?: string;
+    starRating?: string;
+    userType?: "b2c" | "b2b";
+    location?: string;
+    category?: string;
+    duration?: string;
+  }) {
+    console.log("🔄 Using fallback markup calculation");
+
+    // Define default markup ranges based on type and other factors
+    let baseMarkupMin = 10;
+    let baseMarkupMax = 25;
+    let selectedMarkupPercentage = 15;
+
+    if (bookingDetails.type === "air") {
+      // Flight markup logic
+      if (bookingDetails.class === "business" || bookingDetails.class === "first") {
+        baseMarkupMin = 8;
+        baseMarkupMax = 18;
+        selectedMarkupPercentage = 12;
+      } else {
+        baseMarkupMin = 12;
+        baseMarkupMax = 22;
+        selectedMarkupPercentage = 16;
+      }
+
+      // Premium airlines get lower markup
+      const premiumAirlines = ["EK", "QR", "EY", "LH", "BA", "AF", "SQ"];
+      if (premiumAirlines.includes(bookingDetails.airline || "")) {
+        selectedMarkupPercentage = Math.max(selectedMarkupPercentage - 3, baseMarkupMin);
+      }
+    } else if (bookingDetails.type === "hotel") {
+      // Hotel markup logic
+      const starRating = parseInt(bookingDetails.starRating || "3");
+      if (starRating >= 5) {
+        baseMarkupMin = 15;
+        baseMarkupMax = 25;
+        selectedMarkupPercentage = 18;
+      } else if (starRating >= 4) {
+        baseMarkupMin = 18;
+        baseMarkupMax = 28;
+        selectedMarkupPercentage = 22;
+      } else {
+        baseMarkupMin = 20;
+        baseMarkupMax = 30;
+        selectedMarkupPercentage = 25;
+      }
+    } else if (bookingDetails.type === "sightseeing") {
+      // Sightseeing markup logic
+      baseMarkupMin = 20;
+      baseMarkupMax = 35;
+      selectedMarkupPercentage = 25;
+
+      // Premium categories get higher markup
+      const premiumCategories = ["luxury", "premium", "vip"];
+      if (premiumCategories.some(cat =>
+        bookingDetails.category?.toLowerCase().includes(cat))) {
+        selectedMarkupPercentage = 30;
+      }
+    }
+
+    const markupAmount = bookingDetails.basePrice * (selectedMarkupPercentage / 100);
+    const finalPrice = bookingDetails.basePrice + markupAmount;
+
+    // Create a fallback markup object
+    const fallbackMarkup = {
+      id: `fallback_${bookingDetails.type}_${Date.now()}`,
+      name: `Fallback ${bookingDetails.type.charAt(0).toUpperCase() + bookingDetails.type.slice(1)} Markup`,
+      description: "Default markup used when API is unavailable",
+      markupType: "percentage" as const,
+      markupValue: selectedMarkupPercentage,
+      minAmount: 0,
+      maxAmount: 999999,
+      currentFareMin: baseMarkupMin,
+      currentFareMax: baseMarkupMax,
+      bargainFareMin: Math.max(baseMarkupMin - 5, 5),
+      bargainFareMax: baseMarkupMax + 5,
+      validFrom: new Date().toISOString(),
+      validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+      status: "active" as const,
+      priority: 1,
+      userType: "all" as const,
+      specialConditions: "Fallback markup",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    return {
+      applicableMarkups: [fallbackMarkup],
+      selectedMarkup: fallbackMarkup,
+      markupAmount,
+      finalPrice,
+      markupRange: { min: baseMarkupMin, max: baseMarkupMax }
+    };
   }
 }
 
