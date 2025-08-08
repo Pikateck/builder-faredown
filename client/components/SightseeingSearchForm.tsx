@@ -315,7 +315,7 @@ export function SightseeingSearchForm() {
       duration,
     });
 
-    if (endDate) {
+    if (endDate && endDate.getTime() !== visitDate!.getTime()) {
       searchParams.set("endDate", endDate.toISOString());
     }
 
