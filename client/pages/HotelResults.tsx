@@ -4,11 +4,7 @@ import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
-import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import {
-  useBargainPhase1,
-  createHotelBargainItem,
-} from "@/hooks/useBargainPhase1";
+import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
