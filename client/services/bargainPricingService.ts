@@ -9,7 +9,7 @@ import { promoCodeService } from "./promoCodeService";
 import { apiClient } from "@/lib/api";
 
 export interface BargainPricingRequest {
-  type: "flight" | "hotel";
+  type: "flight" | "hotel" | "sightseeing";
   itemId: string;
   basePrice: number;
   userType: "b2c" | "b2b";
@@ -22,6 +22,11 @@ export interface BargainPricingRequest {
   hotelName?: string;
   starRating?: string;
   roomCategory?: string;
+  // Sightseeing specific
+  location?: string;
+  category?: string;
+  duration?: string;
+  activityName?: string;
   // User preferences
   promoCode?: string;
   userLocation?: string;
