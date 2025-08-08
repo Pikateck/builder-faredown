@@ -312,9 +312,6 @@ export function SightseeingSearchForm() {
       searchParams.set("endDate", endDate.toISOString());
     }
 
-    if (guests.childrenAges.length > 0) {
-      searchParams.set("childrenAges", guests.childrenAges.join(","));
-    }
 
     console.log("🎭 Searching sightseeing with params:", searchParams.toString());
     console.log("🎭 Navigating to:", `/sightseeing/results?${searchParams.toString()}`);
