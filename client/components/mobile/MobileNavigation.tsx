@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Plane, Building2, Heart, User } from "lucide-react";
+import { Plane, Building2, Camera, User } from "lucide-react";
 
 export function MobileNavigation() {
   const location = useLocation();
