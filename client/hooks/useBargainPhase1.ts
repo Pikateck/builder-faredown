@@ -158,4 +158,29 @@ export function createHotelBargainItem(hotel: {
   };
 }
 
+// Helper function to extract bargain item from sightseeing data
+export function createSightseeingBargainItem(activity: {
+  id: string;
+  name: string;
+  location: string;
+  category?: string;
+  duration?: string;
+  rating?: number;
+  price: number;
+  [key: string]: any;
+}): BargainItem {
+  return {
+    type: "sightseeing",
+    itemId: activity.id,
+    title: `${activity.name} • ${activity.location}`,
+    basePrice: activity.price,
+    location: activity.location,
+    category: activity.category,
+    duration: activity.duration,
+    activityName: activity.name,
+    starRating: activity.rating?.toString(),
+    userType: "b2c", // Default, can be overridden
+  };
+}
+
 export default useBargainPhase1;
