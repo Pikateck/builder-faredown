@@ -292,7 +292,11 @@ export function SightseeingCard({
                 </div>
               </div>
 
-              <div className="flex items-center gap-1 mt-1">
+              <div
+                className="flex items-center gap-1 mt-1 cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={handleReviewsClick}
+                title="Click to view reviews"
+              >
                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
                 <span className="font-medium text-gray-900">{attraction.rating}</span>
                 <span className="text-sm text-gray-500">
