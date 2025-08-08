@@ -391,7 +391,7 @@ export function SightseeingSearchForm() {
 
   // Handle destination selection
   const handleDestinationSelect = (selectedDestination: DestinationOption, event?: React.MouseEvent) => {
-    console.log('🎯 Destination selected:', selectedDestination.name);
+    console.log('���� Destination selected:', selectedDestination.name);
 
     // Prevent event propagation to avoid conflicts
     if (event) {
@@ -641,7 +641,7 @@ export function SightseeingSearchForm() {
                           <button
                             key={dest.id}
                             className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
-                            onClick={() => handleDestinationSelect(dest)}
+                            onClick={(e) => handleDestinationSelect(dest, e)}
                           >
                             <div className="flex items-center space-x-3">
                               <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -804,7 +804,7 @@ export function SightseeingSearchForm() {
                     setIsDestinationOpenDesktop(true);
                   }}
                   onClick={() => {
-                    console.log('🎯 Desktop destination input clicked');
+                    console.log('���� Desktop destination input clicked');
                     setIsDestinationOpenDesktop(true);
                   }}
                 />
