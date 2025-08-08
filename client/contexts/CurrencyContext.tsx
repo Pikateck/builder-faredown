@@ -307,9 +307,23 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
     }
   };
 
-  const setCurrency = (currency: Currency) => {
-    setSelectedCurrency(currency);
-    localStorage.setItem("preferred_currency", currency.code);
+  const setCurrency = (currency: Currency | string) => {
+    let targetCurrency: Currency;
+
+    if (typeof currency === 'string') {
+      // Find the currency object by code
+      const foundCurrency = currencies.find(c => c.code === currency);
+      if (!foundCurrency) {
+        console.warn(`Currency with code ${currency} not found`);
+        return;
+      }
+      targetCurrency = foundCurrency;
+    } else {
+      targetCurrency = currency;
+    }
+
+    setSelectedCurrency(targetCurrency);
+    localStorage.setItem("preferred_currency", targetCurrency.code);
   };
 
   const refreshRates = async () => {
