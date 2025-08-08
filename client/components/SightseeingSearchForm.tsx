@@ -348,7 +348,12 @@ export function SightseeingSearchForm() {
   const formatDateDisplay = () => {
     if (!visitDate) return "Select visit date";
 
-    // Format like hotel calendar: "8-Aug-2025"
+    // If we have both start and end dates and they're different, show range
+    if (endDate && visitDate && endDate.getTime() !== visitDate.getTime()) {
+      return `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`;
+    }
+
+    // Single date format like hotel calendar: "8-Aug-2025"
     return format(visitDate, "d-MMM-yyyy");
   };
 
