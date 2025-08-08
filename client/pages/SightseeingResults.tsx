@@ -582,16 +582,17 @@ export default function SightseeingResults() {
 
   // Handle bargain click
   const handleBargainClick = (attraction: SightseeingAttraction, searchParams: URLSearchParams) => {
-    // Adapt sightseeing item to BargainItem interface (treating it as a hotel-like service)
+    // Create proper sightseeing bargain item
     const item = {
-      type: "hotel" as const, // Use hotel type as it's the closest match for sightseeing
+      type: "sightseeing" as const,
       itemId: attraction.id,
       title: attraction.name,
       basePrice: attraction.currentPrice,
-      city: attraction.location,
-      hotelName: attraction.name, // Use attraction name as the "hotel" name
+      location: attraction.location,
+      category: attraction.category,
+      duration: attraction.duration,
+      activityName: attraction.name,
       starRating: attraction.rating.toString(),
-      roomCategory: attraction.category,
     };
 
     bargainHook.startBargain(item);
