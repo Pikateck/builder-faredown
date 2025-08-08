@@ -272,6 +272,90 @@ class BargainPricingService {
   }
 
   /**
+   * Fallback bargain pricing when API/markup calculation fails
+   */
+  private getFallbackBargainPricing(request: BargainPricingRequest): BargainPricingResult {
+    console.log("🔄 Generating fallback bargain pricing for:", request.type);
+
+    // Define fallback markup percentages by type
+    const fallbackMarkups = {
+      flight: { min: 12, max: 22, selected: 16 },
+      hotel: { min: 15, max: 28, selected: 20 },
+      sightseeing: { min: 20, max: 35, selected: 25 }
+    };
+
+    const markup = fallbackMarkups[request.type] || fallbackMarkups.flight;
+
+    // Randomize within range
+    const randomizedMarkup = this.randomizeMarkupInRange(markup.min, markup.max);
+    const markupAmount = request.basePrice * (randomizedMarkup / 100);
+    const markedUpPrice = request.basePrice + markupAmount;
+
+    // Simple promo code handling for fallback
+    let finalPrice = markedUpPrice;
+    let promoDetails = null;
+
+    if (request.promoCode) {
+      // Apply a basic 10% discount for valid-looking promo codes
+      const discountAmount = markedUpPrice * 0.1;
+      finalPrice = markedUpPrice - discountAmount;
+
+      promoDetails = {
+        code: request.promoCode,
+        discountAmount,
+        discountPercentage: 10,
+        isValid: true,
+        appliedAfterMarkup: true,
+      };
+    }
+
+    // Calculate bargain range
+    const bargainFareMin = Math.max(markup.min - 5, 5);
+    const bargainFareMax = markup.max + 5;
+    const minimumAcceptable = request.basePrice * (1 + bargainFareMin / 100);
+    const maximumCounterOffer = request.basePrice * (1 + bargainFareMax / 100);
+    const recommendedTarget = request.basePrice * (1 + (markup.min + 2) / 100);
+
+    return {
+      originalPrice: request.basePrice,
+      markedUpPrice,
+      finalPrice,
+      markupDetails: {
+        applicableMarkups: [],
+        selectedMarkup: {
+          id: `fallback_${request.type}`,
+          name: `Fallback ${request.type} markup`,
+          markupType: "percentage",
+          markupValue: randomizedMarkup,
+          currentFareMin: markup.min,
+          currentFareMax: markup.max,
+          bargainFareMin,
+          bargainFareMax,
+        },
+        markupPercentage: randomizedMarkup,
+        markupAmount,
+        markupRange: { min: markup.min, max: markup.max },
+        randomizedMarkup,
+      },
+      promoDetails,
+      bargainRange: {
+        minimumAcceptable,
+        maximumCounterOffer,
+        recommendedTarget,
+        savingsOpportunity: finalPrice - recommendedTarget,
+      },
+      phase1Logic: {
+        baseCalculation: `Fallback pricing - Base: ₹${request.basePrice}`,
+        markupLogic: `Fallback markup ${randomizedMarkup.toFixed(2)}% applied`,
+        promoApplication: promoDetails
+          ? `Fallback promo discount: -₹${promoDetails.discountAmount.toLocaleString()}`
+          : "No promo code applied",
+        counterOfferStrategy: `Fallback bargain range: ₹${minimumAcceptable.toLocaleString()}-₹${maximumCounterOffer.toLocaleString()}`,
+      },
+    };
+  }
+
+  /**
    * Phase 1: Handle user counter-offers with intelligent responses
    */
   async processCounterOffer(
