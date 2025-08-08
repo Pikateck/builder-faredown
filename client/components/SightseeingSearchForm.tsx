@@ -567,7 +567,7 @@ export function SightseeingSearchForm() {
                   <BookingCalendar
                     initialRange={{
                       startDate: visitDate || new Date(),
-                      endDate: visitDate || addDays(new Date(), 1),
+                      endDate: endDate || addDays(visitDate || new Date(), 1),
                     }}
                     onChange={handleMobileDateSelect}
                     onClose={() => setIsCalendarOpenMobile(false)}
@@ -768,7 +768,7 @@ export function SightseeingSearchForm() {
                 <BookingCalendar
                   initialRange={{
                     startDate: visitDate || new Date(),
-                    endDate: visitDate || addDays(new Date(), 1),
+                    endDate: endDate || addDays(visitDate || new Date(), 1),
                   }}
                   onChange={handleDesktopDateSelect}
                   onClose={() => setIsCalendarOpenDesktop(false)}
