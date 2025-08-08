@@ -500,7 +500,7 @@ export default function Index() {
                     </Link>
 
                     <Link
-                      to="/account"
+                      to="/bookings"
                       className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
                       onClick={() => setShowMobileMenu(false)}
                     >
@@ -1708,7 +1708,7 @@ export default function Index() {
                                       <span className="font-semibold">
                                         {data.code}
                                       </span>{" "}
-                                      • {city}
+                                      ��� {city}
                                     </div>
                                     <div className="text-xs text-gray-500">
                                       {data.airport}
