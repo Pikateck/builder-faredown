@@ -460,7 +460,10 @@ export function SightseeingSearchForm() {
                   placeholder="Enter destination or attraction"
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
-                  onFocus={() => setIsDestinationOpenMobile(true)}
+                  onFocus={() => {
+                    console.log('🎯 Mobile destination input focused');
+                    setIsDestinationOpenMobile(true);
+                  }}
                   onClick={() => setIsDestinationOpenMobile(true)}
                 />
               </PopoverTrigger>
