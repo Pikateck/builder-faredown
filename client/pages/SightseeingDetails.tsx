@@ -67,6 +67,7 @@ export default function SightseeingDetails() {
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedTicketType, setSelectedTicketType] = useState(0);
+  const [selectedTime, setSelectedTime] = useState<string>("");
 
   // Get adults count from search params
   const adults = parseInt(searchParams.get("adults") || "2");
@@ -270,9 +271,14 @@ export default function SightseeingDetails() {
 
   // Navigation handlers
   const handleBookNow = () => {
+    if (!selectedTime) {
+      alert("Please select a time slot before booking");
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", selectedTicketType.toString());
+    params.set("selectedTime", selectedTime);
     navigate(`/sightseeing/booking?${params.toString()}`);
   };
 
@@ -532,11 +538,22 @@ export default function SightseeingDetails() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Today</h3>
                     <div className="grid grid-cols-2 gap-2">
                       {attraction.availableSlots[0]?.times.map((time, index) => (
-                        <Button key={index} variant="outline" size="sm">
+                        <Button
+                          key={index}
+                          variant={selectedTime === time ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSelectedTime(time)}
+                          className={selectedTime === time ? "bg-[#003580] text-white" : ""}
+                        >
                           {time}
                         </Button>
                       ))}
                     </div>
+                    {selectedTime && (
+                      <div className="mt-2 text-sm text-green-600 font-medium">
+                        Selected: {selectedTime}
+                      </div>
+                    )}
                   </div>
 
                   {/* Price Summary */}
