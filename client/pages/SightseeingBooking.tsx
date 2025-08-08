@@ -74,6 +74,7 @@ export default function SightseeingBooking() {
   const attractionId = searchParams.get("attractionId") || "";
   const ticketTypeIndex = parseInt(searchParams.get("ticketType") || "0");
   const visitDate = searchParams.get("visitDate") || "";
+  const selectedTime = searchParams.get("selectedTime") || "";
   const adults = parseInt(searchParams.get("adults") || "2");
   const children = parseInt(searchParams.get("children") || "0");
 
