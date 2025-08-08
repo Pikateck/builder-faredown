@@ -259,16 +259,14 @@ export function SightseeingCard({
           </div>
 
           {/* Content Section */}
-          <div className="p-3">
+          <div className="p-3 flex flex-col h-full">
             {/* Header */}
-            <div className="mb-2">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-bold text-gray-900 line-clamp-2 pr-2">
-                  {attraction.name}
-                </h3>
-              </div>
+            <div className="mb-3">
+              <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2">
+                {attraction.name}
+              </h3>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
                 <div className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
                   <span className="truncate">{attraction.location}</span>
@@ -280,7 +278,7 @@ export function SightseeingCard({
               </div>
 
               <div
-                className="flex items-center gap-1 mt-1 cursor-pointer hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={handleReviewsClick}
                 title="Click to view reviews"
               >
@@ -293,26 +291,39 @@ export function SightseeingCard({
             </div>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+            <p className="text-sm text-gray-600 mb-3 line-clamp-3 flex-grow">
               {attraction.description}
             </p>
 
             {/* Features */}
-            <div className="flex flex-wrap gap-1 mb-3">
-              {attraction.features.slice(0, 3).map((feature, index) => (
+            <div className="flex flex-wrap gap-1 mb-4">
+              {attraction.features.slice(0, 4).map((feature, index) => (
                 <Badge key={index} variant="secondary" className="text-xs">
                   {feature}
                 </Badge>
               ))}
-              {attraction.features.length > 3 && (
+              {attraction.features.length > 4 && (
                 <Badge variant="outline" className="text-xs">
-                  +{attraction.features.length - 3} more
+                  +{attraction.features.length - 4} more
                 </Badge>
               )}
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-2">
+            {/* Highlights */}
+            <div className="mb-4 flex-grow">
+              <h4 className="text-sm font-medium text-gray-900 mb-2">Highlights:</h4>
+              <div className="space-y-1">
+                {attraction.highlights.slice(0, 3).map((highlight, index) => (
+                  <div key={index} className="flex items-start text-sm text-gray-600">
+                    <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                    <span className="line-clamp-1">{highlight}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons - Moved to bottom */}
+            <div className="flex gap-2 mt-auto pt-2">
               <Button
                 onClick={onBargainClick}
                 className="flex-1 py-2.5 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
