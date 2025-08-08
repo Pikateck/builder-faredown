@@ -582,27 +582,19 @@ export default function SightseeingResults() {
 
   // Handle bargain click
   const handleBargainClick = (attraction: SightseeingAttraction, searchParams: URLSearchParams) => {
+    // Adapt sightseeing item to BargainItem interface (treating it as a hotel-like service)
     const item = {
+      type: "hotel" as const, // Use hotel type as it's the closest match for sightseeing
       itemId: attraction.id,
-      name: attraction.name,
-      originalPrice: attraction.originalPrice,
-      currentPrice: attraction.currentPrice,
-      type: "sightseeing" as const,
-      imageUrl: attraction.images[0],
-      details: {
-        location: attraction.location,
-        duration: attraction.duration,
-        rating: attraction.rating,
-        category: attraction.category,
-      },
+      title: attraction.name,
+      basePrice: attraction.currentPrice,
+      city: attraction.location,
+      hotelName: attraction.name, // Use attraction name as the "hotel" name
+      starRating: attraction.rating.toString(),
+      roomCategory: attraction.category,
     };
 
-    bargainHook.triggerBargain(item, {
-      destination: searchParams.get("destination") || "",
-      visitDate: searchParams.get("visitDate") || "",
-      adults: searchParams.get("adults") || "2",
-      children: searchParams.get("children") || "0",
-    });
+    bargainHook.startBargain(item);
   };
 
   if (loading) {
