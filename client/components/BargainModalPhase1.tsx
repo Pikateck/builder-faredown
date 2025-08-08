@@ -169,12 +169,17 @@ export default function BargainModalPhase1({
       // Set suggested target price as default
       setUserOfferPrice(result.bargainRange.recommendedTarget.toString());
     } catch (err) {
+      console.error("❌ Failed to initialize bargain session:", err);
+
+      // Show a user-friendly error message but keep the modal functional
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to initialize bargain session",
+        "Unable to connect to pricing server. Using offline pricing - you can still bargain!"
       );
-      setStep("rejected");
+
+      // Don't set to rejected, let the fallback pricing work
+      if (step === "loading") {
+        setStep("initial");
+      }
     }
   };
 
