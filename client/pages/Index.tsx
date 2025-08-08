@@ -2085,7 +2085,7 @@ export default function Index() {
         {/* Hotels Search Form */}
         <header
           className={`py-3 sm:py-6 md:py-8 pb-24 sm:pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}
-          style={{ backgroundColor: "#003580" }}
+          style={{ backgroundColor: "#003580", display: activeTab === "hotels" ? "block" : "none" }}
         >
           <div className="max-w-7xl mx-auto px-3 sm:px-4">
             <div className="text-center mb-2 sm:mb-3">
