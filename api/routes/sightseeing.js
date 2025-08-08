@@ -539,16 +539,43 @@ router.post('/book', async (req, res) => {
 
     await client.query('COMMIT');
 
-    res.json({
-      success: true,
-      booking: {
-        id: booking.id,
-        booking_ref: bookingRef,
-        status: 'confirmed',
-        booking_date: booking.booking_date,
-        total_amount: totalAmount
-      }
-    });
+    // Generate voucher automatically for confirmed bookings
+    try {
+      const SightseeingVoucherService = require('../services/sightseeingVoucherService');
+      const voucherService = new SightseeingVoucherService();
+
+      const voucherResult = await voucherService.generateVoucher(booking.id);
+
+      res.json({
+        success: true,
+        booking: {
+          id: booking.id,
+          booking_ref: bookingRef,
+          status: 'confirmed',
+          booking_date: booking.booking_date,
+          total_amount: totalAmount
+        },
+        voucher: voucherResult.success ? {
+          voucher_number: voucherResult.voucher.voucher_number,
+          generated: true
+        } : null
+      });
+    } catch (voucherError) {
+      console.error('Voucher generation failed:', voucherError);
+      // Still return success for booking, voucher can be generated later
+      res.json({
+        success: true,
+        booking: {
+          id: booking.id,
+          booking_ref: bookingRef,
+          status: 'confirmed',
+          booking_date: booking.booking_date,
+          total_amount: totalAmount
+        },
+        voucher: null,
+        voucher_error: 'Voucher generation failed, will be generated manually'
+      });
+    }
 
   } catch (error) {
     await client.query('ROLLBACK');
