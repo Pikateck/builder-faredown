@@ -895,8 +895,51 @@ export default function SightseeingResults() {
         </div>
       )}
 
-      {/* Bargain Modal */}
-      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
+      {/* Sightseeing Bargain Modal */}
+      <FlightStyleBargainModal
+        roomType={
+          selectedAttraction
+            ? {
+                id: selectedAttraction.id,
+                name: selectedAttraction.name,
+                description: selectedAttraction.description,
+                image: selectedAttraction.images?.[0] || "/placeholder.svg",
+                marketPrice: selectedAttraction.originalPrice,
+                totalPrice: selectedAttraction.currentPrice,
+                total: selectedAttraction.currentPrice,
+                features: selectedAttraction.highlights || [],
+                maxOccupancy: 1, // For sightseeing experiences
+                bedType: selectedAttraction.duration,
+                size: selectedAttraction.category,
+                cancellation: "Free cancellation",
+              }
+            : null
+        }
+        hotel={
+          selectedAttraction
+            ? {
+                id: parseInt(selectedAttraction.id),
+                name: selectedAttraction.name,
+                location: selectedAttraction.location,
+                rating: selectedAttraction.rating,
+                image: selectedAttraction.images?.[0] || "/placeholder.svg",
+              }
+            : null
+        }
+        isOpen={isBargainModalOpen}
+        onClose={() => {
+          setIsBargainModalOpen(false);
+          setSelectedAttraction(null);
+        }}
+        checkInDate={new Date()}
+        checkOutDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
+        roomsCount={1}
+        onBookingSuccess={(finalPrice) => {
+          setIsBargainModalOpen(false);
+          // Navigate to sightseeing booking confirmation
+          navigate(`/sightseeing-booking-confirmation?item=${selectedAttraction?.id}&price=${finalPrice}&bargainApplied=true`);
+        }}
+      />
     </div>
   );
 }
