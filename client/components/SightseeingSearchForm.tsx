@@ -533,7 +533,7 @@ export function SightseeingSearchForm() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 z-[60]" align="start">
-                <BookingCalendar
+                <Calendar
                   mode="single"
                   selected={visitDate}
                   onSelect={handleMobileDateSelect}
@@ -705,7 +705,7 @@ export function SightseeingSearchForm() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <BookingCalendar
+              <Calendar
                 mode="single"
                 selected={visitDate}
                 onSelect={handleDesktopDateSelect}
