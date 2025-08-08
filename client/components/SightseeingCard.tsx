@@ -475,12 +475,31 @@ export function SightseeingCard({
                 </div>
               </div>
 
-              {/* Right Content - Additional Info */}
-              <div className="w-52 flex flex-col">
+              {/* Right Content - Pricing & Info */}
+              <div className="w-64 flex flex-col">
+                {/* Pricing Section - Booking.com Style */}
+                <div className="text-right mb-4">
+                  <div className="space-y-1">
+                    <div className="text-sm text-gray-500 line-through">
+                      {formatPrice(attraction.originalPrice * adults)}
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {formatPrice(attraction.currentPrice * adults)}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      for {adults} {adults === 1 ? 'person' : 'people'}
+                    </div>
+                    <div className="text-sm text-green-600 font-medium">
+                      You save {formatPrice((attraction.originalPrice - attraction.currentPrice) * adults)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* What's Included */}
                 <div className="mb-4">
                   <h4 className="text-sm font-medium text-gray-900 mb-2">What's Included:</h4>
                   <div className="space-y-1">
-                    {attraction.includes.slice(0, 4).map((item, index) => (
+                    {attraction.includes.slice(0, 3).map((item, index) => (
                       <div key={index} className="flex items-start text-sm text-gray-600">
                         <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{item}</span>
@@ -489,18 +508,13 @@ export function SightseeingCard({
                   </div>
                 </div>
 
-                {attraction.ticketTypes.length > 0 && (
-                  <div className="mb-4">
-                    <h4 className="text-sm font-medium text-gray-900 mb-2">Ticket Options:</h4>
-                    <div className="space-y-1">
-                      {attraction.ticketTypes.slice(0, 3).map((ticket, index) => (
-                        <div key={index} className="text-sm text-gray-600">
-                          <div className="font-medium">{ticket.name}</div>
-                        </div>
-                      ))}
-                    </div>
+                {/* Availability Status */}
+                <div className="mb-4">
+                  <div className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded text-sm font-medium">
+                    <CheckCircle className="w-3 h-3" />
+                    Available Today
                   </div>
-                )}
+                </div>
               </div>
             </div>
 
