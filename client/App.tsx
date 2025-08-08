@@ -139,6 +139,7 @@ function App() {
                   />
                   <Route path="/amadeus-test" element={<AmadeusTestPanel />} />
                   <Route path="/api-integration-test" element={<ApiIntegrationTest />} />
+                  <Route path="/bargain-error-test" element={<BargainErrorTest />} />
                   <Route path="/logo-designs" element={<LogoDesignOptions />} />
                   <Route
                     path="/color-palette"
