@@ -533,13 +533,31 @@ export function SightseeingSearchForm() {
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-sm">
                     <span className="hidden md:inline">
-                      {visitDate ? format(visitDate, "d-MMM-yyyy") : "Select visit date"}
+                      {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
+                        `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
+                      ) : visitDate ? (
+                        format(visitDate, "d-MMM-yyyy")
+                      ) : (
+                        "Select visit date"
+                      )}
                     </span>
                     <span className="hidden sm:inline md:hidden">
-                      {visitDate ? format(visitDate, "d MMM") : "Select date"}
+                      {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
+                        `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                      ) : visitDate ? (
+                        format(visitDate, "d MMM")
+                      ) : (
+                        "Select date"
+                      )}
                     </span>
                     <span className="sm:hidden">
-                      {visitDate ? format(visitDate, "d MMM") : "Date"}
+                      {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
+                        `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                      ) : visitDate ? (
+                        format(visitDate, "d MMM")
+                      ) : (
+                        "Date"
+                      )}
                     </span>
                   </span>
                 </Button>
@@ -716,13 +734,31 @@ export function SightseeingSearchForm() {
                 <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate text-sm">
                   <span className="hidden md:inline">
-                    {visitDate ? format(visitDate, "d-MMM-yyyy") : "Select visit date"}
+                    {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
+                      `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
+                    ) : visitDate ? (
+                      format(visitDate, "d-MMM-yyyy")
+                    ) : (
+                      "Select visit date"
+                    )}
                   </span>
                   <span className="hidden sm:inline md:hidden">
-                    {visitDate ? format(visitDate, "d MMM") : "Select date"}
+                    {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
+                      `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                    ) : visitDate ? (
+                      format(visitDate, "d MMM")
+                    ) : (
+                      "Select date"
+                    )}
                   </span>
                   <span className="sm:hidden">
-                    {visitDate ? format(visitDate, "d MMM") : "Date"}
+                    {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
+                      `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                    ) : visitDate ? (
+                      format(visitDate, "d MMM")
+                    ) : (
+                      "Date"
+                    )}
                   </span>
                 </span>
               </Button>
