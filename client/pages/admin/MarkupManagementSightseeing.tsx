@@ -68,7 +68,15 @@ interface SightseeingMarkup {
   id: string;
   destinationCode: string;
   destinationName: string;
-  experienceType: "landmark" | "museum" | "tour" | "activity" | "food" | "culture" | "adventure" | "all";
+  experienceType:
+    | "landmark"
+    | "museum"
+    | "tour"
+    | "activity"
+    | "food"
+    | "culture"
+    | "adventure"
+    | "all";
   experienceName?: string;
   markupType: "percentage" | "fixed";
   markupValue: number;
@@ -111,9 +119,12 @@ export default function MarkupManagementSightseeing() {
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingMarkup, setEditingMarkup] = useState<SightseeingMarkup | null>(null);
+  const [editingMarkup, setEditingMarkup] = useState<SightseeingMarkup | null>(
+    null,
+  );
   const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteConfirmMarkup, setDeleteConfirmMarkup] = useState<SightseeingMarkup | null>(null);
+  const [deleteConfirmMarkup, setDeleteConfirmMarkup] =
+    useState<SightseeingMarkup | null>(null);
 
   // Form state
   const [formData, setFormData] = useState<CreateSightseeingMarkupRequest>({
@@ -128,7 +139,7 @@ export default function MarkupManagementSightseeing() {
     maxPrice: undefined,
     isActive: true,
     priority: 1,
-    validFrom: new Date().toISOString().split('T')[0],
+    validFrom: new Date().toISOString().split("T")[0],
     validTo: "",
     notes: "",
   });
@@ -245,7 +256,7 @@ export default function MarkupManagementSightseeing() {
       try {
         setLoading(true);
         // Use sample data for now
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         setMarkups(sampleMarkups);
       } catch (error) {
         console.error("Error loading sightseeing markups:", error);
@@ -259,23 +270,30 @@ export default function MarkupManagementSightseeing() {
 
   // Filter markups
   const filteredMarkups = markups.filter((markup) => {
-    const matchesSearch = markup.destinationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         markup.experienceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (markup.experienceName && markup.experienceName.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesType = filterType === "all" || markup.experienceType === filterType;
-    const matchesStatus = filterStatus === "all" || 
-                         (filterStatus === "active" && markup.isActive) ||
-                         (filterStatus === "inactive" && !markup.isActive);
+    const matchesSearch =
+      markup.destinationName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      markup.experienceType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (markup.experienceName &&
+        markup.experienceName.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesType =
+      filterType === "all" || markup.experienceType === filterType;
+    const matchesStatus =
+      filterStatus === "all" ||
+      (filterStatus === "active" && markup.isActive) ||
+      (filterStatus === "inactive" && !markup.isActive);
 
     return matchesSearch && matchesType && matchesStatus;
   });
 
   // Form handlers
-  const handleInputChange = (field: keyof CreateSightseeingMarkupRequest, value: any) => {
-    setFormData(prev => ({
+  const handleInputChange = (
+    field: keyof CreateSightseeingMarkupRequest,
+    value: any,
+  ) => {
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -288,7 +306,9 @@ export default function MarkupManagementSightseeing() {
           ...formData,
           updatedAt: new Date().toISOString(),
         };
-        setMarkups(prev => prev.map(m => m.id === editingMarkup.id ? updatedMarkup : m));
+        setMarkups((prev) =>
+          prev.map((m) => (m.id === editingMarkup.id ? updatedMarkup : m)),
+        );
       } else {
         // Create new markup
         const newMarkup: SightseeingMarkup = {
@@ -300,9 +320,9 @@ export default function MarkupManagementSightseeing() {
           avgExperiencePrice: 0,
           totalRevenue: 0,
         };
-        setMarkups(prev => [...prev, newMarkup]);
+        setMarkups((prev) => [...prev, newMarkup]);
       }
-      
+
       closeDialog();
     } catch (error) {
       console.error("Error saving sightseeing markup:", error);
@@ -342,7 +362,7 @@ export default function MarkupManagementSightseeing() {
         maxPrice: undefined,
         isActive: true,
         priority: 1,
-        validFrom: new Date().toISOString().split('T')[0],
+        validFrom: new Date().toISOString().split("T")[0],
         validTo: "",
         notes: "",
       });
@@ -358,8 +378,8 @@ export default function MarkupManagementSightseeing() {
   const handleDelete = async (markup: SightseeingMarkup) => {
     try {
       setIsDeleting(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setMarkups(prev => prev.filter(m => m.id !== markup.id));
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setMarkups((prev) => prev.filter((m) => m.id !== markup.id));
       setDeleteConfirmMarkup(null);
     } catch (error) {
       console.error("Error deleting sightseeing markup:", error);
@@ -374,38 +394,56 @@ export default function MarkupManagementSightseeing() {
       isActive: !markup.isActive,
       updatedAt: new Date().toISOString(),
     };
-    setMarkups(prev => prev.map(m => m.id === markup.id ? updatedMarkup : m));
+    setMarkups((prev) =>
+      prev.map((m) => (m.id === markup.id ? updatedMarkup : m)),
+    );
   };
 
   const getExperienceTypeIcon = (type: string) => {
     switch (type) {
-      case "landmark": return "🏛️";
-      case "museum": return "🎨";
-      case "tour": return "🚌";
-      case "activity": return "🎯";
-      case "food": return "🍽️";
-      case "culture": return "🎭";
-      case "adventure": return "⛰️";
-      default: return "🎪";
+      case "landmark":
+        return "🏛️";
+      case "museum":
+        return "🎨";
+      case "tour":
+        return "🚌";
+      case "activity":
+        return "🎯";
+      case "food":
+        return "🍽️";
+      case "culture":
+        return "🎭";
+      case "adventure":
+        return "⛰️";
+      default:
+        return "🎪";
     }
   };
 
   const getExperienceTypeColor = (type: string) => {
     switch (type) {
-      case "landmark": return "bg-blue-100 text-blue-800";
-      case "museum": return "bg-purple-100 text-purple-800";
-      case "tour": return "bg-green-100 text-green-800";
-      case "activity": return "bg-orange-100 text-orange-800";
-      case "food": return "bg-red-100 text-red-800";
-      case "culture": return "bg-indigo-100 text-indigo-800";
-      case "adventure": return "bg-yellow-100 text-yellow-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "landmark":
+        return "bg-blue-100 text-blue-800";
+      case "museum":
+        return "bg-purple-100 text-purple-800";
+      case "tour":
+        return "bg-green-100 text-green-800";
+      case "activity":
+        return "bg-orange-100 text-orange-800";
+      case "food":
+        return "bg-red-100 text-red-800";
+      case "culture":
+        return "bg-indigo-100 text-indigo-800";
+      case "adventure":
+        return "bg-yellow-100 text-yellow-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   // Calculate total stats
   const totalMarkups = markups.length;
-  const activeMarkups = markups.filter(m => m.isActive).length;
+  const activeMarkups = markups.filter((m) => m.isActive).length;
   const totalRevenue = markups.reduce((sum, m) => sum + m.totalRevenue, 0);
   const totalUsage = markups.reduce((sum, m) => sum + m.usageCount, 0);
 
@@ -422,7 +460,10 @@ export default function MarkupManagementSightseeing() {
             Manage markups for sightseeing experiences and attractions
           </p>
         </div>
-        <Button onClick={() => openDialog()} className="flex items-center gap-2">
+        <Button
+          onClick={() => openDialog()}
+          className="flex items-center gap-2"
+        >
           <Plus className="w-4 h-4" />
           Add Sightseeing Markup
         </Button>
@@ -435,7 +476,9 @@ export default function MarkupManagementSightseeing() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Markups</p>
-                <p className="text-2xl font-bold text-gray-900">{totalMarkups}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {totalMarkups}
+                </p>
               </div>
               <Settings className="w-8 h-8 text-blue-600" />
             </div>
@@ -447,7 +490,9 @@ export default function MarkupManagementSightseeing() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Active Markups</p>
-                <p className="text-2xl font-bold text-green-600">{activeMarkups}</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {activeMarkups}
+                </p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
@@ -460,7 +505,10 @@ export default function MarkupManagementSightseeing() {
               <div>
                 <p className="text-sm text-gray-600">Total Revenue</p>
                 <p className="text-2xl font-bold text-purple-600">
-                  ${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  $
+                  {totalRevenue.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
                 </p>
               </div>
               <TrendingUp className="w-8 h-8 text-purple-600" />
@@ -473,7 +521,9 @@ export default function MarkupManagementSightseeing() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Usage</p>
-                <p className="text-2xl font-bold text-orange-600">{totalUsage.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-orange-600">
+                  {totalUsage.toLocaleString()}
+                </p>
               </div>
               <Eye className="w-8 h-8 text-orange-600" />
             </div>
@@ -496,7 +546,7 @@ export default function MarkupManagementSightseeing() {
                 />
               </div>
             </div>
-            
+
             <Select value={filterType} onValueChange={setFilterType}>
               <SelectTrigger className="w-full md:w-48">
                 <SelectValue placeholder="Experience Type" />
@@ -535,7 +585,11 @@ export default function MarkupManagementSightseeing() {
               <Ticket className="w-5 h-5" />
               Sightseeing Markups ({filteredMarkups.length})
             </span>
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
               <Download className="w-4 h-4" />
               Export
             </Button>
@@ -570,59 +624,77 @@ export default function MarkupManagementSightseeing() {
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-gray-500" />
                           <div>
-                            <div className="font-medium">{markup.destinationName}</div>
-                            <div className="text-sm text-gray-500">{markup.destinationCode}</div>
+                            <div className="font-medium">
+                              {markup.destinationName}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {markup.destinationCode}
+                            </div>
                           </div>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Badge className={getExperienceTypeColor(markup.experienceType)}>
-                            {getExperienceTypeIcon(markup.experienceType)} {markup.experienceType}
+                          <Badge
+                            className={getExperienceTypeColor(
+                              markup.experienceType,
+                            )}
+                          >
+                            {getExperienceTypeIcon(markup.experienceType)}{" "}
+                            {markup.experienceType}
                           </Badge>
                           {markup.experienceName && (
-                            <div className="text-sm text-gray-600">{markup.experienceName}</div>
+                            <div className="text-sm text-gray-600">
+                              {markup.experienceName}
+                            </div>
                           )}
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="flex items-center gap-1">
                           <span className="font-medium">
-                            {markup.markupType === 'percentage' ? `${markup.markupValue}%` : `${markup.markupValue} ${markup.currency}`}
+                            {markup.markupType === "percentage"
+                              ? `${markup.markupValue}%`
+                              : `${markup.markupValue} ${markup.currency}`}
                           </span>
                           <Badge variant="outline" className="text-xs">
                             {markup.markupType}
                           </Badge>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         {markup.minPrice || markup.maxPrice ? (
                           <div className="text-sm">
-                            {markup.minPrice && `${markup.minPrice} ${markup.currency}`}
+                            {markup.minPrice &&
+                              `${markup.minPrice} ${markup.currency}`}
                             {markup.minPrice && markup.maxPrice && " - "}
-                            {markup.maxPrice && `${markup.maxPrice} ${markup.currency}`}
+                            {markup.maxPrice &&
+                              `${markup.maxPrice} ${markup.currency}`}
                           </div>
                         ) : (
                           <span className="text-gray-500">No limit</span>
                         )}
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4 text-gray-500" />
                           <span>{markup.usageCount.toLocaleString()}</span>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="font-medium text-green-600">
-                          ${markup.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          $
+                          {markup.totalRevenue.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                          })}
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Switch
@@ -630,21 +702,27 @@ export default function MarkupManagementSightseeing() {
                             onCheckedChange={() => toggleMarkupStatus(markup)}
                             size="sm"
                           />
-                          <Badge variant={markup.isActive ? "default" : "secondary"}>
+                          <Badge
+                            variant={markup.isActive ? "default" : "secondary"}
+                          >
                             {markup.isActive ? "Active" : "Inactive"}
                           </Badge>
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <div className="text-sm">
-                          <div>{new Date(markup.validFrom).toLocaleDateString()}</div>
+                          <div>
+                            {new Date(markup.validFrom).toLocaleDateString()}
+                          </div>
                           {markup.validTo && (
-                            <div className="text-gray-500">to {new Date(markup.validTo).toLocaleDateString()}</div>
+                            <div className="text-gray-500">
+                              to {new Date(markup.validTo).toLocaleDateString()}
+                            </div>
                           )}
                         </div>
                       </TableCell>
-                      
+
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -653,11 +731,13 @@ export default function MarkupManagementSightseeing() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => openDialog(markup)}>
+                            <DropdownMenuItem
+                              onClick={() => openDialog(markup)}
+                            >
                               <Edit className="w-4 h-4 mr-2" />
                               Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                               onClick={() => setDeleteConfirmMarkup(markup)}
                               className="text-red-600"
                             >
@@ -671,7 +751,7 @@ export default function MarkupManagementSightseeing() {
                   ))}
                 </TableBody>
               </Table>
-              
+
               {filteredMarkups.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   No sightseeing markups found matching your criteria.
@@ -688,10 +768,14 @@ export default function MarkupManagementSightseeing() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Camera className="w-5 h-5" />
-              {editingMarkup ? "Edit Sightseeing Markup" : "Add Sightseeing Markup"}
+              {editingMarkup
+                ? "Edit Sightseeing Markup"
+                : "Add Sightseeing Markup"}
             </DialogTitle>
             <DialogDescription>
-              {editingMarkup ? "Update the sightseeing markup configuration" : "Create a new markup rule for sightseeing experiences"}
+              {editingMarkup
+                ? "Update the sightseeing markup configuration"
+                : "Create a new markup rule for sightseeing experiences"}
             </DialogDescription>
           </DialogHeader>
 
@@ -710,17 +794,24 @@ export default function MarkupManagementSightseeing() {
                       id="destinationCode"
                       placeholder="e.g., DXB, LON, PAR"
                       value={formData.destinationCode}
-                      onChange={(e) => handleInputChange("destinationCode", e.target.value.toUpperCase())}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "destinationCode",
+                          e.target.value.toUpperCase(),
+                        )
+                      }
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="destinationName">Destination Name *</Label>
                     <Input
                       id="destinationName"
                       placeholder="e.g., Dubai, London, Paris"
                       value={formData.destinationName}
-                      onChange={(e) => handleInputChange("destinationName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("destinationName", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -728,7 +819,12 @@ export default function MarkupManagementSightseeing() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="experienceType">Experience Type *</Label>
-                    <Select value={formData.experienceType} onValueChange={(value) => handleInputChange("experienceType", value)}>
+                    <Select
+                      value={formData.experienceType}
+                      onValueChange={(value) =>
+                        handleInputChange("experienceType", value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -744,14 +840,18 @@ export default function MarkupManagementSightseeing() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="experienceName">Specific Experience (Optional)</Label>
+                    <Label htmlFor="experienceName">
+                      Specific Experience (Optional)
+                    </Label>
                     <Input
                       id="experienceName"
                       placeholder="e.g., Burj Khalifa, Desert Safari"
                       value={formData.experienceName}
-                      onChange={(e) => handleInputChange("experienceName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("experienceName", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -759,33 +859,52 @@ export default function MarkupManagementSightseeing() {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="markupType">Markup Type *</Label>
-                    <Select value={formData.markupType} onValueChange={(value) => handleInputChange("markupType", value)}>
+                    <Select
+                      value={formData.markupType}
+                      onValueChange={(value) =>
+                        handleInputChange("markupType", value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="percentage">Percentage (%)</SelectItem>
+                        <SelectItem value="percentage">
+                          Percentage (%)
+                        </SelectItem>
                         <SelectItem value="fixed">Fixed Amount</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="markupValue">Markup Value *</Label>
                     <Input
                       id="markupValue"
                       type="number"
                       min="0"
-                      step={formData.markupType === 'percentage' ? "0.1" : "1"}
-                      placeholder={formData.markupType === 'percentage' ? "15.0" : "25"}
+                      step={formData.markupType === "percentage" ? "0.1" : "1"}
+                      placeholder={
+                        formData.markupType === "percentage" ? "15.0" : "25"
+                      }
                       value={formData.markupValue || ""}
-                      onChange={(e) => handleInputChange("markupValue", parseFloat(e.target.value) || 0)}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "markupValue",
+                          parseFloat(e.target.value) || 0,
+                        )
+                      }
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="currency">Currency *</Label>
-                    <Select value={formData.currency} onValueChange={(value) => handleInputChange("currency", value)}>
+                    <Select
+                      value={formData.currency}
+                      onValueChange={(value) =>
+                        handleInputChange("currency", value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -811,10 +930,15 @@ export default function MarkupManagementSightseeing() {
                       min="0"
                       placeholder="e.g., 50"
                       value={formData.minPrice || ""}
-                      onChange={(e) => handleInputChange("minPrice", parseFloat(e.target.value) || undefined)}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "minPrice",
+                          parseFloat(e.target.value) || undefined,
+                        )
+                      }
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="maxPrice">Maximum Price (Optional)</Label>
                     <Input
@@ -823,7 +947,12 @@ export default function MarkupManagementSightseeing() {
                       min="0"
                       placeholder="e.g., 500"
                       value={formData.maxPrice || ""}
-                      onChange={(e) => handleInputChange("maxPrice", parseFloat(e.target.value) || undefined)}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "maxPrice",
+                          parseFloat(e.target.value) || undefined,
+                        )
+                      }
                     />
                   </div>
                 </div>
@@ -831,7 +960,12 @@ export default function MarkupManagementSightseeing() {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="priority">Priority *</Label>
-                    <Select value={formData.priority.toString()} onValueChange={(value) => handleInputChange("priority", parseInt(value))}>
+                    <Select
+                      value={formData.priority.toString()}
+                      onValueChange={(value) =>
+                        handleInputChange("priority", parseInt(value))
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -844,24 +978,28 @@ export default function MarkupManagementSightseeing() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="validFrom">Valid From *</Label>
                     <Input
                       id="validFrom"
                       type="date"
                       value={formData.validFrom}
-                      onChange={(e) => handleInputChange("validFrom", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("validFrom", e.target.value)
+                      }
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="validTo">Valid To (Optional)</Label>
                     <Input
                       id="validTo"
                       type="date"
                       value={formData.validTo}
-                      onChange={(e) => handleInputChange("validTo", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("validTo", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -881,7 +1019,9 @@ export default function MarkupManagementSightseeing() {
                   <Switch
                     id="isActive"
                     checked={formData.isActive}
-                    onCheckedChange={(checked) => handleInputChange("isActive", checked)}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("isActive", checked)
+                    }
                   />
                   <Label htmlFor="isActive">Active</Label>
                   <span className="text-sm text-gray-500">
@@ -904,7 +1044,10 @@ export default function MarkupManagementSightseeing() {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={!!deleteConfirmMarkup} onOpenChange={() => setDeleteConfirmMarkup(null)}>
+      <Dialog
+        open={!!deleteConfirmMarkup}
+        onOpenChange={() => setDeleteConfirmMarkup(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -912,17 +1055,24 @@ export default function MarkupManagementSightseeing() {
               Confirm Deletion
             </DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the markup for "{deleteConfirmMarkup?.destinationName}" - "{deleteConfirmMarkup?.experienceType}"?
-              This action cannot be undone.
+              Are you sure you want to delete the markup for "
+              {deleteConfirmMarkup?.destinationName}" - "
+              {deleteConfirmMarkup?.experienceType}"? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirmMarkup(null)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteConfirmMarkup(null)}
+            >
               Cancel
             </Button>
-            <Button 
-              variant="destructive" 
-              onClick={() => deleteConfirmMarkup && handleDelete(deleteConfirmMarkup)}
+            <Button
+              variant="destructive"
+              onClick={() =>
+                deleteConfirmMarkup && handleDelete(deleteConfirmMarkup)
+              }
               disabled={isDeleting}
             >
               {isDeleting ? "Deleting..." : "Delete Markup"}

@@ -35,7 +35,14 @@ interface SightseeingAttraction {
   originalPrice: number;
   currentPrice: number;
   description: string;
-  category: "museum" | "landmark" | "tour" | "activity" | "food" | "culture" | "adventure";
+  category:
+    | "museum"
+    | "landmark"
+    | "tour"
+    | "activity"
+    | "food"
+    | "culture"
+    | "adventure";
   duration: string;
   highlights: string[];
   includes: string[];
@@ -86,43 +93,43 @@ export function SightseeingCard({
         return {
           label: "Landmarks & Attractions",
           color: "bg-blue-100 text-blue-800",
-          IconComponent: Building2
+          IconComponent: Building2,
         };
       case "museum":
         return {
           label: "Museums & Culture",
           color: "bg-purple-100 text-purple-800",
-          IconComponent: Camera
+          IconComponent: Camera,
         };
       case "tour":
         return {
           label: "Tours & Sightseeing",
           color: "bg-green-100 text-green-800",
-          IconComponent: Ticket
+          IconComponent: Ticket,
         };
       case "adventure":
         return {
           label: "Adventure & Sports",
           color: "bg-yellow-100 text-yellow-800",
-          IconComponent: Mountain
+          IconComponent: Mountain,
         };
       case "food":
         return {
           label: "Food & Dining",
           color: "bg-red-100 text-red-800",
-          IconComponent: Utensils
+          IconComponent: Utensils,
         };
       case "culture":
         return {
           label: "Cultural Experiences",
           color: "bg-indigo-100 text-indigo-800",
-          IconComponent: Music
+          IconComponent: Music,
         };
       default:
         return {
           label: "Experience",
           color: "bg-gray-100 text-gray-800",
-          IconComponent: Camera
+          IconComponent: Camera,
         };
     }
   };
@@ -144,15 +151,15 @@ export function SightseeingCard({
   // Image navigation
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => 
-      prev === attraction.images.length - 1 ? 0 : prev + 1
+    setCurrentImageIndex((prev) =>
+      prev === attraction.images.length - 1 ? 0 : prev + 1,
     );
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? attraction.images.length - 1 : prev - 1
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? attraction.images.length - 1 : prev - 1,
     );
   };
 
@@ -182,7 +189,7 @@ export function SightseeingCard({
       <div
         className={cn(
           "bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group",
-          className
+          className,
         )}
       >
         {/* Mobile Layout */}
@@ -220,7 +227,7 @@ export function SightseeingCard({
                         "w-2 h-2 rounded-full transition-all",
                         index === currentImageIndex
                           ? "bg-white"
-                          : "bg-white bg-opacity-50"
+                          : "bg-white bg-opacity-50",
                       )}
                     />
                   ))}
@@ -242,11 +249,13 @@ export function SightseeingCard({
                 onClick={toggleWishlist}
                 className="w-9 h-9 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
               >
-                <Heart 
+                <Heart
                   className={cn(
                     "w-5 h-5 transition-colors",
-                    isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
-                  )} 
+                    isWishlisted
+                      ? "text-red-500 fill-current"
+                      : "text-gray-600",
+                  )}
                 />
               </button>
               <button
@@ -294,13 +303,19 @@ export function SightseeingCard({
                   title="Click to view reviews"
                 >
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="font-medium text-gray-900">{attraction.rating}</span>
+                  <span className="font-medium text-gray-900">
+                    {attraction.rating}
+                  </span>
                   <span className="text-sm text-gray-500">
                     ({attraction.reviews.toLocaleString()} reviews)
                   </span>
                 </div>
                 <div className="text-xs text-green-600 font-medium">
-                  Save {formatPrice((attraction.originalPrice - attraction.currentPrice) * adults)}
+                  Save{" "}
+                  {formatPrice(
+                    (attraction.originalPrice - attraction.currentPrice) *
+                      adults,
+                  )}
                 </div>
               </div>
             </div>
@@ -326,10 +341,15 @@ export function SightseeingCard({
 
             {/* Highlights */}
             <div className="mb-4 flex-grow">
-              <h4 className="text-sm font-medium text-gray-900 mb-2">Highlights:</h4>
+              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                Highlights:
+              </h4>
               <div className="space-y-1">
                 {attraction.highlights.slice(0, 3).map((highlight, index) => (
-                  <div key={index} className="flex items-start text-sm text-gray-600">
+                  <div
+                    key={index}
+                    className="flex items-start text-sm text-gray-600"
+                  >
                     <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                     <span className="line-clamp-1">{highlight}</span>
                   </div>
@@ -367,7 +387,7 @@ export function SightseeingCard({
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 cursor-pointer"
               onClick={() => setShowImageGallery(true)}
             />
-            
+
             {/* Image navigation */}
             {attraction.images.length > 1 && (
               <>
@@ -383,7 +403,7 @@ export function SightseeingCard({
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
-                
+
                 {/* Image count indicator */}
                 <div className="absolute bottom-3 right-3 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
                   {currentImageIndex + 1} / {attraction.images.length}
@@ -405,11 +425,13 @@ export function SightseeingCard({
                 onClick={toggleWishlist}
                 className="w-9 h-9 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
               >
-                <Heart 
+                <Heart
                   className={cn(
                     "w-5 h-5 transition-colors",
-                    isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
-                  )} 
+                    isWishlisted
+                      ? "text-red-500 fill-current"
+                      : "text-gray-600",
+                  )}
                 />
               </button>
               <button
@@ -450,7 +472,9 @@ export function SightseeingCard({
                     title="Click to view reviews"
                   >
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="font-medium text-gray-900">{attraction.rating}</span>
+                    <span className="font-medium text-gray-900">
+                      {attraction.rating}
+                    </span>
                     <span className="text-sm text-gray-500">
                       ({attraction.reviews.toLocaleString()} reviews)
                     </span>
@@ -464,14 +488,21 @@ export function SightseeingCard({
 
                 {/* Highlights */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">Highlights:</h4>
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">
+                    Highlights:
+                  </h4>
                   <div className="grid grid-cols-2 gap-1">
-                    {attraction.highlights.slice(0, 6).map((highlight, index) => (
-                      <div key={index} className="flex items-start text-sm text-gray-600">
-                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="truncate">{highlight}</span>
-                      </div>
-                    ))}
+                    {attraction.highlights
+                      .slice(0, 6)
+                      .map((highlight, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start text-sm text-gray-600"
+                        >
+                          <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                          <span className="truncate">{highlight}</span>
+                        </div>
+                      ))}
                   </div>
                 </div>
 
@@ -502,20 +533,29 @@ export function SightseeingCard({
                       {formatPrice(attraction.currentPrice * adults)}
                     </div>
                     <div className="text-sm text-gray-600">
-                      for {adults} {adults === 1 ? 'person' : 'people'}
+                      for {adults} {adults === 1 ? "person" : "people"}
                     </div>
                     <div className="text-sm text-green-600 font-medium">
-                      You save {formatPrice((attraction.originalPrice - attraction.currentPrice) * adults)}
+                      You save{" "}
+                      {formatPrice(
+                        (attraction.originalPrice - attraction.currentPrice) *
+                          adults,
+                      )}
                     </div>
                   </div>
                 </div>
 
                 {/* What's Included */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">What's Included:</h4>
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">
+                    What's Included:
+                  </h4>
                   <div className="space-y-1">
                     {attraction.includes.slice(0, 3).map((item, index) => (
-                      <div key={index} className="flex items-start text-sm text-gray-600">
+                      <div
+                        key={index}
+                        className="flex items-start text-sm text-gray-600"
+                      >
                         <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{item}</span>
                       </div>
@@ -564,19 +604,21 @@ export function SightseeingCard({
             >
               <X className="w-6 h-6" />
             </button>
-            
+
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
               className="max-w-full max-h-full object-contain"
             />
-            
+
             {attraction.images.length > 1 && (
               <>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentImageIndex(prev => prev === 0 ? attraction.images.length - 1 : prev - 1);
+                    setCurrentImageIndex((prev) =>
+                      prev === 0 ? attraction.images.length - 1 : prev - 1,
+                    );
                   }}
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 text-white rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
                 >
@@ -585,13 +627,15 @@ export function SightseeingCard({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentImageIndex(prev => prev === attraction.images.length - 1 ? 0 : prev + 1);
+                    setCurrentImageIndex((prev) =>
+                      prev === attraction.images.length - 1 ? 0 : prev + 1,
+                    );
                   }}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 text-white rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
-                
+
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded text-sm">
                   {currentImageIndex + 1} / {attraction.images.length}
                 </div>

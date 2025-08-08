@@ -100,7 +100,10 @@ export function BookingCalendar({
       if (!endDate) {
         // If no end date selected yet, use start date (user is still selecting)
         endDate = range.startDate;
-      } else if (bookingType === "hotel" && isSameDay(range.startDate, endDate)) {
+      } else if (
+        bookingType === "hotel" &&
+        isSameDay(range.startDate, endDate)
+      ) {
         // For hotels, ensure at least 1 night stay
         endDate = addDays(range.startDate, 1);
       }
@@ -114,7 +117,12 @@ export function BookingCalendar({
         },
       ];
 
-      console.log("Setting new selection:", newSelection, "bookingType:", bookingType);
+      console.log(
+        "Setting new selection:",
+        newSelection,
+        "bookingType:",
+        bookingType,
+      );
       setSelection(newSelection);
 
       // Call onChange with proper date range
@@ -476,7 +484,10 @@ export function BookingCalendar({
         </div>
 
         {/* Calendar component */}
-        <div className="p-0" style={{ pointerEvents: 'auto', position: 'relative', zIndex: 1 }}>
+        <div
+          className="p-0"
+          style={{ pointerEvents: "auto", position: "relative", zIndex: 1 }}
+        >
           <DateRange
             ranges={selection}
             onChange={handleSelect}

@@ -38,7 +38,14 @@ interface SightseeingAttraction {
   originalPrice: number;
   currentPrice: number;
   description: string;
-  category: "museum" | "landmark" | "tour" | "activity" | "food" | "culture" | "adventure";
+  category:
+    | "museum"
+    | "landmark"
+    | "tour"
+    | "activity"
+    | "food"
+    | "culture"
+    | "adventure";
   duration: string;
   highlights: string[];
   includes: string[];
@@ -60,7 +67,9 @@ export default function SightseeingDetails() {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
 
-  const [attraction, setAttraction] = useState<SightseeingAttraction | null>(null);
+  const [attraction, setAttraction] = useState<SightseeingAttraction | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -80,7 +89,7 @@ export default function SightseeingDetails() {
 
       try {
         // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Sample attraction data (in real app, this would come from API)
         const sampleAttractions: Record<string, SightseeingAttraction> = {
@@ -97,7 +106,8 @@ export default function SightseeingDetails() {
             reviews: 45879,
             originalPrice: 189,
             currentPrice: 149,
-            description: "Skip the line and enjoy breathtaking views from the world's tallest building. Experience Dubai from the clouds with stunning 360-degree panoramic views of the city's iconic skyline, desert, and ocean.",
+            description:
+              "Skip the line and enjoy breathtaking views from the world's tallest building. Experience Dubai from the clouds with stunning 360-degree panoramic views of the city's iconic skyline, desert, and ocean.",
             category: "landmark",
             duration: "1-2 hours",
             highlights: [
@@ -108,7 +118,7 @@ export default function SightseeingDetails() {
               "World's tallest building",
               "Skip-the-line access",
               "Professional photography opportunities",
-              "Gift shop access"
+              "Gift shop access",
             ],
             includes: [
               "Skip-the-line access",
@@ -118,32 +128,64 @@ export default function SightseeingDetails() {
               "High-speed elevator ride",
               "Interactive displays",
               "Professional guide (optional)",
-              "Photography assistance"
+              "Photography assistance",
             ],
-            features: ["Skip the line", "Audio guide", "Mobile ticket", "Instant confirmation"],
+            features: [
+              "Skip the line",
+              "Audio guide",
+              "Mobile ticket",
+              "Instant confirmation",
+            ],
             availableSlots: [
               {
                 date: new Date().toISOString(),
-                times: ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00", "19:30"]
-              }
+                times: [
+                  "09:00",
+                  "10:30",
+                  "12:00",
+                  "13:30",
+                  "15:00",
+                  "16:30",
+                  "18:00",
+                  "19:30",
+                ],
+              },
             ],
             ticketTypes: [
               {
                 name: "Standard Admission",
                 price: 149,
-                features: ["Floors 124 & 125", "Skip-the-line access", "Outdoor deck", "Welcome drink"]
+                features: [
+                  "Floors 124 & 125",
+                  "Skip-the-line access",
+                  "Outdoor deck",
+                  "Welcome drink",
+                ],
               },
               {
                 name: "Prime Time",
                 price: 199,
-                features: ["Floors 124 & 125", "Skip-the-line access", "Prime viewing times", "Premium refreshments", "Priority elevator"]
+                features: [
+                  "Floors 124 & 125",
+                  "Skip-the-line access",
+                  "Prime viewing times",
+                  "Premium refreshments",
+                  "Priority elevator",
+                ],
               },
               {
                 name: "VIP Experience",
                 price: 299,
-                features: ["Floors 124, 125 & 148", "Private elevator", "VIP lounge access", "Premium refreshments", "Personal guide", "Professional photos"]
-              }
-            ]
+                features: [
+                  "Floors 124, 125 & 148",
+                  "Private elevator",
+                  "VIP lounge access",
+                  "Premium refreshments",
+                  "Personal guide",
+                  "Professional photos",
+                ],
+              },
+            ],
           },
           "dubai-aquarium": {
             id: "dubai-aquarium",
@@ -158,7 +200,8 @@ export default function SightseeingDetails() {
             reviews: 23156,
             originalPrice: 120,
             currentPrice: 89,
-            description: "Explore one of the world's largest suspended aquariums with over 140 species",
+            description:
+              "Explore one of the world's largest suspended aquariums with over 140 species",
             category: "museum",
             duration: "2-3 hours",
             highlights: [
@@ -167,7 +210,7 @@ export default function SightseeingDetails() {
               "Underwater zoo experience",
               "Interactive touch tanks",
               "Shark feeding shows",
-              "Educational presentations"
+              "Educational presentations",
             ],
             includes: [
               "Aquarium tunnel access",
@@ -175,39 +218,61 @@ export default function SightseeingDetails() {
               "King Crocodile viewing",
               "Touch tank experience",
               "Educational talks",
-              "Mobile app guide"
+              "Mobile app guide",
             ],
-            features: ["Mobile ticket", "Audio guide", "Photo opportunities", "Interactive experience"],
+            features: [
+              "Mobile ticket",
+              "Audio guide",
+              "Photo opportunities",
+              "Interactive experience",
+            ],
             availableSlots: [
               {
                 date: new Date().toISOString(),
-                times: ["10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00"]
-              }
+                times: [
+                  "10:00",
+                  "11:00",
+                  "12:00",
+                  "14:00",
+                  "15:00",
+                  "16:00",
+                  "17:00",
+                ],
+              },
             ],
             ticketTypes: [
               {
                 name: "Aquarium + Zoo",
                 price: 89,
-                features: ["Aquarium access", "Underwater zoo", "Touch tanks", "Educational talks"]
+                features: [
+                  "Aquarium access",
+                  "Underwater zoo",
+                  "Touch tanks",
+                  "Educational talks",
+                ],
               },
               {
                 name: "Explorer Experience",
                 price: 129,
-                features: ["All standard features", "Behind-the-scenes tour", "Feeding experience", "VIP guide"]
-              }
-            ]
-          }
+                features: [
+                  "All standard features",
+                  "Behind-the-scenes tour",
+                  "Feeding experience",
+                  "VIP guide",
+                ],
+              },
+            ],
+          },
         };
 
         const attractionData = sampleAttractions[attractionId || ""];
-        
+
         if (!attractionData) {
           setError("Attraction not found");
           return;
         }
 
         setAttraction(attractionData);
-        
       } catch (err) {
         console.error("Error loading attraction:", err);
         setError("Failed to load attraction details. Please try again.");
@@ -228,43 +293,43 @@ export default function SightseeingDetails() {
         return {
           label: "Landmarks & Attractions",
           color: "bg-blue-100 text-blue-800",
-          IconComponent: Building2
+          IconComponent: Building2,
         };
       case "museum":
         return {
           label: "Museums & Culture",
           color: "bg-purple-100 text-purple-800",
-          IconComponent: Camera
+          IconComponent: Camera,
         };
       case "tour":
         return {
           label: "Tours & Sightseeing",
           color: "bg-green-100 text-green-800",
-          IconComponent: Ticket
+          IconComponent: Ticket,
         };
       case "adventure":
         return {
           label: "Adventure & Sports",
           color: "bg-yellow-100 text-yellow-800",
-          IconComponent: Mountain
+          IconComponent: Mountain,
         };
       case "food":
         return {
           label: "Food & Dining",
           color: "bg-red-100 text-red-800",
-          IconComponent: Utensils
+          IconComponent: Utensils,
         };
       case "culture":
         return {
           label: "Cultural Experiences",
           color: "bg-indigo-100 text-indigo-800",
-          IconComponent: Music
+          IconComponent: Music,
         };
       default:
         return {
           label: "Experience",
           color: "bg-gray-100 text-gray-800",
-          IconComponent: Camera
+          IconComponent: Camera,
         };
     }
   };
@@ -290,16 +355,16 @@ export default function SightseeingDetails() {
   // Image navigation
   const nextImage = () => {
     if (attraction) {
-      setCurrentImageIndex((prev) => 
-        prev === attraction.images.length - 1 ? 0 : prev + 1
+      setCurrentImageIndex((prev) =>
+        prev === attraction.images.length - 1 ? 0 : prev + 1,
       );
     }
   };
 
   const prevImage = () => {
     if (attraction) {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? attraction.images.length - 1 : prev - 1
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? attraction.images.length - 1 : prev - 1,
       );
     }
   };
@@ -331,9 +396,9 @@ export default function SightseeingDetails() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Results
           </Button>
-          <ErrorBanner 
-            message={error || "Attraction not found"} 
-            onClose={() => setError("")} 
+          <ErrorBanner
+            message={error || "Attraction not found"}
+            onClose={() => setError("")}
           />
         </div>
       </div>
@@ -349,7 +414,7 @@ export default function SightseeingDetails() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Back Button */}
         <Button
@@ -370,7 +435,7 @@ export default function SightseeingDetails() {
               alt={attraction.name}
               className="w-full h-full object-cover"
             />
-            
+
             {attraction.images.length > 1 && (
               <>
                 <button
@@ -385,7 +450,7 @@ export default function SightseeingDetails() {
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
-                
+
                 <div className="absolute bottom-4 right-4 bg-black bg-opacity-60 text-white text-sm px-3 py-1 rounded">
                   {currentImageIndex + 1} / {attraction.images.length}
                 </div>
@@ -405,16 +470,16 @@ export default function SightseeingDetails() {
                 onClick={() => setIsWishlisted(!isWishlisted)}
                 className="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
               >
-                <Heart 
+                <Heart
                   className={cn(
                     "w-5 h-5 transition-colors",
-                    isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
-                  )} 
+                    isWishlisted
+                      ? "text-red-500 fill-current"
+                      : "text-gray-600",
+                  )}
                 />
               </button>
-              <button
-                className="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
-              >
+              <button className="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all">
                 <Share2 className="w-5 h-5 text-gray-600" />
               </button>
             </div>
@@ -430,7 +495,7 @@ export default function SightseeingDetails() {
                   <h1 className="text-3xl font-bold text-gray-900 mb-4">
                     {attraction.name}
                   </h1>
-                  
+
                   <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-4">
                     <div className="flex items-center gap-2">
                       <MapPin className="w-5 h-5" />
@@ -442,8 +507,12 @@ export default function SightseeingDetails() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                      <span className="font-medium text-gray-900">{attraction.rating}</span>
-                      <span className="text-sm">({attraction.reviews.toLocaleString()} reviews)</span>
+                      <span className="font-medium text-gray-900">
+                        {attraction.rating}
+                      </span>
+                      <span className="text-sm">
+                        ({attraction.reviews.toLocaleString()} reviews)
+                      </span>
                     </div>
                   </div>
 
@@ -454,10 +523,15 @@ export default function SightseeingDetails() {
 
                 {/* Highlights */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Highlights</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    Highlights
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {attraction.highlights.map((highlight, index) => (
-                      <div key={index} className="flex items-center text-gray-600">
+                      <div
+                        key={index}
+                        className="flex items-center text-gray-600"
+                      >
                         <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                         <span>{highlight}</span>
                       </div>
@@ -467,10 +541,15 @@ export default function SightseeingDetails() {
 
                 {/* What's Included */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">What's Included</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    What's Included
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {attraction.includes.map((item, index) => (
-                      <div key={index} className="flex items-center text-gray-600">
+                      <div
+                        key={index}
+                        className="flex items-center text-gray-600"
+                      >
                         <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
                         <span>{item}</span>
                       </div>
@@ -480,7 +559,9 @@ export default function SightseeingDetails() {
 
                 {/* Features */}
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Features</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                    Features
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {attraction.features.map((feature, index) => (
                       <Badge key={index} variant="secondary">
@@ -496,7 +577,9 @@ export default function SightseeingDetails() {
                 <div className="bg-gray-50 rounded-xl p-6 sticky top-6">
                   {/* Ticket Types */}
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Choose Ticket Type</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      Choose Ticket Type
+                    </h3>
                     <div className="space-y-3">
                       {attraction.ticketTypes.map((ticket, index) => (
                         <div
@@ -505,12 +588,14 @@ export default function SightseeingDetails() {
                             "p-4 border rounded-lg cursor-pointer transition-all",
                             selectedTicketType === index
                               ? "border-blue-500 bg-blue-50"
-                              : "border-gray-200 hover:border-gray-300"
+                              : "border-gray-200 hover:border-gray-300",
                           )}
                           onClick={() => setSelectedTicketType(index)}
                         >
                           <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-medium text-gray-900">{ticket.name}</h4>
+                            <h4 className="font-medium text-gray-900">
+                              {ticket.name}
+                            </h4>
                             <div className="text-right">
                               <div className="text-lg font-bold text-blue-600">
                                 {formatPrice(ticket.price * adults)}
@@ -522,7 +607,10 @@ export default function SightseeingDetails() {
                           </div>
                           <div className="space-y-1">
                             {ticket.features.map((feature, idx) => (
-                              <div key={idx} className="text-sm text-gray-600 flex items-center">
+                              <div
+                                key={idx}
+                                className="text-sm text-gray-600 flex items-center"
+                              >
                                 <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
                                 {feature}
                               </div>
@@ -535,19 +623,29 @@ export default function SightseeingDetails() {
 
                   {/* Available Times */}
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Today</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      Available Today
+                    </h3>
                     <div className="grid grid-cols-2 gap-2">
-                      {attraction.availableSlots[0]?.times.map((time, index) => (
-                        <Button
-                          key={index}
-                          variant={selectedTime === time ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setSelectedTime(time)}
-                          className={selectedTime === time ? "bg-[#003580] text-white" : ""}
-                        >
-                          {time}
-                        </Button>
-                      ))}
+                      {attraction.availableSlots[0]?.times.map(
+                        (time, index) => (
+                          <Button
+                            key={index}
+                            variant={
+                              selectedTime === time ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() => setSelectedTime(time)}
+                            className={
+                              selectedTime === time
+                                ? "bg-[#003580] text-white"
+                                : ""
+                            }
+                          >
+                            {time}
+                          </Button>
+                        ),
+                      )}
                     </div>
                     {selectedTime && (
                       <div className="mt-2 text-sm text-green-600 font-medium">
@@ -559,7 +657,9 @@ export default function SightseeingDetails() {
                   {/* Price Summary */}
                   <div className="mb-6 p-4 bg-white rounded-lg border">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600">Total for {adults} adult{adults > 1 ? 's' : ''}</span>
+                      <span className="text-gray-600">
+                        Total for {adults} adult{adults > 1 ? "s" : ""}
+                      </span>
                       <span className="text-2xl font-bold text-blue-600">
                         {formatPrice(totalPrice)}
                       </span>

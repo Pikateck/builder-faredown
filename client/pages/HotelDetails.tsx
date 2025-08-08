@@ -248,8 +248,15 @@ export default function HotelDetails() {
               children: parseInt(childrenParam || "0"),
             };
 
-            console.log("🔍 Using hotelsService.getHotelDetails:", hotelId, searchParams);
-            const hotel = await hotelsService.getHotelDetails(hotelId, searchParams);
+            console.log(
+              "🔍 Using hotelsService.getHotelDetails:",
+              hotelId,
+              searchParams,
+            );
+            const hotel = await hotelsService.getHotelDetails(
+              hotelId,
+              searchParams,
+            );
             console.log("✅ Hotel data received via service:", hotel);
             return hotel;
           } catch (serviceError) {
@@ -261,7 +268,8 @@ export default function HotelDetails() {
               window.location.origin,
             );
             if (checkInParam) apiUrl.searchParams.set("checkIn", checkInParam);
-            if (checkOutParam) apiUrl.searchParams.set("checkOut", checkOutParam);
+            if (checkOutParam)
+              apiUrl.searchParams.set("checkOut", checkOutParam);
 
             const response = await fetchWithTimeout(apiUrl.toString(), {
               method: "GET",
@@ -272,13 +280,18 @@ export default function HotelDetails() {
             });
 
             if (!response.ok) {
-              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              throw new Error(
+                `HTTP ${response.status}: ${response.statusText}`,
+              );
             }
 
             const data = await response.json();
 
             if (data.success && data.hotel) {
-              console.log("✅ Live hotel data received via direct API:", data.hotel);
+              console.log(
+                "✅ Live hotel data received via direct API:",
+                data.hotel,
+              );
               return data.hotel;
             } else {
               throw new Error("Invalid response structure or no hotel data");
@@ -707,7 +720,9 @@ export default function HotelDetails() {
     // Scroll to reviews section smoothly - try both mobile and desktop versions
     setTimeout(() => {
       const reviewsSectionMobile = document.getElementById("reviews-section");
-      const reviewsSectionDesktop = document.getElementById("reviews-section-desktop");
+      const reviewsSectionDesktop = document.getElementById(
+        "reviews-section-desktop",
+      );
       const targetSection = reviewsSectionMobile || reviewsSectionDesktop;
       if (targetSection) {
         console.log("📍 Scrolling to reviews section:", targetSection.id);
@@ -2553,7 +2568,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "reviews" && (
-              <div id="reviews-section-desktop" className="bg-white rounded-lg border border-gray-200 p-4">
+              <div
+                id="reviews-section-desktop"
+                className="bg-white rounded-lg border border-gray-200 p-4"
+              >
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold">
                     Guest reviews for {hotel.name}

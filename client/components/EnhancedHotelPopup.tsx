@@ -265,7 +265,6 @@ export function EnhancedHotelPopup({
                     for {nights} {nights === 1 ? "night" : "nights"}
                   </span>
                 </div>
-                
               </div>
               <p className="text-sm text-gray-600 mt-1">
                 Includes taxes and fees

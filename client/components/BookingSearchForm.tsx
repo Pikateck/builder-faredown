@@ -66,7 +66,9 @@ export function BookingSearchForm() {
   checkOutDefault.setDate(checkOutDefault.getDate() + 4);
 
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(tomorrow);
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(checkOutDefault);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
+    checkOutDefault,
+  );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,

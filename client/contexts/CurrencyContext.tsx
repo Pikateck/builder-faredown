@@ -310,9 +310,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   const setCurrency = (currency: Currency | string) => {
     let targetCurrency: Currency;
 
-    if (typeof currency === 'string') {
+    if (typeof currency === "string") {
       // Find the currency object by code
-      const foundCurrency = currencies.find(c => c.code === currency);
+      const foundCurrency = currencies.find((c) => c.code === currency);
       if (!foundCurrency) {
         console.warn(`Currency with code ${currency} not found`);
         return;

@@ -112,10 +112,22 @@ function App() {
                   <Route path="/booking-invoice" element={<BookingInvoice />} />
                   <Route path="/bookings" element={<Bookings />} />
                   <Route path="/sightseeing" element={<Sightseeing />} />
-                  <Route path="/sightseeing/results" element={<SightseeingResults />} />
-                  <Route path="/sightseeing/:attractionId" element={<SightseeingDetails />} />
-                  <Route path="/sightseeing/booking" element={<SightseeingBooking />} />
-                  <Route path="/sightseeing/booking/confirmation" element={<SightseeingBookingConfirmation />} />
+                  <Route
+                    path="/sightseeing/results"
+                    element={<SightseeingResults />}
+                  />
+                  <Route
+                    path="/sightseeing/:attractionId"
+                    element={<SightseeingDetails />}
+                  />
+                  <Route
+                    path="/sightseeing/booking"
+                    element={<SightseeingBooking />}
+                  />
+                  <Route
+                    path="/sightseeing/booking/confirmation"
+                    element={<SightseeingBookingConfirmation />}
+                  />
                   <Route path="/sports" element={<SportsEvents />} />
                   <Route path="/sports-events" element={<SportsEvents />} />
                   <Route path="/transfers" element={<Transfers />} />
@@ -138,8 +150,14 @@ function App() {
                     element={<BackendTestDashboard />}
                   />
                   <Route path="/amadeus-test" element={<AmadeusTestPanel />} />
-                  <Route path="/api-integration-test" element={<ApiIntegrationTest />} />
-                  <Route path="/bargain-error-test" element={<BargainErrorTest />} />
+                  <Route
+                    path="/api-integration-test"
+                    element={<ApiIntegrationTest />}
+                  />
+                  <Route
+                    path="/bargain-error-test"
+                    element={<BargainErrorTest />}
+                  />
                   <Route path="/logo-designs" element={<LogoDesignOptions />} />
                   <Route
                     path="/color-palette"

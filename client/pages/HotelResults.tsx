@@ -1441,9 +1441,13 @@ export default function HotelResults() {
                 name: "Standard Room",
                 description: "Comfortable standard room",
                 image: selectedHotel.images?.[0] || "/placeholder.svg",
-                marketPrice: selectedHotel.originalPrice || selectedHotel.pricePerNight * 1.2,
-                totalPrice: selectedHotel.currentPrice || selectedHotel.pricePerNight,
-                total: selectedHotel.currentPrice || selectedHotel.pricePerNight,
+                marketPrice:
+                  selectedHotel.originalPrice ||
+                  selectedHotel.pricePerNight * 1.2,
+                totalPrice:
+                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
+                total:
+                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
                 features: selectedHotel.features || [],
                 maxOccupancy: 2,
                 bedType: "1 double bed",
@@ -1482,7 +1486,9 @@ export default function HotelResults() {
         onBookingSuccess={(finalPrice) => {
           setIsBargainModalOpen(false);
           // Navigate to booking with bargained price
-          navigate(`/hotel-booking-confirmation?price=${finalPrice}&bargainApplied=true`);
+          navigate(
+            `/hotel-booking-confirmation?price=${finalPrice}&bargainApplied=true`,
+          );
         }}
       />
 

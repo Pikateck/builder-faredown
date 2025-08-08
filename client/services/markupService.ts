@@ -424,7 +424,10 @@ class MarkupService {
         return this.getFallbackMarkupCalculation(bookingDetails);
       }
     } catch (error) {
-      console.warn("⚠️ API server unavailable, using fallback markup calculation:", error instanceof Error ? error.message : "Unknown error");
+      console.warn(
+        "⚠️ API server unavailable, using fallback markup calculation:",
+        error instanceof Error ? error.message : "Unknown error",
+      );
       return this.getFallbackMarkupCalculation(bookingDetails);
     }
   }
@@ -455,7 +458,10 @@ class MarkupService {
 
     if (bookingDetails.type === "air") {
       // Flight markup logic
-      if (bookingDetails.class === "business" || bookingDetails.class === "first") {
+      if (
+        bookingDetails.class === "business" ||
+        bookingDetails.class === "first"
+      ) {
         baseMarkupMin = 8;
         baseMarkupMax = 18;
         selectedMarkupPercentage = 12;
@@ -468,7 +474,10 @@ class MarkupService {
       // Premium airlines get lower markup
       const premiumAirlines = ["EK", "QR", "EY", "LH", "BA", "AF", "SQ"];
       if (premiumAirlines.includes(bookingDetails.airline || "")) {
-        selectedMarkupPercentage = Math.max(selectedMarkupPercentage - 3, baseMarkupMin);
+        selectedMarkupPercentage = Math.max(
+          selectedMarkupPercentage - 3,
+          baseMarkupMin,
+        );
       }
     } else if (bookingDetails.type === "hotel") {
       // Hotel markup logic
@@ -494,13 +503,17 @@ class MarkupService {
 
       // Premium categories get higher markup
       const premiumCategories = ["luxury", "premium", "vip"];
-      if (premiumCategories.some(cat =>
-        bookingDetails.category?.toLowerCase().includes(cat))) {
+      if (
+        premiumCategories.some((cat) =>
+          bookingDetails.category?.toLowerCase().includes(cat),
+        )
+      ) {
         selectedMarkupPercentage = 30;
       }
     }
 
-    const markupAmount = bookingDetails.basePrice * (selectedMarkupPercentage / 100);
+    const markupAmount =
+      bookingDetails.basePrice * (selectedMarkupPercentage / 100);
     const finalPrice = bookingDetails.basePrice + markupAmount;
 
     // Create a fallback markup object
@@ -531,7 +544,7 @@ class MarkupService {
       selectedMarkup: fallbackMarkup,
       markupAmount,
       finalPrice,
-      markupRange: { min: baseMarkupMin, max: baseMarkupMax }
+      markupRange: { min: baseMarkupMin, max: baseMarkupMax },
     };
   }
 }

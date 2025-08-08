@@ -274,20 +274,25 @@ class BargainPricingService {
   /**
    * Fallback bargain pricing when API/markup calculation fails
    */
-  private getFallbackBargainPricing(request: BargainPricingRequest): BargainPricingResult {
+  private getFallbackBargainPricing(
+    request: BargainPricingRequest,
+  ): BargainPricingResult {
     console.log("🔄 Generating fallback bargain pricing for:", request.type);
 
     // Define fallback markup percentages by type
     const fallbackMarkups = {
       flight: { min: 12, max: 22, selected: 16 },
       hotel: { min: 15, max: 28, selected: 20 },
-      sightseeing: { min: 20, max: 35, selected: 25 }
+      sightseeing: { min: 20, max: 35, selected: 25 },
     };
 
     const markup = fallbackMarkups[request.type] || fallbackMarkups.flight;
 
     // Randomize within range
-    const randomizedMarkup = this.randomizeMarkupInRange(markup.min, markup.max);
+    const randomizedMarkup = this.randomizeMarkupInRange(
+      markup.min,
+      markup.max,
+    );
     const markupAmount = request.basePrice * (randomizedMarkup / 100);
     const markedUpPrice = request.basePrice + markupAmount;
 

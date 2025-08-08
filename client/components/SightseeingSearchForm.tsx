@@ -44,7 +44,6 @@ import {
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
-
 interface DestinationOption {
   id: string;
   code: string;
@@ -66,7 +65,8 @@ export function SightseeingSearchForm() {
   const [destinationCode, setDestinationCode] = useState(""); // Store destination code
   // Separate states for mobile and desktop popovers
   const [isDestinationOpenMobile, setIsDestinationOpenMobile] = useState(false);
-  const [isDestinationOpenDesktop, setIsDestinationOpenDesktop] = useState(false);
+  const [isDestinationOpenDesktop, setIsDestinationOpenDesktop] =
+    useState(false);
   const [isCalendarOpenMobile, setIsCalendarOpenMobile] = useState(false);
   const [isCalendarOpenDesktop, setIsCalendarOpenDesktop] = useState(false);
 
@@ -120,7 +120,9 @@ export function SightseeingSearchForm() {
   useEffect(() => {
     const loadPopularDestinations = async () => {
       try {
-        console.log("🎆 Loading popular sightseeing destinations from database...");
+        console.log(
+          "🎆 Loading popular sightseeing destinations from database...",
+        );
         const popular = await hotelsService.searchDestinations("", 8, true); // Get 8 popular destinations
         const formattedPopular = popular.map((dest) => ({
           id: dest.id,
@@ -210,7 +212,7 @@ export function SightseeingSearchForm() {
         country: "United Arab Emirates",
         type: "city",
         flag: "🇦🇪",
-        popular: true
+        popular: true,
       },
       {
         id: "DXB-MARINA",
@@ -218,7 +220,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Marina",
         country: "United Arab Emirates",
         type: "district",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "DXB-DOWNTOWN",
@@ -226,7 +228,7 @@ export function SightseeingSearchForm() {
         name: "Downtown Dubai",
         country: "United Arab Emirates",
         type: "district",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "DXB-JBR",
@@ -234,7 +236,7 @@ export function SightseeingSearchForm() {
         name: "JBR - Jumeirah Beach Residence",
         country: "United Arab Emirates",
         type: "district",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       // Top attractions
       {
@@ -243,7 +245,7 @@ export function SightseeingSearchForm() {
         name: "The Dubai Fountain",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "BURJ-KHALIFA",
@@ -251,7 +253,7 @@ export function SightseeingSearchForm() {
         name: "Burj Khalifa",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "DUBAI-MALL",
@@ -259,7 +261,7 @@ export function SightseeingSearchForm() {
         name: "The Dubai Mall",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "DUBAI-FRAME",
@@ -267,7 +269,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Frame",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "ATLANTIS-PALM",
@@ -275,7 +277,7 @@ export function SightseeingSearchForm() {
         name: "Atlantis The Palm",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "DUBAI-MIRACLE-GARDEN",
@@ -283,7 +285,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Miracle Garden",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "GOLD-SOUKS",
@@ -291,7 +293,7 @@ export function SightseeingSearchForm() {
         name: "Gold & Spice Souks",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "LEGOLAND-DUBAI",
@@ -299,7 +301,7 @@ export function SightseeingSearchForm() {
         name: "Legoland Dubai",
         country: "United Arab Emirates",
         type: "theme-park",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "IMG-WORLDS",
@@ -307,7 +309,7 @@ export function SightseeingSearchForm() {
         name: "IMG Worlds of Adventure",
         country: "United Arab Emirates",
         type: "theme-park",
-        flag: "🇦🇪"
+        flag: "🇦🇪",
       },
       {
         id: "DUBAI-AQUARIUM",
@@ -315,57 +317,63 @@ export function SightseeingSearchForm() {
         name: "Dubai Aquarium & Underwater Zoo",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦����"
-      }
+        flag: "🇦����",
+      },
     ];
   };
 
   // Debounced destination search
-  const searchDestinations = useCallback(
-    async (query: string) => {
-      if (!query.trim() || query.length < 2) {
-        setDestinationSuggestions([]);
+  const searchDestinations = useCallback(async (query: string) => {
+    if (!query.trim() || query.length < 2) {
+      setDestinationSuggestions([]);
+      return;
+    }
+
+    setLoadingDestinations(true);
+    try {
+      console.log("🔍 Searching sightseeing destinations for:", query);
+
+      // Check if searching for Dubai - show specific attractions
+      const lowerQuery = query.toLowerCase();
+      if (lowerQuery.includes("dubai") || lowerQuery.includes("dxb")) {
+        const dubaiAttractions = getDubaiAttractions();
+        // Filter attractions based on query
+        const filteredAttractions = dubaiAttractions.filter(
+          (attraction) =>
+            attraction.name.toLowerCase().includes(lowerQuery) ||
+            attraction.country.toLowerCase().includes(lowerQuery),
+        );
+        setDestinationSuggestions(filteredAttractions);
+        console.log(
+          "✅ Found",
+          filteredAttractions.length,
+          "Dubai sightseeing destinations",
+        );
         return;
       }
 
-      setLoadingDestinations(true);
-      try {
-        console.log("🔍 Searching sightseeing destinations for:", query);
-
-        // Check if searching for Dubai - show specific attractions
-        const lowerQuery = query.toLowerCase();
-        if (lowerQuery.includes('dubai') || lowerQuery.includes('dxb')) {
-          const dubaiAttractions = getDubaiAttractions();
-          // Filter attractions based on query
-          const filteredAttractions = dubaiAttractions.filter(attraction =>
-            attraction.name.toLowerCase().includes(lowerQuery) ||
-            attraction.country.toLowerCase().includes(lowerQuery)
-          );
-          setDestinationSuggestions(filteredAttractions);
-          console.log("✅ Found", filteredAttractions.length, "Dubai sightseeing destinations");
-          return;
-        }
-
-        // Fallback to regular search
-        const results = await hotelsService.searchDestinations(query, 10);
-        const formattedResults = results.map((dest) => ({
-          id: dest.id,
-          code: dest.id,
-          name: dest.name,
-          country: dest.country,
-          type: dest.type as "city" | "region" | "country" | "landmark",
-        }));
-        setDestinationSuggestions(formattedResults);
-        console.log("✅ Found", formattedResults.length, "sightseeing destinations");
-      } catch (error) {
-        console.error("⚠️ Error searching destinations:", error);
-        setDestinationSuggestions([]);
-      } finally {
-        setLoadingDestinations(false);
-      }
-    },
-    []
-  );
+      // Fallback to regular search
+      const results = await hotelsService.searchDestinations(query, 10);
+      const formattedResults = results.map((dest) => ({
+        id: dest.id,
+        code: dest.id,
+        name: dest.name,
+        country: dest.country,
+        type: dest.type as "city" | "region" | "country" | "landmark",
+      }));
+      setDestinationSuggestions(formattedResults);
+      console.log(
+        "✅ Found",
+        formattedResults.length,
+        "sightseeing destinations",
+      );
+    } catch (error) {
+      console.error("⚠️ Error searching destinations:", error);
+      setDestinationSuggestions([]);
+    } finally {
+      setLoadingDestinations(false);
+    }
+  }, []);
 
   // Handle destination input change with debouncing
   const handleDestinationChange = (value: string) => {
@@ -396,8 +404,11 @@ export function SightseeingSearchForm() {
   };
 
   // Handle destination selection
-  const handleDestinationSelect = (selectedDestination: DestinationOption, event?: React.MouseEvent) => {
-    console.log('🎯 Destination selected:', selectedDestination.name);
+  const handleDestinationSelect = (
+    selectedDestination: DestinationOption,
+    event?: React.MouseEvent,
+  ) => {
+    console.log("🎯 Destination selected:", selectedDestination.name);
 
     // Prevent event propagation to avoid conflicts
     if (event) {
@@ -416,26 +427,31 @@ export function SightseeingSearchForm() {
     setTimeout(() => {
       setIsDestinationOpenMobile(false);
       setIsDestinationOpenDesktop(false);
-      console.log('🎯 Destination selection complete, popovers closed');
+      console.log("🎯 Destination selection complete, popovers closed");
     }, 100);
   };
 
   // Handle date selection for mobile calendar (don't close calendar here)
-  const handleMobileDateSelect = (range: { startDate: Date; endDate: Date }) => {
-    console.log('📅 Mobile date range selected:', range);
+  const handleMobileDateSelect = (range: {
+    startDate: Date;
+    endDate: Date;
+  }) => {
+    console.log("📅 Mobile date range selected:", range);
     setVisitDate(range.startDate);
     setEndDate(range.endDate);
     // Don't close calendar here - let Apply button handle it
   };
 
   // Handle date selection for desktop calendar (don't close calendar here)
-  const handleDesktopDateSelect = (range: { startDate: Date; endDate: Date }) => {
-    console.log('📅 Desktop date range selected:', range);
+  const handleDesktopDateSelect = (range: {
+    startDate: Date;
+    endDate: Date;
+  }) => {
+    console.log("📅 Desktop date range selected:", range);
     setVisitDate(range.startDate);
     setEndDate(range.endDate);
     // Don't close calendar here - let Apply button handle it
   };
-
 
   // Search validation and execution
   const validateAndSearch = () => {
@@ -444,7 +460,7 @@ export function SightseeingSearchForm() {
       inputValue,
       destinationCode,
       visitDate,
-      endDate
+      endDate,
     });
 
     // Clear any existing errors
@@ -471,7 +487,6 @@ export function SightseeingSearchForm() {
       return;
     }
 
-
     // Build search parameters
     const searchParams = new URLSearchParams({
       destination: destinationCode || inputValue || destination,
@@ -485,9 +500,14 @@ export function SightseeingSearchForm() {
       searchParams.set("endDate", endDate.toISOString());
     }
 
-
-    console.log("🎭 Searching sightseeing with params:", searchParams.toString());
-    console.log("🎭 Navigating to:", `/sightseeing/results?${searchParams.toString()}`);
+    console.log(
+      "🎭 Searching sightseeing with params:",
+      searchParams.toString(),
+    );
+    console.log(
+      "🎭 Navigating to:",
+      `/sightseeing/results?${searchParams.toString()}`,
+    );
 
     try {
       navigate(`/sightseeing/results?${searchParams.toString()}`);
@@ -505,11 +525,10 @@ export function SightseeingSearchForm() {
       destinationCode,
       inputValue,
       visitDate,
-      endDate
+      endDate,
     });
     validateAndSearch();
   };
-
 
   // Format date display
   const formatDateDisplay = () => {
@@ -533,36 +552,42 @@ export function SightseeingSearchForm() {
     // Specific icons for Dubai attractions
     if (name) {
       const lowerName = name.toLowerCase();
-      if (lowerName.includes('fountain')) return Sparkles;
-      if (lowerName.includes('burj khalifa')) return Crown;
-      if (lowerName.includes('mall')) return ShoppingBag;
-      if (lowerName.includes('frame')) return Camera;
-      if (lowerName.includes('atlantis') || lowerName.includes('palm')) return Palmtree;
-      if (lowerName.includes('miracle garden') || lowerName.includes('garden')) return Trees;
-      if (lowerName.includes('legoland') || lowerName.includes('img worlds')) return Gamepad2;
-      if (lowerName.includes('aquarium') || lowerName.includes('underwater')) return Fish;
-      if (lowerName.includes('souks') || lowerName.includes('souk')) return ShoppingBag;
-      if (lowerName.includes('marina')) return Palmtree;
-      if (lowerName.includes('jbr') || lowerName.includes('jumeirah')) return Home;
+      if (lowerName.includes("fountain")) return Sparkles;
+      if (lowerName.includes("burj khalifa")) return Crown;
+      if (lowerName.includes("mall")) return ShoppingBag;
+      if (lowerName.includes("frame")) return Camera;
+      if (lowerName.includes("atlantis") || lowerName.includes("palm"))
+        return Palmtree;
+      if (lowerName.includes("miracle garden") || lowerName.includes("garden"))
+        return Trees;
+      if (lowerName.includes("legoland") || lowerName.includes("img worlds"))
+        return Gamepad2;
+      if (lowerName.includes("aquarium") || lowerName.includes("underwater"))
+        return Fish;
+      if (lowerName.includes("souks") || lowerName.includes("souk"))
+        return ShoppingBag;
+      if (lowerName.includes("marina")) return Palmtree;
+      if (lowerName.includes("jbr") || lowerName.includes("jumeirah"))
+        return Home;
     }
 
     // General type-based icons
     switch (type.toLowerCase()) {
-      case 'city':
+      case "city":
         return Building2;
-      case 'district':
+      case "district":
         return Building2;
-      case 'airport':
+      case "airport":
         return Plane;
-      case 'region':
+      case "region":
         return Mountain;
-      case 'country':
+      case "country":
         return Globe;
-      case 'landmark':
+      case "landmark":
         return Landmark;
-      case 'attraction':
+      case "attraction":
         return Camera;
-      case 'theme-park':
+      case "theme-park":
         return Gamepad2;
       default:
         return MapPin;
@@ -589,7 +614,7 @@ export function SightseeingSearchForm() {
           <Popover
             open={isDestinationOpenMobile}
             onOpenChange={(open) => {
-              console.log('🎯 Mobile destination popover state changed:', open);
+              console.log("🎯 Mobile destination popover state changed:", open);
               setIsDestinationOpenMobile(open);
             }}
           >
@@ -602,7 +627,7 @@ export function SightseeingSearchForm() {
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => {
-                    console.log('🎯 Mobile destination input focused');
+                    console.log("🎯 Mobile destination input focused");
                     setIsDestinationOpenMobile(true);
                   }}
                 />
@@ -639,7 +664,10 @@ export function SightseeingSearchForm() {
                     )}
                     <div className="py-1">
                       {destinationsToShow.map((dest) => {
-                        const IconComponent = getDestinationIcon(dest.type, dest.name);
+                        const IconComponent = getDestinationIcon(
+                          dest.type,
+                          dest.name,
+                        );
                         return (
                           <button
                             key={dest.id}
@@ -660,13 +688,19 @@ export function SightseeingSearchForm() {
                                   </span>
                                 </div>
                                 <div className="text-xs text-gray-500 truncate mt-0.5">
-                                  {dest.type === 'city' ? `${dest.country}` :
-                                   dest.type === 'district' ? `District • ${dest.country}` :
-                                   dest.type === 'attraction' ? `Top Attraction • ${dest.country}` :
-                                   dest.type === 'theme-park' ? `Theme Park • ${dest.country}` :
-                                   dest.type === 'airport' ? `${dest.name} Airport, ${dest.country}` :
-                                   dest.type === 'region' ? `${dest.country}` :
-                                   dest.country}
+                                  {dest.type === "city"
+                                    ? `${dest.country}`
+                                    : dest.type === "district"
+                                      ? `District • ${dest.country}`
+                                      : dest.type === "attraction"
+                                        ? `Top Attraction • ${dest.country}`
+                                        : dest.type === "theme-park"
+                                          ? `Theme Park • ${dest.country}`
+                                          : dest.type === "airport"
+                                            ? `${dest.name} Airport, ${dest.country}`
+                                            : dest.type === "region"
+                                              ? `${dest.country}`
+                                              : dest.country}
                                 </div>
                               </div>
                               <div className="flex items-center space-x-1">
@@ -709,7 +743,7 @@ export function SightseeingSearchForm() {
             <Popover
               open={isCalendarOpenMobile}
               onOpenChange={(open) => {
-                console.log('📅 Mobile calendar popover state changed:', open);
+                console.log("📅 Mobile calendar popover state changed:", open);
                 setIsCalendarOpenMobile(open);
               }}
             >
@@ -722,31 +756,31 @@ export function SightseeingSearchForm() {
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-sm">
                     <span className="hidden md:inline">
-                      {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
-                        `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
-                      ) : visitDate ? (
-                        format(visitDate, "d-MMM-yyyy")
-                      ) : (
-                        "Select visit date"
-                      )}
+                      {visitDate &&
+                      endDate &&
+                      visitDate.getTime() !== endDate.getTime()
+                        ? `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
+                        : visitDate
+                          ? format(visitDate, "d-MMM-yyyy")
+                          : "Select visit date"}
                     </span>
                     <span className="hidden sm:inline md:hidden">
-                      {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
-                        `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                      ) : visitDate ? (
-                        format(visitDate, "d MMM")
-                      ) : (
-                        "Select date"
-                      )}
+                      {visitDate &&
+                      endDate &&
+                      visitDate.getTime() !== endDate.getTime()
+                        ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                        : visitDate
+                          ? format(visitDate, "d MMM")
+                          : "Select date"}
                     </span>
                     <span className="sm:hidden">
-                      {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
-                        `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                      ) : visitDate ? (
-                        format(visitDate, "d MMM")
-                      ) : (
-                        "Date"
-                      )}
+                      {visitDate &&
+                      endDate &&
+                      visitDate.getTime() !== endDate.getTime()
+                        ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                        : visitDate
+                          ? format(visitDate, "d MMM")
+                          : "Date"}
                     </span>
                   </span>
                 </Button>
@@ -769,7 +803,6 @@ export function SightseeingSearchForm() {
           </div>
         </div>
 
-
         {/* Search Button */}
         <Button
           onClick={handleSearch}
@@ -790,7 +823,10 @@ export function SightseeingSearchForm() {
           <Popover
             open={isDestinationOpenDesktop}
             onOpenChange={(open) => {
-              console.log('🎯 Desktop destination popover state changed:', open);
+              console.log(
+                "🎯 Desktop destination popover state changed:",
+                open,
+              );
               setIsDestinationOpenDesktop(open);
             }}
           >
@@ -803,7 +839,7 @@ export function SightseeingSearchForm() {
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => {
-                    console.log('🎯 Desktop destination input focused');
+                    console.log("🎯 Desktop destination input focused");
                     setIsDestinationOpenDesktop(true);
                   }}
                 />
@@ -840,7 +876,10 @@ export function SightseeingSearchForm() {
                     )}
                     <div className="py-1">
                       {destinationsToShow.map((dest) => {
-                        const IconComponent = getDestinationIcon(dest.type, dest.name);
+                        const IconComponent = getDestinationIcon(
+                          dest.type,
+                          dest.name,
+                        );
                         return (
                           <button
                             key={dest.id}
@@ -861,13 +900,19 @@ export function SightseeingSearchForm() {
                                   </span>
                                 </div>
                                 <div className="text-sm text-gray-500 truncate">
-                                  {dest.type === 'city' ? `${dest.country}` :
-                                   dest.type === 'district' ? `District • ${dest.country}` :
-                                   dest.type === 'attraction' ? `Top Attraction • ${dest.country}` :
-                                   dest.type === 'theme-park' ? `Theme Park • ${dest.country}` :
-                                   dest.type === 'airport' ? `${dest.name} Airport, ${dest.country}` :
-                                   dest.type === 'region' ? `${dest.country}` :
-                                   dest.country}
+                                  {dest.type === "city"
+                                    ? `${dest.country}`
+                                    : dest.type === "district"
+                                      ? `District • ${dest.country}`
+                                      : dest.type === "attraction"
+                                        ? `Top Attraction • ${dest.country}`
+                                        : dest.type === "theme-park"
+                                          ? `Theme Park • ${dest.country}`
+                                          : dest.type === "airport"
+                                            ? `${dest.name} Airport, ${dest.country}`
+                                            : dest.type === "region"
+                                              ? `${dest.country}`
+                                              : dest.country}
                                 </div>
                               </div>
                               <div className="flex items-center space-x-2">
@@ -909,7 +954,7 @@ export function SightseeingSearchForm() {
           <Popover
             open={isCalendarOpenDesktop}
             onOpenChange={(open) => {
-              console.log('📅 Desktop calendar popover state changed:', open);
+              console.log("📅 Desktop calendar popover state changed:", open);
               setIsCalendarOpenDesktop(open);
             }}
           >
@@ -922,31 +967,31 @@ export function SightseeingSearchForm() {
                 <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate text-sm">
                   <span className="hidden md:inline">
-                    {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
-                      `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
-                    ) : visitDate ? (
-                      format(visitDate, "d-MMM-yyyy")
-                    ) : (
-                      "Select visit date"
-                    )}
+                    {visitDate &&
+                    endDate &&
+                    visitDate.getTime() !== endDate.getTime()
+                      ? `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
+                      : visitDate
+                        ? format(visitDate, "d-MMM-yyyy")
+                        : "Select visit date"}
                   </span>
                   <span className="hidden sm:inline md:hidden">
-                    {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
-                      `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                    ) : visitDate ? (
-                      format(visitDate, "d MMM")
-                    ) : (
-                      "Select date"
-                    )}
+                    {visitDate &&
+                    endDate &&
+                    visitDate.getTime() !== endDate.getTime()
+                      ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                      : visitDate
+                        ? format(visitDate, "d MMM")
+                        : "Select date"}
                   </span>
                   <span className="sm:hidden">
-                    {visitDate && endDate && visitDate.getTime() !== endDate.getTime() ? (
-                      `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                    ) : visitDate ? (
-                      format(visitDate, "d MMM")
-                    ) : (
-                      "Date"
-                    )}
+                    {visitDate &&
+                    endDate &&
+                    visitDate.getTime() !== endDate.getTime()
+                      ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                      : visitDate
+                        ? format(visitDate, "d MMM")
+                        : "Date"}
                   </span>
                 </span>
               </Button>
@@ -967,7 +1012,6 @@ export function SightseeingSearchForm() {
             </PopoverContent>
           </Popover>
         </div>
-
 
         {/* Search Button */}
         <Button

@@ -4,7 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, XCircle, Clock, Plane, Hotel, Camera, Tag } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  Plane,
+  Hotel,
+  Camera,
+  Tag,
+} from "lucide-react";
 import { flightsService } from "@/services/flightsService";
 import { hotelsService } from "@/services/hotelsService";
 import { sightseeingService } from "@/services/sightseeingService";
@@ -35,15 +43,15 @@ export function ApiIntegrationTest() {
   const [testResults, setTestResults] = useState<any>({});
 
   const updateTest = (name: string, updates: Partial<TestResult>) => {
-    setTests(prev => prev.map(test => 
-      test.name === name ? { ...test, ...updates } : test
-    ));
+    setTests((prev) =>
+      prev.map((test) => (test.name === name ? { ...test, ...updates } : test)),
+    );
   };
 
   const runFlightSearchTest = async (): Promise<any> => {
     const startTime = Date.now();
     updateTest("Flight Search (Amadeus)", { status: "running" });
-    
+
     try {
       const searchParams = {
         departure: "BOM",
@@ -54,12 +62,12 @@ export function ApiIntegrationTest() {
         cabinClass: "economy" as const,
         tripType: "one_way" as const,
         promoCode: promoCode,
-        userId: "test_user_123"
+        userId: "test_user_123",
       };
 
       const flights = await flightsService.searchFlights(searchParams);
       const duration = Date.now() - startTime;
-      
+
       updateTest("Flight Search (Amadeus)", {
         status: "success",
         duration,
@@ -67,8 +75,8 @@ export function ApiIntegrationTest() {
           count: flights.length,
           sample: flights[0],
           hasMarkup: flights[0]?.price?.breakdown?.markup > 0,
-          hasPromoDiscount: flights[0]?.price?.breakdown?.discount > 0
-        }
+          hasPromoDiscount: flights[0]?.price?.breakdown?.discount > 0,
+        },
       });
 
       return flights[0];
@@ -77,7 +85,7 @@ export function ApiIntegrationTest() {
       updateTest("Flight Search (Amadeus)", {
         status: "error",
         duration,
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       });
       throw error;
     }
@@ -86,7 +94,7 @@ export function ApiIntegrationTest() {
   const runHotelSearchTest = async (): Promise<any> => {
     const startTime = Date.now();
     updateTest("Hotel Search (Hotelbeds)", { status: "running" });
-    
+
     try {
       const searchParams = {
         destination: "Dubai",
@@ -96,12 +104,12 @@ export function ApiIntegrationTest() {
         adults: 2,
         children: 0,
         promoCode: promoCode,
-        userId: "test_user_123"
+        userId: "test_user_123",
       };
 
       const hotels = await hotelsService.searchHotels(searchParams);
       const duration = Date.now() - startTime;
-      
+
       updateTest("Hotel Search (Hotelbeds)", {
         status: "success",
         duration,
@@ -109,8 +117,8 @@ export function ApiIntegrationTest() {
           count: hotels.length,
           sample: hotels[0],
           hasMarkup: hotels[0]?.pricing?.markupApplied?.markup_percentage > 0,
-          hasPromoDiscount: hotels[0]?.pricing?.promoApplied
-        }
+          hasPromoDiscount: hotels[0]?.pricing?.promoApplied,
+        },
       });
 
       return hotels[0];
@@ -119,7 +127,7 @@ export function ApiIntegrationTest() {
       updateTest("Hotel Search (Hotelbeds)", {
         status: "error",
         duration,
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       });
       throw error;
     }
@@ -128,7 +136,7 @@ export function ApiIntegrationTest() {
   const runSightseeingSearchTest = async (): Promise<any> => {
     const startTime = Date.now();
     updateTest("Sightseeing Search (Hotelbeds)", { status: "running" });
-    
+
     try {
       const searchParams = {
         destination: "Dubai",
@@ -136,21 +144,23 @@ export function ApiIntegrationTest() {
         adults: 2,
         children: 0,
         promoCode: promoCode,
-        userId: "test_user_123"
+        userId: "test_user_123",
       };
 
-      const activities = await sightseeingService.searchActivities(searchParams);
+      const activities =
+        await sightseeingService.searchActivities(searchParams);
       const duration = Date.now() - startTime;
-      
+
       updateTest("Sightseeing Search (Hotelbeds)", {
         status: "success",
         duration,
         data: {
           count: activities.length,
           sample: activities[0],
-          hasMarkup: activities[0]?.pricing?.markupApplied?.markup_percentage > 0,
-          hasPromoDiscount: activities[0]?.pricing?.promoApplied
-        }
+          hasMarkup:
+            activities[0]?.pricing?.markupApplied?.markup_percentage > 0,
+          hasPromoDiscount: activities[0]?.pricing?.promoApplied,
+        },
       });
 
       return activities[0];
@@ -159,7 +169,7 @@ export function ApiIntegrationTest() {
       updateTest("Sightseeing Search (Hotelbeds)", {
         status: "error",
         duration,
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       });
       throw error;
     }
@@ -168,14 +178,14 @@ export function ApiIntegrationTest() {
   const runPromoCodeTest = async (sampleFlight: any): Promise<void> => {
     const startTime = Date.now();
     updateTest("Promo Code Application", { status: "running" });
-    
+
     try {
       // Check if promo code was applied in the search results
       const hasPromoDiscount = sampleFlight?.price?.breakdown?.discount > 0;
       const promoDetails = sampleFlight?.price?.promoDetails;
-      
+
       const duration = Date.now() - startTime;
-      
+
       updateTest("Promo Code Application", {
         status: hasPromoDiscount ? "success" : "error",
         duration,
@@ -183,16 +193,18 @@ export function ApiIntegrationTest() {
           promoCode: promoCode,
           applied: hasPromoDiscount,
           discount: sampleFlight?.price?.breakdown?.discount || 0,
-          details: promoDetails
+          details: promoDetails,
         },
-        error: hasPromoDiscount ? undefined : "Promo code not applied or invalid"
+        error: hasPromoDiscount
+          ? undefined
+          : "Promo code not applied or invalid",
       });
     } catch (error) {
       const duration = Date.now() - startTime;
       updateTest("Promo Code Application", {
         status: "error",
         duration,
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
   };
@@ -200,16 +212,16 @@ export function ApiIntegrationTest() {
   const runMarkupTest = async (sampleFlight: any): Promise<void> => {
     const startTime = Date.now();
     updateTest("Markup Calculation", { status: "running" });
-    
+
     try {
       // Check if markup was applied in the search results
       const hasMarkup = sampleFlight?.price?.breakdown?.markup > 0;
       const markupAmount = sampleFlight?.price?.breakdown?.markup || 0;
       const originalAmount = sampleFlight?.price?.originalAmount || 0;
       const markedUpAmount = sampleFlight?.price?.markedUpAmount || 0;
-      
+
       const duration = Date.now() - startTime;
-      
+
       updateTest("Markup Calculation", {
         status: hasMarkup ? "success" : "error",
         duration,
@@ -218,16 +230,19 @@ export function ApiIntegrationTest() {
           markupAmount,
           originalAmount,
           markedUpAmount,
-          markupPercentage: originalAmount > 0 ? (markupAmount / originalAmount * 100).toFixed(2) : 0
+          markupPercentage:
+            originalAmount > 0
+              ? ((markupAmount / originalAmount) * 100).toFixed(2)
+              : 0,
         },
-        error: hasMarkup ? undefined : "No markup calculation found"
+        error: hasMarkup ? undefined : "No markup calculation found",
       });
     } catch (error) {
       const duration = Date.now() - startTime;
       updateTest("Markup Calculation", {
         status: "error",
         duration,
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
   };
@@ -235,29 +250,33 @@ export function ApiIntegrationTest() {
   const runDatabaseTest = async (): Promise<void> => {
     const startTime = Date.now();
     updateTest("Database Storage", { status: "running" });
-    
+
     try {
       // Test database connectivity by making an API call that would trigger database operations
-      const response = await fetch('/api/health');
+      const response = await fetch("/api/health");
       const healthData = await response.json();
-      
+
       const duration = Date.now() - startTime;
-      
+
       updateTest("Database Storage", {
-        status: healthData.services?.database === "connected" ? "success" : "error",
+        status:
+          healthData.services?.database === "connected" ? "success" : "error",
         duration,
         data: {
           dbHealth: healthData.services?.database,
-          dbDetails: healthData.database
+          dbDetails: healthData.database,
         },
-        error: healthData.services?.database !== "connected" ? "Database not connected" : undefined
+        error:
+          healthData.services?.database !== "connected"
+            ? "Database not connected"
+            : undefined,
       });
     } catch (error) {
       const duration = Date.now() - startTime;
       updateTest("Database Storage", {
         status: "error",
         duration,
-        error: error instanceof Error ? error.message : "Unknown error"
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
   };
@@ -265,44 +284,51 @@ export function ApiIntegrationTest() {
   const runAllTests = async () => {
     setIsRunning(true);
     setOverallProgress(0);
-    
+
     try {
       // Reset all tests
-      setTests(tests.map(test => ({ ...test, status: "pending", duration: undefined, data: undefined, error: undefined })));
-      
+      setTests(
+        tests.map((test) => ({
+          ...test,
+          status: "pending",
+          duration: undefined,
+          data: undefined,
+          error: undefined,
+        })),
+      );
+
       let completedTests = 0;
       const totalTests = tests.length;
-      
+
       // Run Flight Search Test
       const flightResult = await runFlightSearchTest();
       completedTests++;
       setOverallProgress((completedTests / totalTests) * 100);
-      
+
       // Run Hotel Search Test
       await runHotelSearchTest();
       completedTests++;
       setOverallProgress((completedTests / totalTests) * 100);
-      
+
       // Run Sightseeing Search Test
       await runSightseeingSearchTest();
       completedTests++;
       setOverallProgress((completedTests / totalTests) * 100);
-      
+
       // Run Promo Code Test
       await runPromoCodeTest(flightResult);
       completedTests++;
       setOverallProgress((completedTests / totalTests) * 100);
-      
+
       // Run Markup Test
       await runMarkupTest(flightResult);
       completedTests++;
       setOverallProgress((completedTests / totalTests) * 100);
-      
+
       // Run Database Test
       await runDatabaseTest();
       completedTests++;
       setOverallProgress((completedTests / totalTests) * 100);
-      
     } catch (error) {
       console.error("Test suite failed:", error);
     } finally {
@@ -319,12 +345,14 @@ export function ApiIntegrationTest() {
       case "running":
         return <Clock className="w-5 h-5 text-blue-600 animate-spin" />;
       default:
-        return <div className="w-5 h-5 rounded-full border-2 border-gray-300" />;
+        return (
+          <div className="w-5 h-5 rounded-full border-2 border-gray-300" />
+        );
     }
   };
 
-  const successCount = tests.filter(test => test.status === "success").length;
-  const errorCount = tests.filter(test => test.status === "error").length;
+  const successCount = tests.filter((test) => test.status === "success").length;
+  const errorCount = tests.filter((test) => test.status === "error").length;
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -337,7 +365,8 @@ export function ApiIntegrationTest() {
             <span>End-to-End API Integration Test</span>
           </CardTitle>
           <div className="text-sm text-gray-600">
-            Test the complete integration of Amadeus, Hotelbeds, markup management, and promo code systems
+            Test the complete integration of Amadeus, Hotelbeds, markup
+            management, and promo code systems
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -374,11 +403,7 @@ export function ApiIntegrationTest() {
           </div>
 
           {/* Run Tests Button */}
-          <Button 
-            onClick={runAllTests} 
-            disabled={isRunning}
-            className="w-full"
-          >
+          <Button onClick={runAllTests} disabled={isRunning} className="w-full">
             {isRunning ? "Running Tests..." : "Run All Tests"}
           </Button>
         </CardContent>
@@ -387,12 +412,18 @@ export function ApiIntegrationTest() {
       {/* Test Results */}
       <div className="grid gap-4">
         {tests.map((test, index) => (
-          <Card key={index} className={`border-l-4 ${
-            test.status === "success" ? "border-l-green-500" :
-            test.status === "error" ? "border-l-red-500" :
-            test.status === "running" ? "border-l-blue-500" :
-            "border-l-gray-300"
-          }`}>
+          <Card
+            key={index}
+            className={`border-l-4 ${
+              test.status === "success"
+                ? "border-l-green-500"
+                : test.status === "error"
+                  ? "border-l-red-500"
+                  : test.status === "running"
+                    ? "border-l-blue-500"
+                    : "border-l-gray-300"
+            }`}
+          >
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -404,7 +435,7 @@ export function ApiIntegrationTest() {
                     )}
                   </div>
                 </div>
-                
+
                 {test.status === "success" && (
                   <Badge className="bg-green-100 text-green-800">Success</Badge>
                 )}
@@ -429,7 +460,9 @@ export function ApiIntegrationTest() {
                     <div className="bg-blue-50 rounded-lg p-3">
                       <div className="flex items-center space-x-2 mb-2">
                         <Plane className="w-4 h-4 text-blue-600" />
-                        <span className="font-medium text-blue-900">Flight Result Sample</span>
+                        <span className="font-medium text-blue-900">
+                          Flight Result Sample
+                        </span>
                       </div>
                       <PricingDisplay
                         originalPrice={test.data.sample.price?.originalAmount}
@@ -444,7 +477,7 @@ export function ApiIntegrationTest() {
                       />
                     </div>
                   )}
-                  
+
                   <div className="text-sm text-gray-600">
                     <pre className="bg-gray-100 rounded p-2 overflow-auto">
                       {JSON.stringify(test.data, null, 2)}

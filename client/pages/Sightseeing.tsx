@@ -117,7 +117,7 @@ export default function Sightseeing() {
 
   // Scroll to top when component mounts
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // Handle sign out
@@ -162,7 +162,7 @@ export default function Sightseeing() {
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
       {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
-      
+
       {/* MOBILE HEADER (ONLY visible on mobile) */}
       <div className="md:hidden">
         <header className="bg-[#003580] text-white">
@@ -250,7 +250,9 @@ export default function Sightseeing() {
                     onClick={() => setShowMobileMenu(false)}
                   >
                     <Camera className="w-5 h-5 text-blue-600" />
-                    <span className="font-medium text-blue-600">Sightseeing</span>
+                    <span className="font-medium text-blue-600">
+                      Sightseeing
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -393,8 +395,9 @@ export default function Sightseeing() {
               Discover Amazing Experiences
             </h1>
             <p className="text-base md:text-lg text-blue-100 max-w-2xl mx-auto">
-              Explore fascinating attractions, cultural landmarks, and exciting activities. 
-              Create unforgettable memories with our curated sightseeing experiences.
+              Explore fascinating attractions, cultural landmarks, and exciting
+              activities. Create unforgettable memories with our curated
+              sightseeing experiences.
             </p>
           </div>
 
@@ -413,7 +416,8 @@ export default function Sightseeing() {
               Why Choose Faredown Sightseeing?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              We make it easy to discover and book the best attractions and activities around the world.
+              We make it easy to discover and book the best attractions and
+              activities around the world.
             </p>
           </div>
 
@@ -426,10 +430,11 @@ export default function Sightseeing() {
                 Bargain Engine
               </h3>
               <p className="text-gray-600 text-sm">
-                Get the best deals with our smart bargaining system that saves you up to 40%.
+                Get the best deals with our smart bargaining system that saves
+                you up to 40%.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-[#febb02] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Building2 className="w-8 h-8 text-[#003580]" />
@@ -438,10 +443,11 @@ export default function Sightseeing() {
                 Curated Experiences
               </h3>
               <p className="text-gray-600 text-sm">
-                Hand-picked attractions and activities to ensure memorable experiences.
+                Hand-picked attractions and activities to ensure memorable
+                experiences.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-[#febb02] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-[#003580]" />
@@ -453,7 +459,7 @@ export default function Sightseeing() {
                 Safe and secure payment processing with instant confirmation.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-[#febb02] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Headphones className="w-8 h-8 text-[#003580]" />
@@ -462,7 +468,8 @@ export default function Sightseeing() {
                 24/7 Support
               </h3>
               <p className="text-gray-600 text-sm">
-                Round-the-clock customer support to help you every step of the way.
+                Round-the-clock customer support to help you every step of the
+                way.
               </p>
             </div>
           </div>
@@ -477,7 +484,8 @@ export default function Sightseeing() {
               Popular Destinations
             </h2>
             <p className="text-gray-600">
-              Discover trending sightseeing experiences in these amazing destinations
+              Discover trending sightseeing experiences in these amazing
+              destinations
             </p>
           </div>
 
@@ -535,7 +543,8 @@ export default function Sightseeing() {
                 </div>
               </div>
               <p className="text-gray-600 mb-4">
-                "Amazing experience at the Burj Khalifa! The booking process was seamless and the views were incredible."
+                "Amazing experience at the Burj Khalifa! The booking process was
+                seamless and the views were incredible."
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
@@ -557,7 +566,8 @@ export default function Sightseeing() {
                 </div>
               </div>
               <p className="text-gray-600 mb-4">
-                "The bargain feature saved us 35% on our Louvre tickets. Faredown makes travel affordable!"
+                "The bargain feature saved us 35% on our Louvre tickets.
+                Faredown makes travel affordable!"
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
@@ -579,7 +589,8 @@ export default function Sightseeing() {
                 </div>
               </div>
               <p className="text-gray-600 mb-4">
-                "Fast confirmation and great customer support. Highly recommend for booking sightseeing tours!"
+                "Fast confirmation and great customer support. Highly recommend
+                for booking sightseeing tours!"
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mr-3">
@@ -616,7 +627,8 @@ export default function Sightseeing() {
                 Live Bargain Technology
               </h3>
               <p className="text-gray-600 text-sm">
-                Negotiate sightseeing prices in real-time and discover the best deals available.
+                Negotiate sightseeing prices in real-time and discover the best
+                deals available.
               </p>
             </div>
 
@@ -628,7 +640,8 @@ export default function Sightseeing() {
                 Pay What You Feel Is Fair
               </h3>
               <p className="text-gray-600 text-sm">
-                Set your price and let Faredown do its job to get a deal that works for everyone.
+                Set your price and let Faredown do its job to get a deal that
+                works for everyone.
               </p>
             </div>
 
@@ -640,7 +653,8 @@ export default function Sightseeing() {
                 Secure, Real-Time Bookings
               </h3>
               <p className="text-gray-600 text-sm">
-                Your data is encrypted and transactions are processed securely and instantly.
+                Your data is encrypted and transactions are processed securely
+                and instantly.
               </p>
             </div>
 
@@ -652,7 +666,8 @@ export default function Sightseeing() {
                 Smarter Than Any Travel Agent
               </h3>
               <p className="text-gray-600 text-sm">
-                Skip the back and forth. Our AI works faster, smarter, and always in your favor.
+                Skip the back and forth. Our AI works faster, smarter, and
+                always in your favor.
               </p>
             </div>
           </div>
@@ -693,7 +708,9 @@ export default function Sightseeing() {
               <div className="flex justify-center mb-4">
                 <div className="flex items-center space-x-1">
                   <User className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-medium text-gray-600">Live Chat</span>
+                  <span className="text-sm font-medium text-gray-600">
+                    Live Chat
+                  </span>
                 </div>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Diya Sharma</h3>
@@ -704,7 +721,8 @@ export default function Sightseeing() {
                 ))}
               </div>
               <p className="text-gray-600 text-sm">
-                "Saved ₹15,000 on Dubai trip! The bargaining feature is amazing. Got business class for economy price!"
+                "Saved ₹15,000 on Dubai trip! The bargaining feature is amazing.
+                Got business class for economy price!"
               </p>
             </div>
 
@@ -712,7 +730,9 @@ export default function Sightseeing() {
               <div className="flex justify-center mb-4">
                 <div className="flex items-center space-x-1">
                   <Headphones className="w-5 h-5 text-green-600" />
-                  <span className="text-sm font-medium text-gray-600">Phone Call</span>
+                  <span className="text-sm font-medium text-gray-600">
+                    Phone Call
+                  </span>
                 </div>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Rohit Kumar</h3>
@@ -723,7 +743,8 @@ export default function Sightseeing() {
                 ))}
               </div>
               <p className="text-gray-600 text-sm">
-                "Best app especially in Singapore hotels using Bargain™. Faredown is revolutionary! Customer service A+++"
+                "Best app especially in Singapore hotels using Bargain™.
+                Faredown is revolutionary! Customer service A+++"
               </p>
             </div>
 
@@ -731,7 +752,9 @@ export default function Sightseeing() {
               <div className="flex justify-center mb-4">
                 <div className="flex items-center space-x-1">
                   <User className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm font-medium text-gray-600">24/7 Support</span>
+                  <span className="text-sm font-medium text-gray-600">
+                    24/7 Support
+                  </span>
                 </div>
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Anjali Patel</h3>
@@ -742,7 +765,8 @@ export default function Sightseeing() {
                 ))}
               </div>
               <p className="text-gray-600 text-sm">
-                "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!"
+                "Easy booking process and instant confirmations. Saved on both
+                flights and hotels. Will use again!"
               </p>
             </div>
           </div>
@@ -763,7 +787,8 @@ export default function Sightseeing() {
               Travel Smarter. Bargain Better. On the Go.
             </h2>
             <p className="text-blue-100 mb-8 text-lg">
-              Download the Faredown app for exclusive mobile-only deals and instant bargain alerts
+              Download the Faredown app for exclusive mobile-only deals and
+              instant bargain alerts
             </p>
           </div>
 
@@ -785,7 +810,7 @@ export default function Sightseeing() {
           <div className="flex justify-center space-x-4">
             <Button
               className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center space-x-2"
-              onClick={() => window.open('https://apps.apple.com/', '_blank')}
+              onClick={() => window.open("https://apps.apple.com/", "_blank")}
             >
               <span className="text-lg">📱</span>
               <div className="text-left">
@@ -795,7 +820,7 @@ export default function Sightseeing() {
             </Button>
             <Button
               className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center space-x-2"
-              onClick={() => window.open('https://play.google.com/', '_blank')}
+              onClick={() => window.open("https://play.google.com/", "_blank")}
             >
               <span className="text-lg">▶️</span>
               <div className="text-left">
@@ -813,9 +838,7 @@ export default function Sightseeing() {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             Stay ahead with secret travel bargains
           </h2>
-          <p className="text-gray-600 mb-8">
-            Enter your email address
-          </p>
+          <p className="text-gray-600 mb-8">Enter your email address</p>
           <div className="flex justify-center max-w-md mx-auto">
             <div className="flex w-full">
               <input
@@ -838,23 +861,40 @@ export default function Sightseeing() {
             <div>
               <h3 className="text-lg font-bold mb-3">Faredown</h3>
               <p className="text-gray-400 text-sm mb-4">
-                The world's first travel portal where you can negotiate and bargain for better deals.
+                The world's first travel portal where you can negotiate and
+                bargain for better deals.
               </p>
               <div className="flex space-x-3">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-                   className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                >
                   <Facebook className="w-4 h-4" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                   className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
+                >
                   <Instagram className="w-4 h-4" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
-                   className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+                >
                   <Twitter className="w-4 h-4" />
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
-                   className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                >
                   <Linkedin className="w-4 h-4" />
                 </a>
               </div>
@@ -863,28 +903,86 @@ export default function Sightseeing() {
             <div>
               <h4 className="font-semibold mb-3">Quick Links</h4>
               <ul className="space-y-1 text-sm text-gray-400">
-                <li><Link to="/about" className="hover:text-white">About Us</Link></li>
-                <li><Link to="/how-it-works" className="hover:text-white">How It Works</Link></li>
-                <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
-                <li><Link to="/help" className="hover:text-white">Help Center</Link></li>
+                <li>
+                  <Link to="/about" className="hover:text-white">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/how-it-works" className="hover:text-white">
+                    How It Works
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="hover:text-white">
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/help" className="hover:text-white">
+                    Help Center
+                  </Link>
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-3">Services</h4>
               <ul className="space-y-0.5 text-sm text-gray-400">
-                <li><Link to="/?tab=flights" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Flights</Link></li>
-                <li><Link to="/?tab=hotels" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Hotels</Link></li>
-                <li><Link to="/?tab=sightseeing" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Sightseeing</Link></li>
+                <li>
+                  <Link
+                    to="/?tab=flights"
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
+                    className="hover:text-white"
+                  >
+                    Flights
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/?tab=hotels"
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
+                    className="hover:text-white"
+                  >
+                    Hotels
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/?tab=sightseeing"
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
+                    className="hover:text-white"
+                  >
+                    Sightseeing
+                  </Link>
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-3">Legal</h4>
               <ul className="space-y-1 text-sm text-gray-400">
-                <li><Link to="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-white">Terms of Service</Link></li>
-                <li><Link to="/refund" className="hover:text-white">Refund Policy</Link></li>
+                <li>
+                  <Link to="/privacy" className="hover:text-white">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/terms" className="hover:text-white">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/refund" className="hover:text-white">
+                    Refund Policy
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -896,13 +994,19 @@ export default function Sightseeing() {
                   <span className="font-semibold">Certified by:</span>
                   <div className="flex items-center space-x-4">
                     <div className="bg-white rounded px-2 py-1">
-                      <span className="text-[#003580] font-bold text-xs">TAAI</span>
+                      <span className="text-[#003580] font-bold text-xs">
+                        TAAI
+                      </span>
                     </div>
                     <div className="bg-white rounded px-2 py-1">
-                      <span className="text-[#003580] font-bold text-xs">TAAFI</span>
+                      <span className="text-[#003580] font-bold text-xs">
+                        TAAFI
+                      </span>
                     </div>
                     <div className="bg-white rounded px-2 py-1">
-                      <span className="text-[#003580] font-bold text-xs">IATA</span>
+                      <span className="text-[#003580] font-bold text-xs">
+                        IATA
+                      </span>
                     </div>
                   </div>
                 </div>

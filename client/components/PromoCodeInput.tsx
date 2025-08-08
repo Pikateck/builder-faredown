@@ -53,7 +53,7 @@ export function PromoCodeInput({
     setInputValue(newValue);
     onChange(newValue);
     setError("");
-    
+
     if (!newValue) {
       setAppliedCode("");
       setDiscount(0);
@@ -66,16 +66,16 @@ export function PromoCodeInput({
 
     setIsApplying(true);
     setError("");
-    
+
     try {
       const result = await onApply(inputValue);
-      
+
       if (result.success) {
         setAppliedCode(inputValue);
         setDiscount(result.discount || 0);
         setShowSuccess(true);
         setError("");
-        
+
         // Hide success message after 3 seconds
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
@@ -115,13 +115,13 @@ export function PromoCodeInput({
               className={cn(
                 "pr-8",
                 isApplied && "border-green-500 bg-green-50",
-                error && "border-red-500"
+                error && "border-red-500",
               )}
               disabled={isApplying}
             />
             <Ticket className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           </div>
-          
+
           {!autoApply && inputValue && !isApplied && (
             <Button
               onClick={handleApply}
@@ -132,7 +132,7 @@ export function PromoCodeInput({
               {isApplying ? "..." : "Apply"}
             </Button>
           )}
-          
+
           {isApplied && (
             <Button
               onClick={handleRemove}
@@ -144,7 +144,7 @@ export function PromoCodeInput({
             </Button>
           )}
         </div>
-        
+
         {/* Status Messages */}
         {error && (
           <div className="mt-1 flex items-center space-x-1 text-sm text-red-600">
@@ -152,7 +152,7 @@ export function PromoCodeInput({
             <span>{error}</span>
           </div>
         )}
-        
+
         {isApplied && discount > 0 && (
           <div className="mt-1 flex items-center space-x-1 text-sm text-green-600">
             <Check className="w-3 h-3" />
@@ -169,12 +169,15 @@ export function PromoCodeInput({
         <Ticket className="w-5 h-5 text-blue-600" />
         <h3 className="text-sm font-medium text-gray-900">Promo Code</h3>
         {isApplied && (
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300">
+          <Badge
+            variant="outline"
+            className="bg-green-50 text-green-700 border-green-300"
+          >
             Applied
           </Badge>
         )}
       </div>
-      
+
       <div className="flex items-center space-x-2">
         <div className="relative flex-1">
           <Input
@@ -184,12 +187,12 @@ export function PromoCodeInput({
             className={cn(
               "pr-8",
               isApplied && "border-green-500 bg-green-50",
-              error && "border-red-500"
+              error && "border-red-500",
             )}
             disabled={isApplying}
           />
         </div>
-        
+
         {!autoApply && inputValue && !isApplied && (
           <Button
             onClick={handleApply}
@@ -199,7 +202,7 @@ export function PromoCodeInput({
             {isApplying ? "Applying..." : "Apply"}
           </Button>
         )}
-        
+
         {isApplied && (
           <Button
             onClick={handleRemove}
@@ -211,27 +214,28 @@ export function PromoCodeInput({
           </Button>
         )}
       </div>
-      
+
       {/* Status Messages */}
       {showSuccess && isApplied && (
         <div className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-lg">
           <Check className="w-4 h-4 text-green-600" />
           <div className="text-sm text-green-800">
-            <span className="font-medium">{appliedCode}</span> applied successfully!
+            <span className="font-medium">{appliedCode}</span> applied
+            successfully!
             {discount > 0 && (
               <span className="ml-1">You saved ₹{discount.toFixed(0)}</span>
             )}
           </div>
         </div>
       )}
-      
+
       {error && (
         <div className="flex items-center space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="w-4 h-4 text-red-600" />
           <div className="text-sm text-red-800">{error}</div>
         </div>
       )}
-      
+
       {/* Popular Promo Codes */}
       <div className="space-y-2">
         <h4 className="text-xs font-medium text-gray-600">Popular Codes</h4>

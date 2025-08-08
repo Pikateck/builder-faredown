@@ -21,10 +21,17 @@ export function BargainErrorTest() {
   ]);
   const [isRunning, setIsRunning] = useState(false);
 
-  const updateTest = (name: string, status: TestResult["status"], message: string, duration?: number) => {
-    setTests(prev => prev.map(test => 
-      test.name === name ? { ...test, status, message, duration } : test
-    ));
+  const updateTest = (
+    name: string,
+    status: TestResult["status"],
+    message: string,
+    duration?: number,
+  ) => {
+    setTests((prev) =>
+      prev.map((test) =>
+        test.name === name ? { ...test, status, message, duration } : test,
+      ),
+    );
   };
 
   const runTests = async () => {
@@ -33,33 +40,59 @@ export function BargainErrorTest() {
     // Test 1: Markup Service
     try {
       const startTime = Date.now();
-      updateTest("Markup Service API Test", "pending", "Testing markup calculation...");
-      
+      updateTest(
+        "Markup Service API Test",
+        "pending",
+        "Testing markup calculation...",
+      );
+
       await markupService.calculateMarkup({
         type: "flight",
         basePrice: 50000,
         airline: "EK",
         route: { from: "BOM", to: "DXB" },
         class: "economy",
-        userType: "b2c"
+        userType: "b2c",
       });
-      
+
       const duration = Date.now() - startTime;
-      updateTest("Markup Service API Test", "success", "API responded successfully", duration);
+      updateTest(
+        "Markup Service API Test",
+        "success",
+        "API responded successfully",
+        duration,
+      );
     } catch (error) {
       const duration = Date.now() - Date.now();
-      if (error instanceof Error && error.message.includes("API server offline")) {
-        updateTest("Markup Service API Test", "fallback", "API offline, fallback activated", duration);
+      if (
+        error instanceof Error &&
+        error.message.includes("API server offline")
+      ) {
+        updateTest(
+          "Markup Service API Test",
+          "fallback",
+          "API offline, fallback activated",
+          duration,
+        );
       } else {
-        updateTest("Markup Service API Test", "error", error instanceof Error ? error.message : "Unknown error", duration);
+        updateTest(
+          "Markup Service API Test",
+          "error",
+          error instanceof Error ? error.message : "Unknown error",
+          duration,
+        );
       }
     }
 
     // Test 2: Bargain Pricing Service
     try {
       const startTime = Date.now();
-      updateTest("Bargain Pricing Test", "pending", "Testing bargain pricing calculation...");
-      
+      updateTest(
+        "Bargain Pricing Test",
+        "pending",
+        "Testing bargain pricing calculation...",
+      );
+
       await bargainPricingService.calculateInitialPricing({
         type: "flight",
         itemId: "test_flight_123",
@@ -67,20 +100,34 @@ export function BargainErrorTest() {
         userType: "b2c",
         airline: "EK",
         route: { from: "BOM", to: "DXB" },
-        class: "economy"
+        class: "economy",
       });
-      
+
       const duration = Date.now() - startTime;
-      updateTest("Bargain Pricing Test", "success", "Bargain pricing calculated successfully", duration);
+      updateTest(
+        "Bargain Pricing Test",
+        "success",
+        "Bargain pricing calculated successfully",
+        duration,
+      );
     } catch (error) {
       const duration = Date.now() - Date.now();
-      updateTest("Bargain Pricing Test", "fallback", "Using fallback pricing mechanism", duration);
+      updateTest(
+        "Bargain Pricing Test",
+        "fallback",
+        "Using fallback pricing mechanism",
+        duration,
+      );
     }
 
     // Test 3: Fallback Mechanism
     try {
-      updateTest("Fallback Mechanism Test", "pending", "Testing offline behavior...");
-      
+      updateTest(
+        "Fallback Mechanism Test",
+        "pending",
+        "Testing offline behavior...",
+      );
+
       // This should always work with fallback
       const result = await bargainPricingService.calculateInitialPricing({
         type: "sightseeing",
@@ -89,16 +136,28 @@ export function BargainErrorTest() {
         userType: "b2c",
         location: "Dubai",
         category: "tours",
-        duration: "3 hours"
+        duration: "3 hours",
       });
-      
+
       if (result && result.finalPrice > 0) {
-        updateTest("Fallback Mechanism Test", "success", "Fallback pricing working correctly");
+        updateTest(
+          "Fallback Mechanism Test",
+          "success",
+          "Fallback pricing working correctly",
+        );
       } else {
-        updateTest("Fallback Mechanism Test", "error", "Fallback pricing failed");
+        updateTest(
+          "Fallback Mechanism Test",
+          "error",
+          "Fallback pricing failed",
+        );
       }
     } catch (error) {
-      updateTest("Fallback Mechanism Test", "error", error instanceof Error ? error.message : "Fallback failed");
+      updateTest(
+        "Fallback Mechanism Test",
+        "error",
+        error instanceof Error ? error.message : "Fallback failed",
+      );
     }
 
     setIsRunning(false);
@@ -139,21 +198,21 @@ export function BargainErrorTest() {
             Bargain System Error Handling Test
           </CardTitle>
           <p className="text-sm text-gray-600">
-            This test verifies that the bargain system works even when the API server is offline
+            This test verifies that the bargain system works even when the API
+            server is offline
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button 
-            onClick={runTests} 
-            disabled={isRunning}
-            className="w-full"
-          >
+          <Button onClick={runTests} disabled={isRunning} className="w-full">
             {isRunning ? "Running Tests..." : "Run Error Handling Tests"}
           </Button>
 
           <div className="space-y-3">
             {tests.map((test, index) => (
-              <Card key={index} className={`border-l-4 ${getStatusColor(test.status)}`}>
+              <Card
+                key={index}
+                className={`border-l-4 ${getStatusColor(test.status)}`}
+              >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -162,7 +221,9 @@ export function BargainErrorTest() {
                         <h4 className="font-medium">{test.name}</h4>
                         <p className="text-sm text-gray-600">{test.message}</p>
                         {test.duration && (
-                          <p className="text-xs text-gray-500">{test.duration}ms</p>
+                          <p className="text-xs text-gray-500">
+                            {test.duration}ms
+                          </p>
                         )}
                       </div>
                     </div>
@@ -172,22 +233,31 @@ export function BargainErrorTest() {
             ))}
           </div>
 
-          {tests.every(test => test.status !== "pending") && !isRunning && (
+          {tests.every((test) => test.status !== "pending") && !isRunning && (
             <Alert>
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
                 <strong>Test Results Summary:</strong>
                 <ul className="mt-2 space-y-1">
-                  <li>✅ <strong>Success:</strong> {tests.filter(t => t.status === "success").length} tests</li>
-                  <li>⚠️ <strong>Fallback:</strong> {tests.filter(t => t.status === "fallback").length} tests</li>
-                  <li>❌ <strong>Error:</strong> {tests.filter(t => t.status === "error").length} tests</li>
+                  <li>
+                    ✅ <strong>Success:</strong>{" "}
+                    {tests.filter((t) => t.status === "success").length} tests
+                  </li>
+                  <li>
+                    ⚠️ <strong>Fallback:</strong>{" "}
+                    {tests.filter((t) => t.status === "fallback").length} tests
+                  </li>
+                  <li>
+                    ❌ <strong>Error:</strong>{" "}
+                    {tests.filter((t) => t.status === "error").length} tests
+                  </li>
                 </ul>
                 <p className="mt-2 text-sm">
-                  {tests.filter(t => t.status === "fallback").length > 0 
+                  {tests.filter((t) => t.status === "fallback").length > 0
                     ? "✅ Fallback mechanisms are working! The bargain system will function even when the API is offline."
-                    : tests.every(t => t.status === "success")
-                    ? "✅ All systems operational! API server is responding normally."
-                    : "❌ Some tests failed. Check the error messages above."}
+                    : tests.every((t) => t.status === "success")
+                      ? "✅ All systems operational! API server is responding normally."
+                      : "❌ Some tests failed. Check the error messages above."}
                 </p>
               </AlertDescription>
             </Alert>

@@ -1,13 +1,13 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
 });
 
 // Get sightseeing statistics
-router.get('/stats', async (req, res) => {
+router.get("/stats", async (req, res) => {
   try {
     const stats = await pool.query(`
       SELECT 
@@ -18,41 +18,41 @@ router.get('/stats', async (req, res) => {
         (SELECT COALESCE(SUM(total_amount), 0) FROM sightseeing_bookings WHERE status IN ('confirmed', 'completed')) as total_revenue,
         (SELECT COUNT(*) FROM sightseeing_promocodes WHERE is_active = true AND valid_to > NOW()) as active_promo_codes
     `);
-    
+
     res.json(stats.rows[0]);
   } catch (error) {
-    console.error('Error fetching sightseeing stats:', error);
-    res.status(500).json({ error: 'Failed to fetch statistics' });
+    console.error("Error fetching sightseeing stats:", error);
+    res.status(500).json({ error: "Failed to fetch statistics" });
   }
 });
 
 // Activities management
-router.get('/activities', async (req, res) => {
+router.get("/activities", async (req, res) => {
   try {
-    const { page = 1, limit = 50, search = '', status = 'all' } = req.query;
+    const { page = 1, limit = 50, search = "", status = "all" } = req.query;
     const offset = (page - 1) * limit;
-    
-    let whereClause = 'WHERE 1=1';
+
+    let whereClause = "WHERE 1=1";
     const queryParams = [];
     let paramCount = 0;
-    
+
     if (search) {
       paramCount++;
       whereClause += ` AND (activity_name ILIKE $${paramCount} OR destination_name ILIKE $${paramCount})`;
       queryParams.push(`%${search}%`);
     }
-    
-    if (status !== 'all') {
+
+    if (status !== "all") {
       paramCount++;
       whereClause += ` AND is_active = $${paramCount}`;
-      queryParams.push(status === 'active');
+      queryParams.push(status === "active");
     }
-    
+
     paramCount++;
     queryParams.push(limit);
     paramCount++;
     queryParams.push(offset);
-    
+
     const query = `
       SELECT 
         id,
@@ -79,25 +79,25 @@ router.get('/activities', async (req, res) => {
       ORDER BY created_at DESC
       LIMIT $${paramCount - 1} OFFSET $${paramCount}
     `;
-    
+
     const result = await pool.query(query, queryParams);
-    
+
     // Format the data for frontend
-    const activities = result.rows.map(row => ({
+    const activities = result.rows.map((row) => ({
       ...row,
       inclusions: row.inclusions || [],
       exclusions: row.exclusions || [],
-      available_times: row.available_times || []
+      available_times: row.available_times || [],
     }));
-    
+
     res.json(activities);
   } catch (error) {
-    console.error('Error fetching activities:', error);
-    res.status(500).json({ error: 'Failed to fetch activities' });
+    console.error("Error fetching activities:", error);
+    res.status(500).json({ error: "Failed to fetch activities" });
   }
 });
 
-router.post('/activities', async (req, res) => {
+router.post("/activities", async (req, res) => {
   try {
     const {
       name,
@@ -105,16 +105,16 @@ router.post('/activities', async (req, res) => {
       destination,
       duration,
       price,
-      currency = 'USD',
+      currency = "USD",
       description,
       inclusions,
       exclusions,
       available_times,
       min_capacity,
       max_capacity,
-      status
+      status,
     } = req.body;
-    
+
     const query = `
       INSERT INTO sightseeing_items (
         activity_code,
@@ -132,9 +132,9 @@ router.post('/activities', async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
     `;
-    
+
     const activityCode = `ACT${Date.now()}${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
-    
+
     const result = await pool.query(query, [
       activityCode,
       name,
@@ -147,17 +147,17 @@ router.post('/activities', async (req, res) => {
       JSON.stringify(inclusions),
       JSON.stringify(exclusions),
       JSON.stringify(available_times),
-      status === 'active'
+      status === "active",
     ]);
-    
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error creating activity:', error);
-    res.status(500).json({ error: 'Failed to create activity' });
+    console.error("Error creating activity:", error);
+    res.status(500).json({ error: "Failed to create activity" });
   }
 });
 
-router.put('/activities/:id', async (req, res) => {
+router.put("/activities/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -171,9 +171,9 @@ router.put('/activities/:id', async (req, res) => {
       inclusions,
       exclusions,
       available_times,
-      status
+      status,
     } = req.body;
-    
+
     const query = `
       UPDATE sightseeing_items SET
         activity_name = $1,
@@ -191,7 +191,7 @@ router.put('/activities/:id', async (req, res) => {
       WHERE id = $12
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       name,
       category,
@@ -203,65 +203,68 @@ router.put('/activities/:id', async (req, res) => {
       JSON.stringify(inclusions),
       JSON.stringify(exclusions),
       JSON.stringify(available_times),
-      status === 'active',
-      id
+      status === "active",
+      id,
     ]);
-    
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Activity not found' });
+      return res.status(404).json({ error: "Activity not found" });
     }
-    
+
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Error updating activity:', error);
-    res.status(500).json({ error: 'Failed to update activity' });
+    console.error("Error updating activity:", error);
+    res.status(500).json({ error: "Failed to update activity" });
   }
 });
 
-router.delete('/activities/:id', async (req, res) => {
+router.delete("/activities/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const result = await pool.query('DELETE FROM sightseeing_items WHERE id = $1 RETURNING id', [id]);
-    
+
+    const result = await pool.query(
+      "DELETE FROM sightseeing_items WHERE id = $1 RETURNING id",
+      [id],
+    );
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Activity not found' });
+      return res.status(404).json({ error: "Activity not found" });
     }
-    
-    res.json({ message: 'Activity deleted successfully' });
+
+    res.json({ message: "Activity deleted successfully" });
   } catch (error) {
-    console.error('Error deleting activity:', error);
-    res.status(500).json({ error: 'Failed to delete activity' });
+    console.error("Error deleting activity:", error);
+    res.status(500).json({ error: "Failed to delete activity" });
   }
 });
 
 // Bookings management
-router.get('/bookings', async (req, res) => {
+router.get("/bookings", async (req, res) => {
   try {
-    const { page = 1, limit = 50, search = '', status = 'all' } = req.query;
+    const { page = 1, limit = 50, search = "", status = "all" } = req.query;
     const offset = (page - 1) * limit;
-    
-    let whereClause = 'WHERE 1=1';
+
+    let whereClause = "WHERE 1=1";
     const queryParams = [];
     let paramCount = 0;
-    
+
     if (search) {
       paramCount++;
       whereClause += ` AND (booking_ref ILIKE $${paramCount} OR activity_name ILIKE $${paramCount} OR guest_details->>'primaryGuest'->>'firstName' ILIKE $${paramCount})`;
       queryParams.push(`%${search}%`);
     }
-    
-    if (status !== 'all') {
+
+    if (status !== "all") {
       paramCount++;
       whereClause += ` AND status = $${paramCount}`;
       queryParams.push(status);
     }
-    
+
     paramCount++;
     queryParams.push(limit);
     paramCount++;
     queryParams.push(offset);
-    
+
     const query = `
       SELECT 
         id,
@@ -289,17 +292,17 @@ router.get('/bookings', async (req, res) => {
       ORDER BY created_at DESC
       LIMIT $${paramCount - 1} OFFSET $${paramCount}
     `;
-    
+
     const result = await pool.query(query, queryParams);
     res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching bookings:', error);
-    res.status(500).json({ error: 'Failed to fetch bookings' });
+    console.error("Error fetching bookings:", error);
+    res.status(500).json({ error: "Failed to fetch bookings" });
   }
 });
 
 // Markup rules management
-router.get('/markup-rules', async (req, res) => {
+router.get("/markup-rules", async (req, res) => {
   try {
     const query = `
       SELECT 
@@ -328,16 +331,16 @@ router.get('/markup-rules', async (req, res) => {
       FROM sightseeing_markup_rules 
       ORDER BY priority DESC, created_at DESC
     `;
-    
+
     const result = await pool.query(query);
     res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching markup rules:', error);
-    res.status(500).json({ error: 'Failed to fetch markup rules' });
+    console.error("Error fetching markup rules:", error);
+    res.status(500).json({ error: "Failed to fetch markup rules" });
   }
 });
 
-router.post('/markup-rules', async (req, res) => {
+router.post("/markup-rules", async (req, res) => {
   try {
     const {
       name,
@@ -345,9 +348,9 @@ router.post('/markup-rules', async (req, res) => {
       value,
       conditions = {},
       priority,
-      is_active
+      is_active,
     } = req.body;
-    
+
     const query = `
       INSERT INTO sightseeing_markup_rules (
         rule_name,
@@ -366,10 +369,10 @@ router.post('/markup-rules', async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       name,
-      conditions.destination || conditions.category ? 'specific' : 'global',
+      conditions.destination || conditions.category ? "specific" : "global",
       type,
       value,
       conditions.destination || null,
@@ -380,17 +383,17 @@ router.post('/markup-rules', async (req, res) => {
       conditions.price_range?.max || null,
       priority,
       is_active,
-      'admin'
+      "admin",
     ]);
-    
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error creating markup rule:', error);
-    res.status(500).json({ error: 'Failed to create markup rule' });
+    console.error("Error creating markup rule:", error);
+    res.status(500).json({ error: "Failed to create markup rule" });
   }
 });
 
-router.put('/markup-rules/:id', async (req, res) => {
+router.put("/markup-rules/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -399,9 +402,9 @@ router.put('/markup-rules/:id', async (req, res) => {
       value,
       conditions = {},
       priority,
-      is_active
+      is_active,
     } = req.body;
-    
+
     const query = `
       UPDATE sightseeing_markup_rules SET
         rule_name = $1,
@@ -419,7 +422,7 @@ router.put('/markup-rules/:id', async (req, res) => {
       WHERE id = $12
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       name,
       type,
@@ -432,39 +435,42 @@ router.put('/markup-rules/:id', async (req, res) => {
       conditions.price_range?.max || null,
       priority,
       is_active,
-      id
+      id,
     ]);
-    
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Markup rule not found' });
+      return res.status(404).json({ error: "Markup rule not found" });
     }
-    
+
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Error updating markup rule:', error);
-    res.status(500).json({ error: 'Failed to update markup rule' });
+    console.error("Error updating markup rule:", error);
+    res.status(500).json({ error: "Failed to update markup rule" });
   }
 });
 
-router.delete('/markup-rules/:id', async (req, res) => {
+router.delete("/markup-rules/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const result = await pool.query('DELETE FROM sightseeing_markup_rules WHERE id = $1 RETURNING id', [id]);
-    
+
+    const result = await pool.query(
+      "DELETE FROM sightseeing_markup_rules WHERE id = $1 RETURNING id",
+      [id],
+    );
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Markup rule not found' });
+      return res.status(404).json({ error: "Markup rule not found" });
     }
-    
-    res.json({ message: 'Markup rule deleted successfully' });
+
+    res.json({ message: "Markup rule deleted successfully" });
   } catch (error) {
-    console.error('Error deleting markup rule:', error);
-    res.status(500).json({ error: 'Failed to delete markup rule' });
+    console.error("Error deleting markup rule:", error);
+    res.status(500).json({ error: "Failed to delete markup rule" });
   }
 });
 
 // Promo codes management
-router.get('/promo-codes', async (req, res) => {
+router.get("/promo-codes", async (req, res) => {
   try {
     const query = `
       SELECT 
@@ -484,16 +490,16 @@ router.get('/promo-codes', async (req, res) => {
       FROM sightseeing_promocodes 
       ORDER BY created_at DESC
     `;
-    
+
     const result = await pool.query(query);
     res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching promo codes:', error);
-    res.status(500).json({ error: 'Failed to fetch promo codes' });
+    console.error("Error fetching promo codes:", error);
+    res.status(500).json({ error: "Failed to fetch promo codes" });
   }
 });
 
-router.post('/promo-codes', async (req, res) => {
+router.post("/promo-codes", async (req, res) => {
   try {
     const {
       code,
@@ -504,9 +510,9 @@ router.post('/promo-codes', async (req, res) => {
       usage_limit,
       valid_from,
       valid_until,
-      is_active
+      is_active,
     } = req.body;
-    
+
     const query = `
       INSERT INTO sightseeing_promocodes (
         code,
@@ -524,11 +530,11 @@ router.post('/promo-codes', async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       code.toUpperCase(),
       `${code} Promotion`,
-      `${type === 'percentage' ? value + '%' : '$' + value} discount`,
+      `${type === "percentage" ? value + "%" : "$" + value} discount`,
       type,
       value,
       max_discount_amount || null,
@@ -537,21 +543,21 @@ router.post('/promo-codes', async (req, res) => {
       valid_from,
       valid_until,
       is_active,
-      'admin'
+      "admin",
     ]);
-    
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error creating promo code:', error);
-    if (error.code === '23505') {
-      res.status(400).json({ error: 'Promo code already exists' });
+    console.error("Error creating promo code:", error);
+    if (error.code === "23505") {
+      res.status(400).json({ error: "Promo code already exists" });
     } else {
-      res.status(500).json({ error: 'Failed to create promo code' });
+      res.status(500).json({ error: "Failed to create promo code" });
     }
   }
 });
 
-router.put('/promo-codes/:id', async (req, res) => {
+router.put("/promo-codes/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -563,9 +569,9 @@ router.put('/promo-codes/:id', async (req, res) => {
       usage_limit,
       valid_from,
       valid_until,
-      is_active
+      is_active,
     } = req.body;
-    
+
     const query = `
       UPDATE sightseeing_promocodes SET
         code = $1,
@@ -583,11 +589,11 @@ router.put('/promo-codes/:id', async (req, res) => {
       WHERE id = $12
       RETURNING *
     `;
-    
+
     const result = await pool.query(query, [
       code.toUpperCase(),
       `${code} Promotion`,
-      `${type === 'percentage' ? value + '%' : '$' + value} discount`,
+      `${type === "percentage" ? value + "%" : "$" + value} discount`,
       type,
       value,
       max_discount_amount || null,
@@ -596,34 +602,37 @@ router.put('/promo-codes/:id', async (req, res) => {
       valid_from,
       valid_until,
       is_active,
-      id
+      id,
     ]);
-    
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Promo code not found' });
+      return res.status(404).json({ error: "Promo code not found" });
     }
-    
+
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Error updating promo code:', error);
-    res.status(500).json({ error: 'Failed to update promo code' });
+    console.error("Error updating promo code:", error);
+    res.status(500).json({ error: "Failed to update promo code" });
   }
 });
 
-router.delete('/promo-codes/:id', async (req, res) => {
+router.delete("/promo-codes/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const result = await pool.query('DELETE FROM sightseeing_promocodes WHERE id = $1 RETURNING id', [id]);
-    
+
+    const result = await pool.query(
+      "DELETE FROM sightseeing_promocodes WHERE id = $1 RETURNING id",
+      [id],
+    );
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Promo code not found' });
+      return res.status(404).json({ error: "Promo code not found" });
     }
-    
-    res.json({ message: 'Promo code deleted successfully' });
+
+    res.json({ message: "Promo code deleted successfully" });
   } catch (error) {
-    console.error('Error deleting promo code:', error);
-    res.status(500).json({ error: 'Failed to delete promo code' });
+    console.error("Error deleting promo code:", error);
+    res.status(500).json({ error: "Failed to delete promo code" });
   }
 });
 

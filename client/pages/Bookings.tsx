@@ -9,9 +9,9 @@ import {
 import { Button } from "@/components/ui/button";
 
 const Bookings: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"all" | "flights" | "hotels" | "sightseeing">(
-    "all",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "all" | "flights" | "hotels" | "sightseeing"
+  >("all");
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [viewDetailsModal, setViewDetailsModal] = useState(false);
   const [manageBookingModal, setManageBookingModal] = useState(false);
@@ -149,30 +149,32 @@ const Bookings: React.FC = () => {
     },
   ];
 
-  const allBookings = [...flightBookings, ...hotelBookings, ...sightseeingBookings].sort(
-    (a, b) => {
-      let dateA: string;
-      let dateB: string;
+  const allBookings = [
+    ...flightBookings,
+    ...hotelBookings,
+    ...sightseeingBookings,
+  ].sort((a, b) => {
+    let dateA: string;
+    let dateB: string;
 
-      if (a.type === "flight") {
-        dateA = a.date;
-      } else if (a.type === "hotel") {
-        dateA = a.checkIn;
-      } else {
-        dateA = a.visitDate;
-      }
+    if (a.type === "flight") {
+      dateA = a.date;
+    } else if (a.type === "hotel") {
+      dateA = a.checkIn;
+    } else {
+      dateA = a.visitDate;
+    }
 
-      if (b.type === "flight") {
-        dateB = b.date;
-      } else if (b.type === "hotel") {
-        dateB = b.checkIn;
-      } else {
-        dateB = b.visitDate;
-      }
+    if (b.type === "flight") {
+      dateB = b.date;
+    } else if (b.type === "hotel") {
+      dateB = b.checkIn;
+    } else {
+      dateB = b.visitDate;
+    }
 
-      return new Date(dateA).getTime() - new Date(dateB).getTime();
-    },
-  );
+    return new Date(dateA).getTime() - new Date(dateB).getTime();
+  });
 
   const getFilteredBookings = () => {
     switch (activeTab) {
@@ -326,8 +328,8 @@ const Bookings: React.FC = () => {
                         booking.type === "flight"
                           ? "bg-blue-100"
                           : booking.type === "hotel"
-                          ? "bg-amber-100"
-                          : "bg-purple-100"
+                            ? "bg-amber-100"
+                            : "bg-purple-100"
                       }`}
                     >
                       {booking.type === "flight" ? (
@@ -459,8 +461,8 @@ const Bookings: React.FC = () => {
                     {booking.type === "flight"
                       ? `Airline: ${booking.airline}`
                       : booking.type === "hotel"
-                      ? booking.location
-                      : `${booking.location} • ${booking.ticketType}`}
+                        ? booking.location
+                        : `${booking.location} • ${booking.ticketType}`}
                   </div>
                   <div className="flex space-x-3">
                     <button

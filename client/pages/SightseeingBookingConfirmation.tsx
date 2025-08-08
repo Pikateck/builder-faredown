@@ -36,7 +36,14 @@ interface SightseeingAttraction {
   images: string[];
   rating: number;
   reviews: number;
-  category: "museum" | "landmark" | "tour" | "activity" | "food" | "culture" | "adventure";
+  category:
+    | "museum"
+    | "landmark"
+    | "tour"
+    | "activity"
+    | "food"
+    | "culture"
+    | "adventure";
   duration: string;
   ticketTypes: {
     name: string;
@@ -50,7 +57,9 @@ export default function SightseeingBookingConfirmation() {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
 
-  const [attraction, setAttraction] = useState<SightseeingAttraction | null>(null);
+  const [attraction, setAttraction] = useState<SightseeingAttraction | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   // Extract booking parameters
@@ -71,7 +80,7 @@ export default function SightseeingBookingConfirmation() {
       setLoading(true);
 
       try {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         // Sample attraction data (same as in other components)
         const sampleAttractions: Record<string, SightseeingAttraction> = {
@@ -90,19 +99,34 @@ export default function SightseeingBookingConfirmation() {
               {
                 name: "Standard Admission",
                 price: 149,
-                features: ["Floors 124 & 125", "Skip-the-line access", "Outdoor deck", "Welcome drink"]
+                features: [
+                  "Floors 124 & 125",
+                  "Skip-the-line access",
+                  "Outdoor deck",
+                  "Welcome drink",
+                ],
               },
               {
                 name: "Prime Time",
                 price: 199,
-                features: ["Floors 124 & 125", "Skip-the-line access", "Prime viewing times", "Premium refreshments"]
+                features: [
+                  "Floors 124 & 125",
+                  "Skip-the-line access",
+                  "Prime viewing times",
+                  "Premium refreshments",
+                ],
               },
               {
                 name: "VIP Experience",
                 price: 299,
-                features: ["Floors 124, 125 & 148", "Private elevator", "VIP lounge access", "Premium refreshments"]
-              }
-            ]
+                features: [
+                  "Floors 124, 125 & 148",
+                  "Private elevator",
+                  "VIP lounge access",
+                  "Premium refreshments",
+                ],
+              },
+            ],
           },
           "dubai-aquarium": {
             id: "dubai-aquarium",
@@ -119,20 +143,28 @@ export default function SightseeingBookingConfirmation() {
               {
                 name: "Aquarium + Zoo",
                 price: 89,
-                features: ["Aquarium access", "Underwater zoo", "Touch tanks", "Educational talks"]
+                features: [
+                  "Aquarium access",
+                  "Underwater zoo",
+                  "Touch tanks",
+                  "Educational talks",
+                ],
               },
               {
                 name: "Explorer Experience",
                 price: 129,
-                features: ["All standard features", "Behind-the-scenes tour", "Feeding experience"]
-              }
-            ]
-          }
+                features: [
+                  "All standard features",
+                  "Behind-the-scenes tour",
+                  "Feeding experience",
+                ],
+              },
+            ],
+          },
         };
 
         const attractionData = sampleAttractions[attractionId];
         setAttraction(attractionData || null);
-        
       } catch (err) {
         console.error("Error loading attraction:", err);
       } finally {
@@ -149,19 +181,47 @@ export default function SightseeingBookingConfirmation() {
   const getCategoryInfo = (category: string) => {
     switch (category) {
       case "landmark":
-        return { label: "Landmarks & Attractions", color: "bg-blue-100 text-blue-800", IconComponent: Building2 };
+        return {
+          label: "Landmarks & Attractions",
+          color: "bg-blue-100 text-blue-800",
+          IconComponent: Building2,
+        };
       case "museum":
-        return { label: "Museums & Culture", color: "bg-purple-100 text-purple-800", IconComponent: Camera };
+        return {
+          label: "Museums & Culture",
+          color: "bg-purple-100 text-purple-800",
+          IconComponent: Camera,
+        };
       case "tour":
-        return { label: "Tours & Sightseeing", color: "bg-green-100 text-green-800", IconComponent: Ticket };
+        return {
+          label: "Tours & Sightseeing",
+          color: "bg-green-100 text-green-800",
+          IconComponent: Ticket,
+        };
       case "adventure":
-        return { label: "Adventure & Sports", color: "bg-yellow-100 text-yellow-800", IconComponent: Mountain };
+        return {
+          label: "Adventure & Sports",
+          color: "bg-yellow-100 text-yellow-800",
+          IconComponent: Mountain,
+        };
       case "food":
-        return { label: "Food & Dining", color: "bg-red-100 text-red-800", IconComponent: Utensils };
+        return {
+          label: "Food & Dining",
+          color: "bg-red-100 text-red-800",
+          IconComponent: Utensils,
+        };
       case "culture":
-        return { label: "Cultural Experiences", color: "bg-indigo-100 text-indigo-800", IconComponent: Music };
+        return {
+          label: "Cultural Experiences",
+          color: "bg-indigo-100 text-indigo-800",
+          IconComponent: Music,
+        };
       default:
-        return { label: "Experience", color: "bg-gray-100 text-gray-800", IconComponent: Camera };
+        return {
+          label: "Experience",
+          color: "bg-gray-100 text-gray-800",
+          IconComponent: Camera,
+        };
     }
   };
 
@@ -176,7 +236,9 @@ export default function SightseeingBookingConfirmation() {
 
   const handleDownloadTicket = () => {
     // In a real app, this would download the actual ticket PDF
-    alert("Ticket download would start here. Check your email for the mobile ticket.");
+    alert(
+      "Ticket download would start here. Check your email for the mobile ticket.",
+    );
   };
 
   const handleShareBooking = () => {
@@ -215,11 +277,17 @@ export default function SightseeingBookingConfirmation() {
             <div className="text-red-500 mb-4">
               <Info className="w-16 h-16 mx-auto" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Booking Not Found</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              Booking Not Found
+            </h1>
             <p className="text-gray-600 mb-6">
-              We couldn't find the booking details. Please check your confirmation email or contact support.
+              We couldn't find the booking details. Please check your
+              confirmation email or contact support.
             </p>
-            <Button onClick={handleGoHome} className="bg-[#003580] hover:bg-[#002a66] text-white">
+            <Button
+              onClick={handleGoHome}
+              className="bg-[#003580] hover:bg-[#002a66] text-white"
+            >
               Go to Homepage
             </Button>
           </div>
@@ -229,26 +297,29 @@ export default function SightseeingBookingConfirmation() {
   }
 
   const categoryInfo = getCategoryInfo(attraction.category);
-  const selectedTicket = attraction.ticketTypes[ticketTypeIndex] || attraction.ticketTypes[0];
+  const selectedTicket =
+    attraction.ticketTypes[ticketTypeIndex] || attraction.ticketTypes[0];
   const totalPrice = selectedTicket.price * adults;
-  const formattedVisitDate = new Date(visitDate).toLocaleDateString('en-US', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const formattedVisitDate = new Date(visitDate).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Success Header */}
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking Confirmed!</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Booking Confirmed!
+          </h1>
           <p className="text-lg text-gray-600">
             Your {attraction.name} experience has been successfully booked.
           </p>
@@ -260,7 +331,9 @@ export default function SightseeingBookingConfirmation() {
           <div className="lg:col-span-2 space-y-6">
             {/* Booking Reference */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Booking Reference</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Booking Reference
+              </h2>
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="text-center">
                   <div className="text-2xl font-mono font-bold text-[#003580] mb-2">
@@ -275,8 +348,10 @@ export default function SightseeingBookingConfirmation() {
 
             {/* Experience Details */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Experience Details</h2>
-              
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Experience Details
+              </h2>
+
               <div className="flex gap-4 mb-4">
                 <img
                   src={attraction.images[0]}
@@ -288,14 +363,17 @@ export default function SightseeingBookingConfirmation() {
                     <categoryInfo.IconComponent className="w-3 h-3 mr-1" />
                     {categoryInfo.label}
                   </Badge>
-                  <h3 className="font-semibold text-gray-900 mb-1">{attraction.name}</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1">
+                    {attraction.name}
+                  </h3>
                   <div className="flex items-center text-sm text-gray-600 mb-1">
                     <MapPin className="w-4 h-4 mr-1" />
                     {attraction.location}
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
                     <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                    {attraction.rating} ({attraction.reviews.toLocaleString()} reviews)
+                    {attraction.rating} ({attraction.reviews.toLocaleString()}{" "}
+                    reviews)
                   </div>
                 </div>
               </div>
@@ -304,7 +382,9 @@ export default function SightseeingBookingConfirmation() {
                 <div className="flex items-center text-sm">
                   <Calendar className="w-4 h-4 text-gray-500 mr-2" />
                   <span className="text-gray-600">Visit Date:</span>
-                  <span className="ml-auto font-medium">{formattedVisitDate}</span>
+                  <span className="ml-auto font-medium">
+                    {formattedVisitDate}
+                  </span>
                 </div>
                 {selectedTime && (
                   <div className="flex items-center text-sm">
@@ -317,29 +397,40 @@ export default function SightseeingBookingConfirmation() {
                   <Users className="w-4 h-4 text-gray-500 mr-2" />
                   <span className="text-gray-600">Guests:</span>
                   <span className="ml-auto font-medium">
-                    {adults} adult{adults > 1 ? 's' : ''}{children > 0 ? `, ${children} child${children > 1 ? 'ren' : ''}` : ''}
+                    {adults} adult{adults > 1 ? "s" : ""}
+                    {children > 0
+                      ? `, ${children} child${children > 1 ? "ren" : ""}`
+                      : ""}
                   </span>
                 </div>
                 <div className="flex items-center text-sm">
                   <Clock className="w-4 h-4 text-gray-500 mr-2" />
                   <span className="text-gray-600">Duration:</span>
-                  <span className="ml-auto font-medium">{attraction.duration}</span>
+                  <span className="ml-auto font-medium">
+                    {attraction.duration}
+                  </span>
                 </div>
                 <div className="flex items-center text-sm">
                   <Ticket className="w-4 h-4 text-gray-500 mr-2" />
                   <span className="text-gray-600">Ticket:</span>
-                  <span className="ml-auto font-medium">{selectedTicket.name}</span>
+                  <span className="ml-auto font-medium">
+                    {selectedTicket.name}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Guest Information */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Guest Information</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Guest Information
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm text-gray-600">Guest Name</label>
-                  <p className="font-medium">{firstName} {lastName}</p>
+                  <p className="font-medium">
+                    {firstName} {lastName}
+                  </p>
                 </div>
                 <div>
                   <label className="text-sm text-gray-600">Email</label>
@@ -357,9 +448,13 @@ export default function SightseeingBookingConfirmation() {
               <ul className="space-y-2 text-sm text-amber-700">
                 <li>• Please arrive 30 minutes before your scheduled time</li>
                 <li>• Bring a valid government-issued photo ID</li>
-                <li>• Mobile tickets will be sent to your email within 24 hours</li>
+                <li>
+                  • Mobile tickets will be sent to your email within 24 hours
+                </li>
                 <li>• Free cancellation up to 24 hours before your visit</li>
-                <li>• Contact customer service for any changes to your booking</li>
+                <li>
+                  • Contact customer service for any changes to your booking
+                </li>
               </ul>
             </div>
           </div>
@@ -369,24 +464,34 @@ export default function SightseeingBookingConfirmation() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-6">
               {/* Price Summary */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Payment Summary</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  Payment Summary
+                </h3>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">{selectedTicket.name} × {adults}</span>
+                    <span className="text-gray-600">
+                      {selectedTicket.name} × {adults}
+                    </span>
                     <span>{formatPrice(selectedTicket.price * adults)}</span>
                   </div>
                   {children > 0 && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Children × {children}</span>
+                      <span className="text-gray-600">
+                        Children × {children}
+                      </span>
                       <span>Free</span>
                     </div>
                   )}
                 </div>
-                
+
                 <div className="border-t pt-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-semibold text-gray-900">Total Paid</span>
-                    <span className="text-xl font-bold text-green-600">{formatPrice(totalPrice)}</span>
+                    <span className="text-lg font-semibold text-gray-900">
+                      Total Paid
+                    </span>
+                    <span className="text-xl font-bold text-green-600">
+                      {formatPrice(totalPrice)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -400,7 +505,7 @@ export default function SightseeingBookingConfirmation() {
                   <Download className="w-4 h-4 mr-2" />
                   Download Ticket
                 </Button>
-                
+
                 <Button
                   onClick={handleShareBooking}
                   variant="outline"
@@ -409,7 +514,7 @@ export default function SightseeingBookingConfirmation() {
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Booking
                 </Button>
-                
+
                 <Button
                   onClick={handleViewMyBookings}
                   variant="outline"
@@ -418,7 +523,7 @@ export default function SightseeingBookingConfirmation() {
                   <FileText className="w-4 h-4 mr-2" />
                   View My Bookings
                 </Button>
-                
+
                 <Button
                   onClick={handleGoHome}
                   variant="ghost"
@@ -456,9 +561,12 @@ export default function SightseeingBookingConfirmation() {
                 1
               </div>
               <div>
-                <h4 className="font-medium text-blue-900 mb-1">Check Your Email</h4>
+                <h4 className="font-medium text-blue-900 mb-1">
+                  Check Your Email
+                </h4>
                 <p className="text-sm text-blue-700">
-                  You'll receive a confirmation email with your mobile ticket within 24 hours.
+                  You'll receive a confirmation email with your mobile ticket
+                  within 24 hours.
                 </p>
               </div>
             </div>
@@ -467,7 +575,9 @@ export default function SightseeingBookingConfirmation() {
                 2
               </div>
               <div>
-                <h4 className="font-medium text-blue-900 mb-1">Prepare for Your Visit</h4>
+                <h4 className="font-medium text-blue-900 mb-1">
+                  Prepare for Your Visit
+                </h4>
                 <p className="text-sm text-blue-700">
                   Review the important information and arrive 30 minutes early.
                 </p>
@@ -478,7 +588,9 @@ export default function SightseeingBookingConfirmation() {
                 3
               </div>
               <div>
-                <h4 className="font-medium text-blue-900 mb-1">Enjoy Your Experience</h4>
+                <h4 className="font-medium text-blue-900 mb-1">
+                  Enjoy Your Experience
+                </h4>
                 <p className="text-sm text-blue-700">
                   Show your mobile ticket at the entrance and enjoy your visit!
                 </p>

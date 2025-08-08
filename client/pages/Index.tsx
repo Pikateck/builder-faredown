@@ -243,11 +243,11 @@ export default function Index() {
   // Handle URL parameters for tab switching
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const tabParam = urlParams.get('tab');
-    if (tabParam && ['flights', 'hotels', 'sightseeing'].includes(tabParam)) {
+    const tabParam = urlParams.get("tab");
+    if (tabParam && ["flights", "hotels", "sightseeing"].includes(tabParam)) {
       setActiveTab(tabParam);
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // Add flight segment function
@@ -848,7 +848,9 @@ export default function Index() {
         )}
 
         {/* Mobile Hero Section */}
-        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "flights" ? "" : "hidden"}`}>
+        <div
+          className={`bg-[#003580] text-white pb-8 ${activeTab === "flights" ? "" : "hidden"}`}
+        >
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
@@ -1213,14 +1215,17 @@ export default function Index() {
         </div>
 
         {/* Mobile Sightseeing Section */}
-        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "sightseeing" ? "" : "hidden"}`}>
+        <div
+          className={`bg-[#003580] text-white pb-8 ${activeTab === "sightseeing" ? "" : "hidden"}`}
+        >
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
                 Discover Amazing Experiences
               </h1>
               <p className="text-blue-200 text-sm mb-3">
-                Explore fascinating attractions, cultural landmarks, and exciting activities...
+                Explore fascinating attractions, cultural landmarks, and
+                exciting activities...
               </p>
             </div>
 
@@ -1230,12 +1235,13 @@ export default function Index() {
         </div>
 
         {/* Mobile Hotels Section */}
-        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "hotels" ? "" : "hidden"}`} style={{ display: activeTab === "hotels" ? "block" : "none" }}>
+        <div
+          className={`bg-[#003580] text-white pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}
+          style={{ display: activeTab === "hotels" ? "block" : "none" }}
+        >
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2">
-                Find your next stay
-              </h1>
+              <h1 className="text-2xl font-bold mb-2">Find your next stay</h1>
               <p className="text-blue-200 text-sm mb-3">
                 Search low prices on hotels, homes and much more...
               </p>
@@ -1314,7 +1320,7 @@ export default function Index() {
                 <button
                   onClick={() => {
                     setActiveTab("flights");
-                    window.history.pushState({}, '', '/?tab=flights');
+                    window.history.pushState({}, "", "/?tab=flights");
                   }}
                   className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
                     activeTab === "flights" ? "border-b-2 border-white" : ""
@@ -1325,7 +1331,7 @@ export default function Index() {
                 <button
                   onClick={() => {
                     setActiveTab("hotels");
-                    window.history.pushState({}, '', '/?tab=hotels');
+                    window.history.pushState({}, "", "/?tab=hotels");
                   }}
                   className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
                     activeTab === "hotels" ? "border-b-2 border-white" : ""
@@ -1336,7 +1342,7 @@ export default function Index() {
                 <button
                   onClick={() => {
                     setActiveTab("sightseeing");
-                    window.history.pushState({}, '', '/?tab=sightseeing');
+                    window.history.pushState({}, "", "/?tab=sightseeing");
                   }}
                   className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
                     activeTab === "sightseeing" ? "border-b-2 border-white" : ""
@@ -2108,7 +2114,10 @@ export default function Index() {
         {/* Hotels Search Form */}
         <header
           className={`py-3 sm:py-6 md:py-8 pb-24 sm:pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}
-          style={{ backgroundColor: "#003580", display: activeTab === "hotels" ? "block" : "none" }}
+          style={{
+            backgroundColor: "#003580",
+            display: activeTab === "hotels" ? "block" : "none",
+          }}
         >
           <div className="max-w-7xl mx-auto px-3 sm:px-4">
             <div className="text-center mb-2 sm:mb-3">
@@ -2140,7 +2149,8 @@ export default function Index() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Explore fascinating attractions, cultural landmarks, and exciting activities...
+                Explore fascinating attractions, cultural landmarks, and
+                exciting activities...
               </h1>
             </div>
 
@@ -2685,23 +2695,40 @@ export default function Index() {
               <div>
                 <h3 className="text-lg font-bold mb-3">Faredown</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  The world's first travel portal where you can negotiate and bargain for better deals.
+                  The world's first travel portal where you can negotiate and
+                  bargain for better deals.
                 </p>
                 <div className="flex space-x-3">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                  <a
+                    href="https://facebook.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                  >
                     <Facebook className="w-4 h-4" />
                   </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
+                  >
                     <Instagram className="w-4 h-4" />
                   </a>
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+                  >
                     <Twitter className="w-4 h-4" />
                   </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
                     <Linkedin className="w-4 h-4" />
                   </a>
                 </div>
@@ -2710,28 +2737,89 @@ export default function Index() {
               <div>
                 <h4 className="font-semibold mb-3">Quick Links</h4>
                 <ul className="space-y-1 text-sm text-gray-400">
-                  <li><Link to="/about" className="hover:text-white">About Us</Link></li>
-                  <li><Link to="/how-it-works" className="hover:text-white">How It Works</Link></li>
-                  <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
-                  <li><Link to="/help" className="hover:text-white">Help Center</Link></li>
+                  <li>
+                    <Link to="/about" className="hover:text-white">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/how-it-works" className="hover:text-white">
+                      How It Works
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="hover:text-white">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/help" className="hover:text-white">
+                      Help Center
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-3">Services</h4>
                 <ul className="space-y-0.5 text-sm text-gray-400">
-                  <li><button onClick={() => { setActiveTab("flights"); window.history.pushState({}, '', '/?tab=flights'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Flights</button></li>
-                  <li><button onClick={() => { setActiveTab("hotels"); window.history.pushState({}, '', '/?tab=hotels'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Hotels</button></li>
-                  <li><button onClick={() => { setActiveTab("sightseeing"); window.history.pushState({}, '', '/?tab=sightseeing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Sightseeing</button></li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        setActiveTab("flights");
+                        window.history.pushState({}, "", "/?tab=flights");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="hover:text-white text-left"
+                    >
+                      Flights
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        setActiveTab("hotels");
+                        window.history.pushState({}, "", "/?tab=hotels");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="hover:text-white text-left"
+                    >
+                      Hotels
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        setActiveTab("sightseeing");
+                        window.history.pushState({}, "", "/?tab=sightseeing");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="hover:text-white text-left"
+                    >
+                      Sightseeing
+                    </button>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-3">Legal</h4>
                 <ul className="space-y-1 text-sm text-gray-400">
-                  <li><Link to="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                  <li><Link to="/terms" className="hover:text-white">Terms of Service</Link></li>
-                  <li><Link to="/refund" className="hover:text-white">Refund Policy</Link></li>
+                  <li>
+                    <Link to="/privacy" className="hover:text-white">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/terms" className="hover:text-white">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/refund" className="hover:text-white">
+                      Refund Policy
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -2743,13 +2831,19 @@ export default function Index() {
                     <span className="font-semibold">Certified by:</span>
                     <div className="flex items-center space-x-4">
                       <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">TAAI</span>
+                        <span className="text-[#003580] font-bold text-xs">
+                          TAAI
+                        </span>
                       </div>
                       <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">TAAFI</span>
+                        <span className="text-[#003580] font-bold text-xs">
+                          TAAFI
+                        </span>
                       </div>
                       <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">IATA</span>
+                        <span className="text-[#003580] font-bold text-xs">
+                          IATA
+                        </span>
                       </div>
                     </div>
                   </div>

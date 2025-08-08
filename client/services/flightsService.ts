@@ -210,7 +210,7 @@ export class FlightsService {
     } else if (response && response.data) {
       // Handle case where data is directly the flight object
       return response.data;
-    } else if (response && typeof response === 'object' && response.id) {
+    } else if (response && typeof response === "object" && response.id) {
       // Handle case where response itself is the flight object
       return response as Flight;
     }

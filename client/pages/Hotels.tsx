@@ -111,7 +111,7 @@ export default function Hotels() {
 
   // Scroll to top when component mounts
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   // Handle sign out
@@ -547,21 +547,27 @@ export default function Hotels() {
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <Link
                   to="/?tab=flights"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Flights</span>
                 </Link>
                 <Link
                   to="/?tab=hotels"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
                 >
                   <span>Hotels</span>
                 </Link>
                 <Link
                   to="/?tab=sightseeing"
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Sightseeing</span>
@@ -1111,23 +1117,40 @@ export default function Hotels() {
               <div>
                 <h3 className="text-lg font-bold mb-3">Faredown</h3>
                 <p className="text-gray-400 text-sm mb-4">
-                  The world's first travel portal where you can negotiate and bargain for better deals.
+                  The world's first travel portal where you can negotiate and
+                  bargain for better deals.
                 </p>
                 <div className="flex space-x-3">
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                  <a
+                    href="https://facebook.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                  >
                     <Facebook className="w-4 h-4" />
                   </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors">
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
+                  >
                     <Instagram className="w-4 h-4" />
                   </a>
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors">
+                  <a
+                    href="https://twitter.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+                  >
                     <Twitter className="w-4 h-4" />
                   </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
-                     className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                  >
                     <Linkedin className="w-4 h-4" />
                   </a>
                 </div>
@@ -1136,28 +1159,86 @@ export default function Hotels() {
               <div>
                 <h4 className="font-semibold mb-3">Quick Links</h4>
                 <ul className="space-y-1 text-sm text-gray-400">
-                  <li><Link to="/about" className="hover:text-white">About Us</Link></li>
-                  <li><Link to="/how-it-works" className="hover:text-white">How It Works</Link></li>
-                  <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
-                  <li><Link to="/help" className="hover:text-white">Help Center</Link></li>
+                  <li>
+                    <Link to="/about" className="hover:text-white">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/how-it-works" className="hover:text-white">
+                      How It Works
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="hover:text-white">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/help" className="hover:text-white">
+                      Help Center
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-3">Services</h4>
                 <ul className="space-y-0.5 text-sm text-gray-400">
-                  <li><Link to="/?tab=flights" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Flights</Link></li>
-                  <li><Link to="/?tab=hotels" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Hotels</Link></li>
-                  <li><Link to="/?tab=sightseeing" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Sightseeing</Link></li>
+                  <li>
+                    <Link
+                      to="/?tab=flights"
+                      onClick={() =>
+                        window.scrollTo({ top: 0, behavior: "smooth" })
+                      }
+                      className="hover:text-white"
+                    >
+                      Flights
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/?tab=hotels"
+                      onClick={() =>
+                        window.scrollTo({ top: 0, behavior: "smooth" })
+                      }
+                      className="hover:text-white"
+                    >
+                      Hotels
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/?tab=sightseeing"
+                      onClick={() =>
+                        window.scrollTo({ top: 0, behavior: "smooth" })
+                      }
+                      className="hover:text-white"
+                    >
+                      Sightseeing
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="font-semibold mb-3">Legal</h4>
                 <ul className="space-y-1 text-sm text-gray-400">
-                  <li><Link to="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                  <li><Link to="/terms" className="hover:text-white">Terms of Service</Link></li>
-                  <li><Link to="/refund" className="hover:text-white">Refund Policy</Link></li>
+                  <li>
+                    <Link to="/privacy" className="hover:text-white">
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/terms" className="hover:text-white">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/refund" className="hover:text-white">
+                      Refund Policy
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -1169,13 +1250,19 @@ export default function Hotels() {
                     <span className="font-semibold">Certified by:</span>
                     <div className="flex items-center space-x-4">
                       <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">TAAI</span>
+                        <span className="text-[#003580] font-bold text-xs">
+                          TAAI
+                        </span>
                       </div>
                       <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">TAAFI</span>
+                        <span className="text-[#003580] font-bold text-xs">
+                          TAAFI
+                        </span>
                       </div>
                       <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">IATA</span>
+                        <span className="text-[#003580] font-bold text-xs">
+                          IATA
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -179,8 +179,13 @@ export class SightseeingService {
   /**
    * Search for activities using live Hotelbeds Activities API
    */
-  async searchActivities(searchParams: SightseeingSearchRequest): Promise<Activity[]> {
-    console.log("🎯 Searching activities with Hotelbeds Activities API:", searchParams);
+  async searchActivities(
+    searchParams: SightseeingSearchRequest,
+  ): Promise<Activity[]> {
+    console.log(
+      "🎯 Searching activities with Hotelbeds Activities API:",
+      searchParams,
+    );
 
     // Map frontend params to backend API format
     const apiParams = {
@@ -235,7 +240,7 @@ export class SightseeingService {
     } else if (response && response.data) {
       // Handle case where data is directly the activity object
       return response.data;
-    } else if (response && typeof response === 'object' && response.id) {
+    } else if (response && typeof response === "object" && response.id) {
       // Handle case where response itself is the activity object
       return response as Activity;
     }
@@ -293,7 +298,9 @@ export class SightseeingService {
   /**
    * Book an activity
    */
-  async bookActivity(bookingRequest: ActivityBookingRequest): Promise<ActivityBooking> {
+  async bookActivity(
+    bookingRequest: ActivityBookingRequest,
+  ): Promise<ActivityBooking> {
     console.log("🎯 Booking activity:", bookingRequest);
 
     const response = await apiClient.post<ApiResponse<ActivityBooking>>(
@@ -502,7 +509,10 @@ export class SightseeingService {
         ],
         includes: ["Professional guide", "Walking tour", "Historical insights"],
         excludes: ["Food and beverages", "Transportation", "Entrance fees"],
-        importantInfo: ["Comfortable walking shoes recommended", "Weather dependent"],
+        importantInfo: [
+          "Comfortable walking shoes recommended",
+          "Weather dependent",
+        ],
         cancellationPolicy: "Free cancellation up to 24 hours before",
         rating: 4.5,
         reviewCount: 128,
