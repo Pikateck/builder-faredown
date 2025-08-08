@@ -85,11 +85,18 @@ export function BookingCalendar({
     const range = ranges.selection;
 
     if (range && range.startDate) {
-      // Ensure endDate is at least the same as startDate or add 1 day for single date selection
       let endDate = range.endDate;
-      if (!endDate || isSameDay(range.startDate, endDate)) {
+
+      // For sightseeing, allow same-day selections (single day experience)
+      // For hotels, ensure minimum 1 night stay
+      if (!endDate) {
+        // If no end date selected yet, use start date (user is still selecting)
+        endDate = range.startDate;
+      } else if (bookingType === "hotel" && isSameDay(range.startDate, endDate)) {
+        // For hotels, ensure at least 1 night stay
         endDate = addDays(range.startDate, 1);
       }
+      // For sightseeing, allow same day (single day experience)
 
       const newSelection = [
         {
@@ -99,7 +106,7 @@ export function BookingCalendar({
         },
       ];
 
-      console.log("Setting new selection:", newSelection);
+      console.log("Setting new selection:", newSelection, "bookingType:", bookingType);
       setSelection(newSelection);
 
       // Call onChange with proper date range
