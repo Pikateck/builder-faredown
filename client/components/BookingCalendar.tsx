@@ -110,12 +110,15 @@ export function BookingCalendar({
       console.log("Setting new selection:", newSelection, "bookingType:", bookingType);
       setSelection(newSelection);
 
-      // Call onChange with proper date range
-      if (onChange) {
+      // Call onChange with proper date range only when we have a complete selection
+      if (onChange && range.endDate) {
+        console.log("🗓️ Calling onChange with:", { startDate: range.startDate, endDate: endDate });
         onChange({
           startDate: range.startDate,
           endDate: endDate,
         });
+      } else {
+        console.log("🗓️ Waiting for end date selection...");
       }
     }
   };
