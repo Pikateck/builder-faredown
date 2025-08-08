@@ -640,7 +640,7 @@ export function SightseeingSearchForm() {
           </label>
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
-              <div className="relative cursor-pointer">
+              <button className="relative cursor-pointer w-full text-left">
                 <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
                 <Input
                   className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm"
@@ -648,20 +648,22 @@ export function SightseeingSearchForm() {
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => setIsDestinationOpen(true)}
+                  onClick={() => setIsDestinationOpen(true)}
                 />
                 {inputValue && (
-                  <button
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20"
-                    onClick={() => {
+                  <span
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setInputValue("");
                       setDestination("");
                       setDestinationCode("");
                     }}
                   >
                     <X className="w-4 h-4" />
-                  </button>
+                  </span>
                 )}
-              </div>
+              </button>
             </PopoverTrigger>
             <PopoverContent className="w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg z-[60]">
               <div className="max-h-80 overflow-y-auto">
