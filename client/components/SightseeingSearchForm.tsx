@@ -408,7 +408,7 @@ export function SightseeingSearchForm() {
                 )}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-0 border border-gray-200 shadow-2xl rounded-lg">
+            <PopoverContent className="w-80 p-0 border border-gray-200 shadow-2xl rounded-lg z-[60]">
               <div className="max-h-80 overflow-y-auto">
                 {loadingDestinations ? (
                   <div className="p-4 text-center text-gray-500">
@@ -479,7 +479,7 @@ export function SightseeingSearchForm() {
                   </span>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent className="w-auto p-0 z-[60]" align="start">
                 <BookingCalendar
                   mode="single"
                   selected={visitDate}
@@ -511,7 +511,7 @@ export function SightseeingSearchForm() {
                 </span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-0" align="start">
+            <PopoverContent className="w-80 p-0 z-[60]" align="start">
               <div className="p-4 space-y-4">
                 <div className="space-y-4">
                   {/* Adults */}
@@ -661,7 +661,7 @@ export function SightseeingSearchForm() {
                 )}
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg">
+            <PopoverContent className="w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg z-[60]">
               <div className="max-h-80 overflow-y-auto">
                 {loadingDestinations ? (
                   <div className="p-4 text-center text-gray-500">
@@ -762,7 +762,7 @@ export function SightseeingSearchForm() {
                 </span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-0" align="start">
+            <PopoverContent className="w-80 p-0 z-[60]" align="start">
               <div className="p-4 space-y-4">
                 <div className="space-y-4">
                   {/* Adults */}
