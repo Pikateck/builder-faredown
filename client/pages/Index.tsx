@@ -1216,7 +1216,7 @@ export default function Index() {
         </div>
 
         {/* Mobile Hotels Section */}
-        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}>
+        <div className={`bg-[#003580] text-white pb-8 ${activeTab === "hotels" ? "" : "hidden"}`} style={{ display: activeTab === "hotels" ? "block" : "none" }}>
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
