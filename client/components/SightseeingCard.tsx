@@ -471,11 +471,7 @@ export function SightseeingCard({
               <div className="w-64 flex flex-col justify-between">
                 {/* Pricing */}
                 <div className="text-right mb-4">
-                  {savings > 0 && (
-                    <div className="text-sm text-gray-500 line-through mb-1">
-                      {formatPrice(originalTotalPrice)}
-                    </div>
-                  )}
+                  {/* Original price removed per user request */}
                   {/* Price display and savings removed per user request */}
                 </div>
 
