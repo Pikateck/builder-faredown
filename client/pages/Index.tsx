@@ -240,8 +240,13 @@ export default function Index() {
     { id: "2", from: "", to: "", departureDate: null },
   ]);
 
-  // Scroll to top when component mounts
+  // Handle URL parameters for tab switching
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    if (tabParam && ['flights', 'hotels', 'sightseeing'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
