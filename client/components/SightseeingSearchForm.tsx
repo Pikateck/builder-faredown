@@ -639,9 +639,7 @@ export function SightseeingSearchForm() {
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
               <div className="relative cursor-pointer">
-                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10">
-                  <Camera className="w-4 h-4" />
-                </svg>
+                <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
                 <Input
                   className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm"
                   placeholder="Where do you want to explore?"
