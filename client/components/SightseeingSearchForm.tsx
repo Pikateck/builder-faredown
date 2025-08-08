@@ -716,8 +716,8 @@ export function SightseeingSearchForm() {
                   placeholder="Where do you want to explore?"
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
-                  onFocus={() => setIsDestinationOpen(true)}
-                  onClick={() => setIsDestinationOpen(true)}
+                  onFocus={() => setIsDestinationOpenDesktop(true)}
+                  onClick={() => setIsDestinationOpenDesktop(true)}
                 />
                 {inputValue && (
                   <span
