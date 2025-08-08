@@ -270,8 +270,7 @@ export function SightseeingSearchForm() {
       destination,
       inputValue,
       destinationCode,
-      visitDate,
-      guests
+      visitDate
     });
 
     // Clear any existing errors
