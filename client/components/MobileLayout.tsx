@@ -49,7 +49,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
     },
     {
       icon: Plane,
-      label: "My Trips",
+      label: "My Bookings",
       path: "/mobile-trips",
       active:
         location.pathname.includes("trip") ||
