@@ -45,7 +45,7 @@ import {
   Code,
   Clock,
   Star,
-  Monument,
+  Building2,
   Ticket,
   Binoculars,
 } from "lucide-react";
