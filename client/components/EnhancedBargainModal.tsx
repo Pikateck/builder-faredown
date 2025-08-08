@@ -406,7 +406,7 @@ export function EnhancedBargainModal({
               </Button>
               <Button
                 onClick={handleSubmitOffer}
-                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black touch-manipulation py-3"
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black touch-manipulation py-3"
                 disabled={!bargainPrice}
               >
                 Submit Offer
@@ -617,7 +617,7 @@ export function EnhancedBargainModal({
                     isTimerActive: false,
                   })
                 }
-                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black"
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
               >
                 Try Again
               </Button>
