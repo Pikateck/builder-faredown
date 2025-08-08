@@ -106,6 +106,7 @@ function App() {
                   <Route path="/booking-invoice" element={<BookingInvoice />} />
                   <Route path="/bookings" element={<Bookings />} />
                   <Route path="/sightseeing" element={<Sightseeing />} />
+                  <Route path="/sightseeing/results" element={<SightseeingResults />} />
                   <Route path="/sports" element={<SportsEvents />} />
                   <Route path="/sports-events" element={<SportsEvents />} />
                   <Route path="/transfers" element={<Transfers />} />
