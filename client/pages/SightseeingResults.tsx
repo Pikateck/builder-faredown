@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { SightseeingCard } from "@/components/SightseeingCard";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import { 
