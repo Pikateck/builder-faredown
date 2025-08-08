@@ -72,12 +72,11 @@ export function SightseeingCard({
 
   // Get adults count from search params
   const adults = parseInt(searchParams.get("adults") || "2");
-  const totalPrice = attraction.currentPrice * adults;
-  const originalTotalPrice = attraction.originalPrice * adults;
-
-  // Calculate savings
-  const savings = attraction.originalPrice - attraction.currentPrice;
-  const savingsPercentage = Math.round((savings / attraction.originalPrice) * 100);
+  // Price calculation variables removed per user request
+  // const totalPrice = attraction.currentPrice * adults;
+  // const originalTotalPrice = attraction.originalPrice * adults;
+  // const savings = attraction.originalPrice - attraction.currentPrice;
+  // const savingsPercentage = Math.round((savings / attraction.originalPrice) * 100);
 
   // Handle star/reviews click to navigate to details with reviews tab
   const handleReviewsClick = () => {
