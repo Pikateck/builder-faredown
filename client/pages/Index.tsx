@@ -1278,6 +1278,14 @@ export default function Index() {
                 >
                   <span>Hotels</span>
                 </button>
+                <button
+                  onClick={() => setActiveTab("sightseeing")}
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "sightseeing" ? "border-b-2 border-white" : ""
+                  }`}
+                >
+                  <span>Sightseeing</span>
+                </button>
               </nav>
 
               <div className="flex items-center space-x-2 md:space-x-6">
