@@ -433,52 +433,75 @@ export function SightseeingSearchForm() {
                 )}
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-0 border border-gray-200 shadow-2xl rounded-lg z-[60]">
+            <PopoverContent className="w-80 p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white">
               <div className="max-h-80 overflow-y-auto">
                 {loadingDestinations ? (
                   <div className="p-4 text-center text-gray-500">
                     <div className="flex items-center justify-center space-x-2">
                       <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                      <span>Searching destinations...</span>
+                      <span className="text-sm">Searching destinations...</span>
                     </div>
                   </div>
                 ) : destinationsToShow.length > 0 ? (
-                  <div className="py-2">
+                  <div>
                     {!isUserTyping && (
-                      <div className="px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50 border-b">
+                      <div className="px-4 py-3 text-xs font-semibold text-gray-600 bg-gray-50 border-b border-gray-200">
                         POPULAR DESTINATIONS
                       </div>
                     )}
-                    {destinationsToShow.map((dest) => (
-                      <button
-                        key={dest.id}
-                        className="w-full text-left px-3 py-3 hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors"
-                        onClick={() => handleDestinationSelect(dest)}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            <Camera className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-medium text-gray-900 truncate">
-                              {dest.name}
+                    <div className="py-1">
+                      {destinationsToShow.map((dest) => {
+                        const IconComponent = getDestinationIcon(dest.type);
+                        return (
+                          <button
+                            key={dest.id}
+                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                            onClick={() => handleDestinationSelect(dest)}
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <IconComponent className="w-4 h-4 text-gray-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-semibold text-gray-900 text-sm truncate">
+                                    {dest.name}
+                                  </span>
+                                  <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                    {dest.code}
+                                  </span>
+                                </div>
+                                <div className="text-xs text-gray-500 truncate mt-0.5">
+                                  {dest.type === 'city' ? `${dest.country}` :
+                                   dest.type === 'airport' ? `${dest.name} Airport, ${dest.country}` :
+                                   dest.type === 'region' ? `${dest.country}` :
+                                   dest.country}
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                {dest.flag && (
+                                  <span className="text-base">{dest.flag}</span>
+                                )}
+                                <div className="w-5 h-5 flex items-center justify-center">
+                                  <MapPin className="w-3 h-3 text-gray-400" />
+                                </div>
+                              </div>
                             </div>
-                            <div className="text-sm text-gray-500 truncate">
-                              {dest.country}
-                            </div>
-                          </div>
-                          {dest.flag && (
-                            <span className="text-lg">{dest.flag}</span>
-                          )}
-                        </div>
-                      </button>
-                    ))}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 ) : (
                   <div className="p-4 text-center text-gray-500">
-                    {isUserTyping && inputValue
-                      ? "No destinations found"
-                      : "Start typing to search destinations"}
+                    <div className="flex flex-col items-center space-y-2">
+                      <Search className="w-8 h-8 text-gray-300" />
+                      <span className="text-sm">
+                        {isUserTyping && inputValue
+                          ? "No destinations found"
+                          : "Start typing to search destinations"}
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>
