@@ -612,9 +612,9 @@ export default function SightseeingResults() {
       )}
 
       {/* Search Summary */}
-      <div className="bg-white border-b border-gray-200 py-4">
+      <div className="bg-white border-b border-gray-200 py-3">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900">
                 Sightseeing in {destinationName || destination}
