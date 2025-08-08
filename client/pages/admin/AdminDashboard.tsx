@@ -13,6 +13,7 @@ import PromoCodeManager from "./PromoCodeManager";
 import UserManagement from "./UserManagement";
 import MarkupManagementAir from "./MarkupManagementAir";
 import MarkupManagementHotel from "./MarkupManagementHotel";
+import MarkupManagementSightseeing from "./MarkupManagementSightseeing";
 import VATManagement from "./VATManagement";
 import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
