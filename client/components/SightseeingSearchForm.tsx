@@ -22,11 +22,8 @@ import { format, addDays } from "date-fns";
 import {
   MapPin,
   CalendarIcon,
-  Users,
   Search,
   X,
-  Plus,
-  Minus,
   Camera,
   Clock,
   Ticket,
