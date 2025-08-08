@@ -275,10 +275,6 @@ export function SightseeingCard({
                 <h3 className="text-lg font-bold text-gray-900 line-clamp-2 pr-2">
                   {attraction.name}
                 </h3>
-                <div className="text-right">
-                  {/* Original price display removed per user request */}
-                  {/* Price display removed per user request */}
-                </div>
               </div>
 
               <div className="flex items-center gap-4 text-sm text-gray-600">
