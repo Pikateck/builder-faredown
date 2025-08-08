@@ -917,7 +917,11 @@ export default function HotelDetails() {
 
           {/* Hotel Info with Star Rating */}
           <div className="bg-white p-4 border-b border-gray-100">
-            <div className="flex items-center mb-2">
+            <div
+              className="flex items-center mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={handleStarClick}
+              title="Click to view reviews"
+            >
               <div className="flex items-center">
                 {[...Array(5)].map((_, i) => (
                   <Star
