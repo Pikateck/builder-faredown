@@ -242,7 +242,7 @@ export default function Hotels() {
                     </Link>
 
                     <Link
-                      to="/account"
+                      to="/bookings"
                       className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
                       onClick={() => setShowMobileMenu(false)}
                     >
