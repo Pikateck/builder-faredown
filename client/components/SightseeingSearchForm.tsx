@@ -255,20 +255,20 @@ export function SightseeingSearchForm() {
     setIsUserTyping(false);
   };
 
-  // Handle date selection for mobile calendar
+  // Handle date selection for mobile calendar (don't close calendar here)
   const handleMobileDateSelect = (range: { startDate: Date; endDate: Date }) => {
     console.log('📅 Mobile date range selected:', range);
     setVisitDate(range.startDate);
     setEndDate(range.endDate);
-    setIsCalendarOpenMobile(false);
+    // Don't close calendar here - let Apply button handle it
   };
 
-  // Handle date selection for desktop calendar
+  // Handle date selection for desktop calendar (don't close calendar here)
   const handleDesktopDateSelect = (range: { startDate: Date; endDate: Date }) => {
     console.log('📅 Desktop date range selected:', range);
     setVisitDate(range.startDate);
     setEndDate(range.endDate);
-    setIsCalendarOpenDesktop(false);
+    // Don't close calendar here - let Apply button handle it
   };
 
 
