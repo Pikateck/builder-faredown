@@ -1460,21 +1460,27 @@ export default function HotelDetails() {
         <div className="bg-white border-b border-gray-200 px-4 py-3">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i < Math.floor(hotel.rating)
-                        ? "text-blue-600 fill-current"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
+              <div
+                className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={handleStarClick}
+                title="Click to view reviews"
+              >
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${
+                        i < Math.floor(hotel.rating)
+                          ? "text-blue-600 fill-current"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm font-medium text-blue-600 ml-2">
+                  {hotel.rating}
+                </span>
               </div>
-              <span className="text-sm font-medium text-blue-600">
-                {hotel.rating}
-              </span>
               <h1 className="text-xl font-bold text-gray-900">{hotel.name}</h1>
               <div className="flex items-center text-gray-600">
                 <MapPin className="w-4 h-4 text-gray-400 mr-1" />
