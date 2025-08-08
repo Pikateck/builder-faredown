@@ -288,12 +288,21 @@ export function SightseeingSearchForm() {
 
   // Search validation and execution
   const validateAndSearch = () => {
+    console.log("🔍 Validating search...", {
+      destination,
+      inputValue,
+      destinationCode,
+      visitDate,
+      guests
+    });
+
     // Clear any existing errors
     setShowError(false);
     setErrorMessage("");
 
     // Validation checks
     if (!destination && !inputValue) {
+      console.log("❌ Validation failed: No destination");
       setErrorMessage("Please enter a destination");
       setShowError(true);
       return;
