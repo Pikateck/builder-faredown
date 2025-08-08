@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { SightseeingCard } from "@/components/SightseeingCard";
 import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import { useBargainPhase1 } from "@/hooks/useBargainPhase1";
+import { useBargainPhase1, createSightseeingBargainItem } from "@/hooks/useBargainPhase1";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import { 
