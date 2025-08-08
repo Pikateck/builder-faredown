@@ -546,21 +546,21 @@ export default function Hotels() {
               {/* Centered Navigation */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <Link
-                  to="/"
+                  to="/?tab=flights"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Flights</span>
                 </Link>
                 <Link
-                  to="/hotels"
+                  to="/?tab=hotels"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
                 >
                   <span>Hotels</span>
                 </Link>
                 <Link
-                  to="/sightseeing"
+                  to="/?tab=sightseeing"
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
