@@ -318,6 +318,8 @@ export class HotelsService {
         adults: searchParams.adults || 2,
         children: searchParams.children || 0,
         currency: searchParams.currencyCode || "INR",
+        promoCode: searchParams.promoCode,
+        userId: searchParams.userId,
       };
 
       console.log(
@@ -480,6 +482,8 @@ export class HotelsService {
         adults: searchParams.adults || 2,
         children: searchParams.children || 0,
         currency: searchParams.currencyCode || "INR",
+        promoCode: searchParams.promoCode,
+        userId: searchParams.userId,
       };
 
       const response = await apiClient.get<ApiResponse<Hotel[]>>(
