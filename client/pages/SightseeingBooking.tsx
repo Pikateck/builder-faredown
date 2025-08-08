@@ -479,6 +479,13 @@ export default function SightseeingBooking() {
                   <span className="text-gray-600">Visit Date:</span>
                   <span className="ml-auto font-medium">{formattedVisitDate}</span>
                 </div>
+                {selectedTime && (
+                  <div className="flex items-center text-sm">
+                    <Clock className="w-4 h-4 text-gray-500 mr-2" />
+                    <span className="text-gray-600">Time:</span>
+                    <span className="ml-auto font-medium">{selectedTime}</span>
+                  </div>
+                )}
                 <div className="flex items-center text-sm">
                   <Users className="w-4 h-4 text-gray-500 mr-2" />
                   <span className="text-gray-600">Guests:</span>
