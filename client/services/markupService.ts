@@ -425,9 +425,7 @@ class MarkupService {
       }
     } catch (error) {
       console.warn("⚠️ API server unavailable, using fallback markup calculation:", error instanceof Error ? error.message : "Unknown error");
-
-      // Throw a consistent error message for the modal to catch
-      throw new Error("API server offline");
+      return this.getFallbackMarkupCalculation(bookingDetails);
     }
   }
 
