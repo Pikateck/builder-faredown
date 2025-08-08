@@ -535,15 +535,18 @@ export function SightseeingSearchForm() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 z-[60]" align="start">
-                <Calendar
-                  mode="single"
-                  selected={visitDate}
-                  onSelect={handleMobileDateSelect}
-                  disabled={(date) =>
-                    date < new Date(new Date().setHours(0, 0, 0, 0))
-                  }
-                  initialFocus
-                />
+                <div className="flex flex-col">
+                  <BookingCalendar
+                    initialRange={{
+                      startDate: visitDate || new Date(),
+                      endDate: visitDate || addDays(new Date(), 1),
+                    }}
+                    onChange={handleMobileDateSelect}
+                    onClose={() => setIsCalendarOpenMobile(false)}
+                    className="w-full"
+                    bookingType="sightseeing"
+                  />
+                </div>
               </PopoverContent>
             </Popover>
           </div>
@@ -707,15 +710,18 @@ export function SightseeingSearchForm() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
-                selected={visitDate}
-                onSelect={handleDesktopDateSelect}
-                disabled={(date) =>
-                  date < new Date(new Date().setHours(0, 0, 0, 0))
-                }
-                initialFocus
-              />
+              <div className="flex flex-col">
+                <BookingCalendar
+                  initialRange={{
+                    startDate: visitDate || new Date(),
+                    endDate: visitDate || addDays(new Date(), 1),
+                  }}
+                  onChange={handleDesktopDateSelect}
+                  onClose={() => setIsCalendarOpenDesktop(false)}
+                  className="w-full"
+                  bookingType="sightseeing"
+                />
+              </div>
             </PopoverContent>
           </Popover>
         </div>
