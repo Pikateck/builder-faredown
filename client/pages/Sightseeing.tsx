@@ -419,7 +419,7 @@ export default function Sightseeing() {
             
             <div className="text-center">
               <div className="w-16 h-16 bg-[#febb02] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Monument className="w-8 h-8 text-[#003580]" />
+                <Building2 className="w-8 h-8 text-[#003580]" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Curated Experiences
