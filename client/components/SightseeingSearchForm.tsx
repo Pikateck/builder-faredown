@@ -304,8 +304,6 @@ export function SightseeingSearchForm() {
       destination: destinationCode || inputValue || destination,
       destinationName: destination || inputValue,
       visitDate: visitDate.toISOString(),
-      adults: guests.adults.toString(),
-      children: guests.children.toString(),
       experienceType,
       duration,
     });
