@@ -70,6 +70,11 @@ export function SightseeingCard({
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
+  // Get adults count from search params
+  const adults = parseInt(searchParams.get("adults") || "2");
+  const totalPrice = attraction.currentPrice * adults;
+  const originalTotalPrice = attraction.originalPrice * adults;
+
   // Calculate savings
   const savings = attraction.originalPrice - attraction.currentPrice;
   const savingsPercentage = Math.round((savings / attraction.originalPrice) * 100);
@@ -268,13 +273,16 @@ export function SightseeingCard({
                 <div className="text-right">
                   {savings > 0 && (
                     <div className="text-sm text-gray-500 line-through">
-                      {formatPrice(attraction.originalPrice)}
+                      {formatPrice(originalTotalPrice)}
                     </div>
                   )}
                   <div className="text-xl font-bold text-[#003580]">
-                    {formatPrice(attraction.currentPrice)}
+                    {formatPrice(totalPrice)}
                   </div>
-                  <div className="text-xs text-gray-500">per person</div>
+                  <div className="text-xs text-gray-500">total for {adults} adult{adults > 1 ? 's' : ''}</div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {formatPrice(attraction.currentPrice)} per person
+                  </div>
                 </div>
               </div>
 
@@ -475,16 +483,19 @@ export function SightseeingCard({
                 <div className="text-right mb-4">
                   {savings > 0 && (
                     <div className="text-sm text-gray-500 line-through mb-1">
-                      {formatPrice(attraction.originalPrice)}
+                      {formatPrice(originalTotalPrice)}
                     </div>
                   )}
                   <div className="text-2xl font-bold text-[#003580] mb-1">
-                    {formatPrice(attraction.currentPrice)}
+                    {formatPrice(totalPrice)}
                   </div>
-                  <div className="text-sm text-gray-500">per person</div>
+                  <div className="text-sm text-gray-500">total for {adults} adult{adults > 1 ? 's' : ''}</div>
+                  <div className="text-base text-gray-600 mt-1">
+                    {formatPrice(attraction.currentPrice)} per person
+                  </div>
                   {savings > 0 && (
                     <div className="text-sm text-green-600 font-medium mt-1">
-                      You save {formatPrice(savings)}
+                      You save {formatPrice(savings * adults)} total
                     </div>
                   )}
                 </div>
