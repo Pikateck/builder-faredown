@@ -30,6 +30,11 @@ import {
   Camera,
   Clock,
   Ticket,
+  Plane,
+  Building2,
+  Mountain,
+  Landmark,
+  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
