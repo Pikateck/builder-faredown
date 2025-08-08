@@ -270,7 +270,7 @@ const MobileTrips = () => {
             }`}
           >
             <Plane className="w-5 h-5 inline mr-2" />
-            My Trips
+            My Bookings
           </button>
           <button
             onClick={() => setActiveTab("profile")}
