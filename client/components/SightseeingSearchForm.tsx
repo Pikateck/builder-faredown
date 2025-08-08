@@ -36,11 +36,6 @@ import {
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
-interface GuestConfig {
-  adults: number;
-  children: number;
-  childrenAges: number[];
-}
 
 interface DestinationOption {
   id: string;
