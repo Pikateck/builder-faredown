@@ -850,6 +850,9 @@ export function SightseeingSearchForm() {
                                 </div>
                                 <div className="text-sm text-gray-500 truncate">
                                   {dest.type === 'city' ? `${dest.country}` :
+                                   dest.type === 'district' ? `District • ${dest.country}` :
+                                   dest.type === 'attraction' ? `Top Attraction • ${dest.country}` :
+                                   dest.type === 'theme-park' ? `Theme Park • ${dest.country}` :
                                    dest.type === 'airport' ? `${dest.name} Airport, ${dest.country}` :
                                    dest.type === 'region' ? `${dest.country}` :
                                    dest.country}
