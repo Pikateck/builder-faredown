@@ -51,6 +51,7 @@ import MyTrips from "./pages/MyTrips";
 import ApiTestPanel from "./components/ApiTestPanel";
 import BackendTestDashboard from "./components/BackendTestDashboard";
 import AmadeusTestPanel from "./components/AmadeusTestPanel";
+import ApiIntegrationTest from "./components/ApiIntegrationTest";
 import LogoDesignOptions from "./components/LogoDesignOptions";
 import FaredownColorPalette from "./components/FaredownColorPalette";
 
