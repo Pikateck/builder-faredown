@@ -166,6 +166,7 @@ app.get("/", (req, res) => {
       users: "/api/users",
       flights: "/api/flights",
       hotels: "/api/hotels",
+      sightseeing: "/api/sightseeing",
       bargain: "/api/bargain",
       currency: "/api/currency",
       promo: "/api/promo",
