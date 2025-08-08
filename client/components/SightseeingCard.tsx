@@ -396,7 +396,7 @@ export function SightseeingCard({
           </div>
 
           {/* Content Section */}
-          <div className="flex-1 p-6">
+          <div className="flex-1 p-4">
             <div className="flex justify-between h-full">
               {/* Left Content */}
               <div className="flex-1 pr-6">
