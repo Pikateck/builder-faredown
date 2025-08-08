@@ -21,7 +21,7 @@ import {
   Clock,
   Ticket,
   Camera,
-  Monument,
+  Building2,
   Utensils,
   Music,
   Mountain,
