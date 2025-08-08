@@ -582,24 +582,291 @@ export default function Sightseeing() {
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="bg-[#003580] text-white py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Ready to Explore the World?
-          </h2>
-          <p className="text-blue-100 mb-8 text-lg">
-            Start your adventure today with Faredown's amazing sightseeing experiences.
-          </p>
-          <Button
-            onClick={() => document.querySelector('.sightseeing-search-form')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold px-8 py-3 text-lg"
-          >
-            Start Exploring
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
+      {/* WHY FAREDOWN IS REINVENTING TRAVEL BOOKING */}
+      <section className="py-12 md:py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              Why Faredown Is Reinventing Travel Booking
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              The future of booking isn't fixed pricing — it's live bargaining.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Live Bargain Technology
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Negotiate sightseeing prices in real-time and discover the best deals available.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
+                <DollarSign className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Pay What You Feel Is Fair
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Set your price and let Faredown do its job to get a deal that works for everyone.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Secure, Real-Time Bookings
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Your data is encrypted and transactions are processed securely and instantly.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
+                <User className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Smarter Than Any Travel Agent
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Skip the back and forth. Our AI works faster, smarter, and always in your favor.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* TRUSTED BY MILLIONS */}
+      <section className="py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              Trusted by 50M+ Travelers
+            </h2>
+            <p className="text-gray-600">
+              Real reviews from verified travelers
+            </p>
+          </div>
+
+          <div className="flex justify-center mb-8">
+            <div className="flex items-center space-x-2">
+              <div className="flex text-green-500">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-current" />
+                ))}
+              </div>
+              <span className="text-2xl font-bold text-gray-900">4.9</span>
+            </div>
+          </div>
+
+          <div className="text-center mb-12">
+            <p className="text-gray-600">
+              Excellent • Based on 50,000+ reviews on Trustpilot
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
+              <div className="flex justify-center mb-4">
+                <div className="flex items-center space-x-1">
+                  <User className="w-5 h-5 text-blue-600" />
+                  <span className="text-sm font-medium text-gray-600">Live Chat</span>
+                </div>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Diya Sharma</h3>
+              <p className="text-sm text-gray-500 mb-3">Marketing Manager</p>
+              <div className="flex justify-center text-yellow-400 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-600 text-sm">
+                "Saved ₹15,000 on Dubai trip! The bargaining feature is amazing. Got business class for economy price!"
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
+              <div className="flex justify-center mb-4">
+                <div className="flex items-center space-x-1">
+                  <Headphones className="w-5 h-5 text-green-600" />
+                  <span className="text-sm font-medium text-gray-600">Phone Call</span>
+                </div>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Rohit Kumar</h3>
+              <p className="text-sm text-gray-500 mb-3">Software Engineer</p>
+              <div className="flex justify-center text-yellow-400 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-600 text-sm">
+                "Best app especially in Singapore hotels using Bargain™. Faredown is revolutionary! Customer service A+++"
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
+              <div className="flex justify-center mb-4">
+                <div className="flex items-center space-x-1">
+                  <User className="w-5 h-5 text-purple-600" />
+                  <span className="text-sm font-medium text-gray-600">24/7 Support</span>
+                </div>
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Anjali Patel</h3>
+              <p className="text-sm text-gray-500 mb-3">Product Designer</p>
+              <div className="flex justify-center text-yellow-400 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-600 text-sm">
+                "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!"
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <p className="text-gray-500 text-sm">
+              Safe, Verified, and Instant Confirmations. Backed by real humans.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* APP DOWNLOAD SECTION */}
+      <section className="bg-[#003580] text-white py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Travel Smarter. Bargain Better. On the Go.
+            </h2>
+            <p className="text-blue-100 mb-8 text-lg">
+              Download the Faredown app for exclusive mobile-only deals and instant bargain alerts
+            </p>
+          </div>
+
+          <div className="flex justify-center items-center space-x-8 mb-8">
+            <div className="flex items-center space-x-2">
+              <Zap className="w-5 h-5 text-[#febb02]" />
+              <span className="text-sm">Instant notifications</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Shield className="w-5 h-5 text-[#febb02]" />
+              <span className="text-sm">Mobile-exclusive deals</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Settings className="w-5 h-5 text-[#febb02]" />
+              <span className="text-sm">Offline management</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center space-x-4">
+            <Button
+              className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center space-x-2"
+              onClick={() => window.open('https://apps.apple.com/', '_blank')}
+            >
+              <span className="text-lg">📱</span>
+              <div className="text-left">
+                <div className="text-xs">Download on the</div>
+                <div className="font-semibold">App Store</div>
+              </div>
+            </Button>
+            <Button
+              className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center space-x-2"
+              onClick={() => window.open('https://play.google.com/', '_blank')}
+            >
+              <span className="text-lg">▶️</span>
+              <div className="text-left">
+                <div className="text-xs">Get it on</div>
+                <div className="font-semibold">Google Play</div>
+              </div>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* NEWSLETTER SIGNUP */}
+      <section className="bg-white py-12 md:py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+            Stay ahead with secret travel bargains
+          </h2>
+          <p className="text-gray-600 mb-8">
+            Enter your email address
+          </p>
+          <div className="flex justify-center max-w-md mx-auto">
+            <div className="flex w-full">
+              <input
+                type="email"
+                placeholder="No spam promise ✋"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#003580] focus:border-transparent"
+              />
+              <Button className="bg-[#003580] hover:bg-[#002347] text-white px-6 py-3 rounded-r-lg">
+                Subscribe
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-[#1a1a2e] text-white py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-lg font-bold mb-4">Faredown</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                The world's first travel portal where you can negotiate and bargain for better deals on flights and hotels.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/about" className="hover:text-white">About Us</Link></li>
+                <li><Link to="/how-it-works" className="hover:text-white">How It Works</Link></li>
+                <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
+                <li><Link to="/help" className="hover:text-white">Help Center</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Services</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/flights" className="hover:text-white">Flights</Link></li>
+                <li><Link to="/hotels" className="hover:text-white">Hotels</Link></li>
+                <li><Link to="/sightseeing" className="hover:text-white">Sightseeing</Link></li>
+                <li><Link to="/car-rental" className="hover:text-white">Car Rental</Link></li>
+                <li><Link to="/travel-insurance" className="hover:text-white">Travel Insurance</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/privacy" className="hover:text-white">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-white">Terms of Service</Link></li>
+                <li><Link to="/refund" className="hover:text-white">Refund Policy</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+            <p className="text-gray-400 text-sm">
+              © 2024 Faredown.com. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
 
       {/* MOBILE BOTTOM NAVIGATION */}
       <div className="md:hidden">
