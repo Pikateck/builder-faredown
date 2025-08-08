@@ -685,8 +685,8 @@ export default function SightseeingResults() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex gap-4">
           {/* Desktop Filters Sidebar - Always visible */}
           <div className="hidden md:block w-80 bg-white rounded-lg shadow-sm border h-fit sticky top-24">
               <div className="p-4 border-b border-gray-200">
