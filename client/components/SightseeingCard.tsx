@@ -480,18 +480,7 @@ export function SightseeingCard({
                       {formatPrice(originalTotalPrice)}
                     </div>
                   )}
-                  <div className="text-2xl font-bold text-[#003580] mb-1">
-                    {formatPrice(totalPrice)}
-                  </div>
-                  <div className="text-sm text-gray-500">total for {adults} adult{adults > 1 ? 's' : ''}</div>
-                  <div className="text-base text-gray-600 mt-1">
-                    {formatPrice(attraction.currentPrice)} per person
-                  </div>
-                  {savings > 0 && (
-                    <div className="text-sm text-green-600 font-medium mt-1">
-                      You save {formatPrice(savings * adults)} total
-                    </div>
-                  )}
+                  {/* Price display and savings removed per user request */}
                 </div>
 
                 {/* Available Times */}
