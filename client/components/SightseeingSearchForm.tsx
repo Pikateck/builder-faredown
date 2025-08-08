@@ -250,7 +250,8 @@ export function SightseeingSearchForm() {
     setDestination(selectedDestination.name);
     setDestinationCode(selectedDestination.code);
     setInputValue(selectedDestination.name);
-    setIsDestinationOpen(false);
+    setIsDestinationOpenMobile(false);
+    setIsDestinationOpenDesktop(false);
     setDestinationSuggestions([]);
     setIsUserTyping(false);
   };
