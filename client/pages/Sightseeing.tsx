@@ -876,7 +876,6 @@ export default function Sightseeing() {
                 <li><Link to="/?tab=flights" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Flights</Link></li>
                 <li><Link to="/?tab=hotels" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Hotels</Link></li>
                 <li><Link to="/?tab=sightseeing" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Sightseeing</Link></li>
-                <li><Link to="/car-rental" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Car Rental</Link></li>
                 <li><Link to="/travel-insurance" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Travel Insurance</Link></li>
               </ul>
             </div>
