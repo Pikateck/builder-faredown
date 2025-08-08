@@ -901,7 +901,7 @@ export default function Sightseeing() {
                 </div>
               </div>
               <p className="text-gray-400 text-sm">
-                © 2024 Faredown.com. All rights reserved.
+                © 2025 Faredown.com. All rights reserved.
               </p>
             </div>
           </div>
