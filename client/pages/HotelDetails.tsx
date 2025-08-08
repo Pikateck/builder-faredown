@@ -59,8 +59,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import { useBargainPhase1, createHotelBargainItem } from "@/hooks/useBargainPhase1";
+import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
@@ -2853,7 +2852,7 @@ export default function HotelDetails() {
                   );
                 }}
               >
-                📘 Facebook
+                �� Facebook
               </Button>
             </div>
           </div>
