@@ -74,8 +74,10 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
 
         if (currentBargainItem.type === "flight") {
           navigate(`/booking/flight?${bookingParams.toString()}`);
-        } else {
+        } else if (currentBargainItem.type === "hotel") {
           navigate(`/booking/hotel?${bookingParams.toString()}`);
+        } else if (currentBargainItem.type === "sightseeing") {
+          navigate(`/booking/sightseeing?${bookingParams.toString()}`);
         }
       }
 
