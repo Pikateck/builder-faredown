@@ -467,19 +467,7 @@ export function SightseeingCard({
               <div className="w-64 flex flex-col justify-between">
                 {/* Pricing removed per user request */}
 
-                {/* Available Times */}
-                <div className="mb-4">
-                  <div className="text-sm text-gray-600 mb-2">Available times today:</div>
-                  <div className="flex flex-wrap gap-1">
-                    {attraction.availableSlots[0]?.times.slice(0, 3).map((time, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {time}
-                      </Badge>
-                    )) || (
-                      <span className="text-xs text-gray-500">Check availability</span>
-                    )}
-                  </div>
-                </div>
+                {/* Available Times removed per user request */}
 
                 {/* Action Buttons */}
                 <div className="space-y-2">
