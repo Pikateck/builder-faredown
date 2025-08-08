@@ -703,11 +703,13 @@ export default function HotelDetails() {
 
   const handleStarClick = () => {
     setActiveTab("reviews");
-    // Scroll to reviews section smoothly
+    // Scroll to reviews section smoothly - try both mobile and desktop versions
     setTimeout(() => {
-      const reviewsSection = document.getElementById("reviews-section");
-      if (reviewsSection) {
-        reviewsSection.scrollIntoView({ behavior: "smooth" });
+      const reviewsSectionMobile = document.getElementById("reviews-section");
+      const reviewsSectionDesktop = document.getElementById("reviews-section-desktop");
+      const targetSection = reviewsSectionMobile || reviewsSectionDesktop;
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
   };
