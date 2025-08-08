@@ -338,7 +338,8 @@ export function SightseeingSearchForm() {
       destination,
       destinationCode,
       inputValue,
-      visitDate
+      visitDate,
+      endDate
     });
     validateAndSearch();
   };
