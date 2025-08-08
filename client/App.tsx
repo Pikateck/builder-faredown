@@ -111,6 +111,7 @@ function App() {
                   <Route path="/sightseeing" element={<Sightseeing />} />
                   <Route path="/sightseeing/results" element={<SightseeingResults />} />
                   <Route path="/sightseeing/:attractionId" element={<SightseeingDetails />} />
+                  <Route path="/sightseeing/booking" element={<SightseeingBooking />} />
                   <Route path="/sports" element={<SportsEvents />} />
                   <Route path="/sports-events" element={<SportsEvents />} />
                   <Route path="/transfers" element={<Transfers />} />
