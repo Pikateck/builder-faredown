@@ -315,7 +315,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Aquarium & Underwater Zoo",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪"
+        flag: "🇦����"
       }
     ];
   };
@@ -603,10 +603,6 @@ export function SightseeingSearchForm() {
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => {
                     console.log('🎯 Mobile destination input focused');
-                    setIsDestinationOpenMobile(true);
-                  }}
-                  onClick={() => {
-                    console.log('��� Mobile destination input clicked');
                     setIsDestinationOpenMobile(true);
                   }}
                 />
