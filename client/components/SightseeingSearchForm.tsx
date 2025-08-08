@@ -61,20 +61,25 @@ export function SightseeingSearchForm() {
   const [showError, setShowError] = useState(false);
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState(""); // Store destination code
-  const [isDestinationOpen, setIsDestinationOpen] = useState(false);
+  // Separate states for mobile and desktop popovers
+  const [isDestinationOpenMobile, setIsDestinationOpenMobile] = useState(false);
+  const [isDestinationOpenDesktop, setIsDestinationOpenDesktop] = useState(false);
+  const [isCalendarOpenMobile, setIsCalendarOpenMobile] = useState(false);
+  const [isCalendarOpenDesktop, setIsCalendarOpenDesktop] = useState(false);
+  const [isGuestPopoverOpenMobile, setIsGuestPopoverOpenMobile] = useState(false);
+  const [isGuestPopoverOpenDesktop, setIsGuestPopoverOpenDesktop] = useState(false);
+
   const [destinationSuggestions, setDestinationSuggestions] = useState<
     DestinationOption[]
   >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
   const [visitDate, setVisitDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
     children: 0,
     childrenAges: [],
   });
-  const [isGuestPopoverOpen, setIsGuestPopoverOpen] = useState(false);
   const [experienceType, setExperienceType] = useState("any");
   const [duration, setDuration] = useState("any");
 
