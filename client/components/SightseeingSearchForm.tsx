@@ -346,13 +346,10 @@ export function SightseeingSearchForm() {
 
   // Format date display
   const formatDateDisplay = () => {
-    if (!visitDate) return "Select date";
-    
-    if (tripType === "multi-day" && endDate) {
-      return `${format(visitDate, "MMM d")} - ${format(endDate, "MMM d")}`;
-    }
-    
-    return format(visitDate, "EEE, MMM d");
+    if (!visitDate) return "Select visit date";
+
+    // Format like hotel calendar: "8-Aug-2025"
+    return format(visitDate, "d-MMM-yyyy");
   };
 
   const destinationsToShow = isUserTyping
