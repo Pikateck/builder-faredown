@@ -240,6 +240,11 @@ export default function Index() {
     { id: "2", from: "", to: "", departureDate: null },
   ]);
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // Add flight segment function
   const addFlightSegment = () => {
     const newSegment: FlightSegment = {
