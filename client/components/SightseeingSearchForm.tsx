@@ -183,7 +183,7 @@ export function SightseeingSearchForm() {
             name: "Mumbai",
             country: "India",
             type: "city",
-            flag: "🇮🇳",
+            flag: "🇮��",
           },
         ]);
         setPopularDestinationsLoaded(true);
@@ -263,41 +263,6 @@ export function SightseeingSearchForm() {
     setIsUserTyping(false);
   };
 
-  // Guest configuration handlers
-  const updateGuestCount = (type: "adults" | "children", change: number) => {
-    setGuests((prev) => {
-      const newCount = Math.max(0, prev[type] + change);
-      if (type === "adults" && newCount === 0) return prev; // Minimum 1 adult
-
-      const newGuests = { ...prev, [type]: newCount };
-
-      // Handle children ages array
-      if (type === "children") {
-        if (newCount > prev.children) {
-          // Adding children - add default ages
-          const newAges = [...prev.childrenAges];
-          for (let i = prev.children; i < newCount; i++) {
-            newAges.push(8); // Default age
-          }
-          newGuests.childrenAges = newAges;
-        } else {
-          // Removing children - trim ages array
-          newGuests.childrenAges = prev.childrenAges.slice(0, newCount);
-        }
-      }
-
-      return newGuests;
-    });
-  };
-
-  const updateChildAge = (index: number, age: number) => {
-    setGuests((prev) => ({
-      ...prev,
-      childrenAges: prev.childrenAges.map((currentAge, i) =>
-        i === index ? age : currentAge
-      ),
-    }));
-  };
 
   // Search validation and execution
   const validateAndSearch = () => {
