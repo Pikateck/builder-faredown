@@ -23,9 +23,9 @@ export function MobileNavigation() {
       label: "Hotels",
     },
     {
-      path: "/saved",
-      icon: Heart,
-      label: "Saved",
+      path: "/sightseeing",
+      icon: Camera,
+      label: "Sightseeing",
     },
     {
       path: "/account",
