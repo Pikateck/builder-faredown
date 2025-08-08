@@ -76,11 +76,6 @@ export function SightseeingSearchForm() {
   const [loadingDestinations, setLoadingDestinations] = useState(false);
   const [visitDate, setVisitDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [guests, setGuests] = useState<GuestConfig>({
-    adults: 2,
-    children: 0,
-    childrenAges: [],
-  });
   const [experienceType, setExperienceType] = useState("any");
   const [duration, setDuration] = useState("any");
 
