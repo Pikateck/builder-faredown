@@ -237,6 +237,12 @@ export function SightseeingSearchForm() {
     setDestination(value);
     setIsUserTyping(true);
 
+    // Ensure popovers stay open when typing
+    if (!isDestinationOpenMobile && !isDestinationOpenDesktop) {
+      setIsDestinationOpenMobile(true);
+      setIsDestinationOpenDesktop(true);
+    }
+
     // Clear previous timeout
     if (debouncedSearchRef.current) {
       clearTimeout(debouncedSearchRef.current);
