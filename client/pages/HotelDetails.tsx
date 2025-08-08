@@ -887,7 +887,11 @@ export default function HotelDetails() {
 
             {/* Rating and Live Data Indicator */}
             <div className="absolute bottom-4 left-4 space-y-2">
-              <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm">
+              <div
+                className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm cursor-pointer hover:bg-white/100 transition-colors"
+                onClick={handleStarClick}
+                title="Click to view reviews"
+              >
                 <div className="flex items-center space-x-1">
                   <Star className="w-4 h-4 fill-blue-600 text-blue-600" />
                   <span className="font-semibold text-sm text-gray-900">
