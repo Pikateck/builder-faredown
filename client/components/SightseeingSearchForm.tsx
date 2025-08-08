@@ -743,7 +743,10 @@ export function SightseeingSearchForm() {
                   placeholder="Where do you want to explore?"
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
-                  onFocus={() => setIsDestinationOpenDesktop(true)}
+                  onFocus={() => {
+                    console.log('🎯 Desktop destination input focused');
+                    setIsDestinationOpenDesktop(true);
+                  }}
                   onClick={() => setIsDestinationOpenDesktop(true)}
                 />
               </PopoverTrigger>
