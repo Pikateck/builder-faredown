@@ -319,8 +319,8 @@ export function SightseeingSearchForm() {
 
     // Build search parameters
     const searchParams = new URLSearchParams({
-      destination: destinationCode,
-      destinationName: destination,
+      destination: destinationCode || inputValue || destination,
+      destinationName: destination || inputValue,
       visitDate: visitDate.toISOString(),
       adults: guests.adults.toString(),
       children: guests.children.toString(),
