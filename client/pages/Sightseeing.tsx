@@ -314,7 +314,7 @@ export default function Sightseeing() {
                       <DropdownMenuItem
                         key={currency.code}
                         onClick={() => {
-                          setCurrency(currency);
+                          setCurrency(currency.code);
                           setShowCurrencyDropdown(false);
                         }}
                         className={cn(
