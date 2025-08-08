@@ -407,16 +407,17 @@ export function SightseeingCard({
           </div>
 
           {/* Content Section */}
-          <div className="flex-1 p-4">
-            <div className="flex justify-between h-full">
+          <div className="flex-1 p-4 flex flex-col">
+            {/* Content Area */}
+            <div className="flex justify-between flex-grow">
               {/* Left Content */}
-              <div className="flex-1 pr-4">
+              <div className="flex-1 pr-6">
                 {/* Header */}
                 <div className="mb-3">
                   <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
                     {attraction.name}
                   </h3>
-                  
+
                   <div className="flex items-center gap-6 text-sm text-gray-600 mb-2">
                     <div className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
@@ -442,7 +443,7 @@ export function SightseeingCard({
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-600 mb-4 line-clamp-2">
+                <p className="text-gray-600 mb-4 line-clamp-3">
                   {attraction.description}
                 </p>
 
@@ -450,9 +451,9 @@ export function SightseeingCard({
                 <div className="mb-4">
                   <h4 className="text-sm font-medium text-gray-900 mb-2">Highlights:</h4>
                   <div className="grid grid-cols-2 gap-1">
-                    {attraction.highlights.slice(0, 4).map((highlight, index) => (
-                      <div key={index} className="flex items-center text-sm text-gray-600">
-                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                    {attraction.highlights.slice(0, 6).map((highlight, index) => (
+                      <div key={index} className="flex items-start text-sm text-gray-600">
+                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                         <span className="truncate">{highlight}</span>
                       </div>
                     ))}
@@ -461,43 +462,64 @@ export function SightseeingCard({
 
                 {/* Features */}
                 <div className="flex flex-wrap gap-1">
-                  {attraction.features.slice(0, 4).map((feature, index) => (
+                  {attraction.features.slice(0, 6).map((feature, index) => (
                     <Badge key={index} variant="secondary" className="text-xs">
                       {feature}
                     </Badge>
                   ))}
-                  {attraction.features.length > 4 && (
+                  {attraction.features.length > 6 && (
                     <Badge variant="outline" className="text-xs">
-                      +{attraction.features.length - 4} more
+                      +{attraction.features.length - 6} more
                     </Badge>
                   )}
                 </div>
               </div>
 
-              {/* Right Content - Pricing & Actions */}
-              <div className="w-64 flex flex-col justify-between">
-                {/* Pricing removed per user request */}
-
-                {/* Available Times removed per user request */}
-
-                {/* Action Buttons */}
-                <div className="space-y-2">
-                  <Button
-                    onClick={onBargainClick}
-                    className="w-full py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center justify-center gap-2 rounded-xl shadow-sm transition-all duration-200"
-                  >
-                    <TrendingDown className="w-4 h-4" />
-                    Bargain Now
-                  </Button>
-                  <Button
-                    onClick={handleViewDetails}
-                    variant="outline"
-                    className="w-full py-3 text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white font-semibold rounded-xl transition-all duration-200"
-                  >
-                    View Details
-                  </Button>
+              {/* Right Content - Additional Info */}
+              <div className="w-52 flex flex-col">
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">What's Included:</h4>
+                  <div className="space-y-1">
+                    {attraction.includes.slice(0, 4).map((item, index) => (
+                      <div key={index} className="flex items-start text-sm text-gray-600">
+                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="line-clamp-1">{item}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                {attraction.ticketTypes.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium text-gray-900 mb-2">Ticket Options:</h4>
+                    <div className="space-y-1">
+                      {attraction.ticketTypes.slice(0, 3).map((ticket, index) => (
+                        <div key={index} className="text-sm text-gray-600">
+                          <div className="font-medium">{ticket.name}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
+            </div>
+
+            {/* Action Buttons - Moved to bottom */}
+            <div className="flex gap-3 mt-4 pt-4 border-t border-gray-100">
+              <Button
+                onClick={onBargainClick}
+                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center justify-center gap-2 rounded-xl shadow-sm transition-all duration-200"
+              >
+                <TrendingDown className="w-4 h-4" />
+                Bargain Now
+              </Button>
+              <Button
+                onClick={handleViewDetails}
+                variant="outline"
+                className="flex-1 py-3 text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white font-semibold rounded-xl transition-all duration-200"
+              >
+                View Details
+              </Button>
             </div>
           </div>
         </div>
