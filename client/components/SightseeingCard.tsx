@@ -74,25 +74,51 @@ export function SightseeingCard({
   const savings = attraction.originalPrice - attraction.currentPrice;
   const savingsPercentage = Math.round((savings / attraction.originalPrice) * 100);
 
-  // Get category display info
+  // Get category display info - matches filter icons exactly
   const getCategoryInfo = (category: string) => {
     switch (category) {
       case "landmark":
-        return { label: "Landmark", color: "bg-blue-100 text-blue-800", icon: "🏛️" };
+        return {
+          label: "Landmarks & Attractions",
+          color: "bg-blue-100 text-blue-800",
+          IconComponent: Building2
+        };
       case "museum":
-        return { label: "Museum", color: "bg-purple-100 text-purple-800", icon: "🎨" };
+        return {
+          label: "Museums & Culture",
+          color: "bg-purple-100 text-purple-800",
+          IconComponent: Camera
+        };
       case "tour":
-        return { label: "Tour", color: "bg-green-100 text-green-800", icon: "🚌" };
-      case "activity":
-        return { label: "Activity", color: "bg-orange-100 text-orange-800", icon: "🎯" };
-      case "food":
-        return { label: "Food & Dining", color: "bg-red-100 text-red-800", icon: "🍽️" };
-      case "culture":
-        return { label: "Cultural", color: "bg-indigo-100 text-indigo-800", icon: "🎭" };
+        return {
+          label: "Tours & Sightseeing",
+          color: "bg-green-100 text-green-800",
+          IconComponent: Ticket
+        };
       case "adventure":
-        return { label: "Adventure", color: "bg-yellow-100 text-yellow-800", icon: "⛰️" };
+        return {
+          label: "Adventure & Sports",
+          color: "bg-yellow-100 text-yellow-800",
+          IconComponent: Mountain
+        };
+      case "food":
+        return {
+          label: "Food & Dining",
+          color: "bg-red-100 text-red-800",
+          IconComponent: Utensils
+        };
+      case "culture":
+        return {
+          label: "Cultural Experiences",
+          color: "bg-indigo-100 text-indigo-800",
+          IconComponent: Music
+        };
       default:
-        return { label: "Experience", color: "bg-gray-100 text-gray-800", icon: "🎪" };
+        return {
+          label: "Experience",
+          color: "bg-gray-100 text-gray-800",
+          IconComponent: Camera
+        };
     }
   };
 
