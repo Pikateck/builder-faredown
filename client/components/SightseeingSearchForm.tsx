@@ -464,7 +464,10 @@ export function SightseeingSearchForm() {
                     console.log('🎯 Mobile destination input focused');
                     setIsDestinationOpenMobile(true);
                   }}
-                  onClick={() => setIsDestinationOpenMobile(true)}
+                  onClick={() => {
+                    console.log('🎯 Mobile destination input clicked');
+                    setIsDestinationOpenMobile(true);
+                  }}
                 />
               </PopoverTrigger>
               {inputValue && (
