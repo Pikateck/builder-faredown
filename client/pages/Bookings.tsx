@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const Bookings: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"all" | "flights" | "hotels">(
+  const [activeTab, setActiveTab] = useState<"all" | "flights" | "hotels" | "sightseeing">(
     "all",
   );
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
@@ -108,10 +108,70 @@ const Bookings: React.FC = () => {
     },
   ];
 
-  const allBookings = [...flightBookings, ...hotelBookings].sort(
-    (a, b) =>
-      new Date(a.type === "flight" ? a.date : a.checkIn).getTime() -
-      new Date(b.type === "flight" ? b.date : b.checkIn).getTime(),
+  const sightseeingBookings = [
+    {
+      id: "SG001",
+      type: "sightseeing",
+      name: "Burj Khalifa: Floors 124 and 125",
+      location: "Dubai, UAE",
+      visitDate: "2024-01-16",
+      time: "14:30",
+      duration: "1-2 hours",
+      guests: 2,
+      status: "Confirmed",
+      totalAmount: "₹29,800",
+      bookingRef: "SG174640632414",
+      ticketType: "Standard Admission",
+      category: "landmark",
+      bookingDate: "2024-01-02",
+      cancellable: true,
+      refundAmount: "₹26,820",
+      refundStatus: null,
+    },
+    {
+      id: "SG002",
+      type: "sightseeing",
+      name: "Dubai Aquarium & Underwater Zoo",
+      location: "Dubai, UAE",
+      visitDate: "2024-01-17",
+      time: "11:00",
+      duration: "2-3 hours",
+      guests: 2,
+      status: "Confirmed",
+      totalAmount: "₹17,800",
+      bookingRef: "SG174640733515",
+      ticketType: "Aquarium + Zoo",
+      category: "museum",
+      bookingDate: "2024-01-02",
+      cancellable: true,
+      refundAmount: "₹16,020",
+      refundStatus: null,
+    },
+  ];
+
+  const allBookings = [...flightBookings, ...hotelBookings, ...sightseeingBookings].sort(
+    (a, b) => {
+      let dateA: string;
+      let dateB: string;
+
+      if (a.type === "flight") {
+        dateA = a.date;
+      } else if (a.type === "hotel") {
+        dateA = a.checkIn;
+      } else {
+        dateA = a.visitDate;
+      }
+
+      if (b.type === "flight") {
+        dateB = b.date;
+      } else if (b.type === "hotel") {
+        dateB = b.checkIn;
+      } else {
+        dateB = b.visitDate;
+      }
+
+      return new Date(dateA).getTime() - new Date(dateB).getTime();
+    },
   );
 
   const getFilteredBookings = () => {
@@ -120,6 +180,8 @@ const Bookings: React.FC = () => {
         return flightBookings;
       case "hotels":
         return hotelBookings;
+      case "sightseeing":
+        return sightseeingBookings;
       default:
         return allBookings;
     }
@@ -146,7 +208,7 @@ const Bookings: React.FC = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">My Bookings</h1>
           <p className="text-gray-600">
-            Manage your flights and hotel reservations
+            Manage your flights, hotels, and sightseeing reservations
           </p>
         </div>
 
