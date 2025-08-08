@@ -90,6 +90,10 @@ import {
   Minus,
   Navigation,
   Compass,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
