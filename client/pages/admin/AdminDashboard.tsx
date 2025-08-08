@@ -53,6 +53,7 @@ import {
   TrendingUp,
   Hotel,
   Plane,
+  Camera,
   DollarSign,
   Settings,
   Shield,
