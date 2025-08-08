@@ -235,6 +235,7 @@ export default function SightseeingBooking() {
         attractionId,
         ticketType: ticketTypeIndex.toString(),
         visitDate,
+        selectedTime,
         adults: adults.toString(),
         children: children.toString(),
         firstName: formData.firstName,
