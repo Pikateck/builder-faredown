@@ -86,16 +86,9 @@ export default function SightseeingResults() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showMobileSort, setShowMobileSort] = useState(false);
 
-  // Bargain hook integration
-  const bargainHook = useBargainPhase1({
-    onBookingConfirmed: (item, finalPrice) => {
-      navigate(
-        `/sightseeing-booking-confirmation?itemId=${item.itemId}&finalPrice=${finalPrice}&bargainApplied=true`,
-      );
-    },
-    redirectToBooking: true,
-    deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
-  });
+  // Sightseeing bargain modal state
+  const [selectedAttraction, setSelectedAttraction] = useState<SightseeingAttraction | null>(null);
+  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
   // Mobile detection
   useEffect(() => {
