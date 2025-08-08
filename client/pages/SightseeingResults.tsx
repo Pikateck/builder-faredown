@@ -596,11 +596,18 @@ export default function SightseeingResults() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
+      {/* Search Bar - Same as Landing Page */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <SightseeingSearchForm />
+        </div>
+      </div>
+
       {error && (
-        <ErrorBanner 
-          message={error} 
-          onClose={() => setError("")} 
+        <ErrorBanner
+          message={error}
+          onClose={() => setError("")}
         />
       )}
 
