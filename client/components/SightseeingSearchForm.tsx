@@ -408,10 +408,10 @@ export function SightseeingSearchForm() {
           </label>
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
-              <button className="relative cursor-pointer w-full text-left">
+              <div className="relative cursor-pointer w-full">
                 <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
                 <Input
-                  className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation relative z-10"
+                  className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation cursor-pointer"
                   placeholder="Enter destination or attraction"
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
@@ -431,7 +431,7 @@ export function SightseeingSearchForm() {
                     <X className="w-4 h-4" />
                   </span>
                 )}
-              </button>
+              </div>
             </PopoverTrigger>
             <PopoverContent className="w-80 p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white">
               <div className="max-h-80 overflow-y-auto">
@@ -686,10 +686,10 @@ export function SightseeingSearchForm() {
           </label>
           <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
             <PopoverTrigger asChild>
-              <button className="relative cursor-pointer w-full text-left">
+              <div className="relative cursor-pointer w-full">
                 <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
                 <Input
-                  className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm"
+                  className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm cursor-pointer"
                   placeholder="Where do you want to explore?"
                   value={inputValue}
                   onChange={(e) => handleDestinationChange(e.target.value)}
@@ -709,7 +709,7 @@ export function SightseeingSearchForm() {
                     <X className="w-4 h-4" />
                   </span>
                 )}
-              </button>
+              </div>
             </PopoverTrigger>
             <PopoverContent className="w-[520px] p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white">
               <div className="max-h-80 overflow-y-auto">
