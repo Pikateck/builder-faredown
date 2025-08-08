@@ -27,9 +27,12 @@ export function BookingCalendar({
   bookingType = "hotel",
 }: BookingCalendarProps) {
   const [selection, setSelection] = useState(() => {
-    const startDate = initialRange?.startDate || new Date();
+    // Use tomorrow as the default start date to prevent booking today/past dates
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const startDate = initialRange?.startDate || tomorrow;
     // For sightseeing, default to same day (single day activity)
-    const defaultDays = bookingType === "sightseeing" ? 1 : 3;
+    const defaultDays = bookingType === "sightseeing" ? 0 : 3;
     const endDate = initialRange?.endDate || addDays(startDate, defaultDays);
 
     console.log("Initial calendar range:", { startDate, endDate, bookingType });
@@ -42,6 +45,10 @@ export function BookingCalendar({
       },
     ];
   });
+
+  // Get tomorrow's date for minimum selectable date
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
