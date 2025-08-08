@@ -11,6 +11,7 @@ import {
   Hotel,
   Car,
   MapPin,
+  BookOpen,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
