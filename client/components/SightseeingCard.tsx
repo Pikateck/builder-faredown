@@ -276,13 +276,7 @@ export function SightseeingCard({
                       {formatPrice(originalTotalPrice)}
                     </div>
                   )}
-                  <div className="text-xl font-bold text-[#003580]">
-                    {formatPrice(totalPrice)}
-                  </div>
-                  <div className="text-xs text-gray-500">total for {adults} adult{adults > 1 ? 's' : ''}</div>
-                  <div className="text-sm text-gray-600 mt-1">
-                    {formatPrice(attraction.currentPrice)} per person
-                  </div>
+                  {/* Price display removed per user request */}
                 </div>
               </div>
 
