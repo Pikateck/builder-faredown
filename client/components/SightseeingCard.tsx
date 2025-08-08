@@ -188,7 +188,7 @@ export function SightseeingCard({
         {/* Mobile Layout */}
         <div className="md:hidden">
           {/* Image Section */}
-          <div className="relative aspect-[16/10] overflow-hidden">
+          <div className="relative aspect-[16/12] overflow-hidden">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
