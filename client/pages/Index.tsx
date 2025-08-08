@@ -2706,9 +2706,9 @@ export default function Index() {
               <div>
                 <h4 className="font-semibold mb-3">Services</h4>
                 <ul className="space-y-1 text-sm text-gray-400">
-                  <li><Link to="/flights" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Flights</Link></li>
-                  <li><Link to="/hotels" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Hotels</Link></li>
-                  <li><Link to="/sightseeing" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Sightseeing</Link></li>
+                  <li><button onClick={() => { setActiveTab("flights"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Flights</button></li>
+                  <li><button onClick={() => { setActiveTab("hotels"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Hotels</button></li>
+                  <li><button onClick={() => { setActiveTab("sightseeing"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Sightseeing</button></li>
                   <li><Link to="/car-rental" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Car Rental</Link></li>
                   <li><Link to="/travel-insurance" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Travel Insurance</Link></li>
                 </ul>
