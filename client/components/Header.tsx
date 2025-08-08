@@ -155,10 +155,6 @@ export function Header({ className }: HeaderProps) {
                     <ChevronDown className="w-4 h-4" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuItem onClick={() => navigate("/account")}>
-                      <User className="w-4 h-4 mr-2" />
-                      Profile
-                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/bookings")}>
                       <BookOpen className="w-4 h-4 mr-2" />
                       My Bookings
