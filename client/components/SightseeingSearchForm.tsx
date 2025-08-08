@@ -825,7 +825,7 @@ export function SightseeingSearchForm() {
                     )}
                     <div className="py-1">
                       {destinationsToShow.map((dest) => {
-                        const IconComponent = getDestinationIcon(dest.type);
+                        const IconComponent = getDestinationIcon(dest.type, dest.name);
                         return (
                           <button
                             key={dest.id}
