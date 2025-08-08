@@ -319,7 +319,7 @@ export default function Sightseeing() {
                         }}
                         className={cn(
                           "cursor-pointer",
-                          selectedCurrency === currency.code
+                          selectedCurrency.code === currency.code
                             ? "bg-blue-50 text-blue-700"
                             : "",
                         )}
