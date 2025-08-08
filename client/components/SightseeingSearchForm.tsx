@@ -536,12 +536,12 @@ export function SightseeingSearchForm() {
             When do you want to visit?
           </label>
           <div className="grid grid-cols-1 gap-2">
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <Popover open={isCalendarOpenMobile} onOpenChange={setIsCalendarOpenMobile}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-sm px-3 touch-manipulation"
-                  onClick={() => setIsCalendarOpen(true)}
+                  onClick={() => setIsCalendarOpenMobile(true)}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-sm">
