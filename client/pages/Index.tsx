@@ -2723,7 +2723,6 @@ export default function Index() {
                   <li><button onClick={() => { setActiveTab("flights"); window.history.pushState({}, '', '/?tab=flights'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Flights</button></li>
                   <li><button onClick={() => { setActiveTab("hotels"); window.history.pushState({}, '', '/?tab=hotels'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Hotels</button></li>
                   <li><button onClick={() => { setActiveTab("sightseeing"); window.history.pushState({}, '', '/?tab=sightseeing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-white text-left">Sightseeing</button></li>
-                  <li><Link to="/car-rental" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Car Rental</Link></li>
                   <li><Link to="/travel-insurance" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Travel Insurance</Link></li>
                 </ul>
               </div>
