@@ -527,7 +527,15 @@ export function SightseeingSearchForm() {
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-sm">
-                    {formatDateDisplay()}
+                    <span className="hidden md:inline">
+                      {visitDate ? format(visitDate, "d-MMM-yyyy") : "Select visit date"}
+                    </span>
+                    <span className="hidden sm:inline md:hidden">
+                      {visitDate ? format(visitDate, "d MMM") : "Select date"}
+                    </span>
+                    <span className="sm:hidden">
+                      {visitDate ? format(visitDate, "d MMM") : "Date"}
+                    </span>
                   </span>
                 </Button>
               </PopoverTrigger>
@@ -702,7 +710,15 @@ export function SightseeingSearchForm() {
               >
                 <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate text-sm">
-                  {formatDateDisplay()}
+                  <span className="hidden md:inline">
+                    {visitDate ? format(visitDate, "d-MMM-yyyy") : "Select visit date"}
+                  </span>
+                  <span className="hidden sm:inline md:hidden">
+                    {visitDate ? format(visitDate, "d MMM") : "Select date"}
+                  </span>
+                  <span className="sm:hidden">
+                    {visitDate ? format(visitDate, "d MMM") : "Date"}
+                  </span>
                 </span>
               </Button>
             </PopoverTrigger>
