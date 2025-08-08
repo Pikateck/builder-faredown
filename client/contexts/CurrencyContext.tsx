@@ -213,7 +213,7 @@ export const CURRENCIES: Currency[] = [
 interface CurrencyContextType {
   selectedCurrency: Currency;
   currencies: Currency[];
-  setCurrency: (currency: Currency) => void;
+  setCurrency: (currency: Currency | string) => void;
   convertPrice: (priceInINR: number) => number;
   formatPrice: (priceInINR: number) => string;
   isLoading: boolean;
