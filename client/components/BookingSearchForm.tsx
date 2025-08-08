@@ -59,10 +59,14 @@ export function BookingSearchForm() {
     DestinationOption[]
   >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  const [checkInDate, setCheckInDate] = useState<Date | undefined>(new Date());
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
-    addDays(new Date(), 3),
-  );
+  // Set default dates to future dates
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const checkOutDefault = new Date();
+  checkOutDefault.setDate(checkOutDefault.getDate() + 4);
+
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(tomorrow);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(checkOutDefault);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
