@@ -520,6 +520,7 @@ export function SightseeingSearchForm() {
                 <Button
                   variant="outline"
                   className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-sm px-3 touch-manipulation"
+                  onClick={() => setIsCalendarOpen(true)}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-sm">
@@ -552,6 +553,7 @@ export function SightseeingSearchForm() {
               <Button
                 variant="outline"
                 className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-sm px-3 touch-manipulation"
+                onClick={() => setIsGuestPopoverOpen(true)}
               >
                 <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate text-sm">
