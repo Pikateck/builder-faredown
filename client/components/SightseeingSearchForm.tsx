@@ -367,9 +367,27 @@ export function SightseeingSearchForm() {
     return format(visitDate, "EEE, MMM d");
   };
 
-  const destinationsToShow = isUserTyping 
-    ? destinationSuggestions 
+  const destinationsToShow = isUserTyping
+    ? destinationSuggestions
     : popularDestinations;
+
+  // Get appropriate icon for destination type
+  const getDestinationIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'city':
+        return Building2;
+      case 'airport':
+        return Plane;
+      case 'region':
+        return Mountain;
+      case 'country':
+        return Globe;
+      case 'landmark':
+        return Landmark;
+      default:
+        return MapPin;
+    }
+  };
 
   return (
     <div className="sightseeing-search-form bg-white rounded-xl shadow-xl p-4 sm:p-6">
