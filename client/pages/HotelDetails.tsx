@@ -149,8 +149,8 @@ export default function HotelDetails() {
   const [bargainingRoomId, setBargainingRoomId] = useState<string | null>(null);
   const [bargainedRooms, setBargainedRooms] = useState<Set<string>>(new Set());
 
-  // Initialize bargain hook for consistent UI
-  const bargainHook = useBargainPhase1();
+  // Hotel bargain modal state
+  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState(100);
   const [selectedRating, setSelectedRating] = useState<number[]>([]);
@@ -1685,7 +1685,7 @@ export default function HotelDetails() {
                               )}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {room.type} • {room.details}
+                              {room.type} �� {room.details}
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
@@ -2852,7 +2852,7 @@ export default function HotelDetails() {
                   );
                 }}
               >
-                �� Facebook
+                📘 Facebook
               </Button>
             </div>
           </div>
