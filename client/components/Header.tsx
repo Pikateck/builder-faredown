@@ -159,10 +159,6 @@ export function Header({ className }: HeaderProps) {
                       <User className="w-4 h-4 mr-2" />
                       Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/my-trips")}>
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      My Trips
-                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/bookings")}>
                       <BookOpen className="w-4 h-4 mr-2" />
                       My Bookings
