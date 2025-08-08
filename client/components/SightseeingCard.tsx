@@ -323,7 +323,7 @@ export function SightseeingCard({
               <Button
                 onClick={handleViewDetails}
                 variant="outline"
-                className="flex-1 py-3 text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white font-semibold text-sm min-h-[48px] rounded-xl touch-manipulation transition-all duration-200"
+                className="flex-1 py-2.5 text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl touch-manipulation transition-all duration-200"
               >
                 View Details
               </Button>
