@@ -8,7 +8,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface BargainItem {
-  type: "flight" | "hotel";
+  type: "flight" | "hotel" | "sightseeing";
   itemId: string;
   title: string;
   basePrice: number;
@@ -22,6 +22,11 @@ interface BargainItem {
   hotelName?: string;
   starRating?: string;
   roomCategory?: string;
+  // Sightseeing specific
+  location?: string;
+  category?: string;
+  duration?: string;
+  activityName?: string;
 }
 
 interface UseBargainPhase1Options {
