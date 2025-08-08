@@ -438,7 +438,7 @@ export default function SightseeingResults() {
       id: "category",
       name: "Experience Type",
       options: [
-        { id: "landmark", name: "Landmarks & Attractions", icon: Monument },
+        { id: "landmark", name: "Landmarks & Attractions", icon: Building2 },
         { id: "museum", name: "Museums & Culture", icon: Camera },
         { id: "tour", name: "Tours & Sightseeing", icon: Ticket },
         { id: "adventure", name: "Adventure & Sports", icon: Mountain },
