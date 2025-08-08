@@ -315,7 +315,7 @@ export function SightseeingCard({
             <div className="flex gap-2">
               <Button
                 onClick={onBargainClick}
-                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                className="flex-1 py-2.5 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
               >
                 <TrendingDown className="w-4 h-4" />
                 Bargain Now
