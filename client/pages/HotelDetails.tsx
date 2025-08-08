@@ -1115,7 +1115,7 @@ export default function HotelDetails() {
                             </Button>
 
                             <Button
-                              onClick={() => setActiveTab("reviews")}
+                              onClick={handleStarClick}
                               variant="outline"
                               className="w-full font-medium py-2 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
                             >
