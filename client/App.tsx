@@ -24,6 +24,7 @@ import BookingInvoice from "./pages/BookingInvoice";
 import Bookings from "./pages/Bookings";
 import Sightseeing from "./pages/Sightseeing";
 import SightseeingResults from "./pages/SightseeingResults";
+import SightseeingDetails from "./pages/SightseeingDetails";
 import SportsEvents from "./pages/SportsEvents";
 import Transfers from "./pages/Transfers";
 import HelpCenter from "./pages/HelpCenter";
