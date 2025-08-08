@@ -263,8 +263,11 @@ class BargainPricingService {
         },
       };
     } catch (error) {
-      console.error("Error calculating initial pricing:", error);
-      throw error;
+      console.error("❌ Error calculating initial pricing:", error);
+      console.log("🔄 Providing fallback bargain pricing...");
+
+      // Return a fallback pricing result to keep the bargain modal functional
+      return this.getFallbackBargainPricing(request);
     }
   }
 
