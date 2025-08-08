@@ -278,7 +278,8 @@ export function SightseeingSearchForm() {
       destination,
       inputValue,
       destinationCode,
-      visitDate
+      visitDate,
+      endDate
     });
 
     // Clear any existing errors
@@ -417,7 +418,7 @@ export function SightseeingSearchForm() {
                     setIsDestinationOpenMobile(true);
                   }}
                   onClick={() => {
-                    console.log('🎯 Mobile destination input clicked');
+                    console.log('��� Mobile destination input clicked');
                     setIsDestinationOpenMobile(true);
                   }}
                 />
