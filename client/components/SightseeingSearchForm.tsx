@@ -335,17 +335,6 @@ export function SightseeingSearchForm() {
     validateAndSearch();
   };
 
-  // Format guest count display
-  const getGuestDisplayText = () => {
-    const parts = [];
-    if (guests.adults > 0) {
-      parts.push(`${guests.adults} adult${guests.adults > 1 ? "s" : ""}`);
-    }
-    if (guests.children > 0) {
-      parts.push(`${guests.children} child${guests.children > 1 ? "ren" : ""}`);
-    }
-    return parts.join(", ") || "Add guests";
-  };
 
   // Format date display
   const formatDateDisplay = () => {
