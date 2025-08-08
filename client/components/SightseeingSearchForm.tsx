@@ -256,16 +256,18 @@ export function SightseeingSearchForm() {
   };
 
   // Handle date selection for mobile calendar
-  const handleMobileDateSelect = (date: Date | undefined) => {
-    console.log('📅 Mobile date selected:', date);
-    setVisitDate(date);
+  const handleMobileDateSelect = (range: { startDate: Date; endDate: Date }) => {
+    console.log('📅 Mobile date range selected:', range);
+    setVisitDate(range.startDate);
+    // For sightseeing, we only need the start date (visit date)
     setIsCalendarOpenMobile(false);
   };
 
   // Handle date selection for desktop calendar
-  const handleDesktopDateSelect = (date: Date | undefined) => {
-    console.log('📅 Desktop date selected:', date);
-    setVisitDate(date);
+  const handleDesktopDateSelect = (range: { startDate: Date; endDate: Date }) => {
+    console.log('📅 Desktop date range selected:', range);
+    setVisitDate(range.startDate);
+    // For sightseeing, we only need the start date (visit date)
     setIsCalendarOpenDesktop(false);
   };
 
