@@ -723,10 +723,20 @@ export default function BargainModalPhase1({
           <DialogTitle className="flex items-center gap-2">
             <Target className="w-5 h-5" />
             Bargain Engine - Phase 1
+            {error && error.includes("offline") && (
+              <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
+                Offline Mode
+              </span>
+            )}
           </DialogTitle>
           <DialogDescription>
             {itemDetails.title} • Base Price + Randomized Markup +
             Counter-offers
+            {error && error.includes("offline") && (
+              <span className="block text-yellow-600 text-sm mt-1">
+                ⚠️ Using fallback pricing - bargaining still works!
+              </span>
+            )}
           </DialogDescription>
         </DialogHeader>
 
