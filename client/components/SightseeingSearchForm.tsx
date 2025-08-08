@@ -513,7 +513,13 @@ export function SightseeingSearchForm() {
             When do you want to visit?
           </label>
           <div className="grid grid-cols-1 gap-2">
-            <Popover open={isCalendarOpenMobile} onOpenChange={setIsCalendarOpenMobile}>
+            <Popover
+              open={isCalendarOpenMobile}
+              onOpenChange={(open) => {
+                console.log('📅 Mobile calendar popover state changed:', open);
+                setIsCalendarOpenMobile(open);
+              }}
+            >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -679,7 +685,13 @@ export function SightseeingSearchForm() {
           <label className="text-sm font-medium text-gray-700">
             Visit Date
           </label>
-          <Popover open={isCalendarOpenDesktop} onOpenChange={setIsCalendarOpenDesktop}>
+          <Popover
+            open={isCalendarOpenDesktop}
+            onOpenChange={(open) => {
+              console.log('📅 Desktop calendar popover state changed:', open);
+              setIsCalendarOpenDesktop(open);
+            }}
+          >
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
