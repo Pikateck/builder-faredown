@@ -3913,10 +3913,10 @@ export default function FlightResults() {
                                               bargainItem,
                                             );
                                           }}
-                                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
+                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
                                         >
-                                          <span className="text-lg">🎯</span>
-                                          Start Bargain
+                                          <TrendingDown className="w-4 h-4" />
+                                          Bargain Now
                                         </Button>
 
                                         {/* Book Now Button Mobile */}
@@ -4756,7 +4756,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
+                    { label: "Afternoon", range: [12, 18], icon: "���️" },
                     { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
