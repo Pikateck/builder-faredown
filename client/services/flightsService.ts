@@ -17,6 +17,8 @@ export interface FlightSearchRequest {
   cabinClass: "economy" | "premium_economy" | "business" | "first";
   tripType: "one_way" | "round_trip" | "multi_city";
   currencyCode?: string;
+  promoCode?: string;
+  userId?: string;
 }
 
 export interface Flight {
