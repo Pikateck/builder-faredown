@@ -150,6 +150,12 @@ const adminModules = [
     icon: Hotel,
     color: "bg-green-600",
   },
+  {
+    id: "markup-sightseeing",
+    name: "Markup Management (Sightseeing)",
+    icon: Camera,
+    color: "bg-purple-600",
+  },
   { id: "vat", name: "VAT Management", icon: FileText, color: "bg-purple-600" },
   { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
   {
@@ -473,7 +479,7 @@ export default function AdminDashboard() {
                         {cabin.bookings} bookings
                       </div>
                       <div className="text-xs text-gray-600">
-                        ₹{cabin.revenue.toLocaleString()}
+                        ���{cabin.revenue.toLocaleString()}
                       </div>
                     </div>
                   </div>
