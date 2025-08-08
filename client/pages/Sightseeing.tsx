@@ -867,11 +867,11 @@ export default function Sightseeing() {
             <div>
               <h4 className="font-semibold mb-3">Services</h4>
               <ul className="space-y-1 text-sm text-gray-400">
-                <li><Link to="/flights" className="hover:text-white">Flights</Link></li>
-                <li><Link to="/hotels" className="hover:text-white">Hotels</Link></li>
-                <li><Link to="/sightseeing" className="hover:text-white">Sightseeing</Link></li>
-                <li><Link to="/car-rental" className="hover:text-white">Car Rental</Link></li>
-                <li><Link to="/travel-insurance" className="hover:text-white">Travel Insurance</Link></li>
+                <li><Link to="/flights" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Flights</Link></li>
+                <li><Link to="/hotels" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Hotels</Link></li>
+                <li><Link to="/sightseeing" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Sightseeing</Link></li>
+                <li><Link to="/car-rental" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Car Rental</Link></li>
+                <li><Link to="/travel-insurance" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Travel Insurance</Link></li>
               </ul>
             </div>
 
