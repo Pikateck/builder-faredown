@@ -806,10 +806,6 @@ export function SightseeingSearchForm() {
                     console.log('🎯 Desktop destination input focused');
                     setIsDestinationOpenDesktop(true);
                   }}
-                  onClick={() => {
-                    console.log('🎯 Desktop destination input clicked');
-                    setIsDestinationOpenDesktop(true);
-                  }}
                 />
               </PopoverTrigger>
               {inputValue && (
