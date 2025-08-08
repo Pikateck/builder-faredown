@@ -460,14 +460,16 @@ export default function HotelDetails() {
             "htl-DXB-006":
               "Dubai International Airport, Dubai, United Arab Emirates",
           };
-          // Always use our mapped locations first, fallback to API location
+          // Prioritize API location data, fallback to mapped locations if API data is missing
           return (
-            hotelLocations[hotelId] ||
             (typeof hotelData.location === "string"
               ? hotelData.location
               : hotelData.location?.address?.street ||
                 hotelData.address?.street ||
-                "Dubai, United Arab Emirates")
+                hotelData.location?.city ||
+                hotelData.address?.city) ||
+            hotelLocations[hotelId] ||
+            "Dubai, United Arab Emirates"
           );
         })(),
         image:
