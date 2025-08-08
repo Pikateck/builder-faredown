@@ -32,6 +32,14 @@ import {
   Mountain,
   Landmark,
   Globe,
+  Palmtree,
+  Gamepad2,
+  ShoppingBag,
+  Sparkles,
+  Crown,
+  Trees,
+  Fish,
+  Home,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
