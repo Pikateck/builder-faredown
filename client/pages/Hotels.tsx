@@ -246,8 +246,8 @@ export default function Hotels() {
                       className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
                       onClick={() => setShowMobileMenu(false)}
                     >
-                      <User className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">My Account</span>
+                      <BookOpen className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">My Bookings</span>
                     </Link>
 
                     {/* Currency Selection Tab */}
