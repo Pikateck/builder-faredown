@@ -1432,8 +1432,59 @@ export default function HotelResults() {
         </div>
       </div>
 
-      {/* Phase 1 Bargain Modal for Hotels */}
-      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
+      {/* Hotel Bargain Modal */}
+      <FlightStyleBargainModal
+        roomType={
+          selectedHotel
+            ? {
+                id: "standard",
+                name: "Standard Room",
+                description: "Comfortable standard room",
+                image: selectedHotel.images?.[0] || "/placeholder.svg",
+                marketPrice: selectedHotel.originalPrice || selectedHotel.pricePerNight * 1.2,
+                totalPrice: selectedHotel.currentPrice || selectedHotel.pricePerNight,
+                total: selectedHotel.currentPrice || selectedHotel.pricePerNight,
+                features: selectedHotel.features || [],
+                maxOccupancy: 2,
+                bedType: "1 double bed",
+                size: "Standard size",
+                cancellation: "Free cancellation",
+              }
+            : null
+        }
+        hotel={
+          selectedHotel
+            ? {
+                id: selectedHotel.id,
+                name: selectedHotel.name,
+                location: selectedHotel.location,
+                rating: selectedHotel.rating,
+                image: selectedHotel.images?.[0] || "/placeholder.svg",
+              }
+            : null
+        }
+        isOpen={isBargainModalOpen}
+        onClose={() => {
+          setIsBargainModalOpen(false);
+          setSelectedHotel(null);
+        }}
+        checkInDate={
+          searchParams.get("checkIn")
+            ? new Date(searchParams.get("checkIn")!)
+            : new Date()
+        }
+        checkOutDate={
+          searchParams.get("checkOut")
+            ? new Date(searchParams.get("checkOut")!)
+            : new Date(Date.now() + 24 * 60 * 60 * 1000)
+        }
+        roomsCount={parseInt(searchParams.get("rooms") || "1")}
+        onBookingSuccess={(finalPrice) => {
+          setIsBargainModalOpen(false);
+          // Navigate to booking with bargained price
+          navigate(`/hotel-booking-confirmation?price=${finalPrice}&bargainApplied=true`);
+        }}
+      />
 
       {/* Mobile Dropdown Components for Edit Search */}
       <MobileCityDropdown
