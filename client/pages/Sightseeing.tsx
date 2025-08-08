@@ -872,11 +872,10 @@ export default function Sightseeing() {
 
             <div>
               <h4 className="font-semibold mb-3">Services</h4>
-              <ul className="space-y-1 text-sm text-gray-400">
+              <ul className="space-y-0.5 text-sm text-gray-400">
                 <li><Link to="/?tab=flights" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Flights</Link></li>
                 <li><Link to="/?tab=hotels" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Hotels</Link></li>
                 <li><Link to="/?tab=sightseeing" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Sightseeing</Link></li>
-                <li><Link to="/travel-insurance" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-white">Travel Insurance</Link></li>
               </ul>
             </div>
 
