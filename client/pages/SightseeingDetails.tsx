@@ -472,7 +472,7 @@ export default function SightseeingDetails() {
 
     if (!ticket) return 0;
 
-    const priceCalc = SightseeingService.calculatePrice(
+    const priceCalc = sightseeingService.calculatePrice(
       ticket.price,
       passengerQuantities.adults,
       passengerQuantities.children,
@@ -1072,12 +1072,12 @@ export default function SightseeingDetails() {
                       <div className="space-y-2 text-sm">
                         {(() => {
                           const ticket = attraction.ticketTypes[selectedTicketType];
-                          const priceCalc = SightseeingService.calculatePrice(
-                            ticket.price,
-                            passengerQuantities.adults,
-                            passengerQuantities.children,
-                            passengerQuantities.infants
-                          );
+                          const priceCalc = sightseeingService.calculatePrice(
+      ticket.price,
+      passengerQuantities.adults,
+      passengerQuantities.children,
+      passengerQuantities.infants
+    );
 
                           return (
                             <>
