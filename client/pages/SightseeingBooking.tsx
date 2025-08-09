@@ -678,6 +678,9 @@ export default function SightseeingBooking() {
                     <span className="text-2xl font-bold text-blue-600">
                       {formatPrice(totalPrice)}
                     </span>
+                    <div className="text-xs text-gray-500 mt-1">
+                      includes taxes and fees
+                    </div>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
                     All taxes and fees included
