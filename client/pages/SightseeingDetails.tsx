@@ -25,6 +25,7 @@ import {
   Music,
   Ticket,
   ArrowLeft,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
