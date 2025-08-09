@@ -1047,15 +1047,91 @@ export default function SightseeingDetails() {
                 })}
               </div>
 
-              {/* Total Summary */}
+              {/* Total Summary with Tax Breakdown */}
               <div className="p-4 border-t border-gray-200 bg-blue-50">
-                <div className="text-center">
-                  <div className="text-sm text-gray-600 mb-1">
-                    Total for {getTotalPassengers()} guest{getTotalPassengers() > 1 ? 's' : ''}
+                <div className="space-y-3">
+                  <div className="text-center">
+                    <div className="text-sm font-medium text-gray-700 mb-1">
+                      Total for {getTotalPassengers()} guest{getTotalPassengers() > 1 ? 's' : ''}
+                    </div>
+                    <div className="text-xs text-gray-500 mb-2">
+                      {passengerQuantities.adults} Adults{passengerQuantities.children > 0 ? `, ${passengerQuantities.children} Children` : ''}{passengerQuantities.infants > 0 ? `, ${passengerQuantities.infants} Infants` : ''}
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-500 mt-1 mb-1">
-                    {passengerQuantities.adults} Adults{passengerQuantities.children > 0 ? `, ${passengerQuantities.children} Children` : ''}{passengerQuantities.infants > 0 ? `, ${passengerQuantities.infants} Infants` : ''}
-                  </div>
+
+                  {/* Price Breakdown */}
+                  {getTotalPassengers() > 0 && attraction.ticketTypes[selectedTicketType] && (
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
+                      <div className="space-y-2 text-sm">
+                        {passengerQuantities.adults > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">
+                              {passengerQuantities.adults} × Adult ({formatPrice(attraction.ticketTypes[selectedTicketType].price)})
+                            </span>
+                            <span className="font-medium text-gray-900">
+                              {formatPrice(attraction.ticketTypes[selectedTicketType].price * passengerQuantities.adults)}
+                            </span>
+                          </div>
+                        )}
+                        {passengerQuantities.children > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">
+                              {passengerQuantities.children} × Child ({formatPrice(attraction.ticketTypes[selectedTicketType].price * 0.5)})
+                            </span>
+                            <span className="font-medium text-gray-900">
+                              {formatPrice(attraction.ticketTypes[selectedTicketType].price * 0.5 * passengerQuantities.children)}
+                            </span>
+                          </div>
+                        )}
+                        {passengerQuantities.infants > 0 && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-600">
+                              {passengerQuantities.infants} × Infant (Free)
+                            </span>
+                            <span className="font-medium text-gray-900">
+                              {formatPrice(0)}
+                            </span>
+                          </div>
+                        )}
+
+                        <hr className="border-gray-200" />
+
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Subtotal</span>
+                          <span className="font-medium text-gray-900">
+                            {formatPrice(getTicketTotalPrice(selectedTicketType))}
+                          </span>
+                        </div>
+
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Taxes & Fees (18%)</span>
+                          <span className="font-medium text-gray-900">
+                            {formatPrice(getTicketTotalPrice(selectedTicketType) * 0.18)}
+                          </span>
+                        </div>
+
+                        <hr className="border-gray-300" />
+
+                        <div className="flex justify-between items-center text-lg font-bold">
+                          <span className="text-gray-900">Total Amount</span>
+                          <span className="text-[#003580]">
+                            {formatPrice(getTicketTotalPrice(selectedTicketType) * 1.18)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {getTotalPassengers() === 0 && (
+                    <div className="text-center py-4">
+                      <div className="text-2xl font-bold text-gray-400 mb-1">
+                        {formatPrice(0)}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        Select tickets to see total
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
