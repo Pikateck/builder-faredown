@@ -989,19 +989,19 @@ export default function SightseeingDetails() {
                                 {ticket.refundable ? "Refundable" : "Non-refundable"}
                               </div>
                             </div>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-gray-600 mt-1 font-normal">
                               {formatPrice(ticket.price)} per person
                             </p>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 mt-1 font-normal">
                               {ticket.cancellationPolicy}
                             </p>
                           </div>
                           <div className="text-right">
-                            <div className="text-2xl font-bold text-[#003580]">
+                            <div className="text-xl sm:text-2xl font-bold text-[#003580]">
                               {formatPrice(totalPrice)}
                             </div>
-                            <div className="text-sm text-gray-500">
-                              includes taxes and fees
+                            <div className="text-xs sm:text-sm text-gray-500 font-normal">
+                              excludes taxes and fees
                             </div>
                           </div>
                         </div>
