@@ -365,7 +365,7 @@ export default function SightseeingBooking() {
 
   // Calculate price using SightseeingService for consistency
   const infants = parseInt(searchParams.get("infants") || "0");
-  const priceCalc = SightseeingService.calculatePrice(
+  const priceCalc = sightseeingService.calculatePrice(
     selectedTicket.price,
     adults,
     children,
