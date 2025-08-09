@@ -941,7 +941,10 @@ export function SightseeingSearchForm() {
                   }}
                   onClick={() => {
                     console.log("🎯 Desktop destination input clicked");
-                    setIsDestinationOpenDesktop(true);
+                    // Small delay to prevent race conditions
+                    setTimeout(() => {
+                      setIsDestinationOpenDesktop(true);
+                    }, 0);
                   }}
                 />
               </PopoverTrigger>
