@@ -393,24 +393,12 @@ export function SightseeingCard({
             {/* Right Content - Pricing & Actions */}
             <div className="w-72 border-l border-gray-200 bg-gray-50 p-8 flex flex-col justify-between">
               <div>
-                <div className="text-right mb-4">
+                <div className="text-right mb-6">
                   <div className="text-2xl font-bold text-gray-900 mb-1">
                     {formatPrice(totalPrice)}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 mb-4">
                     {formatPrice(pricePerPerson)} per person
-                  </div>
-                </div>
-                
-                {/* Booking Features */}
-                <div className="space-y-2 mb-6">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
-                    <span>Free cancellation</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                    <span>Reserve now, pay later</span>
                   </div>
                 </div>
               </div>
