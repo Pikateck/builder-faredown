@@ -639,7 +639,7 @@ export default function SightseeingDetails() {
                     </div>
                   </div>
 
-                  <p className="text-gray-600 text-lg leading-relaxed">
+                  <p className="text-gray-600 text-base sm:text-lg leading-relaxed font-normal">
                     {attraction.description}
                   </p>
                 </div>
