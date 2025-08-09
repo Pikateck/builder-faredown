@@ -852,7 +852,13 @@ export default function SightseeingResults() {
           </div>
 
           {/* Attractions List */}
-          <div className="flex-1">
+          <div className="flex-1 px-4">
+            {(() => {
+              console.log("🎯 Rendering attractions:", filteredAndSortedAttractions.length);
+              console.log("🎯 Total attractions loaded:", attractions.length);
+              return null;
+            })()}
+
             {filteredAndSortedAttractions.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-lg shadow-sm">
                 <Camera className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -862,27 +868,18 @@ export default function SightseeingResults() {
                 <p className="text-gray-600 mb-4">
                   Try adjusting your filters or search criteria
                 </p>
+                <p className="text-sm text-gray-400 mb-4">
+                  Total attractions loaded: {attractions.length}
+                </p>
                 <Button onClick={clearAllFilters} variant="outline">
                   Clear filters
                 </Button>
               </div>
             ) : (
-              <div className="space-y-3">
-                {(() => {
-                  console.log("🎯 Rendering attractions:", filteredAndSortedAttractions.length);
-                  return null;
-                })()}
-                {filteredAndSortedAttractions.length === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-gray-500">No attractions found. Please try different filters.</p>
-                    <p className="text-sm text-gray-400 mt-2">
-                      Total attractions loaded: {attractions.length}
-                    </p>
-                  </div>
-                ) : (
-                  filteredAndSortedAttractions.map((attraction) => (
+              <div className="space-y-6">
+                {filteredAndSortedAttractions.map((attraction) => (
+                  <div key={attraction.id} className="bg-white rounded-lg shadow-sm p-2">
                     <SightseeingCard
-                      key={attraction.id}
                       attraction={attraction}
                       onBargainClick={() =>
                         handleBargainClick(attraction, searchParams)
@@ -890,8 +887,8 @@ export default function SightseeingResults() {
                       searchParams={searchParams}
                       className="transition-all hover:shadow-md"
                     />
-                  ))
-                )}
+                  </div>
+                ))}
               </div>
             )}
           </div>
