@@ -465,14 +465,16 @@ export default function SightseeingDetails() {
     return passengerQuantities.adults + passengerQuantities.children + passengerQuantities.infants;
   };
 
-  // Calculate total price for a ticket type
+  // Calculate total price for a ticket type (including taxes)
   const getTicketTotalPrice = (ticketIndex: number) => {
     const ticket = attraction?.ticketTypes[ticketIndex];
 
     if (!ticket) return 0;
 
     // Adults pay full price, children 50%, infants free
-    return (ticket.price * passengerQuantities.adults) + (ticket.price * 0.5 * passengerQuantities.children);
+    const basePrice = (ticket.price * passengerQuantities.adults) + (ticket.price * 0.5 * passengerQuantities.children);
+    // Include 18% tax
+    return basePrice * 1.18;
   };
 
   // Image navigation
