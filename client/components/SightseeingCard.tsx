@@ -367,14 +367,26 @@ export function SightseeingCard({
                 </div>
               </div>
 
-              {/* Highlights */}
-              <div className="space-y-2">
-                {attraction.highlights.slice(0, 3).map((highlight, index) => (
+              {/* Highlights and Features */}
+              <div className="space-y-2 mb-4">
+                {attraction.highlights.slice(0, 2).map((highlight, index) => (
                   <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
                     <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
                     <span className="truncate">{highlight}</span>
                   </div>
                 ))}
+              </div>
+
+              {/* Features - Moved to Left Side */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  <span>Free cancellation</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                  <span>Reserve now, pay later</span>
+                </div>
               </div>
             </div>
 
