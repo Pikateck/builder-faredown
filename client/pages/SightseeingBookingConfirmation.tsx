@@ -63,16 +63,16 @@ export default function SightseeingBookingConfirmation() {
   const [loading, setLoading] = useState(true);
 
   // Extract booking parameters
-  const bookingRef = searchParams.get("bookingRef") || "";
-  const attractionId = searchParams.get("attractionId") || "";
+  const bookingRef = searchParams.get("bookingRef") || `FD-${Date.now()}`; // Generate if not provided
+  const attractionId = searchParams.get("attractionId") || searchParams.get("item") || ""; // Support both params
   const ticketTypeIndex = parseInt(searchParams.get("ticketType") || "0");
-  const visitDate = searchParams.get("visitDate") || "";
+  const visitDate = searchParams.get("visitDate") || new Date().toISOString(); // Default to today
   const selectedTime = searchParams.get("selectedTime") || "";
   const adults = parseInt(searchParams.get("adults") || "2");
   const children = parseInt(searchParams.get("children") || "0");
-  const firstName = searchParams.get("firstName") || "";
-  const lastName = searchParams.get("lastName") || "";
-  const email = searchParams.get("email") || "";
+  const firstName = searchParams.get("firstName") || "Guest";
+  const lastName = searchParams.get("lastName") || "User";
+  const email = searchParams.get("email") || "guest@example.com";
 
   // Load attraction data
   useEffect(() => {
