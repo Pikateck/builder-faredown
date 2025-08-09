@@ -199,3 +199,7 @@ export class SightseeingService {
     }
   }
 }
+
+// Create instance for default export
+export const sightseeingService = new SightseeingService();
+export default sightseeingService;
