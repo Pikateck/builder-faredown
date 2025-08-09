@@ -140,7 +140,7 @@ export function SightseeingCard({
     <>
       <div
         className={cn(
-          "bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group",
+          "bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group mb-4",
           className
         )}
         onClick={handleViewDetails}
@@ -178,8 +178,8 @@ export function SightseeingCard({
           </div>
 
           {/* Mobile Content */}
-          <div className="p-6 min-h-[320px] flex flex-col">
-            <div className="flex justify-between items-start mb-4">
+          <div className="p-4">
+            <div className="flex justify-between items-start mb-3">
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-2">
                   {attraction.name}
@@ -222,7 +222,7 @@ export function SightseeingCard({
             </div>
 
             {/* Features */}
-            <div className="mb-6 space-y-3 flex-grow">
+            <div className="mb-4 space-y-2">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
@@ -233,38 +233,50 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Mobile Action Buttons - GUARANTEED VISIBLE AT BOTTOM */}
-            <div className="flex gap-3 pt-4 border-t border-gray-200 mt-auto">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onBargainClick();
-                }}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
-                style={{ backgroundColor: '#febb02', minHeight: '52px', width: '48%' }}
-              >
-                <TrendingDown className="w-5 h-5" />
-                Bargain Now
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleViewDetails();
-                }}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
-                style={{ backgroundColor: '#003580', minHeight: '52px', width: '48%' }}
-              >
-                <Eye className="w-5 h-5" />
-                View Details
-              </button>
+            {/* MOBILE BUTTONS - BULLETPROOF SOLUTION */}
+            <div className="border-t border-gray-200 pt-4 -mx-4 px-4 bg-gray-50">
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBargainClick();
+                  }}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm text-sm"
+                  style={{
+                    backgroundColor: '#febb02',
+                    minHeight: '48px',
+                    border: 'none',
+                    outline: 'none'
+                  }}
+                >
+                  <TrendingDown className="w-4 h-4" />
+                  Bargain Now
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewDetails();
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm text-sm"
+                  style={{
+                    backgroundColor: '#003580',
+                    minHeight: '48px',
+                    border: 'none',
+                    outline: 'none'
+                  }}
+                >
+                  <Eye className="w-4 h-4" />
+                  View Details
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex h-48">
+        <div className="hidden md:flex h-52">
           {/* Desktop Image */}
-          <div className="relative w-64 h-full overflow-hidden flex-shrink-0">
+          <div className="relative w-80 h-full overflow-hidden flex-shrink-0">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
@@ -296,7 +308,7 @@ export function SightseeingCard({
           {/* Desktop Content */}
           <div className="flex-1 flex">
             {/* Left Content */}
-            <div className="flex-1 p-4">
+            <div className="flex-1 p-6">
               <h3 className="font-semibold text-gray-900 text-xl line-clamp-1 mb-2">
                 {attraction.name}
               </h3>
@@ -306,7 +318,7 @@ export function SightseeingCard({
                 <span className="truncate">{attraction.location}</span>
               </div>
 
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex items-center gap-4 mb-4">
                 <div
                   className="flex items-center cursor-pointer hover:bg-gray-50 px-2 py-1 rounded-md transition-colors"
                   onClick={(e) => {
@@ -330,8 +342,8 @@ export function SightseeingCard({
               </div>
 
               {/* Highlights */}
-              <div className="space-y-1">
-                {attraction.highlights.slice(0, 2).map((highlight, index) => (
+              <div className="space-y-2">
+                {attraction.highlights.slice(0, 3).map((highlight, index) => (
                   <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
                     <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
                     <span className="truncate">{highlight}</span>
@@ -341,9 +353,9 @@ export function SightseeingCard({
             </div>
 
             {/* Right Content - Pricing & Actions */}
-            <div className="w-52 p-4 border-l border-gray-100 flex flex-col justify-between">
+            <div className="w-64 border-l border-gray-200 bg-gray-50 p-6 flex flex-col justify-between">
               <div>
-                <div className="text-right mb-3">
+                <div className="text-right mb-4">
                   <div className="text-2xl font-bold text-gray-900 mb-1">
                     {formatPrice(totalPrice)}
                   </div>
@@ -353,7 +365,7 @@ export function SightseeingCard({
                 </div>
                 
                 {/* Booking Features */}
-                <div className="space-y-2 mb-4">
+                <div className="space-y-2 mb-6">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span>Free cancellation</span>
@@ -365,17 +377,23 @@ export function SightseeingCard({
                 </div>
               </div>
               
-              {/* Desktop Action Buttons - GUARANTEED VISIBLE */}
-              <div className="space-y-3 pt-4 border-t border-gray-200">
+              {/* DESKTOP BUTTONS - BULLETPROOF SOLUTION */}
+              <div className="space-y-3">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onBargainClick();
                   }}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
-                  style={{ backgroundColor: '#febb02', minHeight: '44px' }}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  style={{
+                    backgroundColor: '#febb02',
+                    minHeight: '44px',
+                    width: '100%',
+                    border: 'none',
+                    outline: 'none'
+                  }}
                 >
-                  <TrendingDown className="w-5 h-5" />
+                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
                 </button>
                 <button
@@ -383,10 +401,16 @@ export function SightseeingCard({
                     e.stopPropagation();
                     handleViewDetails();
                   }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
-                  style={{ backgroundColor: '#003580', minHeight: '44px' }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  style={{
+                    backgroundColor: '#003580',
+                    minHeight: '44px',
+                    width: '100%',
+                    border: 'none',
+                    outline: 'none'
+                  }}
                 >
-                  <Eye className="w-5 h-5" />
+                  <Eye className="w-4 h-4" />
                   View Details
                 </button>
               </div>
