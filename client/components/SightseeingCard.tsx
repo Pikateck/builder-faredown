@@ -404,8 +404,8 @@ export function SightseeingCard({
               </div>
               
               {/* DESKTOP BUTTONS - GUARANTEED VISIBLE */}
-              <div style={{ paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ paddingTop: '12px', borderTop: '1px solid #e5e7eb' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -415,11 +415,11 @@ export function SightseeingCard({
                       backgroundColor: '#febb02',
                       color: '#000000',
                       border: 'none',
-                      borderRadius: '8px',
-                      padding: '16px 24px',
+                      borderRadius: '6px',
+                      padding: '12px 16px',
                       fontWeight: '600',
-                      fontSize: '16px',
-                      minHeight: '50px',
+                      fontSize: '14px',
+                      minHeight: '40px',
                       width: '100%',
                       display: 'flex',
                       alignItems: 'center',
@@ -429,7 +429,7 @@ export function SightseeingCard({
                       boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                     }}
                   >
-                    <TrendingDown size={16} />
+                    <TrendingDown size={14} />
                     Bargain Now
                   </button>
                   <button
@@ -441,11 +441,11 @@ export function SightseeingCard({
                       backgroundColor: '#003580',
                       color: '#ffffff',
                       border: 'none',
-                      borderRadius: '8px',
-                      padding: '16px 24px',
+                      borderRadius: '6px',
+                      padding: '12px 16px',
                       fontWeight: '600',
-                      fontSize: '16px',
-                      minHeight: '50px',
+                      fontSize: '14px',
+                      minHeight: '40px',
                       width: '100%',
                       display: 'flex',
                       alignItems: 'center',
@@ -455,7 +455,7 @@ export function SightseeingCard({
                       boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                     }}
                   >
-                    <Eye size={16} />
+                    <Eye size={14} />
                     View Details
                   </button>
                 </div>
