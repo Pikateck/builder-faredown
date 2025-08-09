@@ -334,7 +334,7 @@ export function SightseeingCard({
           {/* Desktop Content */}
           <div className="flex-1 flex">
             {/* Left Content */}
-            <div className="flex-1 p-8">
+            <div className="flex-1 p-4">
               <h3 className="font-semibold text-gray-900 text-xl line-clamp-1 mb-2">
                 {attraction.name}
               </h3>
