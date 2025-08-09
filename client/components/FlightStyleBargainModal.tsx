@@ -356,7 +356,11 @@ export function FlightStyleBargainModal({
               <div className="flex items-center justify-between mb-3 md:mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-[#003580]/10 rounded-lg flex items-center justify-center">
-                    <Bed className="w-6 h-6 text-[#003580]" />
+                    {type === "sightseeing" ? (
+                      <Camera className="w-6 h-6 text-[#003580]" />
+                    ) : (
+                      <Bed className="w-6 h-6 text-[#003580]" />
+                    )}
                   </div>
                   <div>
                     <h3 className="font-bold text-lg text-gray-900">
