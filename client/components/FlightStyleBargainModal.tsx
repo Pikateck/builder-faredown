@@ -394,7 +394,7 @@ export function FlightStyleBargainModal({
                     AI Assistant
                   </p>
                   <p className="text-sm text-gray-600">
-                    Tell me your target price and I'll negotiate with the hotel!
+                    Tell me your target price and I'll negotiate with the {type === "sightseeing" ? "venue" : "hotel"}!
                   </p>
                 </div>
               </div>
