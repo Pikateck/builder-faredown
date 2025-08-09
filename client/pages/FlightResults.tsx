@@ -1576,7 +1576,7 @@ export default function FlightResults() {
               {/* Center: Navigation */}
               <nav className="flex items-center space-x-8">
                 <Link
-                  to="/flights"
+                  to="/?tab=flights"
                   className="text-white font-medium px-4 py-2 rounded-md bg-blue-700 hover:bg-blue-600 transition-colors"
                 >
                   Flights
