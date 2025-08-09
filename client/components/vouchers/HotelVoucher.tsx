@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { QrCode, Building2, Calendar, Users, MapPin, Bed, Star, Clock, Wifi, Car, Coffee, Utensils } from "lucide-react";
+import { preparePrintDocument } from "@/utils/printUtils";
 
 interface HotelVoucherProps {
   booking: {
