@@ -233,19 +233,21 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* MOBILE BUTTONS - BULLETPROOF SOLUTION */}
+            {/* MOBILE BUTTONS - GUARANTEED VISIBLE */}
             <div
-              className="border-t-2 border-gray-200 pt-6 -mx-6 px-6 bg-gray-50 mt-auto"
               style={{
-                marginLeft: '-1.5rem',
-                marginRight: '-1.5rem',
-                paddingLeft: '1.5rem',
-                paddingRight: '1.5rem',
-                paddingTop: '1.5rem',
-                paddingBottom: '1.5rem'
+                borderTop: '2px solid #e5e7eb',
+                paddingTop: '16px',
+                marginTop: 'auto',
+                marginLeft: '-1rem',
+                marginRight: '-1rem',
+                paddingLeft: '1rem',
+                paddingRight: '1rem',
+                paddingBottom: '16px',
+                backgroundColor: '#f9fafb'
               }}
             >
-              <div className="flex gap-4">
+              <div style={{ display: 'flex', gap: '12px' }}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -255,27 +257,22 @@ export function SightseeingCard({
                     backgroundColor: '#febb02',
                     color: '#000000',
                     border: 'none',
-                    borderRadius: '12px',
-                    padding: '16px 20px',
-                    fontWeight: '700',
-                    fontSize: '15px',
-                    minHeight: '56px',
-                    width: 'calc(50% - 8px)',
+                    borderRadius: '8px',
+                    padding: '14px 16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    minHeight: '48px',
+                    width: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#e6a602';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = '#febb02';
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    flex: '1'
                   }}
                 >
-                  <TrendingDown size={18} />
+                  <TrendingDown size={16} />
                   Bargain Now
                 </button>
                 <button
@@ -287,27 +284,22 @@ export function SightseeingCard({
                     backgroundColor: '#003580',
                     color: '#ffffff',
                     border: 'none',
-                    borderRadius: '12px',
-                    padding: '16px 20px',
-                    fontWeight: '700',
-                    fontSize: '15px',
-                    minHeight: '56px',
-                    width: 'calc(50% - 8px)',
+                    borderRadius: '8px',
+                    padding: '14px 16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    minHeight: '48px',
+                    width: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#002a66';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = '#003580';
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    flex: '1'
                   }}
                 >
-                  <Eye size={18} />
+                  <Eye size={16} />
                   View Details
                 </button>
               </div>
