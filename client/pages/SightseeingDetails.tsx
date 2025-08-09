@@ -35,6 +35,7 @@ import {
   Ticket,
   ArrowLeft,
   MessageSquare,
+  Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
