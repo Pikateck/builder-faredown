@@ -383,8 +383,8 @@ export function SightseeingCard({
                     e.stopPropagation();
                     handleViewDetails();
                   }}
-                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
-                  style={{ minHeight: '44px' }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  style={{ backgroundColor: '#003580', minHeight: '44px' }}
                 >
                   <Eye className="w-5 h-5" />
                   View Details
