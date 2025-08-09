@@ -21,6 +21,7 @@ import {
   Shield,
   CheckCircle,
   AlertCircle,
+  Camera,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import {
