@@ -878,6 +878,40 @@ export default function SightseeingResults() {
               </div>
             ) : (
               <div className="space-y-6">
+                {/* TEMPORARY TEST - SIMPLE CARDS WITH WORKING BUTTONS */}
+                <SightseeingCardSimple
+                  onBargainClick={() => {
+                    console.log("🔥 BARGAIN CLICKED!");
+                    alert("Bargain button works!");
+                  }}
+                  onViewDetails={() => {
+                    console.log("🔥 VIEW DETAILS CLICKED!");
+                    alert("View Details button works!");
+                  }}
+                />
+                <SightseeingCardSimple
+                  onBargainClick={() => {
+                    console.log("🔥 BARGAIN CLICKED!");
+                    alert("Bargain button works!");
+                  }}
+                  onViewDetails={() => {
+                    console.log("🔥 VIEW DETAILS CLICKED!");
+                    alert("View Details button works!");
+                  }}
+                />
+                <SightseeingCardSimple
+                  onBargainClick={() => {
+                    console.log("🔥 BARGAIN CLICKED!");
+                    alert("Bargain button works!");
+                  }}
+                  onViewDetails={() => {
+                    console.log("🔥 VIEW DETAILS CLICKED!");
+                    alert("View Details button works!");
+                  }}
+                />
+
+                {/* ORIGINAL CARDS - COMMENTED OUT FOR TESTING */}
+                {/*
                 {filteredAndSortedAttractions.map((attraction) => (
                   <div key={attraction.id} className="bg-white rounded-lg shadow-sm p-2">
                     <SightseeingCard
@@ -890,6 +924,7 @@ export default function SightseeingResults() {
                     />
                   </div>
                 ))}
+                */}
               </div>
             )}
           </div>
