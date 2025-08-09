@@ -85,24 +85,12 @@ export function SightseeingCard({
   const infants = parseInt(searchParams.get("infants") || "0");
 
   // Calculate price using SightseeingService for consistency
-  console.log("🎫 SightseeingCard Pricing Debug:", {
-    attractionName: attraction.name,
-    currentPrice: attraction.currentPrice,
-    originalPrice: attraction.originalPrice,
-    adults,
-    children,
-    infants
-  });
-
   const priceCalc = sightseeingService.calculatePrice(
     attraction.currentPrice,
     adults,
     children,
     infants
   );
-
-  console.log("💳 SightseeingCard Price Calculation:", priceCalc);
-
   const totalPrice = priceCalc.totalPrice;
   const pricePerPerson = sightseeingService.calculatePrice(attraction.currentPrice, 1, 0, 0).totalPrice;
 
