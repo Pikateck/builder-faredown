@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Calendar, Mail, Phone, Globe, MapPin, FileText, CreditCard } from "lucide-react";
+import { preparePrintDocument } from "@/utils/printUtils";
 
 interface InvoiceItem {
   description: string;
