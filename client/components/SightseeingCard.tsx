@@ -215,7 +215,7 @@ export function SightseeingCard({
               </div>
 
               {/* Right Column - Price and Buttons */}
-              <div className="w-36 text-right flex-shrink-0">
+              <div className="w-40 text-right flex-shrink-0">
                 <div className="text-xl font-bold text-gray-900 mb-1">
                   {formatPrice(totalPrice)}
                 </div>
