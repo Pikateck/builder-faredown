@@ -100,7 +100,7 @@ export function SightseeingSearchForm() {
 
   // State to track if user is actively typing (not pre-filled)
   const [isUserTyping, setIsUserTyping] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("Dubai");
 
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
