@@ -14,7 +14,7 @@ export default function Sightseeing() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       {/* Mobile Header */}
       <div className="block md:hidden">
         <div className="bg-[#003580] text-white pb-8">
@@ -25,7 +25,8 @@ export default function Sightseeing() {
               </h1>
               <p className="text-blue-200 text-sm mb-3">
                 Explore fascinating attractions, cultural landmarks, and
-                exciting activities. Create unforgettable memories with our curated sightseeing experiences.
+                exciting activities. Create unforgettable memories with our
+                curated sightseeing experiences.
               </p>
             </div>
 
@@ -50,7 +51,8 @@ export default function Sightseeing() {
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
                 Explore fascinating attractions, cultural landmarks, and
-                exciting activities. Create unforgettable memories with our curated sightseeing experiences.
+                exciting activities. Create unforgettable memories with our
+                curated sightseeing experiences.
               </h1>
             </div>
 

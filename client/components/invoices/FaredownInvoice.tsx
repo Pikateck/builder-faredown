@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Calendar, Mail, Phone, Globe, MapPin, FileText, CreditCard } from "lucide-react";
+import {
+  Calendar,
+  Mail,
+  Phone,
+  Globe,
+  MapPin,
+  FileText,
+  CreditCard,
+} from "lucide-react";
 import { preparePrintDocument } from "@/utils/printUtils";
 
 interface InvoiceItem {
@@ -43,26 +51,30 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
   taxes = [],
   subtotal,
   total,
-  onPrint
+  onPrint,
 }) => {
   const invoiceNumber = `FD-${booking.bookingRef}`;
-  const currentDate = new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const currentDate = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
   useEffect(() => {
-    const cleanup = preparePrintDocument('invoice');
+    const cleanup = preparePrintDocument("invoice");
     return cleanup;
   }, []);
 
   const getServiceIcon = () => {
     switch (booking.type) {
-      case 'flight': return '✈️';
-      case 'hotel': return '🏨';
-      case 'sightseeing': return '📷';
-      default: return '🎫';
+      case "flight":
+        return "✈️";
+      case "hotel":
+        return "🏨";
+      case "sightseeing":
+        return "📷";
+      default:
+        return "🎫";
     }
   };
 
@@ -71,10 +83,19 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
       {/* Print Styles */}
       <style jsx>{`
         @media print {
-          .no-print { display: none !important; }
-          .print-break { page-break-before: always; }
-          body { -webkit-print-color-adjust: exact; color-adjust: exact; }
-          .print-header { background-color: #003580 !important; }
+          .no-print {
+            display: none !important;
+          }
+          .print-break {
+            page-break-before: always;
+          }
+          body {
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+          }
+          .print-header {
+            background-color: #003580 !important;
+          }
         }
       `}</style>
 
@@ -83,7 +104,9 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-4xl font-bold mb-2">FAREDOWN</h1>
-            <p className="text-blue-100 text-lg mb-4">Travel Booking Platform</p>
+            <p className="text-blue-100 text-lg mb-4">
+              Travel Booking Platform
+            </p>
             <div className="space-y-1 text-blue-100 text-sm">
               <div className="flex items-center">
                 <Globe className="w-4 h-4 mr-2" />
@@ -106,9 +129,16 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
           <div className="text-right bg-white/10 rounded-lg p-4">
             <h2 className="text-2xl font-bold mb-2">INVOICE</h2>
             <div className="space-y-1 text-sm">
-              <p><span className="font-semibold">Invoice #:</span> {invoiceNumber}</p>
-              <p><span className="font-semibold">Date:</span> {currentDate}</p>
-              <p><span className="font-semibold">Due Date:</span> Paid</p>
+              <p>
+                <span className="font-semibold">Invoice #:</span>{" "}
+                {invoiceNumber}
+              </p>
+              <p>
+                <span className="font-semibold">Date:</span> {currentDate}
+              </p>
+              <p>
+                <span className="font-semibold">Due Date:</span> Paid
+              </p>
             </div>
           </div>
         </div>
@@ -123,7 +153,9 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
               Bill To
             </h3>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="font-semibold text-gray-900 text-lg">{booking.customerName}</p>
+              <p className="font-semibold text-gray-900 text-lg">
+                {booking.customerName}
+              </p>
               <p className="text-gray-600">{booking.customerEmail}</p>
               {booking.customerPhone && (
                 <p className="text-gray-600">{booking.customerPhone}</p>
@@ -134,19 +166,25 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Service Details</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              Service Details
+            </h3>
             <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
               <div className="flex items-center mb-2">
                 <span className="text-2xl mr-2">{getServiceIcon()}</span>
-                <p className="font-semibold text-gray-900">{booking.serviceName}</p>
+                <p className="font-semibold text-gray-900">
+                  {booking.serviceName}
+                </p>
               </div>
               <p className="text-gray-600 text-sm">{booking.serviceDetails}</p>
               <div className="mt-3 pt-3 border-t border-blue-200">
                 <p className="text-sm text-gray-600">
-                  <span className="font-medium">Booking Reference:</span> {booking.bookingRef}
+                  <span className="font-medium">Booking Reference:</span>{" "}
+                  {booking.bookingRef}
                 </p>
                 <p className="text-sm text-gray-600">
-                  <span className="font-medium">Booking Date:</span> {booking.bookingDate}
+                  <span className="font-medium">Booking Date:</span>{" "}
+                  {booking.bookingDate}
                 </p>
               </div>
             </div>
@@ -155,7 +193,9 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
 
         {/* Invoice Items Table */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Invoice Details</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Invoice Details
+          </h3>
           <div className="overflow-x-auto">
             <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
               <thead className="bg-[#003580] text-white">
@@ -170,14 +210,20 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                 {items.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-gray-900">{item.description}</p>
+                      <p className="font-medium text-gray-900">
+                        {item.description}
+                      </p>
                     </td>
-                    <td className="px-4 py-3 text-center text-gray-600">{item.quantity}</td>
+                    <td className="px-4 py-3 text-center text-gray-600">
+                      {item.quantity}
+                    </td>
                     <td className="px-4 py-3 text-right text-gray-600">
-                      {booking.currency || '₹'}{item.unitPrice.toLocaleString()}
+                      {booking.currency || "₹"}
+                      {item.unitPrice.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-right font-medium text-gray-900">
-                      {booking.currency || '₹'}{item.total.toLocaleString()}
+                      {booking.currency || "₹"}
+                      {item.total.toLocaleString()}
                     </td>
                   </tr>
                 ))}
@@ -190,22 +236,28 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
         <div className="flex justify-end mb-8">
           <div className="w-full max-w-md">
             <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h4 className="font-semibold text-gray-900 mb-4">Invoice Summary</h4>
-              
+              <h4 className="font-semibold text-gray-900 mb-4">
+                Invoice Summary
+              </h4>
+
               {/* Subtotal */}
               <div className="flex justify-between py-2">
                 <span className="text-gray-600">Subtotal:</span>
                 <span className="font-medium text-gray-900">
-                  {booking.currency || '₹'}{subtotal.toLocaleString()}
+                  {booking.currency || "₹"}
+                  {subtotal.toLocaleString()}
                 </span>
               </div>
 
               {/* Taxes */}
               {taxes.map((tax, index) => (
                 <div key={index} className="flex justify-between py-2">
-                  <span className="text-gray-600">{tax.name} ({tax.rate}%):</span>
+                  <span className="text-gray-600">
+                    {tax.name} ({tax.rate}%):
+                  </span>
                   <span className="font-medium text-gray-900">
-                    {booking.currency || '₹'}{tax.amount.toLocaleString()}
+                    {booking.currency || "₹"}
+                    {tax.amount.toLocaleString()}
                   </span>
                 </div>
               ))}
@@ -219,9 +271,12 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
               {/* Total */}
               <div className="border-t border-gray-300 mt-4 pt-4">
                 <div className="flex justify-between">
-                  <span className="text-lg font-semibold text-gray-900">Total Amount:</span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    Total Amount:
+                  </span>
                   <span className="text-xl font-bold text-[#003580]">
-                    {booking.currency || '₹'}{total.toLocaleString()}
+                    {booking.currency || "₹"}
+                    {total.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -230,7 +285,9 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
               <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                 <div className="flex items-center text-green-800">
                   <CreditCard className="w-4 h-4 mr-2" />
-                  <span className="font-medium text-sm">Payment Status: PAID</span>
+                  <span className="font-medium text-sm">
+                    Payment Status: PAID
+                  </span>
                 </div>
               </div>
             </div>
@@ -241,22 +298,40 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
         <div className="border-t border-gray-200 pt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Terms & Conditions</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">
+                Terms & Conditions
+              </h4>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• All bookings are subject to availability</li>
                 <li>• Cancellation policies vary by service provider</li>
-                <li>• Refunds will be processed as per the original payment method</li>
+                <li>
+                  • Refunds will be processed as per the original payment method
+                </li>
                 <li>• Service fees are non-refundable</li>
                 <li>• Prices are subject to change without notice</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Payment Information</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">
+                Payment Information
+              </h4>
               <div className="text-sm text-gray-600 space-y-1">
-                <p><span className="font-medium">Payment Method:</span> Online Payment</p>
-                <p><span className="font-medium">Transaction ID:</span> TXN-{booking.bookingRef}</p>
-                <p><span className="font-medium">Payment Date:</span> {booking.bookingDate}</p>
-                <p><span className="font-medium">Currency:</span> {booking.currency || 'INR'}</p>
+                <p>
+                  <span className="font-medium">Payment Method:</span> Online
+                  Payment
+                </p>
+                <p>
+                  <span className="font-medium">Transaction ID:</span> TXN-
+                  {booking.bookingRef}
+                </p>
+                <p>
+                  <span className="font-medium">Payment Date:</span>{" "}
+                  {booking.bookingDate}
+                </p>
+                <p>
+                  <span className="font-medium">Currency:</span>{" "}
+                  {booking.currency || "INR"}
+                </p>
               </div>
             </div>
           </div>
@@ -268,11 +343,13 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
             Thank you for choosing Faredown for your travel needs!
           </p>
           <p className="text-xs text-gray-500">
-            This is a computer-generated invoice and does not require a signature.
+            This is a computer-generated invoice and does not require a
+            signature.
           </p>
           <div className="mt-4">
             <p className="text-xs text-gray-400">
-              For any queries regarding this invoice, please contact our support team at support@faredown.com
+              For any queries regarding this invoice, please contact our support
+              team at support@faredown.com
             </p>
           </div>
         </div>

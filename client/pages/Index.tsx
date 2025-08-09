@@ -2026,7 +2026,9 @@ export default function Index() {
                               JSON.stringify(flightSegments),
                             );
                           }
-                          navigate(`/flights/results?${searchParams.toString()}`);
+                          navigate(
+                            `/flights/results?${searchParams.toString()}`,
+                          );
                         }}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
@@ -2163,12 +2165,146 @@ export default function Index() {
         <div className="">
           {/* Upgrade & Add-ons Section */}
           <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-[#003580] rounded-lg flex items-center justify-center">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-[#003580] rounded-lg flex items-center justify-center">
+                    <svg
+                      className="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      Want Business Class or Room Upgrade?
+                    </h3>
+                    <p className="text-gray-600">Bargain for It Instantly.</p>
+                  </div>
+                </div>
+                <Button className="bg-[#003580] hover:bg-[#0071c2] text-white font-medium px-6 py-2 rounded-lg">
+                  Start Bargaining
+                </Button>
+              </div>
+            </div>
+          </section>
+
+          {/* Desktop Content Sections */}
+          {/* Why Choose Faredown Section */}
+          <section className="py-16 bg-white">
+            <div className="max-w-[1280px] mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  Why Faredown Is Reinventing Travel Booking
+                </h2>
+                <p className="text-gray-600 text-lg">
+                  The future of booking isn't fixed pricing — it's{" "}
+                  <strong>live bargaining.</strong>
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Zap className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Live Bargain Technology
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Negotiate upgrades instantly — from economy to business,
+                    from standard to suite.
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Pay What You Feel Is Fair
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Set your price and let Faredown try to get it for you — no
+                    more overpaying.
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Secure, Real-Time Bookings
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Your data is encrypted and bookings are confirmed instantly.
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <Headphones className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Smarter Than Any Travel Agent
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Skip the back and forth. Our AI works faster, 24/7.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Trust & Social Proof Section */}
+          <section className="py-16 bg-gray-50">
+            <div className="max-w-[1280px] mx-auto px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  Trusted by 50M+ Travelers
+                </h2>
+                <p className="text-gray-600 text-lg mb-6">
+                  Real reviews from verified travelers
+                </p>
+
+                {/* Trustpilot Integration */}
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8 inline-block">
+                  <div className="flex items-center justify-center space-x-4 mb-4">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb6ae57258e4549a19f25b81f562dc1a7?format=webp&width=800"
+                      alt="Trustpilot"
+                      className="h-8"
+                    />
+                    <div className="flex items-center space-x-1">
+                      {Array(5)
+                        .fill(0)
+                        .map((_, i) => (
+                          <Star
+                            key={i}
+                            className="w-5 h-5 text-green-500 fill-current"
+                          />
+                        ))}
+                    </div>
+                    <span className="text-xl font-bold text-gray-900">4.9</span>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Excellent • Based on 50,000+ reviews on Trustpilot
+                  </p>
+                </div>
+
+                {/* Live Support Banner */}
+                <div className="bg-blue-600 text-white px-8 py-4 rounded-lg flex items-center justify-center space-x-3 mb-8 mx-auto max-w-2xl">
                   <svg
-                    className="w-6 h-6 text-white"
+                    className="w-6 h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -2176,133 +2312,376 @@ export default function Index() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      strokeWidth={2}
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                     />
                   </svg>
+                  <span className="font-medium text-lg">
+                    24×7 Customer Support | Live Chat & Call Available
+                  </span>
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Want Business Class or Room Upgrade?
-                  </h3>
-                  <p className="text-gray-600">Bargain for It Instantly.</p>
-                </div>
-              </div>
-              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white font-medium px-6 py-2 rounded-lg">
-                Start Bargaining
-              </Button>
-            </div>
-          </div>
-        </section>
 
-        {/* Desktop Content Sections */}
-        {/* Why Choose Faredown Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Why Faredown Is Reinventing Travel Booking
-              </h2>
-              <p className="text-gray-600 text-lg">
-                The future of booking isn't fixed pricing — it's{" "}
-                <strong>live bargaining.</strong>
-              </p>
-            </div>
+                {/* Customer Support Visual */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-100 rounded-xl p-8 mb-8 mx-auto max-w-4xl">
+                  <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-12">
+                    {/* Support Team Illustration */}
+                    <div className="flex -space-x-3">
+                      <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                        <svg
+                          className="w-8 h-8 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                        <svg
+                          className="w-8 h-8 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                        <svg
+                          className="w-8 h-8 text-white"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Live Bargain Technology
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Negotiate upgrades instantly — from economy to business, from
-                  standard to suite.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Pay What You Feel Is Fair
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Set your price and let Faredown try to get it for you — no
-                  more overpaying.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Secure, Real-Time Bookings
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Your data is encrypted and bookings are confirmed instantly.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Headphones className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Smarter Than Any Travel Agent
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Skip the back and forth. Our AI works faster, 24/7.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Trust & Social Proof Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Trusted by 50M+ Travelers
-              </h2>
-              <p className="text-gray-600 text-lg mb-6">
-                Real reviews from verified travelers
-              </p>
-
-              {/* Trustpilot Integration */}
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8 inline-block">
-                <div className="flex items-center justify-center space-x-4 mb-4">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb6ae57258e4549a19f25b81f562dc1a7?format=webp&width=800"
-                    alt="Trustpilot"
-                    className="h-8"
-                  />
-                  <div className="flex items-center space-x-1">
-                    {Array(5)
-                      .fill(0)
-                      .map((_, i) => (
-                        <Star
-                          key={i}
-                          className="w-5 h-5 text-green-500 fill-current"
-                        />
-                      ))}
+                    {/* Support Features */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-medium text-gray-700">
+                          Live Chat
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mx-auto">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-medium text-gray-700">
+                          Phone Call
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mx-auto">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-medium text-gray-700">
+                          Email
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mx-auto">
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-sm font-medium text-gray-700">
+                          24/7 Support
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <span className="text-xl font-bold text-gray-900">4.9</span>
                 </div>
-                <p className="text-sm text-gray-600">
-                  Excellent • Based on 50,000+ reviews on Trustpilot
+
+                <p className="text-sm text-gray-500">
+                  Safe, Verified, and Instant Confirmations. Backed by real
+                  humans.
                 </p>
               </div>
 
-              {/* Live Support Banner */}
-              <div className="bg-blue-600 text-white px-8 py-4 rounded-lg flex items-center justify-center space-x-3 mb-8 mx-auto max-w-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                  {
+                    name: "Priya Sharma",
+                    location: "Mumbai • Verified Traveler",
+                    review:
+                      "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class for economy price.",
+                    rating: 5,
+                    profession: "Marketing Manager",
+                    verified: true,
+                  },
+                  {
+                    name: "Rohit Kumar",
+                    location: "Delhi • Verified Traveler",
+                    review:
+                      "Got suite upgrade in Singapore hotel using Bargain It™. Faredown is revolutionary! Customer service is excellent.",
+                    rating: 5,
+                    profession: "Software Engineer",
+                    verified: true,
+                  },
+                  {
+                    name: "Anjali Patel",
+                    location: "Bangalore • Verified Traveler",
+                    review:
+                      "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
+                    rating: 5,
+                    profession: "Product Designer",
+                    verified: true,
+                  },
+                ].map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-center mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4 text-white font-bold text-lg">
+                        {testimonial.name.charAt(0)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <h4 className="font-semibold text-gray-900">
+                            {testimonial.name}
+                          </h4>
+                          {testimonial.verified && (
+                            <svg
+                              className="w-4 h-4 text-blue-500"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {testimonial.profession}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {testimonial.location}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center mb-3">
+                      {Array(testimonial.rating)
+                        .fill(0)
+                        .map((_, i) => (
+                          <Star
+                            key={i}
+                            className="w-4 h-4 text-yellow-400 fill-current"
+                          />
+                        ))}
+                      <span className="ml-2 text-sm text-gray-500">5.0</span>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">
+                      "{testimonial.review}"
+                    </p>
+                    <div className="mt-4 pt-3 border-t border-gray-100">
+                      <span className="text-xs text-green-600 font-medium">
+                        ✓ Verified Purchase
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Mobile App Promo Section */}
+          <section className="py-16 bg-[#003580] relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#003580] to-[#0071c2] opacity-90"></div>
+            <div className="relative max-w-[1280px] mx-auto px-4">
+              <div className="text-center text-white mb-12">
+                <h2 className="text-3xl font-bold mb-4">
+                  Travel Smarter. Bargain Better. On the Go.
+                </h2>
+                <p className="text-xl text-blue-200 mb-8">
+                  Download the Faredown app for exclusive mobile-only deals and
+                  instant bargain alerts.
+                </p>
+
+                {/* App Features - Inline */}
+                <div className="flex flex-wrap justify-center gap-8 mb-8 text-sm">
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      className="w-4 h-4 text-green-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 17h5l-5 5v-5z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4"
+                      />
+                    </svg>
+                    <span className="text-blue-100">Instant notifications</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      className="w-4 h-4 text-green-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <span className="text-blue-100">
+                      Mobile-exclusive deals
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      className="w-4 h-4 text-green-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span className="text-blue-100">Offline management</span>
+                  </div>
+                </div>
+
+                {/* Download Buttons */}
+                <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
+                  <div className="flex-1 bg-black rounded-lg px-4 py-3 flex items-center justify-center space-x-3 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <svg
+                      className="w-6 h-6 text-white"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                    </svg>
+                    <div className="text-left">
+                      <div className="text-xs text-gray-300">
+                        Download on the
+                      </div>
+                      <div className="text-sm font-semibold">App Store</div>
+                    </div>
+                  </div>
+                  <div className="flex-1 bg-black rounded-lg px-4 py-3 flex items-center justify-center space-x-3 cursor-pointer hover:bg-gray-800 transition-colors">
+                    <svg
+                      className="w-6 h-6 text-white"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
+                    </svg>
+                    <div className="text-left">
+                      <div className="text-xs text-gray-300">Get it on</div>
+                      <div className="text-sm font-semibold">Google Play</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Email Signup Section */}
+          <section className="py-16 bg-white">
+            <div className="max-w-[1280px] mx-auto px-4 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Stay ahead with secret travel bargains
+              </h2>
+              <div className="max-w-md mx-auto flex space-x-4 mb-4">
+                <Input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1"
+                />
+                <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8">
+                  Subscribe
+                </Button>
+              </div>
+              <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
                 <svg
-                  className="w-6 h-6"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -2311,552 +2690,181 @@ export default function Index() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
-                <span className="font-medium text-lg">
-                  24×7 Customer Support | Live Chat & Call Available
-                </span>
+                <span>We respect your inbox.</span>
               </div>
-
-              {/* Customer Support Visual */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-100 rounded-xl p-8 mb-8 mx-auto max-w-4xl">
-                <div className="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-12">
-                  {/* Support Team Illustration */}
-                  <div className="flex -space-x-3">
-                    <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                      <svg
-                        className="w-8 h-8 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                      <svg
-                        className="w-8 h-8 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                      <svg
-                        className="w-8 h-8 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-
-                  {/* Support Features */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                    <div className="space-y-2">
-                      <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto">
-                        <svg
-                          className="w-6 h-6 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm font-medium text-gray-700">
-                        Live Chat
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mx-auto">
-                        <svg
-                          className="w-6 h-6 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.53c-.56.28-.56 1.07.085 1.492A9.963 9.963 0 0010.47 16.09c.423.644 1.213.644 1.492.085l1.145-1.73a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm font-medium text-gray-700">
-                        Phone Call
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mx-auto">
-                        <svg
-                          className="w-6 h-6 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm font-medium text-gray-700">Email</p>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mx-auto">
-                        <svg
-                          className="w-6 h-6 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm font-medium text-gray-700">
-                        24/7 Support
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-sm text-gray-500">
-                Safe, Verified, and Instant Confirmations. Backed by real
-                humans.
-              </p>
             </div>
+          </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  name: "Priya Sharma",
-                  location: "Mumbai • Verified Traveler",
-                  review:
-                    "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class for economy price.",
-                  rating: 5,
-                  profession: "Marketing Manager",
-                  verified: true,
-                },
-                {
-                  name: "Rohit Kumar",
-                  location: "Delhi • Verified Traveler",
-                  review:
-                    "Got suite upgrade in Singapore hotel using Bargain It™. Faredown is revolutionary! Customer service is excellent.",
-                  rating: 5,
-                  profession: "Software Engineer",
-                  verified: true,
-                },
-                {
-                  name: "Anjali Patel",
-                  location: "Bangalore • Verified Traveler",
-                  review:
-                    "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!",
-                  rating: 5,
-                  profession: "Product Designer",
-                  verified: true,
-                },
-              ].map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4 text-white font-bold text-lg">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-semibold text-gray-900">
-                          {testimonial.name}
-                        </h4>
-                        {testimonial.verified && (
-                          <svg
-                            className="w-4 h-4 text-blue-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        {testimonial.profession}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        {testimonial.location}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center mb-3">
-                    {Array(testimonial.rating)
-                      .fill(0)
-                      .map((_, i) => (
-                        <Star
-                          key={i}
-                          className="w-4 h-4 text-yellow-400 fill-current"
-                        />
-                      ))}
-                    <span className="ml-2 text-sm text-gray-500">5.0</span>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed">
-                    "{testimonial.review}"
+          {/* Footer */}
+          <footer className="bg-[#1a1a2e] text-white py-8">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                  <h3 className="text-lg font-bold mb-3">Faredown</h3>
+                  <p className="text-gray-400 text-sm mb-4">
+                    The world's first travel portal where you can negotiate and
+                    bargain for better deals.
                   </p>
-                  <div className="mt-4 pt-3 border-t border-gray-100">
-                    <span className="text-xs text-green-600 font-medium">
-                      ✓ Verified Purchase
-                    </span>
+                  <div className="flex space-x-3">
+                    <a
+                      href="https://facebook.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                    >
+                      <Facebook className="w-4 h-4" />
+                    </a>
+                    <a
+                      href="https://instagram.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
+                    >
+                      <Instagram className="w-4 h-4" />
+                    </a>
+                    <a
+                      href="https://twitter.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+                    >
+                      <Twitter className="w-4 h-4" />
+                    </a>
+                    <a
+                      href="https://linkedin.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                    >
+                      <Linkedin className="w-4 h-4" />
+                    </a>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* Mobile App Promo Section */}
-        <section className="py-16 bg-[#003580] relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#003580] to-[#0071c2] opacity-90"></div>
-          <div className="relative max-w-[1280px] mx-auto px-4">
-            <div className="text-center text-white mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Travel Smarter. Bargain Better. On the Go.
-              </h2>
-              <p className="text-xl text-blue-200 mb-8">
-                Download the Faredown app for exclusive mobile-only deals and
-                instant bargain alerts.
-              </p>
+                <div>
+                  <h4 className="font-semibold mb-3">Quick Links</h4>
+                  <ul className="space-y-1 text-sm text-gray-400">
+                    <li>
+                      <Link to="/about" className="hover:text-white">
+                        About Us
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/how-it-works" className="hover:text-white">
+                        How It Works
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/contact" className="hover:text-white">
+                        Contact
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/help" className="hover:text-white">
+                        Help Center
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
-              {/* App Features - Inline */}
-              <div className="flex flex-wrap justify-center gap-8 mb-8 text-sm">
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 text-green-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 17h5l-5 5v-5z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4"
-                    />
-                  </svg>
-                  <span className="text-blue-100">Instant notifications</span>
+                <div>
+                  <h4 className="font-semibold mb-3">Services</h4>
+                  <ul className="space-y-0.5 text-sm text-gray-400">
+                    <li>
+                      <button
+                        onClick={() => {
+                          setActiveTab("flights");
+                          window.history.pushState({}, "", "/?tab=flights");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="hover:text-white text-left"
+                      >
+                        Flights
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          setActiveTab("hotels");
+                          window.history.pushState({}, "", "/?tab=hotels");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="hover:text-white text-left"
+                      >
+                        Hotels
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          setActiveTab("sightseeing");
+                          window.history.pushState({}, "", "/?tab=sightseeing");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="hover:text-white text-left"
+                      >
+                        Sightseeing
+                      </button>
+                    </li>
+                  </ul>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 text-green-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <span className="text-blue-100">Mobile-exclusive deals</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 text-green-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span className="text-blue-100">Offline management</span>
-                </div>
-              </div>
 
-              {/* Download Buttons */}
-              <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
-                <div className="flex-1 bg-black rounded-lg px-4 py-3 flex items-center justify-center space-x-3 cursor-pointer hover:bg-gray-800 transition-colors">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-                  </svg>
-                  <div className="text-left">
-                    <div className="text-xs text-gray-300">Download on the</div>
-                    <div className="text-sm font-semibold">App Store</div>
-                  </div>
-                </div>
-                <div className="flex-1 bg-black rounded-lg px-4 py-3 flex items-center justify-center space-x-3 cursor-pointer hover:bg-gray-800 transition-colors">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
-                  </svg>
-                  <div className="text-left">
-                    <div className="text-xs text-gray-300">Get it on</div>
-                    <div className="text-sm font-semibold">Google Play</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Email Signup Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-[1280px] mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Stay ahead with secret travel bargains
-            </h2>
-            <div className="max-w-md mx-auto flex space-x-4 mb-4">
-              <Input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1"
-              />
-              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8">
-                Subscribe
-              </Button>
-            </div>
-            <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-              <span>We respect your inbox.</span>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="bg-[#1a1a2e] text-white py-8">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <h3 className="text-lg font-bold mb-3">Faredown</h3>
-                <p className="text-gray-400 text-sm mb-4">
-                  The world's first travel portal where you can negotiate and
-                  bargain for better deals.
-                </p>
-                <div className="flex space-x-3">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                  >
-                    <Facebook className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
-                  >
-                    <Instagram className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://twitter.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
-                  >
-                    <Twitter className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                  </a>
+                <div>
+                  <h4 className="font-semibold mb-3">Legal</h4>
+                  <ul className="space-y-1 text-sm text-gray-400">
+                    <li>
+                      <Link to="/privacy" className="hover:text-white">
+                        Privacy Policy
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/terms" className="hover:text-white">
+                        Terms of Service
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/refund" className="hover:text-white">
+                        Refund Policy
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
-              <div>
-                <h4 className="font-semibold mb-3">Quick Links</h4>
-                <ul className="space-y-1 text-sm text-gray-400">
-                  <li>
-                    <Link to="/about" className="hover:text-white">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/how-it-works" className="hover:text-white">
-                      How It Works
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/contact" className="hover:text-white">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/help" className="hover:text-white">
-                      Help Center
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Services</h4>
-                <ul className="space-y-0.5 text-sm text-gray-400">
-                  <li>
-                    <button
-                      onClick={() => {
-                        setActiveTab("flights");
-                        window.history.pushState({}, "", "/?tab=flights");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="hover:text-white text-left"
-                    >
-                      Flights
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        setActiveTab("hotels");
-                        window.history.pushState({}, "", "/?tab=hotels");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="hover:text-white text-left"
-                    >
-                      Hotels
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => {
-                        setActiveTab("sightseeing");
-                        window.history.pushState({}, "", "/?tab=sightseeing");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="hover:text-white text-left"
-                    >
-                      Sightseeing
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Legal</h4>
-                <ul className="space-y-1 text-sm text-gray-400">
-                  <li>
-                    <Link to="/privacy" className="hover:text-white">
-                      Privacy Policy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/terms" className="hover:text-white">
-                      Terms of Service
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/refund" className="hover:text-white">
-                      Refund Policy
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-700 mt-6 pt-6">
-              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <div className="flex items-center space-x-6">
-                  <div className="flex items-center space-x-3 text-xs text-gray-400">
-                    <span className="font-semibold">Certified by:</span>
-                    <div className="flex items-center space-x-4">
-                      <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">
-                          TAAI
-                        </span>
-                      </div>
-                      <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">
-                          TAAFI
-                        </span>
-                      </div>
-                      <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">
-                          IATA
-                        </span>
+              <div className="border-t border-gray-700 mt-6 pt-6">
+                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-3 text-xs text-gray-400">
+                      <span className="font-semibold">Certified by:</span>
+                      <div className="flex items-center space-x-4">
+                        <div className="bg-white rounded px-2 py-1">
+                          <span className="text-[#003580] font-bold text-xs">
+                            TAAI
+                          </span>
+                        </div>
+                        <div className="bg-white rounded px-2 py-1">
+                          <span className="text-[#003580] font-bold text-xs">
+                            TAAFI
+                          </span>
+                        </div>
+                        <div className="bg-white rounded px-2 py-1">
+                          <span className="text-[#003580] font-bold text-xs">
+                            IATA
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <p className="text-gray-400 text-sm">
+                    © 2025 Faredown.com. All rights reserved.
+                  </p>
                 </div>
-                <p className="text-gray-400 text-sm">
-                  © 2025 Faredown.com. All rights reserved.
-                </p>
               </div>
             </div>
-          </div>
-        </footer>
+          </footer>
         </div>
       </div>
 

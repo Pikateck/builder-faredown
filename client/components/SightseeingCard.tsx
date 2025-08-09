@@ -89,10 +89,15 @@ export function SightseeingCard({
     attraction.currentPrice,
     adults,
     children,
-    infants
+    infants,
   );
   const totalPrice = priceCalc.totalPrice;
-  const pricePerPerson = sightseeingService.calculatePrice(attraction.currentPrice, 1, 0, 0).totalPrice;
+  const pricePerPerson = sightseeingService.calculatePrice(
+    attraction.currentPrice,
+    1,
+    0,
+    0,
+  ).totalPrice;
 
   // Handle star/reviews click to navigate to details with reviews tab
   const handleReviewsClick = () => {
@@ -130,15 +135,15 @@ export function SightseeingCard({
   // Image navigation
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => 
-      prev === attraction.images.length - 1 ? 0 : prev + 1
+    setCurrentImageIndex((prev) =>
+      prev === attraction.images.length - 1 ? 0 : prev + 1,
     );
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? attraction.images.length - 1 : prev - 1
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? attraction.images.length - 1 : prev - 1,
     );
   };
 
@@ -153,7 +158,7 @@ export function SightseeingCard({
       <div
         className={cn(
           "bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group mb-4",
-          className
+          className,
         )}
         onClick={handleViewDetails}
       >
@@ -166,12 +171,13 @@ export function SightseeingCard({
               alt={attraction.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            
+
             {/* Category Badge */}
             <div className="absolute top-3 left-3">
               <Badge className="bg-white text-gray-800 shadow-sm">
                 <CategoryIcon className="w-3 h-3 mr-1" />
-                {attraction.category.charAt(0).toUpperCase() + attraction.category.slice(1)}
+                {attraction.category.charAt(0).toUpperCase() +
+                  attraction.category.slice(1)}
               </Badge>
             </div>
 
@@ -180,11 +186,11 @@ export function SightseeingCard({
               onClick={toggleWishlist}
               className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
             >
-              <Heart 
+              <Heart
                 className={cn(
                   "w-4 h-4",
-                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
-                )} 
+                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600",
+                )}
               />
             </button>
           </div>
@@ -243,21 +249,21 @@ export function SightseeingCard({
                       onBargainClick();
                     }}
                     style={{
-                      backgroundColor: '#febb02',
-                      color: '#000000',
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '12px 10px',
-                      fontWeight: '600',
-                      fontSize: '12px',
-                      minHeight: '42px',
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '4px',
-                      cursor: 'pointer',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                      backgroundColor: "#febb02",
+                      color: "#000000",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "12px 10px",
+                      fontWeight: "600",
+                      fontSize: "12px",
+                      minHeight: "42px",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                      cursor: "pointer",
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
                     }}
                   >
                     <TrendingDown size={12} />
@@ -269,21 +275,21 @@ export function SightseeingCard({
                       handleViewDetails();
                     }}
                     style={{
-                      backgroundColor: '#003580',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '12px 10px',
-                      fontWeight: '600',
-                      fontSize: '12px',
-                      minHeight: '42px',
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '4px',
-                      cursor: 'pointer',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                      backgroundColor: "#003580",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "12px 10px",
+                      fontWeight: "600",
+                      fontSize: "12px",
+                      minHeight: "42px",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "4px",
+                      cursor: "pointer",
+                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
                     }}
                   >
                     <Eye size={12} />
@@ -320,12 +326,13 @@ export function SightseeingCard({
               alt={attraction.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            
+
             {/* Category Badge */}
             <div className="absolute top-3 left-3">
               <Badge className="bg-white text-gray-800 shadow-sm">
                 <CategoryIcon className="w-3 h-3 mr-1" />
-                {attraction.category.charAt(0).toUpperCase() + attraction.category.slice(1)}
+                {attraction.category.charAt(0).toUpperCase() +
+                  attraction.category.slice(1)}
               </Badge>
             </div>
 
@@ -334,11 +341,11 @@ export function SightseeingCard({
               onClick={toggleWishlist}
               className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
             >
-              <Heart 
+              <Heart
                 className={cn(
                   "w-4 h-4",
-                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
-                )} 
+                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600",
+                )}
               />
             </button>
           </div>
@@ -350,7 +357,7 @@ export function SightseeingCard({
               <h3 className="font-semibold text-gray-900 text-xl line-clamp-1 mb-2">
                 {attraction.name}
               </h3>
-              
+
               <div className="flex items-center text-sm text-gray-600 mb-2">
                 <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
                 <span className="truncate">{attraction.location}</span>
@@ -382,7 +389,10 @@ export function SightseeingCard({
               {/* Highlights and Features */}
               <div className="space-y-2 mb-4">
                 {attraction.highlights.slice(0, 2).map((highlight, index) => (
-                  <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 text-sm text-gray-600"
+                  >
                     <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
                     <span className="truncate">{highlight}</span>
                   </div>
@@ -414,31 +424,43 @@ export function SightseeingCard({
                   </div>
                 </div>
               </div>
-              
+
               {/* DESKTOP BUTTONS - GUARANTEED VISIBLE */}
-              <div style={{ paddingTop: '16px', borderTop: '1px solid #e5e7eb', marginTop: '16px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div
+                style={{
+                  paddingTop: "16px",
+                  borderTop: "1px solid #e5e7eb",
+                  marginTop: "16px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onBargainClick();
                     }}
                     style={{
-                      backgroundColor: '#febb02',
-                      color: '#000000',
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '14px 18px',
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      minHeight: '44px',
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      backgroundColor: "#febb02",
+                      color: "#000000",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "14px 18px",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      minHeight: "44px",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "6px",
+                      cursor: "pointer",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                     }}
                   >
                     <TrendingDown size={14} />
@@ -450,21 +472,21 @@ export function SightseeingCard({
                       handleViewDetails();
                     }}
                     style={{
-                      backgroundColor: '#003580',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '14px 18px',
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      minHeight: '44px',
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      cursor: 'pointer',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      backgroundColor: "#003580",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "14px 18px",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                      minHeight: "44px",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "6px",
+                      cursor: "pointer",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                     }}
                   >
                     <Eye size={14} />
@@ -487,7 +509,7 @@ export function SightseeingCard({
             >
               <X className="w-6 h-6" />
             </button>
-            
+
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}

@@ -64,7 +64,8 @@ export default function SightseeingBookingConfirmation() {
 
   // Extract booking parameters
   const bookingRef = searchParams.get("bookingRef") || `FD-${Date.now()}`; // Generate if not provided
-  const attractionId = searchParams.get("attractionId") || searchParams.get("item") || ""; // Support both params
+  const attractionId =
+    searchParams.get("attractionId") || searchParams.get("item") || ""; // Support both params
   const ticketTypeIndex = parseInt(searchParams.get("ticketType") || "0");
   const visitDate = searchParams.get("visitDate") || new Date().toISOString(); // Default to today
   const selectedTime = searchParams.get("selectedTime") || "";

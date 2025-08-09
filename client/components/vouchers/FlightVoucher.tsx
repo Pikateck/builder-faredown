@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { QrCode, Plane, Calendar, Clock, Users, MapPin, Ticket } from "lucide-react";
+import {
+  QrCode,
+  Plane,
+  Calendar,
+  Clock,
+  Users,
+  MapPin,
+  Ticket,
+} from "lucide-react";
 import { preparePrintDocument } from "@/utils/printUtils";
 
 interface FlightVoucherProps {
@@ -21,25 +29,35 @@ interface FlightVoucherProps {
   onPrint?: () => void;
 }
 
-export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }) => {
+export const FlightVoucher: React.FC<FlightVoucherProps> = ({
+  booking,
+  onPrint,
+}) => {
   const [fromCity, toCity] = booking.route.split(" → ");
 
   useEffect(() => {
-    const cleanup = preparePrintDocument('voucher');
+    const cleanup = preparePrintDocument("voucher");
     return cleanup;
   }, []);
-  
+
   return (
     <div className="bg-white text-black print:shadow-none print:border-none">
       {/* Print Styles */}
       <style jsx>{`
         @media print {
-          .no-print { display: none !important; }
-          .print-break { page-break-before: always; }
-          body { -webkit-print-color-adjust: exact; color-adjust: exact; }
+          .no-print {
+            display: none !important;
+          }
+          .print-break {
+            page-break-before: always;
+          }
+          body {
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+          }
         }
       `}</style>
-      
+
       {/* Header */}
       <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-6 print:bg-[#003580]">
         <div className="flex justify-between items-start">
@@ -65,13 +83,17 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
               <Plane className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">{booking.airline}</h2>
+              <h2 className="text-xl font-bold text-gray-900">
+                {booking.airline}
+              </h2>
               <p className="text-gray-600">Flight {booking.flightNumber}</p>
             </div>
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-600">Boarding Pass</p>
-            <p className="text-2xl font-bold text-[#003580]">{booking.flightNumber}</p>
+            <p className="text-2xl font-bold text-[#003580]">
+              {booking.flightNumber}
+            </p>
           </div>
         </div>
 
@@ -80,7 +102,9 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
           <div className="text-center">
             <div className="bg-gray-50 rounded-lg p-4">
               <MapPin className="w-5 h-5 text-gray-600 mx-auto mb-2" />
-              <p className="text-xs text-gray-600 uppercase tracking-wide">From</p>
+              <p className="text-xs text-gray-600 uppercase tracking-wide">
+                From
+              </p>
               <p className="text-xl font-bold text-gray-900">{fromCity}</p>
             </div>
           </div>
@@ -92,7 +116,9 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
           <div className="text-center">
             <div className="bg-gray-50 rounded-lg p-4">
               <MapPin className="w-5 h-5 text-gray-600 mx-auto mb-2" />
-              <p className="text-xs text-gray-600 uppercase tracking-wide">To</p>
+              <p className="text-xs text-gray-600 uppercase tracking-wide">
+                To
+              </p>
               <p className="text-xl font-bold text-gray-900">{toCity}</p>
             </div>
           </div>
@@ -102,22 +128,30 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-gray-50 rounded-lg p-3">
             <Calendar className="w-4 h-4 text-gray-600 mb-1" />
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Date</p>
+            <p className="text-xs text-gray-600 uppercase tracking-wide">
+              Date
+            </p>
             <p className="font-semibold text-gray-900">{booking.date}</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-3">
             <Clock className="w-4 h-4 text-gray-600 mb-1" />
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Time</p>
+            <p className="text-xs text-gray-600 uppercase tracking-wide">
+              Time
+            </p>
             <p className="font-semibold text-gray-900">{booking.time}</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-3">
             <Ticket className="w-4 h-4 text-gray-600 mb-1" />
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Seat</p>
+            <p className="text-xs text-gray-600 uppercase tracking-wide">
+              Seat
+            </p>
             <p className="font-semibold text-gray-900">{booking.seat}</p>
           </div>
           <div className="bg-gray-50 rounded-lg p-3">
             <Users className="w-4 h-4 text-gray-600 mb-1" />
-            <p className="text-xs text-gray-600 uppercase tracking-wide">Passengers</p>
+            <p className="text-xs text-gray-600 uppercase tracking-wide">
+              Passengers
+            </p>
             <p className="font-semibold text-gray-900">{booking.passengers}</p>
           </div>
         </div>
@@ -125,26 +159,36 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
 
       {/* Passenger Information */}
       <div className="p-6 border-b-2 border-dashed border-gray-300">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Passenger Information</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Passenger Information
+        </h3>
         <div className="grid grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-gray-600">Passenger Name</p>
-            <p className="font-semibold text-gray-900">{booking.passengerName || "John Doe"}</p>
+            <p className="font-semibold text-gray-900">
+              {booking.passengerName || "John Doe"}
+            </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Booking Reference</p>
-            <p className="font-mono font-semibold text-gray-900">{booking.bookingRef}</p>
+            <p className="font-mono font-semibold text-gray-900">
+              {booking.bookingRef}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Terminal Information */}
       <div className="p-6 border-b-2 border-dashed border-gray-300">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Terminal Information</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Terminal Information
+        </h3>
         <div className="grid grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-gray-600">Terminal</p>
-            <p className="text-xl font-bold text-[#003580]">{booking.terminal}</p>
+            <p className="text-xl font-bold text-[#003580]">
+              {booking.terminal}
+            </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Gate</p>
@@ -155,11 +199,14 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
 
       {/* Important Information */}
       <div className="p-6 bg-amber-50 border-l-4 border-amber-400">
-        <h3 className="text-lg font-semibold text-amber-800 mb-3">Important Information</h3>
+        <h3 className="text-lg font-semibold text-amber-800 mb-3">
+          Important Information
+        </h3>
         <ul className="space-y-2 text-sm text-amber-700">
           <li className="flex items-start">
             <span className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Please arrive at the airport at least 2 hours before domestic flights and 3 hours before international flights
+            Please arrive at the airport at least 2 hours before domestic
+            flights and 3 hours before international flights
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -167,7 +214,8 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Check-in online or at the airport counter before proceeding to security
+            Check-in online or at the airport counter before proceeding to
+            security
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -178,11 +226,16 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }
 
       {/* Footer */}
       <div className="p-6 bg-gray-50 text-center">
-        <p className="text-sm text-gray-600 mb-2">Thank you for choosing Faredown!</p>
-        <p className="text-xs text-gray-500">For support, contact us at support@faredown.com | +971 4 123 4567</p>
+        <p className="text-sm text-gray-600 mb-2">
+          Thank you for choosing Faredown!
+        </p>
+        <p className="text-xs text-gray-500">
+          For support, contact us at support@faredown.com | +971 4 123 4567
+        </p>
         <div className="mt-4 pt-4 border-t border-gray-200">
           <p className="text-xs text-gray-400">
-            This is a computer-generated voucher and does not require a signature.
+            This is a computer-generated voucher and does not require a
+            signature.
           </p>
         </div>
       </div>

@@ -369,7 +369,7 @@ export default function SightseeingBooking() {
     selectedTicket.price,
     adults,
     children,
-    infants
+    infants,
   );
   const basePrice = priceCalc.basePrice;
   const totalPrice = priceCalc.totalPrice;
@@ -672,7 +672,9 @@ export default function SightseeingBooking() {
                       <span className="text-gray-600">
                         Children × {children} (50% off)
                       </span>
-                      <span>{formatPrice(selectedTicket.price * 0.5 * children)}</span>
+                      <span>
+                        {formatPrice(selectedTicket.price * 0.5 * children)}
+                      </span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">

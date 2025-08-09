@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DateProvider } from "./contexts/DateContext";
@@ -74,7 +79,10 @@ function App() {
                 <Routes>
                   {/* Original Web Routes */}
                   <Route path="/" element={<Index />} />
-                  <Route path="/flights" element={<Navigate to="/?tab=flights" replace />} />
+                  <Route
+                    path="/flights"
+                    element={<Navigate to="/?tab=flights" replace />}
+                  />
                   <Route path="/flights/results" element={<FlightResults />} />
                   <Route
                     path="/flight-details/:flightId"

@@ -19,7 +19,10 @@ const Bookings: React.FC = () => {
   // Initialize tab from URL parameter
   const getInitialTab = (): "all" | "flights" | "hotels" | "sightseeing" => {
     const tabParam = searchParams.get("tab");
-    if (tabParam && ["all", "flights", "hotels", "sightseeing"].includes(tabParam)) {
+    if (
+      tabParam &&
+      ["all", "flights", "hotels", "sightseeing"].includes(tabParam)
+    ) {
       return tabParam as "all" | "flights" | "hotels" | "sightseeing";
     }
     return "all";
@@ -39,7 +42,10 @@ const Bookings: React.FC = () => {
   // Watch for URL parameter changes
   useEffect(() => {
     const tabParam = searchParams.get("tab");
-    if (tabParam && ["all", "flights", "hotels", "sightseeing"].includes(tabParam)) {
+    if (
+      tabParam &&
+      ["all", "flights", "hotels", "sightseeing"].includes(tabParam)
+    ) {
       setActiveTab(tabParam as "all" | "flights" | "hotels" | "sightseeing");
     }
   }, [searchParams]);
@@ -888,7 +894,7 @@ const Bookings: React.FC = () => {
                     gate: selectedBooking.gate || "A15",
                     passengers: selectedBooking.passengers,
                     totalAmount: selectedBooking.totalAmount,
-                    passengerName: "John Doe"
+                    passengerName: "John Doe",
                   }}
                   onPrint={() => window.print()}
                 />
@@ -910,7 +916,7 @@ const Bookings: React.FC = () => {
                     phone: "+971 50 123 4567",
                     email: "guest@example.com",
                     nights: selectedBooking.nights || 1,
-                    rating: 4
+                    rating: 4,
                   }}
                   onPrint={() => window.print()}
                 />
@@ -922,17 +928,23 @@ const Bookings: React.FC = () => {
                     id: selectedBooking.id,
                     name: selectedBooking.name || "Burj Khalifa Experience",
                     location: selectedBooking.location || "Dubai, UAE",
-                    visitDate: selectedBooking.date || selectedBooking.visitDate,
-                    visitTime: selectedBooking.time || selectedBooking.visitTime || "10:30 AM",
+                    visitDate:
+                      selectedBooking.date || selectedBooking.visitDate,
+                    visitTime:
+                      selectedBooking.time ||
+                      selectedBooking.visitTime ||
+                      "10:30 AM",
                     bookingRef: selectedBooking.bookingRef,
-                    guests: selectedBooking.guests || selectedBooking.passengers || 2,
+                    guests:
+                      selectedBooking.guests || selectedBooking.passengers || 2,
                     totalAmount: selectedBooking.totalAmount,
                     guestName: "John Doe",
                     email: "guest@example.com",
-                    ticketType: selectedBooking.ticketType || "Standard Admission",
+                    ticketType:
+                      selectedBooking.ticketType || "Standard Admission",
                     duration: selectedBooking.duration || "1-2 hours",
                     rating: 4.6,
-                    category: "Landmarks & Attractions"
+                    category: "Landmarks & Attractions",
                   }}
                   onPrint={() => window.print()}
                 />
@@ -969,41 +981,67 @@ const Bookings: React.FC = () => {
                   id: selectedBooking.id,
                   bookingRef: selectedBooking.bookingRef,
                   type: selectedBooking.type,
-                  bookingDate: selectedBooking.bookingDate || new Date().toISOString().split('T')[0],
+                  bookingDate:
+                    selectedBooking.bookingDate ||
+                    new Date().toISOString().split("T")[0],
                   customerName: "John Doe",
                   customerEmail: "john.doe@example.com",
                   customerPhone: "+971 50 123 4567",
                   customerAddress: "Dubai, United Arab Emirates",
-                  serviceName: selectedBooking.type === "flight"
-                    ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
-                    : selectedBooking.type === "hotel"
-                    ? selectedBooking.name
-                    : selectedBooking.name || "Sightseeing Experience",
-                  serviceDetails: selectedBooking.type === "flight"
-                    ? `${selectedBooking.route} • ${selectedBooking.date} ${selectedBooking.time}`
-                    : selectedBooking.type === "hotel"
-                    ? `${selectedBooking.location} • ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
-                    : `${selectedBooking.location || "Dubai, UAE"} • ${selectedBooking.date || selectedBooking.visitDate}`,
+                  serviceName:
+                    selectedBooking.type === "flight"
+                      ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                      : selectedBooking.type === "hotel"
+                        ? selectedBooking.name
+                        : selectedBooking.name || "Sightseeing Experience",
+                  serviceDetails:
+                    selectedBooking.type === "flight"
+                      ? `${selectedBooking.route} • ${selectedBooking.date} ${selectedBooking.time}`
+                      : selectedBooking.type === "hotel"
+                        ? `${selectedBooking.location} • ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
+                        : `${selectedBooking.location || "Dubai, UAE"} • ${selectedBooking.date || selectedBooking.visitDate}`,
                   totalAmount: selectedBooking.totalAmount,
-                  currency: "₹"
+                  currency: "₹",
                 }}
                 items={[
                   {
-                    description: selectedBooking.type === "flight"
-                      ? `Flight Ticket - ${selectedBooking.airline} ${selectedBooking.flightNumber}`
-                      : selectedBooking.type === "hotel"
-                      ? `Hotel Booking - ${selectedBooking.name} (${selectedBooking.roomType || "Deluxe Room"})`
-                      : `Sightseeing Experience - ${selectedBooking.name || "Attraction Visit"}`,
-                    quantity: selectedBooking.passengers || selectedBooking.guests || 1,
-                    unitPrice: parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, '')) / (selectedBooking.passengers || selectedBooking.guests || 1),
-                    total: parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, ''))
-                  }
+                    description:
+                      selectedBooking.type === "flight"
+                        ? `Flight Ticket - ${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                        : selectedBooking.type === "hotel"
+                          ? `Hotel Booking - ${selectedBooking.name} (${selectedBooking.roomType || "Deluxe Room"})`
+                          : `Sightseeing Experience - ${selectedBooking.name || "Attraction Visit"}`,
+                    quantity:
+                      selectedBooking.passengers || selectedBooking.guests || 1,
+                    unitPrice:
+                      parseInt(
+                        selectedBooking.totalAmount.replace(/[^\d]/g, ""),
+                      ) /
+                      (selectedBooking.passengers ||
+                        selectedBooking.guests ||
+                        1),
+                    total: parseInt(
+                      selectedBooking.totalAmount.replace(/[^\d]/g, ""),
+                    ),
+                  },
                 ]}
                 taxes={[
-                  { name: "Service Tax", rate: 18, amount: parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, '')) * 0.15 }
+                  {
+                    name: "Service Tax",
+                    rate: 18,
+                    amount:
+                      parseInt(
+                        selectedBooking.totalAmount.replace(/[^\d]/g, ""),
+                      ) * 0.15,
+                  },
                 ]}
-                subtotal={parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, '')) * 0.85}
-                total={parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, ''))}
+                subtotal={
+                  parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, "")) *
+                  0.85
+                }
+                total={parseInt(
+                  selectedBooking.totalAmount.replace(/[^\d]/g, ""),
+                )}
                 onPrint={() => window.print()}
               />
 

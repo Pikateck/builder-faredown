@@ -1,5 +1,16 @@
 import React, { useEffect } from "react";
-import { QrCode, Camera, Calendar, Users, MapPin, Clock, Star, Ticket, Info, CheckCircle } from "lucide-react";
+import {
+  QrCode,
+  Camera,
+  Calendar,
+  Users,
+  MapPin,
+  Clock,
+  Star,
+  Ticket,
+  Info,
+  CheckCircle,
+} from "lucide-react";
 import { preparePrintDocument } from "@/utils/printUtils";
 
 interface SightseeingVoucherProps {
@@ -22,16 +33,19 @@ interface SightseeingVoucherProps {
   onPrint?: () => void;
 }
 
-export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking, onPrint }) => {
+export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({
+  booking,
+  onPrint,
+}) => {
   const features = [
     "Skip-the-line access",
     "Professional guide",
     "Mobile ticket",
-    "Instant confirmation"
+    "Instant confirmation",
   ];
 
   useEffect(() => {
-    const cleanup = preparePrintDocument('voucher');
+    const cleanup = preparePrintDocument("voucher");
     return cleanup;
   }, []);
 
@@ -40,12 +54,19 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
       {/* Print Styles */}
       <style jsx>{`
         @media print {
-          .no-print { display: none !important; }
-          .print-break { page-break-before: always; }
-          body { -webkit-print-color-adjust: exact; color-adjust: exact; }
+          .no-print {
+            display: none !important;
+          }
+          .print-break {
+            page-break-before: always;
+          }
+          body {
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+          }
         }
       `}</style>
-      
+
       {/* Header */}
       <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-6 print:bg-[#003580]">
         <div className="flex justify-between items-start">
@@ -71,7 +92,9 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
               <Camera className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-1">{booking.name}</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-1">
+                {booking.name}
+              </h2>
               <div className="flex items-center mb-2">
                 <MapPin className="w-4 h-4 text-gray-600 mr-2" />
                 <p className="text-gray-700">{booking.location}</p>
@@ -79,7 +102,9 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
               {booking.rating && (
                 <div className="flex items-center mb-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
-                  <span className="text-sm text-gray-600">{booking.rating} rating</span>
+                  <span className="text-sm text-gray-600">
+                    {booking.rating} rating
+                  </span>
                 </div>
               )}
               {booking.category && (
@@ -97,26 +122,38 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
 
         {/* Visit Details */}
         <div className="bg-blue-50 rounded-lg p-4 mb-6">
-          <h3 className="text-lg font-semibold text-[#003580] mb-3">Visit Details</h3>
+          <h3 className="text-lg font-semibold text-[#003580] mb-3">
+            Visit Details
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <Calendar className="w-4 h-4 text-gray-600 mb-1" />
-              <p className="text-xs text-gray-600 uppercase tracking-wide">Visit Date</p>
+              <p className="text-xs text-gray-600 uppercase tracking-wide">
+                Visit Date
+              </p>
               <p className="font-semibold text-gray-900">{booking.visitDate}</p>
             </div>
             <div>
               <Clock className="w-4 h-4 text-gray-600 mb-1" />
-              <p className="text-xs text-gray-600 uppercase tracking-wide">Visit Time</p>
+              <p className="text-xs text-gray-600 uppercase tracking-wide">
+                Visit Time
+              </p>
               <p className="font-semibold text-gray-900">{booking.visitTime}</p>
             </div>
             <div>
               <Ticket className="w-4 h-4 text-gray-600 mb-1" />
-              <p className="text-xs text-gray-600 uppercase tracking-wide">Ticket Type</p>
-              <p className="font-semibold text-gray-900">{booking.ticketType}</p>
+              <p className="text-xs text-gray-600 uppercase tracking-wide">
+                Ticket Type
+              </p>
+              <p className="font-semibold text-gray-900">
+                {booking.ticketType}
+              </p>
             </div>
             <div>
               <Users className="w-4 h-4 text-gray-600 mb-1" />
-              <p className="text-xs text-gray-600 uppercase tracking-wide">Guests</p>
+              <p className="text-xs text-gray-600 uppercase tracking-wide">
+                Guests
+              </p>
               <p className="font-semibold text-gray-900">{booking.guests}</p>
             </div>
           </div>
@@ -127,36 +164,51 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
           <div className="bg-gray-50 rounded-lg p-4">
             <Clock className="w-5 h-5 text-gray-600 mb-2" />
             <p className="text-sm text-gray-600">Duration</p>
-            <p className="text-xl font-bold text-gray-900">{booking.duration}</p>
+            <p className="text-xl font-bold text-gray-900">
+              {booking.duration}
+            </p>
           </div>
           <div className="bg-green-50 rounded-lg p-4 border border-green-200">
             <p className="text-sm text-green-600">Total Amount Paid</p>
-            <p className="text-2xl font-bold text-green-700">{booking.totalAmount}</p>
+            <p className="text-2xl font-bold text-green-700">
+              {booking.totalAmount}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Guest Information */}
       <div className="p-6 border-b-2 border-dashed border-gray-300">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Guest Information</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Guest Information
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-gray-600">Primary Guest</p>
-            <p className="font-semibold text-gray-900">{booking.guestName || "John Doe"}</p>
+            <p className="font-semibold text-gray-900">
+              {booking.guestName || "John Doe"}
+            </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Email Address</p>
-            <p className="font-semibold text-gray-900">{booking.email || "guest@example.com"}</p>
+            <p className="font-semibold text-gray-900">
+              {booking.email || "guest@example.com"}
+            </p>
           </div>
         </div>
       </div>
 
       {/* What's Included */}
       <div className="p-6 border-b-2 border-dashed border-gray-300">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">What's Included</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          What's Included
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {features.map((feature, index) => (
-            <div key={index} className="flex items-center space-x-2 text-gray-700">
+            <div
+              key={index}
+              className="flex items-center space-x-2 text-gray-700"
+            >
               <CheckCircle className="w-4 h-4 text-green-500" />
               <span className="text-sm">{feature}</span>
             </div>
@@ -166,7 +218,9 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
 
       {/* Entry Instructions */}
       <div className="p-6 bg-blue-50 border-l-4 border-[#003580]">
-        <h3 className="text-lg font-semibold text-[#003580] mb-3">Entry Instructions</h3>
+        <h3 className="text-lg font-semibold text-[#003580] mb-3">
+          Entry Instructions
+        </h3>
         <ul className="space-y-2 text-sm text-gray-700">
           <li className="flex items-start">
             <span className="w-2 h-2 bg-[#003580] rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -174,7 +228,8 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-[#003580] rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Present this voucher and a valid government-issued photo ID at the entrance
+            Present this voucher and a valid government-issued photo ID at the
+            entrance
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-[#003580] rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -182,14 +237,17 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-[#003580] rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Late arrivals may result in reduced experience time or forfeiture of ticket
+            Late arrivals may result in reduced experience time or forfeiture of
+            ticket
           </li>
         </ul>
       </div>
 
       {/* Important Policies */}
       <div className="p-6 bg-amber-50 border-l-4 border-amber-400">
-        <h3 className="text-lg font-semibold text-amber-800 mb-3">Important Policies</h3>
+        <h3 className="text-lg font-semibold text-amber-800 mb-3">
+          Important Policies
+        </h3>
         <ul className="space-y-2 text-sm text-amber-700">
           <li className="flex items-start">
             <span className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -205,14 +263,17 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
           </li>
           <li className="flex items-start">
             <span className="w-2 h-2 bg-amber-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Photography: Personal photography allowed, commercial photography requires permission
+            Photography: Personal photography allowed, commercial photography
+            requires permission
           </li>
         </ul>
       </div>
 
       {/* Emergency Contact */}
       <div className="p-6 bg-red-50 border-l-4 border-red-400">
-        <h3 className="text-lg font-semibold text-red-800 mb-3">Emergency Contact</h3>
+        <h3 className="text-lg font-semibold text-red-800 mb-3">
+          Emergency Contact
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-red-700">
           <div>
             <p className="font-medium">Venue Contact</p>
@@ -227,11 +288,16 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
 
       {/* Footer */}
       <div className="p-6 bg-gray-50 text-center">
-        <p className="text-sm text-gray-600 mb-2">Thank you for choosing Faredown!</p>
-        <p className="text-xs text-gray-500">For support, contact us at support@faredown.com | +971 4 123 4567</p>
+        <p className="text-sm text-gray-600 mb-2">
+          Thank you for choosing Faredown!
+        </p>
+        <p className="text-xs text-gray-500">
+          For support, contact us at support@faredown.com | +971 4 123 4567
+        </p>
         <div className="mt-4 pt-4 border-t border-gray-200">
           <p className="text-xs text-gray-400">
-            This is a computer-generated voucher and does not require a signature.
+            This is a computer-generated voucher and does not require a
+            signature.
           </p>
           <p className="text-xs text-gray-400 mt-1">
             Valid only for the date, time, and guest mentioned above.

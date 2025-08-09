@@ -19,7 +19,10 @@ export default function Index() {
             </Link>
             <div className="flex items-center space-x-6">
               <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <Link to="/?tab=flights" className="text-white hover:text-blue-200">
+                <Link
+                  to="/?tab=flights"
+                  className="text-white hover:text-blue-200"
+                >
                   Flights
                 </Link>
                 <span className="text-white hover:text-blue-200 cursor-pointer">

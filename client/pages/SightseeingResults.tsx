@@ -470,7 +470,11 @@ export default function SightseeingResults() {
         ];
 
         setAttractions(sampleAttractions);
-        console.log("🎯 Loaded attractions:", sampleAttractions.length, "items");
+        console.log(
+          "🎯 Loaded attractions:",
+          sampleAttractions.length,
+          "items",
+        );
         console.log("🎯 First attraction:", sampleAttractions[0]?.name);
 
         // Set initial price range based on loaded data
@@ -856,7 +860,10 @@ export default function SightseeingResults() {
           {/* Attractions List */}
           <div className="flex-1 px-4">
             {(() => {
-              console.log("🎯 Rendering attractions:", filteredAndSortedAttractions.length);
+              console.log(
+                "🎯 Rendering attractions:",
+                filteredAndSortedAttractions.length,
+              );
               console.log("🎯 Total attractions loaded:", attractions.length);
               return null;
             })()}
@@ -1038,7 +1045,7 @@ export default function SightseeingResults() {
                   selectedAttraction.currentPrice,
                   parseInt(adults),
                   parseInt(children),
-                  parseInt(searchParams.get("infants") || "0")
+                  parseInt(searchParams.get("infants") || "0"),
                 );
 
                 return {
@@ -1090,7 +1097,10 @@ export default function SightseeingResults() {
 
           // Add visitDate if not already set
           if (!searchParams.get("visitDate")) {
-            searchParams.set("visitDate", new Date().toISOString().split('T')[0]);
+            searchParams.set(
+              "visitDate",
+              new Date().toISOString().split("T")[0],
+            );
           }
 
           navigate(`/sightseeing/booking?${searchParams.toString()}`);

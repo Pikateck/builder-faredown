@@ -136,7 +136,7 @@ export function FlightStyleBargainModal({
           totalNights: 1,
           roomsCount: 1,
           subtotal: roomType.totalPrice / 1.18, // Remove tax to show breakdown
-          taxes: roomType.totalPrice - (roomType.totalPrice / 1.18),
+          taxes: roomType.totalPrice - roomType.totalPrice / 1.18,
           fees: 0,
           total: roomType.totalPrice, // Use the already calculated total
         };
@@ -383,11 +383,9 @@ export function FlightStyleBargainModal({
                       {hotel.name}
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {type === "sightseeing" ? (
-                        `${roomType.size} • ${roomType.bedType}`
-                      ) : (
-                        `${roomType.name} • ${hotel.name}`
-                      )}
+                      {type === "sightseeing"
+                        ? `${roomType.size} • ${roomType.bedType}`
+                        : `${roomType.name} • ${hotel.name}`}
                     </p>
                   </div>
                 </div>
@@ -414,7 +412,8 @@ export function FlightStyleBargainModal({
                     AI Assistant
                   </p>
                   <p className="text-sm text-gray-600">
-                    Tell me your target price and I'll negotiate with the {type === "sightseeing" ? "venue" : "hotel"}!
+                    Tell me your target price and I'll negotiate with the{" "}
+                    {type === "sightseeing" ? "venue" : "hotel"}!
                   </p>
                 </div>
               </div>
@@ -458,13 +457,21 @@ export function FlightStyleBargainModal({
                   </p>
                 )}
                 <p className="text-center text-xs text-gray-500 mt-2">
-                  Enter between {selectedCurrency.symbol}1 and {selectedCurrency.symbol}{formatNumberWithCommas(priceCalculation?.total.toString() || "0")}
+                  Enter between {selectedCurrency.symbol}1 and{" "}
+                  {selectedCurrency.symbol}
+                  {formatNumberWithCommas(
+                    priceCalculation?.total.toString() || "0",
+                  )}
                 </p>
               </div>
 
               <Button
                 onClick={startBargaining}
-                disabled={!bargainPrice || parseInt(bargainPrice) <= 0 || parseInt(bargainPrice) > (priceCalculation?.total || 0)}
+                disabled={
+                  !bargainPrice ||
+                  parseInt(bargainPrice) <= 0 ||
+                  parseInt(bargainPrice) > (priceCalculation?.total || 0)
+                }
                 className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-4 md:py-6 text-base md:text-lg font-semibold rounded-xl disabled:bg-gray-400 shadow-lg touch-manipulation"
               >
                 Start AI Negotiation
@@ -483,7 +490,8 @@ export function FlightStyleBargainModal({
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                AI Negotiating with {type === "sightseeing" ? hotel.name : hotel.name}
+                AI Negotiating with{" "}
+                {type === "sightseeing" ? hotel.name : hotel.name}
               </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Analyzing market rates and finding the best deal for you...
@@ -514,8 +522,8 @@ export function FlightStyleBargainModal({
                 AI Counter Offer!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The {type === "sightseeing" ? "venue" : "hotel"} couldn't match your price, but here's their best
-                offer!
+                The {type === "sightseeing" ? "venue" : "hotel"} couldn't match
+                your price, but here's their best offer!
               </p>
             </div>
 
@@ -578,7 +586,8 @@ export function FlightStyleBargainModal({
                 Perfect Match!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The {type === "sightseeing" ? "venue" : "hotel"} accepted your exact price!
+                The {type === "sightseeing" ? "venue" : "hotel"} accepted your
+                exact price!
               </p>
             </div>
 

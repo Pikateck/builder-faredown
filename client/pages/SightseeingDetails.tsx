@@ -198,7 +198,8 @@ export default function SightseeingDetails() {
                 name: "Prime Time",
                 price: 199,
                 refundable: true,
-                cancellationPolicy: "Free cancellation up to 24 hours before visit",
+                cancellationPolicy:
+                  "Free cancellation up to 24 hours before visit",
                 features: [
                   "Floors 124 & 125",
                   "Skip-the-line access",
@@ -211,7 +212,8 @@ export default function SightseeingDetails() {
                 name: "VIP Experience",
                 price: 299,
                 refundable: true,
-                cancellationPolicy: "Free cancellation up to 48 hours before visit",
+                cancellationPolicy:
+                  "Free cancellation up to 48 hours before visit",
                 features: [
                   "Floors 124, 125 & 148",
                   "Private elevator",
@@ -293,7 +295,8 @@ export default function SightseeingDetails() {
                 name: "Explorer Experience",
                 price: 129,
                 refundable: true,
-                cancellationPolicy: "Free cancellation up to 24 hours before visit",
+                cancellationPolicy:
+                  "Free cancellation up to 24 hours before visit",
                 features: [
                   "All standard features",
                   "Behind-the-scenes tour",
@@ -376,13 +379,14 @@ export default function SightseeingDetails() {
 
   // Navigation handlers
   const handleBookNow = (ticketIndex?: number) => {
-    const ticketToBook = ticketIndex !== undefined ? ticketIndex : selectedTicketType;
+    const ticketToBook =
+      ticketIndex !== undefined ? ticketIndex : selectedTicketType;
 
     console.log("🎫 Book Now clicked!", {
       selectedTime,
       ticketIndex: ticketToBook,
       attractionId: attraction?.id,
-      quantities: passengerQuantities
+      quantities: passengerQuantities,
     });
 
     if (!selectedTime) {
@@ -401,7 +405,7 @@ export default function SightseeingDetails() {
 
     // Add visitDate - use the current date if not already set
     if (!params.get("visitDate")) {
-      params.set("visitDate", new Date().toISOString().split('T')[0]);
+      params.set("visitDate", new Date().toISOString().split("T")[0]);
     }
 
     const bookingUrl = `/sightseeing/booking?${params.toString()}`;
@@ -443,27 +447,34 @@ export default function SightseeingDetails() {
 
     // Add visitDate if not already set
     if (!params.get("visitDate")) {
-      params.set("visitDate", new Date().toISOString().split('T')[0]);
+      params.set("visitDate", new Date().toISOString().split("T")[0]);
     }
 
     navigate(`/sightseeing/booking?${params.toString()}`);
   };
 
   // Passenger quantity management
-  const updatePassengerQuantity = (type: 'adults' | 'children' | 'infants', change: number) => {
-    setPassengerQuantities(prev => {
+  const updatePassengerQuantity = (
+    type: "adults" | "children" | "infants",
+    change: number,
+  ) => {
+    setPassengerQuantities((prev) => {
       const newQuantity = Math.max(0, prev[type] + change);
 
       return {
         ...prev,
-        [type]: newQuantity
+        [type]: newQuantity,
       };
     });
   };
 
   // Calculate total passengers
   const getTotalPassengers = () => {
-    return passengerQuantities.adults + passengerQuantities.children + passengerQuantities.infants;
+    return (
+      passengerQuantities.adults +
+      passengerQuantities.children +
+      passengerQuantities.infants
+    );
   };
 
   // Calculate total price for a ticket type (including taxes)
@@ -476,7 +487,7 @@ export default function SightseeingDetails() {
       ticket.price,
       passengerQuantities.adults,
       passengerQuantities.children,
-      passengerQuantities.infants
+      passengerQuantities.infants,
     );
 
     return priceCalc.totalPrice;
@@ -660,7 +671,7 @@ export default function SightseeingDetails() {
                         "py-2 px-1 border-b-2 font-medium text-sm",
                         activeTab === "overview"
                           ? "border-blue-500 text-blue-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          : "border-transparent text-gray-500 hover:text-gray-700",
                       )}
                     >
                       Overview
@@ -671,7 +682,7 @@ export default function SightseeingDetails() {
                         "py-2 px-1 border-b-2 font-medium text-sm",
                         activeTab === "reviews"
                           ? "border-blue-500 text-blue-600"
-                          : "border-transparent text-gray-500 hover:text-gray-700"
+                          : "border-transparent text-gray-500 hover:text-gray-700",
                       )}
                     >
                       Reviews ({attraction.reviews.toLocaleString()})
@@ -823,7 +834,9 @@ export default function SightseeingDetails() {
                               />
                             ))}
                           </div>
-                          <p className="text-sm text-gray-700">{review.comment}</p>
+                          <p className="text-sm text-gray-700">
+                            {review.comment}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -843,320 +856,387 @@ export default function SightseeingDetails() {
               </div>
 
               {/* Right Column - Booking */}
-          <div className="xl:col-span-2">
-            <div className="bg-white rounded-lg border border-gray-200 shadow-sm sticky top-6">
-              {/* Header */}
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="text-xl font-semibold text-gray-900">
-                  Tickets and prices
-                </h3>
-              </div>
+              <div className="xl:col-span-2">
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm sticky top-6">
+                  {/* Header */}
+                  <div className="p-4 border-b border-gray-200">
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      Tickets and prices
+                    </h3>
+                  </div>
 
-              {/* Available Times */}
-              <div className="p-4 border-b border-gray-200">
-                <h4 className="font-medium text-gray-900 mb-3">Select times</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  {attraction.availableSlots[0]?.times.map((time, index) => (
-                    <Button
-                      key={index}
-                      variant={selectedTime === time ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => {
-                        console.log("⏰ Time selected:", time);
-                        setSelectedTime(time);
-                      }}
-                      className={cn(
-                        "text-sm",
-                        selectedTime === time
-                          ? "bg-[#003580] text-white hover:bg-[#002a66]"
-                          : "border-gray-300 hover:border-[#003580]"
+                  {/* Available Times */}
+                  <div className="p-4 border-b border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-3">
+                      Select times
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {attraction.availableSlots[0]?.times.map(
+                        (time, index) => (
+                          <Button
+                            key={index}
+                            variant={
+                              selectedTime === time ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() => {
+                              console.log("⏰ Time selected:", time);
+                              setSelectedTime(time);
+                            }}
+                            className={cn(
+                              "text-sm",
+                              selectedTime === time
+                                ? "bg-[#003580] text-white hover:bg-[#002a66]"
+                                : "border-gray-300 hover:border-[#003580]",
+                            )}
+                          >
+                            {time}
+                          </Button>
+                        ),
                       )}
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-                {selectedTime && (
-                  <div className="mt-2 text-sm text-green-600 font-medium">
-                    ✓ Selected: {selectedTime}
+                    </div>
+                    {selectedTime && (
+                      <div className="mt-2 text-sm text-green-600 font-medium">
+                        ✓ Selected: {selectedTime}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              {/* Unified Passenger Selection */}
-              <div className="p-4 border-b border-gray-200">
-                <h4 className="font-medium text-gray-900 mb-4">How many tickets?</h4>
+                  {/* Unified Passenger Selection */}
+                  <div className="p-4 border-b border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-4">
+                      How many tickets?
+                    </h4>
 
-                {/* Adults */}
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <div className="font-medium text-gray-900">Adult (age 13+)</div>
-                    <div className="text-sm text-gray-500">Full price</div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updatePassengerQuantity('adults', -1)}
-                      disabled={passengerQuantities.adults <= 0}
-                      className="w-8 h-8 p-0"
-                    >
-                      -
-                    </Button>
-                    <span className="w-8 text-center font-medium">{passengerQuantities.adults}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updatePassengerQuantity('adults', 1)}
-                      className="w-8 h-8 p-0"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
+                    {/* Adults */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Adult (age 13+)
+                        </div>
+                        <div className="text-sm text-gray-500">Full price</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updatePassengerQuantity("adults", -1)}
+                          disabled={passengerQuantities.adults <= 0}
+                          className="w-8 h-8 p-0"
+                        >
+                          -
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {passengerQuantities.adults}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updatePassengerQuantity("adults", 1)}
+                          className="w-8 h-8 p-0"
+                        >
+                          +
+                        </Button>
+                      </div>
+                    </div>
 
-                {/* Children */}
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <div className="font-medium text-gray-900">Child (age 4-12)</div>
-                    <div className="text-sm text-gray-500">50% price</div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updatePassengerQuantity('children', -1)}
-                      disabled={passengerQuantities.children <= 0}
-                      className="w-8 h-8 p-0"
-                    >
-                      -
-                    </Button>
-                    <span className="w-8 text-center font-medium">{passengerQuantities.children}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updatePassengerQuantity('children', 1)}
-                      className="w-8 h-8 p-0"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
+                    {/* Children */}
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Child (age 4-12)
+                        </div>
+                        <div className="text-sm text-gray-500">50% price</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            updatePassengerQuantity("children", -1)
+                          }
+                          disabled={passengerQuantities.children <= 0}
+                          className="w-8 h-8 p-0"
+                        >
+                          -
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {passengerQuantities.children}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updatePassengerQuantity("children", 1)}
+                          className="w-8 h-8 p-0"
+                        >
+                          +
+                        </Button>
+                      </div>
+                    </div>
 
-                {/* Infants */}
-                <div className="flex items-center justify-between mb-0">
-                  <div>
-                    <div className="font-medium text-gray-900">Infant (age 0-3)</div>
-                    <div className="text-sm text-gray-500">Free</div>
+                    {/* Infants */}
+                    <div className="flex items-center justify-between mb-0">
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          Infant (age 0-3)
+                        </div>
+                        <div className="text-sm text-gray-500">Free</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updatePassengerQuantity("infants", -1)}
+                          disabled={passengerQuantities.infants <= 0}
+                          className="w-8 h-8 p-0"
+                        >
+                          -
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {passengerQuantities.infants}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => updatePassengerQuantity("infants", 1)}
+                          className="w-8 h-8 p-0"
+                        >
+                          +
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updatePassengerQuantity('infants', -1)}
-                      disabled={passengerQuantities.infants <= 0}
-                      className="w-8 h-8 p-0"
-                    >
-                      -
-                    </Button>
-                    <span className="w-8 text-center font-medium">{passengerQuantities.infants}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updatePassengerQuantity('infants', 1)}
-                      className="w-8 h-8 p-0"
-                    >
-                      +
-                    </Button>
-                  </div>
-                </div>
-              </div>
 
-              {/* Ticket Types */}
-              <div className="p-4 md:p-6 space-y-4">
-                {attraction.ticketTypes.map((ticket, index) => {
-                  const totalPrice = getTicketTotalPrice(index);
+                  {/* Ticket Types */}
+                  <div className="p-4 md:p-6 space-y-4">
+                    {attraction.ticketTypes.map((ticket, index) => {
+                      const totalPrice = getTicketTotalPrice(index);
 
-                  return (
-                    <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
-                      {/* Ticket Header */}
-                      <div className="p-4 bg-gray-50">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <div className="flex items-center gap-3 mb-1">
-                              <h4 className="font-semibold text-gray-900 text-base sm:text-lg">
-                              {ticket.name}
-                            </h4>
-                              <div className={cn(
-                                "inline-flex items-center px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap",
-                                ticket.refundable
-                                  ? "bg-green-100 text-green-700 border border-green-200"
-                                  : "bg-red-50 text-red-600 border border-red-200"
-                              )}>
-                                {ticket.refundable ? "Refundable" : "Non-refundable"}
+                      return (
+                        <div
+                          key={index}
+                          className="border border-gray-200 rounded-lg overflow-hidden"
+                        >
+                          {/* Ticket Header */}
+                          <div className="p-4 bg-gray-50">
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <div className="flex items-center gap-3 mb-1">
+                                  <h4 className="font-semibold text-gray-900 text-base sm:text-lg">
+                                    {ticket.name}
+                                  </h4>
+                                  <div
+                                    className={cn(
+                                      "inline-flex items-center px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap",
+                                      ticket.refundable
+                                        ? "bg-green-100 text-green-700 border border-green-200"
+                                        : "bg-red-50 text-red-600 border border-red-200",
+                                    )}
+                                  >
+                                    {ticket.refundable
+                                      ? "Refundable"
+                                      : "Non-refundable"}
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-600 mt-1 font-normal">
+                                  {formatPrice(ticket.price)} per person
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1 font-normal">
+                                  {ticket.cancellationPolicy}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-xl sm:text-2xl font-bold text-[#003580]">
+                                  {formatPrice(totalPrice)}
+                                </div>
+                                <div className="text-xs sm:text-sm text-gray-500 font-normal">
+                                  includes taxes and fees
+                                </div>
                               </div>
                             </div>
-                            <p className="text-sm text-gray-600 mt-1 font-normal">
-                              {formatPrice(ticket.price)} per person
-                            </p>
-                            <p className="text-xs text-gray-500 mt-1 font-normal">
-                              {ticket.cancellationPolicy}
-                            </p>
                           </div>
-                          <div className="text-right">
-                            <div className="text-xl sm:text-2xl font-bold text-[#003580]">
-                              {formatPrice(totalPrice)}
+
+                          {/* Features */}
+                          <div className="px-4 py-3 border-b border-gray-200">
+                            <div className="grid grid-cols-2 gap-2">
+                              {ticket.features
+                                .slice(0, 4)
+                                .map((feature, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="flex items-center text-sm text-gray-600"
+                                  >
+                                    <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                                    {feature}
+                                  </div>
+                                ))}
                             </div>
-                            <div className="text-xs sm:text-sm text-gray-500 font-normal">
-                              includes taxes and fees
+                            {ticket.features.length > 4 && (
+                              <button className="text-sm text-[#003580] hover:underline mt-2">
+                                + {ticket.features.length - 4} more
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="p-4 md:p-6">
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              <Button
+                                onClick={() => handleBargainClick(index)}
+                                className="flex-1 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-semibold py-3 px-4 text-sm sm:text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[48px] flex items-center justify-center"
+                              >
+                                <TrendingDown className="w-4 h-4 mr-2 flex-shrink-0" />
+                                <span className="truncate">
+                                  Bargain This Price
+                                </span>
+                              </Button>
+                              <Button
+                                onClick={() => handleBookNow(index)}
+                                className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white font-bold py-3 px-4 text-sm sm:text-base rounded-lg shadow-lg transition-all duration-200 min-h-[48px] flex items-center justify-center"
+                              >
+                                <span className="truncate">Book Now</span>
+                              </Button>
                             </div>
                           </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Total Summary with Tax Breakdown */}
+                  <div className="p-4 border-t border-gray-200 bg-blue-50">
+                    <div className="space-y-3">
+                      <div className="text-center">
+                        <div className="text-sm font-medium text-gray-700 mb-1">
+                          Total for {getTotalPassengers()} guest
+                          {getTotalPassengers() > 1 ? "s" : ""}
+                        </div>
+                        <div className="text-xs text-gray-500 mb-2">
+                          {passengerQuantities.adults} Adults
+                          {passengerQuantities.children > 0
+                            ? `, ${passengerQuantities.children} Children`
+                            : ""}
+                          {passengerQuantities.infants > 0
+                            ? `, ${passengerQuantities.infants} Infants`
+                            : ""}
                         </div>
                       </div>
 
-                      {/* Features */}
-                      <div className="px-4 py-3 border-b border-gray-200">
-                        <div className="grid grid-cols-2 gap-2">
-                          {ticket.features.slice(0, 4).map((feature, idx) => (
-                            <div key={idx} className="flex items-center text-sm text-gray-600">
-                              <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
-                              {feature}
+                      {/* Price Breakdown */}
+                      {getTotalPassengers() > 0 &&
+                        attraction.ticketTypes[selectedTicketType] && (
+                          <div className="bg-white rounded-lg p-3 border border-gray-200">
+                            <div className="space-y-2 text-sm">
+                              {(() => {
+                                const ticket =
+                                  attraction.ticketTypes[selectedTicketType];
+                                const priceCalc =
+                                  sightseeingService.calculatePrice(
+                                    ticket.price,
+                                    passengerQuantities.adults,
+                                    passengerQuantities.children,
+                                    passengerQuantities.infants,
+                                  );
+
+                                return (
+                                  <>
+                                    {priceCalc.breakdown.adults.count > 0 && (
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">
+                                          {priceCalc.breakdown.adults.count} ×
+                                          Adult (
+                                          {formatPrice(
+                                            priceCalc.breakdown.adults.price,
+                                          )}
+                                          )
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                          {formatPrice(
+                                            priceCalc.breakdown.adults.total,
+                                          )}
+                                        </span>
+                                      </div>
+                                    )}
+                                    {priceCalc.breakdown.children.count > 0 && (
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">
+                                          {priceCalc.breakdown.children.count} ×
+                                          Child (
+                                          {formatPrice(
+                                            priceCalc.breakdown.children.price,
+                                          )}
+                                          )
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                          {formatPrice(
+                                            priceCalc.breakdown.children.total,
+                                          )}
+                                        </span>
+                                      </div>
+                                    )}
+                                    {priceCalc.breakdown.infants.count > 0 && (
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-gray-600">
+                                          {priceCalc.breakdown.infants.count} ×
+                                          Infant (Free)
+                                        </span>
+                                        <span className="font-medium text-gray-900">
+                                          {formatPrice(0)}
+                                        </span>
+                                      </div>
+                                    )}
+
+                                    <hr className="border-gray-200" />
+
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-gray-600">
+                                        Subtotal
+                                      </span>
+                                      <span className="font-medium text-gray-900">
+                                        {formatPrice(priceCalc.basePrice)}
+                                      </span>
+                                    </div>
+
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-gray-600">
+                                        Taxes & Fees (18%)
+                                      </span>
+                                      <span className="font-medium text-gray-900">
+                                        {formatPrice(priceCalc.taxAmount)}
+                                      </span>
+                                    </div>
+
+                                    <hr className="border-gray-300" />
+
+                                    <div className="flex justify-between items-center text-lg font-bold">
+                                      <span className="text-gray-900">
+                                        Total Amount
+                                      </span>
+                                      <span className="text-[#003580]">
+                                        {formatPrice(priceCalc.totalPrice)}
+                                      </span>
+                                    </div>
+                                  </>
+                                );
+                              })()}
                             </div>
-                          ))}
-                        </div>
-                        {ticket.features.length > 4 && (
-                          <button className="text-sm text-[#003580] hover:underline mt-2">
-                            + {ticket.features.length - 4} more
-                          </button>
+                          </div>
                         )}
-                      </div>
 
-                      {/* Action Buttons */}
-                      <div className="p-4 md:p-6">
-                        <div className="flex flex-col sm:flex-row gap-3">
-                          <Button
-                            onClick={() => handleBargainClick(index)}
-                            className="flex-1 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-semibold py-3 px-4 text-sm sm:text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[48px] flex items-center justify-center"
-                          >
-                            <TrendingDown className="w-4 h-4 mr-2 flex-shrink-0" />
-                            <span className="truncate">Bargain This Price</span>
-                          </Button>
-                          <Button
-                            onClick={() => handleBookNow(index)}
-                            className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white font-bold py-3 px-4 text-sm sm:text-base rounded-lg shadow-lg transition-all duration-200 min-h-[48px] flex items-center justify-center"
-                          >
-                            <span className="truncate">Book Now</span>
-                          </Button>
+                      {getTotalPassengers() === 0 && (
+                        <div className="text-center py-4">
+                          <div className="text-2xl font-bold text-gray-400 mb-1">
+                            {formatPrice(0)}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            Select tickets to see total
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Total Summary with Tax Breakdown */}
-              <div className="p-4 border-t border-gray-200 bg-blue-50">
-                <div className="space-y-3">
-                  <div className="text-center">
-                    <div className="text-sm font-medium text-gray-700 mb-1">
-                      Total for {getTotalPassengers()} guest{getTotalPassengers() > 1 ? 's' : ''}
-                    </div>
-                    <div className="text-xs text-gray-500 mb-2">
-                      {passengerQuantities.adults} Adults{passengerQuantities.children > 0 ? `, ${passengerQuantities.children} Children` : ''}{passengerQuantities.infants > 0 ? `, ${passengerQuantities.infants} Infants` : ''}
+                      )}
                     </div>
                   </div>
-
-                  {/* Price Breakdown */}
-                  {getTotalPassengers() > 0 && attraction.ticketTypes[selectedTicketType] && (
-                    <div className="bg-white rounded-lg p-3 border border-gray-200">
-                      <div className="space-y-2 text-sm">
-                        {(() => {
-                          const ticket = attraction.ticketTypes[selectedTicketType];
-                          const priceCalc = sightseeingService.calculatePrice(
-      ticket.price,
-      passengerQuantities.adults,
-      passengerQuantities.children,
-      passengerQuantities.infants
-    );
-
-                          return (
-                            <>
-                              {priceCalc.breakdown.adults.count > 0 && (
-                                <div className="flex justify-between items-center">
-                                  <span className="text-gray-600">
-                                    {priceCalc.breakdown.adults.count} × Adult ({formatPrice(priceCalc.breakdown.adults.price)})
-                                  </span>
-                                  <span className="font-medium text-gray-900">
-                                    {formatPrice(priceCalc.breakdown.adults.total)}
-                                  </span>
-                                </div>
-                              )}
-                              {priceCalc.breakdown.children.count > 0 && (
-                                <div className="flex justify-between items-center">
-                                  <span className="text-gray-600">
-                                    {priceCalc.breakdown.children.count} × Child ({formatPrice(priceCalc.breakdown.children.price)})
-                                  </span>
-                                  <span className="font-medium text-gray-900">
-                                    {formatPrice(priceCalc.breakdown.children.total)}
-                                  </span>
-                                </div>
-                              )}
-                              {priceCalc.breakdown.infants.count > 0 && (
-                                <div className="flex justify-between items-center">
-                                  <span className="text-gray-600">
-                                    {priceCalc.breakdown.infants.count} × Infant (Free)
-                                  </span>
-                                  <span className="font-medium text-gray-900">
-                                    {formatPrice(0)}
-                                  </span>
-                                </div>
-                              )}
-
-                              <hr className="border-gray-200" />
-
-                              <div className="flex justify-between items-center">
-                                <span className="text-gray-600">Subtotal</span>
-                                <span className="font-medium text-gray-900">
-                                  {formatPrice(priceCalc.basePrice)}
-                                </span>
-                              </div>
-
-                              <div className="flex justify-between items-center">
-                                <span className="text-gray-600">Taxes & Fees (18%)</span>
-                                <span className="font-medium text-gray-900">
-                                  {formatPrice(priceCalc.taxAmount)}
-                                </span>
-                              </div>
-
-                              <hr className="border-gray-300" />
-
-                              <div className="flex justify-between items-center text-lg font-bold">
-                                <span className="text-gray-900">Total Amount</span>
-                                <span className="text-[#003580]">
-                                  {formatPrice(priceCalc.totalPrice)}
-                                </span>
-                              </div>
-                            </>
-                          );
-                        })()}
-                      </div>
-                    </div>
-                  )}
-
-                  {getTotalPassengers() === 0 && (
-                    <div className="text-center py-4">
-                      <div className="text-2xl font-bold text-gray-400 mb-1">
-                        {formatPrice(0)}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        Select tickets to see total
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
-            </div>
-          </div>
             </div>
           </div>
         </div>
@@ -1173,13 +1253,16 @@ export default function SightseeingDetails() {
             <AlertDialogDescription className="text-gray-600">
               <div className="space-y-3">
                 <p className="font-medium">
-                  Please select your preferred visit time to continue with the booking.
+                  Please select your preferred visit time to continue with the
+                  booking.
                 </p>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <div className="flex items-start gap-2">
                     <Info className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
                     <div className="text-sm text-amber-800">
-                      <p className="font-medium mb-1">Why is time selection important?</p>
+                      <p className="font-medium mb-1">
+                        Why is time selection important?
+                      </p>
                       <ul className="space-y-1 text-xs">
                         <li>• Ensures availability for your preferred slot</li>
                         <li>• Helps us prepare for your visit</li>
@@ -1189,7 +1272,8 @@ export default function SightseeingDetails() {
                   </div>
                 </div>
                 <p className="text-sm text-gray-500">
-                  You can select from the available time slots shown on the right.
+                  You can select from the available time slots shown on the
+                  right.
                 </p>
               </div>
             </AlertDialogDescription>
@@ -1211,23 +1295,31 @@ export default function SightseeingDetails() {
           type="sightseeing"
           roomType={{
             id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
-            name: attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission",
+            name:
+              attraction.ticketTypes[bargainTicketType]?.name ||
+              "Standard Admission",
             description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
             image: attraction.images[0],
-            marketPrice: getTicketTotalPrice(bargainTicketType) || (attraction.ticketTypes[bargainTicketType]?.price || 149),
-            totalPrice: getTicketTotalPrice(bargainTicketType) || (attraction.ticketTypes[bargainTicketType]?.price || 149),
+            marketPrice:
+              getTicketTotalPrice(bargainTicketType) ||
+              attraction.ticketTypes[bargainTicketType]?.price ||
+              149,
+            totalPrice:
+              getTicketTotalPrice(bargainTicketType) ||
+              attraction.ticketTypes[bargainTicketType]?.price ||
+              149,
             features: attraction.ticketTypes[bargainTicketType]?.features || [],
             maxOccupancy: adults,
             bedType: attraction.duration,
             size: attraction.category,
-            cancellation: "Free cancellation up to 24 hours before visit date"
+            cancellation: "Free cancellation up to 24 hours before visit date",
           }}
           hotel={{
             id: attraction.id,
             name: attraction.name,
             location: attraction.location,
-            checkIn: new Date().toISOString().split('T')[0],
-            checkOut: new Date().toISOString().split('T')[0]
+            checkIn: new Date().toISOString().split("T")[0],
+            checkOut: new Date().toISOString().split("T")[0],
           }}
           isOpen={isBargainModalOpen}
           onClose={() => setIsBargainModalOpen(false)}

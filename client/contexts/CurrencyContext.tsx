@@ -381,7 +381,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        console.warn(`📈 Exchange rate API returned ${response.status}: ${response.statusText}, using static rates`);
+        console.warn(
+          `📈 Exchange rate API returned ${response.status}: ${response.statusText}, using static rates`,
+        );
         return;
       }
 
@@ -389,7 +391,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       try {
         data = await response.json();
       } catch (jsonError) {
-        console.warn("📈 Invalid JSON response from exchange rate API, using static rates");
+        console.warn(
+          "📈 Invalid JSON response from exchange rate API, using static rates",
+        );
         return;
       }
 

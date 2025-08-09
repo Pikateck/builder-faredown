@@ -45,7 +45,7 @@ export class SightseeingService {
     ticketPrice: number,
     adults: number = 0,
     children: number = 0,
-    infants: number = 0
+    infants: number = 0,
   ): PriceCalculation {
     const adultsTotal = ticketPrice * adults;
     const childrenTotal = ticketPrice * 0.5 * children; // Children 50% price
@@ -61,25 +61,31 @@ export class SightseeingService {
       totalPrice,
       breakdown: {
         adults: { count: adults, price: ticketPrice, total: adultsTotal },
-        children: { count: children, price: ticketPrice * 0.5, total: childrenTotal },
-        infants: { count: infants, price: 0, total: infantsTotal }
-      }
+        children: {
+          count: children,
+          price: ticketPrice * 0.5,
+          total: childrenTotal,
+        },
+        infants: { count: infants, price: 0, total: infantsTotal },
+      },
     };
   }
 
   /**
    * Get attraction details by ID
    */
-  async getAttractionDetails(attractionId: string): Promise<SightseeingAttraction> {
+  async getAttractionDetails(
+    attractionId: string,
+  ): Promise<SightseeingAttraction> {
     try {
       const response = await fetch(`/api/sightseeing/details/${attractionId}`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch attraction: ${response.statusText}`);
       }
 
       const data = await response.json();
-      
+
       if (data.success && data.activity) {
         return this.transformApiDataToAttraction(data.activity, attractionId);
       } else {
@@ -95,7 +101,10 @@ export class SightseeingService {
   /**
    * Transform API data to component format
    */
-  private transformApiDataToAttraction(apiData: any, attractionId: string): SightseeingAttraction {
+  private transformApiDataToAttraction(
+    apiData: any,
+    attractionId: string,
+  ): SightseeingAttraction {
     return {
       id: apiData.activity_code || attractionId,
       name: apiData.activity_name || apiData.name || "Unknown Activity",
@@ -114,16 +123,20 @@ export class SightseeingService {
           price: apiData.base_price || 149,
           refundable: false,
           cancellationPolicy: "Non-refundable",
-          features: ["Standard access", "Basic facilities"]
+          features: ["Standard access", "Basic facilities"],
         },
         {
-          name: "Premium Experience", 
+          name: "Premium Experience",
           price: (apiData.base_price || 149) * 1.3,
           refundable: true,
           cancellationPolicy: "Free cancellation up to 24 hours before visit",
-          features: ["Premium access", "Enhanced facilities", "Priority service"]
-        }
-      ]
+          features: [
+            "Premium access",
+            "Enhanced facilities",
+            "Priority service",
+          ],
+        },
+      ],
     };
   }
 
@@ -143,7 +156,8 @@ export class SightseeingService {
         reviews: 45879,
         originalPrice: 189,
         currentPrice: 149,
-        description: "Skip the line and enjoy breathtaking views from the world's tallest building.",
+        description:
+          "Skip the line and enjoy breathtaking views from the world's tallest building.",
         category: "landmark",
         duration: "1-2 hours",
         ticketTypes: [
@@ -152,24 +166,39 @@ export class SightseeingService {
             price: 149,
             refundable: false,
             cancellationPolicy: "Non-refundable",
-            features: ["Floors 124 & 125", "Skip-the-line access", "Outdoor deck", "Welcome drink"]
+            features: [
+              "Floors 124 & 125",
+              "Skip-the-line access",
+              "Outdoor deck",
+              "Welcome drink",
+            ],
           },
           {
             name: "Prime Time",
             price: 199,
             refundable: true,
             cancellationPolicy: "Free cancellation up to 24 hours before visit",
-            features: ["Floors 124 & 125", "Skip-the-line access", "Prime viewing times", "Premium refreshments"]
+            features: [
+              "Floors 124 & 125",
+              "Skip-the-line access",
+              "Prime viewing times",
+              "Premium refreshments",
+            ],
           },
           {
             name: "VIP Experience",
             price: 299,
             refundable: true,
             cancellationPolicy: "Free cancellation up to 48 hours before visit",
-            features: ["Floors 124, 125 & 148", "Private elevator", "VIP lounge access", "Premium refreshments"]
-          }
-        ]
-      }
+            features: [
+              "Floors 124, 125 & 148",
+              "Private elevator",
+              "VIP lounge access",
+              "Premium refreshments",
+            ],
+          },
+        ],
+      },
     };
 
     return fallbackData[attractionId] || fallbackData["burj-khalifa"];
@@ -180,10 +209,10 @@ export class SightseeingService {
    */
   async createBooking(bookingData: any): Promise<any> {
     try {
-      const response = await fetch('/api/sightseeing/book', {
-        method: 'POST',
+      const response = await fetch("/api/sightseeing/book", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(bookingData),
       });

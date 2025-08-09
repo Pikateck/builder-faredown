@@ -204,7 +204,10 @@ export function SightseeingSearchForm() {
 
   // Initialize form state from URL parameters
   useEffect(() => {
-    console.log("🔄 Initializing form from URL parameters:", searchParams.toString());
+    console.log(
+      "🔄 Initializing form from URL parameters:",
+      searchParams.toString(),
+    );
 
     // Initialize destination
     const urlDestination = searchParams.get("destination");
@@ -214,7 +217,12 @@ export function SightseeingSearchForm() {
       setDestination(urlDestinationName);
       setDestinationCode(urlDestination);
       setInputValue(urlDestinationName);
-      console.log("✅ Set destination from URL:", urlDestinationName, "->", urlDestination);
+      console.log(
+        "✅ Set destination from URL:",
+        urlDestinationName,
+        "->",
+        urlDestination,
+      );
     }
 
     // Initialize visit date
@@ -225,9 +233,18 @@ export function SightseeingSearchForm() {
         const parsedDate = new Date(decodeURIComponent(urlVisitDate));
         if (!isNaN(parsedDate.getTime())) {
           // Ensure we use the date part only (no time zone issues)
-          const localDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
+          const localDate = new Date(
+            parsedDate.getFullYear(),
+            parsedDate.getMonth(),
+            parsedDate.getDate(),
+          );
           setVisitDate(localDate);
-          console.log("✅ Set visit date from URL:", localDate, "from", urlVisitDate);
+          console.log(
+            "✅ Set visit date from URL:",
+            localDate,
+            "from",
+            urlVisitDate,
+          );
         } else {
           console.warn("⚠️ Invalid visit date format in URL:", urlVisitDate);
         }
@@ -244,10 +261,19 @@ export function SightseeingSearchForm() {
         const parsedEndDate = new Date(decodeURIComponent(urlEndDate));
         if (!isNaN(parsedEndDate.getTime())) {
           // Ensure we use the date part only (no time zone issues)
-          const localEndDate = new Date(parsedEndDate.getFullYear(), parsedEndDate.getMonth(), parsedEndDate.getDate());
+          const localEndDate = new Date(
+            parsedEndDate.getFullYear(),
+            parsedEndDate.getMonth(),
+            parsedEndDate.getDate(),
+          );
           setEndDate(localEndDate);
           setTripType("multi-day");
-          console.log("✅ Set end date from URL:", localEndDate, "from", urlEndDate);
+          console.log(
+            "✅ Set end date from URL:",
+            localEndDate,
+            "from",
+            urlEndDate,
+          );
         } else {
           console.warn("⚠️ Invalid end date format in URL:", urlEndDate);
         }
@@ -273,7 +299,12 @@ export function SightseeingSearchForm() {
     // Get adults and children from URL for consistent pricing (stored for use in search)
     const urlAdults = searchParams.get("adults") || "2";
     const urlChildren = searchParams.get("children") || "0";
-    console.log("✅ Read adults/children from URL:", urlAdults, "/", urlChildren);
+    console.log(
+      "✅ Read adults/children from URL:",
+      urlAdults,
+      "/",
+      urlChildren,
+    );
   }, [searchParams]);
 
   // Get Dubai-specific attractions when searching for Dubai
@@ -618,7 +649,12 @@ export function SightseeingSearchForm() {
     console.log("🔍 Validation check:");
     console.log("  - Has destination?", !!(destination || inputValue));
     console.log("  - Has visitDate?", !!visitDate);
-    console.log("  - Date is future?", visitDate ? visitDate >= new Date(new Date().setHours(0, 0, 0, 0)) : false);
+    console.log(
+      "  - Date is future?",
+      visitDate
+        ? visitDate >= new Date(new Date().setHours(0, 0, 0, 0))
+        : false,
+    );
 
     validateAndSearch();
   };
