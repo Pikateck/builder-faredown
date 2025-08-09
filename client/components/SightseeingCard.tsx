@@ -21,7 +21,6 @@ import {
   Ticket,
   Calendar,
   Shield,
-  Users2,
   Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -80,6 +79,8 @@ export function SightseeingCard({
 
   // Get adults count from search params
   const adults = parseInt(searchParams.get("adults") || "2");
+  const totalPrice = attraction.currentPrice * adults;
+  const pricePerPerson = attraction.currentPrice;
 
   // Handle star/reviews click to navigate to details with reviews tab
   const handleReviewsClick = () => {
@@ -135,9 +136,6 @@ export function SightseeingCard({
     setIsWishlisted(!isWishlisted);
   };
 
-  const totalPrice = attraction.currentPrice * adults;
-  const pricePerPerson = attraction.currentPrice;
-
   return (
     <>
       <div
@@ -157,36 +155,7 @@ export function SightseeingCard({
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             
-            {/* Mobile Image Navigation */}
-            {attraction.images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-                <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
-                  {attraction.images.map((_, index) => (
-                    <div
-                      key={index}
-                      className={cn(
-                        "w-2 h-2 rounded-full",
-                        index === currentImageIndex ? "bg-white" : "bg-white bg-opacity-50"
-                      )}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-
-            {/* Mobile Category Badge */}
+            {/* Category Badge */}
             <div className="absolute top-3 left-3">
               <Badge className="bg-white text-gray-800 shadow-sm">
                 <CategoryIcon className="w-3 h-3 mr-1" />
@@ -194,7 +163,7 @@ export function SightseeingCard({
               </Badge>
             </div>
 
-            {/* Mobile Wishlist */}
+            {/* Wishlist */}
             <button
               onClick={toggleWishlist}
               className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
@@ -209,10 +178,10 @@ export function SightseeingCard({
           </div>
 
           {/* Mobile Content */}
-          <div className="p-4 flex flex-col min-h-[280px]">
-            <div className="flex justify-between items-start mb-2">
+          <div className="p-4">
+            <div className="flex justify-between items-start mb-3">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-1">
+                <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-2">
                   {attraction.name}
                 </h3>
                 <div className="flex items-center text-sm text-gray-600 mb-2">
@@ -252,8 +221,8 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Mobile Features */}
-            <div className="mb-4 space-y-2 flex-grow">
+            {/* Features */}
+            <div className="mb-4 space-y-2">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
@@ -264,40 +233,36 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Mobile Actions */}
-            <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100">
-              <Button
+            {/* Mobile Action Buttons - GUARANTEED VISIBLE */}
+            <div className="flex gap-2 pt-3 border-t border-gray-100">
+              <button
                 onClick={(e) => {
-                  console.log("🔥 Bargain button clicked!");
                   e.stopPropagation();
                   onBargainClick();
                 }}
-                size="sm"
-                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm px-3 py-2 h-auto min-h-[40px] rounded-lg border-0 shadow-sm"
-                style={{ backgroundColor: '#febb02', color: 'black' }}
+                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                style={{ backgroundColor: '#febb02', minHeight: '44px' }}
               >
-                <TrendingDown className="w-4 h-4 mr-1" />
+                <TrendingDown className="w-4 h-4" />
                 Bargain Now
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={(e) => {
-                  console.log("🔥 View Details button clicked!");
                   e.stopPropagation();
                   handleViewDetails();
                 }}
-                variant="outline"
-                size="sm"
-                className="flex-1 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold text-sm px-3 py-2 h-auto min-h-[40px] rounded-lg"
+                className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                style={{ minHeight: '44px' }}
               >
-                <Eye className="w-4 h-4 mr-1" />
+                <Eye className="w-4 h-4" />
                 View Details
-              </Button>
+              </button>
             </div>
           </div>
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex h-36">
+        <div className="hidden md:flex h-40">
           {/* Desktop Image */}
           <div className="relative w-64 h-full overflow-hidden flex-shrink-0">
             <img
@@ -306,28 +271,7 @@ export function SightseeingCard({
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
             
-            {/* Desktop Image Navigation */}
-            {attraction.images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-                <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
-                  {currentImageIndex + 1}/{attraction.images.length}
-                </div>
-              </>
-            )}
-
-            {/* Desktop Category Badge */}
+            {/* Category Badge */}
             <div className="absolute top-3 left-3">
               <Badge className="bg-white text-gray-800 shadow-sm">
                 <CategoryIcon className="w-3 h-3 mr-1" />
@@ -335,7 +279,7 @@ export function SightseeingCard({
               </Badge>
             </div>
 
-            {/* Desktop Wishlist */}
+            {/* Wishlist */}
             <button
               onClick={toggleWishlist}
               className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
@@ -353,11 +297,9 @@ export function SightseeingCard({
           <div className="flex-1 flex">
             {/* Left Content */}
             <div className="flex-1 p-4">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold text-gray-900 text-xl line-clamp-1 flex-1 pr-4">
-                  {attraction.name}
-                </h3>
-              </div>
+              <h3 className="font-semibold text-gray-900 text-xl line-clamp-1 mb-2">
+                {attraction.name}
+              </h3>
               
               <div className="flex items-center text-sm text-gray-600 mb-2">
                 <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
@@ -387,7 +329,7 @@ export function SightseeingCard({
                 </div>
               </div>
 
-              {/* Desktop Key Highlights */}
+              {/* Highlights */}
               <div className="space-y-1">
                 {attraction.highlights.slice(0, 2).map((highlight, index) => (
                   <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
@@ -399,7 +341,7 @@ export function SightseeingCard({
             </div>
 
             {/* Right Content - Pricing & Actions */}
-            <div className="w-48 p-4 border-l border-gray-100 flex flex-col justify-between">
+            <div className="w-52 p-4 border-l border-gray-100 flex flex-col justify-between">
               <div>
                 <div className="text-right mb-3">
                   <div className="text-2xl font-bold text-gray-900 mb-1">
@@ -409,7 +351,7 @@ export function SightseeingCard({
                     {formatPrice(pricePerPerson)} per person
                   </div>
                 </div>
-
+                
                 {/* Booking Features */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -423,33 +365,30 @@ export function SightseeingCard({
                 </div>
               </div>
               
+              {/* Desktop Action Buttons - GUARANTEED VISIBLE */}
               <div className="space-y-2 pt-2 border-t border-gray-100">
-                <Button
+                <button
                   onClick={(e) => {
-                    console.log("🔥 Desktop Bargain button clicked!");
                     e.stopPropagation();
                     onBargainClick();
                   }}
-                  size="sm"
-                  className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm px-3 py-2 h-auto min-h-[36px] rounded-lg border-0 shadow-sm"
-                  style={{ backgroundColor: '#febb02', color: 'black' }}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                  style={{ backgroundColor: '#febb02', minHeight: '36px' }}
                 >
-                  <TrendingDown className="w-4 h-4 mr-1" />
+                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
-                </Button>
-                <Button
+                </button>
+                <button
                   onClick={(e) => {
-                    console.log("🔥 Desktop View Details button clicked!");
                     e.stopPropagation();
                     handleViewDetails();
                   }}
-                  variant="outline"
-                  size="sm"
-                  className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold text-sm px-3 py-2 h-auto min-h-[36px] rounded-lg"
+                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                  style={{ minHeight: '36px' }}
                 >
-                  <Eye className="w-4 h-4 mr-1" />
+                  <Eye className="w-4 h-4" />
                   View Details
-                </Button>
+                </button>
               </div>
             </div>
           </div>
@@ -472,33 +411,6 @@ export function SightseeingCard({
               alt={attraction.name}
               className="max-w-full max-h-full object-contain"
             />
-            
-            {attraction.images.length > 1 && (
-              <>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentImageIndex(prev => prev === 0 ? attraction.images.length - 1 : prev - 1);
-                  }}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 text-white rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentImageIndex(prev => prev === attraction.images.length - 1 ? 0 : prev + 1);
-                  }}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 text-white rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-                
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded text-sm">
-                  {currentImageIndex + 1} / {attraction.images.length}
-                </div>
-              </>
-            )}
           </div>
         </div>
       )}
