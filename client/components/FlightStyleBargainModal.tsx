@@ -281,12 +281,23 @@ export function FlightStyleBargainModal({
   };
 
   const handleAcceptCounterOffer = () => {
-    setBargainState((prev) => ({
-      ...prev,
-      phase: "accepted",
-      isTimerActive: true,
-      timeRemaining: 28, // Reset timer for booking urgency
-    }));
+    const finalPrice = bargainState.currentCounterOffer || 0;
+
+    // Close modal immediately to prevent double-click issues
+    onClose();
+
+    if (onBookingSuccess) {
+      // For sightseeing: call the booking success callback
+      onBookingSuccess(finalPrice);
+    } else {
+      // For hotels: navigate to reservation page
+      setBargainState((prev) => ({
+        ...prev,
+        phase: "accepted",
+        isTimerActive: true,
+        timeRemaining: 28, // Reset timer for booking urgency
+      }));
+    }
   };
 
   const handleBookOriginal = () => {
