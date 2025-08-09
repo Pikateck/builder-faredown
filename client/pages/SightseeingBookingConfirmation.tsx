@@ -164,7 +164,16 @@ export default function SightseeingBookingConfirmation() {
         };
 
         const attractionData = sampleAttractions[attractionId];
-        setAttraction(attractionData || null);
+        // If no specific attraction found but we have a valid ID, try first available
+        if (!attractionData && attractionId) {
+          console.warn(`Attraction ${attractionId} not found`);
+          setAttraction(null);
+        } else if (!attractionData && !attractionId) {
+          // If no ID provided, default to first attraction for demo
+          setAttraction(sampleAttractions["burj-khalifa"]);
+        } else {
+          setAttraction(attractionData);
+        }
       } catch (err) {
         console.error("Error loading attraction:", err);
       } finally {
