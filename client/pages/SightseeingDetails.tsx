@@ -843,139 +843,220 @@ export default function SightseeingDetails() {
               </div>
 
               {/* Right Column - Booking */}
-              <div className="lg:col-span-1">
-                <div className="bg-gray-50 rounded-xl p-6 sticky top-6">
-                  {/* Ticket Types */}
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Choose Ticket Type
-                    </h3>
-                    <div className="space-y-3">
-                      {attraction.ticketTypes.map((ticket, index) => (
-                        <div
-                          key={index}
-                          className={cn(
-                            "p-4 border rounded-lg transition-all",
-                            selectedTicketType === index
-                              ? "border-blue-500 bg-blue-50"
-                              : "border-gray-200 hover:border-gray-300",
-                          )}
-                        >
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setSelectedTicketType(index)}
-                          >
-                            <div className="flex justify-between items-start mb-2">
-                              <h4 className="font-medium text-gray-900">
-                                {ticket.name}
-                              </h4>
-                              <div className="text-right">
-                                <div className="text-lg font-bold text-blue-600">
-                                  {formatPrice(ticket.price * adults)}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {formatPrice(ticket.price)} per person
-                                </div>
-                              </div>
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg border border-gray-200 shadow-sm sticky top-6">
+              {/* Header */}
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Tickets and prices
+                </h3>
+              </div>
+
+              {/* Available Times */}
+              <div className="p-4 border-b border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-3">Select times</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {attraction.availableSlots[0]?.times.map((time, index) => (
+                    <Button
+                      key={index}
+                      variant={selectedTime === time ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        console.log("⏰ Time selected:", time);
+                        setSelectedTime(time);
+                      }}
+                      className={cn(
+                        "text-sm",
+                        selectedTime === time
+                          ? "bg-[#003580] text-white hover:bg-[#002a66]"
+                          : "border-gray-300 hover:border-[#003580]"
+                      )}
+                    >
+                      {time}
+                    </Button>
+                  ))}
+                </div>
+                {selectedTime && (
+                  <div className="mt-2 text-sm text-green-600 font-medium">
+                    ✓ Selected: {selectedTime}
+                  </div>
+                )}
+              </div>
+
+              {/* Ticket Types */}
+              <div className="p-4 space-y-4">
+                {attraction.ticketTypes.map((ticket, index) => {
+                  const quantities = ticketQuantities[index];
+                  const totalPrice = getTicketTotalPrice(index);
+
+                  return (
+                    <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+                      {/* Ticket Header */}
+                      <div className="p-4 bg-gray-50">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-semibold text-gray-900 text-lg">
+                              {ticket.name}
+                            </h4>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {formatPrice(ticket.price)} per person
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-[#003580]">
+                              {formatPrice(totalPrice)}
                             </div>
-                            <div className="space-y-1 mb-3">
-                              {ticket.features.map((feature, idx) => (
-                                <div
-                                  key={idx}
-                                  className="text-sm text-gray-600 flex items-center"
-                                >
-                                  <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
-                                  {feature}
-                                </div>
-                              ))}
+                            <div className="text-sm text-gray-500">
+                              includes taxes and fees
                             </div>
                           </div>
+                        </div>
+                      </div>
 
-                          {/* Bargain Button */}
-                          <div className="pt-3 border-t border-gray-200">
+                      {/* Features */}
+                      <div className="px-4 py-3 border-b border-gray-200">
+                        <div className="grid grid-cols-2 gap-2">
+                          {ticket.features.slice(0, 4).map((feature, idx) => (
+                            <div key={idx} className="flex items-center text-sm text-gray-600">
+                              <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                              {feature}
+                            </div>
+                          ))}
+                        </div>
+                        {ticket.features.length > 4 && (
+                          <button className="text-sm text-[#003580] hover:underline mt-2">
+                            + {ticket.features.length - 4} more
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Passenger Selection */}
+                      <div className="p-4 bg-gray-50">
+                        <h5 className="font-medium text-gray-900 mb-3">How many tickets?</h5>
+
+                        {/* Adults */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <div className="font-medium text-gray-900">Adult (age 13+)</div>
+                            <div className="text-sm text-gray-500">{formatPrice(ticket.price)}</div>
+                          </div>
+                          <div className="flex items-center space-x-3">
                             <Button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleBargainClick(index);
-                              }}
                               variant="outline"
                               size="sm"
-                              className="w-full text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200"
+                              onClick={() => updatePassengerQuantity(index, 'adults', -1)}
+                              disabled={quantities.adults <= 1}
+                              className="w-8 h-8 p-0"
                             >
-                              <TrendingDown className="w-4 h-4 mr-2" />
-                              Bargain This Price
+                              -
+                            </Button>
+                            <span className="w-8 text-center font-medium">{quantities.adults}</span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updatePassengerQuantity(index, 'adults', 1)}
+                              className="w-8 h-8 p-0"
+                            >
+                              +
                             </Button>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* Available Times */}
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                      Available Today
-                    </h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      {attraction.availableSlots[0]?.times.map(
-                        (time, index) => (
+                        {/* Children */}
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <div className="font-medium text-gray-900">Child (age 4-12)</div>
+                            <div className="text-sm text-gray-500">{formatPrice(ticket.price * 0.5)}</div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updatePassengerQuantity(index, 'children', -1)}
+                              disabled={quantities.children <= 0}
+                              className="w-8 h-8 p-0"
+                            >
+                              -
+                            </Button>
+                            <span className="w-8 text-center font-medium">{quantities.children}</span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updatePassengerQuantity(index, 'children', 1)}
+                              className="w-8 h-8 p-0"
+                            >
+                              +
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Infants */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <div className="font-medium text-gray-900">Infant (age 0-3)</div>
+                            <div className="text-sm text-gray-500">Free</div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updatePassengerQuantity(index, 'infants', -1)}
+                              disabled={quantities.infants <= 0}
+                              className="w-8 h-8 p-0"
+                            >
+                              -
+                            </Button>
+                            <span className="w-8 text-center font-medium">{quantities.infants}</span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updatePassengerQuantity(index, 'infants', 1)}
+                              className="w-8 h-8 p-0"
+                            >
+                              +
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="grid grid-cols-2 gap-2">
                           <Button
-                            key={index}
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            size="sm"
-                            onClick={() => {
-                              console.log("⏰ Time selected:", time);
-                              setSelectedTime(time);
-                            }}
-                            className={
-                              selectedTime === time
-                                ? "bg-[#003580] text-white"
-                                : ""
-                            }
+                            onClick={() => handleBargainClick(index)}
+                            variant="outline"
+                            className="text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white"
                           >
-                            {time}
+                            <TrendingDown className="w-4 h-4 mr-2" />
+                            Bargain This Price
                           </Button>
-                        ),
-                      )}
-                    </div>
-                    {selectedTime && (
-                      <div className="mt-2 text-sm text-green-600 font-medium">
-                        Selected: {selectedTime}
+                          <Button
+                            onClick={() => handleBookNow(index)}
+                            className="bg-[#ff8c00] hover:bg-[#e67e00] text-white"
+                          >
+                            Book Now
+                          </Button>
+                        </div>
                       </div>
-                    )}
-                  </div>
-
-                  {/* Price Summary */}
-                  <div className="mb-6 p-4 bg-white rounded-lg border">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600">
-                        Total for {adults} adult{adults > 1 ? "s" : ""}
-                      </span>
-                      <span className="text-2xl font-bold text-blue-600">
-                        {formatPrice(totalPrice)}
-                      </span>
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {formatPrice(selectedTicket.price)} per person
-                    </div>
-                    {savings > 0 && (
-                      <div className="text-sm text-green-600 font-medium mt-1">
-                        You save {formatPrice(savings * adults)} total
-                      </div>
-                    )}
-                  </div>
+                  );
+                })}
+              </div>
 
-                  {/* Book Button */}
-                  <Button
-                    onClick={handleBookNow}
-                    className="w-full py-4 text-lg bg-[#003580] hover:bg-[#002a66] text-white"
-                  >
-                    Book Now
-                  </Button>
+              {/* Total Summary */}
+              <div className="p-4 border-t border-gray-200 bg-blue-50">
+                <div className="text-center">
+                  <div className="text-sm text-gray-600 mb-1">
+                    Total for {getTotalPassengers(selectedTicketType)} guest{getTotalPassengers(selectedTicketType) > 1 ? 's' : ''}
+                  </div>
+                  <div className="text-3xl font-bold text-[#003580]">
+                    {formatPrice(getTicketTotalPrice(selectedTicketType))}
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">
+                    includes taxes and fees
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
             </div>
           </div>
         </div>
