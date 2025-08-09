@@ -10,9 +10,20 @@ import {
 import { Button } from "@/components/ui/button";
 
 const Bookings: React.FC = () => {
+  const [searchParams] = useSearchParams();
+
+  // Initialize tab from URL parameter
+  const getInitialTab = (): "all" | "flights" | "hotels" | "sightseeing" => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && ["all", "flights", "hotels", "sightseeing"].includes(tabParam)) {
+      return tabParam as "all" | "flights" | "hotels" | "sightseeing";
+    }
+    return "all";
+  };
+
   const [activeTab, setActiveTab] = useState<
     "all" | "flights" | "hotels" | "sightseeing"
-  >("all");
+  >(getInitialTab());
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [viewDetailsModal, setViewDetailsModal] = useState(false);
   const [manageBookingModal, setManageBookingModal] = useState(false);
