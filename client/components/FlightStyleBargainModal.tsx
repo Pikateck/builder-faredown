@@ -367,7 +367,11 @@ export function FlightStyleBargainModal({
                       {hotel.name}
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {roomType.name} • {hotel.name}
+                      {type === "sightseeing" ? (
+                        `${roomType.size} • ${roomType.bedType}`
+                      ) : (
+                        `${roomType.name} • ${hotel.name}`
+                      )}
                     </p>
                   </div>
                 </div>
