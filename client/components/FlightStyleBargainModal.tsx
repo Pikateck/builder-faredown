@@ -108,6 +108,7 @@ export function FlightStyleBargainModal({
   checkOutDate,
   roomsCount,
   onBookingSuccess,
+  type = "hotel",
 }: FlightStyleBargainModalProps) {
   const { selectedCurrency } = useCurrency();
   const navigate = useNavigate();
