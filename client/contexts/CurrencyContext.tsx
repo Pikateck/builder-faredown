@@ -371,9 +371,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
           "📈 Network error fetching exchange rates:",
           fetchError?.message || "Unknown error",
         );
-        throw new Error(
-          `Network error: ${fetchError?.message || "Failed to fetch"}`,
-        );
+        // Don't throw error, just log and continue with static rates
+        console.log("💰 Using static exchange rates due to fetch failure");
+        return;
       }
 
       clearTimeout(timeoutId);
