@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { SightseeingService } from "@/services/sightseeingService";
+import { sightseeingService } from "@/services/sightseeingService";
 import {
   MapPin,
   Star,
