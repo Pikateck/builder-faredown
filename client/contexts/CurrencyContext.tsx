@@ -381,7 +381,8 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        console.warn(`📈 Exchange rate API returned ${response.status}: ${response.statusText}, using static rates`);
+        return;
       }
 
       const data = await response.json();
