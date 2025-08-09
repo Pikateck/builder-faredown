@@ -300,7 +300,7 @@ export function SightseeingCard({
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex h-44">
+        <div className="hidden md:flex h-52">
           {/* Desktop Image */}
           <div className="relative w-64 h-full overflow-hidden flex-shrink-0">
             <img
