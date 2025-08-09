@@ -92,6 +92,19 @@ export default function SightseeingDetails() {
   const [showTimeAlert, setShowTimeAlert] = useState(false);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [bargainTicketType, setBargainTicketType] = useState<number>(0);
+
+  // Passenger quantities for each ticket type
+  const [ticketQuantities, setTicketQuantities] = useState<{
+    [ticketIndex: number]: {
+      adults: number;
+      children: number;
+      infants: number;
+    };
+  }>({
+    0: { adults: 2, children: 0, infants: 0 },
+    1: { adults: 2, children: 0, infants: 0 },
+    2: { adults: 2, children: 0, infants: 0 },
+  });
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
