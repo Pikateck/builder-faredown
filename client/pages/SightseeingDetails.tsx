@@ -87,6 +87,7 @@ export default function SightseeingDetails() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedTicketType, setSelectedTicketType] = useState(0);
   const [selectedTime, setSelectedTime] = useState<string>("");
+  const [showTimeAlert, setShowTimeAlert] = useState(false);
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
