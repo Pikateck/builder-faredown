@@ -215,7 +215,7 @@ export function SightseeingCard({
               </div>
 
               {/* Right Column - Price and Buttons */}
-              <div className="w-32 text-right">
+              <div className="w-36 text-right flex-shrink-0">
                 <div className="text-xl font-bold text-gray-900 mb-1">
                   {formatPrice(totalPrice)}
                 </div>
@@ -235,10 +235,10 @@ export function SightseeingCard({
                       color: '#000000',
                       border: 'none',
                       borderRadius: '6px',
-                      padding: '8px 12px',
+                      padding: '10px 8px',
                       fontWeight: '600',
-                      fontSize: '12px',
-                      minHeight: '36px',
+                      fontSize: '11px',
+                      minHeight: '38px',
                       width: '100%',
                       display: 'flex',
                       alignItems: 'center',
@@ -248,8 +248,8 @@ export function SightseeingCard({
                       boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                     }}
                   >
-                    <TrendingDown size={14} />
-                    Bargain
+                    <TrendingDown size={12} />
+                    Bargain Now
                   </button>
                   <button
                     onClick={(e) => {
@@ -261,10 +261,10 @@ export function SightseeingCard({
                       color: '#ffffff',
                       border: 'none',
                       borderRadius: '6px',
-                      padding: '8px 12px',
+                      padding: '10px 8px',
                       fontWeight: '600',
-                      fontSize: '12px',
-                      minHeight: '36px',
+                      fontSize: '11px',
+                      minHeight: '38px',
                       width: '100%',
                       display: 'flex',
                       alignItems: 'center',
@@ -274,8 +274,8 @@ export function SightseeingCard({
                       boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
                     }}
                   >
-                    <Eye size={14} />
-                    Details
+                    <Eye size={12} />
+                    View Details
                   </button>
                 </div>
               </div>
