@@ -95,7 +95,7 @@ export default function SightseeingDetails() {
 
   // Unified passenger quantities for all ticket types
   const [passengerQuantities, setPassengerQuantities] = useState({
-    adults: 2,
+    adults: 0,
     children: 0,
     infants: 0,
   });
