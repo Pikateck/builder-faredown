@@ -11,6 +11,7 @@ import { SightseeingCardSimple } from "@/components/SightseeingCardSimple";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { sightseeingService } from "@/services/sightseeingService";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import {
   Filter,
