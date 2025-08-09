@@ -19,6 +19,10 @@ import {
   Music,
   Camera,
   Ticket,
+  Calendar,
+  Shield,
+  Users2,
+  Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
