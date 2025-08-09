@@ -868,17 +868,27 @@ export default function SightseeingResults() {
               </div>
             ) : (
               <div className="space-y-3">
-                {filteredAndSortedAttractions.map((attraction) => (
-                  <SightseeingCard
-                    key={attraction.id}
-                    attraction={attraction}
-                    onBargainClick={() =>
-                      handleBargainClick(attraction, searchParams)
-                    }
-                    searchParams={searchParams}
-                    className="transition-all hover:shadow-md"
-                  />
-                ))}
+                {console.log("🎯 Rendering attractions:", filteredAndSortedAttractions.length)}
+                {filteredAndSortedAttractions.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No attractions found. Please try different filters.</p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      Total attractions loaded: {attractions.length}
+                    </p>
+                  </div>
+                ) : (
+                  filteredAndSortedAttractions.map((attraction) => (
+                    <SightseeingCard
+                      key={attraction.id}
+                      attraction={attraction}
+                      onBargainClick={() =>
+                        handleBargainClick(attraction, searchParams)
+                      }
+                      searchParams={searchParams}
+                      className="transition-all hover:shadow-md"
+                    />
+                  ))
+                )}
               </div>
             )}
           </div>
