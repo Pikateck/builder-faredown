@@ -929,6 +929,7 @@ export function SightseeingSearchForm() {
               );
               setIsDestinationOpenDesktop(open);
             }}
+            modal={false}
           >
             <div className="relative w-full">
               <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
