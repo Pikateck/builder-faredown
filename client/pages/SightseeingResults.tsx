@@ -1028,6 +1028,7 @@ export default function SightseeingResults() {
 
       {/* Sightseeing Bargain Modal */}
       <FlightStyleBargainModal
+        type="sightseeing"
         roomType={
           selectedAttraction
             ? {
