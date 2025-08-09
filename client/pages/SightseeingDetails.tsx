@@ -966,6 +966,39 @@ export default function SightseeingDetails() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Sightseeing Bargain Modal */}
+      {attraction && (
+        <FlightStyleBargainModal
+          type="sightseeing"
+          roomType={{
+            id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
+            name: attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission",
+            description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
+            image: attraction.images[0],
+            marketPrice: attraction.ticketTypes[bargainTicketType]?.price || 149,
+            totalPrice: attraction.ticketTypes[bargainTicketType]?.price || 149,
+            features: attraction.ticketTypes[bargainTicketType]?.features || [],
+            maxOccupancy: adults,
+            bedType: attraction.duration,
+            size: attraction.category,
+            cancellation: "Free cancellation up to 24 hours before visit date"
+          }}
+          hotel={{
+            id: attraction.id,
+            name: attraction.name,
+            location: attraction.location,
+            checkIn: new Date().toISOString().split('T')[0],
+            checkOut: new Date().toISOString().split('T')[0]
+          }}
+          isOpen={isBargainModalOpen}
+          onClose={() => setIsBargainModalOpen(false)}
+          checkInDate={new Date()}
+          checkOutDate={new Date()}
+          roomsCount={1}
+          onBookingSuccess={handleBargainSuccess}
+        />
+      )}
     </div>
   );
 }
