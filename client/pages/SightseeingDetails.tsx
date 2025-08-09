@@ -873,6 +873,49 @@ export default function SightseeingDetails() {
           </div>
         </div>
       </div>
+
+      {/* Time Selection Alert Dialog */}
+      <AlertDialog open={showTimeAlert} onOpenChange={setShowTimeAlert}>
+        <AlertDialogContent className="sm:max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-amber-600">
+              <Clock className="w-5 h-5" />
+              Time Selection Required
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600">
+              <div className="space-y-3">
+                <p className="font-medium">
+                  Please select your preferred visit time to continue with the booking.
+                </p>
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <Info className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-amber-800">
+                      <p className="font-medium mb-1">Why is time selection important?</p>
+                      <ul className="space-y-1 text-xs">
+                        <li>• Ensures availability for your preferred slot</li>
+                        <li>• Helps us prepare for your visit</li>
+                        <li>• Avoids waiting times and disappointment</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500">
+                  You can select from the available time slots shown on the right.
+                </p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              onClick={() => setShowTimeAlert(false)}
+              className="bg-[#003580] hover:bg-[#002a66] text-white"
+            >
+              Got It, I'll Select a Time
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
