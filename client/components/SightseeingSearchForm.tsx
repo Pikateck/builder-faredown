@@ -543,6 +543,11 @@ export function SightseeingSearchForm() {
     setErrorMessage("");
 
     // Validation checks
+    console.log("🔍 Validating search:");
+    console.log("  - destination:", destination);
+    console.log("  - inputValue:", inputValue);
+    console.log("  - visitDate:", visitDate);
+
     if (!destination && !inputValue) {
       console.log("❌ Validation failed: No destination");
       setErrorMessage("Please enter a destination");
@@ -551,16 +556,23 @@ export function SightseeingSearchForm() {
     }
 
     if (!visitDate) {
+      console.log("❌ Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
     }
 
-    if (visitDate < new Date(new Date().setHours(0, 0, 0, 0))) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (visitDate < today) {
+      console.log("❌ Validation failed: Date in past");
       setErrorMessage("Visit date cannot be in the past");
       setShowError(true);
       return;
     }
+
+    console.log("✅ Validation passed, proceeding with search");
 
     // Build search parameters
     const currentSearchParams = new URLSearchParams(window.location.search);
