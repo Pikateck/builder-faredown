@@ -605,6 +605,13 @@ export function SightseeingSearchForm() {
       visitDate,
       endDate,
     });
+
+    // Additional debugging
+    console.log("🔍 Validation check:");
+    console.log("  - Has destination?", !!(destination || inputValue));
+    console.log("  - Has visitDate?", !!visitDate);
+    console.log("  - Date is future?", visitDate ? visitDate >= new Date(new Date().setHours(0, 0, 0, 0)) : false);
+
     validateAndSearch();
   };
 
