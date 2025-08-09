@@ -30,6 +30,11 @@ export const HotelVoucher: React.FC<HotelVoucherProps> = ({ booking, onPrint }) 
     { icon: Utensils, label: "Restaurant" }
   ];
 
+  useEffect(() => {
+    const cleanup = preparePrintDocument('voucher');
+    return cleanup;
+  }, []);
+
   return (
     <div className="bg-white text-black print:shadow-none print:border-none">
       {/* Print Styles */}
