@@ -239,12 +239,14 @@ export function SightseeingCard({
 
             {/* MOBILE BUTTONS - BULLETPROOF SOLUTION */}
             <div
-              className="border-t border-gray-200 pt-4 -mx-4 px-4 bg-gray-50"
+              className="border-t-2 border-gray-200 pt-6 -mx-6 px-6 bg-gray-50 mt-auto"
               style={{
-                marginLeft: '-1rem',
-                marginRight: '-1rem',
-                paddingLeft: '1rem',
-                paddingRight: '1rem'
+                marginLeft: '-1.5rem',
+                marginRight: '-1.5rem',
+                paddingLeft: '1.5rem',
+                paddingRight: '1.5rem',
+                paddingTop: '1.5rem',
+                paddingBottom: '1.5rem'
               }}
             >
               <div className="flex gap-3">
