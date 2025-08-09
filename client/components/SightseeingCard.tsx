@@ -424,7 +424,7 @@ export function SightseeingCard({
               </div>
               
               {/* DESKTOP BUTTONS - BULLETPROOF SOLUTION */}
-              <div className="space-y-3">
+              <div className="space-y-4 pt-4">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -434,18 +434,18 @@ export function SightseeingCard({
                     backgroundColor: '#febb02',
                     color: '#000000',
                     border: 'none',
-                    borderRadius: '8px',
-                    padding: '12px 16px',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    minHeight: '44px',
+                    borderRadius: '12px',
+                    padding: '16px 24px',
+                    fontWeight: '700',
+                    fontSize: '16px',
+                    minHeight: '52px',
                     width: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
                     cursor: 'pointer',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor = '#e6a602';
@@ -454,7 +454,7 @@ export function SightseeingCard({
                     e.currentTarget.style.backgroundColor = '#febb02';
                   }}
                 >
-                  <TrendingDown size={16} />
+                  <TrendingDown size={18} />
                   Bargain Now
                 </button>
                 <button
@@ -466,18 +466,18 @@ export function SightseeingCard({
                     backgroundColor: '#003580',
                     color: '#ffffff',
                     border: 'none',
-                    borderRadius: '8px',
-                    padding: '12px 16px',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    minHeight: '44px',
+                    borderRadius: '12px',
+                    padding: '16px 24px',
+                    fontWeight: '700',
+                    fontSize: '16px',
+                    minHeight: '52px',
                     width: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
                     cursor: 'pointer',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor = '#002a66';
@@ -486,7 +486,7 @@ export function SightseeingCard({
                     e.currentTarget.style.backgroundColor = '#003580';
                   }}
                 >
-                  <Eye size={16} />
+                  <Eye size={18} />
                   View Details
                 </button>
               </div>
