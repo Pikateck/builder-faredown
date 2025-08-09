@@ -868,7 +868,10 @@ export default function SightseeingResults() {
               </div>
             ) : (
               <div className="space-y-3">
-                {console.log("🎯 Rendering attractions:", filteredAndSortedAttractions.length)}
+                {(() => {
+                  console.log("🎯 Rendering attractions:", filteredAndSortedAttractions.length);
+                  return null;
+                })()}
                 {filteredAndSortedAttractions.length === 0 ? (
                   <div className="text-center py-8">
                     <p className="text-gray-500">No attractions found. Please try different filters.</p>
