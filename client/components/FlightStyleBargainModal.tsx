@@ -129,30 +129,45 @@ export function FlightStyleBargainModal({
   // Calculate pricing when modal opens or currency changes
   useEffect(() => {
     if (roomType && checkInDate && checkOutDate) {
-      const nights = Math.max(
-        1,
-        Math.ceil(
-          (checkOutDate.getTime() - checkInDate.getTime()) /
-            (1000 * 60 * 60 * 24),
-        ),
-      );
-      const basePricePerNight =
-        roomType.totalPrice || roomType.marketPrice || 129;
-      const rooms = roomsCount || 1;
-      const breakdown = calculateTotalPrice(basePricePerNight, nights, rooms);
+      if (type === "sightseeing") {
+        // For sightseeing, totalPrice already includes all taxes and fees
+        const calculation: PriceCalculation = {
+          perNightPrice: roomType.totalPrice,
+          totalNights: 1,
+          roomsCount: 1,
+          subtotal: roomType.totalPrice / 1.18, // Remove tax to show breakdown
+          taxes: roomType.totalPrice - (roomType.totalPrice / 1.18),
+          fees: 0,
+          total: roomType.totalPrice, // Use the already calculated total
+        };
+        setPriceCalculation(calculation);
+      } else {
+        // For hotels, use the existing calculation
+        const nights = Math.max(
+          1,
+          Math.ceil(
+            (checkOutDate.getTime() - checkInDate.getTime()) /
+              (1000 * 60 * 60 * 24),
+          ),
+        );
+        const basePricePerNight =
+          roomType.totalPrice || roomType.marketPrice || 129;
+        const rooms = roomsCount || 1;
+        const breakdown = calculateTotalPrice(basePricePerNight, nights, rooms);
 
-      const calculation: PriceCalculation = {
-        perNightPrice: basePricePerNight,
-        totalNights: nights,
-        roomsCount: rooms,
-        subtotal: breakdown.basePrice,
-        taxes: breakdown.taxes,
-        fees: breakdown.fees,
-        total: breakdown.total,
-      };
-      setPriceCalculation(calculation);
+        const calculation: PriceCalculation = {
+          perNightPrice: basePricePerNight,
+          totalNights: nights,
+          roomsCount: rooms,
+          subtotal: breakdown.basePrice,
+          taxes: breakdown.taxes,
+          fees: breakdown.fees,
+          total: breakdown.total,
+        };
+        setPriceCalculation(calculation);
+      }
     }
-  }, [roomType, checkInDate, checkOutDate, roomsCount, selectedCurrency]);
+  }, [roomType, checkInDate, checkOutDate, roomsCount, selectedCurrency, type]);
 
   // Timer effect
   useEffect(() => {
