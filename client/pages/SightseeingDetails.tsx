@@ -361,7 +361,7 @@ export default function SightseeingDetails() {
 
     if (!selectedTime) {
       console.log("❌ No time selected");
-      alert("Please select a time slot before booking");
+      setShowTimeAlert(true);
       return;
     }
 
