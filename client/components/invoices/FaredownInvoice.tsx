@@ -37,13 +37,13 @@ interface FaredownInvoiceProps {
   onPrint?: () => void;
 }
 
-export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({ 
-  booking, 
-  items, 
-  taxes = [], 
-  subtotal, 
-  total, 
-  onPrint 
+export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
+  booking,
+  items,
+  taxes = [],
+  subtotal,
+  total,
+  onPrint
 }) => {
   const invoiceNumber = `FD-${booking.bookingRef}`;
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -51,6 +51,11 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
     month: 'long',
     day: 'numeric'
   });
+
+  useEffect(() => {
+    const cleanup = preparePrintDocument('invoice');
+    return cleanup;
+  }, []);
 
   const getServiceIcon = () => {
     switch (booking.type) {
