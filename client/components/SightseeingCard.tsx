@@ -7,21 +7,18 @@ import {
   MapPin,
   Star,
   Clock,
-  Users,
-  Camera,
   Heart,
-  Share2,
   TrendingDown,
   ChevronLeft,
   ChevronRight,
   X,
-  Ticket,
   CheckCircle,
-  Info,
   Building2,
   Mountain,
   Utensils,
   Music,
+  Camera,
+  Ticket,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -79,62 +76,33 @@ export function SightseeingCard({
 
   // Get adults count from search params
   const adults = parseInt(searchParams.get("adults") || "2");
-  // Price calculation variables completely removed per user request
 
   // Handle star/reviews click to navigate to details with reviews tab
   const handleReviewsClick = () => {
     navigate(`/sightseeing/${attraction.id}?tab=reviews`);
   };
 
-  // Get category display info - matches filter icons exactly
-  const getCategoryInfo = (category: string) => {
+  // Get category icon
+  const getCategoryIcon = (category: string) => {
     switch (category) {
       case "landmark":
-        return {
-          label: "Landmarks & Attractions",
-          color: "bg-blue-100 text-blue-800",
-          IconComponent: Building2,
-        };
+        return Building2;
       case "museum":
-        return {
-          label: "Museums & Culture",
-          color: "bg-purple-100 text-purple-800",
-          IconComponent: Camera,
-        };
+        return Camera;
       case "tour":
-        return {
-          label: "Tours & Sightseeing",
-          color: "bg-green-100 text-green-800",
-          IconComponent: Ticket,
-        };
+        return Ticket;
       case "adventure":
-        return {
-          label: "Adventure & Sports",
-          color: "bg-yellow-100 text-yellow-800",
-          IconComponent: Mountain,
-        };
+        return Mountain;
       case "food":
-        return {
-          label: "Food & Dining",
-          color: "bg-red-100 text-red-800",
-          IconComponent: Utensils,
-        };
+        return Utensils;
       case "culture":
-        return {
-          label: "Cultural Experiences",
-          color: "bg-indigo-100 text-indigo-800",
-          IconComponent: Music,
-        };
+        return Music;
       default:
-        return {
-          label: "Experience",
-          color: "bg-gray-100 text-gray-800",
-          IconComponent: Camera,
-        };
+        return Camera;
     }
   };
 
-  const categoryInfo = getCategoryInfo(attraction.category);
+  const CategoryIcon = getCategoryIcon(attraction.category);
 
   // Navigation handlers
   const handleViewDetails = () => {
@@ -142,24 +110,18 @@ export function SightseeingCard({
     navigate(`/sightseeing/${attraction.id}?${params.toString()}`);
   };
 
-  const handleBookNow = () => {
-    const params = new URLSearchParams(searchParams);
-    params.set("attractionId", attraction.id);
-    navigate(`/sightseeing/booking?${params.toString()}`);
-  };
-
   // Image navigation
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) =>
-      prev === attraction.images.length - 1 ? 0 : prev + 1,
+    setCurrentImageIndex((prev) => 
+      prev === attraction.images.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? attraction.images.length - 1 : prev - 1,
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? attraction.images.length - 1 : prev - 1
     );
   };
 
@@ -169,65 +131,51 @@ export function SightseeingCard({
     setIsWishlisted(!isWishlisted);
   };
 
-  // Share functionality
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (navigator.share) {
-      navigator.share({
-        title: attraction.name,
-        text: attraction.description,
-        url: window.location.href,
-      });
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
+  const totalPrice = attraction.currentPrice * adults;
+  const originalTotalPrice = attraction.originalPrice * adults;
+  const savings = originalTotalPrice - totalPrice;
 
   return (
     <>
       <div
         className={cn(
-          "bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group",
-          className,
+          "bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group",
+          className
         )}
+        onClick={handleViewDetails}
       >
         {/* Mobile Layout */}
         <div className="md:hidden">
-          {/* Image Section */}
-          <div className="relative aspect-[16/12] overflow-hidden">
+          {/* Mobile Image */}
+          <div className="relative h-48 overflow-hidden">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-
-            {/* Image navigation */}
+            
+            {/* Mobile Image Navigation */}
             {attraction.images.length > 1 && (
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 transition-opacity"
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 transition-opacity"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
-
-                {/* Image indicators */}
                 <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
                   {attraction.images.map((_, index) => (
                     <div
                       key={index}
                       className={cn(
-                        "w-2 h-2 rounded-full transition-all",
-                        index === currentImageIndex
-                          ? "bg-white"
-                          : "bg-white bg-opacity-50",
+                        "w-2 h-2 rounded-full",
+                        index === currentImageIndex ? "bg-white" : "bg-white bg-opacity-50"
                       )}
                     />
                   ))}
@@ -235,141 +183,103 @@ export function SightseeingCard({
               </>
             )}
 
-            {/* Overlays */}
-            <div className="absolute top-3 left-3 flex flex-col gap-2">
-              <Badge className={categoryInfo.color}>
-                <categoryInfo.IconComponent className="w-3 h-3 mr-1 inline-block" />
-                {categoryInfo.label}
+            {/* Mobile Category Badge */}
+            <div className="absolute top-3 left-3">
+              <Badge className="bg-white text-gray-800 shadow-sm">
+                <CategoryIcon className="w-3 h-3 mr-1" />
+                {attraction.category.charAt(0).toUpperCase() + attraction.category.slice(1)}
               </Badge>
-              {/* Savings badge removed per user request */}
             </div>
 
-            <div className="absolute top-3 right-3 flex flex-col gap-2">
-              <button
-                onClick={toggleWishlist}
-                className="w-9 h-9 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
-              >
-                <Heart
-                  className={cn(
-                    "w-5 h-5 transition-colors",
-                    isWishlisted
-                      ? "text-red-500 fill-current"
-                      : "text-gray-600",
-                  )}
-                />
-              </button>
-              <button
-                onClick={handleShare}
-                className="w-9 h-9 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
-              >
-                <Share2 className="w-4 h-4 text-gray-600" />
-              </button>
-            </div>
+            {/* Mobile Wishlist */}
+            <button
+              onClick={toggleWishlist}
+              className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
+            >
+              <Heart 
+                className={cn(
+                  "w-4 h-4",
+                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
+                )} 
+              />
+            </button>
           </div>
 
-          {/* Content Section */}
-          <div className="p-3 flex flex-col h-full">
-            {/* Header */}
-            <div className="mb-3">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-bold text-gray-900 line-clamp-2 pr-2 flex-1">
+          {/* Mobile Content */}
+          <div className="p-4">
+            <div className="flex justify-between items-start mb-2">
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-1">
                   {attraction.name}
                 </h3>
-                <div className="text-right flex-shrink-0">
-                  <div className="text-xs text-gray-500 line-through">
-                    {formatPrice(attraction.originalPrice * adults)}
-                  </div>
-                  <div className="text-lg font-bold text-gray-900">
-                    {formatPrice(attraction.currentPrice * adults)}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
+                <div className="flex items-center text-sm text-gray-600 mb-2">
+                  <MapPin className="w-4 h-4 mr-1" />
                   <span className="truncate">{attraction.location}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  <span>{attraction.duration}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div
-                  className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={handleReviewsClick}
-                  title="Click to view reviews"
-                >
-                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                  <span className="font-medium text-gray-900">
-                    {attraction.rating}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    ({attraction.reviews.toLocaleString()} reviews)
-                  </span>
-                </div>
-                <div className="text-xs text-green-600 font-medium">
-                  Save{" "}
-                  {formatPrice(
-                    (attraction.originalPrice - attraction.currentPrice) *
-                      adults,
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Description */}
-            <p className="text-sm text-gray-600 mb-3 line-clamp-3 flex-grow">
-              {attraction.description}
-            </p>
-
-            {/* Features */}
-            <div className="flex flex-wrap gap-1 mb-4">
-              {attraction.features.slice(0, 4).map((feature, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
-                  {feature}
-                </Badge>
-              ))}
-              {attraction.features.length > 4 && (
-                <Badge variant="outline" className="text-xs">
-                  +{attraction.features.length - 4} more
-                </Badge>
-              )}
-            </div>
-
-            {/* Highlights */}
-            <div className="mb-4 flex-grow">
-              <h4 className="text-sm font-medium text-gray-900 mb-2">
-                Highlights:
-              </h4>
-              <div className="space-y-1">
-                {attraction.highlights.slice(0, 3).map((highlight, index) => (
+                <div className="flex items-center gap-3 mb-2">
                   <div
-                    key={index}
-                    className="flex items-start text-sm text-gray-600"
+                    className="flex items-center cursor-pointer hover:opacity-80"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleReviewsClick();
+                    }}
                   >
-                    <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="line-clamp-1">{highlight}</span>
+                    <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded text-sm font-medium">
+                      <Star className="w-3 h-3 mr-1 fill-current" />
+                      {attraction.rating}
+                    </div>
+                    <span className="text-sm text-gray-600 ml-2">
+                      {attraction.reviews.toLocaleString()} reviews
+                    </span>
                   </div>
-                ))}
+                  <div className="flex items-center text-sm text-gray-600">
+                    <Clock className="w-4 h-4 mr-1" />
+                    {attraction.duration}
+                  </div>
+                </div>
+              </div>
+              <div className="text-right ml-3">
+                {savings > 0 && (
+                  <div className="text-xs text-gray-500 line-through">
+                    {formatPrice(originalTotalPrice)}
+                  </div>
+                )}
+                <div className="text-xl font-bold text-gray-900">
+                  {formatPrice(totalPrice)}
+                </div>
+                <div className="text-xs text-gray-600">
+                  per {adults} {adults === 1 ? 'person' : 'people'}
+                </div>
               </div>
             </div>
 
-            {/* Action Buttons - Moved to bottom */}
-            <div className="flex gap-2 mt-auto pt-2">
+            {/* Mobile Key Highlights */}
+            <div className="mb-3">
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
+                <span className="truncate">{attraction.highlights[0]}</span>
+              </div>
+            </div>
+
+            {/* Mobile Actions */}
+            <div className="flex gap-2">
               <Button
-                onClick={onBargainClick}
-                className="flex-1 py-2.5 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onBargainClick();
+                }}
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold h-10"
               >
-                <TrendingDown className="w-4 h-4" />
-                Bargain Now
+                <TrendingDown className="w-4 h-4 mr-1" />
+                Bargain
               </Button>
               <Button
-                onClick={handleViewDetails}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleViewDetails();
+                }}
                 variant="outline"
-                className="flex-1 py-2.5 text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl touch-manipulation transition-all duration-200"
+                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-10"
               >
                 View Details
               </Button>
@@ -378,217 +288,149 @@ export function SightseeingCard({
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex">
-          {/* Image Section */}
-          <div className="relative w-72 h-48 overflow-hidden flex-shrink-0">
+        <div className="hidden md:flex h-36">
+          {/* Desktop Image */}
+          <div className="relative w-64 h-full overflow-hidden flex-shrink-0">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 cursor-pointer"
-              onClick={() => setShowImageGallery(true)}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-
-            {/* Image navigation */}
+            
+            {/* Desktop Image Navigation */}
             {attraction.images.length > 1 && (
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 transition-opacity opacity-0 group-hover:opacity-100"
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 transition-opacity opacity-0 group-hover:opacity-100"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 text-white rounded-full flex items-center justify-center hover:bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
-
-                {/* Image count indicator */}
-                <div className="absolute bottom-3 right-3 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
-                  {currentImageIndex + 1} / {attraction.images.length}
+                <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                  {currentImageIndex + 1}/{attraction.images.length}
                 </div>
               </>
             )}
 
-            {/* Overlays */}
-            <div className="absolute top-3 left-3 flex flex-col gap-2">
-              <Badge className={categoryInfo.color}>
-                <categoryInfo.IconComponent className="w-3 h-3 mr-1 inline-block" />
-                {categoryInfo.label}
+            {/* Desktop Category Badge */}
+            <div className="absolute top-3 left-3">
+              <Badge className="bg-white text-gray-800 shadow-sm">
+                <CategoryIcon className="w-3 h-3 mr-1" />
+                {attraction.category.charAt(0).toUpperCase() + attraction.category.slice(1)}
               </Badge>
-              {/* Savings badge removed per user request */}
             </div>
 
-            <div className="absolute top-3 right-3 flex gap-2">
-              <button
-                onClick={toggleWishlist}
-                className="w-9 h-9 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
-              >
-                <Heart
-                  className={cn(
-                    "w-5 h-5 transition-colors",
-                    isWishlisted
-                      ? "text-red-500 fill-current"
-                      : "text-gray-600",
-                  )}
-                />
-              </button>
-              <button
-                onClick={handleShare}
-                className="w-9 h-9 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm hover:bg-opacity-100 transition-all"
-              >
-                <Share2 className="w-4 h-4 text-gray-600" />
-              </button>
-            </div>
+            {/* Desktop Wishlist */}
+            <button
+              onClick={toggleWishlist}
+              className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
+            >
+              <Heart 
+                className={cn(
+                  "w-4 h-4",
+                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600"
+                )} 
+              />
+            </button>
           </div>
 
-          {/* Content Section */}
-          <div className="flex-1 p-4 flex flex-col">
-            {/* Content Area */}
-            <div className="flex justify-between flex-grow">
-              {/* Left Content */}
-              <div className="flex-1 pr-6">
-                {/* Header */}
-                <div className="mb-3">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
-                    {attraction.name}
-                  </h3>
+          {/* Desktop Content */}
+          <div className="flex-1 flex">
+            {/* Left Content */}
+            <div className="flex-1 p-4">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-semibold text-gray-900 text-xl line-clamp-1 flex-1 pr-4">
+                  {attraction.name}
+                </h3>
+              </div>
+              
+              <div className="flex items-center text-sm text-gray-600 mb-2">
+                <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+                <span className="truncate">{attraction.location}</span>
+              </div>
 
-                  <div className="flex items-center gap-6 text-sm text-gray-600 mb-2">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      <span>{attraction.location}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{attraction.duration}</span>
-                    </div>
+              <div className="flex items-center gap-4 mb-3">
+                <div
+                  className="flex items-center cursor-pointer hover:opacity-80"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleReviewsClick();
+                  }}
+                >
+                  <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded text-sm font-medium">
+                    <Star className="w-3 h-3 mr-1 fill-current" />
+                    {attraction.rating}
                   </div>
-
-                  <div
-                    className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
-                    onClick={handleReviewsClick}
-                    title="Click to view reviews"
-                  >
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="font-medium text-gray-900">
-                      {attraction.rating}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      ({attraction.reviews.toLocaleString()} reviews)
-                    </span>
-                  </div>
+                  <span className="text-sm text-gray-600 ml-2">
+                    {attraction.reviews.toLocaleString()} reviews
+                  </span>
                 </div>
-
-                {/* Description */}
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {attraction.description}
-                </p>
-
-                {/* Highlights */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">
-                    Highlights:
-                  </h4>
-                  <div className="grid grid-cols-2 gap-1">
-                    {attraction.highlights
-                      .slice(0, 6)
-                      .map((highlight, index) => (
-                        <div
-                          key={index}
-                          className="flex items-start text-sm text-gray-600"
-                        >
-                          <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                          <span className="truncate">{highlight}</span>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-
-                {/* Features */}
-                <div className="flex flex-wrap gap-1">
-                  {attraction.features.slice(0, 6).map((feature, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {feature}
-                    </Badge>
-                  ))}
-                  {attraction.features.length > 6 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{attraction.features.length - 6} more
-                    </Badge>
-                  )}
+                <div className="flex items-center text-sm text-gray-600">
+                  <Clock className="w-4 h-4 mr-1" />
+                  {attraction.duration}
                 </div>
               </div>
 
-              {/* Right Content - Pricing & Info */}
-              <div className="w-64 flex flex-col">
-                {/* Pricing Section - Booking.com Style */}
-                <div className="text-right mb-4">
-                  <div className="space-y-1">
-                    <div className="text-sm text-gray-500 line-through">
-                      {formatPrice(attraction.originalPrice * adults)}
-                    </div>
-                    <div className="text-2xl font-bold text-gray-900">
-                      {formatPrice(attraction.currentPrice * adults)}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      for {adults} {adults === 1 ? "person" : "people"}
-                    </div>
-                    <div className="text-sm text-green-600 font-medium">
-                      You save{" "}
-                      {formatPrice(
-                        (attraction.originalPrice - attraction.currentPrice) *
-                          adults,
-                      )}
-                    </div>
+              {/* Desktop Key Highlights */}
+              <div className="space-y-1">
+                {attraction.highlights.slice(0, 2).map((highlight, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+                    <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
+                    <span className="truncate">{highlight}</span>
                   </div>
-                </div>
-
-                {/* What's Included */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-900 mb-2">
-                    What's Included:
-                  </h4>
-                  <div className="space-y-1">
-                    {attraction.includes.slice(0, 3).map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex items-start text-sm text-gray-600"
-                      >
-                        <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="line-clamp-1">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Availability Status */}
-                <div className="mb-4">
-                  <div className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-1 rounded text-sm font-medium">
-                    <CheckCircle className="w-3 h-3" />
-                    Available Today
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* Action Buttons - Moved to bottom */}
-            <div className="flex gap-3 mt-4 pt-4 border-t border-gray-100">
-              <Button
-                onClick={onBargainClick}
-                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center justify-center gap-2 rounded-xl shadow-sm transition-all duration-200"
-              >
-                <TrendingDown className="w-4 h-4" />
-                Bargain Now
-              </Button>
-              <Button
-                onClick={handleViewDetails}
-                variant="outline"
-                className="flex-1 py-3 text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white font-semibold rounded-xl transition-all duration-200"
-              >
-                View Details
-              </Button>
+            {/* Right Content - Pricing & Actions */}
+            <div className="w-48 p-4 border-l border-gray-100 flex flex-col justify-between">
+              <div className="text-right">
+                {savings > 0 && (
+                  <div className="text-sm text-gray-500 line-through mb-1">
+                    {formatPrice(originalTotalPrice)}
+                  </div>
+                )}
+                <div className="text-2xl font-bold text-gray-900 mb-1">
+                  {formatPrice(totalPrice)}
+                </div>
+                <div className="text-sm text-gray-600 mb-1">
+                  per {adults} {adults === 1 ? 'person' : 'people'}
+                </div>
+                {savings > 0 && (
+                  <div className="text-sm text-green-600 font-medium">
+                    You save {formatPrice(savings)}
+                  </div>
+                )}
+              </div>
+              
+              <div className="space-y-2 mt-3">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onBargainClick();
+                  }}
+                  className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold h-9"
+                >
+                  <TrendingDown className="w-4 h-4 mr-1" />
+                  Bargain
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleViewDetails();
+                  }}
+                  variant="outline"
+                  className="w-full border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-9"
+                >
+                  View Details
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -604,21 +446,19 @@ export function SightseeingCard({
             >
               <X className="w-6 h-6" />
             </button>
-
+            
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
               className="max-w-full max-h-full object-contain"
             />
-
+            
             {attraction.images.length > 1 && (
               <>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentImageIndex((prev) =>
-                      prev === 0 ? attraction.images.length - 1 : prev - 1,
-                    );
+                    setCurrentImageIndex(prev => prev === 0 ? attraction.images.length - 1 : prev - 1);
                   }}
                   className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 text-white rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
                 >
@@ -627,15 +467,13 @@ export function SightseeingCard({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentImageIndex((prev) =>
-                      prev === attraction.images.length - 1 ? 0 : prev + 1,
-                    );
+                    setCurrentImageIndex(prev => prev === attraction.images.length - 1 ? 0 : prev + 1);
                   }}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white bg-opacity-20 text-white rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
-
+                
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded text-sm">
                   {currentImageIndex + 1} / {attraction.images.length}
                 </div>
