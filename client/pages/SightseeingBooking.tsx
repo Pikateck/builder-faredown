@@ -681,7 +681,7 @@ export default function SightseeingBooking() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Taxes & Fees (18%)</span>
-                    <span>{formatPrice(basePrice * 0.18)}</span>
+                    <span>{formatPrice(priceCalc.taxAmount)}</span>
                   </div>
                 </div>
 
