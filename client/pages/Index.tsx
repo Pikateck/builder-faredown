@@ -1072,7 +1072,7 @@ export default function Index() {
                       JSON.stringify(flightSegments),
                     );
                   }
-                  navigate(`/flights?${searchParams.toString()}`);
+                  navigate(`/flights/results?${searchParams.toString()}`);
                 }}
                 className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-4 text-lg rounded-xl shadow-lg"
               >
@@ -2026,7 +2026,7 @@ export default function Index() {
                               JSON.stringify(flightSegments),
                             );
                           }
-                          navigate(`/flights?${searchParams.toString()}`);
+                          navigate(`/flights/results?${searchParams.toString()}`);
                         }}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
