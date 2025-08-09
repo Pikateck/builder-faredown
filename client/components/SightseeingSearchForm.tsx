@@ -564,6 +564,8 @@ export function SightseeingSearchForm() {
       visitDate: visitDate.toISOString(),
       experienceType,
       duration,
+      adults: "2", // Default adults count
+      children: "0", // Default children count
     });
 
     if (endDate && endDate.getTime() !== visitDate!.getTime()) {
