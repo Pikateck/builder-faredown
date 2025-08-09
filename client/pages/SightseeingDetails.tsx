@@ -527,55 +527,195 @@ export default function SightseeingDetails() {
                   </p>
                 </div>
 
-                {/* Highlights */}
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                    Highlights
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {attraction.highlights.map((highlight, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center text-gray-600"
-                      >
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                        <span>{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
+                {/* Tab Navigation */}
+                <div className="border-b border-gray-200">
+                  <nav className="flex space-x-8">
+                    <button
+                      onClick={() => setActiveTab("overview")}
+                      className={cn(
+                        "py-2 px-1 border-b-2 font-medium text-sm",
+                        activeTab === "overview"
+                          ? "border-blue-500 text-blue-600"
+                          : "border-transparent text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      Overview
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("reviews")}
+                      className={cn(
+                        "py-2 px-1 border-b-2 font-medium text-sm",
+                        activeTab === "reviews"
+                          ? "border-blue-500 text-blue-600"
+                          : "border-transparent text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      Reviews ({attraction.reviews.toLocaleString()})
+                    </button>
+                  </nav>
                 </div>
 
-                {/* What's Included */}
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                    What's Included
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {attraction.includes.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center text-gray-600"
-                      >
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                        <span>{item}</span>
+                {/* Tab Content */}
+                {activeTab === "overview" && (
+                  <div className="space-y-6">
+                    {/* Highlights */}
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                        Highlights
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {attraction.highlights.map((highlight, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center text-gray-600"
+                          >
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                            <span>{highlight}</span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
 
-                {/* Features */}
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                    Features
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {attraction.features.map((feature, index) => (
-                      <Badge key={index} variant="secondary">
-                        {feature}
-                      </Badge>
-                    ))}
+                    {/* What's Included */}
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                        What's Included
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {attraction.includes.map((item, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center text-gray-600"
+                          >
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Features */}
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                        Features
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {attraction.features.map((feature, index) => (
+                          <Badge key={index} variant="secondary">
+                            {feature}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {activeTab === "reviews" && (
+                  <div id="reviews-section" className="bg-white rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-bold text-gray-900">
+                        Visitor Reviews
+                      </h2>
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg min-h-[44px] active:scale-95 transition-all duration-200 touch-manipulation">
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Write Review
+                      </Button>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-4 text-center mb-4">
+                      <div className="text-2xl font-bold text-gray-900">
+                        {attraction.rating}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Based on {attraction.reviews.toLocaleString()} reviews
+                      </div>
+                      <div className="flex justify-center mt-2">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < Math.floor(attraction.rating)
+                                ? "text-blue-600 fill-current"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Recent Reviews */}
+                    <div className="space-y-3">
+                      {[
+                        {
+                          name: "Sarah M.",
+                          date: "2 days ago",
+                          rating: 5,
+                          comment:
+                            "Incredible experience! The views were breathtaking and the staff was amazing.",
+                        },
+                        {
+                          name: "John D.",
+                          date: "1 week ago",
+                          rating: 4,
+                          comment:
+                            "Great attraction, well organized and worth every penny. Highly recommend!",
+                        },
+                        {
+                          name: "Emily R.",
+                          date: "2 weeks ago",
+                          rating: 5,
+                          comment:
+                            "Perfect for families. Kids loved it and we got some amazing photos.",
+                        },
+                        {
+                          name: "Michael K.",
+                          date: "3 weeks ago",
+                          rating: 4,
+                          comment:
+                            "Skip-the-line tickets were worth it. Saved us hours of waiting.",
+                        },
+                      ].map((review, idx) => (
+                        <div
+                          key={idx}
+                          className="border-b border-gray-100 pb-3 last:border-b-0"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-medium text-sm text-gray-900">
+                              {review.name}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {review.date}
+                            </span>
+                          </div>
+                          <div className="flex items-center mb-2">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`w-3 h-3 ${
+                                  i < review.rating
+                                    ? "text-blue-600 fill-current"
+                                    : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <p className="text-sm text-gray-700">{review.comment}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Write Another Review Button */}
+                    <div className="mt-6 pt-4 border-t border-gray-200">
+                      <Button
+                        variant="outline"
+                        className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 font-medium py-3 min-h-[48px] active:scale-95 transition-all duration-200 touch-manipulation"
+                      >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Share Your Experience
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Right Column - Booking */}
