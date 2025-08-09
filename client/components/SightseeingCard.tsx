@@ -404,8 +404,8 @@ export function SightseeingCard({
               </div>
               
               {/* DESKTOP BUTTONS - GUARANTEED VISIBLE */}
-              <div style={{ paddingTop: '12px', borderTop: '1px solid #e5e7eb' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ paddingTop: '16px', borderTop: '1px solid #e5e7eb', marginTop: '16px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
