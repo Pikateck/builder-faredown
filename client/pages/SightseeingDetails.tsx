@@ -78,6 +78,11 @@ export default function SightseeingDetails() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedTicketType, setSelectedTicketType] = useState(0);
   const [selectedTime, setSelectedTime] = useState<string>("");
+  const [activeTab, setActiveTab] = useState(() => {
+    // Check if tab parameter is provided in URL
+    const tabParam = searchParams.get("tab");
+    return tabParam || "overview";
+  });
 
   // Get adults count from search params
   const adults = parseInt(searchParams.get("adults") || "2");
