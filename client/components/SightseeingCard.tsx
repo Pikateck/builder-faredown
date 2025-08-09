@@ -178,7 +178,7 @@ export function SightseeingCard({
           </div>
 
           {/* Mobile Content */}
-          <div className="p-4 min-h-[250px] flex flex-col">
+          <div className="p-4 min-h-[280px] flex flex-col">
             {/* Content arranged in two columns */}
             <div className="flex gap-4 mb-4">
               {/* Left Column - Main Content */}
