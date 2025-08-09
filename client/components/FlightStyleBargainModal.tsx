@@ -431,7 +431,7 @@ export function FlightStyleBargainModal({
                   </p>
                 )}
                 <p className="text-center text-xs text-gray-500 mt-2">
-                  Maximum allowable price: {selectedCurrency.symbol}{formatNumberWithCommas(priceCalculation?.total.toString() || "0")}
+                  Enter between {selectedCurrency.symbol}1 and {selectedCurrency.symbol}{formatNumberWithCommas(priceCalculation?.total.toString() || "0")}
                 </p>
               </div>
 
