@@ -411,72 +411,62 @@ export function SightseeingCard({
                 </div>
               </div>
               
-              {/* DESKTOP BUTTONS - BULLETPROOF SOLUTION */}
-              <div className="space-y-4 pt-4">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onBargainClick();
-                  }}
-                  style={{
-                    backgroundColor: '#febb02',
-                    color: '#000000',
-                    border: 'none',
-                    borderRadius: '12px',
-                    padding: '16px 24px',
-                    fontWeight: '700',
-                    fontSize: '16px',
-                    minHeight: '52px',
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#e6a602';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = '#febb02';
-                  }}
-                >
-                  <TrendingDown size={18} />
-                  Bargain Now
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleViewDetails();
-                  }}
-                  style={{
-                    backgroundColor: '#003580',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '12px',
-                    padding: '16px 24px',
-                    fontWeight: '700',
-                    fontSize: '16px',
-                    minHeight: '52px',
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#002a66';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = '#003580';
-                  }}
-                >
-                  <Eye size={18} />
-                  View Details
-                </button>
+              {/* DESKTOP BUTTONS - GUARANTEED VISIBLE */}
+              <div style={{ paddingTop: '16px', borderTop: '1px solid #e5e7eb' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onBargainClick();
+                    }}
+                    style={{
+                      backgroundColor: '#febb02',
+                      color: '#000000',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '14px 20px',
+                      fontWeight: '600',
+                      fontSize: '15px',
+                      minHeight: '46px',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <TrendingDown size={16} />
+                    Bargain Now
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewDetails();
+                    }}
+                    style={{
+                      backgroundColor: '#003580',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '14px 20px',
+                      fontWeight: '600',
+                      fontSize: '15px',
+                      minHeight: '46px',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <Eye size={16} />
+                    View Details
+                  </button>
+                </div>
               </div>
             </div>
           </div>
