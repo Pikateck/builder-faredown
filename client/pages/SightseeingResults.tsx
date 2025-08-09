@@ -1032,20 +1032,36 @@ export default function SightseeingResults() {
         type="sightseeing"
         roomType={
           selectedAttraction
-            ? {
-                id: selectedAttraction.id,
-                name: selectedAttraction.name,
-                description: selectedAttraction.description,
-                image: selectedAttraction.images?.[0] || "/placeholder.svg",
-                marketPrice: selectedAttraction.originalPrice * parseInt(adults),
-                totalPrice: selectedAttraction.currentPrice * parseInt(adults),
-                total: selectedAttraction.currentPrice * parseInt(adults),
-                features: selectedAttraction.highlights || [],
-                maxOccupancy: parseInt(adults), // Number of adults for sightseeing
-                bedType: selectedAttraction.duration,
-                size: selectedAttraction.category,
-                cancellation: "Free cancellation",
-              }
+            ? (() => {
+                // Calculate consistent pricing with tax included
+                const priceCalc = sightseeingService.calculatePrice(
+                  selectedAttraction.currentPrice,
+                  parseInt(adults),
+                  parseInt(children),
+                  parseInt(searchParams.get("infants") || "0")
+                );
+                const originalPriceCalc = sightseeingService.calculatePrice(
+                  selectedAttraction.originalPrice,
+                  parseInt(adults),
+                  parseInt(children),
+                  parseInt(searchParams.get("infants") || "0")
+                );
+
+                return {
+                  id: selectedAttraction.id,
+                  name: selectedAttraction.name,
+                  description: selectedAttraction.description,
+                  image: selectedAttraction.images?.[0] || "/placeholder.svg",
+                  marketPrice: originalPriceCalc.totalPrice,
+                  totalPrice: priceCalc.totalPrice,
+                  total: priceCalc.totalPrice,
+                  features: selectedAttraction.highlights || [],
+                  maxOccupancy: parseInt(adults), // Number of adults for sightseeing
+                  bedType: selectedAttraction.duration,
+                  size: selectedAttraction.category,
+                  cancellation: "Free cancellation",
+                };
+              })()
             : null
         }
         hotel={
