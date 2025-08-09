@@ -552,7 +552,7 @@ export function SightseeingSearchForm() {
     }
 
     if (!visitDate) {
-      console.log("❌ Validation failed: No visit date");
+      console.log("��� Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
@@ -933,6 +933,10 @@ export function SightseeingSearchForm() {
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => {
                     console.log("🎯 Desktop destination input focused");
+                    setIsDestinationOpenDesktop(true);
+                  }}
+                  onClick={() => {
+                    console.log("🎯 Desktop destination input clicked");
                     setIsDestinationOpenDesktop(true);
                   }}
                 />
