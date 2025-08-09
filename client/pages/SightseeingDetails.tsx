@@ -1068,20 +1068,20 @@ export default function SightseeingDetails() {
                         {passengerQuantities.adults > 0 && (
                           <div className="flex justify-between items-center">
                             <span className="text-gray-600">
-                              {passengerQuantities.adults} × Adult ({formatPrice(attraction.ticketTypes[selectedTicketType].price)})
+                              {passengerQuantities.adults} × Adult ({formatPrice(attraction.ticketTypes[selectedTicketType].price * 1.18)})
                             </span>
                             <span className="font-medium text-gray-900">
-                              {formatPrice(attraction.ticketTypes[selectedTicketType].price * passengerQuantities.adults)}
+                              {formatPrice(attraction.ticketTypes[selectedTicketType].price * 1.18 * passengerQuantities.adults)}
                             </span>
                           </div>
                         )}
                         {passengerQuantities.children > 0 && (
                           <div className="flex justify-between items-center">
                             <span className="text-gray-600">
-                              {passengerQuantities.children} × Child ({formatPrice(attraction.ticketTypes[selectedTicketType].price * 0.5)})
+                              {passengerQuantities.children} × Child ({formatPrice(attraction.ticketTypes[selectedTicketType].price * 0.5 * 1.18)})
                             </span>
                             <span className="font-medium text-gray-900">
-                              {formatPrice(attraction.ticketTypes[selectedTicketType].price * 0.5 * passengerQuantities.children)}
+                              {formatPrice(attraction.ticketTypes[selectedTicketType].price * 0.5 * 1.18 * passengerQuantities.children)}
                             </span>
                           </div>
                         )}
@@ -1099,16 +1099,16 @@ export default function SightseeingDetails() {
                         <hr className="border-gray-200" />
 
                         <div className="flex justify-between items-center">
-                          <span className="text-gray-600">Subtotal</span>
+                          <span className="text-gray-600">Subtotal (excl. tax)</span>
                           <span className="font-medium text-gray-900">
-                            {formatPrice(getTicketTotalPrice(selectedTicketType))}
+                            {formatPrice(getTicketTotalPrice(selectedTicketType) / 1.18)}
                           </span>
                         </div>
 
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Taxes & Fees (18%)</span>
                           <span className="font-medium text-gray-900">
-                            {formatPrice(getTicketTotalPrice(selectedTicketType) * 0.18)}
+                            {formatPrice(getTicketTotalPrice(selectedTicketType) - (getTicketTotalPrice(selectedTicketType) / 1.18))}
                           </span>
                         </div>
 
@@ -1117,7 +1117,7 @@ export default function SightseeingDetails() {
                         <div className="flex justify-between items-center text-lg font-bold">
                           <span className="text-gray-900">Total Amount</span>
                           <span className="text-[#003580]">
-                            {formatPrice(getTicketTotalPrice(selectedTicketType) * 1.18)}
+                            {formatPrice(getTicketTotalPrice(selectedTicketType))}
                           </span>
                         </div>
                       </div>
