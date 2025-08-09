@@ -7,6 +7,7 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { SightseeingCard } from "@/components/SightseeingCard";
+import { SightseeingCardSimple } from "@/components/SightseeingCardSimple";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
