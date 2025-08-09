@@ -798,36 +798,56 @@ export default function SightseeingDetails() {
                         <div
                           key={index}
                           className={cn(
-                            "p-4 border rounded-lg cursor-pointer transition-all",
+                            "p-4 border rounded-lg transition-all",
                             selectedTicketType === index
                               ? "border-blue-500 bg-blue-50"
                               : "border-gray-200 hover:border-gray-300",
                           )}
-                          onClick={() => setSelectedTicketType(index)}
                         >
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-medium text-gray-900">
-                              {ticket.name}
-                            </h4>
-                            <div className="text-right">
-                              <div className="text-lg font-bold text-blue-600">
-                                {formatPrice(ticket.price * adults)}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {formatPrice(ticket.price)} per person
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => setSelectedTicketType(index)}
+                          >
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="font-medium text-gray-900">
+                                {ticket.name}
+                              </h4>
+                              <div className="text-right">
+                                <div className="text-lg font-bold text-blue-600">
+                                  {formatPrice(ticket.price * adults)}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {formatPrice(ticket.price)} per person
+                                </div>
                               </div>
                             </div>
+                            <div className="space-y-1 mb-3">
+                              {ticket.features.map((feature, idx) => (
+                                <div
+                                  key={idx}
+                                  className="text-sm text-gray-600 flex items-center"
+                                >
+                                  <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                                  {feature}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <div className="space-y-1">
-                            {ticket.features.map((feature, idx) => (
-                              <div
-                                key={idx}
-                                className="text-sm text-gray-600 flex items-center"
-                              >
-                                <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
-                                {feature}
-                              </div>
-                            ))}
+
+                          {/* Bargain Button */}
+                          <div className="pt-3 border-t border-gray-200">
+                            <Button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleBargainClick(index);
+                              }}
+                              variant="outline"
+                              size="sm"
+                              className="w-full text-[#003580] border-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200"
+                            >
+                              <TrendingDown className="w-4 h-4 mr-2" />
+                              Bargain This Price
+                            </Button>
                           </div>
                         </div>
                       ))}
