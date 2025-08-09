@@ -222,7 +222,7 @@ export function SightseeingCard({
             </div>
 
             {/* Features */}
-            <div className="mb-4 space-y-2">
+            <div className="mb-8 space-y-3 flex-grow">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
@@ -230,6 +230,10 @@ export function SightseeingCard({
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span className="truncate">{attraction.highlights[0]}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <span className="truncate">{attraction.highlights[1] || "Premium experience"}</span>
               </div>
             </div>
 
