@@ -8,6 +8,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { FlightVoucher } from "@/components/vouchers/FlightVoucher";
+import { HotelVoucher } from "@/components/vouchers/HotelVoucher";
+import { SightseeingVoucher } from "@/components/vouchers/SightseeingVoucher";
+import { FaredownInvoice } from "@/components/invoices/FaredownInvoice";
 
 const Bookings: React.FC = () => {
   const [searchParams] = useSearchParams();
