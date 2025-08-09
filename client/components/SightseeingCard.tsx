@@ -240,10 +240,10 @@ export function SightseeingCard({
                   e.stopPropagation();
                   onBargainClick();
                 }}
-                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
-                style={{ backgroundColor: '#febb02', minHeight: '44px' }}
+                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                style={{ backgroundColor: '#febb02', minHeight: '52px' }}
               >
-                <TrendingDown className="w-4 h-4" />
+                <TrendingDown className="w-5 h-5" />
                 Bargain Now
               </button>
               <button
@@ -251,10 +251,10 @@ export function SightseeingCard({
                   e.stopPropagation();
                   handleViewDetails();
                 }}
-                className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
-                style={{ minHeight: '44px' }}
+                className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                style={{ minHeight: '52px' }}
               >
-                <Eye className="w-4 h-4" />
+                <Eye className="w-5 h-5" />
                 View Details
               </button>
             </div>
