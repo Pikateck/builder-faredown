@@ -870,165 +870,91 @@ const Bookings: React.FC = () => {
 
       {/* Ticket/Voucher Modal */}
       <Dialog open={ticketModal} onOpenChange={setTicketModal}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>
-              {selectedBooking?.type === "flight"
-                ? "Boarding Pass"
-                : "Hotel Voucher"}
-            </DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
           {selectedBooking && (
-            <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 p-6 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50">
-                <div className="text-center">
-                  <div
-                    className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                      selectedBooking.type === "flight"
-                        ? "bg-blue-100"
-                        : "bg-amber-100"
-                    }`}
-                  >
-                    {selectedBooking.type === "flight" ? (
-                      <svg
-                        className="w-10 h-10 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className="w-10 h-10 text-amber-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">
-                    {selectedBooking.type === "flight"
-                      ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
-                      : selectedBooking.name}
-                  </h3>
-                  <p className="text-gray-600 mb-4">
-                    {selectedBooking.bookingRef}
-                  </p>
+            <>
+              {selectedBooking.type === "flight" && (
+                <FlightVoucher
+                  booking={{
+                    id: selectedBooking.id,
+                    airline: selectedBooking.airline,
+                    route: selectedBooking.route,
+                    date: selectedBooking.date,
+                    time: selectedBooking.time,
+                    flightNumber: selectedBooking.flightNumber,
+                    bookingRef: selectedBooking.bookingRef,
+                    seat: selectedBooking.seat,
+                    terminal: selectedBooking.terminal || "Terminal 3",
+                    gate: selectedBooking.gate || "A15",
+                    passengers: selectedBooking.passengers,
+                    totalAmount: selectedBooking.totalAmount,
+                    passengerName: "John Doe"
+                  }}
+                  onPrint={() => window.print()}
+                />
+              )}
 
-                  {selectedBooking.type === "flight" ? (
-                    <div className="text-left space-y-2">
-                      <div className="flex justify-between">
-                        <span>Route:</span>
-                        <span className="font-medium">
-                          {selectedBooking.route}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Date:</span>
-                        <span className="font-medium">
-                          {selectedBooking.date}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Time:</span>
-                        <span className="font-medium">
-                          {selectedBooking.time}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Seat:</span>
-                        <span className="font-medium">
-                          {selectedBooking.seat}
-                        </span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-left space-y-2">
-                      <div className="flex justify-between">
-                        <span>Check-in:</span>
-                        <span className="font-medium">
-                          {selectedBooking.checkIn}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Check-out:</span>
-                        <span className="font-medium">
-                          {selectedBooking.checkOut}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Room:</span>
-                        <span className="font-medium">
-                          {selectedBooking.roomType}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Guests:</span>
-                        <span className="font-medium">
-                          {selectedBooking.guests}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+              {selectedBooking.type === "hotel" && (
+                <HotelVoucher
+                  booking={{
+                    id: selectedBooking.id,
+                    name: selectedBooking.name,
+                    location: selectedBooking.location,
+                    checkIn: selectedBooking.checkIn,
+                    checkOut: selectedBooking.checkOut,
+                    roomType: selectedBooking.roomType || "Deluxe Room",
+                    bookingRef: selectedBooking.bookingRef,
+                    guests: selectedBooking.guests || 2,
+                    totalAmount: selectedBooking.totalAmount,
+                    guestName: "John Doe",
+                    phone: "+971 50 123 4567",
+                    email: "guest@example.com",
+                    nights: selectedBooking.nights || 1,
+                    rating: 4
+                  }}
+                  onPrint={() => window.print()}
+                />
+              )}
 
-              <div className="flex space-x-3">
-                <Button className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-2.5 h-2.5 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-                    <span>Download to Phone</span>
-                  </div>
+              {selectedBooking.type === "sightseeing" && (
+                <SightseeingVoucher
+                  booking={{
+                    id: selectedBooking.id,
+                    name: selectedBooking.name || "Burj Khalifa Experience",
+                    location: selectedBooking.location || "Dubai, UAE",
+                    visitDate: selectedBooking.date || selectedBooking.visitDate,
+                    visitTime: selectedBooking.time || selectedBooking.visitTime || "10:30 AM",
+                    bookingRef: selectedBooking.bookingRef,
+                    guests: selectedBooking.guests || selectedBooking.passengers || 2,
+                    totalAmount: selectedBooking.totalAmount,
+                    guestName: "John Doe",
+                    email: "guest@example.com",
+                    ticketType: selectedBooking.ticketType || "Standard Admission",
+                    duration: selectedBooking.duration || "1-2 hours",
+                    rating: 4.6,
+                    category: "Landmarks & Attractions"
+                  }}
+                  onPrint={() => window.print()}
+                />
+              )}
+
+              {/* Action Buttons */}
+              <div className="no-print sticky bottom-0 bg-white border-t border-gray-200 p-4 flex gap-3">
+                <Button
+                  onClick={() => window.print()}
+                  className="flex-1 bg-[#003580] hover:bg-[#002a66]"
+                >
+                  Print Voucher
                 </Button>
-                <Button variant="outline" className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 bg-gray-100 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-2.5 h-2.5 text-gray-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                        />
-                      </svg>
-                    </div>
-                    <span>Print</span>
-                  </div>
+                <Button
+                  variant="outline"
+                  onClick={() => setTicketModal(false)}
+                  className="flex-1"
+                >
+                  Close
                 </Button>
               </div>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
