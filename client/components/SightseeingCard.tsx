@@ -387,7 +387,7 @@ export function SightseeingCard({
             </div>
 
             {/* Right Content - Pricing & Actions */}
-            <div className="w-80 border-l border-gray-200 bg-gray-50 p-8 flex flex-col justify-between">
+            <div className="w-64 border-l border-gray-200 bg-gray-50 p-6 flex flex-col justify-between">
               <div>
                 <div className="text-right mb-4">
                   <div className="text-2xl font-bold text-gray-900 mb-1">
