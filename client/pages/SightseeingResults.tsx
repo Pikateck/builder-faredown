@@ -1035,9 +1035,9 @@ export default function SightseeingResults() {
                 name: selectedAttraction.name,
                 description: selectedAttraction.description,
                 image: selectedAttraction.images?.[0] || "/placeholder.svg",
-                marketPrice: selectedAttraction.originalPrice * parseInt(adults),
-                totalPrice: selectedAttraction.currentPrice * parseInt(adults),
-                total: selectedAttraction.currentPrice * parseInt(adults),
+                marketPrice: selectedAttraction.originalPrice,
+                totalPrice: selectedAttraction.currentPrice,
+                total: selectedAttraction.currentPrice,
                 features: selectedAttraction.highlights || [],
                 maxOccupancy: parseInt(adults), // Number of adults for sightseeing
                 bedType: selectedAttraction.duration,
