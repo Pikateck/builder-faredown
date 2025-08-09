@@ -342,15 +342,34 @@ export default function SightseeingDetails() {
 
   // Navigation handlers
   const handleBookNow = () => {
+    console.log("🎫 Book Now clicked!", {
+      selectedTime,
+      selectedTicketType,
+      attractionId: attraction?.id,
+      adults
+    });
+
     if (!selectedTime) {
+      console.log("❌ No time selected");
       alert("Please select a time slot before booking");
       return;
     }
+
     const params = new URLSearchParams(searchParams);
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", selectedTicketType.toString());
     params.set("selectedTime", selectedTime);
-    navigate(`/sightseeing/booking?${params.toString()}`);
+
+    const bookingUrl = `/sightseeing/booking?${params.toString()}`;
+    console.log("🚀 Navigating to:", bookingUrl);
+
+    try {
+      navigate(bookingUrl);
+      console.log("✅ Navigation successful");
+    } catch (error) {
+      console.error("❌ Navigation failed:", error);
+      alert("Navigation failed. Please try again.");
+    }
   };
 
   const handleBackToResults = () => {
