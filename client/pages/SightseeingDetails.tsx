@@ -931,8 +931,8 @@ export default function SightseeingDetails() {
                       </div>
 
                       {/* Passenger Selection */}
-                      <div className="p-4 bg-gray-50">
-                        <h5 className="font-medium text-gray-900 mb-3">How many tickets?</h5>
+                      <div className="p-4 md:p-6 bg-gray-50">
+                        <h5 className="font-medium text-gray-900 mb-4">How many tickets?</h5>
 
                         {/* Adults */}
                         <div className="flex items-center justify-between mb-3">
