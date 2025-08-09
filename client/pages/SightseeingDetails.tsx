@@ -1019,17 +1019,17 @@ export default function SightseeingDetails() {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <Button
                             onClick={() => handleBargainClick(index)}
-                            className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-semibold py-3 text-base rounded-xl shadow-md transition-all duration-200 transform hover:scale-[1.01] active:scale-95"
+                            className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-semibold py-4 px-6 text-base rounded-xl shadow-md transition-all duration-200 transform hover:scale-[1.01] active:scale-95 min-h-[52px] whitespace-nowrap"
                           >
                             <TrendingDown className="w-4 h-4 mr-2" />
                             Bargain This Price
                           </Button>
                           <Button
                             onClick={() => handleBookNow(index)}
-                            className="bg-[#003580] hover:bg-[#002a66] text-white font-bold py-3 text-base rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95"
+                            className="bg-[#003580] hover:bg-[#002a66] text-white font-bold py-4 px-6 text-base rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 min-h-[52px] whitespace-nowrap"
                           >
                             Book Now
                           </Button>
