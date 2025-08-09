@@ -843,7 +843,7 @@ export default function SightseeingDetails() {
               </div>
 
               {/* Right Column - Booking */}
-          <div className="lg:col-span-1">
+          <div className="xl:col-span-2">
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm sticky top-6">
               {/* Header */}
               <div className="p-4 border-b border-gray-200">
