@@ -725,7 +725,10 @@ export function SightseeingSearchForm() {
                   }}
                   onClick={() => {
                     console.log("🎯 Mobile destination input clicked");
-                    setIsDestinationOpenMobile(true);
+                    // Small delay to prevent race conditions
+                    setTimeout(() => {
+                      setIsDestinationOpenMobile(true);
+                    }, 0);
                   }}
                 />
               </PopoverTrigger>
