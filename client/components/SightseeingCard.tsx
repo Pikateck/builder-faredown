@@ -82,12 +82,17 @@ export function SightseeingCard({
   // Get adults count from search params
   const adults = parseInt(searchParams.get("adults") || "2");
   const children = parseInt(searchParams.get("children") || "0");
+  const infants = parseInt(searchParams.get("infants") || "0");
 
-  // Calculate price including tax (18%)
-  const basePricePerAdult = attraction.currentPrice * 1.18;
-  const basePricePerChild = attraction.currentPrice * 0.5 * 1.18;
-  const totalPrice = (basePricePerAdult * adults) + (basePricePerChild * children);
-  const pricePerPerson = basePricePerAdult;
+  // Calculate price using SightseeingService for consistency
+  const priceCalc = SightseeingService.calculatePrice(
+    attraction.currentPrice,
+    adults,
+    children,
+    infants
+  );
+  const totalPrice = priceCalc.totalPrice;
+  const pricePerPerson = SightseeingService.calculatePrice(attraction.currentPrice, 1, 0, 0).totalPrice;
 
   // Handle star/reviews click to navigate to details with reviews tab
   const handleReviewsClick = () => {
