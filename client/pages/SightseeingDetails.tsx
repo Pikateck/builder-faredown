@@ -977,9 +977,9 @@ export default function SightseeingDetails() {
                         <div className="flex justify-between items-start">
                           <div>
                             <div className="flex items-center gap-3 mb-1">
-                              <h4 className="font-semibold text-gray-900 text-lg">
-                                {ticket.name}
-                              </h4>
+                              <h4 className="font-semibold text-gray-900 text-base sm:text-lg">
+                              {ticket.name}
+                            </h4>
                               <div className={cn(
                                 "inline-flex items-center px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap",
                                 ticket.refundable
