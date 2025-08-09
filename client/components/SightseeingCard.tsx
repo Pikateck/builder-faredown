@@ -148,7 +148,7 @@ export function SightseeingCard({
         {/* Mobile Layout */}
         <div className="md:hidden">
           {/* Mobile Image */}
-          <div className="relative h-56 overflow-hidden">
+          <div className="relative h-40 overflow-hidden">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
