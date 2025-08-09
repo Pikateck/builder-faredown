@@ -130,7 +130,7 @@ export class SightseeingService {
   /**
    * Fallback attraction data when API is unavailable
    */
-  private static getFallbackAttraction(attractionId: string): SightseeingAttraction {
+  private getFallbackAttraction(attractionId: string): SightseeingAttraction {
     const fallbackData: Record<string, SightseeingAttraction> = {
       "burj-khalifa": {
         id: "burj-khalifa",
