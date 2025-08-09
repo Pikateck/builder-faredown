@@ -209,7 +209,7 @@ export function SightseeingCard({
           </div>
 
           {/* Mobile Content */}
-          <div className="p-4">
+          <div className="p-4 flex flex-col min-h-[280px]">
             <div className="flex justify-between items-start mb-2">
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-1">
@@ -253,7 +253,7 @@ export function SightseeingCard({
             </div>
 
             {/* Mobile Features */}
-            <div className="mb-3 space-y-2">
+            <div className="mb-4 space-y-2 flex-grow">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
