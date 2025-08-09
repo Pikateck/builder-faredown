@@ -361,7 +361,11 @@ export default function SightseeingBooking() {
   const categoryInfo = getCategoryInfo(attraction.category);
   const selectedTicket =
     attraction.ticketTypes[ticketTypeIndex] || attraction.ticketTypes[0];
-  const totalPrice = selectedTicket.price * adults;
+
+  // Calculate price including tax (18%) and children
+  const infants = parseInt(searchParams.get("infants") || "0");
+  const basePrice = (selectedTicket.price * adults) + (selectedTicket.price * 0.5 * children);
+  const totalPrice = basePrice * 1.18; // Include 18% tax
   const formattedVisitDate = new Date(visitDate).toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
