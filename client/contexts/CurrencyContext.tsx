@@ -385,7 +385,13 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         return;
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.warn("📈 Invalid JSON response from exchange rate API, using static rates");
+        return;
+      }
 
       if (data.success && data.data) {
         setCurrencies((currentCurrencies) => {
