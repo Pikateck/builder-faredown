@@ -222,7 +222,7 @@ export function SightseeingCard({
             </div>
 
             {/* Features */}
-            <div className="mb-4 space-y-2">
+            <div className="mb-6 space-y-3 flex-grow">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
@@ -233,8 +233,8 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Mobile Action Buttons - GUARANTEED VISIBLE */}
-            <div className="flex gap-2 pt-3 border-t border-gray-100">
+            {/* Mobile Action Buttons - GUARANTEED VISIBLE AT BOTTOM */}
+            <div className="flex gap-3 pt-4 border-t border-gray-200 mt-auto">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
