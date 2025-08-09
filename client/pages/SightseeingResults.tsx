@@ -468,6 +468,8 @@ export default function SightseeingResults() {
         ];
 
         setAttractions(sampleAttractions);
+        console.log("🎯 Loaded attractions:", sampleAttractions.length, "items");
+        console.log("🎯 First attraction:", sampleAttractions[0]?.name);
 
         // Set initial price range based on loaded data
         const prices = sampleAttractions.map(
@@ -476,11 +478,13 @@ export default function SightseeingResults() {
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
         setPriceRange([minPrice, maxPrice]);
+        console.log("💰 Price range set:", minPrice, "to", maxPrice);
       } catch (err) {
-        console.error("Error loading attractions:", err);
+        console.error("❌ Error loading attractions:", err);
         setError("Failed to load sightseeing attractions. Please try again.");
       } finally {
         setLoading(false);
+        console.log("🏁 Loading finished");
       }
     };
 
