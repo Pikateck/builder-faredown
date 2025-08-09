@@ -424,16 +424,31 @@ export function SightseeingCard({
                     e.stopPropagation();
                     onBargainClick();
                   }}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm"
                   style={{
                     backgroundColor: '#febb02',
+                    color: '#000000',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
                     minHeight: '44px',
                     width: '100%',
-                    border: 'none',
-                    outline: 'none'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = '#e6a602';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = '#febb02';
                   }}
                 >
-                  <TrendingDown className="w-4 h-4" />
+                  <TrendingDown size={16} />
                   Bargain Now
                 </button>
                 <button
@@ -441,16 +456,31 @@ export function SightseeingCard({
                     e.stopPropagation();
                     handleViewDetails();
                   }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-sm"
                   style={{
                     backgroundColor: '#003580',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    fontWeight: '600',
+                    fontSize: '14px',
                     minHeight: '44px',
                     width: '100%',
-                    border: 'none',
-                    outline: 'none'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = '#002a66';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = '#003580';
                   }}
                 >
-                  <Eye className="w-4 h-4" />
+                  <Eye size={16} />
                   View Details
                 </button>
               </div>
