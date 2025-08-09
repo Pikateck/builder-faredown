@@ -136,8 +136,7 @@ export function SightseeingCard({
   };
 
   const totalPrice = attraction.currentPrice * adults;
-  const originalTotalPrice = attraction.originalPrice * adults;
-  const savings = originalTotalPrice - totalPrice;
+  const pricePerPerson = attraction.currentPrice;
 
   return (
     <>
