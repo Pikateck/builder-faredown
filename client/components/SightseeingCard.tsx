@@ -240,8 +240,8 @@ export function SightseeingCard({
                   e.stopPropagation();
                   onBargainClick();
                 }}
-                className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
-                style={{ backgroundColor: '#febb02', minHeight: '52px' }}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                style={{ backgroundColor: '#febb02', minHeight: '52px', width: '48%' }}
               >
                 <TrendingDown className="w-5 h-5" />
                 Bargain Now
@@ -251,8 +251,8 @@ export function SightseeingCard({
                   e.stopPropagation();
                   handleViewDetails();
                 }}
-                className="flex-1 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
-                style={{ minHeight: '52px' }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                style={{ backgroundColor: '#003580', minHeight: '52px', width: '48%' }}
               >
                 <Eye className="w-5 h-5" />
                 View Details
