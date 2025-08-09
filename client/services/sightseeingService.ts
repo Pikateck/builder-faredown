@@ -178,7 +178,7 @@ export class SightseeingService {
   /**
    * Create booking
    */
-  static async createBooking(bookingData: any): Promise<any> {
+  async createBooking(bookingData: any): Promise<any> {
     try {
       const response = await fetch('/api/sightseeing/book', {
         method: 'POST',
