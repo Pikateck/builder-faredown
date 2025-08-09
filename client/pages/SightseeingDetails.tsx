@@ -1026,19 +1026,19 @@ export default function SightseeingDetails() {
 
                       {/* Action Buttons */}
                       <div className="p-4 md:p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3">
                           <Button
                             onClick={() => handleBargainClick(index)}
-                            className="bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-semibold py-4 px-6 text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[52px] whitespace-nowrap flex items-center justify-center"
+                            className="flex-1 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-semibold py-3 px-4 text-sm sm:text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[48px] flex items-center justify-center"
                           >
-                            <TrendingDown className="w-4 h-4 mr-2" />
-                            Bargain This Price
+                            <TrendingDown className="w-4 h-4 mr-2 flex-shrink-0" />
+                            <span className="truncate">Bargain This Price</span>
                           </Button>
                           <Button
                             onClick={() => handleBookNow(index)}
-                            className="bg-[#003580] hover:bg-[#002a66] text-white font-bold py-4 px-6 text-base rounded-lg shadow-lg transition-all duration-200 min-h-[52px] whitespace-nowrap flex items-center justify-center"
+                            className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white font-bold py-3 px-4 text-sm sm:text-base rounded-lg shadow-lg transition-all duration-200 min-h-[48px] flex items-center justify-center"
                           >
-                            Book Now
+                            <span className="truncate">Book Now</span>
                           </Button>
                         </div>
                       </div>
