@@ -472,10 +472,14 @@ export default function SightseeingDetails() {
 
     if (!ticket) return 0;
 
-    // Adults pay full price, children 50%, infants free
-    const basePrice = (ticket.price * passengerQuantities.adults) + (ticket.price * 0.5 * passengerQuantities.children);
-    // Include 18% tax
-    return basePrice * 1.18;
+    const priceCalc = SightseeingService.calculatePrice(
+      ticket.price,
+      passengerQuantities.adults,
+      passengerQuantities.children,
+      passengerQuantities.infants
+    );
+
+    return priceCalc.totalPrice;
   };
 
   // Image navigation
