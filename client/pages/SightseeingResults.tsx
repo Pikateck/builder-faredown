@@ -1067,9 +1067,9 @@ export default function SightseeingResults() {
         roomsCount={1}
         onBookingSuccess={(finalPrice) => {
           setIsBargainModalOpen(false);
-          // Navigate to sightseeing booking confirmation
+          // Navigate to sightseeing booking confirmation with correct URL
           navigate(
-            `/sightseeing-booking-confirmation?item=${selectedAttraction?.id}&price=${finalPrice}&bargainApplied=true`,
+            `/sightseeing/booking/confirmation?item=${selectedAttraction?.id}&price=${finalPrice}&bargainApplied=true&adults=${adults}`,
           );
         }}
       />
