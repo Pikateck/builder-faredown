@@ -224,7 +224,7 @@ export function SightseeingCard({
                 </div>
 
                 {/* Mobile Buttons - Below Price */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
