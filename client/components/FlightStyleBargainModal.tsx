@@ -398,7 +398,12 @@ export function FlightStyleBargainModal({
                         /[^0-9]/g,
                         "",
                       );
-                      setBargainPrice(numericValue);
+                      // Validate that price doesn't exceed total price
+                      const totalPrice = priceCalculation?.total || 0;
+                      const enteredPrice = parseInt(numericValue) || 0;
+                      if (enteredPrice <= totalPrice) {
+                        setBargainPrice(numericValue);
+                      }
                     }}
                     placeholder="Enter your target price"
                     className="text-lg md:text-xl font-bold text-center py-4 md:py-6 border-2 focus:border-[#003580] placeholder:text-gray-400 placeholder:font-normal rounded-xl bg-white shadow-sm transition-colors border-[#003580]/20"
