@@ -1034,32 +1034,12 @@ export default function SightseeingResults() {
           selectedAttraction
             ? (() => {
                 // Calculate consistent pricing with tax included
-                console.log("🔍 Bargain Modal Pricing Debug:", {
-                  attractionName: selectedAttraction.name,
-                  currentPrice: selectedAttraction.currentPrice,
-                  originalPrice: selectedAttraction.originalPrice,
-                  adults: parseInt(adults),
-                  children: parseInt(children),
-                  infants: parseInt(searchParams.get("infants") || "0")
-                });
-
                 const priceCalc = sightseeingService.calculatePrice(
                   selectedAttraction.currentPrice,
                   parseInt(adults),
                   parseInt(children),
                   parseInt(searchParams.get("infants") || "0")
                 );
-
-                console.log("💰 Current Price Calculation:", priceCalc);
-
-                const originalPriceCalc = sightseeingService.calculatePrice(
-                  selectedAttraction.originalPrice,
-                  parseInt(adults),
-                  parseInt(children),
-                  parseInt(searchParams.get("infants") || "0")
-                );
-
-                console.log("💰 Original Price Calculation:", originalPriceCalc);
 
                 return {
                   id: selectedAttraction.id,
