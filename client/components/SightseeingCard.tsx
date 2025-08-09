@@ -423,24 +423,29 @@ export function SightseeingCard({
                 </div>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-2 pt-2 border-t border-gray-100">
                 <Button
                   onClick={(e) => {
+                    console.log("🔥 Desktop Bargain button clicked!");
                     e.stopPropagation();
                     onBargainClick();
                   }}
-                  className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold h-9 rounded-md transition-all duration-200 shadow-sm"
+                  size="sm"
+                  className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm px-3 py-2 h-auto min-h-[36px] rounded-lg border-0 shadow-sm"
+                  style={{ backgroundColor: '#febb02', color: 'black' }}
                 >
                   <TrendingDown className="w-4 h-4 mr-1" />
-                  Bargain
+                  Bargain Now
                 </Button>
                 <Button
                   onClick={(e) => {
+                    console.log("🔥 Desktop View Details button clicked!");
                     e.stopPropagation();
                     handleViewDetails();
                   }}
                   variant="outline"
-                  className="w-full border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-9 rounded-md transition-all duration-200"
+                  size="sm"
+                  className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold text-sm px-3 py-2 h-auto min-h-[36px] rounded-lg"
                 >
                   <Eye className="w-4 h-4 mr-1" />
                   View Details
