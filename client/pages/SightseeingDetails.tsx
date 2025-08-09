@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import {
   AlertDialog,
   AlertDialogAction,
