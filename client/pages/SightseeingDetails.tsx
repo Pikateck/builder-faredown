@@ -426,7 +426,10 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", bargainTicketType.toString());
     params.set("selectedTime", selectedTime || "10:30");
-    params.set("adults", adults.toString());
+    const quantities = ticketQuantities[bargainTicketType];
+    params.set("adults", quantities.adults.toString());
+    params.set("children", quantities.children.toString());
+    params.set("infants", quantities.infants.toString());
     params.set("bargainApplied", "true");
     params.set("bargainPrice", finalPrice.toString());
 
@@ -436,6 +439,44 @@ export default function SightseeingDetails() {
     }
 
     navigate(`/sightseeing/booking?${params.toString()}`);
+  };
+
+  // Passenger quantity management
+  const updatePassengerQuantity = (ticketIndex: number, type: 'adults' | 'children' | 'infants', change: number) => {
+    setTicketQuantities(prev => {
+      const current = prev[ticketIndex] || { adults: 2, children: 0, infants: 0 };
+      const newQuantity = Math.max(0, current[type] + change);
+
+      // Ensure at least 1 adult for bookings
+      if (type === 'adults' && newQuantity === 0) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [ticketIndex]: {
+          ...current,
+          [type]: newQuantity
+        }
+      };
+    });
+  };
+
+  // Calculate total passengers for a ticket type
+  const getTotalPassengers = (ticketIndex: number) => {
+    const quantities = ticketQuantities[ticketIndex] || { adults: 2, children: 0, infants: 0 };
+    return quantities.adults + quantities.children + quantities.infants;
+  };
+
+  // Calculate total price for a ticket type
+  const getTicketTotalPrice = (ticketIndex: number) => {
+    const ticket = attraction?.ticketTypes[ticketIndex];
+    const quantities = ticketQuantities[ticketIndex] || { adults: 2, children: 0, infants: 0 };
+
+    if (!ticket) return 0;
+
+    // Adults pay full price, children 50%, infants free
+    return (ticket.price * quantities.adults) + (ticket.price * 0.5 * quantities.children);
   };
 
   // Image navigation
