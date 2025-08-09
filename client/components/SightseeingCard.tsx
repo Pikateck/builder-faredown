@@ -322,7 +322,7 @@ export function SightseeingCard({
         {/* Desktop Layout */}
         <div className="hidden md:flex h-64">
           {/* Desktop Image */}
-          <div className="relative w-80 h-full overflow-hidden flex-shrink-0">
+          <div className="relative w-96 h-full overflow-hidden flex-shrink-0">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
