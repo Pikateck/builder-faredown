@@ -800,7 +800,10 @@ export default function SightseeingDetails() {
                               selectedTime === time ? "default" : "outline"
                             }
                             size="sm"
-                            onClick={() => setSelectedTime(time)}
+                            onClick={() => {
+                              console.log("⏰ Time selected:", time);
+                              setSelectedTime(time);
+                            }}
                             className={
                               selectedTime === time
                                 ? "bg-[#003580] text-white"
