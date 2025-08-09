@@ -90,6 +90,8 @@ export default function SightseeingDetails() {
   const [selectedTicketType, setSelectedTicketType] = useState(0);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [showTimeAlert, setShowTimeAlert] = useState(false);
+  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  const [bargainTicketType, setBargainTicketType] = useState<number>(0);
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
