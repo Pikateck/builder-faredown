@@ -2159,8 +2159,10 @@ export default function Index() {
           </div>
         </header>
 
-        {/* Upgrade & Add-ons Section */}
-        <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
+        {/* Content sections shown for all tabs */}
+        <div className="">
+          {/* Upgrade & Add-ons Section */}
+          <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4">
             <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -2855,6 +2857,7 @@ export default function Index() {
             </div>
           </div>
         </footer>
+        </div>
       </div>
 
       {/* Sign In Modal */}
