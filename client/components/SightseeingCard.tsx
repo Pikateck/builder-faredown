@@ -221,87 +221,19 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Features */}
+            {/* Features and Highlights - Left Side */}
             <div className="mb-4 space-y-2 flex-grow">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <span className="truncate">{attraction.highlights[0]}</span>
+              </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="truncate">{attraction.highlights[0]}</span>
-              </div>
-            </div>
-
-            {/* MOBILE BUTTONS - GUARANTEED VISIBLE */}
-            <div
-              style={{
-                borderTop: '2px solid #e5e7eb',
-                paddingTop: '16px',
-                marginTop: 'auto',
-                marginLeft: '-1rem',
-                marginRight: '-1rem',
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
-                paddingBottom: '16px',
-                backgroundColor: '#f9fafb'
-              }}
-            >
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onBargainClick();
-                  }}
-                  style={{
-                    backgroundColor: '#febb02',
-                    color: '#000000',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '16px 20px',
-                    fontWeight: '600',
-                    fontSize: '15px',
-                    minHeight: '52px',
-                    width: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    flex: '1'
-                  }}
-                >
-                  <TrendingDown size={16} />
-                  Bargain Now
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleViewDetails();
-                  }}
-                  style={{
-                    backgroundColor: '#003580',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '16px 20px',
-                    fontWeight: '600',
-                    fontSize: '15px',
-                    minHeight: '52px',
-                    width: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    flex: '1'
-                  }}
-                >
-                  <Eye size={16} />
-                  View Details
-                </button>
+                <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <span>Reserve now, pay later</span>
               </div>
             </div>
           </div>
