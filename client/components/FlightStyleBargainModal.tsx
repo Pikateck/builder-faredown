@@ -498,7 +498,7 @@ export function FlightStyleBargainModal({
                 AI Counter Offer!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The hotel couldn't match your price, but here's their best
+                The {type === "sightseeing" ? "venue" : "hotel"} couldn't match your price, but here's their best
                 offer!
               </p>
             </div>
