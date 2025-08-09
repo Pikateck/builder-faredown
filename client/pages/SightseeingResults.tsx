@@ -1068,10 +1068,21 @@ export default function SightseeingResults() {
         roomsCount={1}
         onBookingSuccess={(finalPrice) => {
           setIsBargainModalOpen(false);
-          // Navigate to sightseeing booking confirmation with correct URL
-          navigate(
-            `/sightseeing/booking/confirmation?item=${selectedAttraction?.id}&price=${finalPrice}&bargainApplied=true&adults=${adults}`,
-          );
+          // Navigate to sightseeing booking page (not confirmation) to enter passenger details
+          const searchParams = new URLSearchParams(window.location.search);
+          searchParams.set("attractionId", selectedAttraction?.id || "");
+          searchParams.set("ticketType", "0"); // Default to first ticket type
+          searchParams.set("selectedTime", "10:30"); // Default time slot
+          searchParams.set("adults", adults.toString());
+          searchParams.set("bargainApplied", "true");
+          searchParams.set("bargainPrice", finalPrice.toString());
+
+          // Add visitDate if not already set
+          if (!searchParams.get("visitDate")) {
+            searchParams.set("visitDate", new Date().toISOString().split('T')[0]);
+          }
+
+          navigate(`/sightseeing/booking?${searchParams.toString()}`);
         }}
       />
     </div>
