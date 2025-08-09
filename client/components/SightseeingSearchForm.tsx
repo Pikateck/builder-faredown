@@ -202,6 +202,65 @@ export function SightseeingSearchForm() {
     loadPopularDestinations();
   }, []);
 
+  // Initialize form state from URL parameters
+  useEffect(() => {
+    console.log("🔄 Initializing form from URL parameters:", searchParams.toString());
+
+    // Initialize destination
+    const urlDestination = searchParams.get("destination");
+    const urlDestinationName = searchParams.get("destinationName");
+
+    if (urlDestination && urlDestinationName) {
+      setDestination(urlDestinationName);
+      setDestinationCode(urlDestination);
+      setInputValue(urlDestinationName);
+      console.log("✅ Set destination from URL:", urlDestinationName, "->", urlDestination);
+    }
+
+    // Initialize visit date
+    const urlVisitDate = searchParams.get("visitDate");
+    if (urlVisitDate) {
+      try {
+        const parsedDate = new Date(urlVisitDate);
+        if (!isNaN(parsedDate.getTime())) {
+          setVisitDate(parsedDate);
+          console.log("✅ Set visit date from URL:", parsedDate);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing visit date from URL:", error);
+      }
+    }
+
+    // Initialize end date
+    const urlEndDate = searchParams.get("endDate");
+    if (urlEndDate) {
+      try {
+        const parsedEndDate = new Date(urlEndDate);
+        if (!isNaN(parsedEndDate.getTime())) {
+          setEndDate(parsedEndDate);
+          setTripType("multi-day");
+          console.log("✅ Set end date from URL:", parsedEndDate);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing end date from URL:", error);
+      }
+    }
+
+    // Initialize experience type
+    const urlExperienceType = searchParams.get("experienceType");
+    if (urlExperienceType) {
+      setExperienceType(urlExperienceType);
+      console.log("✅ Set experience type from URL:", urlExperienceType);
+    }
+
+    // Initialize duration
+    const urlDuration = searchParams.get("duration");
+    if (urlDuration) {
+      setDuration(urlDuration);
+      console.log("✅ Set duration from URL:", urlDuration);
+    }
+  }, [searchParams]);
+
   // Get Dubai-specific attractions when searching for Dubai
   const getDubaiAttractions = (): DestinationOption[] => {
     return [
@@ -262,7 +321,7 @@ export function SightseeingSearchForm() {
         name: "The Dubai Mall",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪",
+        flag: "🇦����",
       },
       {
         id: "DUBAI-FRAME",
