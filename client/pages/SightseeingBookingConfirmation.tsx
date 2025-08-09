@@ -238,7 +238,7 @@ export default function SightseeingBookingConfirmation() {
   };
 
   const handleViewMyBookings = () => {
-    navigate("/bookings");
+    navigate("/bookings?tab=sightseeing");
   };
 
   const handleDownloadTicket = () => {
