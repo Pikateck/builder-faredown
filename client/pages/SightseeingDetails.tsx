@@ -399,6 +399,32 @@ export default function SightseeingDetails() {
     navigate(`/sightseeing/results?${params.toString()}`);
   };
 
+  // Bargain functionality
+  const handleBargainClick = (ticketIndex: number) => {
+    setBargainTicketType(ticketIndex);
+    setIsBargainModalOpen(true);
+  };
+
+  const handleBargainSuccess = (finalPrice: number) => {
+    setIsBargainModalOpen(false);
+
+    // Navigate to booking page with bargain price
+    const params = new URLSearchParams(searchParams);
+    params.set("attractionId", attraction?.id || "");
+    params.set("ticketType", bargainTicketType.toString());
+    params.set("selectedTime", selectedTime || "10:30");
+    params.set("adults", adults.toString());
+    params.set("bargainApplied", "true");
+    params.set("bargainPrice", finalPrice.toString());
+
+    // Add visitDate if not already set
+    if (!params.get("visitDate")) {
+      params.set("visitDate", new Date().toISOString().split('T')[0]);
+    }
+
+    navigate(`/sightseeing/booking?${params.toString()}`);
+  };
+
   // Image navigation
   const nextImage = () => {
     if (attraction) {
