@@ -242,16 +242,11 @@ export function SightseeingCard({
                 </div>
               </div>
               <div className="text-right ml-3">
-                {savings > 0 && (
-                  <div className="text-xs text-gray-500 line-through">
-                    {formatPrice(originalTotalPrice)}
-                  </div>
-                )}
                 <div className="text-xl font-bold text-gray-900">
                   {formatPrice(totalPrice)}
                 </div>
                 <div className="text-xs text-gray-600">
-                  per {adults} {adults === 1 ? 'person' : 'people'}
+                  {formatPrice(pricePerPerson)} per person
                 </div>
               </div>
             </div>
