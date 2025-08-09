@@ -416,13 +416,13 @@ export function SightseeingCard({
                 </div>
               </div>
               
-              <div className="space-y-2 mt-3">
+              <div className="space-y-2">
                 <Button
                   onClick={(e) => {
                     e.stopPropagation();
                     onBargainClick();
                   }}
-                  className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold h-9"
+                  className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold h-9 rounded-md transition-all duration-200 shadow-sm"
                 >
                   <TrendingDown className="w-4 h-4 mr-1" />
                   Bargain
@@ -433,8 +433,9 @@ export function SightseeingCard({
                     handleViewDetails();
                   }}
                   variant="outline"
-                  className="w-full border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-9"
+                  className="w-full border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-9 rounded-md transition-all duration-200"
                 >
+                  <Eye className="w-4 h-4 mr-1" />
                   View Details
                 </Button>
               </div>
