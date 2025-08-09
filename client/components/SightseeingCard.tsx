@@ -361,17 +361,18 @@ export function SightseeingCard({
 
               <div className="flex items-center gap-4 mb-3">
                 <div
-                  className="flex items-center cursor-pointer hover:opacity-80"
+                  className="flex items-center cursor-pointer hover:bg-gray-50 px-2 py-1 rounded-md transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleReviewsClick();
                   }}
+                  title="Click to view reviews"
                 >
                   <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded text-sm font-medium">
                     <Star className="w-3 h-3 mr-1 fill-current" />
                     {attraction.rating}
                   </div>
-                  <span className="text-sm text-gray-600 ml-2">
+                  <span className="text-sm text-blue-600 ml-2 font-medium underline decoration-1 underline-offset-2">
                     {attraction.reviews.toLocaleString()} reviews
                   </span>
                 </div>
