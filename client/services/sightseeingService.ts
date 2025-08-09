@@ -70,7 +70,7 @@ export class SightseeingService {
   /**
    * Get attraction details by ID
    */
-  static async getAttractionDetails(attractionId: string): Promise<SightseeingAttraction> {
+  async getAttractionDetails(attractionId: string): Promise<SightseeingAttraction> {
     try {
       const response = await fetch(`/api/sightseeing/details/${attractionId}`);
       
