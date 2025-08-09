@@ -351,7 +351,7 @@ export function FlightStyleBargainModal({
       case "initial":
         return (
           <>
-            {/* Hotel Info - Exact flight layout */}
+            {/* Venue Info - Exact flight layout */}
             <div className="bg-white rounded-xl p-3 md:p-6 border border-[#003580]/10 shadow-sm">
               <div className="flex items-center justify-between mb-3 md:mb-4">
                 <div className="flex items-center space-x-3">
