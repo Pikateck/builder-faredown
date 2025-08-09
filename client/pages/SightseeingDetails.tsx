@@ -981,7 +981,7 @@ export default function SightseeingDetails() {
                                 {ticket.name}
                               </h4>
                               <div className={cn(
-                                "inline-flex items-center px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide whitespace-nowrap",
+                                "inline-flex items-center px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap",
                                 ticket.refundable
                                   ? "bg-green-100 text-green-700 border border-green-200"
                                   : "bg-red-50 text-red-600 border border-red-200"
