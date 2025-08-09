@@ -1001,7 +1001,7 @@ export default function SightseeingDetails() {
                               {formatPrice(totalPrice)}
                             </div>
                             <div className="text-xs sm:text-sm text-gray-500 font-normal">
-                              excludes taxes and fees
+                              includes taxes and fees
                             </div>
                           </div>
                         </div>
