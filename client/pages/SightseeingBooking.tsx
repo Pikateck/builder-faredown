@@ -663,28 +663,35 @@ export default function SightseeingBooking() {
                   {children > 0 && (
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">
-                        Children × {children}
+                        Children × {children} (50% off)
                       </span>
-                      <span>Free</span>
+                      <span>{formatPrice(selectedTicket.price * 0.5 * children)}</span>
                     </div>
                   )}
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span>{formatPrice(basePrice)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Taxes & Fees (18%)</span>
+                    <span>{formatPrice(basePrice * 0.18)}</span>
+                  </div>
                 </div>
 
                 <div className="border-t pt-2">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-900">
-                      Total
+                      Total Amount
                     </span>
-                    <span className="text-2xl font-bold text-blue-600">
-                      {formatPrice(totalPrice)}
-                    </span>
-                    <div className="text-xs text-gray-500 mt-1">
-                      includes taxes and fees
+                    <div className="text-right">
+                      <span className="text-2xl font-bold text-blue-600">
+                        {formatPrice(totalPrice)}
+                      </span>
+                      <div className="text-xs text-gray-500 mt-1">
+                        includes taxes and fees
+                      </div>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    All taxes and fees included
-                  </p>
                 </div>
               </div>
 
