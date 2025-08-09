@@ -23,6 +23,11 @@ interface FlightVoucherProps {
 
 export const FlightVoucher: React.FC<FlightVoucherProps> = ({ booking, onPrint }) => {
   const [fromCity, toCity] = booking.route.split(" → ");
+
+  useEffect(() => {
+    const cleanup = preparePrintDocument('voucher');
+    return cleanup;
+  }, []);
   
   return (
     <div className="bg-white text-black print:shadow-none print:border-none">
