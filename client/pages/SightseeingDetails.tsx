@@ -441,11 +441,6 @@ export default function SightseeingDetails() {
     setPassengerQuantities(prev => {
       const newQuantity = Math.max(0, prev[type] + change);
 
-      // Ensure at least 1 adult for bookings
-      if (type === 'adults' && newQuantity === 0) {
-        return prev;
-      }
-
       return {
         ...prev,
         [type]: newQuantity
