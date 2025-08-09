@@ -36,12 +36,12 @@ export interface PriceCalculation {
 }
 
 export class SightseeingService {
-  private static readonly TAX_RATE = 0.18; // 18% tax
+  private readonly TAX_RATE = 0.18; // 18% tax
 
   /**
    * Calculate price including tax for given passengers and ticket
    */
-  static calculatePrice(
+  calculatePrice(
     ticketPrice: number,
     adults: number = 0,
     children: number = 0,
