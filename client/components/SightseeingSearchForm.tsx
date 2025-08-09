@@ -82,14 +82,14 @@ export function SightseeingSearchForm() {
   dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
 
   const [visitDate, setVisitDate] = useState<Date | undefined>(tomorrow);
-  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>(dayAfterTomorrow);
   const [experienceType, setExperienceType] = useState("any");
   const [duration, setDuration] = useState("any");
 
   // Mobile-specific states
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
-  const [tripType, setTripType] = useState("single-day");
+  const [tripType, setTripType] = useState("multi-day");
 
   // Popular destinations will be loaded from database
   const [popularDestinations, setPopularDestinations] = useState<
