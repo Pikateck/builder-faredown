@@ -1046,7 +1046,7 @@ export default function SightseeingResults() {
                   name: selectedAttraction.name,
                   description: selectedAttraction.description,
                   image: selectedAttraction.images?.[0] || "/placeholder.svg",
-                  marketPrice: originalPriceCalc.totalPrice,
+                  marketPrice: priceCalc.totalPrice, // Use same price to avoid confusion
                   totalPrice: priceCalc.totalPrice,
                   total: priceCalc.totalPrice,
                   features: selectedAttraction.highlights || [],
