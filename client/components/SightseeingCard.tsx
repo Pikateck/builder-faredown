@@ -264,13 +264,13 @@ export function SightseeingCard({
             </div>
 
             {/* Mobile Actions */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mt-2">
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
                   onBargainClick();
                 }}
-                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold h-10"
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold h-10 rounded-md transition-all duration-200"
               >
                 <TrendingDown className="w-4 h-4 mr-1" />
                 Bargain
@@ -281,8 +281,9 @@ export function SightseeingCard({
                   handleViewDetails();
                 }}
                 variant="outline"
-                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-10"
+                className="flex-1 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-semibold h-10 rounded-md transition-all duration-200"
               >
+                <Eye className="w-4 h-4 mr-1" />
                 View Details
               </Button>
             </div>
