@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { QrCode, Camera, Calendar, Users, MapPin, Clock, Star, Ticket, Info, CheckCircle } from "lucide-react";
+import { preparePrintDocument } from "@/utils/printUtils";
 
 interface SightseeingVoucherProps {
   booking: {
