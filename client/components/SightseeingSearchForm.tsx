@@ -62,8 +62,8 @@ export function SightseeingSearchForm() {
 
   // Debug: Log component initialization
   console.log("🎭 SightseeingSearchForm initialized");
-  const [destination, setDestination] = useState("");
-  const [destinationCode, setDestinationCode] = useState(""); // Store destination code
+  const [destination, setDestination] = useState("Dubai");
+  const [destinationCode, setDestinationCode] = useState("DXB"); // Store destination code
   // Separate states for mobile and desktop popovers
   const [isDestinationOpenMobile, setIsDestinationOpenMobile] = useState(false);
   const [isDestinationOpenDesktop, setIsDestinationOpenDesktop] =
