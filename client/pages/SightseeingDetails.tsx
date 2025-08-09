@@ -615,7 +615,7 @@ export default function SightseeingDetails() {
               <div className="xl:col-span-3 space-y-6">
                 {/* Header */}
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight">
                     {attraction.name}
                   </h1>
 
