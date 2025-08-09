@@ -30,6 +30,11 @@ export const SightseeingVoucher: React.FC<SightseeingVoucherProps> = ({ booking,
     "Instant confirmation"
   ];
 
+  useEffect(() => {
+    const cleanup = preparePrintDocument('voucher');
+    return cleanup;
+  }, []);
+
   return (
     <div className="bg-white text-black print:shadow-none print:border-none">
       {/* Print Styles */}
