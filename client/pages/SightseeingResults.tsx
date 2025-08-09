@@ -1063,7 +1063,7 @@ export default function SightseeingResults() {
           setSelectedAttraction(null);
         }}
         checkInDate={new Date()}
-        checkOutDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
+        checkOutDate={new Date()}
         roomsCount={1}
         onBookingSuccess={(finalPrice) => {
           setIsBargainModalOpen(false);
