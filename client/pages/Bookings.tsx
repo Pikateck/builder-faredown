@@ -961,115 +961,79 @@ const Bookings: React.FC = () => {
 
       {/* Invoice Modal */}
       <Dialog open={invoiceModal} onOpenChange={setInvoiceModal}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Invoice</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
           {selectedBooking && (
-            <div className="space-y-6">
-              <div className="border rounded-lg p-6 bg-white">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h2 className="text-2xl font-bold text-blue-600">
-                      FAREDOWN
-                    </h2>
-                    <p className="text-gray-600">Travel Booking Platform</p>
-                  </div>
-                  <div className="text-right">
-                    <h3 className="text-lg font-semibold">INVOICE</h3>
-                    <p className="text-gray-600">
-                      #{selectedBooking.bookingRef}
-                    </p>
-                    <p className="text-gray-600">
-                      Date: {selectedBooking.bookingDate}
-                    </p>
-                  </div>
-                </div>
+            <>
+              <FaredownInvoice
+                booking={{
+                  id: selectedBooking.id,
+                  bookingRef: selectedBooking.bookingRef,
+                  type: selectedBooking.type,
+                  bookingDate: selectedBooking.bookingDate || new Date().toISOString().split('T')[0],
+                  customerName: "John Doe",
+                  customerEmail: "john.doe@example.com",
+                  customerPhone: "+971 50 123 4567",
+                  customerAddress: "Dubai, United Arab Emirates",
+                  serviceName: selectedBooking.type === "flight"
+                    ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                    : selectedBooking.type === "hotel"
+                    ? selectedBooking.name
+                    : selectedBooking.name || "Sightseeing Experience",
+                  serviceDetails: selectedBooking.type === "flight"
+                    ? `${selectedBooking.route} • ${selectedBooking.date} ${selectedBooking.time}`
+                    : selectedBooking.type === "hotel"
+                    ? `${selectedBooking.location} • ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
+                    : `${selectedBooking.location || "Dubai, UAE"} • ${selectedBooking.date || selectedBooking.visitDate}`,
+                  totalAmount: selectedBooking.totalAmount,
+                  currency: "₹"
+                }}
+                items={[
+                  {
+                    description: selectedBooking.type === "flight"
+                      ? `Flight Ticket - ${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                      : selectedBooking.type === "hotel"
+                      ? `Hotel Booking - ${selectedBooking.name} (${selectedBooking.roomType || "Deluxe Room"})`
+                      : `Sightseeing Experience - ${selectedBooking.name || "Attraction Visit"}`,
+                    quantity: selectedBooking.passengers || selectedBooking.guests || 1,
+                    unitPrice: parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, '')) / (selectedBooking.passengers || selectedBooking.guests || 1),
+                    total: parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, ''))
+                  }
+                ]}
+                taxes={[
+                  { name: "Service Tax", rate: 18, amount: parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, '')) * 0.15 }
+                ]}
+                subtotal={parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, '')) * 0.85}
+                total={parseInt(selectedBooking.totalAmount.replace(/[^\d]/g, ''))}
+                onPrint={() => window.print()}
+              />
 
-                <div className="border-t border-b py-4 mb-4">
-                  <h4 className="font-semibold mb-2">Booking Details</h4>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-600">Service:</span>
-                      <p className="font-medium">
-                        {selectedBooking.type === "flight"
-                          ? `Flight - ${selectedBooking.airline}`
-                          : `Hotel - ${selectedBooking.name}`}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Reference:</span>
-                      <p className="font-medium">
-                        {selectedBooking.bookingRef}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between">
-                    <span>Subtotal:</span>
-                    <span>{selectedBooking.totalAmount}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Taxes & Fees:</span>
-                    <span>Included</span>
-                  </div>
-                  <div className="flex justify-between font-bold text-lg border-t pt-2">
-                    <span>Total:</span>
-                    <span>{selectedBooking.totalAmount}</span>
-                  </div>
-                </div>
-
-                <div className="text-center text-sm text-gray-600">
-                  <p>Thank you for booking with Faredown!</p>
-                  <p>For support, contact us at support@faredown.com</p>
-                </div>
-              </div>
-
-              <div className="flex space-x-3">
-                <Button className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-2.5 h-2.5 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                    </div>
-                    <span>Email Invoice</span>
-                  </div>
+              {/* Action Buttons */}
+              <div className="no-print sticky bottom-0 bg-white border-t border-gray-200 p-4 flex gap-3">
+                <Button
+                  onClick={() => {
+                    // Email functionality
+                    alert("Invoice will be sent to your email address.");
+                  }}
+                  className="flex-1 bg-[#003580] hover:bg-[#002a66]"
+                >
+                  Email Invoice
                 </Button>
-                <Button variant="outline" className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 bg-gray-100 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-2.5 h-2.5 text-gray-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
-                    </div>
-                    <span>Download PDF</span>
-                  </div>
+                <Button
+                  onClick={() => window.print()}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Print/Download PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setInvoiceModal(false)}
+                  className="flex-1"
+                >
+                  Close
                 </Button>
               </div>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
