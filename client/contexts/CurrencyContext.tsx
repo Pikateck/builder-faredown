@@ -358,7 +358,9 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
       let response;
       try {
-        response = await fetch("/api/currency/rates", {
+        // Check if we're in development/production with proper API
+        const apiUrl = "/api/currency/rates";
+        response = await fetch(apiUrl, {
           signal: controller.signal,
           headers: {
             Accept: "application/json",
