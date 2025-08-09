@@ -366,16 +366,16 @@ export function SightseeingCard({
               </div>
               
               {/* Desktop Action Buttons - GUARANTEED VISIBLE */}
-              <div className="space-y-2 pt-2 border-t border-gray-100">
+              <div className="space-y-3 pt-4 border-t border-gray-200">
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onBargainClick();
                   }}
-                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
-                  style={{ backgroundColor: '#febb02', minHeight: '36px' }}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  style={{ backgroundColor: '#febb02', minHeight: '44px' }}
                 >
-                  <TrendingDown className="w-4 h-4" />
+                  <TrendingDown className="w-5 h-5" />
                   Bargain Now
                 </button>
                 <button
@@ -383,10 +383,10 @@ export function SightseeingCard({
                     e.stopPropagation();
                     handleViewDetails();
                   }}
-                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
-                  style={{ minHeight: '36px' }}
+                  className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                  style={{ minHeight: '44px' }}
                 >
-                  <Eye className="w-4 h-4" />
+                  <Eye className="w-5 h-5" />
                   View Details
                 </button>
               </div>
