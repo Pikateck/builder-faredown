@@ -75,11 +75,11 @@ export function SightseeingSearchForm() {
     DestinationOption[]
   >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  // Set default dates to future dates (tomorrow and day after)
+  // Set default dates to future dates (tomorrow and 3 days later)
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const dayAfterTomorrow = new Date();
-  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 4); // 3-day trip by default
 
   const [visitDate, setVisitDate] = useState<Date | undefined>(tomorrow);
   const [endDate, setEndDate] = useState<Date | undefined>(dayAfterTomorrow);
