@@ -221,10 +221,15 @@ export function SightseeingSearchForm() {
     const urlVisitDate = searchParams.get("visitDate");
     if (urlVisitDate) {
       try {
-        const parsedDate = new Date(urlVisitDate);
+        // Handle both ISO string and simple date formats
+        const parsedDate = new Date(decodeURIComponent(urlVisitDate));
         if (!isNaN(parsedDate.getTime())) {
-          setVisitDate(parsedDate);
-          console.log("✅ Set visit date from URL:", parsedDate);
+          // Ensure we use the date part only (no time zone issues)
+          const localDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
+          setVisitDate(localDate);
+          console.log("✅ Set visit date from URL:", localDate, "from", urlVisitDate);
+        } else {
+          console.warn("⚠️ Invalid visit date format in URL:", urlVisitDate);
         }
       } catch (error) {
         console.error("❌ Error parsing visit date from URL:", error);
@@ -235,11 +240,16 @@ export function SightseeingSearchForm() {
     const urlEndDate = searchParams.get("endDate");
     if (urlEndDate) {
       try {
-        const parsedEndDate = new Date(urlEndDate);
+        // Handle both ISO string and simple date formats
+        const parsedEndDate = new Date(decodeURIComponent(urlEndDate));
         if (!isNaN(parsedEndDate.getTime())) {
-          setEndDate(parsedEndDate);
+          // Ensure we use the date part only (no time zone issues)
+          const localEndDate = new Date(parsedEndDate.getFullYear(), parsedEndDate.getMonth(), parsedEndDate.getDate());
+          setEndDate(localEndDate);
           setTripType("multi-day");
-          console.log("✅ Set end date from URL:", parsedEndDate);
+          console.log("✅ Set end date from URL:", localEndDate, "from", urlEndDate);
+        } else {
+          console.warn("⚠️ Invalid end date format in URL:", urlEndDate);
         }
       } catch (error) {
         console.error("❌ Error parsing end date from URL:", error);
@@ -321,7 +331,7 @@ export function SightseeingSearchForm() {
         name: "The Dubai Mall",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦����",
+        flag: "🇦🇪",
       },
       {
         id: "DUBAI-FRAME",
