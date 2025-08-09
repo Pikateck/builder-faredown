@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { QrCode, Plane, Calendar, Clock, Users, MapPin, Ticket } from "lucide-react";
+import { preparePrintDocument } from "@/utils/printUtils";
 
 interface FlightVoucherProps {
   booking: {
