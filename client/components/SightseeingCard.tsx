@@ -251,10 +251,14 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Mobile Key Highlights */}
-            <div className="mb-3">
-              <div className="flex items-center gap-1 text-sm text-gray-600">
-                <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
+            {/* Mobile Features */}
+            <div className="mb-3 space-y-2">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
+                <span>Free cancellation</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span className="truncate">{attraction.highlights[0]}</span>
               </div>
             </div>
