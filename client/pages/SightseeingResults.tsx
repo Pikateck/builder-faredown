@@ -1035,11 +1035,11 @@ export default function SightseeingResults() {
                 name: selectedAttraction.name,
                 description: selectedAttraction.description,
                 image: selectedAttraction.images?.[0] || "/placeholder.svg",
-                marketPrice: selectedAttraction.originalPrice,
-                totalPrice: selectedAttraction.currentPrice,
-                total: selectedAttraction.currentPrice,
+                marketPrice: selectedAttraction.originalPrice * parseInt(adults),
+                totalPrice: selectedAttraction.currentPrice * parseInt(adults),
+                total: selectedAttraction.currentPrice * parseInt(adults),
                 features: selectedAttraction.highlights || [],
-                maxOccupancy: 1, // For sightseeing experiences
+                maxOccupancy: parseInt(adults), // Number of adults for sightseeing
                 bedType: selectedAttraction.duration,
                 size: selectedAttraction.category,
                 cancellation: "Free cancellation",
