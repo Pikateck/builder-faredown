@@ -32,6 +32,14 @@ const Bookings: React.FC = () => {
   const [invoiceModal, setInvoiceModal] = useState(false);
   const [refundModal, setRefundModal] = useState(false);
 
+  // Watch for URL parameter changes
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && ["all", "flights", "hotels", "sightseeing"].includes(tabParam)) {
+      setActiveTab(tabParam as "all" | "flights" | "hotels" | "sightseeing");
+    }
+  }, [searchParams]);
+
   const flightBookings = [
     {
       id: "FL001",
