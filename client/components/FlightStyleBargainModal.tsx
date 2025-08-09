@@ -409,10 +409,10 @@ export function FlightStyleBargainModal({
                         /[^0-9]/g,
                         "",
                       );
-                      // Validate that price doesn't exceed total price
+                      // Validate that price doesn't exceed total price and is greater than zero
                       const totalPrice = priceCalculation?.total || 0;
                       const enteredPrice = parseInt(numericValue) || 0;
-                      if (enteredPrice <= totalPrice) {
+                      if (enteredPrice > 0 && enteredPrice <= totalPrice) {
                         setBargainPrice(numericValue);
                       }
                     }}
