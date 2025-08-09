@@ -269,6 +269,11 @@ export function SightseeingSearchForm() {
       setDuration(urlDuration);
       console.log("✅ Set duration from URL:", urlDuration);
     }
+
+    // Get adults and children from URL for consistent pricing (stored for use in search)
+    const urlAdults = searchParams.get("adults") || "2";
+    const urlChildren = searchParams.get("children") || "0";
+    console.log("✅ Read adults/children from URL:", urlAdults, "/", urlChildren);
   }, [searchParams]);
 
   // Get Dubai-specific attractions when searching for Dubai
