@@ -95,7 +95,7 @@ export class SightseeingService {
   /**
    * Transform API data to component format
    */
-  private static transformApiDataToAttraction(apiData: any, attractionId: string): SightseeingAttraction {
+  private transformApiDataToAttraction(apiData: any, attractionId: string): SightseeingAttraction {
     return {
       id: apiData.activity_code || attractionId,
       name: apiData.activity_name || apiData.name || "Unknown Activity",
