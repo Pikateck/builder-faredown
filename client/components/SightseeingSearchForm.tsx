@@ -56,6 +56,7 @@ interface DestinationOption {
 
 export function SightseeingSearchForm() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
