@@ -179,7 +179,9 @@ export function SightseeingCard({
 
           {/* Mobile Content */}
           <div className="p-6 min-h-[380px] flex flex-col">
-            <div className="flex justify-between items-start mb-4">
+            {/* Content arranged in two columns */}
+            <div className="flex gap-4 mb-4">
+              {/* Left Column - Main Content */}
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-2">
                   {attraction.name}
@@ -188,7 +190,7 @@ export function SightseeingCard({
                   <MapPin className="w-4 h-4 mr-1" />
                   <span className="truncate">{attraction.location}</span>
                 </div>
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3 mb-3">
                   <div
                     className="flex items-center cursor-pointer hover:bg-gray-50 px-2 py-1 rounded-md transition-colors"
                     onClick={(e) => {
@@ -211,12 +213,70 @@ export function SightseeingCard({
                   </div>
                 </div>
               </div>
-              <div className="text-right ml-3">
-                <div className="text-xl font-bold text-gray-900">
+
+              {/* Right Column - Price and Buttons */}
+              <div className="w-32 text-right">
+                <div className="text-xl font-bold text-gray-900 mb-1">
                   {formatPrice(totalPrice)}
                 </div>
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-gray-600 mb-3">
                   {formatPrice(pricePerPerson)} per person
+                </div>
+
+                {/* Mobile Buttons - Below Price */}
+                <div className="space-y-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onBargainClick();
+                    }}
+                    style={{
+                      backgroundColor: '#febb02',
+                      color: '#000000',
+                      border: 'none',
+                      borderRadius: '6px',
+                      padding: '8px 12px',
+                      fontWeight: '600',
+                      fontSize: '12px',
+                      minHeight: '36px',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '4px',
+                      cursor: 'pointer',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <TrendingDown size={14} />
+                    Bargain
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewDetails();
+                    }}
+                    style={{
+                      backgroundColor: '#003580',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '6px',
+                      padding: '8px 12px',
+                      fontWeight: '600',
+                      fontSize: '12px',
+                      minHeight: '36px',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '4px',
+                      cursor: 'pointer',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                    }}
+                  >
+                    <Eye size={14} />
+                    Details
+                  </button>
                 </div>
               </div>
             </div>
