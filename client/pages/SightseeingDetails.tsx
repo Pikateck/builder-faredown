@@ -93,17 +93,11 @@ export default function SightseeingDetails() {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [bargainTicketType, setBargainTicketType] = useState<number>(0);
 
-  // Passenger quantities for each ticket type
-  const [ticketQuantities, setTicketQuantities] = useState<{
-    [ticketIndex: number]: {
-      adults: number;
-      children: number;
-      infants: number;
-    };
-  }>({
-    0: { adults: 2, children: 0, infants: 0 },
-    1: { adults: 2, children: 0, infants: 0 },
-    2: { adults: 2, children: 0, infants: 0 },
+  // Unified passenger quantities for all ticket types
+  const [passengerQuantities, setPassengerQuantities] = useState({
+    adults: 2,
+    children: 0,
+    infants: 0,
   });
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
@@ -370,13 +364,12 @@ export default function SightseeingDetails() {
   // Navigation handlers
   const handleBookNow = (ticketIndex?: number) => {
     const ticketToBook = ticketIndex !== undefined ? ticketIndex : selectedTicketType;
-    const quantities = ticketQuantities[ticketToBook];
 
     console.log("🎫 Book Now clicked!", {
       selectedTime,
       ticketIndex: ticketToBook,
       attractionId: attraction?.id,
-      quantities
+      quantities: passengerQuantities
     });
 
     if (!selectedTime) {
@@ -389,9 +382,9 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", ticketToBook.toString());
     params.set("selectedTime", selectedTime);
-    params.set("adults", quantities.adults.toString());
-    params.set("children", quantities.children.toString());
-    params.set("infants", quantities.infants.toString());
+    params.set("adults", passengerQuantities.adults.toString());
+    params.set("children", passengerQuantities.children.toString());
+    params.set("infants", passengerQuantities.infants.toString());
 
     // Add visitDate - use the current date if not already set
     if (!params.get("visitDate")) {
@@ -429,10 +422,9 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", bargainTicketType.toString());
     params.set("selectedTime", selectedTime || "10:30");
-    const quantities = ticketQuantities[bargainTicketType];
-    params.set("adults", quantities.adults.toString());
-    params.set("children", quantities.children.toString());
-    params.set("infants", quantities.infants.toString());
+    params.set("adults", passengerQuantities.adults.toString());
+    params.set("children", passengerQuantities.children.toString());
+    params.set("infants", passengerQuantities.infants.toString());
     params.set("bargainApplied", "true");
     params.set("bargainPrice", finalPrice.toString());
 
@@ -445,10 +437,9 @@ export default function SightseeingDetails() {
   };
 
   // Passenger quantity management
-  const updatePassengerQuantity = (ticketIndex: number, type: 'adults' | 'children' | 'infants', change: number) => {
-    setTicketQuantities(prev => {
-      const current = prev[ticketIndex] || { adults: 2, children: 0, infants: 0 };
-      const newQuantity = Math.max(0, current[type] + change);
+  const updatePassengerQuantity = (type: 'adults' | 'children' | 'infants', change: number) => {
+    setPassengerQuantities(prev => {
+      const newQuantity = Math.max(0, prev[type] + change);
 
       // Ensure at least 1 adult for bookings
       if (type === 'adults' && newQuantity === 0) {
@@ -457,29 +448,24 @@ export default function SightseeingDetails() {
 
       return {
         ...prev,
-        [ticketIndex]: {
-          ...current,
-          [type]: newQuantity
-        }
+        [type]: newQuantity
       };
     });
   };
 
-  // Calculate total passengers for a ticket type
-  const getTotalPassengers = (ticketIndex: number) => {
-    const quantities = ticketQuantities[ticketIndex] || { adults: 2, children: 0, infants: 0 };
-    return quantities.adults + quantities.children + quantities.infants;
+  // Calculate total passengers
+  const getTotalPassengers = () => {
+    return passengerQuantities.adults + passengerQuantities.children + passengerQuantities.infants;
   };
 
   // Calculate total price for a ticket type
   const getTicketTotalPrice = (ticketIndex: number) => {
     const ticket = attraction?.ticketTypes[ticketIndex];
-    const quantities = ticketQuantities[ticketIndex] || { adults: 2, children: 0, infants: 0 };
 
     if (!ticket) return 0;
 
     // Adults pay full price, children 50%, infants free
-    return (ticket.price * quantities.adults) + (ticket.price * 0.5 * quantities.children);
+    return (ticket.price * passengerQuantities.adults) + (ticket.price * 0.5 * passengerQuantities.children);
   };
 
   // Image navigation
@@ -883,10 +869,98 @@ export default function SightseeingDetails() {
                 )}
               </div>
 
+              {/* Unified Passenger Selection */}
+              <div className="p-4 border-b border-gray-200">
+                <h4 className="font-medium text-gray-900 mb-4">How many tickets?</h4>
+
+                {/* Adults */}
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <div className="font-medium text-gray-900">Adult (age 13+)</div>
+                    <div className="text-sm text-gray-500">Full price</div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updatePassengerQuantity('adults', -1)}
+                      disabled={passengerQuantities.adults <= 1}
+                      className="w-8 h-8 p-0"
+                    >
+                      -
+                    </Button>
+                    <span className="w-8 text-center font-medium">{passengerQuantities.adults}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updatePassengerQuantity('adults', 1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Children */}
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <div className="font-medium text-gray-900">Child (age 4-12)</div>
+                    <div className="text-sm text-gray-500">50% price</div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updatePassengerQuantity('children', -1)}
+                      disabled={passengerQuantities.children <= 0}
+                      className="w-8 h-8 p-0"
+                    >
+                      -
+                    </Button>
+                    <span className="w-8 text-center font-medium">{passengerQuantities.children}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updatePassengerQuantity('children', 1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Infants */}
+                <div className="flex items-center justify-between mb-0">
+                  <div>
+                    <div className="font-medium text-gray-900">Infant (age 0-3)</div>
+                    <div className="text-sm text-gray-500">Free</div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updatePassengerQuantity('infants', -1)}
+                      disabled={passengerQuantities.infants <= 0}
+                      className="w-8 h-8 p-0"
+                    >
+                      -
+                    </Button>
+                    <span className="w-8 text-center font-medium">{passengerQuantities.infants}</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updatePassengerQuantity('infants', 1)}
+                      className="w-8 h-8 p-0"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
               {/* Ticket Types */}
               <div className="p-4 md:p-6 space-y-4">
                 {attraction.ticketTypes.map((ticket, index) => {
-                  const quantities = ticketQuantities[index];
                   const totalPrice = getTicketTotalPrice(index);
 
                   return (
@@ -930,106 +1004,19 @@ export default function SightseeingDetails() {
                         )}
                       </div>
 
-                      {/* Passenger Selection */}
-                      <div className="p-4 md:p-6 bg-gray-50">
-                        <h5 className="font-medium text-gray-900 mb-4">How many tickets?</h5>
-
-                        {/* Adults */}
-                        <div className="flex items-center justify-between mb-3">
-                          <div>
-                            <div className="font-medium text-gray-900">Adult (age 13+)</div>
-                            <div className="text-sm text-gray-500">{formatPrice(ticket.price)}</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updatePassengerQuantity(index, 'adults', -1)}
-                              disabled={quantities.adults <= 1}
-                              className="w-8 h-8 p-0"
-                            >
-                              -
-                            </Button>
-                            <span className="w-8 text-center font-medium">{quantities.adults}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updatePassengerQuantity(index, 'adults', 1)}
-                              className="w-8 h-8 p-0"
-                            >
-                              +
-                            </Button>
-                          </div>
-                        </div>
-
-                        {/* Children */}
-                        <div className="flex items-center justify-between mb-3">
-                          <div>
-                            <div className="font-medium text-gray-900">Child (age 4-12)</div>
-                            <div className="text-sm text-gray-500">{formatPrice(ticket.price * 0.5)}</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updatePassengerQuantity(index, 'children', -1)}
-                              disabled={quantities.children <= 0}
-                              className="w-8 h-8 p-0"
-                            >
-                              -
-                            </Button>
-                            <span className="w-8 text-center font-medium">{quantities.children}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updatePassengerQuantity(index, 'children', 1)}
-                              className="w-8 h-8 p-0"
-                            >
-                              +
-                            </Button>
-                          </div>
-                        </div>
-
-                        {/* Infants */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <div className="font-medium text-gray-900">Infant (age 0-3)</div>
-                            <div className="text-sm text-gray-500">Free</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updatePassengerQuantity(index, 'infants', -1)}
-                              disabled={quantities.infants <= 0}
-                              className="w-8 h-8 p-0"
-                            >
-                              -
-                            </Button>
-                            <span className="w-8 text-center font-medium">{quantities.infants}</span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => updatePassengerQuantity(index, 'infants', 1)}
-                              className="w-8 h-8 p-0"
-                            >
-                              +
-                            </Button>
-                          </div>
-                        </div>
-
-                        {/* Action Buttons */}
+                      {/* Action Buttons */}
+                      <div className="p-4 md:p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <Button
                             onClick={() => handleBargainClick(index)}
-                            className="bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-semibold py-4 px-6 text-base rounded-xl shadow-md transition-all duration-200 transform hover:scale-[1.01] active:scale-95 min-h-[52px] whitespace-nowrap"
+                            className="bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-semibold py-4 px-6 text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[52px] whitespace-nowrap flex items-center justify-center"
                           >
                             <TrendingDown className="w-4 h-4 mr-2" />
                             Bargain This Price
                           </Button>
                           <Button
                             onClick={() => handleBookNow(index)}
-                            className="bg-[#003580] hover:bg-[#002a66] text-white font-bold py-4 px-6 text-base rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 min-h-[52px] whitespace-nowrap"
+                            className="bg-[#003580] hover:bg-[#002a66] text-white font-bold py-4 px-6 text-base rounded-lg shadow-lg transition-all duration-200 min-h-[52px] whitespace-nowrap flex items-center justify-center"
                           >
                             Book Now
                           </Button>
@@ -1044,13 +1031,10 @@ export default function SightseeingDetails() {
               <div className="p-4 border-t border-gray-200 bg-blue-50">
                 <div className="text-center">
                   <div className="text-sm text-gray-600 mb-1">
-                    Total for {getTotalPassengers(selectedTicketType)} guest{getTotalPassengers(selectedTicketType) > 1 ? 's' : ''}
+                    Total for {getTotalPassengers()} guest{getTotalPassengers() > 1 ? 's' : ''}
                   </div>
-                  <div className="text-3xl font-bold text-[#003580]">
-                    {formatPrice(getTicketTotalPrice(selectedTicketType))}
-                  </div>
-                  <div className="text-sm text-gray-500 mt-1">
-                    includes taxes and fees
+                  <div className="text-sm text-gray-500 mt-1 mb-1">
+                    {passengerQuantities.adults} Adults{passengerQuantities.children > 0 ? `, ${passengerQuantities.children} Children` : ''}{passengerQuantities.infants > 0 ? `, ${passengerQuantities.infants} Infants` : ''}
                   </div>
                 </div>
               </div>
