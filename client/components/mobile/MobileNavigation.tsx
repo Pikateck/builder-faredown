@@ -13,7 +13,7 @@ export function MobileNavigation() {
 
   const navItems = [
     {
-      path: "/flights",
+      path: "/?tab=flights",
       icon: Plane,
       label: "Flights",
     },
@@ -23,7 +23,7 @@ export function MobileNavigation() {
       label: "Hotels",
     },
     {
-      path: "/sightseeing",
+      path: "/?tab=sightseeing",
       icon: Camera,
       label: "Sightseeing",
     },
