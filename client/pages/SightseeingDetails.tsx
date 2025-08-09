@@ -360,6 +360,14 @@ export default function SightseeingDetails() {
     params.set("ticketType", selectedTicketType.toString());
     params.set("selectedTime", selectedTime);
 
+    // Add visitDate - use the current date if not already set
+    if (!params.get("visitDate")) {
+      params.set("visitDate", new Date().toISOString().split('T')[0]);
+    }
+
+    // Ensure adults parameter is set
+    params.set("adults", adults.toString());
+
     const bookingUrl = `/sightseeing/booking?${params.toString()}`;
     console.log("🚀 Navigating to:", bookingUrl);
 
