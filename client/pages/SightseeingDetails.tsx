@@ -368,12 +368,15 @@ export default function SightseeingDetails() {
   };
 
   // Navigation handlers
-  const handleBookNow = () => {
+  const handleBookNow = (ticketIndex?: number) => {
+    const ticketToBook = ticketIndex !== undefined ? ticketIndex : selectedTicketType;
+    const quantities = ticketQuantities[ticketToBook];
+
     console.log("🎫 Book Now clicked!", {
       selectedTime,
-      selectedTicketType,
+      ticketIndex: ticketToBook,
       attractionId: attraction?.id,
-      adults
+      quantities
     });
 
     if (!selectedTime) {
@@ -384,16 +387,16 @@ export default function SightseeingDetails() {
 
     const params = new URLSearchParams(searchParams);
     params.set("attractionId", attraction?.id || "");
-    params.set("ticketType", selectedTicketType.toString());
+    params.set("ticketType", ticketToBook.toString());
     params.set("selectedTime", selectedTime);
+    params.set("adults", quantities.adults.toString());
+    params.set("children", quantities.children.toString());
+    params.set("infants", quantities.infants.toString());
 
     // Add visitDate - use the current date if not already set
     if (!params.get("visitDate")) {
       params.set("visitDate", new Date().toISOString().split('T')[0]);
     }
-
-    // Ensure adults parameter is set
-    params.set("adults", adults.toString());
 
     const bookingUrl = `/sightseeing/booking?${params.toString()}`;
     console.log("🚀 Navigating to:", bookingUrl);
