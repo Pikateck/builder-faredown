@@ -172,9 +172,7 @@ export default function SightseeingBookingConfirmation() {
       }
     };
 
-    if (attractionId) {
-      loadAttraction();
-    }
+    loadAttraction();
   }, [attractionId]);
 
   // Get category display info
