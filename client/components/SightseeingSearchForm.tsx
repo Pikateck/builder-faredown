@@ -62,8 +62,8 @@ export function SightseeingSearchForm() {
 
   // Debug: Log component initialization
   console.log("🎭 SightseeingSearchForm initialized");
-  const [destination, setDestination] = useState("Dubai");
-  const [destinationCode, setDestinationCode] = useState("DXB"); // Store destination code
+  const [destination, setDestination] = useState("");
+  const [destinationCode, setDestinationCode] = useState(""); // Store destination code
   // Exact hotels state pattern
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -384,7 +384,7 @@ export function SightseeingSearchForm() {
         name: "Atlantis The Palm",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦🇪",
+        flag: "🇦����",
       },
       {
         id: "DUBAI-MIRACLE-GARDEN",
@@ -424,7 +424,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Aquarium & Underwater Zoo",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "���������",
+        flag: "�������",
       },
     ];
   };
