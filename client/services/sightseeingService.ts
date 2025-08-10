@@ -60,7 +60,14 @@ class SightseeingService {
         return this.getFallbackDestinations(query, limit);
       }
 
-      const destinations = response.data.data.destinations.map((dest: any) => ({
+      // Check if destinations data exists
+      const destinationsData = response.data.data?.destinations;
+      if (!destinationsData || !Array.isArray(destinationsData)) {
+        console.warn("❌ Sightseeing destinations data is invalid:", response.data.data);
+        return this.getFallbackDestinations(query, limit);
+      }
+
+      const destinations = destinationsData.map((dest: any) => ({
         id: dest.code,
         code: dest.code,
         name: dest.name,
