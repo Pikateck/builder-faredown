@@ -73,6 +73,7 @@ import {
   TrendingUp,
   TrendingDown,
   Search,
+  Camera,
   Navigation,
 } from "lucide-react";
 import {
