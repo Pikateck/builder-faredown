@@ -64,12 +64,9 @@ export function SightseeingSearchForm() {
   console.log("🎭 SightseeingSearchForm initialized");
   const [destination, setDestination] = useState("Dubai");
   const [destinationCode, setDestinationCode] = useState("DXB"); // Store destination code
-  // Separate states for mobile and desktop popovers
-  const [isDestinationOpenMobile, setIsDestinationOpenMobile] = useState(false);
-  const [isDestinationOpenDesktop, setIsDestinationOpenDesktop] =
-    useState(false);
-  const [isCalendarOpenMobile, setIsCalendarOpenMobile] = useState(false);
-  const [isCalendarOpenDesktop, setIsCalendarOpenDesktop] = useState(false);
+  // Unified states for responsive layout
+  const [isDestinationOpen, setIsDestinationOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [destinationSuggestions, setDestinationSuggestions] = useState<
     DestinationOption[]
@@ -423,7 +420,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Aquarium & Underwater Zoo",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "�������",
+        flag: "���������",
       },
     ];
   };
