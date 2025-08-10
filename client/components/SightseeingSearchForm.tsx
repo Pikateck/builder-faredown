@@ -771,6 +771,7 @@ export function SightseeingSearchForm() {
                     const value = e.target.value;
                     setInputValue(value);
                     setIsUserTyping(true);
+                    // Auto-open dropdown when user starts typing
                     if (!isDestinationOpen) {
                       setIsDestinationOpen(true);
                     }
@@ -779,6 +780,7 @@ export function SightseeingSearchForm() {
                   onFocus={(e) => {
                     e.stopPropagation();
                     setIsDestinationOpen(true);
+                    // Set inputValue to current destination when focusing for editing
                     if (!isUserTyping && destination) {
                       setInputValue(destination);
                       setIsUserTyping(true);
