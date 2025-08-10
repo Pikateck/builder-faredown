@@ -49,8 +49,8 @@ interface DestinationOption {
   code: string;
   name: string;
   country: string;
-  type: string;
-  flag?: string;
+  type: "city" | "region" | "country" | "destination";
+  countryCode?: string;
   popular?: boolean;
 }
 
