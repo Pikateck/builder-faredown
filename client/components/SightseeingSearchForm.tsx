@@ -35,22 +35,26 @@ export function SightseeingSearchForm() {
   const [searchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
-
-  // EXACT HOTELS STATE PATTERN
+  
+  // EXACT HOTELS STATE PATTERN - WHOLESALE COPY
   const [destination, setDestination] = useState("");
-  const [destinationCode, setDestinationCode] = useState("");
+  const [destinationCode, setDestinationCode] = useState(""); // Store destination code
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [destinationSuggestions, setDestinationSuggestions] = useState<DestinationOption[]>([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<
+    DestinationOption[]
+  >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-
+  
   // Set default dates to future dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const visitDefault = new Date();
-  visitDefault.setDate(visitDefault.getDate() + 4);
+  const checkOutDefault = new Date();
+  checkOutDefault.setDate(checkOutDefault.getDate() + 4);
 
-  const [visitDate, setVisitDate] = useState<Date | undefined>(tomorrow);
-  const [endDate, setEndDate] = useState<Date | undefined>(visitDefault);
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(tomorrow);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
+    checkOutDefault,
+  );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Mobile-specific states
@@ -59,14 +63,17 @@ export function SightseeingSearchForm() {
   const [tripType, setTripType] = useState("round-trip");
 
   // Popular destinations will be loaded from database
-  const [popularDestinations, setPopularDestinations] = useState<DestinationOption[]>([]);
-  const [popularDestinationsLoaded, setPopularDestinationsLoaded] = useState(false);
+  const [popularDestinations, setPopularDestinations] = useState<
+    DestinationOption[]
+  >([]);
+  const [popularDestinationsLoaded, setPopularDestinationsLoaded] =
+    useState(false);
 
-  // State to track if user is actively typing (not pre-filled) - EXACT HOTELS PATTERN
+  // State to track if user is actively typing (not pre-filled)
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  // Debounced search function - EXACT HOTELS PATTERN
+  // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
 
   // Mobile detection
@@ -89,11 +96,10 @@ export function SightseeingSearchForm() {
         const popular = await sightseeingService.searchDestinations(""); // Empty query for popular
         const formattedPopular = popular.map((dest) => ({
           id: dest.code,
-          code: dest.code,
+          code: dest.code, // dest.code is the destination code
           name: dest.name,
           country: dest.country,
-          type: dest.type,
-          popular: dest.popular,
+          type: dest.type as "city" | "region" | "country" | "landmark",
         }));
         setPopularDestinations(formattedPopular);
         setPopularDestinationsLoaded(true);
@@ -116,7 +122,6 @@ export function SightseeingSearchForm() {
             country: "United Arab Emirates",
             type: "city",
             flag: "🇦🇪",
-            popular: true,
           },
           {
             id: "LON",
@@ -125,7 +130,6 @@ export function SightseeingSearchForm() {
             country: "United Kingdom",
             type: "city",
             flag: "🇬🇧",
-            popular: true,
           },
           {
             id: "BCN",
@@ -134,7 +138,6 @@ export function SightseeingSearchForm() {
             country: "Spain",
             type: "city",
             flag: "🇪🇸",
-            popular: true,
           },
           {
             id: "NYC",
@@ -143,7 +146,6 @@ export function SightseeingSearchForm() {
             country: "United States",
             type: "city",
             flag: "🇺🇸",
-            popular: true,
           },
           {
             id: "PAR",
@@ -152,7 +154,6 @@ export function SightseeingSearchForm() {
             country: "France",
             type: "city",
             flag: "🇫🇷",
-            popular: true,
           },
           {
             id: "BOM",
@@ -161,7 +162,6 @@ export function SightseeingSearchForm() {
             country: "India",
             type: "city",
             flag: "🇮🇳",
-            popular: true,
           },
         ]);
         setPopularDestinationsLoaded(true);
@@ -171,11 +171,11 @@ export function SightseeingSearchForm() {
     loadPopularDestinations();
   }, []);
 
-  // EXACT HOTELS SEARCH PATTERN with debouncing
+  // EXACT HOTELS SEARCH PATTERN
   const searchDestinations = useCallback(
     async (query: string) => {
-      // Show suggestions immediately like Booking.com (min 3 characters)
-      if (query.length < 3) {
+      // Show suggestions immediately like Booking.com (single character minimum)
+      if (query.length < 1) {
         setDestinationSuggestions([]);
         return;
       }
@@ -185,13 +185,13 @@ export function SightseeingSearchForm() {
         clearTimeout(debouncedSearchRef.current);
       }
 
-      // 300ms debounce as specified
+      // Ultra-fast response time like Booking.com
       debouncedSearchRef.current = setTimeout(async () => {
         try {
           setLoadingDestinations(true);
           console.log(`🔍 Real-time sightseeing search: "${query}"`);
 
-          // Get search results using single query parameter
+          // Get search results using single query parameter - ONLY CHANGE FROM HOTELS
           const results = await sightseeingService.searchDestinations(query);
 
           const formattedResults = results.map((dest) => ({
@@ -199,8 +199,9 @@ export function SightseeingSearchForm() {
             code: dest.code,
             name: dest.name,
             country: dest.country,
-            type: dest.type,
-            popular: dest.popular || false,
+            type: dest.type as "city" | "region" | "country" | "landmark",
+            popular: (dest as any).popular || false,
+            flag: (dest as any).flag || "🌍",
           }));
 
           setDestinationSuggestions(formattedResults);
@@ -210,7 +211,7 @@ export function SightseeingSearchForm() {
         } catch (error) {
           console.error("⚠️ Real-time sightseeing search failed:", error);
 
-          // Enhanced fallback with popular destinations filter - EXACT HOTELS PATTERN
+          // Enhanced fallback with popular destinations filter
           const fallbackDestinations = popularDestinations.filter(
             (dest) =>
               dest.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -225,7 +226,7 @@ export function SightseeingSearchForm() {
         } finally {
           setLoadingDestinations(false);
         }
-      }, 300); // 300ms debounce as specified
+      }, 100); // Ultra-fast like Booking.com
     },
     [popularDestinations],
   );
@@ -233,11 +234,11 @@ export function SightseeingSearchForm() {
   // Handle destination search only when user actively types - EXACT HOTELS PATTERN
   useEffect(() => {
     if (popularDestinationsLoaded && isDestinationOpen && isUserTyping) {
-      if (inputValue && inputValue.length >= 3) {
-        // Search immediately as user types (min 3 chars enforced)
+      if (inputValue && inputValue.length >= 1) {
+        // Search immediately as user types (like Booking.com)
         searchDestinations(inputValue);
       } else {
-        // Clear search results when input is too short
+        // Clear search results when input is empty
         setDestinationSuggestions([]);
       }
     }
@@ -249,98 +250,65 @@ export function SightseeingSearchForm() {
     isUserTyping,
   ]);
 
-  // Handle destination selection - FIXED with proper state management
-  const handleDestinationSelect = (d: DestinationOption) => {
-    const label = `${d.name}, ${d.country}`;
-    console.log("🎯 Destination selected:", {
-      label,
-      code: d.code,
-      destination: label,
-      destinationCode: d.code
-    });
-
-    setDestination(label);
-    setDestinationCode(d.code);
-    setInputValue("");          // we can clear this ONLY because value uses destination when !isUserTyping
-    setIsUserTyping(false);
-    setIsDestinationOpen(false);
-
-    console.log("✅ State updated:", {
-      destination: label,
-      destinationCode: d.code,
-      inputValue: "",
-      isUserTyping: false
-    });
-  };
-
-  // Handle search validation and execution - FIXED to use destinationCode
   const handleSearch = () => {
     console.log("🔍 Starting sightseeing search with:", {
       destination,
       destinationCode,
-      visitDate,
-      endDate,
+      checkInDate,
+      checkOutDate,
     });
 
-    // Clear any existing errors
-    setShowError(false);
-    setErrorMessage("");
+    // Only validate dates, destination is optional for browsing
+    if (!checkInDate || !checkOutDate) {
+      console.log("⚠️ Missing required fields:", {
+        checkInDate,
+        checkOutDate,
+      });
 
-    // Validate destination CODE is set
-    if (!destinationCode) {
-      console.log("❌ Validation failed: No destination code");
-      setErrorMessage("Please select a destination");
+      // Show user-friendly error
+      setErrorMessage("Please select check-in and check-out dates");
       setShowError(true);
       return;
     }
 
-    // Validate visit date
-    if (!visitDate) {
-      console.log("❌ Validation failed: No visit date");
-      setErrorMessage("Please select a visit date");
-      setShowError(true);
-      return;
-    }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (visitDate < today) {
-      console.log("❌ Validation failed: Date in past");
-      setErrorMessage("Visit date cannot be in the past");
-      setShowError(true);
-      return;
-    }
-
-    console.log("✅ Validation passed, proceeding with sightseeing search");
-
-    // Build search parameters - USE DESTINATION CODE
-    const currentSearchParams = new URLSearchParams(window.location.search);
-    const searchParamsObj = new URLSearchParams({
-      dest: destinationCode, // MUST use destinationCode
-      destinationName: destination,
-      visitDate: visitDate.toISOString(),
-      adults: currentSearchParams.get("adults") || "2",
-      children: currentSearchParams.get("children") || "0",
-    });
-
-    if (endDate && endDate.getTime() !== visitDate!.getTime()) {
-      searchParamsObj.set("endDate", endDate.toISOString());
-    }
-
-    console.log(
-      "🎭 Searching sightseeing with params:",
-      searchParamsObj.toString(),
+    // Validate date range
+    const daysBetween = Math.ceil(
+      (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
     );
+    if (daysBetween < 1) {
+      setErrorMessage("Check-out date must be after check-in date");
+      setShowError(true);
+      return;
+    }
+    if (daysBetween > 30) {
+      setErrorMessage("Maximum stay duration is 30 days");
+      setShowError(true);
+      return;
+    }
 
     try {
-      const url = `/sightseeing/results?${searchParamsObj.toString()}`;
-      console.log("🎭 Navigating to:", url);
+      const searchParams = new URLSearchParams({
+        checkIn: checkInDate.toISOString(),
+        checkOut: checkOutDate.toISOString(),
+        adults: "2",
+        children: "0",
+        // Additional metadata for improved search
+        searchType: "live", // Flag to indicate live API search preference
+        searchId: Date.now().toString(), // Unique search identifier
+      });
+
+      // Only add destination if it exists
+      if (destination && destinationCode) {
+        searchParams.set("destination", destinationCode);
+        searchParams.set("destinationName", destination);
+      }
+
+      const url = `/sightseeing/results?${searchParams.toString()}`;
+      console.log("🎭 Navigating to live sightseeing search:", url);
       navigate(url);
-      console.log("✅ Navigation successful");
     } catch (error) {
-      console.error("❌ Navigation failed:", error);
-      setErrorMessage("Navigation failed. Please try again.");
+      console.error("🚨 Error in handleSearch:", error);
+      setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
   };
@@ -353,7 +321,7 @@ export function SightseeingSearchForm() {
         onClose={() => setShowError(false)}
       />
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        {/* Main Search Form - EXACT HOTELS RESPONSIVE STRUCTURE */}
+        {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Destination - EXACT HOTELS PATTERN */}
           <div className="flex-1 lg:max-w-[320px] relative destination-container">
@@ -383,7 +351,7 @@ export function SightseeingSearchForm() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 616 0z"
                     />
                   </svg>
                   <Input
@@ -471,7 +439,7 @@ export function SightseeingSearchForm() {
                       </span>
                     </div>
                   ) : isUserTyping &&
-                    inputValue.length >= 3 &&
+                    inputValue.length > 0 &&
                     destinationSuggestions.length > 0 ? (
                     <div>
                       <div className="px-4 py-2 bg-gray-50 border-b">
@@ -484,8 +452,24 @@ export function SightseeingSearchForm() {
                           key={dest.id || index}
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                           onMouseDown={(e) => {
+                            // Prevent input blur from firing before click
                             e.preventDefault();
-                            handleDestinationSelect(dest);
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const fullName = `${dest.name}, ${dest.country}`;
+                            console.log("🎯 Sightseeing destination selected:", {
+                              name: fullName,
+                              code: dest.code || dest.id,
+                              type: dest.type,
+                              popular: (dest as any).popular,
+                            });
+                            setDestination(fullName);
+                            setDestinationCode(dest.code || dest.id);
+                            setInputValue("");
+                            setIsUserTyping(false);
+                            setIsDestinationOpen(false);
                           }}
                         >
                           {/* Elegant search result icon */}
@@ -522,7 +506,7 @@ export function SightseeingSearchForm() {
                                   <span className="font-medium text-gray-900 text-sm truncate">
                                     {dest.name}
                                   </span>
-                                  {dest.popular && (
+                                  {(dest as any).popular && (
                                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                       Popular
                                     </span>
@@ -552,7 +536,7 @@ export function SightseeingSearchForm() {
                       ))}
                     </div>
                   ) : isUserTyping &&
-                    inputValue.length >= 3 &&
+                    inputValue.length > 0 &&
                     !loadingDestinations ? (
                     <div className="p-4 text-center">
                       <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
@@ -579,22 +563,118 @@ export function SightseeingSearchForm() {
                     </div>
                   ) : (
                     <div>
-                      {/* Popular Sightseeing Destinations */}
+                      {/* Sightseeing Test Destinations */}
                       <div className="px-4 py-3 bg-blue-50 border-b border-blue-200">
                         <span className="text-sm font-semibold text-blue-800">
-                          🎯 Popular Sightseeing Destinations
+                          🎯 Sightseeing Test Destinations
                         </span>
                         <div className="text-xs text-blue-600 mt-1">
-                          Choose from popular tourist destinations
+                          Available cities for testing with live API data
                         </div>
                       </div>
-                      {popularDestinations.map((dest, index) => (
+                      {[
+                        {
+                          id: "DXB",
+                          code: "DXB",
+                          name: "Dubai",
+                          country: "United Arab Emirates",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "BCN",
+                          code: "BCN",
+                          name: "Barcelona",
+                          country: "Spain",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "LON",
+                          code: "LON",
+                          name: "London",
+                          country: "United Kingdom",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "PAR",
+                          code: "PAR",
+                          name: "Paris",
+                          country: "France",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "ROM",
+                          code: "ROM",
+                          name: "Rome",
+                          country: "Italy",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "NYC",
+                          code: "NYC",
+                          name: "New York",
+                          country: "United States",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "BKK",
+                          code: "BKK",
+                          name: "Bangkok",
+                          country: "Thailand",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "SIN",
+                          code: "SIN",
+                          name: "Singapore",
+                          country: "Singapore",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "TKO",
+                          code: "TKO",
+                          name: "Tokyo",
+                          country: "Japan",
+                          type: "city",
+                          popular: true,
+                        },
+                        {
+                          id: "SYD",
+                          code: "SYD",
+                          name: "Sydney",
+                          country: "Australia",
+                          type: "city",
+                          popular: true,
+                        },
+                      ].map((dest, index) => (
                         <div
-                          key={dest.id || index}
+                          key={dest.id}
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                           onMouseDown={(e) => {
                             e.preventDefault();
-                            handleDestinationSelect(dest);
+                          }}
+                          onClick={() => {
+                            const fullName = `${dest.name}, ${dest.country}`;
+                            console.log(
+                              "🎯 Sightseeing test destination selected:",
+                              {
+                                name: fullName,
+                                code: dest.code,
+                                type: dest.type,
+                              },
+                            );
+                            setDestination(fullName);
+                            setDestinationCode(dest.code);
+                            setInputValue(""); // Clear the input to show placeholder
+                            setIsUserTyping(false);
+                            setIsDestinationOpen(false);
                           }}
                         >
                           {/* Elegant location icon */}
@@ -626,13 +706,13 @@ export function SightseeingSearchForm() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between">
                               <div className="flex-1 min-w-0">
-                                {/* City name and popular badge */}
+                                {/* City name and Live API badge */}
                                 <div className="flex items-center gap-2 mb-1">
                                   <span className="font-medium text-gray-900 text-sm truncate">
                                     {dest.name}
                                   </span>
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                                    Popular
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                    Live API
                                   </span>
                                 </div>
 
@@ -661,13 +741,13 @@ export function SightseeingSearchForm() {
                         <p className="text-xs text-gray-500 flex items-center gap-1 mb-1">
                           <span>🔍</span>
                           <span>
-                            Type 3+ characters to search destinations
+                            Type to search 1000+ destinations from database
                           </span>
                         </p>
                         <p className="text-xs text-blue-600 flex items-center gap-1">
                           <span>💡</span>
                           <span>
-                            Use the cities above for testing live Hotelbeds Activities data
+                            Use the cities above for testing live Hotelbeds Activities API
                           </span>
                         </p>
                       </div>
@@ -678,7 +758,7 @@ export function SightseeingSearchForm() {
             </Popover>
           </div>
 
-          {/* Visit Date - EXACT HOTELS PATTERN */}
+          {/* Check-in Date */}
           <div className="flex-1 lg:max-w-[280px]">
             {isMobile ? (
               <Button
@@ -689,10 +769,10 @@ export function SightseeingSearchForm() {
                 <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                 <span className="truncate text-xs sm:text-sm">
                   <span className="sm:hidden text-xs">
-                    {visitDate && endDate ? (
+                    {checkInDate && checkOutDate ? (
                       <>
-                        {format(visitDate, "dd-MMM-yyyy")} -{" "}
-                        {format(endDate, "dd-MMM-yyyy")}
+                        {format(checkInDate, "dd-MMM-yyyy")} -{" "}
+                        {format(checkOutDate, "dd-MMM-yyyy")}
                       </>
                     ) : (
                       "Dates"
@@ -710,20 +790,20 @@ export function SightseeingSearchForm() {
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
                       <span className="hidden md:inline">
-                        {visitDate && endDate ? (
+                        {checkInDate && checkOutDate ? (
                           <>
-                            {format(visitDate, "d-MMM-yyyy")} to{" "}
-                            {format(endDate, "d-MMM-yyyy")}
+                            {format(checkInDate, "d-MMM-yyyy")} to{" "}
+                            {format(checkOutDate, "d-MMM-yyyy")}
                           </>
                         ) : (
-                          "Visit Date"
+                          "Check-in to Check-out"
                         )}
                       </span>
                       <span className="hidden sm:inline md:hidden">
-                        {visitDate && endDate ? (
+                        {checkInDate && checkOutDate ? (
                           <>
-                            {format(visitDate, "d MMM")} -{" "}
-                            {format(endDate, "d MMM")}
+                            {format(checkInDate, "d MMM")} -{" "}
+                            {format(checkOutDate, "d MMM")}
                           </>
                         ) : (
                           "Select dates"
@@ -736,18 +816,17 @@ export function SightseeingSearchForm() {
                   <div className="flex flex-col">
                     <BookingCalendar
                       initialRange={{
-                        startDate: visitDate || new Date(),
+                        startDate: checkInDate || new Date(),
                         endDate:
-                          endDate || addDays(visitDate || new Date(), 3),
+                          checkOutDate || addDays(checkInDate || new Date(), 3),
                       }}
                       onChange={(range) => {
                         console.log("Booking calendar range selected:", range);
-                        setVisitDate(range.startDate);
-                        setEndDate(range.endDate);
+                        setCheckInDate(range.startDate);
+                        setCheckOutDate(range.endDate);
                       }}
                       onClose={() => setIsCalendarOpen(false)}
                       className="w-full"
-                      bookingType="sightseeing"
                     />
                   </div>
                 </PopoverContent>
@@ -755,18 +834,12 @@ export function SightseeingSearchForm() {
             )}
           </div>
 
-          {/* Search Button - EXACT HOTELS PATTERN */}
+          {/* Search Button */}
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               onClick={handleSearch}
-              disabled={!destinationCode}
-              className={cn(
-                "h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150",
-                destinationCode
-                  ? "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              )}
-              title={destinationCode ? "Search sightseeing activities" : "Please select a destination first"}
+              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
+              title="Search sightseeing activities"
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               <span className="text-sm sm:text-base">Search</span>
@@ -774,19 +847,18 @@ export function SightseeingSearchForm() {
           </div>
         </div>
 
-        {/* Mobile Date Picker - EXACT HOTELS PATTERN */}
+        {/* Mobile Date Picker */}
         <MobileDatePicker
           isOpen={showMobileDatePicker}
           onClose={() => setShowMobileDatePicker(false)}
           tripType={tripType}
           setTripType={setTripType}
-          selectedDepartureDate={visitDate}
-          selectedReturnDate={endDate}
-          setSelectedDepartureDate={(date) => setVisitDate(date)}
-          setSelectedReturnDate={(date) => setEndDate(date)}
+          selectedDepartureDate={checkInDate}
+          selectedReturnDate={checkOutDate}
+          setSelectedDepartureDate={(date) => setCheckInDate(date)}
+          setSelectedReturnDate={(date) => setCheckOutDate(date)}
           selectingDeparture={true}
           setSelectingDeparture={() => {}}
-          bookingType="hotels" // Use hotels type for check-in/check-out style
         />
       </div>
     </>
