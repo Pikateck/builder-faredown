@@ -64,9 +64,12 @@ export function SightseeingSearchForm() {
   console.log("🎭 SightseeingSearchForm initialized");
   const [destination, setDestination] = useState("Dubai");
   const [destinationCode, setDestinationCode] = useState("DXB"); // Store destination code
-  // Unified states for responsive layout
+  // Exact hotels state pattern
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  // Mobile-specific states like hotels
+  const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
 
   const [destinationSuggestions, setDestinationSuggestions] = useState<
     DestinationOption[]
