@@ -334,7 +334,7 @@ export function SightseeingSearchForm() {
         name: "Downtown Dubai",
         country: "United Arab Emirates",
         type: "district",
-        flag: "🇦🇪",
+        flag: "🇦���",
       },
       {
         id: "DXB-JBR",
@@ -749,7 +749,7 @@ export function SightseeingSearchForm() {
               }}
             >
               <span className="truncate text-sm">
-                {inputValue || "Enter destination or attraction"}
+                {destination || inputValue || "Enter destination or attraction"}
               </span>
             </button>
             {inputValue && (
