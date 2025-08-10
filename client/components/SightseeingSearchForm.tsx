@@ -249,7 +249,31 @@ export function SightseeingSearchForm() {
     isUserTyping,
   ]);
 
-  // Handle search validation and execution
+  // Handle destination selection - FIXED with proper state management
+  const handleDestinationSelect = (d: DestinationOption) => {
+    const label = `${d.name}, ${d.country}`;
+    console.log("🎯 Destination selected:", {
+      label,
+      code: d.code,
+      destination: label,
+      destinationCode: d.code
+    });
+
+    setDestination(label);
+    setDestinationCode(d.code);
+    setInputValue("");          // we can clear this ONLY because value uses destination when !isUserTyping
+    setIsUserTyping(false);
+    setIsDestinationOpen(false);
+
+    console.log("✅ State updated:", {
+      destination: label,
+      destinationCode: d.code,
+      inputValue: "",
+      isUserTyping: false
+    });
+  };
+
+  // Handle search validation and execution - FIXED to use destinationCode
   const handleSearch = () => {
     console.log("🔍 Starting sightseeing search with:", {
       destination,
@@ -262,10 +286,10 @@ export function SightseeingSearchForm() {
     setShowError(false);
     setErrorMessage("");
 
-    // Validate destination
-    if (!destination && !inputValue) {
-      console.log("❌ Validation failed: No destination");
-      setErrorMessage("Please enter a destination");
+    // Validate destination CODE is set
+    if (!destinationCode) {
+      console.log("❌ Validation failed: No destination code");
+      setErrorMessage("Please select a destination");
       setShowError(true);
       return;
     }
@@ -290,14 +314,14 @@ export function SightseeingSearchForm() {
 
     console.log("✅ Validation passed, proceeding with sightseeing search");
 
-    // Build search parameters - EXACT HOTELS PATTERN
+    // Build search parameters - USE DESTINATION CODE
     const currentSearchParams = new URLSearchParams(window.location.search);
     const searchParamsObj = new URLSearchParams({
-      destination: destinationCode || inputValue || destination,
-      destinationName: destination || inputValue,
+      dest: destinationCode, // MUST use destinationCode
+      destinationName: destination,
       visitDate: visitDate.toISOString(),
-      adults: currentSearchParams.get("adults") || "2", // Preserve current adults count
-      children: currentSearchParams.get("children") || "0", // Preserve current children count
+      adults: currentSearchParams.get("adults") || "2",
+      children: currentSearchParams.get("children") || "0",
     });
 
     if (endDate && endDate.getTime() !== visitDate!.getTime()) {
@@ -460,24 +484,8 @@ export function SightseeingSearchForm() {
                           key={dest.id || index}
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                           onMouseDown={(e) => {
-                            // Prevent input blur from firing before click
                             e.preventDefault();
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            const fullName = `${dest.name}, ${dest.country}`;
-                            console.log("🎯 Sightseeing destination selected:", {
-                              name: fullName,
-                              code: dest.code || dest.id,
-                              type: dest.type,
-                              popular: dest.popular,
-                            });
-                            setDestination(fullName);
-                            setDestinationCode(dest.code || dest.id);
-                            setInputValue("");
-                            setIsUserTyping(false);
-                            setIsDestinationOpen(false);
+                            handleDestinationSelect(dest);
                           }}
                         >
                           {/* Elegant search result icon */}
@@ -586,22 +594,7 @@ export function SightseeingSearchForm() {
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                           onMouseDown={(e) => {
                             e.preventDefault();
-                          }}
-                          onClick={() => {
-                            const fullName = `${dest.name}, ${dest.country}`;
-                            console.log(
-                              "🎯 Popular sightseeing destination selected:",
-                              {
-                                name: fullName,
-                                code: dest.code,
-                                type: dest.type,
-                              },
-                            );
-                            setDestination(fullName);
-                            setDestinationCode(dest.code);
-                            setInputValue(""); // Clear the input to show placeholder
-                            setIsUserTyping(false);
-                            setIsDestinationOpen(false);
+                            handleDestinationSelect(dest);
                           }}
                         >
                           {/* Elegant location icon */}
