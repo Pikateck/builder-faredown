@@ -88,7 +88,6 @@ export function SightseeingSearchForm() {
 
   // Mobile-specific states
   const [isMobile, setIsMobile] = useState(false);
-  const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
   const [tripType, setTripType] = useState("multi-day");
 
   // Popular destinations will be loaded from database
