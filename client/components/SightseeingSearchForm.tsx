@@ -749,7 +749,7 @@ export function SightseeingSearchForm() {
               }}
             >
               <span className="truncate text-sm">
-                {destination || inputValue || "Enter destination or attraction"}
+                {destination || "Enter destination or attraction"}
               </span>
             </button>
             {inputValue && (
