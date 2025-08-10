@@ -768,14 +768,14 @@ export function SightseeingSearchForm() {
                     const value = e.target.value;
                     setInputValue(value);
                     setIsUserTyping(true);
-                    if (!isDestinationOpenMobile) {
-                      setIsDestinationOpenMobile(true);
+                    if (!isDestinationOpen) {
+                      setIsDestinationOpen(true);
                     }
                     handleDestinationChange(value);
                   }}
                   onFocus={(e) => {
                     e.stopPropagation();
-                    setIsDestinationOpenMobile(true);
+                    setIsDestinationOpen(true);
                     if (!isUserTyping && destination) {
                       setInputValue(destination);
                       setIsUserTyping(true);
@@ -783,7 +783,7 @@ export function SightseeingSearchForm() {
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsDestinationOpenMobile(true);
+                    setIsDestinationOpen(true);
                   }}
                   onKeyDown={(e) => {
                     e.stopPropagation();
