@@ -512,6 +512,8 @@ export function SightseeingSearchForm() {
     event?: React.MouseEvent,
   ) => {
     console.log("🎯 Destination selected:", selectedDestination.name);
+    console.log("🎯 Before update - inputValue:", inputValue);
+    console.log("🎯 Before update - destination:", destination);
 
     // Prevent event propagation to avoid conflicts
     if (event) {
@@ -529,7 +531,8 @@ export function SightseeingSearchForm() {
     // Close popovers immediately
     setIsDestinationOpenMobile(false);
     setIsDestinationOpenDesktop(false);
-    console.log("🎯 Destination selection complete, popovers closed");
+    console.log("🎯 Destination selection complete:", selectedDestination.name);
+    console.log("🎯 After update - setting inputValue to:", selectedDestination.name);
   };
 
   // Handle date selection for mobile calendar (don't close calendar here)
