@@ -746,7 +746,11 @@ export function SightseeingSearchForm() {
             <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
             <button
               className="w-full h-12 pl-10 pr-8 bg-white border-2 border-blue-400 hover:border-blue-500 rounded font-medium text-sm text-left touch-manipulation cursor-pointer flex items-center"
-              onClick={() => setIsDestinationOpenMobile(true)}
+              onClick={() => {
+                console.log("🎯 Mobile button clicked - inputValue:", inputValue);
+                console.log("🎯 Mobile button clicked - destination:", destination);
+                setIsDestinationOpenMobile(true);
+              }}
             >
               <span className="truncate text-sm">
                 {inputValue || "Enter destination or attraction"}
