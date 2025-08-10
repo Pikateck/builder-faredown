@@ -1142,8 +1142,20 @@ export function SightseeingSearchForm() {
         </div>
       </div>
 
-
-
+      {/* Mobile Date Picker Modal - EXACT HOTELS PATTERN */}
+      <MobileDatePicker
+        isOpen={showMobileDatePicker}
+        onClose={() => setShowMobileDatePicker(false)}
+        tripType={tripType}
+        setTripType={setTripType}
+        selectedDepartureDate={visitDate}
+        selectedReturnDate={endDate}
+        setSelectedDepartureDate={setVisitDate}
+        setSelectedReturnDate={setEndDate}
+        selectingDeparture={true}
+        setSelectingDeparture={() => {}}
+        bookingType="hotels" // Use hotels type for sightseeing (check-in/check-out style)
+      />
     </div>
   );
 }
