@@ -507,7 +507,7 @@ export function SightseeingSearchForm() {
   };
 
   // Handle destination selection
-  const handleDestinationSelect = useCallback((
+  const handleDestinationSelect = (
     selectedDestination: DestinationOption,
     event?: React.MouseEvent,
   ) => {
@@ -519,20 +519,17 @@ export function SightseeingSearchForm() {
       event.stopPropagation();
     }
 
-    // Update state immediately
+    // Update state immediately - direct and simple
+    setInputValue(selectedDestination.name);
     setDestination(selectedDestination.name);
     setDestinationCode(selectedDestination.code);
-    setInputValue(selectedDestination.name);
     setDestinationSuggestions([]);
     setIsUserTyping(false);
+    setIsDestinationOpenMobile(false);
+    setIsDestinationOpenDesktop(false);
 
-    // Close modal after a small delay to ensure state updates are processed
-    setTimeout(() => {
-      setIsDestinationOpenMobile(false);
-      setIsDestinationOpenDesktop(false);
-      console.log("🎯 Destination selection complete, modal closed");
-    }, 50);
-  }, []);
+    console.log("🎯 Updated inputValue to:", selectedDestination.name);
+  };
 
   // Handle date selection for mobile calendar (don't close calendar here)
   const handleMobileDateSelect = (range: {
