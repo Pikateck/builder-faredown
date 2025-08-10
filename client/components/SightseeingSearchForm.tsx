@@ -1103,10 +1103,10 @@ export function SightseeingSearchForm() {
         {/* Search Button */}
         <Button
           onClick={handleSearch}
-          className="h-12 w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-8 touch-manipulation transition-all duration-150"
+          className="h-10 sm:h-12 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150 lg:w-auto w-full"
         >
-          <Search className="mr-2 h-5 w-5" />
-          <span className="text-base">Search Experiences</span>
+          <Search className="mr-2 h-4 w-4" />
+          <span className="text-sm sm:text-base">Search</span>
         </Button>
       </div>
 
