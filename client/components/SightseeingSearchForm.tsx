@@ -99,7 +99,7 @@ export function SightseeingSearchForm() {
 
   // State to track if user is actively typing (not pre-filled)
   const [isUserTyping, setIsUserTyping] = useState(false);
-  const [inputValue, setInputValue] = useState("Dubai");
+  const [inputValue, setInputValue] = useState("");
 
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
@@ -384,7 +384,7 @@ export function SightseeingSearchForm() {
         name: "Atlantis The Palm",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦����",
+        flag: "🇦🇪",
       },
       {
         id: "DUBAI-MIRACLE-GARDEN",
