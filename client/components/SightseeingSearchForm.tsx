@@ -514,7 +514,7 @@ export function SightseeingSearchForm() {
     selectedDestination: DestinationOption,
     event?: React.MouseEvent,
   ) => {
-    console.log("���� Destination selected:", selectedDestination.name);
+    console.log("🎯 Destination selected:", selectedDestination.name);
 
     // Prevent event propagation to avoid conflicts
     if (event) {
@@ -742,158 +742,30 @@ export function SightseeingSearchForm() {
           <label className="text-sm font-medium text-gray-700">
             What would you like to see?
           </label>
-          <Popover
-            open={isDestinationOpenMobile}
-            onOpenChange={(open) => {
-              console.log("🎯 Mobile destination popover state changed:", open);
-              setIsDestinationOpenMobile(open);
-            }}
-            modal={true}
-          >
-            <div className="relative w-full">
-              <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
-              <PopoverTrigger asChild>
-                <Input
-                  className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation cursor-pointer"
-                  placeholder="Enter destination or attraction"
-                  value={inputValue}
-                  onChange={(e) => handleDestinationChange(e.target.value)}
-                  onFocus={() => {
-                    console.log("🎯 Mobile destination input focused");
-                    if (!isDestinationOpenMobile) {
-                      setIsDestinationOpenMobile(true);
-                    }
-                  }}
-                  onTouchStart={() => {
-                    console.log("🎯 Mobile destination input touched");
-                    if (!isDestinationOpenMobile) {
-                      setIsDestinationOpenMobile(true);
-                    }
-                  }}
-                />
-              </PopoverTrigger>
-              {inputValue && (
-                <span
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setInputValue("");
-                    setDestination("");
-                    setDestinationCode("");
-                  }}
-                >
-                  <X className="w-4 h-4" />
-                </span>
-              )}
-            </div>
-            <PopoverContent
-              className="w-80 p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white"
-              onInteractOutside={(e) => {
-                // Prevent closing on mobile when interacting outside
-                if (window.innerWidth < 768) {
-                  e.preventDefault();
-                }
-              }}
+          <div className="relative w-full">
+            <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
+            <button
+              className="w-full h-12 pl-10 pr-8 bg-white border-2 border-blue-400 hover:border-blue-500 rounded font-medium text-sm text-left touch-manipulation cursor-pointer flex items-center"
+              onClick={() => setIsDestinationOpenMobile(true)}
             >
-              {/* Mobile header with close button */}
-              <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between md:hidden">
-                <h3 className="text-sm font-semibold text-gray-900">Select Destination</h3>
-                <button
-                  onClick={() => setIsDestinationOpenMobile(false)}
-                  className="p-1 text-gray-500 hover:text-gray-700 touch-manipulation"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="max-h-80 overflow-y-auto">
-                {loadingDestinations ? (
-                  <div className="p-4 text-center text-gray-500">
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                      <span className="text-sm">Searching destinations...</span>
-                    </div>
-                  </div>
-                ) : destinationsToShow.length > 0 ? (
-                  <div>
-                    {!isUserTyping && (
-                      <div className="px-4 py-3 text-xs font-semibold text-gray-600 bg-gray-50 border-b border-gray-200">
-                        POPULAR DESTINATIONS
-                      </div>
-                    )}
-                    <div className="py-1">
-                      {destinationsToShow.map((dest) => {
-                        const IconComponent = getDestinationIcon(
-                          dest.type,
-                          dest.name,
-                        );
-                        return (
-                          <button
-                            key={dest.id}
-                            className="w-full text-left px-4 py-3 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 border-b border-gray-100 last:border-b-0 touch-manipulation"
-                            onClick={(e) => handleDestinationSelect(dest, e)}
-                            onTouchEnd={(e) => {
-                              e.preventDefault();
-                              handleDestinationSelect(dest, e);
-                            }}
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <IconComponent className="w-4 h-4 text-gray-600" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center space-x-2">
-                                  <span className="font-semibold text-gray-900 text-sm truncate">
-                                    {dest.name}
-                                  </span>
-                                  <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                    {dest.code}
-                                  </span>
-                                </div>
-                                <div className="text-xs text-gray-500 truncate mt-0.5">
-                                  {dest.type === "city"
-                                    ? `${dest.country}`
-                                    : dest.type === "district"
-                                      ? `District • ${dest.country}`
-                                      : dest.type === "attraction"
-                                        ? `Top Attraction • ${dest.country}`
-                                        : dest.type === "theme-park"
-                                          ? `Theme Park • ${dest.country}`
-                                          : dest.type === "airport"
-                                            ? `${dest.name} Airport, ${dest.country}`
-                                            : dest.type === "region"
-                                              ? `${dest.country}`
-                                              : dest.country}
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                {dest.flag && (
-                                  <span className="text-base">{dest.flag}</span>
-                                )}
-                                <div className="w-5 h-5 flex items-center justify-center">
-                                  <MapPin className="w-3 h-3 text-gray-400" />
-                                </div>
-                              </div>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-4 text-center text-gray-500">
-                    <div className="flex flex-col items-center space-y-2">
-                      <Search className="w-8 h-8 text-gray-300" />
-                      <span className="text-sm">
-                        {isUserTyping && inputValue
-                          ? "No destinations found"
-                          : "Start typing to search destinations"}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
+              <span className="truncate text-sm">
+                {inputValue || "Enter destination or attraction"}
+              </span>
+            </button>
+            {inputValue && (
+              <span
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setInputValue("");
+                  setDestination("");
+                  setDestinationCode("");
+                }}
+              >
+                <X className="w-4 h-4" />
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Date Picker */}
