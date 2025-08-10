@@ -514,7 +514,7 @@ export function SightseeingSearchForm() {
     selectedDestination: DestinationOption,
     event?: React.MouseEvent,
   ) => {
-    console.log("🎯 Destination selected:", selectedDestination.name);
+    console.log("���� Destination selected:", selectedDestination.name);
 
     // Prevent event propagation to avoid conflicts
     if (event) {
@@ -1024,7 +1024,7 @@ export function SightseeingSearchForm() {
                         return (
                           <button
                             key={dest.id}
-                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                            className="w-full text-left px-4 py-3 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
                             onClick={(e) => handleDestinationSelect(dest, e)}
                           >
                             <div className="flex items-center space-x-3">
