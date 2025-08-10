@@ -152,7 +152,7 @@ export function SightseeingSearchForm() {
             name: "Dubai",
             country: "United Arab Emirates",
             type: "city",
-            flag: "��🇪",
+            flag: "🇦🇪",
           },
           {
             id: "LON",
@@ -469,7 +469,7 @@ export function SightseeingSearchForm() {
       }));
       setDestinationSuggestions(formattedResults);
       console.log(
-        "�� Found",
+        "✅ Found",
         formattedResults.length,
         "sightseeing destinations",
       );
@@ -1070,72 +1070,108 @@ export function SightseeingSearchForm() {
               <h3 className="text-sm font-medium text-gray-600 mb-3">Popular Destinations</h3>
               <div className="space-y-2">
                 <button
-                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
-                  onClick={() => {
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 active:bg-blue-100"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("🎯 CLICKING DUBAI");
                     setDestination("Dubai");
-                    setInputValue("Dubai");
                     setDestinationCode("DXB");
                     setIsDestinationOpenMobile(false);
+                    // Force DOM update
+                    setTimeout(() => {
+                      const button = document.querySelector('.sightseeing-search-form button span');
+                      if (button) button.textContent = "Dubai";
+                    }, 10);
                   }}
                 >
                   <div className="font-medium">Dubai</div>
                   <div className="text-sm text-gray-500">United Arab Emirates</div>
                 </button>
                 <button
-                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
-                  onClick={() => {
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 active:bg-blue-100"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("🎯 CLICKING LONDON");
                     setDestination("London");
-                    setInputValue("London");
                     setDestinationCode("LON");
                     setIsDestinationOpenMobile(false);
+                    // Force DOM update
+                    setTimeout(() => {
+                      const button = document.querySelector('.sightseeing-search-form button span');
+                      if (button) button.textContent = "London";
+                    }, 10);
                   }}
                 >
                   <div className="font-medium">London</div>
                   <div className="text-sm text-gray-500">United Kingdom</div>
                 </button>
                 <button
-                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
-                  onClick={() => {
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 active:bg-blue-100"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("🎯 CLICKING PARIS");
                     setDestination("Paris");
-                    setInputValue("Paris");
                     setDestinationCode("PAR");
                     setIsDestinationOpenMobile(false);
+                    // Force DOM update
+                    setTimeout(() => {
+                      const button = document.querySelector('.sightseeing-search-form button span');
+                      if (button) button.textContent = "Paris";
+                    }, 10);
                   }}
                 >
                   <div className="font-medium">Paris</div>
                   <div className="text-sm text-gray-500">France</div>
                 </button>
                 <button
-                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
-                  onClick={() => {
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 active:bg-blue-100"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("🎯 CLICKING NEW YORK");
                     setDestination("New York");
-                    setInputValue("New York");
                     setDestinationCode("NYC");
                     setIsDestinationOpenMobile(false);
+                    // Force DOM update
+                    setTimeout(() => {
+                      const button = document.querySelector('.sightseeing-search-form button span');
+                      if (button) button.textContent = "New York";
+                    }, 10);
                   }}
                 >
                   <div className="font-medium">New York</div>
                   <div className="text-sm text-gray-500">United States</div>
                 </button>
                 <button
-                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
-                  onClick={() => {
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 active:bg-blue-100"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("🎯 CLICKING BARCELONA");
                     setDestination("Barcelona");
-                    setInputValue("Barcelona");
                     setDestinationCode("BCN");
                     setIsDestinationOpenMobile(false);
+                    // Force DOM update
+                    setTimeout(() => {
+                      const button = document.querySelector('.sightseeing-search-form button span');
+                      if (button) button.textContent = "Barcelona";
+                    }, 10);
                   }}
                 >
                   <div className="font-medium">Barcelona</div>
                   <div className="text-sm text-gray-500">Spain</div>
                 </button>
                 <button
-                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
-                  onClick={() => {
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 active:bg-blue-100"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log("🎯 CLICKING MUMBAI");
                     setDestination("Mumbai");
-                    setInputValue("Mumbai");
                     setDestinationCode("BOM");
                     setIsDestinationOpenMobile(false);
+                    // Force DOM update
+                    setTimeout(() => {
+                      const button = document.querySelector('.sightseeing-search-form button span');
+                      if (button) button.textContent = "Mumbai";
+                    }, 10);
                   }}
                 >
                   <div className="font-medium">Mumbai</div>
