@@ -49,8 +49,14 @@ class SightseeingService {
         popularOnly,
       });
 
+      // Check if response or response.data is null/undefined
+      if (!response || !response.data) {
+        console.warn("❌ Sightseeing destinations API returned null response");
+        return this.getFallbackDestinations(query, limit);
+      }
+
       if (!response.data.success) {
-        console.warn("❌ Sightseeing destinations API failed");
+        console.warn("❌ Sightseeing destinations API failed:", response.data);
         return this.getFallbackDestinations(query, limit);
       }
 
