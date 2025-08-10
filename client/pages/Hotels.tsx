@@ -483,7 +483,7 @@ export default function Hotels() {
 
         {/* Mobile Bottom Navigation */}
         <div className="block md:hidden bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50">
-          <div className="grid grid-cols-4 h-16">
+          <div className="grid grid-cols-5 h-16">
             <Link
               to="/"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
@@ -503,6 +503,16 @@ export default function Hotels() {
             >
               <Hotel className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">Hotels</span>
+            </Link>
+            <Link
+              to="/sightseeing"
+              className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
+              onClick={() =>
+                console.log("Sightseeing button clicked - navigating to /sightseeing")
+              }
+            >
+              <Camera className="w-5 h-5 text-gray-400" />
+              <span className="text-xs text-gray-500">Sightseeing</span>
             </Link>
             <Link
               to="/saved"
