@@ -877,66 +877,42 @@ export function SightseeingSearchForm() {
             When do you want to visit?
           </label>
           <div className="grid grid-cols-1 gap-2">
-            <Popover
-              open={isCalendarOpenMobile}
-              onOpenChange={(open) => {
-                console.log("📅 Mobile calendar popover state changed:", open);
-                setIsCalendarOpenMobile(open);
-              }}
+            <Button
+              variant="outline"
+              className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-sm px-3 touch-manipulation"
+              onClick={() => setShowMobileDatePicker(true)}
             >
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-sm px-3 touch-manipulation"
-                  onClick={() => setIsCalendarOpenMobile(true)}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate text-sm">
-                    <span className="hidden md:inline">
-                      {visitDate &&
-                      endDate &&
-                      visitDate.getTime() !== endDate.getTime()
-                        ? `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
-                        : visitDate
-                          ? format(visitDate, "d-MMM-yyyy")
-                          : "Select visit date"}
-                    </span>
-                    <span className="hidden sm:inline md:hidden">
-                      {visitDate &&
-                      endDate &&
-                      visitDate.getTime() !== endDate.getTime()
-                        ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                        : visitDate
-                          ? format(visitDate, "d MMM")
-                          : "Select date"}
-                    </span>
-                    <span className="sm:hidden">
-                      {visitDate &&
-                      endDate &&
-                      visitDate.getTime() !== endDate.getTime()
-                        ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                        : visitDate
-                          ? format(visitDate, "d MMM")
-                          : "Date"}
-                    </span>
-                  </span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 z-[60]" align="start">
-                <div className="flex flex-col">
-                  <BookingCalendar
-                    initialRange={{
-                      startDate: visitDate || new Date(),
-                      endDate: endDate || addDays(visitDate || new Date(), 1),
-                    }}
-                    onChange={handleMobileDateSelect}
-                    onClose={() => setIsCalendarOpenMobile(false)}
-                    className="w-full"
-                    bookingType="sightseeing"
-                  />
-                </div>
-              </PopoverContent>
-            </Popover>
+              <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+              <span className="truncate text-sm">
+                <span className="hidden md:inline">
+                  {visitDate &&
+                  endDate &&
+                  visitDate.getTime() !== endDate.getTime()
+                    ? `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`
+                    : visitDate
+                      ? format(visitDate, "d-MMM-yyyy")
+                      : "Select visit date"}
+                </span>
+                <span className="hidden sm:inline md:hidden">
+                  {visitDate &&
+                  endDate &&
+                  visitDate.getTime() !== endDate.getTime()
+                    ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                    : visitDate
+                      ? format(visitDate, "d MMM")
+                      : "Select date"}
+                </span>
+                <span className="sm:hidden">
+                  {visitDate &&
+                  endDate &&
+                  visitDate.getTime() !== endDate.getTime()
+                    ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
+                    : visitDate
+                      ? format(visitDate, "d MMM")
+                      : "Date"}
+                </span>
+              </span>
+            </Button>
           </div>
         </div>
 
