@@ -731,8 +731,8 @@ export function SightseeingSearchForm() {
         />
       )}
 
-      {/* Mobile: Vertical Layout */}
-      <div className="md:hidden space-y-4">
+      {/* Main Search Form - EXACT HOTELS RESPONSIVE STRUCTURE */}
+      <div className="flex flex-col lg:flex-row gap-2 mb-4">
         {/* Destination Input */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
