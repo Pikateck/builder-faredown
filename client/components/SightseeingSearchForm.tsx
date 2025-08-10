@@ -1102,22 +1102,13 @@ export function SightseeingSearchForm() {
                       <button
                         key={dest.id}
                         className="w-full text-left px-4 py-4 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 touch-manipulation"
-                        onClick={(e) => {
-                          console.log("🎯 Mobile: Clicking destination:", dest.name);
-                          e.preventDefault();
-                          e.stopPropagation();
-
-                          // Update state synchronously
-                          setInputValue(dest.name);
+                        onClick={() => {
+                          console.log("🎯 MOBILE CLICK:", dest.name);
                           setDestination(dest.name);
+                          setInputValue(dest.name);
                           setDestinationCode(dest.code);
-                          setDestinationSuggestions([]);
-                          setIsUserTyping(false);
-
-                          // Close modal immediately
                           setIsDestinationOpenMobile(false);
-
-                          console.log("🎯 Mobile: Updated to:", dest.name);
+                          console.log("🎯 MOBILE SET TO:", dest.name);
                         }}
                       >
                         <div className="flex items-center space-x-3">
