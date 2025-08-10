@@ -519,18 +519,19 @@ export function SightseeingSearchForm() {
       event.stopPropagation();
     }
 
-    // Use React.startTransition to ensure state updates are batched properly
-    React.startTransition(() => {
-      setDestination(selectedDestination.name);
-      setDestinationCode(selectedDestination.code);
-      setInputValue(selectedDestination.name);
-      setDestinationSuggestions([]);
-      setIsUserTyping(false);
+    // Update state immediately
+    setDestination(selectedDestination.name);
+    setDestinationCode(selectedDestination.code);
+    setInputValue(selectedDestination.name);
+    setDestinationSuggestions([]);
+    setIsUserTyping(false);
+
+    // Close modal after a small delay to ensure state updates are processed
+    setTimeout(() => {
       setIsDestinationOpenMobile(false);
       setIsDestinationOpenDesktop(false);
-    });
-
-    console.log("🎯 Destination selection complete:", selectedDestination.name);
+      console.log("🎯 Destination selection complete, modal closed");
+    }, 50);
   }, []);
 
   // Handle date selection for mobile calendar (don't close calendar here)
