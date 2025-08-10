@@ -578,7 +578,7 @@ export function SightseeingSearchForm() {
     }
 
     if (!visitDate) {
-      console.log("����� Validation failed: No visit date");
+      console.log("��� Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
@@ -1130,14 +1130,16 @@ export function SightseeingSearchForm() {
           )}
         </div>
 
-        {/* Search Button */}
-        <Button
-          onClick={handleSearch}
-          className="h-10 sm:h-12 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150 lg:w-auto w-full"
-        >
-          <Search className="mr-2 h-4 w-4" />
-          <span className="text-sm sm:text-base">Search</span>
-        </Button>
+        {/* Search Button - EXACT HOTELS PATTERN */}
+        <div className="flex-shrink-0 w-full sm:w-auto">
+          <Button
+            onClick={handleSearch}
+            className="h-10 sm:h-12 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150 w-full sm:w-auto"
+          >
+            <Search className="mr-2 h-4 w-4" />
+            <span className="text-xs sm:text-sm">Search</span>
+          </Button>
+        </div>
       </div>
 
 
