@@ -949,14 +949,9 @@ export function SightseeingSearchForm() {
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => {
                     console.log("🎯 Desktop destination input focused");
-                    setIsDestinationOpenDesktop(true);
-                  }}
-                  onClick={() => {
-                    console.log("🎯 Desktop destination input clicked");
-                    // Small delay to prevent race conditions
-                    setTimeout(() => {
+                    if (!isDestinationOpenDesktop) {
                       setIsDestinationOpenDesktop(true);
-                    }, 0);
+                    }
                   }}
                 />
               </PopoverTrigger>
