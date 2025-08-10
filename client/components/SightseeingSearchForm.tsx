@@ -764,14 +764,12 @@ export function SightseeingSearchForm() {
                       setIsDestinationOpenMobile(true);
                     }
                   }}
-                  onTouchStart={(e) => {
+                  onTouchStart={() => {
                     console.log("🎯 Mobile destination input touched");
-                    e.preventDefault();
                     if (!isDestinationOpenMobile) {
                       setIsDestinationOpenMobile(true);
                     }
                   }}
-                  readOnly={isDestinationOpenMobile}
                 />
               </PopoverTrigger>
               {inputValue && (
