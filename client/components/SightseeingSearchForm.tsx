@@ -424,7 +424,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Aquarium & Underwater Zoo",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "�������",
+        flag: "���������",
       },
     ];
   };
@@ -459,14 +459,16 @@ export function SightseeingSearchForm() {
         return;
       }
 
-      // Fallback to regular search
-      const results = await hotelsService.searchDestinations(query, 10);
+      // Search using sightseeing service
+      const results = await sightseeingService.searchDestinations(query, 10);
       const formattedResults = results.map((dest) => ({
-        id: dest.id,
-        code: dest.id,
+        id: dest.code,
+        code: dest.code,
         name: dest.name,
         country: dest.country,
-        type: dest.type as "city" | "region" | "country" | "landmark",
+        type: dest.type,
+        countryCode: dest.countryCode,
+        popular: dest.popular,
       }));
       setDestinationSuggestions(formattedResults);
       console.log(
