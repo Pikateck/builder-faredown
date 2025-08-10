@@ -94,6 +94,7 @@ import {
   Instagram,
   Linkedin,
   Twitter,
+  Camera,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
