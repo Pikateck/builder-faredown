@@ -39,15 +39,21 @@ class SightseeingService {
     try {
       console.log(`🎯 Searching sightseeing destinations: "${query}"`);
 
-      // Call the backend Hotelbeds Activities API
-      const response = await apiClient.post<{
-        success: boolean;
-        data: { destinations: any[] };
-      }>("/api/sightseeing/destinations", {
-        query,
-        limit,
-        popularOnly,
-      });
+      let response;
+      try {
+        // Call the backend Hotelbeds Activities API
+        response = await apiClient.post<{
+          success: boolean;
+          data: { destinations: any[] };
+        }>("/api/sightseeing/destinations", {
+          query,
+          limit,
+          popularOnly,
+        });
+      } catch (apiError) {
+        console.warn("❌ Sightseeing destinations API request failed:", apiError);
+        return this.getFallbackDestinations(query, limit);
+      }
 
       // Check if response or response.data is null/undefined
       if (!response || !response.data) {
