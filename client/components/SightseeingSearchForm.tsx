@@ -670,7 +670,7 @@ export function SightseeingSearchForm() {
     return format(visitDate, "d-MMM-yyyy");
   };
 
-  const destinationsToShow = isUserTyping
+  const destinationsToShow = (isUserTyping && inputValue.length >= 2)
     ? destinationSuggestions
     : popularDestinations;
 
