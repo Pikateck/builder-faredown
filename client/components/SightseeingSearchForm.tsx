@@ -490,12 +490,9 @@ export function SightseeingSearchForm() {
     setDestination(value);
     setIsUserTyping(true);
 
-    // Only open desktop popover if not already open to prevent conflicts
-    // Mobile uses manual modal opening, so don't auto-open
-    if (window.innerWidth >= 768) {
-      if (!isDestinationOpenDesktop) {
-        setIsDestinationOpenDesktop(true);
-      }
+    // Only open popover if not already open to prevent conflicts
+    if (!isDestinationOpen) {
+      setIsDestinationOpen(true);
     }
 
     // Clear previous timeout
@@ -528,8 +525,7 @@ export function SightseeingSearchForm() {
     setDestinationCode(selectedDestination.code);
     setDestinationSuggestions([]);
     setIsUserTyping(false);
-    setIsDestinationOpenMobile(false);
-    setIsDestinationOpenDesktop(false);
+    setIsDestinationOpen(false);
 
     console.log("🎯 Updated inputValue to:", selectedDestination.name);
   };
