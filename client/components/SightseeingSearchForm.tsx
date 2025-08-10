@@ -578,7 +578,7 @@ export function SightseeingSearchForm() {
     }
 
     if (!visitDate) {
-      console.log("��� Validation failed: No visit date");
+      console.log("����� Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
@@ -1053,51 +1053,81 @@ export function SightseeingSearchForm() {
           </Popover>
         </div>
 
-        {/* Date */}
-        <div className="flex-1 lg:max-w-[280px] relative">
-          <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-            Visit Date
-          </label>
-          <Popover
-            open={isCalendarOpen}
-            onOpenChange={(open) => {
-              console.log("📅 Calendar popover state changed:", open);
-              setIsCalendarOpen(open);
-            }}
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-3 touch-manipulation"
-                onClick={() => setIsCalendarOpen(true)}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                <span className="truncate">
-                  {visitDate &&
-                  endDate &&
-                  visitDate.getTime() !== endDate.getTime()
-                    ? `${format(visitDate, "d MMM")} - ${format(endDate, "d MMM")}`
-                    : visitDate
-                      ? format(visitDate, "d MMM yyyy")
-                      : "Select dates"}
+        {/* Visit Date - EXACT HOTELS PATTERN */}
+        <div className="flex-1 lg:max-w-[280px]">
+          {isMobile ? (
+            <Button
+              variant="outline"
+              className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+              onClick={() => setShowMobileDatePicker(true)}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+              <span className="truncate text-xs sm:text-sm">
+                <span className="sm:hidden text-xs">
+                  {visitDate && endDate ? (
+                    <>
+                      {format(visitDate, "dd-MMM-yyyy")} -{" "}
+                      {format(endDate, "dd-MMM-yyyy")}
+                    </>
+                  ) : (
+                    "Dates"
+                  )}
                 </span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <div className="flex flex-col">
-                <BookingCalendar
-                  initialRange={{
-                    startDate: visitDate || new Date(),
-                    endDate: endDate || addDays(visitDate || new Date(), 1),
-                  }}
-                  onChange={handleDesktopDateSelect}
-                  onClose={() => setIsCalendarOpen(false)}
-                  className="w-full"
-                  bookingType="sightseeing"
-                />
-              </div>
-            </PopoverContent>
-          </Popover>
+              </span>
+            </Button>
+          ) : (
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate text-xs sm:text-sm">
+                    <span className="hidden md:inline">
+                      {visitDate && endDate ? (
+                        <>
+                          {format(visitDate, "d-MMM-yyyy")} to{" "}
+                          {format(endDate, "d-MMM-yyyy")}
+                        </>
+                      ) : (
+                        "Check-in to Check-out"
+                      )}
+                    </span>
+                    <span className="hidden sm:inline md:hidden">
+                      {visitDate && endDate ? (
+                        <>
+                          {format(visitDate, "d MMM")} -{" "}
+                          {format(endDate, "d MMM")}
+                        </>
+                      ) : (
+                        "Select dates"
+                      )}
+                    </span>
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <div className="flex flex-col">
+                  <BookingCalendar
+                    initialRange={{
+                      startDate: visitDate || new Date(),
+                      endDate:
+                        endDate || addDays(visitDate || new Date(), 3),
+                    }}
+                    onChange={(range) => {
+                      console.log("Booking calendar range selected:", range);
+                      setVisitDate(range.startDate);
+                      setEndDate(range.endDate);
+                    }}
+                    onClose={() => setIsCalendarOpen(false)}
+                    className="w-full"
+                    bookingType="sightseeing"
+                  />
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
 
         {/* Search Button */}
