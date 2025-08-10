@@ -9,6 +9,23 @@
 
 @layer base {
   /**
+   * Font rendering optimizations for crisp, sharp text
+   */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1;
+  }
+
+  /**
    * Faredown brand color system
    * tailwind.config.ts expects the following color variables to be expressed as HSL values.
    */
