@@ -574,7 +574,7 @@ export function SightseeingSearchForm() {
     console.log("  - visitDate:", visitDate);
 
     if (!destination && !inputValue) {
-      console.log("❌ Validation failed: No destination");
+      console.log("��� Validation failed: No destination");
       setErrorMessage("Please enter a destination");
       setShowError(true);
       return;
@@ -1053,124 +1053,99 @@ export function SightseeingSearchForm() {
         bookingType="hotels" // Use hotels type for sightseeing (check-in/check-out style)
       />
 
-      {/* Mobile Destination Selection Modal */}
+      {/* Mobile Destination Selection Modal - SIMPLIFIED */}
       {isDestinationOpenMobile && (
-        <div className="sm:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
+        <div className="fixed inset-0 bg-white z-[9999] flex flex-col">
           {/* Header */}
-          <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">Select Destination</h2>
+          <div className="flex items-center justify-between p-4 border-b">
+            <h2 className="text-lg font-medium">Select Destination</h2>
             <button
               onClick={() => setIsDestinationOpenMobile(false)}
-              className="p-2 text-gray-500 hover:text-gray-700 touch-manipulation"
+              className="p-2 rounded-full hover:bg-gray-100"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Search Input */}
-          <div className="p-4 border-b border-gray-200">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input
-                className="pl-10 pr-4 h-12 bg-gray-50 border border-gray-300 rounded-lg text-base"
-                placeholder="Search destinations..."
-                value={inputValue}
-                onChange={(e) => {
-                  console.log("🔍 Mobile input changed:", e.target.value);
-                  handleDestinationChange(e.target.value);
-                }}
-                autoFocus
-              />
+          {/* Popular Destinations */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="p-4">
+              <h3 className="text-sm font-medium text-gray-600 mb-3">Popular Destinations</h3>
+              <div className="space-y-2">
+                <button
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
+                  onClick={() => {
+                    setDestination("Dubai");
+                    setInputValue("Dubai");
+                    setDestinationCode("DXB");
+                    setIsDestinationOpenMobile(false);
+                  }}
+                >
+                  <div className="font-medium">Dubai</div>
+                  <div className="text-sm text-gray-500">United Arab Emirates</div>
+                </button>
+                <button
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
+                  onClick={() => {
+                    setDestination("London");
+                    setInputValue("London");
+                    setDestinationCode("LON");
+                    setIsDestinationOpenMobile(false);
+                  }}
+                >
+                  <div className="font-medium">London</div>
+                  <div className="text-sm text-gray-500">United Kingdom</div>
+                </button>
+                <button
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
+                  onClick={() => {
+                    setDestination("Paris");
+                    setInputValue("Paris");
+                    setDestinationCode("PAR");
+                    setIsDestinationOpenMobile(false);
+                  }}
+                >
+                  <div className="font-medium">Paris</div>
+                  <div className="text-sm text-gray-500">France</div>
+                </button>
+                <button
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
+                  onClick={() => {
+                    setDestination("New York");
+                    setInputValue("New York");
+                    setDestinationCode("NYC");
+                    setIsDestinationOpenMobile(false);
+                  }}
+                >
+                  <div className="font-medium">New York</div>
+                  <div className="text-sm text-gray-500">United States</div>
+                </button>
+                <button
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
+                  onClick={() => {
+                    setDestination("Barcelona");
+                    setInputValue("Barcelona");
+                    setDestinationCode("BCN");
+                    setIsDestinationOpenMobile(false);
+                  }}
+                >
+                  <div className="font-medium">Barcelona</div>
+                  <div className="text-sm text-gray-500">Spain</div>
+                </button>
+                <button
+                  className="w-full p-3 text-left border rounded-lg hover:bg-blue-50"
+                  onClick={() => {
+                    setDestination("Mumbai");
+                    setInputValue("Mumbai");
+                    setDestinationCode("BOM");
+                    setIsDestinationOpenMobile(false);
+                  }}
+                >
+                  <div className="font-medium">Mumbai</div>
+                  <div className="text-sm text-gray-500">India</div>
+                </button>
+              </div>
             </div>
-          </div>
-
-          {/* Destinations List */}
-          <div className="flex-1">
-            {loadingDestinations ? (
-              <div className="p-8 text-center text-gray-500">
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-base">Searching destinations...</span>
-                </div>
-              </div>
-            ) : destinationsToShow.length > 0 ? (
-              <div>
-                {(!isUserTyping || inputValue.length < 2) && (
-                  <div className="px-4 py-3 text-xs font-semibold text-gray-600 bg-gray-50 border-b border-gray-200">
-                    POPULAR DESTINATIONS
-                  </div>
-                )}
-                <div className="divide-y divide-gray-100">
-                  {destinationsToShow.map((dest) => {
-                    const IconComponent = getDestinationIcon(dest.type, dest.name);
-                    return (
-                      <button
-                        key={dest.id}
-                        className="w-full text-left px-4 py-4 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 touch-manipulation"
-                        onClick={() => {
-                          console.log("🎯 MOBILE CLICK:", dest.name);
-                          setDestination(dest.name);
-                          setInputValue(dest.name);
-                          setDestinationCode(dest.code);
-                          setIsDestinationOpenMobile(false);
-                          console.log("🎯 MOBILE SET TO:", dest.name);
-                        }}
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 bg-white border border-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <IconComponent className="w-6 h-6 text-gray-600" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <span className="font-semibold text-gray-900 text-base truncate">
-                                {dest.name}
-                              </span>
-                              <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                                {dest.code}
-                              </span>
-                            </div>
-                            <div className="text-sm text-gray-500 truncate">
-                              {dest.type === "city"
-                                ? `${dest.country}`
-                                : dest.type === "district"
-                                  ? `District • ${dest.country}`
-                                  : dest.type === "attraction"
-                                    ? `Top Attraction • ${dest.country}`
-                                    : dest.type === "theme-park"
-                                      ? `Theme Park • ${dest.country}`
-                                      : dest.type === "airport"
-                                        ? `${dest.name} Airport, ${dest.country}`
-                                        : dest.type === "region"
-                                          ? `${dest.country}`
-                                          : dest.country}
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            {dest.flag && (
-                              <span className="text-xl">{dest.flag}</span>
-                            )}
-                            <div className="w-6 h-6 flex items-center justify-center">
-                              <MapPin className="w-4 h-4 text-gray-400" />
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : (
-              <div className="p-8 text-center text-gray-500">
-                <div className="flex flex-col items-center space-y-3">
-                  <Search className="w-12 h-12 text-gray-300" />
-                  <span className="text-base">
-                    {isUserTyping && inputValue
-                      ? "No destinations found"
-                      : "Start typing to search destinations"}
-                  </span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
