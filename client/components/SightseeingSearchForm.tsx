@@ -829,8 +829,12 @@ export function SightseeingSearchForm() {
                         return (
                           <button
                             key={dest.id}
-                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-b-0"
+                            className="w-full text-left px-4 py-3 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 border-b border-gray-100 last:border-b-0 touch-manipulation"
                             onClick={(e) => handleDestinationSelect(dest, e)}
+                            onTouchEnd={(e) => {
+                              e.preventDefault();
+                              handleDestinationSelect(dest, e);
+                            }}
                           >
                             <div className="flex items-center space-x-3">
                               <div className="w-9 h-9 bg-white border border-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
