@@ -253,6 +253,15 @@ export default function Hotels() {
                     </Link>
 
                     <Link
+                      to="/sightseeing"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <Camera className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Sightseeing</span>
+                    </Link>
+
+                    <Link
                       to="/bookings"
                       className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
                       onClick={() => setShowMobileMenu(false)}
