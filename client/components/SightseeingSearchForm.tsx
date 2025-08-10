@@ -218,7 +218,7 @@ export function SightseeingSearchForm() {
       setDestinationCode(urlDestination);
       setInputValue(urlDestinationName);
       console.log(
-        "�� Set destination from URL:",
+        "✅ Set destination from URL:",
         urlDestinationName,
         "->",
         urlDestination,
@@ -1107,14 +1107,12 @@ export function SightseeingSearchForm() {
                           e.preventDefault();
                           e.stopPropagation();
 
-                          // Use React.startTransition for immediate updates
-                          React.startTransition(() => {
-                            setInputValue(dest.name);
-                            setDestination(dest.name);
-                            setDestinationCode(dest.code);
-                            setDestinationSuggestions([]);
-                            setIsUserTyping(false);
-                          });
+                          // Update state synchronously
+                          setInputValue(dest.name);
+                          setDestination(dest.name);
+                          setDestinationCode(dest.code);
+                          setDestinationSuggestions([]);
+                          setIsUserTyping(false);
 
                           // Close modal immediately
                           setIsDestinationOpenMobile(false);
