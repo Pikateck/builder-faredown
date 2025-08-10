@@ -49,25 +49,25 @@ class SightseeingService {
         });
       } catch (apiError) {
         console.warn("❌ Sightseeing destinations API request failed:", apiError);
-        return this.getFallbackDestinations(query, limit);
+        return this.getFallbackDestinations(query);
       }
 
       // Check if response or response.data is null/undefined
       if (!response || !response.data) {
         console.warn("❌ Sightseeing destinations API returned null response");
-        return this.getFallbackDestinations(query, limit);
+        return this.getFallbackDestinations(query);
       }
 
       if (!response.data.success) {
         console.warn("❌ Sightseeing destinations API failed:", response.data);
-        return this.getFallbackDestinations(query, limit);
+        return this.getFallbackDestinations(query);
       }
 
       // Check if destinations data exists
       const destinationsData = response.data.data?.destinations;
       if (!destinationsData || !Array.isArray(destinationsData)) {
         console.warn("❌ Sightseeing destinations data is invalid:", response.data.data);
-        return this.getFallbackDestinations(query, limit);
+        return this.getFallbackDestinations(query);
       }
 
       const destinations = destinationsData.map((dest: any) => ({
@@ -86,7 +86,7 @@ class SightseeingService {
       return destinations;
     } catch (error) {
       console.error("❌ Sightseeing destinations search error:", error);
-      return this.getFallbackDestinations(query, limit);
+      return this.getFallbackDestinations(query);
     }
   }
 
