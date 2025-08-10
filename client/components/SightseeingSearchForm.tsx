@@ -334,7 +334,7 @@ export function SightseeingSearchForm() {
         name: "Downtown Dubai",
         country: "United Arab Emirates",
         type: "district",
-        flag: "🇦���",
+        flag: "🇦🇪",
       },
       {
         id: "DXB-JBR",
@@ -1103,7 +1103,17 @@ export function SightseeingSearchForm() {
                         key={dest.id}
                         className="w-full text-left px-4 py-4 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 touch-manipulation"
                         onClick={(e) => {
-                          handleDestinationSelect(dest, e);
+                          console.log("🎯 Mobile: Clicking destination:", dest.name);
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          // Direct state updates
+                          setInputValue(dest.name);
+                          setDestination(dest.name);
+                          setDestinationCode(dest.code);
+                          setIsDestinationOpenMobile(false);
+
+                          console.log("🎯 Mobile: Updated to:", dest.name);
                         }}
                       >
                         <div className="flex items-center space-x-3">
