@@ -123,13 +123,15 @@ export function SightseeingSearchForm() {
         console.log(
           "🎆 Loading popular sightseeing destinations from database...",
         );
-        const popular = await hotelsService.searchDestinations("", 8, true); // Get 8 popular destinations
+        const popular = await sightseeingService.searchDestinations("", 8, true); // Get 8 popular destinations
         const formattedPopular = popular.map((dest) => ({
-          id: dest.id,
-          code: dest.id, // dest.id is the destination code
+          id: dest.code,
+          code: dest.code,
           name: dest.name,
           country: dest.country,
-          type: dest.type as "city" | "region" | "country" | "landmark",
+          type: dest.type,
+          countryCode: dest.countryCode,
+          popular: dest.popular,
         }));
         setPopularDestinations(formattedPopular);
         setPopularDestinationsLoaded(true);
