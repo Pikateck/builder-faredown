@@ -733,39 +733,113 @@ export function SightseeingSearchForm() {
 
       {/* Mobile: Vertical Layout */}
       <div className="md:hidden space-y-4">
-        {/* Destination Input */}
+        {/* Destination - Same as Hotels */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
-            What would you like to see?
+            Destination
           </label>
-          <div className="relative w-full">
-            <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
-            <button
-              className="w-full h-12 pl-10 pr-8 bg-white border-2 border-blue-400 hover:border-blue-500 rounded font-medium text-sm text-left touch-manipulation cursor-pointer flex items-center"
-              onClick={() => {
-                console.log("🎯 Mobile button clicked - inputValue:", inputValue);
-                console.log("🎯 Mobile button clicked - destination:", destination);
-                setIsDestinationOpenMobile(true);
-              }}
-            >
-              <span className="truncate text-sm">
-                {destination || inputValue || "Enter destination or attraction"}
-              </span>
-            </button>
-            {inputValue && (
-              <span
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setInputValue("");
-                  setDestination("");
-                  setDestinationCode("");
-                }}
-              >
-                <X className="w-4 h-4" />
-              </span>
-            )}
-          </div>
+          <Popover
+            open={isDestinationOpenMobile}
+            onOpenChange={setIsDestinationOpenMobile}
+          >
+            <PopoverTrigger asChild>
+              <div className="relative cursor-pointer">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
+                <Input
+                  type="text"
+                  value={isUserTyping ? inputValue : destination || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setInputValue(value);
+                    setIsUserTyping(true);
+                    if (!isDestinationOpenMobile) {
+                      setIsDestinationOpenMobile(true);
+                    }
+                    handleDestinationChange(value);
+                  }}
+                  onFocus={(e) => {
+                    e.stopPropagation();
+                    setIsDestinationOpenMobile(true);
+                    if (!isUserTyping && destination) {
+                      setInputValue(destination);
+                      setIsUserTyping(true);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDestinationOpenMobile(true);
+                  }}
+                  className="pl-10 pr-8 h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-sm touch-manipulation"
+                  placeholder="Where do you want to explore?"
+                  autoComplete="off"
+                />
+                {(destination || (isUserTyping && inputValue)) && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDestination("");
+                      setInputValue("");
+                      setIsUserTyping(false);
+                      setDestinationCode("");
+                      setIsDestinationOpenMobile(false);
+                    }}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0 border border-gray-200 shadow-2xl rounded-lg">
+              <div className="max-h-80 overflow-y-auto">
+                {loadingDestinations ? (
+                  <div className="flex items-center justify-center p-4">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                    <span className="text-sm text-gray-600">Searching...</span>
+                  </div>
+                ) : destinationsToShow.length > 0 ? (
+                  <div>
+                    {!isUserTyping && (
+                      <div className="px-4 py-2 bg-gray-50 border-b">
+                        <span className="text-xs font-medium text-gray-600">POPULAR DESTINATIONS</span>
+                      </div>
+                    )}
+                    {destinationsToShow.map((dest, index) => (
+                      <div
+                        key={dest.id || index}
+                        className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log("🎯 Destination selected:", dest.name);
+                          setDestination(dest.name);
+                          setDestinationCode(dest.code);
+                          setInputValue("");
+                          setIsUserTyping(false);
+                          setIsDestinationOpenMobile(false);
+                        }}
+                      >
+                        <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
+                          <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
+                            <Camera className="w-3.5 h-3.5 text-white" />
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-gray-900">{dest.name}</div>
+                          <div className="text-sm text-gray-500">{dest.country}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-gray-500">
+                    <span className="text-sm">Start typing to search destinations</span>
+                  </div>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Date Picker */}
