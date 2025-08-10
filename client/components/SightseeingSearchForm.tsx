@@ -872,7 +872,7 @@ export function SightseeingSearchForm() {
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code || dest.id);
-                          setInputValue("");
+                          setInputValue(fullName);
                           setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
@@ -987,7 +987,7 @@ export function SightseeingSearchForm() {
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code || dest.id);
-                          setInputValue("");
+                          setInputValue(fullName);
                           setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
