@@ -745,6 +745,8 @@ export function SightseeingSearchForm() {
               onClick={() => {
                 console.log("🎯 Mobile button clicked - inputValue:", inputValue);
                 console.log("🎯 Mobile button clicked - destination:", destination);
+                setInputValue(""); // Clear input to show popular destinations
+                setIsUserTyping(false);
                 setIsDestinationOpenMobile(true);
               }}
             >
