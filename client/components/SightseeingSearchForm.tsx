@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, startTransition } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -218,7 +218,7 @@ export function SightseeingSearchForm() {
       setDestinationCode(urlDestination);
       setInputValue(urlDestinationName);
       console.log(
-        "✅ Set destination from URL:",
+        "�� Set destination from URL:",
         urlDestinationName,
         "->",
         urlDestination,
@@ -391,7 +391,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Miracle Garden",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "🇦����",
+        flag: "🇦🇪",
       },
       {
         id: "GOLD-SOUKS",
