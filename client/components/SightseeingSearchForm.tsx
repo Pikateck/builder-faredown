@@ -581,7 +581,7 @@ export function SightseeingSearchForm() {
     }
 
     if (!visitDate) {
-      console.log("����� Validation failed: No visit date");
+      console.log("��� Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
@@ -1093,7 +1093,7 @@ export function SightseeingSearchForm() {
               </div>
             ) : destinationsToShow.length > 0 ? (
               <div>
-                {!isUserTyping && (
+                {(!isUserTyping || inputValue.length < 2) && (
                   <div className="px-4 py-3 text-xs font-semibold text-gray-600 bg-gray-50 border-b border-gray-200">
                     POPULAR DESTINATIONS
                   </div>
