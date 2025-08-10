@@ -8,6 +8,7 @@ const router = express.Router();
 const { Pool } = require("pg");
 const crypto = require("crypto");
 const axios = require("axios");
+const HotelbedsActivitiesService = require("../services/hotelbedsActivitiesService");
 
 // Database connection
 const pool = new Pool({
