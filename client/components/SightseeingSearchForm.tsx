@@ -529,12 +529,10 @@ export function SightseeingSearchForm() {
     setDestinationSuggestions([]);
     setIsUserTyping(false);
 
-    // Force close both popovers immediately with a slight delay for visual feedback
-    setTimeout(() => {
-      setIsDestinationOpenMobile(false);
-      setIsDestinationOpenDesktop(false);
-      console.log("🎯 Destination selection complete, popovers closed");
-    }, 100);
+    // Close popovers immediately
+    setIsDestinationOpenMobile(false);
+    setIsDestinationOpenDesktop(false);
+    console.log("🎯 Destination selection complete, popovers closed");
   };
 
   // Handle date selection for mobile calendar (don't close calendar here)
