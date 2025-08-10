@@ -45,6 +45,7 @@ import {
   CheckCircle,
   Plus,
   Hotel,
+  Camera,
 } from "lucide-react";
 import {
   DropdownMenu,
