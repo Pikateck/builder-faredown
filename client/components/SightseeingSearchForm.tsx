@@ -1112,20 +1112,6 @@ export function SightseeingSearchForm() {
       </div>
 
 
-      {/* Mobile Date Picker Modal - Same as Hotels */}
-      <MobileDatePicker
-        isOpen={showMobileDatePicker}
-        onClose={() => setShowMobileDatePicker(false)}
-        tripType={tripType}
-        setTripType={setTripType}
-        selectedDepartureDate={visitDate}
-        selectedReturnDate={endDate}
-        setSelectedDepartureDate={setVisitDate}
-        setSelectedReturnDate={setEndDate}
-        selectingDeparture={true}
-        setSelectingDeparture={() => {}}
-        bookingType="hotels" // Use hotels type for sightseeing (check-in/check-out style)
-      />
 
       {/* Mobile Destination Selection Modal */}
       {isDestinationOpenMobile && (
