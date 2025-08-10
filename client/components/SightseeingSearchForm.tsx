@@ -659,8 +659,6 @@ export function SightseeingSearchForm() {
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                           onMouseDown={(e) => {
                             e.preventDefault();
-                          }}
-                          onClick={() => {
                             const fullName = `${dest.name}, ${dest.country}`;
                             console.log(
                               "🎯 Sightseeing test destination selected:",
