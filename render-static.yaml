@@ -1,0 +1,26 @@
+services:
+  # Faredown Frontend Static Site
+  - type: web
+    name: builder-faredown
+    env: static
+    buildCommand: npm run build:client
+    staticPublishPath: ./dist/spa
+    plan: free
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://faredown-api.onrender.com
+      - key: VITE_PAYMENT_KEY_ID
+        value: rzp_test_XkiZskS8iGKFKi
+      - key: VITE_MERCHANT_ID
+        value: FAHsqsRoFyoLoV
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
