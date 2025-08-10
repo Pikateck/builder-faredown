@@ -1107,10 +1107,16 @@ export function SightseeingSearchForm() {
                           e.preventDefault();
                           e.stopPropagation();
 
-                          // Direct state updates
-                          setInputValue(dest.name);
-                          setDestination(dest.name);
-                          setDestinationCode(dest.code);
+                          // Use React.startTransition for immediate updates
+                          React.startTransition(() => {
+                            setInputValue(dest.name);
+                            setDestination(dest.name);
+                            setDestinationCode(dest.code);
+                            setDestinationSuggestions([]);
+                            setIsUserTyping(false);
+                          });
+
+                          // Close modal immediately
                           setIsDestinationOpenMobile(false);
 
                           console.log("🎯 Mobile: Updated to:", dest.name);
