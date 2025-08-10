@@ -507,13 +507,11 @@ export function SightseeingSearchForm() {
   };
 
   // Handle destination selection
-  const handleDestinationSelect = (
+  const handleDestinationSelect = useCallback((
     selectedDestination: DestinationOption,
     event?: React.MouseEvent,
   ) => {
     console.log("🎯 Destination selected:", selectedDestination.name);
-    console.log("🎯 Before update - inputValue:", inputValue);
-    console.log("🎯 Before update - destination:", destination);
 
     // Prevent event propagation to avoid conflicts
     if (event) {
@@ -521,19 +519,19 @@ export function SightseeingSearchForm() {
       event.stopPropagation();
     }
 
-    // Update state immediately
-    setDestination(selectedDestination.name);
-    setDestinationCode(selectedDestination.code);
-    setInputValue(selectedDestination.name);
-    setDestinationSuggestions([]);
-    setIsUserTyping(false);
+    // Use React.startTransition to ensure state updates are batched properly
+    React.startTransition(() => {
+      setDestination(selectedDestination.name);
+      setDestinationCode(selectedDestination.code);
+      setInputValue(selectedDestination.name);
+      setDestinationSuggestions([]);
+      setIsUserTyping(false);
+      setIsDestinationOpenMobile(false);
+      setIsDestinationOpenDesktop(false);
+    });
 
-    // Close popovers immediately
-    setIsDestinationOpenMobile(false);
-    setIsDestinationOpenDesktop(false);
     console.log("🎯 Destination selection complete:", selectedDestination.name);
-    console.log("🎯 After update - setting inputValue to:", selectedDestination.name);
-  };
+  }, []);
 
   // Handle date selection for mobile calendar (don't close calendar here)
   const handleMobileDateSelect = (range: {
