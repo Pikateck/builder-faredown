@@ -788,7 +788,15 @@ export function SightseeingSearchForm() {
                 </span>
               )}
             </div>
-            <PopoverContent className="w-80 p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white">
+            <PopoverContent
+              className="w-80 p-0 border border-gray-300 shadow-lg rounded-lg z-[60] bg-white"
+              onInteractOutside={(e) => {
+                // Prevent closing on mobile when interacting outside
+                if (window.innerWidth < 768) {
+                  e.preventDefault();
+                }
+              }}
+            >
               <div className="max-h-80 overflow-y-auto">
                 {loadingDestinations ? (
                   <div className="p-4 text-center text-gray-500">
