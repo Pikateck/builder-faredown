@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { sightseeingService } from "@/services/sightseeingService";
 import {
   Popover,
@@ -11,35 +10,12 @@ import {
 } from "@/components/ui/popover";
 import { BookingCalendar } from "@/components/BookingCalendar";
 import { MobileDatePicker } from "@/components/MobileDropdowns";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { format, addDays } from "date-fns";
 import {
   MapPin,
   CalendarIcon,
   Search,
   X,
-  Camera,
-  Clock,
-  Ticket,
-  Plane,
-  Building2,
-  Mountain,
-  Landmark,
-  Globe,
-  Palmtree,
-  Gamepad2,
-  ShoppingBag,
-  Sparkles,
-  Crown,
-  Trees,
-  Fish,
-  Home,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
@@ -49,8 +25,8 @@ interface DestinationOption {
   code: string;
   name: string;
   country: string;
-  type: "city" | "region" | "country" | "destination";
-  countryCode?: string;
+  type: string;
+  flag?: string;
   popular?: boolean;
 }
 
@@ -60,48 +36,37 @@ export function SightseeingSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
-  // Debug: Log component initialization
-  console.log("🎭 SightseeingSearchForm initialized");
+  // EXACT HOTELS STATE PATTERN
   const [destination, setDestination] = useState("");
-  const [destinationCode, setDestinationCode] = useState(""); // Store destination code
-  // Exact hotels state pattern
+  const [destinationCode, setDestinationCode] = useState("");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-  // Mobile-specific states like hotels
-  const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
-
-  const [destinationSuggestions, setDestinationSuggestions] = useState<
-    DestinationOption[]
-  >([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState<DestinationOption[]>([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  // Set default dates to future dates (tomorrow and 3 days later)
+
+  // Set default dates to future dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const dayAfterTomorrow = new Date();
-  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 4); // 3-day trip by default
+  const visitDefault = new Date();
+  visitDefault.setDate(visitDefault.getDate() + 4);
 
   const [visitDate, setVisitDate] = useState<Date | undefined>(tomorrow);
-  const [endDate, setEndDate] = useState<Date | undefined>(dayAfterTomorrow);
-  const [experienceType, setExperienceType] = useState("any");
-  const [duration, setDuration] = useState("any");
+  const [endDate, setEndDate] = useState<Date | undefined>(visitDefault);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Mobile-specific states
   const [isMobile, setIsMobile] = useState(false);
-  const [tripType, setTripType] = useState("multi-day");
+  const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
+  const [tripType, setTripType] = useState("round-trip");
 
   // Popular destinations will be loaded from database
-  const [popularDestinations, setPopularDestinations] = useState<
-    DestinationOption[]
-  >([]);
-  const [popularDestinationsLoaded, setPopularDestinationsLoaded] =
-    useState(false);
+  const [popularDestinations, setPopularDestinations] = useState<DestinationOption[]>([]);
+  const [popularDestinationsLoaded, setPopularDestinationsLoaded] = useState(false);
 
-  // State to track if user is actively typing (not pre-filled)
+  // State to track if user is actively typing (not pre-filled) - EXACT HOTELS PATTERN
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  // Debounced search function
+  // Debounced search function - EXACT HOTELS PATTERN
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
 
   // Mobile detection
@@ -116,21 +81,18 @@ export function SightseeingSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Load popular destinations from database on component mount
+  // Load popular destinations from database on component mount - EXACT HOTELS PATTERN
   useEffect(() => {
     const loadPopularDestinations = async () => {
       try {
-        console.log(
-          "🎆 Loading popular sightseeing destinations from database...",
-        );
-        const popular = await sightseeingService.searchDestinations("", 8, true); // Get 8 popular destinations
+        console.log("🎆 Loading popular sightseeing destinations from database...");
+        const popular = await sightseeingService.searchDestinations(""); // Empty query for popular
         const formattedPopular = popular.map((dest) => ({
           id: dest.code,
           code: dest.code,
           name: dest.name,
           country: dest.country,
           type: dest.type,
-          countryCode: dest.countryCode,
           popular: dest.popular,
         }));
         setPopularDestinations(formattedPopular);
@@ -145,7 +107,7 @@ export function SightseeingSearchForm() {
           "⚠️ Failed to load popular destinations, using fallback:",
           error,
         );
-        // Static fallback if database fails
+        // Static fallback if database fails - EXACT HOTELS PATTERN
         setPopularDestinations([
           {
             id: "DXB",
@@ -153,7 +115,8 @@ export function SightseeingSearchForm() {
             name: "Dubai",
             country: "United Arab Emirates",
             type: "city",
-            flag: "🇦����",
+            flag: "🇦🇪",
+            popular: true,
           },
           {
             id: "LON",
@@ -162,6 +125,7 @@ export function SightseeingSearchForm() {
             country: "United Kingdom",
             type: "city",
             flag: "🇬🇧",
+            popular: true,
           },
           {
             id: "BCN",
@@ -170,6 +134,7 @@ export function SightseeingSearchForm() {
             country: "Spain",
             type: "city",
             flag: "🇪🇸",
+            popular: true,
           },
           {
             id: "NYC",
@@ -178,6 +143,7 @@ export function SightseeingSearchForm() {
             country: "United States",
             type: "city",
             flag: "🇺🇸",
+            popular: true,
           },
           {
             id: "PAR",
@@ -186,6 +152,7 @@ export function SightseeingSearchForm() {
             country: "France",
             type: "city",
             flag: "🇫🇷",
+            popular: true,
           },
           {
             id: "BOM",
@@ -194,6 +161,7 @@ export function SightseeingSearchForm() {
             country: "India",
             type: "city",
             flag: "🇮🇳",
+            popular: true,
           },
         ]);
         setPopularDestinationsLoaded(true);
@@ -203,360 +171,88 @@ export function SightseeingSearchForm() {
     loadPopularDestinations();
   }, []);
 
-  // Initialize form state from URL parameters
-  useEffect(() => {
-    console.log(
-      "🔄 Initializing form from URL parameters:",
-      searchParams.toString(),
-    );
-
-    // Initialize destination
-    const urlDestination = searchParams.get("destination");
-    const urlDestinationName = searchParams.get("destinationName");
-
-    if (urlDestination && urlDestinationName) {
-      setDestination(urlDestinationName);
-      setDestinationCode(urlDestination);
-      setInputValue(urlDestinationName);
-      console.log(
-        "✅ Set destination from URL:",
-        urlDestinationName,
-        "->",
-        urlDestination,
-      );
-    }
-
-    // Initialize visit date
-    const urlVisitDate = searchParams.get("visitDate");
-    if (urlVisitDate) {
-      try {
-        // Handle both ISO string and simple date formats
-        const parsedDate = new Date(decodeURIComponent(urlVisitDate));
-        if (!isNaN(parsedDate.getTime())) {
-          // Ensure we use the date part only (no time zone issues)
-          const localDate = new Date(
-            parsedDate.getFullYear(),
-            parsedDate.getMonth(),
-            parsedDate.getDate(),
-          );
-          setVisitDate(localDate);
-          console.log(
-            "✅ Set visit date from URL:",
-            localDate,
-            "from",
-            urlVisitDate,
-          );
-        } else {
-          console.warn("⚠️ Invalid visit date format in URL:", urlVisitDate);
-        }
-      } catch (error) {
-        console.error("❌ Error parsing visit date from URL:", error);
-      }
-    }
-
-    // Initialize end date
-    const urlEndDate = searchParams.get("endDate");
-    if (urlEndDate) {
-      try {
-        // Handle both ISO string and simple date formats
-        const parsedEndDate = new Date(decodeURIComponent(urlEndDate));
-        if (!isNaN(parsedEndDate.getTime())) {
-          // Ensure we use the date part only (no time zone issues)
-          const localEndDate = new Date(
-            parsedEndDate.getFullYear(),
-            parsedEndDate.getMonth(),
-            parsedEndDate.getDate(),
-          );
-          setEndDate(localEndDate);
-          setTripType("multi-day");
-          console.log(
-            "✅ Set end date from URL:",
-            localEndDate,
-            "from",
-            urlEndDate,
-          );
-        } else {
-          console.warn("⚠️ Invalid end date format in URL:", urlEndDate);
-        }
-      } catch (error) {
-        console.error("❌ Error parsing end date from URL:", error);
-      }
-    }
-
-    // Initialize experience type
-    const urlExperienceType = searchParams.get("experienceType");
-    if (urlExperienceType) {
-      setExperienceType(urlExperienceType);
-      console.log("✅ Set experience type from URL:", urlExperienceType);
-    }
-
-    // Initialize duration
-    const urlDuration = searchParams.get("duration");
-    if (urlDuration) {
-      setDuration(urlDuration);
-      console.log("✅ Set duration from URL:", urlDuration);
-    }
-
-    // Get adults and children from URL for consistent pricing (stored for use in search)
-    const urlAdults = searchParams.get("adults") || "2";
-    const urlChildren = searchParams.get("children") || "0";
-    console.log(
-      "✅ Read adults/children from URL:",
-      urlAdults,
-      "/",
-      urlChildren,
-    );
-  }, [searchParams]);
-
-  // Get Dubai-specific attractions when searching for Dubai
-  const getDubaiAttractions = (): DestinationOption[] => {
-    return [
-      // Main Dubai destinations
-      {
-        id: "DXB-CITY",
-        code: "DXB",
-        name: "Dubai",
-        country: "United Arab Emirates",
-        type: "city",
-        flag: "🇦🇪",
-        popular: true,
-      },
-      {
-        id: "DXB-MARINA",
-        code: "DXB-MARINA",
-        name: "Dubai Marina",
-        country: "United Arab Emirates",
-        type: "district",
-        flag: "🇦🇪",
-      },
-      {
-        id: "DXB-DOWNTOWN",
-        code: "DXB-DOWNTOWN",
-        name: "Downtown Dubai",
-        country: "United Arab Emirates",
-        type: "district",
-        flag: "🇦🇪",
-      },
-      {
-        id: "DXB-JBR",
-        code: "DXB-JBR",
-        name: "JBR - Jumeirah Beach Residence",
-        country: "United Arab Emirates",
-        type: "district",
-        flag: "🇦🇪",
-      },
-      // Top attractions
-      {
-        id: "DUBAI-FOUNTAIN",
-        code: "DUBAI-FOUNTAIN",
-        name: "The Dubai Fountain",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "BURJ-KHALIFA",
-        code: "BURJ-KHALIFA",
-        name: "Burj Khalifa",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "DUBAI-MALL",
-        code: "DUBAI-MALL",
-        name: "The Dubai Mall",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "DUBAI-FRAME",
-        code: "DUBAI-FRAME",
-        name: "Dubai Frame",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "ATLANTIS-PALM",
-        code: "ATLANTIS-PALM",
-        name: "Atlantis The Palm",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "DUBAI-MIRACLE-GARDEN",
-        code: "DUBAI-MIRACLE-GARDEN",
-        name: "Dubai Miracle Garden",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "GOLD-SOUKS",
-        code: "GOLD-SOUKS",
-        name: "Gold & Spice Souks",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "🇦🇪",
-      },
-      {
-        id: "LEGOLAND-DUBAI",
-        code: "LEGOLAND-DUBAI",
-        name: "Legoland Dubai",
-        country: "United Arab Emirates",
-        type: "theme-park",
-        flag: "🇦🇪",
-      },
-      {
-        id: "IMG-WORLDS",
-        code: "IMG-WORLDS",
-        name: "IMG Worlds of Adventure",
-        country: "United Arab Emirates",
-        type: "theme-park",
-        flag: "🇦🇪",
-      },
-      {
-        id: "DUBAI-AQUARIUM",
-        code: "DUBAI-AQUARIUM",
-        name: "Dubai Aquarium & Underwater Zoo",
-        country: "United Arab Emirates",
-        type: "attraction",
-        flag: "�������",
-      },
-    ];
-  };
-
-  // Debounced destination search
-  const searchDestinations = useCallback(async (query: string) => {
-    if (!query.trim() || query.length < 2) {
-      setDestinationSuggestions([]);
-      return;
-    }
-
-    setLoadingDestinations(true);
-    try {
-      console.log("🔍 Searching sightseeing destinations for:", query);
-
-      // Check if searching for Dubai - show specific attractions
-      const lowerQuery = query.toLowerCase();
-      if (lowerQuery.includes("dubai") || lowerQuery.includes("dxb")) {
-        const dubaiAttractions = getDubaiAttractions();
-        // Filter attractions based on query
-        const filteredAttractions = dubaiAttractions.filter(
-          (attraction) =>
-            attraction.name.toLowerCase().includes(lowerQuery) ||
-            attraction.country.toLowerCase().includes(lowerQuery),
-        );
-        setDestinationSuggestions(filteredAttractions);
-        console.log(
-          "✅ Found",
-          filteredAttractions.length,
-          "Dubai sightseeing destinations",
-        );
+  // EXACT HOTELS SEARCH PATTERN with debouncing
+  const searchDestinations = useCallback(
+    async (query: string) => {
+      // Show suggestions immediately like Booking.com (min 3 characters)
+      if (query.length < 3) {
+        setDestinationSuggestions([]);
         return;
       }
 
-      // Search using sightseeing service
-      const results = await sightseeingService.searchDestinations(query, 10);
-      const formattedResults = results.map((dest) => ({
-        id: dest.code,
-        code: dest.code,
-        name: dest.name,
-        country: dest.country,
-        type: dest.type,
-        countryCode: dest.countryCode,
-        popular: dest.popular,
-      }));
-      setDestinationSuggestions(formattedResults);
-      console.log(
-        "✅ Found",
-        formattedResults.length,
-        "sightseeing destinations",
-      );
-    } catch (error) {
-      console.error("⚠️ Error searching destinations:", error);
-      setDestinationSuggestions([]);
-    } finally {
-      setLoadingDestinations(false);
+      // Clear previous timeout
+      if (debouncedSearchRef.current) {
+        clearTimeout(debouncedSearchRef.current);
+      }
+
+      // 300ms debounce as specified
+      debouncedSearchRef.current = setTimeout(async () => {
+        try {
+          setLoadingDestinations(true);
+          console.log(`🔍 Real-time sightseeing search: "${query}"`);
+
+          // Get search results using single query parameter
+          const results = await sightseeingService.searchDestinations(query);
+
+          const formattedResults = results.map((dest) => ({
+            id: dest.code,
+            code: dest.code,
+            name: dest.name,
+            country: dest.country,
+            type: dest.type,
+            popular: dest.popular || false,
+          }));
+
+          setDestinationSuggestions(formattedResults);
+          console.log(
+            `✅ Real-time sightseeing results: ${formattedResults.length} destinations`,
+          );
+        } catch (error) {
+          console.error("⚠️ Real-time sightseeing search failed:", error);
+
+          // Enhanced fallback with popular destinations filter - EXACT HOTELS PATTERN
+          const fallbackDestinations = popularDestinations.filter(
+            (dest) =>
+              dest.name.toLowerCase().includes(query.toLowerCase()) ||
+              dest.country.toLowerCase().includes(query.toLowerCase()) ||
+              dest.code.toLowerCase().includes(query.toLowerCase()),
+          );
+
+          setDestinationSuggestions(fallbackDestinations.slice(0, 8));
+          console.log(
+            `🔄 Fallback sightseeing results: ${fallbackDestinations.length} destinations`,
+          );
+        } finally {
+          setLoadingDestinations(false);
+        }
+      }, 300); // 300ms debounce as specified
+    },
+    [popularDestinations],
+  );
+
+  // Handle destination search only when user actively types - EXACT HOTELS PATTERN
+  useEffect(() => {
+    if (popularDestinationsLoaded && isDestinationOpen && isUserTyping) {
+      if (inputValue && inputValue.length >= 3) {
+        // Search immediately as user types (min 3 chars enforced)
+        searchDestinations(inputValue);
+      } else {
+        // Clear search results when input is too short
+        setDestinationSuggestions([]);
+      }
     }
-  }, []);
+  }, [
+    inputValue,
+    searchDestinations,
+    popularDestinationsLoaded,
+    isDestinationOpen,
+    isUserTyping,
+  ]);
 
-  // Handle destination input change with debouncing
-  const handleDestinationChange = (value: string) => {
-    setInputValue(value);
-    setDestination(value);
-    setIsUserTyping(true);
-
-    // Only open popover if not already open to prevent conflicts
-    if (!isDestinationOpen) {
-      setIsDestinationOpen(true);
-    }
-
-    // Clear previous timeout
-    if (debouncedSearchRef.current) {
-      clearTimeout(debouncedSearchRef.current);
-    }
-
-    // Set new timeout for debounced search
-    debouncedSearchRef.current = setTimeout(() => {
-      searchDestinations(value);
-    }, 300);
-  };
-
-  // Handle destination selection
-  const handleDestinationSelect = (
-    selectedDestination: DestinationOption,
-    event?: React.MouseEvent,
-  ) => {
-    console.log("🎯 Destination selected:", selectedDestination.name);
-
-    // Prevent event propagation to avoid conflicts
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    // Update state immediately - direct and simple
-    setInputValue(selectedDestination.name);
-    setDestination(selectedDestination.name);
-    setDestinationCode(selectedDestination.code);
-    setDestinationSuggestions([]);
-    setIsUserTyping(false);
-    setIsDestinationOpen(false);
-
-    console.log("🎯 Updated inputValue to:", selectedDestination.name);
-  };
-
-  // Handle date selection for mobile calendar (don't close calendar here)
-  const handleMobileDateSelect = (range: {
-    startDate: Date;
-    endDate: Date;
-  }) => {
-    console.log("📅 Mobile date range selected:", range);
-    setVisitDate(range.startDate);
-    setEndDate(range.endDate);
-    // Don't close calendar here - let Apply button handle it
-  };
-
-  // Handle date selection for desktop calendar (don't close calendar here)
-  const handleDesktopDateSelect = (range: {
-    startDate: Date;
-    endDate: Date;
-  }) => {
-    console.log("📅 Desktop date range selected:", range);
-    setVisitDate(range.startDate);
-    setEndDate(range.endDate);
-    // Don't close calendar here - let Apply button handle it
-  };
-
-  // Search validation and execution
-  const validateAndSearch = () => {
-    console.log("🔍 Validating search...", {
+  // Handle search validation and execution
+  const handleSearch = () => {
+    console.log("🔍 Starting sightseeing search with:", {
       destination,
-      inputValue,
       destinationCode,
       visitDate,
       endDate,
@@ -566,12 +262,7 @@ export function SightseeingSearchForm() {
     setShowError(false);
     setErrorMessage("");
 
-    // Validation checks
-    console.log("🔍 Validating search:");
-    console.log("  - destination:", destination);
-    console.log("  - inputValue:", inputValue);
-    console.log("  - visitDate:", visitDate);
-
+    // Validate destination
     if (!destination && !inputValue) {
       console.log("❌ Validation failed: No destination");
       setErrorMessage("Please enter a destination");
@@ -579,8 +270,9 @@ export function SightseeingSearchForm() {
       return;
     }
 
+    // Validate visit date
     if (!visitDate) {
-      console.log("��� Validation failed: No visit date");
+      console.log("❌ Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
@@ -596,35 +288,31 @@ export function SightseeingSearchForm() {
       return;
     }
 
-    console.log("✅ Validation passed, proceeding with search");
+    console.log("✅ Validation passed, proceeding with sightseeing search");
 
-    // Build search parameters
+    // Build search parameters - EXACT HOTELS PATTERN
     const currentSearchParams = new URLSearchParams(window.location.search);
-    const searchParams = new URLSearchParams({
+    const searchParamsObj = new URLSearchParams({
       destination: destinationCode || inputValue || destination,
       destinationName: destination || inputValue,
       visitDate: visitDate.toISOString(),
-      experienceType,
-      duration,
       adults: currentSearchParams.get("adults") || "2", // Preserve current adults count
       children: currentSearchParams.get("children") || "0", // Preserve current children count
     });
 
     if (endDate && endDate.getTime() !== visitDate!.getTime()) {
-      searchParams.set("endDate", endDate.toISOString());
+      searchParamsObj.set("endDate", endDate.toISOString());
     }
 
     console.log(
       "🎭 Searching sightseeing with params:",
-      searchParams.toString(),
-    );
-    console.log(
-      "🎭 Navigating to:",
-      `/sightseeing/results?${searchParams.toString()}`,
+      searchParamsObj.toString(),
     );
 
     try {
-      navigate(`/sightseeing/results?${searchParams.toString()}`);
+      const url = `/sightseeing/results?${searchParamsObj.toString()}`;
+      console.log("🎭 Navigating to:", url);
+      navigate(url);
       console.log("✅ Navigation successful");
     } catch (error) {
       console.error("❌ Navigation failed:", error);
@@ -633,316 +321,97 @@ export function SightseeingSearchForm() {
     }
   };
 
-  const handleSearch = () => {
-    console.log("🔍 Search button clicked!", {
-      destination,
-      destinationCode,
-      inputValue,
-      visitDate,
-      endDate,
-    });
-
-    // Additional debugging
-    console.log("🔍 Validation check:");
-    console.log("  - Has destination?", !!(destination || inputValue));
-    console.log("  - Has visitDate?", !!visitDate);
-    console.log(
-      "  - Date is future?",
-      visitDate
-        ? visitDate >= new Date(new Date().setHours(0, 0, 0, 0))
-        : false,
-    );
-
-    validateAndSearch();
-  };
-
-  // Format date display
-  const formatDateDisplay = () => {
-    if (!visitDate) return "Select visit date";
-
-    // If we have both start and end dates and they're different, show range
-    if (endDate && visitDate && endDate.getTime() !== visitDate.getTime()) {
-      return `${format(visitDate, "d-MMM-yyyy")} to ${format(endDate, "d-MMM-yyyy")}`;
-    }
-
-    // Single date format like hotel calendar: "8-Aug-2025"
-    return format(visitDate, "d-MMM-yyyy");
-  };
-
-  const destinationsToShow = isUserTyping
-    ? destinationSuggestions
-    : popularDestinations;
-
-  // Get appropriate icon for destination type with specific Dubai attraction icons
-  const getDestinationIcon = (type: string, name?: string) => {
-    // Specific icons for Dubai attractions
-    if (name) {
-      const lowerName = name.toLowerCase();
-      if (lowerName.includes("fountain")) return Sparkles;
-      if (lowerName.includes("burj khalifa")) return Crown;
-      if (lowerName.includes("mall")) return ShoppingBag;
-      if (lowerName.includes("frame")) return Camera;
-      if (lowerName.includes("atlantis") || lowerName.includes("palm"))
-        return Palmtree;
-      if (lowerName.includes("miracle garden") || lowerName.includes("garden"))
-        return Trees;
-      if (lowerName.includes("legoland") || lowerName.includes("img worlds"))
-        return Gamepad2;
-      if (lowerName.includes("aquarium") || lowerName.includes("underwater"))
-        return Fish;
-      if (lowerName.includes("souks") || lowerName.includes("souk"))
-        return ShoppingBag;
-      if (lowerName.includes("marina")) return Palmtree;
-      if (lowerName.includes("jbr") || lowerName.includes("jumeirah"))
-        return Home;
-    }
-
-    // General type-based icons
-    switch (type.toLowerCase()) {
-      case "city":
-        return Building2;
-      case "district":
-        return Building2;
-      case "airport":
-        return Plane;
-      case "region":
-        return Mountain;
-      case "country":
-        return Globe;
-      case "landmark":
-        return Landmark;
-      case "attraction":
-        return Camera;
-      case "theme-park":
-        return Gamepad2;
-      default:
-        return MapPin;
-    }
-  };
-
   return (
-    <div className="sightseeing-search-form bg-white rounded-xl shadow-xl p-4 sm:p-6">
-      {/* Error Banner */}
-      {showError && (
-        <ErrorBanner
-          message={errorMessage}
-          onClose={() => setShowError(false)}
-        />
-      )}
+    <>
+      <ErrorBanner
+        message={errorMessage}
+        isVisible={showError}
+        onClose={() => setShowError(false)}
+      />
+      <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
+        {/* Main Search Form - EXACT HOTELS RESPONSIVE STRUCTURE */}
+        <div className="flex flex-col lg:flex-row gap-2 mb-4">
+          {/* Destination - EXACT HOTELS PATTERN */}
+          <div className="flex-1 lg:max-w-[320px] relative destination-container">
+            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+              Destination
+            </label>
 
-      {/* Main Search Form - EXACT HOTELS RESPONSIVE STRUCTURE */}
-      <div className="flex flex-col lg:flex-row gap-2 mb-4">
-        {/* Destination */}
-        <div className="flex-1 lg:max-w-[320px] relative destination-container">
-          <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-            Destination
-          </label>
-
-          <Popover
-            open={isDestinationOpen}
-            onOpenChange={setIsDestinationOpen}
-          >
-            <PopoverTrigger asChild>
-              <div className="relative cursor-pointer">
-                <svg
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <Input
-                  type="text"
-                  value={isUserTyping ? inputValue : destination || ""}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setInputValue(value);
-                    setIsUserTyping(true);
-                    // Auto-open dropdown when user starts typing
-                    if (!isDestinationOpen) {
-                      setIsDestinationOpen(true);
-                    }
-                    handleDestinationChange(value);
-                  }}
-                  onFocus={(e) => {
-                    e.stopPropagation();
-                    setIsDestinationOpen(true);
-                    // Set inputValue to current destination when focusing for editing
-                    if (!isUserTyping && destination) {
-                      setInputValue(destination);
+            <Popover
+              open={isDestinationOpen}
+              onOpenChange={setIsDestinationOpen}
+            >
+              <PopoverTrigger asChild>
+                <div className="relative cursor-pointer">
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <Input
+                    type="text"
+                    value={isUserTyping ? inputValue : destination || ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setInputValue(value);
                       setIsUserTyping(true);
-                    }
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsDestinationOpen(true);
-                  }}
-                  onKeyDown={(e) => {
-                    e.stopPropagation();
-                  }}
-                  readOnly={false}
-                  disabled={false}
-                  className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
-                  placeholder="Where do you want to explore?"
-                  autoComplete="off"
-                  data-destination-input="true"
-                />
-                {(destination || (isUserTyping && inputValue)) && (
-                  <button
+                      // Auto-open dropdown when user starts typing
+                      if (!isDestinationOpen) {
+                        setIsDestinationOpen(true);
+                      }
+                    }}
+                    onFocus={(e) => {
+                      e.stopPropagation();
+                      setIsDestinationOpen(true);
+                      // Set inputValue to current destination when focusing for editing
+                      if (!isUserTyping && destination) {
+                        setInputValue(destination);
+                        setIsUserTyping(true);
+                      }
+                    }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setDestination("");
-                      setInputValue("");
-                      setIsUserTyping(false);
-                      setDestinationCode("");
-                      setIsDestinationOpen(false);
+                      setIsDestinationOpen(true);
                     }}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
-                    title="Clear destination"
-                  >
-                    <svg
-                      className="w-3 h-3"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                    onKeyDown={(e) => {
+                      e.stopPropagation();
+                    }}
+                    readOnly={false}
+                    disabled={false}
+                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
+                    placeholder="Where do you want to explore?"
+                    autoComplete="off"
+                    data-destination-input="true"
+                  />
+                  {(destination || (isUserTyping && inputValue)) && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDestination("");
+                        setInputValue("");
+                        setIsUserTyping(false);
+                        setDestinationCode("");
+                        setIsDestinationOpen(false);
+                      }}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                      title="Clear destination"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                )}
-              </div>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg"
-              align="start"
-            >
-              <div className="max-h-80 overflow-y-auto">
-                {!popularDestinationsLoaded ? (
-                  <div className="flex items-center justify-center p-4">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                    <span className="text-sm text-gray-600">
-                      Loading destinations...
-                    </span>
-                  </div>
-                ) : loadingDestinations ? (
-                  <div className="flex items-center justify-center p-3">
-                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
-                    <span className="text-xs text-gray-600">
-                      🔍 Searching...
-                    </span>
-                  </div>
-                ) : isUserTyping &&
-                  inputValue.length > 0 &&
-                  destinationSuggestions.length > 0 ? (
-                  <div>
-                    <div className="px-4 py-2 bg-gray-50 border-b">
-                      <span className="text-xs font-medium text-gray-600">
-                        🔍 Search Results
-                      </span>
-                    </div>
-                    {destinationSuggestions.map((dest, index) => (
-                      <div
-                        key={dest.id || index}
-                        className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("🎯 Destination selected:", {
-                            name: fullName,
-                            code: dest.code || dest.id,
-                            type: dest.type,
-                            popular: (dest as any).popular,
-                          });
-                          setDestination(fullName);
-                          setDestinationCode(dest.code || dest.id);
-                          setInputValue("");
-                          setIsUserTyping(false);
-                          setIsDestinationOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
-                          <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
-                            <svg
-                              className="w-3.5 h-3.5 text-white"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 11a3 3 0 11-6 0 3 3 0 616 0z"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-gray-900 text-sm truncate">
-                                  {dest.name}
-                                </span>
-                                {(dest as any).popular && (
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                                    Popular
-                                  </span>
-                                )}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                <span className="capitalize">
-                                  {dest.type}
-                                </span>
-                                {dest.country && (
-                                  <span> in {dest.country}</span>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex-shrink-0 ml-3">
-                              <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
-                                {dest.code || dest.id}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : isUserTyping &&
-                  inputValue.length > 0 &&
-                  !loadingDestinations ? (
-                  <div className="p-4 text-center">
-                    <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
                       <svg
-                        className="w-5 h-5 text-gray-400"
+                        className="w-3 h-3"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -950,216 +419,377 @@ export function SightseeingSearchForm() {
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
                         />
                       </svg>
-                    </div>
-                    <div className="text-sm text-gray-500 mb-2">
-                      No destinations found for "{inputValue}"
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      Try a different city or country name
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="px-4 py-3 bg-blue-50 border-b border-blue-200">
-                      <span className="text-sm font-semibold text-blue-800">
-                        🎯 Popular Sightseeing Destinations
+                    </button>
+                  )}
+                </div>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg"
+                align="start"
+              >
+                <div className="max-h-80 overflow-y-auto">
+                  {!popularDestinationsLoaded ? (
+                    <div className="flex items-center justify-center p-4">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      <span className="text-sm text-gray-600">
+                        Loading destinations...
                       </span>
-                      <div className="text-xs text-blue-600 mt-1">
-                        Choose from popular tourist destinations
-                      </div>
                     </div>
-                    {popularDestinations.map((dest, index) => (
-                      <div
-                        key={dest.id || index}
-                        className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          const fullName = `${dest.name}, ${dest.country}`;
-                          console.log("🎯 Destination selected:", {
-                            name: fullName,
-                            code: dest.code || dest.id,
-                            type: dest.type,
-                            popular: (dest as any).popular,
-                          });
-                          setDestination(fullName);
-                          setDestinationCode(dest.code || dest.id);
-                          setInputValue("");
-                          setIsUserTyping(false);
-                          setIsDestinationOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
-                          <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
-                            <svg
-                              className="w-3.5 h-3.5 text-white"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 11a3 3 0 11-6 0 3 3 0 616 0z"
-                              />
-                            </svg>
+                  ) : loadingDestinations ? (
+                    <div className="flex items-center justify-center p-3">
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
+                      <span className="text-xs text-gray-600">
+                        🔍 Searching...
+                      </span>
+                    </div>
+                  ) : isUserTyping &&
+                    inputValue.length >= 3 &&
+                    destinationSuggestions.length > 0 ? (
+                    <div>
+                      <div className="px-4 py-2 bg-gray-50 border-b">
+                        <span className="text-xs font-medium text-gray-600">
+                          🔍 Search Results
+                        </span>
+                      </div>
+                      {destinationSuggestions.map((dest, index) => (
+                        <div
+                          key={dest.id || index}
+                          className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
+                          onMouseDown={(e) => {
+                            // Prevent input blur from firing before click
+                            e.preventDefault();
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const fullName = `${dest.name}, ${dest.country}`;
+                            console.log("🎯 Sightseeing destination selected:", {
+                              name: fullName,
+                              code: dest.code || dest.id,
+                              type: dest.type,
+                              popular: dest.popular,
+                            });
+                            setDestination(fullName);
+                            setDestinationCode(dest.code || dest.id);
+                            setInputValue("");
+                            setIsUserTyping(false);
+                            setIsDestinationOpen(false);
+                          }}
+                        >
+                          {/* Elegant search result icon */}
+                          <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
+                            <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
+                              <svg
+                                className="w-3.5 h-3.5 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 11a3 3 0 11-6 0 3 3 0 616 0z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+
+                          {/* Main content area */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1 min-w-0">
+                                {/* City name and popular badge */}
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-medium text-gray-900 text-sm truncate">
+                                    {dest.name}
+                                  </span>
+                                  {dest.popular && (
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                      Popular
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* Country and region info */}
+                                <div className="text-xs text-gray-500">
+                                  <span className="capitalize">
+                                    {dest.type}
+                                  </span>
+                                  {dest.country && (
+                                    <span> in {dest.country}</span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* City code aligned right */}
+                              <div className="flex-shrink-0 ml-3">
+                                <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
+                                  {dest.code || dest.id}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-gray-900 text-sm truncate">
-                                  {dest.name}
-                                </span>
-                                {(dest as any).popular && (
+                      ))}
+                    </div>
+                  ) : isUserTyping &&
+                    inputValue.length >= 3 &&
+                    !loadingDestinations ? (
+                    <div className="p-4 text-center">
+                      <div className="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-gray-100">
+                        <svg
+                          className="w-5 h-5 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="text-sm text-gray-500 mb-2">
+                        No destinations found for "{inputValue}"
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        Try a different city or country name
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      {/* Popular Sightseeing Destinations */}
+                      <div className="px-4 py-3 bg-blue-50 border-b border-blue-200">
+                        <span className="text-sm font-semibold text-blue-800">
+                          🎯 Popular Sightseeing Destinations
+                        </span>
+                        <div className="text-xs text-blue-600 mt-1">
+                          Choose from popular tourist destinations
+                        </div>
+                      </div>
+                      {popularDestinations.map((dest, index) => (
+                        <div
+                          key={dest.id || index}
+                          className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                          }}
+                          onClick={() => {
+                            const fullName = `${dest.name}, ${dest.country}`;
+                            console.log(
+                              "🎯 Popular sightseeing destination selected:",
+                              {
+                                name: fullName,
+                                code: dest.code,
+                                type: dest.type,
+                              },
+                            );
+                            setDestination(fullName);
+                            setDestinationCode(dest.code);
+                            setInputValue(""); // Clear the input to show placeholder
+                            setIsUserTyping(false);
+                            setIsDestinationOpen(false);
+                          }}
+                        >
+                          {/* Elegant location icon */}
+                          <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
+                            <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
+                              <svg
+                                className="w-3.5 h-3.5 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 11a3 3 0 11-6 0 3 3 0 616 0z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+
+                          {/* Main content area */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1 min-w-0">
+                                {/* City name and popular badge */}
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-medium text-gray-900 text-sm truncate">
+                                    {dest.name}
+                                  </span>
                                   <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                     Popular
                                   </span>
-                                )}
+                                </div>
+
+                                {/* Country info */}
+                                <div className="text-xs text-gray-500">
+                                  <span className="capitalize">
+                                    {dest.type}
+                                  </span>
+                                  {dest.country && (
+                                    <span> in {dest.country}</span>
+                                  )}
+                                </div>
                               </div>
-                              <div className="text-xs text-gray-500">
-                                <span className="capitalize">
-                                  {dest.type}
+
+                              {/* City code aligned right */}
+                              <div className="flex-shrink-0 ml-3">
+                                <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
+                                  {dest.code}
                                 </span>
-                                {dest.country && (
-                                  <span> in {dest.country}</span>
-                                )}
                               </div>
-                            </div>
-                            <div className="flex-shrink-0 ml-3">
-                              <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
-                                {dest.code || dest.id}
-                              </span>
                             </div>
                           </div>
                         </div>
+                      ))}
+                      <div className="px-4 py-2 border-t bg-gray-50">
+                        <p className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+                          <span>🔍</span>
+                          <span>
+                            Type 3+ characters to search destinations
+                          </span>
+                        </p>
+                        <p className="text-xs text-blue-600 flex items-center gap-1">
+                          <span>💡</span>
+                          <span>
+                            Use the cities above for testing live Hotelbeds Activities data
+                          </span>
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        {/* Visit Date - EXACT HOTELS PATTERN */}
-        <div className="flex-1 lg:max-w-[280px]">
-          {isMobile ? (
-            <Button
-              variant="outline"
-              className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
-              onClick={() => setShowMobileDatePicker(true)}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-              <span className="truncate text-xs sm:text-sm">
-                <span className="sm:hidden text-xs">
-                  {visitDate && endDate ? (
-                    <>
-                      {format(visitDate, "dd-MMM-yyyy")} -{" "}
-                      {format(endDate, "dd-MMM-yyyy")}
-                    </>
-                  ) : (
-                    "Dates"
+                    </div>
                   )}
-                </span>
-              </span>
-            </Button>
-          ) : (
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate text-xs sm:text-sm">
-                    <span className="hidden md:inline">
-                      {visitDate && endDate ? (
-                        <>
-                          {format(visitDate, "d-MMM-yyyy")} to{" "}
-                          {format(endDate, "d-MMM-yyyy")}
-                        </>
-                      ) : (
-                        "Check-in to Check-out"
-                      )}
-                    </span>
-                    <span className="hidden sm:inline md:hidden">
-                      {visitDate && endDate ? (
-                        <>
-                          {format(visitDate, "d MMM")} -{" "}
-                          {format(endDate, "d MMM")}
-                        </>
-                      ) : (
-                        "Select dates"
-                      )}
-                    </span>
-                  </span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <div className="flex flex-col">
-                  <BookingCalendar
-                    initialRange={{
-                      startDate: visitDate || new Date(),
-                      endDate:
-                        endDate || addDays(visitDate || new Date(), 3),
-                    }}
-                    onChange={(range) => {
-                      console.log("Booking calendar range selected:", range);
-                      setVisitDate(range.startDate);
-                      setEndDate(range.endDate);
-                    }}
-                    onClose={() => setIsCalendarOpen(false)}
-                    className="w-full"
-                    bookingType="sightseeing"
-                  />
                 </div>
               </PopoverContent>
             </Popover>
-          )}
+          </div>
+
+          {/* Visit Date - EXACT HOTELS PATTERN */}
+          <div className="flex-1 lg:max-w-[280px]">
+            {isMobile ? (
+              <Button
+                variant="outline"
+                className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                onClick={() => setShowMobileDatePicker(true)}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                <span className="truncate text-xs sm:text-sm">
+                  <span className="sm:hidden text-xs">
+                    {visitDate && endDate ? (
+                      <>
+                        {format(visitDate, "dd-MMM-yyyy")} -{" "}
+                        {format(endDate, "dd-MMM-yyyy")}
+                      </>
+                    ) : (
+                      "Dates"
+                    )}
+                  </span>
+                </span>
+              </Button>
+            ) : (
+              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-xs sm:text-sm">
+                      <span className="hidden md:inline">
+                        {visitDate && endDate ? (
+                          <>
+                            {format(visitDate, "d-MMM-yyyy")} to{" "}
+                            {format(endDate, "d-MMM-yyyy")}
+                          </>
+                        ) : (
+                          "Visit Date"
+                        )}
+                      </span>
+                      <span className="hidden sm:inline md:hidden">
+                        {visitDate && endDate ? (
+                          <>
+                            {format(visitDate, "d MMM")} -{" "}
+                            {format(endDate, "d MMM")}
+                          </>
+                        ) : (
+                          "Select dates"
+                        )}
+                      </span>
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <div className="flex flex-col">
+                    <BookingCalendar
+                      initialRange={{
+                        startDate: visitDate || new Date(),
+                        endDate:
+                          endDate || addDays(visitDate || new Date(), 3),
+                      }}
+                      onChange={(range) => {
+                        console.log("Booking calendar range selected:", range);
+                        setVisitDate(range.startDate);
+                        setEndDate(range.endDate);
+                      }}
+                      onClose={() => setIsCalendarOpen(false)}
+                      className="w-full"
+                      bookingType="sightseeing"
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+
+          {/* Search Button - EXACT HOTELS PATTERN */}
+          <div className="flex-shrink-0 w-full sm:w-auto">
+            <Button
+              onClick={handleSearch}
+              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
+              title="Search sightseeing activities"
+            >
+              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="text-sm sm:text-base">Search</span>
+            </Button>
+          </div>
         </div>
 
-        {/* Search Button - EXACT HOTELS PATTERN */}
-        <div className="flex-shrink-0 w-full sm:w-auto">
-          <Button
-            onClick={handleSearch}
-            className="h-10 sm:h-12 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150 w-full sm:w-auto"
-          >
-            <Search className="mr-2 h-4 w-4" />
-            <span className="text-xs sm:text-sm">Search</span>
-          </Button>
-        </div>
+        {/* Mobile Date Picker - EXACT HOTELS PATTERN */}
+        <MobileDatePicker
+          isOpen={showMobileDatePicker}
+          onClose={() => setShowMobileDatePicker(false)}
+          tripType={tripType}
+          setTripType={setTripType}
+          selectedDepartureDate={visitDate}
+          selectedReturnDate={endDate}
+          setSelectedDepartureDate={(date) => setVisitDate(date)}
+          setSelectedReturnDate={(date) => setEndDate(date)}
+          selectingDeparture={true}
+          setSelectingDeparture={() => {}}
+          bookingType="hotels" // Use hotels type for check-in/check-out style
+        />
       </div>
-
-      {/* Mobile Date Picker Modal - EXACT HOTELS PATTERN */}
-      <MobileDatePicker
-        isOpen={showMobileDatePicker}
-        onClose={() => setShowMobileDatePicker(false)}
-        tripType={tripType}
-        setTripType={setTripType}
-        selectedDepartureDate={visitDate}
-        selectedReturnDate={endDate}
-        setSelectedDepartureDate={setVisitDate}
-        setSelectedReturnDate={setEndDate}
-        selectingDeparture={true}
-        setSelectingDeparture={() => {}}
-        bookingType="hotels" // Use hotels type for sightseeing (check-in/check-out style)
-      />
-    </div>
+    </>
   );
 }
