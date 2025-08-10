@@ -179,10 +179,10 @@ class SightseeingService {
           dest.country.toLowerCase().includes(query.toLowerCase()) ||
           dest.code.toLowerCase().includes(query.toLowerCase())
       );
-      return filtered.slice(0, limit);
+      return filtered.slice(0, 15); // Fixed limit like hotels
     }
 
-    return fallbackDestinations.slice(0, limit);
+    return fallbackDestinations.slice(0, 15); // Fixed limit like hotels
   }
 
   /**
