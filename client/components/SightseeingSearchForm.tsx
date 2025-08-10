@@ -487,12 +487,9 @@ export function SightseeingSearchForm() {
     setDestination(value);
     setIsUserTyping(true);
 
-    // Only open popover if not already open to prevent conflicts
-    if (window.innerWidth < 768) {
-      if (!isDestinationOpenMobile) {
-        setIsDestinationOpenMobile(true);
-      }
-    } else {
+    // Only open desktop popover if not already open to prevent conflicts
+    // Mobile uses manual modal opening, so don't auto-open
+    if (window.innerWidth >= 768) {
       if (!isDestinationOpenDesktop) {
         setIsDestinationOpenDesktop(true);
       }
