@@ -733,52 +733,38 @@ export function SightseeingSearchForm() {
 
       {/* Mobile: Vertical Layout */}
       <div className="md:hidden space-y-4">
-        {/* Destination Selection */}
-        <div className="space-y-3">
+        {/* Destination Input */}
+        <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">
-            Select Destination
+            What would you like to see?
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="relative w-full">
+            <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4 z-10" />
             <button
-              className="p-3 bg-white border-2 border-blue-400 rounded text-left hover:bg-blue-50 active:bg-blue-100"
+              className="w-full h-12 pl-10 pr-8 bg-white border-2 border-blue-400 hover:border-blue-500 rounded font-medium text-sm text-left touch-manipulation cursor-pointer flex items-center"
               onClick={() => {
-                setDestination("Dubai");
-                setDestinationCode("DXB");
+                console.log("🎯 Mobile button clicked - inputValue:", inputValue);
+                console.log("🎯 Mobile button clicked - destination:", destination);
+                setIsDestinationOpenMobile(true);
               }}
             >
-              <div className="font-medium text-sm">Dubai</div>
+              <span className="truncate text-sm">
+                {destination || inputValue || "Enter destination or attraction"}
+              </span>
             </button>
-            <button
-              className="p-3 bg-white border-2 border-blue-400 rounded text-left hover:bg-blue-50 active:bg-blue-100"
-              onClick={() => {
-                setDestination("London");
-                setDestinationCode("LON");
-              }}
-            >
-              <div className="font-medium text-sm">London</div>
-            </button>
-            <button
-              className="p-3 bg-white border-2 border-blue-400 rounded text-left hover:bg-blue-50 active:bg-blue-100"
-              onClick={() => {
-                setDestination("Paris");
-                setDestinationCode("PAR");
-              }}
-            >
-              <div className="font-medium text-sm">Paris</div>
-            </button>
-            <button
-              className="p-3 bg-white border-2 border-blue-400 rounded text-left hover:bg-blue-50 active:bg-blue-100"
-              onClick={() => {
-                setDestination("New York");
-                setDestinationCode("NYC");
-              }}
-            >
-              <div className="font-medium text-sm">New York</div>
-            </button>
-          </div>
-          <div className="text-center p-2 bg-gray-50 rounded">
-            <span className="text-sm text-gray-600">Selected: </span>
-            <span className="font-medium text-blue-600">{destination || "None"}</span>
+            {inputValue && (
+              <span
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-20 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setInputValue("");
+                  setDestination("");
+                  setDestinationCode("");
+                }}
+              >
+                <X className="w-4 h-4" />
+              </span>
+            )}
           </div>
         </div>
 
