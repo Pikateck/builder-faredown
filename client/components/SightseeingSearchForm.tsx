@@ -1101,7 +1101,6 @@ export function SightseeingSearchForm() {
                         className="w-full text-left px-4 py-4 hover:bg-blue-50 active:bg-blue-100 transition-colors duration-150 touch-manipulation"
                         onClick={(e) => {
                           handleDestinationSelect(dest, e);
-                          setIsDestinationOpenMobile(false);
                         }}
                       >
                         <div className="flex items-center space-x-3">
