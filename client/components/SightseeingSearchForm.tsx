@@ -231,14 +231,14 @@ export function SightseeingSearchForm() {
     [popularDestinations],
   );
 
-  // Handle destination search only when user actively types - EXACT HOTELS PATTERN
+  // Search only when typing - FIXED
   useEffect(() => {
     if (popularDestinationsLoaded && isDestinationOpen && isUserTyping) {
-      if (inputValue && inputValue.length >= 1) {
-        // Search immediately as user types (like Booking.com)
+      if (inputValue && inputValue.trim().length >= 3) {
+        // Search only when actively typing with min 3 chars
         searchDestinations(inputValue);
       } else {
-        // Clear search results when input is empty
+        // Clear search results when input is too short
         setDestinationSuggestions([]);
       }
     }
@@ -288,20 +288,13 @@ export function SightseeingSearchForm() {
 
     try {
       const searchParams = new URLSearchParams({
+        dest: destinationCode, // USE DESTINATION CODE
+        destinationName: destination,
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
         adults: "2",
         children: "0",
-        // Additional metadata for improved search
-        searchType: "live", // Flag to indicate live API search preference
-        searchId: Date.now().toString(), // Unique search identifier
       });
-
-      // Only add destination if it exists
-      if (destination && destinationCode) {
-        searchParams.set("destination", destinationCode);
-        searchParams.set("destinationName", destination);
-      }
 
       const url = `/sightseeing/results?${searchParams.toString()}`;
       console.log("🎭 Navigating to live sightseeing search:", url);
@@ -366,13 +359,12 @@ export function SightseeingSearchForm() {
                         setIsDestinationOpen(true);
                       }
                     }}
-                    onFocus={(e) => {
-                      e.stopPropagation();
+                    onFocus={() => {
                       setIsDestinationOpen(true);
-                      // Set inputValue to current destination when focusing for editing
-                      if (!isUserTyping && destination) {
-                        setInputValue(destination);
+                      if (!destinationCode) {
                         setIsUserTyping(true);
+                      } else {
+                        setIsUserTyping(false); // show popular, no fetch
                       }
                     }}
                     onClick={(e) => {
@@ -455,9 +447,8 @@ export function SightseeingSearchForm() {
                             // Prevent input blur from firing before click
                             e.preventDefault();
                           }}
-                          onClick={(e) => {
+                          onPointerDown={(e) => {
                             e.preventDefault();
-                            e.stopPropagation();
                             const fullName = `${dest.name}, ${dest.country}`;
                             console.log("🎯 Sightseeing destination selected:", {
                               name: fullName,
@@ -465,10 +456,10 @@ export function SightseeingSearchForm() {
                               type: dest.type,
                               popular: (dest as any).popular,
                             });
-                            setDestination(fullName);
-                            setDestinationCode(dest.code || dest.id);
-                            setInputValue("");
+                            setDestination(fullName);          // visible label
+                            setDestinationCode(dest.code || dest.id);     // hidden code
                             setIsUserTyping(false);
+                            setInputValue("");
                             setIsDestinationOpen(false);
                           }}
                         >
@@ -657,7 +648,7 @@ export function SightseeingSearchForm() {
                         <div
                           key={dest.id}
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
-                          onMouseDown={(e) => {
+                          onPointerDown={(e) => {
                             e.preventDefault();
                             const fullName = `${dest.name}, ${dest.country}`;
                             console.log(
@@ -668,10 +659,10 @@ export function SightseeingSearchForm() {
                                 type: dest.type,
                               },
                             );
-                            setDestination(fullName);
-                            setDestinationCode(dest.code);
-                            setInputValue(""); // Clear the input to show placeholder
+                            setDestination(fullName);          // visible label
+                            setDestinationCode(dest.code);     // hidden code
                             setIsUserTyping(false);
+                            setInputValue("");
                             setIsDestinationOpen(false);
                           }}
                         >
@@ -836,8 +827,14 @@ export function SightseeingSearchForm() {
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
-              title="Search sightseeing activities"
+              disabled={!destinationCode}
+              className={cn(
+                "h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150",
+                destinationCode
+                  ? "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              )}
+              title={destinationCode ? "Search sightseeing activities" : "Please select a destination first"}
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               <span className="text-sm sm:text-base">Search</span>
