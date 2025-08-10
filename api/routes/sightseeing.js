@@ -111,15 +111,47 @@ async function applyMarkupRules(basePrice, destination, category, supplier_id) {
 // Initialize the Hotelbeds Activities service
 const activitiesService = new HotelbedsActivitiesService();
 
+// In-memory cache for destinations with 5-minute TTL
+const destinationsCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 /**
  * POST /api/sightseeing/destinations
- * Search sightseeing destinations using Hotelbeds Activities API
+ * Search sightseeing destinations using Hotelbeds Activities API with caching
+ * Enforces min 3 chars on server, includes proper caching headers
  */
 router.post("/destinations", async (req, res) => {
   try {
-    const { query = "", limit = 10, popularOnly = false } = req.body;
+    const { query = "", limit = 15, popularOnly = false } = req.body;
+
+    // Enforce minimum 3 characters for search (except for popular destinations)
+    if (query.length > 0 && query.length < 3) {
+      return res.status(400).json({
+        success: false,
+        error: "Minimum 3 characters required for search",
+      });
+    }
 
     console.log(`🎯 Sightseeing destinations API called with query: "${query}"`);
+
+    // Create cache key
+    const cacheKey = `${query.toLowerCase()}_${limit}_${popularOnly}`;
+
+    // Check cache first
+    const cached = destinationsCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
+      console.log(`✅ Returning cached sightseeing destinations for: "${query}"`);
+      // Set cache headers
+      res.set({
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=300',
+        'X-Cache': 'HIT'
+      });
+      return res.json({
+        success: true,
+        data: { destinations: cached.data },
+        cached: true
+      });
+    }
 
     // Get destinations from Hotelbeds Activities API
     const result = await activitiesService.getDestinations("en", limit * 2); // Get more to filter
@@ -134,8 +166,8 @@ router.post("/destinations", async (req, res) => {
 
     let destinations = result.data.destinations || [];
 
-    // Filter by query if provided
-    if (query && query.length > 0) {
+    // Filter by query if provided (min 3 chars enforced above)
+    if (query && query.length >= 3) {
       const lowerQuery = query.toLowerCase();
       destinations = destinations.filter(
         (dest) =>
@@ -158,8 +190,8 @@ router.post("/destinations", async (req, res) => {
       popular: popularCodes.includes(dest.code),
     }));
 
-    // If popularOnly is requested, filter to popular destinations
-    if (popularOnly) {
+    // If popularOnly is requested (empty query), filter to popular destinations
+    if (popularOnly || query === "") {
       destinations = destinations.filter((dest) => dest.popular);
     }
 
@@ -173,11 +205,24 @@ router.post("/destinations", async (req, res) => {
     // Limit results
     destinations = destinations.slice(0, limit);
 
-    console.log(`✅ Found ${destinations.length} sightseeing destinations`);
+    // Cache the results
+    destinationsCache.set(cacheKey, {
+      data: destinations,
+      timestamp: Date.now()
+    });
+
+    console.log(`✅ Found ${destinations.length} sightseeing destinations (cached)`);
+
+    // Set cache headers
+    res.set({
+      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=300',
+      'X-Cache': 'MISS'
+    });
 
     res.json({
       success: true,
       data: { destinations },
+      cached: false
     });
   } catch (error) {
     console.error("❌ Sightseeing destinations API error:", error);
