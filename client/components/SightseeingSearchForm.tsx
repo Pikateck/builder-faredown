@@ -152,7 +152,7 @@ export function SightseeingSearchForm() {
             name: "Dubai",
             country: "United Arab Emirates",
             type: "city",
-            flag: "🇦🇪",
+            flag: "🇦����",
           },
           {
             id: "LON",
@@ -877,7 +877,7 @@ export function SightseeingSearchForm() {
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code || dest.id);
-                          setInputValue(fullName);
+                          setInputValue("");
                           setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
@@ -992,7 +992,7 @@ export function SightseeingSearchForm() {
                           });
                           setDestination(fullName);
                           setDestinationCode(dest.code || dest.id);
-                          setInputValue(fullName);
+                          setInputValue("");
                           setIsUserTyping(false);
                           setIsDestinationOpen(false);
                         }}
