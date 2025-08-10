@@ -758,14 +758,9 @@ export function SightseeingSearchForm() {
                   onChange={(e) => handleDestinationChange(e.target.value)}
                   onFocus={() => {
                     console.log("🎯 Mobile destination input focused");
-                    setIsDestinationOpenMobile(true);
-                  }}
-                  onClick={() => {
-                    console.log("🎯 Mobile destination input clicked");
-                    // Small delay to prevent race conditions
-                    setTimeout(() => {
+                    if (!isDestinationOpenMobile) {
                       setIsDestinationOpenMobile(true);
-                    }, 0);
+                    }
                   }}
                 />
               </PopoverTrigger>
