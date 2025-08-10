@@ -759,8 +759,14 @@ export function SightseeingSearchForm() {
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
-              title="Search sightseeing activities"
+              disabled={!destinationCode}
+              className={cn(
+                "h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150",
+                destinationCode
+                  ? "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              )}
+              title={destinationCode ? "Search sightseeing activities" : "Please select a destination first"}
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               <span className="text-sm sm:text-base">Search</span>
