@@ -152,7 +152,7 @@ export function SightseeingSearchForm() {
             name: "Dubai",
             country: "United Arab Emirates",
             type: "city",
-            flag: "🇦🇪",
+            flag: "��🇪",
           },
           {
             id: "LON",
@@ -469,7 +469,7 @@ export function SightseeingSearchForm() {
       }));
       setDestinationSuggestions(formattedResults);
       console.log(
-        "✅ Found",
+        "�� Found",
         formattedResults.length,
         "sightseeing destinations",
       );
@@ -574,7 +574,7 @@ export function SightseeingSearchForm() {
     console.log("  - visitDate:", visitDate);
 
     if (!destination && !inputValue) {
-      console.log("��� Validation failed: No destination");
+      console.log("❌ Validation failed: No destination");
       setErrorMessage("Please enter a destination");
       setShowError(true);
       return;
@@ -743,10 +743,7 @@ export function SightseeingSearchForm() {
             <button
               className="w-full h-12 pl-10 pr-8 bg-white border-2 border-blue-400 hover:border-blue-500 rounded font-medium text-sm text-left touch-manipulation cursor-pointer flex items-center"
               onClick={() => {
-                console.log("🎯 Mobile button clicked - inputValue:", inputValue);
-                console.log("🎯 Mobile button clicked - destination:", destination);
-                setInputValue(""); // Clear input to show popular destinations
-                setIsUserTyping(false);
+                console.log("🎯 Mobile button clicked - opening modal");
                 setIsDestinationOpenMobile(true);
               }}
             >
