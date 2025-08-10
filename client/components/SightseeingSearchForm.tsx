@@ -874,7 +874,7 @@ export function SightseeingSearchForm() {
                           setDestinationCode(dest.code || dest.id);
                           setInputValue("");
                           setIsUserTyping(false);
-                          setIsDestinationOpenMobile(false);
+                          setIsDestinationOpen(false);
                         }}
                       >
                         <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
@@ -989,7 +989,7 @@ export function SightseeingSearchForm() {
                           setDestinationCode(dest.code || dest.id);
                           setInputValue("");
                           setIsUserTyping(false);
-                          setIsDestinationOpenMobile(false);
+                          setIsDestinationOpen(false);
                         }}
                       >
                         <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
