@@ -30,12 +30,9 @@ export interface SightseeingSearchRequest {
 class SightseeingService {
   /**
    * Search destinations using Hotelbeds Activities API
+   * Matches hotels service signature exactly
    */
-  async searchDestinations(
-    query: string = "",
-    limit: number = 10,
-    popularOnly: boolean = false
-  ): Promise<SightseeingDestination[]> {
+  async searchDestinations(query: string): Promise<SightseeingDestination[]> {
     try {
       console.log(`🎯 Searching sightseeing destinations: "${query}"`);
 
@@ -47,8 +44,8 @@ class SightseeingService {
           data: { destinations: any[] };
         }>("/api/sightseeing/destinations", {
           query,
-          limit,
-          popularOnly,
+          limit: 15, // Fixed limit like hotels
+          popularOnly: query === "", // Popular when empty query
         });
       } catch (apiError) {
         console.warn("❌ Sightseeing destinations API request failed:", apiError);
