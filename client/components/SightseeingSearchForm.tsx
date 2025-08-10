@@ -581,7 +581,7 @@ export function SightseeingSearchForm() {
     }
 
     if (!visitDate) {
-      console.log("��� Validation failed: No visit date");
+      console.log("����� Validation failed: No visit date");
       setErrorMessage("Please select a visit date");
       setShowError(true);
       return;
@@ -1073,7 +1073,10 @@ export function SightseeingSearchForm() {
                 className="pl-10 pr-4 h-12 bg-gray-50 border border-gray-300 rounded-lg text-base"
                 placeholder="Search destinations..."
                 value={inputValue}
-                onChange={(e) => handleDestinationChange(e.target.value)}
+                onChange={(e) => {
+                  console.log("🔍 Mobile input changed:", e.target.value);
+                  handleDestinationChange(e.target.value);
+                }}
                 autoFocus
               />
             </div>
