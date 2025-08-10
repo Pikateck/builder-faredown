@@ -48,6 +48,7 @@ import {
   Linkedin,
   Twitter,
   BookOpen,
+  Camera,
 } from "lucide-react";
 import {
   MobileCityDropdown,
