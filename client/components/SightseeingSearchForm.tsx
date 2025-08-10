@@ -420,7 +420,7 @@ export function SightseeingSearchForm() {
         name: "Dubai Aquarium & Underwater Zoo",
         country: "United Arab Emirates",
         type: "attraction",
-        flag: "���������",
+        flag: "�������",
       },
     ];
   };
@@ -737,8 +737,8 @@ export function SightseeingSearchForm() {
           </label>
 
           <Popover
-            open={isDestinationOpenMobile}
-            onOpenChange={setIsDestinationOpenMobile}
+            open={isDestinationOpen}
+            onOpenChange={setIsDestinationOpen}
           >
             <PopoverTrigger asChild>
               <div className="relative cursor-pointer">
