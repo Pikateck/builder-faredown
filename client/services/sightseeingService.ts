@@ -94,8 +94,7 @@ class SightseeingService {
    * Fallback destinations when API fails
    */
   private getFallbackDestinations(
-    query: string = "",
-    limit: number = 10
+    query: string = ""
   ): SightseeingDestination[] {
     const fallbackDestinations: SightseeingDestination[] = [
       {
