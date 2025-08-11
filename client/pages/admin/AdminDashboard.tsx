@@ -745,6 +745,8 @@ export default function AdminDashboard() {
               <LoyaltyManagement />
             ) : activeModule === "ai-bargaining" ? (
               <AIBargainingDashboard />
+            ) : activeModule === "api-testing" ? (
+              <APITestingDashboard />
             ) : activeModule === "auth-helper" ? (
               <div>
                 <h2 className="text-2xl font-bold mb-4">
