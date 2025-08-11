@@ -344,6 +344,8 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         );
       }
       // Always continue gracefully with static rates
+    } finally {
+      setIsLoading(false);
     }
   };
 
