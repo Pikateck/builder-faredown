@@ -96,10 +96,11 @@ export default function SightseeingDetails() {
   const [showTimeAlert, setShowTimeAlert] = useState(false);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [bargainTicketType, setBargainTicketType] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Unified passenger quantities for all ticket types
   const [passengerQuantities, setPassengerQuantities] = useState({
-    adults: 0,
+    adults: 1, // Default to 1 adult
     children: 0,
     infants: 0,
   });
