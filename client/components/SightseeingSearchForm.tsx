@@ -202,7 +202,7 @@ export function SightseeingSearchForm() {
   // Initialize form state from URL parameters - CRITICAL FOR MOBILE
   useEffect(() => {
     console.log(
-      "��� Initializing sightseeing form from URL parameters:",
+      "🔄 Initializing sightseeing form from URL parameters:",
       searchParams.toString(),
     );
 
@@ -537,40 +537,12 @@ export function SightseeingSearchForm() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            const fullName = `${dest.name}, ${dest.country}`;
-                            console.log(
-                              "🎯 Sightseeing destination selected:",
-                              {
-                                name: fullName,
-                                code: dest.code || dest.id,
-                                type: dest.type,
-                                popular: (dest as any).popular,
-                              },
-                            );
-                            setDestination(fullName); // visible label
-                            setDestinationCode(dest.code || dest.id); // hidden code
-                            setIsUserTyping(false);
-                            setInputValue("");
-                            setIsDestinationOpen(false);
+                            selectDestination(dest, "SEARCH_CLICK");
                           }}
                           onTouchEnd={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            const fullName = `${dest.name}, ${dest.country}`;
-                            console.log(
-                              "🎯 [MOBILE] Sightseeing destination selected:",
-                              {
-                                name: fullName,
-                                code: dest.code || dest.id,
-                                type: dest.type,
-                                popular: (dest as any).popular,
-                              },
-                            );
-                            setDestination(fullName); // visible label
-                            setDestinationCode(dest.code || dest.id); // hidden code
-                            setIsUserTyping(false);
-                            setInputValue("");
-                            setIsDestinationOpen(false);
+                            selectDestination(dest, "SEARCH_TOUCH");
                           }}
                         >
                           {/* Elegant search result icon */}
