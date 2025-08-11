@@ -290,7 +290,7 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
               {attraction.ticketTypes.map((ticket, index) => (
                 <div
                   key={index}
-                  onClick={() => setSelectedTicketType(index)}
+                  onClick={() => handleTicketTypeSelect(index)}
                   className={cn(
                     "border-2 rounded-xl p-4 cursor-pointer transition-all",
                     selectedTicketType === index
