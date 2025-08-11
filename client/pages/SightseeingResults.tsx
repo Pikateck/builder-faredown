@@ -770,7 +770,7 @@ export default function SightseeingResults() {
               <Button
                 variant="outline"
                 onClick={() => setShowMobileFilters(true)}
-                className="flex-1 flex items-center justify-center gap-2"
+                className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-300 hover:border-[#003580] text-black"
               >
                 <Filter className="w-4 h-4" />
                 Filters
@@ -784,7 +784,7 @@ export default function SightseeingResults() {
               <Button
                 variant="outline"
                 onClick={() => setShowMobileSort(true)}
-                className="flex-1 flex items-center justify-center gap-2"
+                className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-300 hover:border-[#003580] text-black"
               >
                 <ArrowUpDown className="w-4 h-4" />
                 Sort
