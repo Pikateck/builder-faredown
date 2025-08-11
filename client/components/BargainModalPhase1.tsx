@@ -687,6 +687,7 @@ export default function BargainModalPhase1({
   );
 
   return (
+    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
@@ -718,5 +719,28 @@ export default function BargainModalPhase1({
         </div>
       </DialogContent>
     </Dialog>
+
+    {/* Reprice Modal */}
+    {showRepriceModal && (
+      <RepriceModal
+        isOpen={showRepriceModal}
+        onClose={() => {
+          setShowRepriceModal(false);
+          setRepriceData(null);
+          onClose(); // Close main modal too
+        }}
+        onRefresh={() => {
+          setShowRepriceModal(false);
+          setRepriceData(null);
+          setStep("loading");
+          initializeBargainSession(); // Restart with fresh data
+        }}
+        oldPrice={repriceData?.oldPrice || 0}
+        newPrice={repriceData?.newPrice}
+        itemTitle={itemDetails.title}
+        reason="Inventory has changed during bargaining"
+      />
+    )}
+    </>
   );
 }
