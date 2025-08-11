@@ -446,12 +446,8 @@ export default function SightseeingDetails() {
       attraction: attraction?.name
     });
 
-    // Temporary alert to test if function is called
-    alert(`Bargain clicked for ticket ${ticketIndex}! Modal state: ${isBargainModalOpen}`);
-
     setBargainTicketType(ticketIndex);
     setIsBargainModalOpen(true);
-    console.log("🎯 Modal should now be open!");
   };
 
   const handleBargainSuccess = (finalPrice: number) => {
