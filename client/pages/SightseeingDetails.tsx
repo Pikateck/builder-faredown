@@ -331,6 +331,17 @@ export default function SightseeingDetails() {
     }
   }, [attractionId]);
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Get category display info
   const getCategoryInfo = (category: string) => {
     switch (category) {
