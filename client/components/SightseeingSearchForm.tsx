@@ -936,10 +936,10 @@ export function SightseeingSearchForm() {
           onClose={() => setShowMobileDatePicker(false)}
           tripType={tripType}
           setTripType={setTripType}
-          selectedDepartureDate={checkInDate}
-          selectedReturnDate={checkOutDate}
-          setSelectedDepartureDate={(date) => setCheckInDate(date)}
-          setSelectedReturnDate={(date) => setCheckOutDate(date)}
+          selectedDepartureDate={checkInDate || null}
+          selectedReturnDate={checkOutDate || null}
+          setSelectedDepartureDate={(date) => setCheckInDate(date || undefined)}
+          setSelectedReturnDate={(date) => setCheckOutDate(date || undefined)}
           selectingDeparture={true}
           setSelectingDeparture={() => {}}
           bookingType="hotels"
