@@ -959,10 +959,10 @@ export default function SightseeingDetails() {
                               setSelectedTime(time);
                             }}
                             className={cn(
-                              "text-sm",
+                              "text-sm border-2",
                               selectedTime === time
-                                ? "bg-[#003580] text-white hover:bg-[#002a66]"
-                                : "border-gray-300 hover:border-[#003580]",
+                                ? "bg-[#003580] text-white hover:bg-[#002a66] border-[#003580]"
+                                : "border-gray-300 hover:border-[#003580] text-black bg-white",
                             )}
                           >
                             {time}
