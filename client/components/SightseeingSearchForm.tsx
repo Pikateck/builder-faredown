@@ -467,10 +467,11 @@ export function SightseeingSearchForm() {
                     }}
                     readOnly={false}
                     disabled={false}
-                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
+                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10 text-gray-900 placeholder-gray-500"
                     placeholder="Where do you want to explore?"
                     autoComplete="off"
                     data-destination-input="true"
+                    style={{ color: '#111827', fontSize: '14px', fontWeight: '500' }}
                   />
                   {(destination || (isUserTyping && inputValue)) && (
                     <button
