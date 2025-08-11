@@ -6,6 +6,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { authService } from "@/services/authService";
 import { bargainPerformanceService } from "@/services/bargainPerformanceService";
+import { bargainSecurityService } from "@/services/bargainSecurityService";
 
 // Types matching the live API
 export interface BargainUser {
@@ -92,24 +93,43 @@ export async function startBargain(
   productCPO: BargainProductCPO,
   promo?: string
 ): Promise<BargainSessionStartResponse> {
+  // Check if AI bargaining is enabled
+  if (!bargainSecurityService.isAIBargainingEnabled()) {
+    throw { code: 'AI_DISABLED', message: 'AI bargaining is currently disabled' };
+  }
+
+  // Rate limiting check
+  if (!bargainSecurityService.checkRateLimit('perSession')) {
+    throw { code: 'RATE_LIMIT', message: 'Too many session starts. Please wait and try again.' };
+  }
+
+  const requestData = {
+    user: bargainSecurityService.sanitizeInput(user),
+    productCPO: bargainSecurityService.sanitizeInput(productCPO),
+    promo_code: promo
+  };
+
+  // Validate request
+  const validation = bargainSecurityService.validateBargainRequest(requestData);
+  if (!validation.valid) {
+    throw { code: 'VALIDATION_ERROR', message: validation.errors.join(', ') };
+  }
+
   const token = authService.getToken();
 
   const res = await bargainPerformanceService.enhancedFetch('/api/bargain/v1/session/start', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
+      'Authorization': token ? `Bearer ${token}` : '',
+      ...bargainSecurityService.getSecurityHeaders()
     },
-    body: JSON.stringify({
-      user,
-      productCPO,
-      promo_code: promo
-    })
+    body: JSON.stringify(requestData)
   });
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: 'Network error' }));
-    throw error;
+    const error = await res.json().catch(() => ({ message: 'Network error', status: res.status }));
+    throw { ...error, status: res.status };
   }
 
   return res.json();
@@ -120,24 +140,37 @@ export async function sendOffer(
   sessionId: string,
   userOffer?: number
 ): Promise<BargainOfferResponse> {
+  // Rate limiting check
+  if (!bargainSecurityService.checkRateLimit('perUser')) {
+    throw { code: 'RATE_LIMIT', message: 'Too many requests. Please wait and try again.' };
+  }
+
+  const requestData = {
+    session_id: bargainSecurityService.sanitizeInput(sessionId),
+    user_offer: userOffer ? bargainSecurityService.sanitizeInput(userOffer) : undefined,
+    signals: captureSignals()
+  };
+
+  const validation = bargainSecurityService.validateBargainRequest(requestData);
+  if (!validation.valid) {
+    throw { code: 'VALIDATION_ERROR', message: validation.errors.join(', ') };
+  }
+
   const token = authService.getToken();
 
   const res = await bargainPerformanceService.enhancedFetch('/api/bargain/v1/session/offer', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
+      'Authorization': token ? `Bearer ${token}` : '',
+      ...bargainSecurityService.getSecurityHeaders()
     },
-    body: JSON.stringify({
-      session_id: sessionId,
-      user_offer: userOffer,
-      signals: captureSignals()
-    })
+    body: JSON.stringify(requestData)
   });
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: 'Network error' }));
-    throw error;
+    const error = await res.json().catch(() => ({ message: 'Network error', status: res.status }));
+    throw { ...error, status: res.status };
   }
 
   return res.json();
@@ -145,15 +178,30 @@ export async function sendOffer(
 
 // Accept flow (with inventory reprice handling)
 export async function acceptOffer(sessionId: string): Promise<BargainAcceptResponse> {
+  // Rate limiting check
+  if (!bargainSecurityService.checkRateLimit('perUser')) {
+    throw { code: 'RATE_LIMIT', message: 'Too many requests. Please wait and try again.' };
+  }
+
+  const requestData = {
+    session_id: bargainSecurityService.sanitizeInput(sessionId)
+  };
+
+  const validation = bargainSecurityService.validateBargainRequest(requestData);
+  if (!validation.valid) {
+    throw { code: 'VALIDATION_ERROR', message: validation.errors.join(', ') };
+  }
+
   const token = authService.getToken();
 
   const res = await bargainPerformanceService.enhancedFetch('/api/bargain/v1/session/accept', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': token ? `Bearer ${token}` : ''
+      'Authorization': token ? `Bearer ${token}` : '',
+      ...bargainSecurityService.getSecurityHeaders()
     },
-    body: JSON.stringify({ session_id: sessionId })
+    body: JSON.stringify(requestData)
   });
 
   if (res.status === 409) {
@@ -162,8 +210,8 @@ export async function acceptOffer(sessionId: string): Promise<BargainAcceptRespo
   }
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: 'Network error' }));
-    throw error;
+    const error = await res.json().catch(() => ({ message: 'Network error', status: res.status }));
+    throw { ...error, status: res.status };
   }
 
   return res.json();
@@ -176,9 +224,10 @@ export function useBargain() {
   const [session, setSession] = useState<BargainSessionStartResponse | null>(null);
   const [lastOffer, setLastOffer] = useState<BargainOfferResponse | null>(null);
 
-  // Initialize performance service
+  // Initialize services
   useEffect(() => {
     bargainPerformanceService.init();
+    bargainSecurityService.init();
   }, []);
 
   const startBargainSession = useCallback(async (
@@ -258,13 +307,14 @@ export function useBargain() {
 
   // Helper to show error messages in UI
   const getErrorMessage = useCallback((error: any) => {
-    if (error?.code === 'RATE_STALE') {
-      return 'Refreshing best price…';
-    }
-    if (error?.code === 'INVENTORY_CHANGED') {
-      return 'Price has changed due to inventory update';
-    }
-    return error?.message || 'Something went wrong';
+    // Use security service for consistent error handling
+    const handled = bargainSecurityService.handleError(error, 'bargain_ui');
+
+    // Log sanitized error for debugging
+    const sanitizedError = bargainSecurityService.sanitizeForLogging(error);
+    console.log('🔍 Bargain error (sanitized):', sanitizedError);
+
+    return handled.userMessage;
   }, []);
 
   return {
@@ -288,7 +338,13 @@ export function useBargain() {
     explanation: lastOffer?.explain || session?.explain || session?.initial_offer?.explanation,
 
     // Performance metrics
-    getPerformanceStats: () => bargainPerformanceService.getPerformanceStats()
+    getPerformanceStats: () => bargainPerformanceService.getPerformanceStats(),
+
+    // Security metrics
+    getSecurityMetrics: () => bargainSecurityService.getSecurityMetrics(),
+
+    // Feature flags
+    isAIEnabled: () => bargainSecurityService.isAIBargainingEnabled()
   };
 }
 
