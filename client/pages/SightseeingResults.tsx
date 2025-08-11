@@ -740,7 +740,7 @@ export default function SightseeingResults() {
                     ? `, ${children} child${parseInt(children) !== 1 ? "ren" : ""}`
                     : ""}
                 </span>
-                <span className="text-gray-400">���</span>
+                <span className="text-gray-400">•</span>
                 <span>
                   {filteredAndSortedAttractions.length} experiences found
                 </span>
