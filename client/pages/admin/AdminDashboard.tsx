@@ -741,6 +741,8 @@ export default function AdminDashboard() {
               <SupplierManagement />
             ) : activeModule === "rewards" ? (
               <LoyaltyManagement />
+            ) : activeModule === "ai-bargaining" ? (
+              <AIBargainingDashboard />
             ) : activeModule === "auth-helper" ? (
               <div>
                 <h2 className="text-2xl font-bold mb-4">
