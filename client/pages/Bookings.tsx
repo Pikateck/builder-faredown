@@ -878,11 +878,15 @@ const Bookings: React.FC = () => {
       {/* Ticket/Voucher Modal */}
       <Dialog open={ticketModal} onOpenChange={setTicketModal}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
-          {selectedBooking && (
-            <div>
-              {console.log("Ticket modal opened for:", selectedBooking.type, selectedBooking)}
-            </div>
-          )}
+          <DialogHeader className="sr-only">
+            <DialogTitle>
+              {selectedBooking?.type === "flight"
+                ? "Boarding Pass"
+                : selectedBooking?.type === "hotel"
+                ? "Hotel Voucher"
+                : "Experience Voucher"}
+            </DialogTitle>
+          </DialogHeader>
           {selectedBooking && (
             <>
               {selectedBooking.type === "flight" && (
@@ -1004,7 +1008,7 @@ const Bookings: React.FC = () => {
                     selectedBooking.type === "flight"
                       ? `${selectedBooking.route} • ${selectedBooking.date} ${selectedBooking.time}`
                       : selectedBooking.type === "hotel"
-                        ? `${selectedBooking.location} • ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
+                        ? `${selectedBooking.location} ��� ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
                         : `${selectedBooking.location || "Dubai, UAE"} • ${selectedBooking.date || selectedBooking.visitDate}`,
                   totalAmount: selectedBooking.totalAmount,
                   currency: "₹",
