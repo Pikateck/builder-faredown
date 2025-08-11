@@ -503,15 +503,31 @@ export function SightseeingSearchForm() {
                         <div
                           key={dest.id || index}
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
-                          onMouseDown={(e) => {
-                            // Prevent input blur from firing before click
+                          onClick={(e) => {
                             e.preventDefault();
-                          }}
-                          onPointerDown={(e) => {
-                            e.preventDefault();
+                            e.stopPropagation();
                             const fullName = `${dest.name}, ${dest.country}`;
                             console.log(
                               "🎯 Sightseeing destination selected:",
+                              {
+                                name: fullName,
+                                code: dest.code || dest.id,
+                                type: dest.type,
+                                popular: (dest as any).popular,
+                              },
+                            );
+                            setDestination(fullName); // visible label
+                            setDestinationCode(dest.code || dest.id); // hidden code
+                            setIsUserTyping(false);
+                            setInputValue("");
+                            setIsDestinationOpen(false);
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const fullName = `${dest.name}, ${dest.country}`;
+                            console.log(
+                              "🎯 [MOBILE] Sightseeing destination selected:",
                               {
                                 name: fullName,
                                 code: dest.code || dest.id,
