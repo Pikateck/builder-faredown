@@ -216,12 +216,50 @@ const AIBargainingDashboard: React.FC = () => {
     const fetchPolicy = async () => {
       try {
         const response = await fetch("/api/admin/ai/policies");
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
         const data = await response.json();
-        if (data.policies && data.policies.length > 0) {
+        if (data.success && data.policies && data.policies.length > 0) {
           setPolicyYaml(data.policies[0].dsl_yaml);
+        } else {
+          // Set default policy if none exists
+          setPolicyYaml(`version: v1.0.0
+global:
+  currency_base: USD
+  exploration_pct: 0.08
+  max_rounds: 3
+  response_budget_ms: 300
+  never_loss: true
+price_rules:
+  flight:
+    min_margin_usd: 6.0
+    max_discount_pct: 0.15
+    hold_minutes: 10
+  hotel:
+    min_margin_usd: 4.0
+    max_discount_pct: 0.20
+    hold_minutes: 15`);
         }
       } catch (err) {
         console.error("Failed to fetch policy:", err);
+        // Set default policy on error
+        setPolicyYaml(`version: v1.0.0
+global:
+  currency_base: USD
+  exploration_pct: 0.08
+  max_rounds: 3
+  response_budget_ms: 300
+  never_loss: true
+price_rules:
+  flight:
+    min_margin_usd: 6.0
+    max_discount_pct: 0.15
+    hold_minutes: 10
+  hotel:
+    min_margin_usd: 4.0
+    max_discount_pct: 0.20
+    hold_minutes: 15`);
       }
     };
 
