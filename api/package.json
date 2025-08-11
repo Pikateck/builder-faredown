@@ -16,7 +16,9 @@
     "migrate:ai": "node database/run-ai-migration.js",
     "init:redis": "node scripts/init-redis.js",
     "test:offerability": "node scripts/test-offerability.js",
-    "test:bargain-api": "node scripts/test-bargain-api.js"
+    "test:bargain-api": "node scripts/test-bargain-api.js",
+    "seed:bargain-data": "node scripts/seed-bargain-data.js",
+    "seed:bargain-cleanup": "node scripts/seed-bargain-data.js --cleanup"
   },
   "keywords": [
     "faredown",
