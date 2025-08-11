@@ -453,11 +453,25 @@ export default function FlightResults() {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
-  // Phase 1 Bargain Engine integration
+  // Phase 1 Bargain Engine integration with live API
   const bargainHook = useBargainPhase1({
+    useLiveAPI: true, // Enable live API integration
     onBookingConfirmed: (item, finalPrice) => {
       // Custom handling after bargain success
-      console.log("Bargain successful!", { item, finalPrice });
+      console.log("✅ Live bargain successful!", { item, finalPrice });
+
+      // Create flight object for booking flow
+      const flightForBooking = flightData.find(f => f.id.toString() === item.itemId);
+      if (flightForBooking) {
+        handleBooking(flightForBooking, {
+          id: "bargained",
+          name: item.class || "Economy",
+          price: finalPrice,
+          refundability: "Non-Refundable",
+          features: ["AI Bargained Price"],
+          baggage: "23kg"
+        });
+      }
     },
     redirectToBooking: true,
     deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
@@ -3604,7 +3618,7 @@ export default function FlightResults() {
 
                                             const bargainItem =
                                               createFlightBargainItem({
-                                                id: flight.id,
+                                                id: flight.id.toString(),
                                                 airline: flight.airline,
                                                 route: {
                                                   from:
@@ -3620,6 +3634,11 @@ export default function FlightResults() {
                                                   flight.price?.amount ||
                                                   0,
                                               });
+
+                                            console.log(
+                                              "🚀 Starting live API bargain (desktop):",
+                                              bargainItem,
+                                            );
 
                                             bargainHook.startBargain(
                                               bargainItem,
