@@ -1,0 +1,469 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "bargain-platform",
+    "title": "AI Bargaining Platform - Production Monitoring",
+    "description": "Complete monitoring dashboard for AI Bargaining Platform with SLA tracking",
+    "tags": ["bargain", "ai", "production", "sla"],
+    "timezone": "UTC",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m"],
+      "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "environment",
+          "type": "custom",
+          "options": [
+            {"text": "Production", "value": "prod", "selected": true},
+            {"text": "Staging", "value": "staging", "selected": false}
+          ]
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "🎯 SLA DASHBOARD - P95 Latency",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"bargain-api\", path=~\"/api/bargain/v1/session.*\"}[5m]))",
+            "legendFormat": "P95 Latency",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "min": 0,
+            "max": 0.5,
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 0.2},
+                {"color": "red", "value": 0.3}
+              ]
+            },
+            "displayName": "P95 Latency"
+          }
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto",
+          "textMode": "auto",
+          "colorMode": "background"
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "📦 Redis Cache Hit Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m]))",
+            "legendFormat": "Hit Rate",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "yellow", "value": 0.8},
+                {"color": "green", "value": 0.9}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "🚀 Sessions per Minute",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(bargain_sessions_total[1m]) * 60",
+            "legendFormat": "Sessions/min",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {"mode": "palette-classic"}
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "✅ Acceptance Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "rate(bargain_sessions_accepted_total[5m]) / rate(bargain_sessions_total[5m])",
+            "legendFormat": "Acceptance Rate",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 1,
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "yellow", "value": 0.15},
+                {"color": "green", "value": 0.25}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "📈 API Latency Trends (P50, P95, P99)",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{job=\"bargain-api\"}[5m]))",
+            "legendFormat": "P50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"bargain-api\"}[5m]))",
+            "legendFormat": "P95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{job=\"bargain-api\"}[5m]))",
+            "legendFormat": "P99",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "lineWidth": 2,
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "never",
+              "pointSize": 5,
+              "stacking": {"mode": "none", "group": "A"},
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "scaleDistribution": {"type": "linear"},
+              "axisCenteredZero": false,
+              "hideFrom": {"legend": false, "tooltip": false, "vis": false},
+              "thresholdsStyle": {"mode": "line"}
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "red", "value": 0.3}
+              ]
+            }
+          }
+        },
+        "options": {
+          "tooltip": {"mode": "single", "sort": "none"},
+          "legend": {"displayMode": "visible", "placement": "bottom", "calcs": []},
+          "displayMode": "list"
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "❌ Error Rate by Endpoint",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"bargain-api\", code!~\"2..\"}[5m]) by (path)",
+            "legendFormat": "{{ path }}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps",
+            "custom": {
+              "drawStyle": "line",
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "opacity"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      },
+      {
+        "id": 7,
+        "title": "💰 Profit Margin Trends (6h Rolling)",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "avg_over_time(bargain_profit_margin_pct[6h])",
+            "legendFormat": "Current 6h Average",
+            "refId": "A"
+          },
+          {
+            "expr": "avg_over_time(bargain_profit_margin_pct[6h] offset 6h)",
+            "legendFormat": "Previous 6h Average",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "custom": {
+              "drawStyle": "line",
+              "lineWidth": 2,
+              "fillOpacity": 0
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "yellow", "value": 5},
+                {"color": "green", "value": 10}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 8,
+        "title": "🚨 Never-Loss Violations (24h)",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "increase(bargain_never_loss_violations_total[24h])",
+            "legendFormat": "Violations",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": 0},
+                {"color": "red", "value": 1}
+              ]
+            },
+            "displayName": "Never-Loss Violations"
+          }
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "horizontal"
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 9,
+        "title": "🔄 Inventory Flip Rate",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "rate(bargain_inventory_changes_total[15m]) / rate(bargain_sessions_total[15m])",
+            "legendFormat": "Flip Rate",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percentunit",
+            "min": 0,
+            "max": 0.1,
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 0.01},
+                {"color": "red", "value": 0.02}
+              ]
+            }
+          }
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 24}
+      },
+      {
+        "id": 10,
+        "title": "⚡ Circuit Breaker Status",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "supplier_circuit_breaker_state",
+            "legendFormat": "{{ supplier }}",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "displayMode": "color-background",
+              "inspect": false
+            },
+            "mappings": [
+              {"options": {"0": {"text": "CLOSED", "color": "green"}}, "type": "value"},
+              {"options": {"1": {"text": "OPEN", "color": "red"}}, "type": "value"},
+              {"options": {"2": {"text": "HALF_OPEN", "color": "yellow"}}, "type": "value"}
+            ]
+          }
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 24}
+      },
+      {
+        "id": 11,
+        "title": "📊 Top Routes by Volume",
+        "type": "bargraph",
+        "targets": [
+          {
+            "expr": "topk(10, sum by (route) (rate(bargain_sessions_total{product_type=\"flight\"}[1h])))",
+            "legendFormat": "{{ route }}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 24}
+      },
+      {
+        "id": 12,
+        "title": "💸 Revenue by Product Type",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (product_type) (rate(bargain_revenue_usd_total[1h]))",
+            "legendFormat": "{{ product_type }}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "pieType": "pie",
+          "tooltip": {"mode": "single", "sort": "none"},
+          "legend": {"displayMode": "visible", "placement": "right", "calcs": []},
+          "displayLabels": ["name", "percent"]
+        },
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 24}
+      },
+      {
+        "id": 13,
+        "title": "🎛️ Feature Flag Status",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "bargain_feature_flag_status",
+            "legendFormat": "{{ flag_name }}",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "center",
+              "displayMode": "color-background"
+            },
+            "mappings": [
+              {"options": {"0": {"text": "DISABLED", "color": "red"}}, "type": "value"},
+              {"options": {"1": {"text": "ENABLED", "color": "green"}}, "type": "value"}
+            ]
+          }
+        },
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 32}
+      },
+      {
+        "id": 14,
+        "title": "📈 A/B Test Traffic Split",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (variant) (rate(bargain_ab_test_requests_total[5m]))",
+            "legendFormat": "{{ variant }}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 32}
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "name": "Deployments",
+          "datasource": "prometheus",
+          "enable": true,
+          "expr": "increase(bargain_deployment_events_total[1m])",
+          "iconColor": "blue",
+          "tags": ["deployment"]
+        },
+        {
+          "name": "Alerts",
+          "datasource": "prometheus", 
+          "enable": true,
+          "expr": "ALERTS{alertname=~\".*Bargain.*\"}",
+          "iconColor": "red",
+          "tags": ["alert"]
+        }
+      ]
+    },
+    "links": [
+      {
+        "title": "Runbooks",
+        "url": "https://docs.faredown.ai/runbooks/",
+        "type": "link"
+      },
+      {
+        "title": "Admin Dashboard",
+        "url": "/admin/ai-bargaining",
+        "type": "link"
+      }
+    ]
+  }
+}
