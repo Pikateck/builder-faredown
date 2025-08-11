@@ -42,11 +42,11 @@ import {
   Sparkles,
 } from "lucide-react";
 import {
-  bargainPricingService,
-  type BargainPricingRequest,
-  type BargainPricingResult,
-  type CounterOfferResponse,
-} from "@/services/bargainPricingService";
+  useBargain,
+  type BargainProductCPO,
+  type BargainSessionStartResponse,
+  type BargainOfferResponse,
+} from "@/hooks/useBargain";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
 
 interface BargainModalPhase1Props {
@@ -96,18 +96,27 @@ export default function BargainModalPhase1({
   deviceType = "desktop",
 }: BargainModalPhase1Props) {
   const [step, setStep] = useState<BargainStep>("loading");
-  const [pricingResult, setPricingResult] =
-    useState<BargainPricingResult | null>(null);
   const [userOfferPrice, setUserOfferPrice] = useState("");
-  const [counterOfferResponse, setCounterOfferResponse] =
-    useState<CounterOfferResponse | null>(null);
-  const [sessionId] = useState(
-    `bargain_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-  );
-  const [isNegotiating, setIsNegotiating] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
-  const [error, setError] = useState<string | null>(null);
   const [showPricingDetails, setShowPricingDetails] = useState(false);
+
+  // Use live bargain API
+  const {
+    isLoading,
+    error: bargainError,
+    session,
+    lastOffer,
+    startBargainSession,
+    submitOffer,
+    acceptCurrentOffer,
+    resetSession,
+    getErrorMessage,
+    currentPrice,
+    minFloor,
+    explanation
+  } = useBargain();
+
+  const [error, setError] = useState<string | null>(null);
 
   // 30-second timer for counter-offers (Zubin's requirement)
   const [counterOfferTimer, setCounterOfferTimer] = useState(0);
@@ -146,54 +155,45 @@ export default function BargainModalPhase1({
     try {
       setError(null);
 
-      const request: BargainPricingRequest = {
+      // Create CPO (Comparable Product Object) for the API
+      const productCPO: BargainProductCPO = {
         type: itemDetails.type,
-        itemId: itemDetails.itemId,
-        basePrice: itemDetails.basePrice,
-        userType: itemDetails.userType || "b2c",
-        airline: itemDetails.airline,
-        route: itemDetails.route,
-        class: itemDetails.class,
-        city: itemDetails.city,
-        hotelName: itemDetails.hotelName,
-        starRating: itemDetails.starRating,
-        roomCategory: itemDetails.roomCategory,
-        location: itemDetails.location,
-        category: itemDetails.category,
-        duration: itemDetails.duration,
-        activityName: itemDetails.activityName,
-        promoCode,
-        userLocation,
-        deviceType,
+        supplier: itemDetails.airline || "hotelbeds", // Determine supplier
+        product_id: itemDetails.itemId,
+        ...(itemDetails.route && {
+          route: `${itemDetails.route.from}-${itemDetails.route.to}`
+        }),
+        ...(itemDetails.city && { city: itemDetails.city }),
+        ...(itemDetails.category && { activity_type: itemDetails.category }),
+        ...(itemDetails.class && { class_of_service: itemDetails.class })
       };
 
-      const result =
-        await bargainPricingService.calculateInitialPricing(request);
-      setPricingResult(result);
+      const result = await startBargainSession(productCPO, promoCode);
       setStep("initial");
 
-      // Set suggested target price as default
-      setUserOfferPrice(result.bargainRange.recommendedTarget.toString());
-    } catch (err) {
+      // Set suggested target price (80% of initial offer as default)
+      const suggestedPrice = Math.round(result.initial_offer.price * 0.8);
+      setUserOfferPrice(suggestedPrice.toString());
+    } catch (err: any) {
       console.error("❌ Failed to initialize bargain session:", err);
 
-      // Show a user-friendly error message but keep the modal functional
-      setError(
-        "Unable to connect to pricing server. Using offline pricing - you can still bargain!",
-      );
+      const errorMsg = getErrorMessage(err);
+      setError(errorMsg);
 
-      // Don't set to rejected, let the fallback pricing work
-      if (step === "loading") {
+      // For network errors, still allow offline mode
+      if (step === "loading" && errorMsg.includes('Network')) {
         setStep("initial");
+        // Fallback pricing based on base price
+        const fallbackPrice = Math.round(itemDetails.basePrice * 0.8);
+        setUserOfferPrice(fallbackPrice.toString());
       }
     }
   };
 
   const handleUserOffer = async () => {
-    if (!pricingResult || !userOfferPrice) return;
+    if (!session || !userOfferPrice) return;
 
     try {
-      setIsNegotiating(true);
       setError(null);
 
       const offerPrice = parseFloat(userOfferPrice);
@@ -214,43 +214,42 @@ export default function BargainModalPhase1({
       // Add to used prices
       setUsedPrices((prev) => new Set(prev).add(offerPrice));
 
-      const counterOfferRequest = {
-        sessionId,
-        originalPrice: pricingResult.originalPrice,
-        userOfferPrice: offerPrice,
-        currentMarkedUpPrice: pricingResult.finalPrice,
-        markupDetails: pricingResult.markupDetails,
-        promoDetails: pricingResult.promoDetails,
-      };
-
-      const response =
-        await bargainPricingService.processCounterOffer(counterOfferRequest);
-      setCounterOfferResponse(response);
+      const response = await submitOffer(offerPrice);
       setAttemptCount((prev) => prev + 1);
 
-      if (response.accepted) {
+      if (response.decision === "accept") {
         setStep("success");
-      } else {
+      } else if (response.decision === "counter") {
         setStep("negotiating");
         // Start 30-second timer for counter-offer (Zubin's requirement)
         setCounterOfferTimer(30);
         setIsCounterOfferExpired(false);
         // Clear the input for next attempt
         setUserOfferPrice("");
+      } else {
+        setStep("rejected");
       }
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to process your offer",
-      );
-    } finally {
-      setIsNegotiating(false);
+    } catch (err: any) {
+      setError(getErrorMessage(err));
     }
   };
 
-  const handleAcceptCounterOffer = () => {
-    if (counterOfferResponse?.counterOffer) {
-      setStep("success");
-      onBookingConfirmed(counterOfferResponse.counterOffer);
+  const handleAcceptCounterOffer = async () => {
+    if (lastOffer?.counter_offer) {
+      try {
+        setError(null);
+        const result = await acceptCurrentOffer();
+        setStep("success");
+        // Use the final accepted price
+        onBookingConfirmed(lastOffer.counter_offer);
+      } catch (err: any) {
+        setError(getErrorMessage(err));
+        if (err.code === 'INVENTORY_CHANGED') {
+          // Show reprice modal or refresh session
+          setStep("loading");
+          initializeBargainSession();
+        }
+      }
     }
   };
 
@@ -263,25 +262,28 @@ export default function BargainModalPhase1({
     }
   };
 
-  const handleBookNow = () => {
-    if (step === "success" && counterOfferResponse?.finalPrice) {
-      onBookingConfirmed(counterOfferResponse.finalPrice);
-    } else if (pricingResult) {
-      onBookingConfirmed(pricingResult.finalPrice);
+  const handleBookNow = async () => {
+    try {
+      setError(null);
+      if (step === "success" && lastOffer?.counter_offer) {
+        const result = await acceptCurrentOffer();
+        onBookingConfirmed(lastOffer.counter_offer);
+      } else if (session?.initial_offer?.price) {
+        const result = await acceptCurrentOffer();
+        onBookingConfirmed(session.initial_offer.price);
+      }
+    } catch (err: any) {
+      setError(getErrorMessage(err));
     }
   };
 
   const getSavingsInfo = () => {
-    if (!pricingResult) return null;
+    if (!session) return null;
 
-    const currentPrice =
-      counterOfferResponse?.finalPrice ||
-      counterOfferResponse?.counterOffer ||
-      parseFloat(userOfferPrice) ||
-      pricingResult.finalPrice;
-    const originalDisplayPrice = pricingResult.finalPrice;
-    const savings = originalDisplayPrice - currentPrice;
-    const savingsPercentage = (savings / originalDisplayPrice) * 100;
+    const initialPrice = session.initial_offer.price;
+    const finalPrice = lastOffer?.counter_offer || parseFloat(userOfferPrice) || initialPrice;
+    const savings = initialPrice - finalPrice;
+    const savingsPercentage = (savings / initialPrice) * 100;
 
     return {
       savings: Math.max(0, savings),
