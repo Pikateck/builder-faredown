@@ -396,7 +396,7 @@ export default function SightseeingDetails() {
     const ticketToBook =
       ticketIndex !== undefined ? ticketIndex : selectedTicketType;
 
-    console.log("��� Book Now clicked!", {
+    console.log("🎫 Book Now clicked!", {
       selectedTime,
       ticketIndex: ticketToBook,
       attractionId: attraction?.id,
