@@ -104,7 +104,14 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
   };
 
   const isBookingValid = () => {
-    return selectedTime && getTotalPassengers() > 0;
+    const valid = selectedTime && getTotalPassengers() > 0;
+    console.log("🔍 Booking validation:", {
+      selectedTime,
+      totalPassengers: getTotalPassengers(),
+      passengerQuantities,
+      valid
+    });
+    return valid;
   };
 
   return (
