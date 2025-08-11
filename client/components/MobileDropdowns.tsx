@@ -384,15 +384,21 @@ export function MobileDatePicker({
     console.log("tripType:", tripType);
     console.log("bookingType:", bookingType);
 
-    // Ensure dates are saved before closing
-    setSelectedDepartureDate(selectedDepartureDate);
+    // Update both local state and parent component state
+    if (selectedDepartureDate) {
+      setSelectedDepartureDate(selectedDepartureDate);
+    }
 
     if (bookingType === "hotels") {
       // For hotels, always require check-out date
-      setSelectedReturnDate(selectedReturnDate);
+      if (selectedReturnDate) {
+        setSelectedReturnDate(selectedReturnDate);
+      }
     } else if (tripType === "round-trip") {
       // For flights round-trip
-      setSelectedReturnDate(selectedReturnDate);
+      if (selectedReturnDate) {
+        setSelectedReturnDate(selectedReturnDate);
+      }
     } else {
       // For flights one-way
       setSelectedReturnDate(null);
