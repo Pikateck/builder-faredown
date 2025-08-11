@@ -732,11 +732,13 @@ export function SightseeingSearchForm() {
                             e.stopPropagation();
                             const fullName = `${dest.name}, ${dest.country}`;
                             console.log(
-                              "🎯 Sightseeing test destination selected:",
+                              "🎯 [CLICK] Sightseeing test destination selected:",
                               {
                                 name: fullName,
                                 code: dest.code,
                                 type: dest.type,
+                                currentDestination: destination,
+                                isUserTyping,
                               },
                             );
                             setDestination(fullName); // visible label
@@ -744,6 +746,8 @@ export function SightseeingSearchForm() {
                             setIsUserTyping(false);
                             setInputValue("");
                             setIsDestinationOpen(false);
+                            // Force component update
+                            console.log("🔄 State updated - destination should now show:", fullName);
                           }}
                           onTouchEnd={(e) => {
                             e.preventDefault();
