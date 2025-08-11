@@ -829,16 +829,6 @@ export function SightseeingSearchForm() {
               </PopoverContent>
             </Popover>
 
-            {/* Debug display - remove after testing */}
-            {(destination || inputValue) && (
-              <div className="mt-1 p-2 bg-green-50 border border-green-200 rounded text-xs">
-                <strong>Selected:</strong> {isUserTyping ? inputValue : destination || "No destination"}
-                <br />
-                <strong>Code:</strong> {destinationCode || "No code"}
-                <br />
-                <strong>Mode:</strong> {isUserTyping ? "Typing" : "Selected"}
-              </div>
-            )}
           </div>
 
           {/* Check-in Date */}
