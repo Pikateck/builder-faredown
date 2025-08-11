@@ -334,8 +334,8 @@ export function MobileDatePicker({
   setTripType,
   selectedDepartureDate,
   selectedReturnDate,
-  setSelectedDepartureDate,
-  setSelectedReturnDate,
+  setSelectedDepartureDate: setParentDepartureDate,
+  setSelectedReturnDate: setParentReturnDate,
   selectingDeparture,
   setSelectingDeparture,
   bookingType = "flights", // Default to flights for backward compatibility
