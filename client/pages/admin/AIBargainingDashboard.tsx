@@ -303,14 +303,21 @@ price_rules:
         }),
       });
 
-      if (response.ok) {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
         alert("Policy published successfully!");
         setPolicyValidation(null);
       } else {
-        alert("Failed to publish policy");
+        alert(`Failed to publish policy: ${result.error || 'Unknown error'}`);
       }
     } catch (err) {
-      alert("Error publishing policy");
+      console.error("Policy publish error:", err);
+      alert(`Error publishing policy: ${err.message}`);
     }
   };
 
