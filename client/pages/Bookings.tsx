@@ -983,6 +983,9 @@ const Bookings: React.FC = () => {
       {/* Invoice Modal */}
       <Dialog open={invoiceModal} onOpenChange={setInvoiceModal}>
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Booking Invoice</DialogTitle>
+          </DialogHeader>
           {selectedBooking && (
             <>
               <FaredownInvoice
