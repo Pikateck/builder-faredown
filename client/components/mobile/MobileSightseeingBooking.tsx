@@ -368,10 +368,7 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
           {/* Action Buttons */}
           <div className="flex gap-3">
             <Button
-              onClick={() => {
-                console.log("🔥 Bargain button clicked!", { selectedTicketType, isValid: isBookingValid() });
-                onBargain(selectedTicketType);
-              }}
+              onClick={() => onBargain(selectedTicketType)}
               disabled={!isBookingValid()}
               className="flex-1 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-bold py-4 rounded-xl text-base shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -379,10 +376,7 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
               Bargain
             </Button>
             <Button
-              onClick={() => {
-                console.log("🔥 Book Now button clicked!", { selectedTicketType, isValid: isBookingValid() });
-                onBookNow(selectedTicketType);
-              }}
+              onClick={() => onBookNow(selectedTicketType)}
               disabled={!isBookingValid()}
               className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white font-bold py-4 rounded-xl text-base shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
