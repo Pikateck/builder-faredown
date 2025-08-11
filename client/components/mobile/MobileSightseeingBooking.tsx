@@ -38,6 +38,16 @@ interface MobileSightseeingBookingProps {
   onBargain: (ticketIndex: number) => void;
   onBookNow: (ticketIndex: number) => void;
   onBack?: () => void;
+  initialTime?: string;
+  initialTicketType?: number;
+  initialPassengers?: {
+    adults: number;
+    children: number;
+    infants: number;
+  };
+  onTimeChange?: (time: string) => void;
+  onTicketTypeChange?: (index: number) => void;
+  onPassengersChange?: (passengers: { adults: number; children: number; infants: number; }) => void;
 }
 
 export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> = ({
