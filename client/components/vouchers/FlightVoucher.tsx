@@ -43,7 +43,7 @@ export const FlightVoucher: React.FC<FlightVoucherProps> = ({
   return (
     <div className="bg-white text-black print:shadow-none print:border-none">
       {/* Print Styles */}
-      <style jsx>{`
+      <style>{`
         @media print {
           .no-print {
             display: none !important;
