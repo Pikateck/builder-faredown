@@ -938,8 +938,14 @@ export function SightseeingSearchForm() {
           setTripType={setTripType}
           selectedDepartureDate={checkInDate || null}
           selectedReturnDate={checkOutDate || null}
-          setSelectedDepartureDate={(date) => setCheckInDate(date || undefined)}
-          setSelectedReturnDate={(date) => setCheckOutDate(date || undefined)}
+          setSelectedDepartureDate={(date) => {
+            console.log("Sightseeing: Setting check-in date:", date);
+            setCheckInDate(date || undefined);
+          }}
+          setSelectedReturnDate={(date) => {
+            console.log("Sightseeing: Setting check-out date:", date);
+            setCheckOutDate(date || undefined);
+          }}
           selectingDeparture={true}
           setSelectingDeparture={() => {}}
           bookingType="hotels"
