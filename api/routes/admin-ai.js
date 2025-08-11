@@ -224,8 +224,78 @@ router.get("/reports/promo-effectiveness", async (req, res) => {
   }
 });
 
+// Get current policies
+router.get("/policies", async (req, res) => {
+  try {
+    // In production, query from ai.policies table:
+    // const policies = await pool.query(`SELECT * FROM ai.policies WHERE active = true ORDER BY created_at DESC`);
+
+    const mockPolicies = [
+      {
+        id: 1,
+        version: "v1.0.0",
+        dsl_yaml: `version: v1.0.0
+global:
+  currency_base: USD
+  exploration_pct: 0.08
+  max_rounds: 3
+  response_budget_ms: 300
+  never_loss: true
+price_rules:
+  flight:
+    min_margin_usd: 6.0
+    max_discount_pct: 0.15
+    hold_minutes: 10
+  hotel:
+    min_margin_usd: 4.0
+    max_discount_pct: 0.20
+    hold_minutes: 15`,
+        active: true,
+        created_at: new Date().toISOString()
+      }
+    ];
+
+    res.json({
+      success: true,
+      policies: mockPolicies,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Error fetching policies:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch policies"
+    });
+  }
+});
+
+// Update/publish policy
+router.put("/policies", async (req, res) => {
+  try {
+    const { version, dsl_yaml } = req.body;
+
+    // In production, insert into ai.policies table:
+    // const result = await pool.query(`
+    //   INSERT INTO ai.policies (version, dsl_yaml, checksum, active)
+    //   VALUES ($1, $2, $3, true)
+    // `, [version, dsl_yaml, generateChecksum(dsl_yaml)]);
+
+    res.json({
+      success: true,
+      message: `Policy ${version} published successfully`,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Error publishing policy:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to publish policy"
+    });
+  }
+});
+
 // Policy validation endpoint
-router.post("/policy/validate", async (req, res) => {
+router.post("/policies/validate", async (req, res) => {
   try {
     const { yaml_content } = req.body;
     
