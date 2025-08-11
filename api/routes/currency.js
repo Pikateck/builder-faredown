@@ -117,24 +117,24 @@ router.get("/rates", (req, res) => {
     );
 
     // Return rates data in format expected by CurrencyContext
-    const ratesData = activeCurrencies.map(currency => ({
+    const ratesData = activeCurrencies.map((currency) => ({
       to: currency.code,
       rate: currency.exchangeRate,
       name: currency.name,
       symbol: currency.symbol,
-      lastUpdated: currency.lastUpdated
+      lastUpdated: currency.lastUpdated,
     }));
 
     res.json({
       success: true,
       data: ratesData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching currency rates:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch exchange rates"
+      error: "Failed to fetch exchange rates",
     });
   }
 });

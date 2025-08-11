@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Clock, 
-  Users, 
-  Star, 
-  TrendingDown, 
-  CheckCircle, 
-  Minus, 
+import {
+  Clock,
+  Users,
+  Star,
+  TrendingDown,
+  CheckCircle,
+  Minus,
   Plus,
   ArrowLeft,
-  Info
+  Info,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -47,10 +47,16 @@ interface MobileSightseeingBookingProps {
   };
   onTimeChange?: (time: string) => void;
   onTicketTypeChange?: (index: number) => void;
-  onPassengersChange?: (passengers: { adults: number; children: number; infants: number; }) => void;
+  onPassengersChange?: (passengers: {
+    adults: number;
+    children: number;
+    infants: number;
+  }) => void;
 }
 
-export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> = ({
+export const MobileSightseeingBooking: React.FC<
+  MobileSightseeingBookingProps
+> = ({
   attraction,
   onBargain,
   onBookNow,
@@ -60,20 +66,28 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
   initialPassengers = { adults: 1, children: 0, infants: 0 },
   onTimeChange,
   onTicketTypeChange,
-  onPassengersChange
+  onPassengersChange,
 }) => {
   const { formatPrice } = useCurrency();
 
   // State management - use parent state if provided
   const [selectedTime, setSelectedTime] = useState<string>(initialTime);
-  const [selectedTicketType, setSelectedTicketType] = useState<number>(initialTicketType);
-  const [passengerQuantities, setPassengerQuantities] = useState(initialPassengers);
+  const [selectedTicketType, setSelectedTicketType] =
+    useState<number>(initialTicketType);
+  const [passengerQuantities, setPassengerQuantities] =
+    useState(initialPassengers);
 
   // Helper functions
-  const updatePassengerQuantity = (type: keyof typeof passengerQuantities, change: number) => {
+  const updatePassengerQuantity = (
+    type: keyof typeof passengerQuantities,
+    change: number,
+  ) => {
     const newQuantities = {
       ...passengerQuantities,
-      [type]: Math.max(type === 'adults' ? 1 : 0, passengerQuantities[type] + change)
+      [type]: Math.max(
+        type === "adults" ? 1 : 0,
+        passengerQuantities[type] + change,
+      ),
     };
     setPassengerQuantities(newQuantities);
     onPassengersChange?.(newQuantities);
@@ -89,17 +103,19 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
     onTicketTypeChange?.(index);
   };
 
-  const getTotalPassengers = () => 
-    passengerQuantities.adults + passengerQuantities.children + passengerQuantities.infants;
+  const getTotalPassengers = () =>
+    passengerQuantities.adults +
+    passengerQuantities.children +
+    passengerQuantities.infants;
 
   const calculateTotalPrice = () => {
     const ticket = attraction.ticketTypes[selectedTicketType];
     if (!ticket) return 0;
-    
+
     const adultPrice = ticket.price * passengerQuantities.adults;
     const childPrice = ticket.price * 0.5 * passengerQuantities.children; // 50% for children
     const infantPrice = 0; // Free for infants
-    
+
     return adultPrice + childPrice + infantPrice;
   };
 
@@ -113,9 +129,9 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
       <div className="bg-white shadow-sm border-b sticky top-0 z-10">
         <div className="flex items-center p-4">
           {onBack && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={onBack}
               className="mr-3 p-2"
             >
@@ -138,11 +154,10 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto pb-32">
-        
         {/* Hero Image */}
         <div className="relative h-64">
-          <img 
-            src={attraction.images[0]} 
+          <img
+            src={attraction.images[0]}
             alt={attraction.name}
             className="w-full h-full object-cover"
           />
@@ -154,12 +169,13 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
         </div>
 
         <div className="p-4 space-y-6">
-          
           {/* Time Selection */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
             <div className="flex items-center mb-4">
               <Clock className="w-5 h-5 text-[#003580] mr-2" />
-              <h3 className="text-lg font-semibold text-gray-900">Select Time</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Select Time
+              </h3>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {attraction.availableSlots[0]?.times.map((time, index) => (
@@ -171,7 +187,7 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
                     "h-12 text-base font-medium rounded-xl",
                     selectedTime === time
                       ? "bg-[#003580] text-white hover:bg-[#002a66] shadow-lg"
-                      : "border-gray-200 hover:border-[#003580] hover:bg-blue-50"
+                      : "border-gray-200 hover:border-[#003580] hover:bg-blue-50",
                   )}
                 >
                   {time}
@@ -189,9 +205,11 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
             <div className="flex items-center mb-4">
               <Users className="w-5 h-5 text-[#003580] mr-2" />
-              <h3 className="text-lg font-semibold text-gray-900">How Many Tickets?</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                How Many Tickets?
+              </h3>
             </div>
-            
+
             {/* Adults */}
             <div className="flex items-center justify-between py-4 border-b border-gray-100">
               <div>
@@ -285,7 +303,9 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
 
           {/* Ticket Type Selection */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Choose Ticket Type</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Choose Ticket Type
+            </h3>
             <div className="space-y-3">
               {attraction.ticketTypes.map((ticket, index) => (
                 <div
@@ -295,15 +315,19 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
                     "border-2 rounded-xl p-4 cursor-pointer transition-all",
                     selectedTicketType === index
                       ? "border-[#003580] bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      : "border-gray-200 hover:border-gray-300",
                   )}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-gray-900">{ticket.name}</h4>
-                        <Badge 
-                          variant={ticket.refundable ? "secondary" : "destructive"}
+                        <h4 className="font-semibold text-gray-900">
+                          {ticket.name}
+                        </h4>
+                        <Badge
+                          variant={
+                            ticket.refundable ? "secondary" : "destructive"
+                          }
                           className="text-xs"
                         >
                           {ticket.refundable ? "Refundable" : "Non-refundable"}
@@ -319,11 +343,14 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
                       )}
                     </div>
                   </div>
-                  
+
                   {/* Features */}
                   <div className="grid grid-cols-1 gap-1">
                     {ticket.features.slice(0, 3).map((feature, idx) => (
-                      <div key={idx} className="flex items-center text-xs text-gray-600">
+                      <div
+                        key={idx}
+                        className="flex items-center text-xs text-gray-600"
+                      >
                         <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
                         {feature}
                       </div>
@@ -338,7 +365,6 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
               ))}
             </div>
           </div>
-
         </div>
       </div>
 
@@ -349,12 +375,15 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
           <div className="flex justify-between items-center mb-4">
             <div>
               <div className="text-sm text-gray-600">
-                Total for {getTotalPassengers()} guest{getTotalPassengers() > 1 ? "s" : ""}
+                Total for {getTotalPassengers()} guest
+                {getTotalPassengers() > 1 ? "s" : ""}
               </div>
               <div className="text-xs text-gray-500">
                 {passengerQuantities.adults} Adults
-                {passengerQuantities.children > 0 && `, ${passengerQuantities.children} Children`}
-                {passengerQuantities.infants > 0 && `, ${passengerQuantities.infants} Infants`}
+                {passengerQuantities.children > 0 &&
+                  `, ${passengerQuantities.children} Children`}
+                {passengerQuantities.infants > 0 &&
+                  `, ${passengerQuantities.infants} Infants`}
               </div>
             </div>
             <div className="text-right">
@@ -388,7 +417,9 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
           {!isBookingValid() && (
             <div className="flex items-center justify-center mt-3 text-sm text-amber-600 bg-amber-50 p-2 rounded-lg">
               <Info className="w-4 h-4 mr-2" />
-              {!selectedTime ? "Please select a time" : "Please select at least 1 guest"}
+              {!selectedTime
+                ? "Please select a time"
+                : "Please select at least 1 guest"}
             </div>
           )}
         </div>

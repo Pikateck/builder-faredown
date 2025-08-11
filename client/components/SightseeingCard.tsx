@@ -295,12 +295,14 @@ export function SightseeingCard({
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = "#e55a00";
                       e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow = "0 4px 8px rgba(255,107,0,0.35)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 8px rgba(255,107,0,0.35)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "#ff6b00";
                       e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 3px 6px rgba(255,107,0,0.25)";
+                      e.currentTarget.style.boxShadow =
+                        "0 3px 6px rgba(255,107,0,0.25)";
                     }}
                   >
                     <Eye size={14} />

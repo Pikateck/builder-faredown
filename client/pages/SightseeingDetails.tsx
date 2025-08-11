@@ -339,8 +339,8 @@ export default function SightseeingDetails() {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Get category display info
@@ -444,7 +444,7 @@ export default function SightseeingDetails() {
     console.log("🎯 handleBargainClick called!", {
       ticketIndex,
       currentModalState: isBargainModalOpen,
-      attraction: attraction?.name
+      attraction: attraction?.name,
     });
 
     setBargainTicketType(ticketIndex);
@@ -612,14 +612,19 @@ export default function SightseeingDetails() {
             isOpen={isBargainModalOpen}
             onClose={() => setIsBargainModalOpen(false)}
             onBargainSuccess={handleBargainSuccess}
-            ticketName={attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}
+            ticketName={
+              attraction.ticketTypes[bargainTicketType]?.name ||
+              "Standard Admission"
+            }
             originalPrice={
               getTicketTotalPrice(bargainTicketType) ||
               attraction.ticketTypes[bargainTicketType]?.price ||
               149
             }
             venueName={attraction.name}
-            ticketFeatures={attraction.ticketTypes[bargainTicketType]?.features || []}
+            ticketFeatures={
+              attraction.ticketTypes[bargainTicketType]?.features || []
+            }
           />
         )}
       </>

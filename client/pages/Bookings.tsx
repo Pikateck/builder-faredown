@@ -882,8 +882,8 @@ const Bookings: React.FC = () => {
               {selectedBooking?.type === "flight"
                 ? "Boarding Pass"
                 : selectedBooking?.type === "hotel"
-                ? "Hotel Voucher"
-                : "Experience Voucher"}
+                  ? "Hotel Voucher"
+                  : "Experience Voucher"}
             </DialogTitle>
           </DialogHeader>
           {selectedBooking && (

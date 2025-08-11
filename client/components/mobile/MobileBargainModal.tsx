@@ -8,13 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import {
-  TrendingDown,
-  X,
-  CheckCircle,
-  Clock,
-  RefreshCw,
-} from "lucide-react";
+import { TrendingDown, X, CheckCircle, Clock, RefreshCw } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface MobileBargainModalProps {
@@ -34,12 +28,14 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
   ticketName,
   originalPrice,
   venueName,
-  ticketFeatures
+  ticketFeatures,
 }) => {
   const { formatPrice } = useCurrency();
-  
+
   const [targetPrice, setTargetPrice] = useState("");
-  const [negotiationPhase, setNegotiationPhase] = useState<"input" | "negotiating" | "success" | "counteroffer">("input");
+  const [negotiationPhase, setNegotiationPhase] = useState<
+    "input" | "negotiating" | "success" | "counteroffer"
+  >("input");
   const [progress, setProgress] = useState(0);
   const [finalPrice, setFinalPrice] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
@@ -59,8 +55,8 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
     let interval: NodeJS.Timeout;
     if (negotiationPhase === "negotiating" && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
-        setProgress(prev => Math.min(prev + 1.67, 100));
+        setTimeLeft((prev) => prev - 1);
+        setProgress((prev) => Math.min(prev + 1.67, 100));
       }, 1000);
     }
     return () => clearInterval(interval);
@@ -72,7 +68,7 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
       const target = parseInt(targetPrice);
       const savings = originalPrice - target;
       const savingsPercent = (savings / originalPrice) * 100;
-      
+
       if (savingsPercent >= 20) {
         // High savings - show counter offer
         const counterOffer = target + Math.floor(savings * 0.3);
@@ -128,20 +124,24 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
         </DialogHeader>
 
         <div className="p-4 space-y-6">
-          
           {/* Ticket Information */}
           <div className="bg-gray-50 rounded-lg p-4">
             <h3 className="font-semibold text-gray-900 mb-2">{ticketName}</h3>
             <p className="text-sm text-gray-600 mb-3">{venueName}</p>
             <div className="flex justify-between items-center mb-3">
               <span className="text-sm text-gray-600">Current Price:</span>
-              <span className="text-xl font-bold text-[#003580]">{formatPrice(originalPrice)}</span>
+              <span className="text-xl font-bold text-[#003580]">
+                {formatPrice(originalPrice)}
+              </span>
             </div>
-            
+
             {/* Features */}
             <div className="space-y-1">
               {ticketFeatures.slice(0, 3).map((feature, idx) => (
-                <div key={idx} className="flex items-center text-xs text-gray-600">
+                <div
+                  key={idx}
+                  className="flex items-center text-xs text-gray-600"
+                >
                   <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
                   {feature}
                 </div>
@@ -153,14 +153,19 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
           {negotiationPhase === "input" && (
             <div className="space-y-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">What's your target price?</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  What's your target price?
+                </h4>
                 <p className="text-sm text-gray-600 mb-4">
-                  Enter your ideal price and our AI will negotiate with {venueName}!
+                  Enter your ideal price and our AI will negotiate with{" "}
+                  {venueName}!
                 </p>
-                
+
                 <div className="space-y-3">
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">₹</span>
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                      ₹
+                    </span>
                     <Input
                       type="number"
                       placeholder="Enter your target price"
@@ -171,24 +176,31 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
                       min={1}
                     />
                   </div>
-                  
+
                   {targetPrice && parseInt(targetPrice) >= originalPrice && (
                     <p className="text-sm text-red-600">
                       Target price must be lower than current price
                     </p>
                   )}
-                  
-                  {targetPrice && parseInt(targetPrice) > 0 && parseInt(targetPrice) < originalPrice && (
-                    <p className="text-sm text-green-600">
-                      Potential savings: {formatPrice(originalPrice - parseInt(targetPrice))}
-                    </p>
-                  )}
+
+                  {targetPrice &&
+                    parseInt(targetPrice) > 0 &&
+                    parseInt(targetPrice) < originalPrice && (
+                      <p className="text-sm text-green-600">
+                        Potential savings:{" "}
+                        {formatPrice(originalPrice - parseInt(targetPrice))}
+                      </p>
+                    )}
                 </div>
               </div>
 
               <Button
                 onClick={handleStartNegotiation}
-                disabled={!targetPrice || parseInt(targetPrice) >= originalPrice || parseInt(targetPrice) <= 0}
+                disabled={
+                  !targetPrice ||
+                  parseInt(targetPrice) >= originalPrice ||
+                  parseInt(targetPrice) <= 0
+                }
                 className="w-full h-12 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-bold text-base"
               >
                 <TrendingDown className="w-5 h-5 mr-2" />
@@ -203,7 +215,7 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
               <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto">
                 <RefreshCw className="w-8 h-8 text-white animate-spin" />
               </div>
-              
+
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">
                   AI Negotiating with {venueName}
@@ -229,9 +241,11 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
               <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle className="w-8 h-8 text-white" />
               </div>
-              
+
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Success! 🎉</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  Success! 🎉
+                </h4>
                 <p className="text-sm text-gray-600 mb-4">
                   {venueName} accepted your exact price!
                 </p>
@@ -261,11 +275,14 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
               <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto">
                 <TrendingDown className="w-8 h-8 text-white" />
               </div>
-              
+
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Counter Offer!</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  Counter Offer!
+                </h4>
                 <p className="text-sm text-gray-600 mb-4">
-                  {venueName} couldn't match your price, but here's their best offer!
+                  {venueName} couldn't match your price, but here's their best
+                  offer!
                 </p>
               </div>
 
@@ -295,7 +312,6 @@ export const MobileBargainModal: React.FC<MobileBargainModalProps> = ({
               </div>
             </div>
           )}
-
         </div>
       </DialogContent>
     </Dialog>

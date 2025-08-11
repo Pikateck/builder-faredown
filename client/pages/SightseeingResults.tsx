@@ -713,25 +713,21 @@ export default function SightseeingResults() {
               <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 mt-1">
                 <span className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  {checkIn && checkOut ? (
-                    checkIn === checkOut ? (
-                      new Date(checkIn).toLocaleDateString("en-US", {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    ) : (
-                      `${new Date(checkIn).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })} - ${new Date(checkOut).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}`
-                    )
-                  ) : (
-                    "Select dates"
-                  )}
+                  {checkIn && checkOut
+                    ? checkIn === checkOut
+                      ? new Date(checkIn).toLocaleDateString("en-US", {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                        })
+                      : `${new Date(checkIn).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })} - ${new Date(checkOut).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}`
+                    : "Select dates"}
                 </span>
                 <span className="flex items-center gap-1">
                   <Users className="w-4 h-4" />

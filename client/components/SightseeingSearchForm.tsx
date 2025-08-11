@@ -83,30 +83,33 @@ export function SightseeingSearchForm() {
   }, [destination, destinationCode, isUserTyping, inputValue]);
 
   // Mobile-optimized destination selection handler
-  const selectDestination = useCallback((dest: any, source: string) => {
-    const fullName = `${dest.name}, ${dest.country}`;
-    console.log(`🎯 [${source}] Destination selection triggered:`, {
-      name: fullName,
-      code: dest.code || dest.id,
-      type: dest.type,
-      currentState: { destination, destinationCode, isUserTyping },
-    });
+  const selectDestination = useCallback(
+    (dest: any, source: string) => {
+      const fullName = `${dest.name}, ${dest.country}`;
+      console.log(`🎯 [${source}] Destination selection triggered:`, {
+        name: fullName,
+        code: dest.code || dest.id,
+        type: dest.type,
+        currentState: { destination, destinationCode, isUserTyping },
+      });
 
-    // Update all states immediately
-    setDestination(fullName);
-    setDestinationCode(dest.code || dest.id);
-    setIsUserTyping(false);
-    setInputValue("");
-    setIsDestinationOpen(false);
-
-    // Force a re-render to ensure UI updates
-    setTimeout(() => {
+      // Update all states immediately
       setDestination(fullName);
-      console.log(`🔄 [${source}] Force refresh completed:`, fullName);
-    }, 10);
+      setDestinationCode(dest.code || dest.id);
+      setIsUserTyping(false);
+      setInputValue("");
+      setIsDestinationOpen(false);
 
-    console.log(`✅ [${source}] Destination selection completed:`, fullName);
-  }, [destination, destinationCode, isUserTyping]);
+      // Force a re-render to ensure UI updates
+      setTimeout(() => {
+        setDestination(fullName);
+        console.log(`🔄 [${source}] Force refresh completed:`, fullName);
+      }, 10);
+
+      console.log(`✅ [${source}] Destination selection completed:`, fullName);
+    },
+    [destination, destinationCode, isUserTyping],
+  );
 
   // Mobile detection
   useEffect(() => {
@@ -477,7 +480,11 @@ export function SightseeingSearchForm() {
                     placeholder="Where do you want to explore?"
                     autoComplete="off"
                     data-destination-input="true"
-                    style={{ color: '#111827', fontSize: '14px', fontWeight: '500' }}
+                    style={{
+                      color: "#111827",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                    }}
                   />
                   {(destination || (isUserTyping && inputValue)) && (
                     <button
@@ -828,7 +835,6 @@ export function SightseeingSearchForm() {
                 </div>
               </PopoverContent>
             </Popover>
-
           </div>
 
           {/* Check-in Date */}
