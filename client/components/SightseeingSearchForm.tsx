@@ -82,6 +82,26 @@ export function SightseeingSearchForm() {
     });
   }, [destination, destinationCode, isUserTyping, inputValue]);
 
+  // Mobile-optimized destination selection handler
+  const selectDestination = useCallback((dest: any, source: string) => {
+    const fullName = `${dest.name}, ${dest.country}`;
+    console.log(`🎯 [${source}] Destination selection triggered:`, {
+      name: fullName,
+      code: dest.code || dest.id,
+      type: dest.type,
+      currentState: { destination, destinationCode, isUserTyping },
+    });
+
+    // Update all states
+    setDestination(fullName);
+    setDestinationCode(dest.code || dest.id);
+    setIsUserTyping(false);
+    setInputValue("");
+    setIsDestinationOpen(false);
+
+    console.log(`✅ [${source}] Destination selection completed:`, fullName);
+  }, [destination, destinationCode, isUserTyping]);
+
   // Mobile detection
   useEffect(() => {
     const checkMobile = () => {
@@ -182,7 +202,7 @@ export function SightseeingSearchForm() {
   // Initialize form state from URL parameters - CRITICAL FOR MOBILE
   useEffect(() => {
     console.log(
-      "🔄 Initializing sightseeing form from URL parameters:",
+      "��� Initializing sightseeing form from URL parameters:",
       searchParams.toString(),
     );
 
