@@ -6,6 +6,7 @@
 
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useBargain, type BargainProductCPO } from "@/hooks/useBargain";
 
 interface BargainItem {
   type: "flight" | "hotel" | "sightseeing";
@@ -35,6 +36,29 @@ interface UseBargainPhase1Options {
   promoCode?: string;
   userLocation?: string;
   deviceType?: "mobile" | "desktop";
+  useLiveAPI?: boolean; // New option to use live API
+}
+
+// Helper function to convert BargainItem to CPO format
+function createCPO(item: BargainItem): BargainProductCPO {
+  const cpo: BargainProductCPO = {
+    type: item.type,
+    supplier: item.airline || "hotelbeds", // Default supplier based on type
+    product_id: item.itemId
+  };
+
+  // Add type-specific fields
+  if (item.type === "flight" && item.route) {
+    cpo.route = `${item.route.from}-${item.route.to}`;
+    cpo.class_of_service = item.class || "economy";
+  } else if (item.type === "hotel") {
+    cpo.city = item.city;
+  } else if (item.type === "sightseeing") {
+    cpo.activity_type = item.category;
+    cpo.city = item.location;
+  }
+
+  return cpo;
 }
 
 export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
@@ -42,6 +66,9 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
   const [currentBargainItem, setCurrentBargainItem] =
     useState<BargainItem | null>(null);
   const navigate = useNavigate();
+
+  // Optionally use live API
+  const liveBargain = useBargain();
 
   const startBargain = useCallback((item: BargainItem) => {
     setCurrentBargainItem(item);
@@ -54,8 +81,19 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
   }, []);
 
   const handleBookingConfirmed = useCallback(
-    (finalPrice: number) => {
+    async (finalPrice: number) => {
       if (!currentBargainItem) return;
+
+      // For live API, complete the transaction
+      if (options.useLiveAPI && liveBargain.hasActiveSession) {
+        try {
+          const result = await liveBargain.acceptCurrentOffer();
+          console.log('✅ Booking confirmed via live API:', result);
+        } catch (err) {
+          console.error('❌ Failed to complete booking via live API:', err);
+          // Continue with fallback flow
+        }
+      }
 
       // Call custom handler if provided
       if (options.onBookingConfirmed) {
@@ -70,6 +108,8 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
           finalPrice: finalPrice.toString(),
           bargainApplied: "true",
           promoCode: options.promoCode || "",
+          // Add live API session info if available
+          ...(liveBargain.session && { sessionId: liveBargain.session.session_id })
         });
 
         if (currentBargainItem.type === "flight") {
@@ -83,7 +123,7 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
 
       closeBargainModal();
     },
-    [currentBargainItem, options, navigate, closeBargainModal],
+    [currentBargainItem, options, navigate, closeBargainModal, liveBargain],
   );
 
   return {
@@ -110,6 +150,16 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
       promoCode: options.promoCode,
       userLocation: options.userLocation,
       deviceType: options.deviceType,
+      useLiveAPI: options.useLiveAPI, // Pass through to modal
+    }),
+
+    // Expose live API functions if enabled
+    ...(options.useLiveAPI && {
+      liveBargain,
+      startLiveBargain: async (item: BargainItem) => {
+        const cpo = createCPO(item);
+        return liveBargain.startBargainSession(cpo, options.promoCode);
+      }
     }),
   };
 }
@@ -182,5 +232,8 @@ export function createSightseeingBargainItem(activity: {
     userType: "b2c", // Default, can be overridden
   };
 }
+
+// Utility function to create CPO from different item types
+export { createCPO };
 
 export default useBargainPhase1;
