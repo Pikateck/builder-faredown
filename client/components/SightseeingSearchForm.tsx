@@ -144,7 +144,7 @@ export function SightseeingSearchForm() {
         );
       } catch (error) {
         console.error(
-          "⚠�� Failed to load popular destinations, using fallback:",
+          "⚠️ Failed to load popular destinations, using fallback:",
           error,
         );
         // Static fallback if database fails - EXACT HOTELS PATTERN
@@ -508,17 +508,6 @@ export function SightseeingSearchForm() {
                     </button>
                   )}
                 </div>
-
-                {/* Debug display - remove after testing */}
-                {(destination || inputValue) && (
-                  <div className="mt-1 p-2 bg-green-50 border border-green-200 rounded text-xs">
-                    <strong>Selected:</strong> {isUserTyping ? inputValue : destination || "No destination"}
-                    <br />
-                    <strong>Code:</strong> {destinationCode || "No code"}
-                    <br />
-                    <strong>Mode:</strong> {isUserTyping ? "Typing" : "Selected"}
-                  </div>
-                )}
               </PopoverTrigger>
               <PopoverContent
                 className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg"
