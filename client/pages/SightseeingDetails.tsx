@@ -565,6 +565,19 @@ export default function SightseeingDetails() {
   const totalPrice = selectedTicket.price * adults;
   const originalTotalPrice = attraction.originalPrice * adults;
 
+  // Mobile view
+  if (isMobile) {
+    return (
+      <MobileSightseeingBooking
+        attraction={attraction}
+        onBargain={handleBargainClick}
+        onBookNow={handleBookNow}
+        onBack={handleBackToResults}
+      />
+    );
+  }
+
+  // Desktop view
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
