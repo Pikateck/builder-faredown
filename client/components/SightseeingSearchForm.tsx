@@ -171,6 +171,69 @@ export function SightseeingSearchForm() {
     loadPopularDestinations();
   }, []);
 
+  // Initialize form state from URL parameters - CRITICAL FOR MOBILE
+  useEffect(() => {
+    console.log(
+      "🔄 Initializing sightseeing form from URL parameters:",
+      searchParams.toString(),
+    );
+
+    // Initialize destination
+    const urlDestination = searchParams.get("dest");
+    const urlDestinationName = searchParams.get("destinationName");
+
+    if (urlDestination && urlDestinationName) {
+      setDestination(urlDestinationName);
+      setDestinationCode(urlDestination);
+      setInputValue("");
+      setIsUserTyping(false);
+      console.log(
+        "✅ Set destination from URL:",
+        urlDestinationName,
+        "->",
+        urlDestination,
+      );
+    }
+
+    // Initialize check-in date
+    const urlCheckIn = searchParams.get("checkIn");
+    if (urlCheckIn) {
+      try {
+        const parsedDate = new Date(decodeURIComponent(urlCheckIn));
+        if (!isNaN(parsedDate.getTime())) {
+          const localDate = new Date(
+            parsedDate.getFullYear(),
+            parsedDate.getMonth(),
+            parsedDate.getDate(),
+          );
+          setCheckInDate(localDate);
+          console.log("✅ Set check-in date from URL:", localDate);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing check-in date from URL:", error);
+      }
+    }
+
+    // Initialize check-out date
+    const urlCheckOut = searchParams.get("checkOut");
+    if (urlCheckOut) {
+      try {
+        const parsedDate = new Date(decodeURIComponent(urlCheckOut));
+        if (!isNaN(parsedDate.getTime())) {
+          const localDate = new Date(
+            parsedDate.getFullYear(),
+            parsedDate.getMonth(),
+            parsedDate.getDate(),
+          );
+          setCheckOutDate(localDate);
+          console.log("✅ Set check-out date from URL:", localDate);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing check-out date from URL:", error);
+      }
+    }
+  }, [searchParams]);
+
   // EXACT HOTELS SEARCH PATTERN
   const searchDestinations = useCallback(
     async (query: string) => {
