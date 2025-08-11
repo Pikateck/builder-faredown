@@ -568,18 +568,75 @@ export default function SightseeingDetails() {
   // Mobile view
   if (isMobile) {
     return (
-      <MobileSightseeingBooking
-        attraction={attraction}
-        onBargain={handleBargainClick}
-        onBookNow={handleBookNow}
-        onBack={handleBackToResults}
-        initialTime={selectedTime}
-        initialTicketType={selectedTicketType}
-        initialPassengers={passengerQuantities}
-        onTimeChange={setSelectedTime}
-        onTicketTypeChange={setSelectedTicketType}
-        onPassengersChange={setPassengerQuantities}
-      />
+      <>
+        <MobileSightseeingBooking
+          attraction={attraction}
+          onBargain={handleBargainClick}
+          onBookNow={handleBookNow}
+          onBack={handleBackToResults}
+          initialTime={selectedTime}
+          initialTicketType={selectedTicketType}
+          initialPassengers={passengerQuantities}
+          onTimeChange={setSelectedTime}
+          onTicketTypeChange={setSelectedTicketType}
+          onPassengersChange={setPassengerQuantities}
+        />
+
+        {/* Time Selection Alert for Mobile */}
+        <AlertDialog open={showTimeAlert} onOpenChange={setShowTimeAlert}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Select a time</AlertDialogTitle>
+              <AlertDialogDescription>
+                Please select a time slot for your visit before proceeding.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={() => setShowTimeAlert(false)}>
+                OK
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Sightseeing Bargain Modal for Mobile */}
+        {attraction && (
+          <FlightStyleBargainModal
+            type="sightseeing"
+            roomType={{
+              id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
+              name:
+                attraction.ticketTypes[bargainTicketType]?.name ||
+                "Standard Admission",
+              description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
+              image: attraction.images[0],
+              marketPrice:
+                getTicketTotalPrice(bargainTicketType) ||
+                attraction.ticketTypes[bargainTicketType]?.price ||
+                149,
+              totalPrice:
+                getTicketTotalPrice(bargainTicketType) ||
+                attraction.ticketTypes[bargainTicketType]?.price ||
+                149,
+              features: attraction.ticketTypes[bargainTicketType]?.features || [],
+              maxOccupancy: getTotalPassengers(),
+              bedType: attraction.duration,
+              size: attraction.category,
+              cancellation: "Free cancellation up to 24 hours before visit date",
+            }}
+            hotel={{
+              id: attraction.id,
+              name: attraction.name,
+              address: attraction.location,
+              rating: attraction.rating,
+              image: attraction.images[0],
+            }}
+            isOpen={isBargainModalOpen}
+            onClose={() => setIsBargainModalOpen(false)}
+            onBargainSuccess={handleBargainSuccess}
+          />
+        )}
+      </>
     );
   }
 
@@ -929,7 +986,7 @@ export default function SightseeingDetails() {
                     </div>
                     {selectedTime && (
                       <div className="mt-2 text-sm text-green-600 font-medium">
-                        ✓ Selected: {selectedTime}
+                        ��� Selected: {selectedTime}
                       </div>
                     )}
                   </div>
