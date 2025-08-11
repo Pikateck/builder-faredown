@@ -109,19 +109,19 @@ const AIBargainingDashboard: React.FC = () => {
                 product_type: "flight",
                 canonical_key: "FL:AI:DEL-BOM:2025-02-15",
                 round_count: 2,
-                latest_offer: 145.50,
+                latest_offer: 145.5,
                 latest_accept_prob: 0.73,
                 is_accepted: false,
-                time_active_minutes: 3.2
-              }
+                time_active_minutes: 3.2,
+              },
             ],
             performance: {
               active_sessions: 5,
               acceptance_rate: 0.68,
               avg_revenue_per_session: 142.33,
-              hourly_profit: 650.45
-            }
-          }
+              hourly_profit: 650.45,
+            },
+          },
         });
         setError(`API offline - showing demo data (${err.message})`);
         setLoading(false);
@@ -144,57 +144,115 @@ const AIBargainingDashboard: React.FC = () => {
         switch (activeTab) {
           case "airline-reports":
             try {
-              const airlineResponse = await fetch("/api/admin/ai/reports/airline-route");
+              const airlineResponse = await fetch(
+                "/api/admin/ai/reports/airline-route",
+              );
               if (airlineResponse.ok) {
                 const airlineResult = await airlineResponse.json();
                 setAirlineData(airlineResult.data || []);
               } else {
-                setAirlineData([{ airline: "Demo", route: "DEL-BOM", sessions: 25, accepted: 18, avg_price: 156.78, avg_profit: 23.45 }]);
+                setAirlineData([
+                  {
+                    airline: "Demo",
+                    route: "DEL-BOM",
+                    sessions: 25,
+                    accepted: 18,
+                    avg_price: 156.78,
+                    avg_profit: 23.45,
+                  },
+                ]);
               }
             } catch {
-              setAirlineData([{ airline: "Demo", route: "DEL-BOM", sessions: 25, accepted: 18, avg_price: 156.78, avg_profit: 23.45 }]);
+              setAirlineData([
+                {
+                  airline: "Demo",
+                  route: "DEL-BOM",
+                  sessions: 25,
+                  accepted: 18,
+                  avg_price: 156.78,
+                  avg_profit: 23.45,
+                },
+              ]);
             }
             break;
 
           case "hotel-reports":
             try {
-              const hotelResponse = await fetch("/api/admin/ai/reports/hotel-city");
+              const hotelResponse = await fetch(
+                "/api/admin/ai/reports/hotel-city",
+              );
               if (hotelResponse.ok) {
                 const hotelResult = await hotelResponse.json();
                 setHotelData(hotelResult.data || []);
               } else {
-                setHotelData([{ city: "Dubai", hotel_name: "Demo Hotel", sessions: 28, accepted: 19, avg_price: 450.00, avg_profit: 67.50 }]);
+                setHotelData([
+                  {
+                    city: "Dubai",
+                    hotel_name: "Demo Hotel",
+                    sessions: 28,
+                    accepted: 19,
+                    avg_price: 450.0,
+                    avg_profit: 67.5,
+                  },
+                ]);
               }
             } catch {
-              setHotelData([{ city: "Dubai", hotel_name: "Demo Hotel", sessions: 28, accepted: 19, avg_price: 450.00, avg_profit: 67.50 }]);
+              setHotelData([
+                {
+                  city: "Dubai",
+                  hotel_name: "Demo Hotel",
+                  sessions: 28,
+                  accepted: 19,
+                  avg_price: 450.0,
+                  avg_profit: 67.5,
+                },
+              ]);
             }
             break;
 
           case "elasticity":
             try {
-              const elasticityResponse = await fetch("/api/admin/ai/elasticity?product_type=flight");
+              const elasticityResponse = await fetch(
+                "/api/admin/ai/elasticity?product_type=flight",
+              );
               if (elasticityResponse.ok) {
                 const elasticityResult = await elasticityResponse.json();
                 setElasticityData(elasticityResult.elasticity_data || []);
               } else {
-                setElasticityData([{ bucket: "0-5%", accept_rate: 0.12 }, { bucket: "10-15%", accept_rate: 0.45 }, { bucket: "20-25%", accept_rate: 0.82 }]);
+                setElasticityData([
+                  { bucket: "0-5%", accept_rate: 0.12 },
+                  { bucket: "10-15%", accept_rate: 0.45 },
+                  { bucket: "20-25%", accept_rate: 0.82 },
+                ]);
               }
             } catch {
-              setElasticityData([{ bucket: "0-5%", accept_rate: 0.12 }, { bucket: "10-15%", accept_rate: 0.45 }, { bucket: "20-25%", accept_rate: 0.82 }]);
+              setElasticityData([
+                { bucket: "0-5%", accept_rate: 0.12 },
+                { bucket: "10-15%", accept_rate: 0.45 },
+                { bucket: "20-25%", accept_rate: 0.82 },
+              ]);
             }
             break;
 
           case "promo-lab":
             try {
-              const promoResponse = await fetch("/api/admin/ai/reports/promo-effectiveness");
+              const promoResponse = await fetch(
+                "/api/admin/ai/reports/promo-effectiveness",
+              );
               if (promoResponse.ok) {
                 const promoResult = await promoResponse.json();
                 setPromoData(promoResult.promo_effectiveness || []);
               } else {
-                setPromoData([{ used_promo: "SAVE10", avg_profit_usd: 23.45 }, { used_promo: "SAVE20", avg_profit_usd: 18.90 }]);
+                setPromoData([
+                  { used_promo: "SAVE10", avg_profit_usd: 23.45 },
+                  { used_promo: "SAVE20", avg_profit_usd: 18.9 },
+                ]);
               }
             } catch {
-              setPromoData([{ used_promo: "SAVE10", avg_profit_usd: 23.45 }, { used_promo: "SAVE20", avg_profit_usd: 18.90 }]);
+              setPromoData([
+                { used_promo: "SAVE10", avg_profit_usd: 23.45 },
+                { used_promo: "SAVE20", avg_profit_usd: 18.9 },
+              ]);
             }
             break;
 
@@ -313,7 +371,7 @@ price_rules:
         alert("Policy published successfully!");
         setPolicyValidation(null);
       } else {
-        alert(`Failed to publish policy: ${result.error || 'Unknown error'}`);
+        alert(`Failed to publish policy: ${result.error || "Unknown error"}`);
       }
     } catch (err) {
       console.error("Policy publish error:", err);
@@ -362,9 +420,7 @@ price_rules:
       {error && (
         <Alert>
           <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>
-            {error}
-          </AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 

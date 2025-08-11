@@ -9,29 +9,29 @@ const mockLiveData = {
       product_type: "flight",
       canonical_key: "FL:AI:DEL-BOM:2025-02-15",
       round_count: 2,
-      latest_offer: 145.50,
+      latest_offer: 145.5,
       latest_accept_prob: 0.73,
       is_accepted: false,
-      time_active_minutes: 3.2
+      time_active_minutes: 3.2,
     },
     {
-      session_id: "sess_002", 
+      session_id: "sess_002",
       product_type: "hotel",
       canonical_key: "HT:12345:DXB:DELUXE",
       round_count: 1,
-      latest_offer: 89.00,
+      latest_offer: 89.0,
       latest_accept_prob: 0.45,
       is_accepted: false,
-      time_active_minutes: 1.8
-    }
+      time_active_minutes: 1.8,
+    },
   ],
   performance: {
     active_sessions: 12,
     acceptance_rate: 0.68,
     avg_revenue_per_session: 142.33,
-    hourly_profit: 1250.45
+    hourly_profit: 1250.45,
   },
-  timestamp: new Date().toISOString()
+  timestamp: new Date().toISOString(),
 };
 
 const mockAirlineData = [
@@ -41,15 +41,15 @@ const mockAirlineData = [
     sessions: 45,
     accepted: 31,
     avg_price: 156.78,
-    avg_profit: 23.45
+    avg_profit: 23.45,
   },
   {
-    airline: "IndiGo", 
+    airline: "IndiGo",
     route: "BLR-DEL",
     sessions: 38,
     accepted: 24,
-    avg_price: 134.50,
-    avg_profit: 19.80
+    avg_price: 134.5,
+    avg_profit: 19.8,
   },
   {
     airline: "SpiceJet",
@@ -57,8 +57,8 @@ const mockAirlineData = [
     sessions: 22,
     accepted: 15,
     avg_price: 98.45,
-    avg_profit: 14.20
-  }
+    avg_profit: 14.2,
+  },
 ];
 
 const mockHotelData = [
@@ -67,8 +67,8 @@ const mockHotelData = [
     hotel_name: "Burj Al Arab",
     sessions: 28,
     accepted: 19,
-    avg_price: 450.00,
-    avg_profit: 67.50
+    avg_price: 450.0,
+    avg_profit: 67.5,
   },
   {
     city: "Mumbai",
@@ -76,7 +76,7 @@ const mockHotelData = [
     sessions: 35,
     accepted: 22,
     avg_price: 380.25,
-    avg_profit: 57.04
+    avg_profit: 57.04,
   },
   {
     city: "Delhi",
@@ -84,8 +84,8 @@ const mockHotelData = [
     sessions: 31,
     accepted: 18,
     avg_price: 320.75,
-    avg_profit: 48.11
-  }
+    avg_profit: 48.11,
+  },
 ];
 
 const mockElasticityData = [
@@ -94,7 +94,7 @@ const mockElasticityData = [
   { bucket: "10-15%", accept_rate: 0.45 },
   { bucket: "15-20%", accept_rate: 0.68 },
   { bucket: "20-25%", accept_rate: 0.82 },
-  { bucket: "25-30%", accept_rate: 0.91 }
+  { bucket: "25-30%", accept_rate: 0.91 },
 ];
 
 const mockPromoData = [
@@ -102,20 +102,20 @@ const mockPromoData = [
     used_promo: "SAVE10",
     avg_profit_usd: 23.45,
     total_redemptions: 156,
-    acceptance_rate: 0.72
+    acceptance_rate: 0.72,
   },
   {
-    used_promo: "SAVE20", 
-    avg_profit_usd: 18.90,
+    used_promo: "SAVE20",
+    avg_profit_usd: 18.9,
     total_redemptions: 89,
-    acceptance_rate: 0.68
+    acceptance_rate: 0.68,
   },
   {
     used_promo: "FLAT50",
-    avg_profit_usd: 31.20,
+    avg_profit_usd: 31.2,
     total_redemptions: 45,
-    acceptance_rate: 0.81
-  }
+    acceptance_rate: 0.81,
+  },
 ];
 
 // Live monitoring endpoint
@@ -123,21 +123,21 @@ router.get("/live", async (req, res) => {
   try {
     // In production, query real data from AI tables:
     // const sessions = await pool.query(`
-    //   SELECT * FROM ai.bargain_sessions 
-    //   WHERE status = 'active' 
+    //   SELECT * FROM ai.bargain_sessions
+    //   WHERE status = 'active'
     //   ORDER BY created_at DESC LIMIT 10
     // `);
-    
+
     res.json({
       success: true,
       data: mockLiveData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching live AI data:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch live data"
+      error: "Failed to fetch live data",
     });
   }
 });
@@ -147,17 +147,17 @@ router.get("/reports/airline-route", async (req, res) => {
   try {
     // In production, query materialized view:
     // const data = await pool.query(`SELECT * FROM ai.mv_airline_route_daily ORDER BY sessions DESC`);
-    
+
     res.json({
       success: true,
       data: mockAirlineData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching airline route data:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch airline route data"
+      error: "Failed to fetch airline route data",
     });
   }
 });
@@ -167,17 +167,17 @@ router.get("/reports/hotel-city", async (req, res) => {
   try {
     // In production, query materialized view:
     // const data = await pool.query(`SELECT * FROM ai.mv_hotel_city_daily ORDER BY sessions DESC`);
-    
+
     res.json({
       success: true,
       data: mockHotelData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching hotel city data:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch hotel city data"
+      error: "Failed to fetch hotel city data",
     });
   }
 });
@@ -186,40 +186,40 @@ router.get("/reports/hotel-city", async (req, res) => {
 router.get("/elasticity", async (req, res) => {
   try {
     const { product_type = "flight" } = req.query;
-    
+
     // In production, calculate real elasticity curves from bargain_events data
-    
+
     res.json({
       success: true,
       product_type,
       elasticity_data: mockElasticityData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching elasticity data:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch elasticity data"
+      error: "Failed to fetch elasticity data",
     });
   }
 });
 
-// Promo effectiveness reports  
+// Promo effectiveness reports
 router.get("/reports/promo-effectiveness", async (req, res) => {
   try {
     // In production, query materialized view:
     // const data = await pool.query(`SELECT * FROM ai.mv_promo_effectiveness ORDER BY total_redemptions DESC`);
-    
+
     res.json({
       success: true,
       promo_effectiveness: mockPromoData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching promo effectiveness data:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch promo effectiveness data"
+      error: "Failed to fetch promo effectiveness data",
     });
   }
 });
@@ -251,20 +251,20 @@ price_rules:
     max_discount_pct: 0.20
     hold_minutes: 15`,
         active: true,
-        created_at: new Date().toISOString()
-      }
+        created_at: new Date().toISOString(),
+      },
     ];
 
     res.json({
       success: true,
       policies: mockPolicies,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error fetching policies:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch policies"
+      error: "Failed to fetch policies",
     });
   }
 });
@@ -283,13 +283,13 @@ router.put("/policies", async (req, res) => {
     res.json({
       success: true,
       message: `Policy ${version} published successfully`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error publishing policy:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to publish policy"
+      error: "Failed to publish policy",
     });
   }
 });
@@ -298,7 +298,7 @@ router.put("/policies", async (req, res) => {
 router.post("/policies/validate", async (req, res) => {
   try {
     const { dsl_yaml } = req.body;
-    
+
     // Basic YAML validation (in production, use proper YAML parser)
     const isValid = dsl_yaml && dsl_yaml.includes("version:");
 
@@ -307,23 +307,23 @@ router.post("/policies/validate", async (req, res) => {
         success: true,
         valid: true,
         preview: {
-          min_price: 50.00,
-          max_price: 500.00,
-          discount_limit: 0.25
-        }
+          min_price: 50.0,
+          max_price: 500.0,
+          discount_limit: 0.25,
+        },
       });
     } else {
       res.json({
         success: false,
         valid: false,
-        errors: ["Invalid YAML format", "Missing version field"]
+        errors: ["Invalid YAML format", "Missing version field"],
       });
     }
   } catch (error) {
     console.error("Error validating policy:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to validate policy"
+      error: "Failed to validate policy",
     });
   }
 });
@@ -332,19 +332,19 @@ router.post("/policies/validate", async (req, res) => {
 router.post("/models/deploy", async (req, res) => {
   try {
     const { model_name, model_version } = req.body;
-    
+
     // In production, update ai.model_registry table
-    
+
     res.json({
       success: true,
       message: `Model ${model_name} v${model_version} deployed successfully`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Error deploying model:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to deploy model"
+      error: "Failed to deploy model",
     });
   }
 });

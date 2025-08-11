@@ -109,17 +109,17 @@ const API_CATEGORIES: APICategory[] = [
         auth_required: false,
         body_schema: {
           email: "string",
-          password: "string"
+          password: "string",
         },
         examples: [
           {
             name: "Standard Login",
             body: {
               email: "user@example.com",
-              password: "password123"
-            }
-          }
-        ]
+              password: "password123",
+            },
+          },
+        ],
       },
       {
         id: "auth_admin_login",
@@ -131,8 +131,8 @@ const API_CATEGORIES: APICategory[] = [
         auth_required: false,
         body_schema: {
           username: "string",
-          password: "string"
-        }
+          password: "string",
+        },
       },
       {
         id: "auth_refresh",
@@ -141,9 +141,9 @@ const API_CATEGORIES: APICategory[] = [
         url: "/api/auth/refresh",
         description: "Refresh access token",
         category: "auth",
-        auth_required: true
-      }
-    ]
+        auth_required: true,
+      },
+    ],
   },
   {
     id: "flights",
@@ -168,10 +168,10 @@ const API_CATEGORIES: APICategory[] = [
               destination: "BOM",
               departure: "2025-02-15",
               adults: 1,
-              cabin: "ECONOMY"
-            }
-          }
-        ]
+              cabin: "ECONOMY",
+            },
+          },
+        ],
       },
       {
         id: "flights_book",
@@ -184,14 +184,14 @@ const API_CATEGORIES: APICategory[] = [
         body_schema: {
           flight_id: "string",
           passengers: "array",
-          payment_details: "object"
-        }
-      }
-    ]
+          payment_details: "object",
+        },
+      },
+    ],
   },
   {
     id: "hotels",
-    name: "Hotel APIs", 
+    name: "Hotel APIs",
     description: "Hotel search, booking, and management",
     icon: Hotel,
     color: "bg-green-500",
@@ -212,10 +212,10 @@ const API_CATEGORIES: APICategory[] = [
               checkin: "2025-02-15",
               checkout: "2025-02-18",
               adults: 2,
-              rooms: 1
-            }
-          }
-        ]
+              rooms: 1,
+            },
+          },
+        ],
       },
       {
         id: "hotels_live",
@@ -224,9 +224,9 @@ const API_CATEGORIES: APICategory[] = [
         url: "/api/hotels-live",
         description: "Get real-time hotel rates",
         category: "hotels",
-        auth_required: false
-      }
-    ]
+        auth_required: false,
+      },
+    ],
   },
   {
     id: "bargain",
@@ -246,14 +246,14 @@ const API_CATEGORIES: APICategory[] = [
         body_schema: {
           user: {
             id: "string",
-            tier: "string"
+            tier: "string",
           },
           productCPO: {
             type: "string",
             canonical_key: "string",
             displayed_price: "number",
-            currency: "string"
-          }
+            currency: "string",
+          },
         },
         examples: [
           {
@@ -261,17 +261,17 @@ const API_CATEGORIES: APICategory[] = [
             body: {
               user: {
                 id: "user_123",
-                tier: "GOLD"
+                tier: "GOLD",
               },
               productCPO: {
                 type: "hotel",
                 canonical_key: "HT:12345:DXB:DELUXE",
                 displayed_price: 250,
-                currency: "USD"
-              }
-            }
-          }
-        ]
+                currency: "USD",
+              },
+            },
+          },
+        ],
       },
       {
         id: "bargain_offer",
@@ -283,10 +283,10 @@ const API_CATEGORIES: APICategory[] = [
         auth_required: true,
         body_schema: {
           session_id: "string",
-          user_offer: "number"
-        }
-      }
-    ]
+          user_offer: "number",
+        },
+      },
+    ],
   },
   {
     id: "ai_admin",
@@ -302,7 +302,7 @@ const API_CATEGORIES: APICategory[] = [
         url: "/api/admin/ai/live",
         description: "Get real-time AI system metrics",
         category: "ai_admin",
-        auth_required: true
+        auth_required: true,
       },
       {
         id: "ai_policies",
@@ -311,7 +311,7 @@ const API_CATEGORIES: APICategory[] = [
         url: "/api/admin/ai/policies",
         description: "Retrieve AI bargaining policies",
         category: "ai_admin",
-        auth_required: true
+        auth_required: true,
       },
       {
         id: "ai_policy_validate",
@@ -322,10 +322,10 @@ const API_CATEGORIES: APICategory[] = [
         category: "ai_admin",
         auth_required: true,
         body_schema: {
-          dsl_yaml: "string"
-        }
-      }
-    ]
+          dsl_yaml: "string",
+        },
+      },
+    ],
   },
   {
     id: "admin",
@@ -341,7 +341,7 @@ const API_CATEGORIES: APICategory[] = [
         url: "/api/admin-dashboard/stats",
         description: "Get admin dashboard statistics",
         category: "admin",
-        auth_required: true
+        auth_required: true,
       },
       {
         id: "admin_users",
@@ -350,9 +350,9 @@ const API_CATEGORIES: APICategory[] = [
         url: "/api/users",
         description: "Get user list",
         category: "admin",
-        auth_required: true
-      }
-    ]
+        auth_required: true,
+      },
+    ],
   },
   {
     id: "payments",
@@ -372,10 +372,10 @@ const API_CATEGORIES: APICategory[] = [
         body_schema: {
           amount: "number",
           currency: "string",
-          booking_id: "string"
-        }
-      }
-    ]
+          booking_id: "string",
+        },
+      },
+    ],
   },
   {
     id: "system",
@@ -391,7 +391,7 @@ const API_CATEGORIES: APICategory[] = [
         url: "/health",
         description: "System health status",
         category: "system",
-        auth_required: false
+        auth_required: false,
       },
       {
         id: "system_metrics",
@@ -400,16 +400,18 @@ const API_CATEGORIES: APICategory[] = [
         url: "/metrics",
         description: "Prometheus metrics",
         category: "system",
-        auth_required: false
-      }
-    ]
-  }
+        auth_required: false,
+      },
+    ],
+  },
 ];
 
 const APITestingDashboard: React.FC = () => {
   const [activeMainTab, setActiveMainTab] = useState("testing");
   const [selectedCategory, setSelectedCategory] = useState("auth");
-  const [selectedEndpoint, setSelectedEndpoint] = useState<APIEndpoint | null>(null);
+  const [selectedEndpoint, setSelectedEndpoint] = useState<APIEndpoint | null>(
+    null,
+  );
   const [requestUrl, setRequestUrl] = useState("");
   const [requestMethod, setRequestMethod] = useState<string>("GET");
   const [requestHeaders, setRequestHeaders] = useState("{}");
@@ -439,18 +441,18 @@ const APITestingDashboard: React.FC = () => {
     setSelectedEndpoint(endpoint);
     setRequestUrl(endpoint.url);
     setRequestMethod(endpoint.method);
-    
+
     // Set default headers
     const headers: any = {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
-    
+
     if (endpoint.auth_required && authToken) {
       headers["Authorization"] = `Bearer ${authToken}`;
     }
-    
+
     setRequestHeaders(JSON.stringify(headers, null, 2));
-    
+
     // Set example body if available
     if (endpoint.examples && endpoint.examples.length > 0) {
       const example = endpoint.examples[0];
@@ -461,51 +463,55 @@ const APITestingDashboard: React.FC = () => {
         setRequestParams(new URLSearchParams(example.params).toString());
       }
     } else {
-      setRequestBody(endpoint.body_schema ? JSON.stringify(endpoint.body_schema, null, 2) : "");
+      setRequestBody(
+        endpoint.body_schema
+          ? JSON.stringify(endpoint.body_schema, null, 2)
+          : "",
+      );
     }
   };
 
   const executeRequest = async () => {
     if (!requestUrl) return;
-    
+
     setLoading(true);
     setResponse(null);
-    
+
     try {
       let url = requestUrl;
       if (requestParams && requestMethod === "GET") {
         url += `?${requestParams}`;
       }
-      
+
       const headers = JSON.parse(requestHeaders || "{}");
-      
+
       const config: RequestInit = {
         method: requestMethod,
         headers: headers,
       };
-      
+
       if (requestMethod !== "GET" && requestBody) {
         config.body = requestBody;
       }
-      
+
       const startTime = Date.now();
       const response = await fetch(url, config);
       const endTime = Date.now();
-      
+
       const responseData = {
         status: response.status,
         statusText: response.statusText,
         headers: Object.fromEntries(response.headers.entries()),
         data: null,
-        time: endTime - startTime
+        time: endTime - startTime,
       };
-      
+
       try {
         responseData.data = await response.json();
       } catch {
         responseData.data = await response.text();
       }
-      
+
       setResponse(responseData);
     } catch (error: any) {
       setResponse({
@@ -513,7 +519,7 @@ const APITestingDashboard: React.FC = () => {
         statusText: "Network Error",
         headers: {},
         data: { error: error.message },
-        time: 0
+        time: 0,
       });
     } finally {
       setLoading(false);
@@ -533,9 +539,9 @@ const APITestingDashboard: React.FC = () => {
       headers: requestHeaders,
       body: requestBody,
       params: requestParams,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    
+
     const updated = [...savedRequests, request];
     setSavedRequests(updated);
     localStorage.setItem("api_test_requests", JSON.stringify(updated));
@@ -560,24 +566,36 @@ const APITestingDashboard: React.FC = () => {
     return "text-gray-600";
   };
 
-  const currentCategory = API_CATEGORIES.find(cat => cat.id === selectedCategory);
+  const currentCategory = API_CATEGORIES.find(
+    (cat) => cat.id === selectedCategory,
+  );
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">API Testing Dashboard</h1>
-          <p className="text-gray-600">Comprehensive API testing interface for all system endpoints</p>
+          <p className="text-gray-600">
+            Comprehensive API testing interface for all system endpoints
+          </p>
         </div>
         <div className="flex items-center space-x-2">
           <Badge variant="outline" className="bg-blue-50">
             <TestTube className="w-4 h-4 mr-1" />
-            {API_CATEGORIES.reduce((sum, cat) => sum + cat.endpoints.length, 0)} Endpoints
+            {API_CATEGORIES.reduce(
+              (sum, cat) => sum + cat.endpoints.length,
+              0,
+            )}{" "}
+            Endpoints
           </Badge>
         </div>
       </div>
 
-      <Tabs value={activeMainTab} onValueChange={setActiveMainTab} className="space-y-6">
+      <Tabs
+        value={activeMainTab}
+        onValueChange={setActiveMainTab}
+        className="space-y-6"
+      >
         <TabsList>
           <TabsTrigger value="testing">API Testing</TabsTrigger>
           <TabsTrigger value="documentation">Documentation</TabsTrigger>
@@ -601,7 +619,9 @@ const APITestingDashboard: React.FC = () => {
                   {API_CATEGORIES.map((category) => (
                     <Button
                       key={category.id}
-                      variant={selectedCategory === category.id ? "default" : "ghost"}
+                      variant={
+                        selectedCategory === category.id ? "default" : "ghost"
+                      }
                       className="w-full justify-start"
                       onClick={() => setSelectedCategory(category.id)}
                     >
@@ -623,23 +643,33 @@ const APITestingDashboard: React.FC = () => {
                       <currentCategory.icon className="w-5 h-5 mr-2" />
                       {currentCategory.name}
                     </CardTitle>
-                    <CardDescription>{currentCategory.description}</CardDescription>
+                    <CardDescription>
+                      {currentCategory.description}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
                     {currentCategory.endpoints.map((endpoint) => (
                       <div
                         key={endpoint.id}
                         className={`p-3 border rounded cursor-pointer hover:bg-gray-50 ${
-                          selectedEndpoint?.id === endpoint.id ? "bg-blue-50 border-blue-200" : ""
+                          selectedEndpoint?.id === endpoint.id
+                            ? "bg-blue-50 border-blue-200"
+                            : ""
                         }`}
                         onClick={() => selectEndpoint(endpoint)}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2">
                             <Badge
-                              variant={endpoint.method === "GET" ? "default" : 
-                                     endpoint.method === "POST" ? "destructive" :
-                                     endpoint.method === "PUT" ? "secondary" : "outline"}
+                              variant={
+                                endpoint.method === "GET"
+                                  ? "default"
+                                  : endpoint.method === "POST"
+                                    ? "destructive"
+                                    : endpoint.method === "PUT"
+                                      ? "secondary"
+                                      : "outline"
+                              }
                               className="text-xs"
                             >
                               {endpoint.method}
@@ -650,8 +680,12 @@ const APITestingDashboard: React.FC = () => {
                           </div>
                         </div>
                         <div className="mt-1">
-                          <div className="font-medium text-sm">{endpoint.name}</div>
-                          <div className="text-xs text-gray-500 font-mono">{endpoint.url}</div>
+                          <div className="font-medium text-sm">
+                            {endpoint.name}
+                          </div>
+                          <div className="text-xs text-gray-500 font-mono">
+                            {endpoint.url}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -672,7 +706,10 @@ const APITestingDashboard: React.FC = () => {
                 <CardContent className="space-y-4">
                   {/* URL and Method */}
                   <div className="flex space-x-2">
-                    <Select value={requestMethod} onValueChange={setRequestMethod}>
+                    <Select
+                      value={requestMethod}
+                      onValueChange={setRequestMethod}
+                    >
                       <SelectTrigger className="w-32">
                         <SelectValue />
                       </SelectTrigger>
@@ -691,7 +728,11 @@ const APITestingDashboard: React.FC = () => {
                       className="flex-1"
                     />
                     <Button onClick={executeRequest} disabled={loading}>
-                      {loading ? <Clock className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+                      {loading ? (
+                        <Clock className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Play className="w-4 h-4" />
+                      )}
                       {loading ? "Sending..." : "Send"}
                     </Button>
                   </div>
@@ -765,10 +806,12 @@ const APITestingDashboard: React.FC = () => {
                         <Badge className={getStatusColor(response.status)}>
                           {response.status} {response.statusText}
                         </Badge>
-                        <Badge variant="outline">
-                          {response.time}ms
-                        </Badge>
-                        <Button variant="outline" size="sm" onClick={copyResponse}>
+                        <Badge variant="outline">{response.time}ms</Badge>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={copyResponse}
+                        >
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
@@ -778,7 +821,9 @@ const APITestingDashboard: React.FC = () => {
                     <Tabs defaultValue="body">
                       <TabsList>
                         <TabsTrigger value="body">Response Body</TabsTrigger>
-                        <TabsTrigger value="headers">Response Headers</TabsTrigger>
+                        <TabsTrigger value="headers">
+                          Response Headers
+                        </TabsTrigger>
                       </TabsList>
 
                       <TabsContent value="body">
@@ -811,14 +856,18 @@ const APITestingDashboard: React.FC = () => {
                   Complete API Documentation
                 </CardTitle>
                 <CardDescription>
-                  Comprehensive documentation for all Faredown APIs including authentication, endpoints, parameters, and examples.
+                  Comprehensive documentation for all Faredown APIs including
+                  authentication, endpoints, parameters, and examples.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="text-center p-4 bg-blue-50 rounded">
                     <div className="font-semibold text-2xl text-blue-600">
-                      {API_CATEGORIES.reduce((sum, cat) => sum + cat.endpoints.length, 0)}
+                      {API_CATEGORIES.reduce(
+                        (sum, cat) => sum + cat.endpoints.length,
+                        0,
+                      )}
                     </div>
                     <div className="text-sm text-gray-600">Total Endpoints</div>
                   </div>
@@ -829,7 +878,9 @@ const APITestingDashboard: React.FC = () => {
                     <div className="text-sm text-gray-600">API Categories</div>
                   </div>
                   <div className="text-center p-4 bg-purple-50 rounded">
-                    <div className="font-semibold text-2xl text-purple-600">REST</div>
+                    <div className="font-semibold text-2xl text-purple-600">
+                      REST
+                    </div>
                     <div className="text-sm text-gray-600">API Type</div>
                   </div>
                 </div>
@@ -838,10 +889,20 @@ const APITestingDashboard: React.FC = () => {
                   <Key className="h-4 w-4" />
                   <AlertDescription>
                     <div className="space-y-1">
-                      <div><strong>Base URL:</strong> https://faredown-api.onrender.com</div>
-                      <div><strong>Authentication:</strong> Bearer token required for protected endpoints</div>
-                      <div><strong>Content-Type:</strong> application/json</div>
-                      <div><strong>Rate Limit:</strong> 100 requests per 15 minutes</div>
+                      <div>
+                        <strong>Base URL:</strong>{" "}
+                        https://faredown-api.onrender.com
+                      </div>
+                      <div>
+                        <strong>Authentication:</strong> Bearer token required
+                        for protected endpoints
+                      </div>
+                      <div>
+                        <strong>Content-Type:</strong> application/json
+                      </div>
+                      <div>
+                        <strong>Rate Limit:</strong> 100 requests per 15 minutes
+                      </div>
                     </div>
                   </AlertDescription>
                 </Alert>
@@ -861,13 +922,22 @@ const APITestingDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-8">
                     {category.endpoints.map((endpoint) => (
-                      <div key={endpoint.id} className="border-l-4 border-blue-500 pl-6 py-4">
+                      <div
+                        key={endpoint.id}
+                        className="border-l-4 border-blue-500 pl-6 py-4"
+                      >
                         {/* Endpoint Header */}
                         <div className="flex items-center space-x-3 mb-4">
                           <Badge
-                            variant={endpoint.method === "GET" ? "default" :
-                                   endpoint.method === "POST" ? "destructive" :
-                                   endpoint.method === "PUT" ? "secondary" : "outline"}
+                            variant={
+                              endpoint.method === "GET"
+                                ? "default"
+                                : endpoint.method === "POST"
+                                  ? "destructive"
+                                  : endpoint.method === "PUT"
+                                    ? "secondary"
+                                    : "outline"
+                            }
                             className="text-sm px-3 py-1"
                           >
                             {endpoint.method}
@@ -884,7 +954,9 @@ const APITestingDashboard: React.FC = () => {
                         <div className="space-y-6">
                           {/* Endpoint URL */}
                           <div>
-                            <h4 className="font-semibold mb-2 text-gray-700">Endpoint</h4>
+                            <h4 className="font-semibold mb-2 text-gray-700">
+                              Endpoint
+                            </h4>
                             <div className="bg-gray-900 text-green-400 p-4 rounded font-mono">
                               {endpoint.method} {endpoint.url}
                             </div>
@@ -892,55 +964,85 @@ const APITestingDashboard: React.FC = () => {
 
                           {/* Description */}
                           <div>
-                            <h4 className="font-semibold mb-2 text-gray-700">Description</h4>
-                            <p className="text-gray-700 text-base">{endpoint.description}</p>
+                            <h4 className="font-semibold mb-2 text-gray-700">
+                              Description
+                            </h4>
+                            <p className="text-gray-700 text-base">
+                              {endpoint.description}
+                            </p>
                           </div>
 
                           {/* Request Schema */}
                           {endpoint.body_schema && (
                             <div>
-                              <h4 className="font-semibold mb-2 text-gray-700">Request Body</h4>
+                              <h4 className="font-semibold mb-2 text-gray-700">
+                                Request Body
+                              </h4>
                               <div className="bg-gray-50 border p-4 rounded">
                                 <pre className="text-sm overflow-auto">
-                                  {JSON.stringify(endpoint.body_schema, null, 2)}
+                                  {JSON.stringify(
+                                    endpoint.body_schema,
+                                    null,
+                                    2,
+                                  )}
                                 </pre>
                               </div>
                             </div>
                           )}
 
                           {/* Examples */}
-                          {endpoint.examples && endpoint.examples.length > 0 && (
-                            <div>
-                              <h4 className="font-semibold mb-2 text-gray-700">Examples</h4>
-                              {endpoint.examples.map((example, idx) => (
-                                <div key={idx} className="border rounded mb-4">
-                                  <div className="bg-gray-100 px-4 py-2 border-b">
-                                    <span className="font-medium">
-                                      {example.name || `Example ${idx + 1}`}
-                                    </span>
+                          {endpoint.examples &&
+                            endpoint.examples.length > 0 && (
+                              <div>
+                                <h4 className="font-semibold mb-2 text-gray-700">
+                                  Examples
+                                </h4>
+                                {endpoint.examples.map((example, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="border rounded mb-4"
+                                  >
+                                    <div className="bg-gray-100 px-4 py-2 border-b">
+                                      <span className="font-medium">
+                                        {example.name || `Example ${idx + 1}`}
+                                      </span>
+                                    </div>
+                                    <div className="p-4">
+                                      <h5 className="font-medium mb-2">
+                                        Request:
+                                      </h5>
+                                      <pre className="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-auto mb-4">
+                                        {JSON.stringify(
+                                          example.body || example.params || {},
+                                          null,
+                                          2,
+                                        )}
+                                      </pre>
+                                      <h5 className="font-medium mb-2">
+                                        Response:
+                                      </h5>
+                                      <pre className="bg-gray-900 text-blue-400 p-3 rounded text-sm overflow-auto">
+                                        {JSON.stringify(
+                                          example.response || {
+                                            success: true,
+                                            data: "Response data here",
+                                            timestamp: "2025-01-15T10:30:00Z",
+                                          },
+                                          null,
+                                          2,
+                                        )}
+                                      </pre>
+                                    </div>
                                   </div>
-                                  <div className="p-4">
-                                    <h5 className="font-medium mb-2">Request:</h5>
-                                    <pre className="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-auto mb-4">
-                                      {JSON.stringify(example.body || example.params || {}, null, 2)}
-                                    </pre>
-                                    <h5 className="font-medium mb-2">Response:</h5>
-                                    <pre className="bg-gray-900 text-blue-400 p-3 rounded text-sm overflow-auto">
-                                      {JSON.stringify(example.response || {
-                                        success: true,
-                                        data: "Response data here",
-                                        timestamp: "2025-01-15T10:30:00Z"
-                                      }, null, 2)}
-                                    </pre>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                                ))}
+                              </div>
+                            )}
 
                           {/* Response Codes */}
                           <div>
-                            <h4 className="font-semibold mb-2 text-gray-700">Response Codes</h4>
+                            <h4 className="font-semibold mb-2 text-gray-700">
+                              Response Codes
+                            </h4>
                             <Table>
                               <TableHeader>
                                 <TableRow>
@@ -950,42 +1052,79 @@ const APITestingDashboard: React.FC = () => {
                               </TableHeader>
                               <TableBody>
                                 <TableRow>
-                                  <TableCell className="font-mono font-bold text-green-600">200</TableCell>
-                                  <TableCell>Success - Request completed successfully</TableCell>
+                                  <TableCell className="font-mono font-bold text-green-600">
+                                    200
+                                  </TableCell>
+                                  <TableCell>
+                                    Success - Request completed successfully
+                                  </TableCell>
                                 </TableRow>
                                 {endpoint.method === "POST" && (
                                   <TableRow>
-                                    <TableCell className="font-mono font-bold text-green-600">201</TableCell>
-                                    <TableCell>Created - Resource created successfully</TableCell>
+                                    <TableCell className="font-mono font-bold text-green-600">
+                                      201
+                                    </TableCell>
+                                    <TableCell>
+                                      Created - Resource created successfully
+                                    </TableCell>
                                   </TableRow>
                                 )}
                                 <TableRow>
-                                  <TableCell className="font-mono font-bold text-yellow-600">400</TableCell>
-                                  <TableCell>Bad Request - Invalid request parameters or body</TableCell>
+                                  <TableCell className="font-mono font-bold text-yellow-600">
+                                    400
+                                  </TableCell>
+                                  <TableCell>
+                                    Bad Request - Invalid request parameters or
+                                    body
+                                  </TableCell>
                                 </TableRow>
                                 {endpoint.auth_required && (
                                   <>
                                     <TableRow>
-                                      <TableCell className="font-mono font-bold text-red-600">401</TableCell>
-                                      <TableCell>Unauthorized - Missing or invalid authentication token</TableCell>
+                                      <TableCell className="font-mono font-bold text-red-600">
+                                        401
+                                      </TableCell>
+                                      <TableCell>
+                                        Unauthorized - Missing or invalid
+                                        authentication token
+                                      </TableCell>
                                     </TableRow>
                                     <TableRow>
-                                      <TableCell className="font-mono font-bold text-red-600">403</TableCell>
-                                      <TableCell>Forbidden - Insufficient permissions for this resource</TableCell>
+                                      <TableCell className="font-mono font-bold text-red-600">
+                                        403
+                                      </TableCell>
+                                      <TableCell>
+                                        Forbidden - Insufficient permissions for
+                                        this resource
+                                      </TableCell>
                                     </TableRow>
                                   </>
                                 )}
                                 <TableRow>
-                                  <TableCell className="font-mono font-bold text-red-600">404</TableCell>
-                                  <TableCell>Not Found - Requested resource does not exist</TableCell>
+                                  <TableCell className="font-mono font-bold text-red-600">
+                                    404
+                                  </TableCell>
+                                  <TableCell>
+                                    Not Found - Requested resource does not
+                                    exist
+                                  </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  <TableCell className="font-mono font-bold text-red-600">429</TableCell>
-                                  <TableCell>Too Many Requests - Rate limit exceeded</TableCell>
+                                  <TableCell className="font-mono font-bold text-red-600">
+                                    429
+                                  </TableCell>
+                                  <TableCell>
+                                    Too Many Requests - Rate limit exceeded
+                                  </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                  <TableCell className="font-mono font-bold text-red-600">500</TableCell>
-                                  <TableCell>Internal Server Error - Unexpected server error</TableCell>
+                                  <TableCell className="font-mono font-bold text-red-600">
+                                    500
+                                  </TableCell>
+                                  <TableCell>
+                                    Internal Server Error - Unexpected server
+                                    error
+                                  </TableCell>
                                 </TableRow>
                               </TableBody>
                             </Table>
@@ -1025,10 +1164,19 @@ const APITestingDashboard: React.FC = () => {
                 <div>
                   <h4 className="font-semibold mb-3">Getting Started</h4>
                   <ol className="list-decimal list-inside space-y-2">
-                    <li>Use the /api/auth/login endpoint to authenticate and receive a JWT token</li>
-                    <li>Include the token in the Authorization header for protected endpoints</li>
+                    <li>
+                      Use the /api/auth/login endpoint to authenticate and
+                      receive a JWT token
+                    </li>
+                    <li>
+                      Include the token in the Authorization header for
+                      protected endpoints
+                    </li>
                     <li>Format: Authorization: Bearer your-jwt-token-here</li>
-                    <li>Tokens expire after 24 hours - use the refresh endpoint before expiration</li>
+                    <li>
+                      Tokens expire after 24 hours - use the refresh endpoint
+                      before expiration
+                    </li>
                   </ol>
                 </div>
 
@@ -1039,30 +1187,45 @@ const APITestingDashboard: React.FC = () => {
                       <div>
                         <strong>Step 1: Login Request</strong>
                         <pre className="bg-gray-900 text-green-400 p-3 rounded mt-2 text-sm">
-POST /api/auth/login{'\n'}
-Content-Type: application/json{'\n\n'}
-{JSON.stringify({ email: "user@example.com", password: "password123" }, null, 2)}
+                          POST /api/auth/login{"\n"}
+                          Content-Type: application/json{"\n\n"}
+                          {JSON.stringify(
+                            {
+                              email: "user@example.com",
+                              password: "password123",
+                            },
+                            null,
+                            2,
+                          )}
                         </pre>
                       </div>
                       <div>
                         <strong>Step 2: Login Response</strong>
                         <pre className="bg-gray-900 text-blue-400 p-3 rounded mt-2 text-sm">
-{JSON.stringify({
-  success: true,
-  data: {
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    user: { id: "123", email: "user@example.com" },
-    expires_in: 86400
-  }
-}, null, 2)}
+                          {JSON.stringify(
+                            {
+                              success: true,
+                              data: {
+                                token:
+                                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                                user: { id: "123", email: "user@example.com" },
+                                expires_in: 86400,
+                              },
+                            },
+                            null,
+                            2,
+                          )}
                         </pre>
                       </div>
                       <div>
-                        <strong>Step 3: Use Token in Subsequent Requests</strong>
+                        <strong>
+                          Step 3: Use Token in Subsequent Requests
+                        </strong>
                         <pre className="bg-gray-900 text-green-400 p-3 rounded mt-2 text-sm">
-GET /api/protected-endpoint{'\n'}
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...{'\n'}
-Content-Type: application/json
+                          GET /api/protected-endpoint{"\n"}
+                          Authorization: Bearer
+                          eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...{"\n"}
+                          Content-Type: application/json
                         </pre>
                       </div>
                     </div>
@@ -1072,8 +1235,9 @@ Content-Type: application/json
                 <Alert>
                   <AlertTriangle className="h-4 w-4" />
                   <AlertDescription>
-                    <strong>Security Best Practices:</strong> Store tokens securely, never expose them in client-side code or logs,
-                    and implement proper token refresh logic before expiration.
+                    <strong>Security Best Practices:</strong> Store tokens
+                    securely, never expose them in client-side code or logs, and
+                    implement proper token refresh logic before expiration.
                   </AlertDescription>
                 </Alert>
               </CardContent>
@@ -1090,7 +1254,9 @@ Content-Type: application/json
               <CardContent>
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold mb-3">Rate Limits by Category</h4>
+                    <h4 className="font-semibold mb-3">
+                      Rate Limits by Category
+                    </h4>
                     <Table>
                       <TableHeader>
                         <TableRow>
@@ -1130,7 +1296,9 @@ Content-Type: application/json
                   </div>
 
                   <div>
-                    <h4 className="font-semibold mb-3">Development Best Practices</h4>
+                    <h4 className="font-semibold mb-3">
+                      Development Best Practices
+                    </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <h5 className="font-medium">Request Guidelines</h5>
@@ -1185,7 +1353,11 @@ Content-Type: application/json
                     variant="outline"
                     onClick={() => setShowAuthToken(!showAuthToken)}
                   >
-                    {showAuthToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showAuthToken ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </Button>
                   <Button onClick={saveAuthToken}>
                     <Save className="w-4 h-4 mr-2" />
@@ -1197,24 +1369,29 @@ Content-Type: application/json
               <Alert>
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  Your token will be automatically included in requests to endpoints that require authentication.
-                  To get a token, use the login endpoints in the Authentication category.
+                  Your token will be automatically included in requests to
+                  endpoints that require authentication. To get a token, use the
+                  login endpoints in the Authentication category.
                 </AlertDescription>
               </Alert>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">User Authentication</CardTitle>
+                    <CardTitle className="text-lg">
+                      User Authentication
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-gray-600 mb-4">
                       For customer-facing APIs like bookings and user data.
                     </p>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full"
-                      onClick={() => selectEndpoint(API_CATEGORIES[0].endpoints[0])}
+                      onClick={() =>
+                        selectEndpoint(API_CATEGORIES[0].endpoints[0])
+                      }
                     >
                       Try User Login
                     </Button>
@@ -1223,16 +1400,20 @@ Content-Type: application/json
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Admin Authentication</CardTitle>
+                    <CardTitle className="text-lg">
+                      Admin Authentication
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-gray-600 mb-4">
                       For admin APIs like AI management and system controls.
                     </p>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="w-full"
-                      onClick={() => selectEndpoint(API_CATEGORIES[0].endpoints[1])}
+                      onClick={() =>
+                        selectEndpoint(API_CATEGORIES[0].endpoints[1])
+                      }
                     >
                       Try Admin Login
                     </Button>
@@ -1260,7 +1441,9 @@ Content-Type: application/json
                 <div className="text-center py-8 text-gray-500">
                   <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                   <p>No saved requests yet</p>
-                  <p className="text-sm">Save requests from the API Testing tab</p>
+                  <p className="text-sm">
+                    Save requests from the API Testing tab
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -1276,7 +1459,9 @@ Content-Type: application/json
                         </Badge>
                         <div>
                           <div className="font-medium">{request.name}</div>
-                          <div className="text-sm text-gray-500 font-mono">{request.url}</div>
+                          <div className="text-sm text-gray-500 font-mono">
+                            {request.url}
+                          </div>
                         </div>
                       </div>
                       <div className="text-xs text-gray-500">
