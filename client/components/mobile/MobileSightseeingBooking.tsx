@@ -54,18 +54,20 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
   attraction,
   onBargain,
   onBookNow,
-  onBack
+  onBack,
+  initialTime = "",
+  initialTicketType = 0,
+  initialPassengers = { adults: 1, children: 0, infants: 0 },
+  onTimeChange,
+  onTicketTypeChange,
+  onPassengersChange
 }) => {
   const { formatPrice } = useCurrency();
-  
-  // State management
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [selectedTicketType, setSelectedTicketType] = useState<number>(0);
-  const [passengerQuantities, setPassengerQuantities] = useState({
-    adults: 1,
-    children: 0,
-    infants: 0
-  });
+
+  // State management - use parent state if provided
+  const [selectedTime, setSelectedTime] = useState<string>(initialTime);
+  const [selectedTicketType, setSelectedTicketType] = useState<number>(initialTicketType);
+  const [passengerQuantities, setPassengerQuantities] = useState(initialPassengers);
 
   // Helper functions
   const updatePassengerQuantity = (type: keyof typeof passengerQuantities, change: number) => {
