@@ -166,7 +166,7 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
                 <Button
                   key={index}
                   variant={selectedTime === time ? "default" : "outline"}
-                  onClick={() => setSelectedTime(time)}
+                  onClick={() => handleTimeSelect(time)}
                   className={cn(
                     "h-12 text-base font-medium rounded-xl",
                     selectedTime === time
