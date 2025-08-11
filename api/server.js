@@ -28,6 +28,7 @@ const bargainRoutes = require("./routes/bargain");
 const currencyRoutes = require("./routes/currency");
 const promoRoutes = require("./routes/promo");
 const analyticsRoutes = require("./routes/analytics");
+const dbTestRoutes = require("./routes/db-test");
 const paymentRoutes = require("./routes/payments");
 const cmsRoutes = require("./routes/cms");
 const testLiveRoutes = require("./routes/test-live");
