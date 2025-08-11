@@ -483,21 +483,21 @@ export function SightseeingCard({
                       handleViewDetails();
                     }}
                     style={{
-                      backgroundColor: "#003580",
+                      backgroundColor: "#ff6b00",
                       color: "#ffffff",
-                      border: "none",
-                      borderRadius: "6px",
+                      border: "2px solid #ff6b00",
+                      borderRadius: "8px",
                       padding: "14px 18px",
-                      fontWeight: "600",
+                      fontWeight: "700",
                       fontSize: "14px",
-                      minHeight: "44px",
+                      minHeight: "46px",
                       width: "100%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "6px",
+                      gap: "8px",
                       cursor: "pointer",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                      boxShadow: "0 3px 6px rgba(255,107,0,0.25)",
                     }}
                   >
                     <Eye size={14} />
