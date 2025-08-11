@@ -368,16 +368,7 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
           {/* Action Buttons */}
           <div className="flex gap-3">
             <Button
-              onClick={() => {
-                console.log("🚀 Bargain clicked!", {
-                  selectedTicketType,
-                  selectedTime,
-                  passengerQuantities,
-                  isValid: isBookingValid(),
-                  onBargain: typeof onBargain
-                });
-                onBargain(selectedTicketType);
-              }}
+              onClick={() => onBargain(selectedTicketType)}
               disabled={!isBookingValid()}
               className="flex-1 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-bold py-4 rounded-xl text-base shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
