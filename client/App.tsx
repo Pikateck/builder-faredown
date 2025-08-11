@@ -68,6 +68,7 @@ import UserManagement from "./pages/admin/UserManagement";
 import BargainEngine from "./pages/admin/BargainEngine";
 import PaymentDashboard from "./pages/admin/PaymentDashboard";
 import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
+import AIBargainingDashboard from "./pages/admin/AIBargainingDashboard";
 
 function App() {
   // Initialize bargain platform on app startup
