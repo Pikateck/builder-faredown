@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { initializeBargainPlatform } from "./services/bargainAppInit";
 import {
   BrowserRouter as Router,
   Routes,
@@ -69,6 +70,11 @@ import PaymentDashboard from "./pages/admin/PaymentDashboard";
 import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
 
 function App() {
+  // Initialize bargain platform on app startup
+  useEffect(() => {
+    initializeBargainPlatform();
+  }, []);
+
   return (
     <div className="App">
       <AuthProvider>
