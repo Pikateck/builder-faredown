@@ -92,12 +92,18 @@ export function SightseeingSearchForm() {
       currentState: { destination, destinationCode, isUserTyping },
     });
 
-    // Update all states
+    // Update all states immediately
     setDestination(fullName);
     setDestinationCode(dest.code || dest.id);
     setIsUserTyping(false);
     setInputValue("");
     setIsDestinationOpen(false);
+
+    // Force a re-render to ensure UI updates
+    setTimeout(() => {
+      setDestination(fullName);
+      console.log(`🔄 [${source}] Force refresh completed:`, fullName);
+    }, 10);
 
     console.log(`✅ [${source}] Destination selection completed:`, fullName);
   }, [destination, destinationCode, isUserTyping]);
@@ -138,7 +144,7 @@ export function SightseeingSearchForm() {
         );
       } catch (error) {
         console.error(
-          "⚠️ Failed to load popular destinations, using fallback:",
+          "⚠�� Failed to load popular destinations, using fallback:",
           error,
         );
         // Static fallback if database fails - EXACT HOTELS PATTERN
@@ -173,7 +179,7 @@ export function SightseeingSearchForm() {
             name: "New York",
             country: "United States",
             type: "city",
-            flag: "����🇸",
+            flag: "🇺🇸",
           },
           {
             id: "PAR",
