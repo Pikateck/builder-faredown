@@ -196,6 +196,14 @@ function App() {
                     path="/admin/testing"
                     element={<AdminTestingDashboard />}
                   />
+                  <Route
+                    path="/admin/AIBargainingDashboard"
+                    element={<AIBargainingDashboard />}
+                  />
+                  <Route
+                    path="/admin/ai-bargaining"
+                    element={<AIBargainingDashboard />}
+                  />
 
                   {/* Mobile App Routes */}
                   <Route path="/mobile" element={<MobileSplash />} />
