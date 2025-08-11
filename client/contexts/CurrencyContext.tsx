@@ -77,7 +77,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "¥",
     name: "Chinese Yuan",
     rate: 0.087,
-    flag: "🇨��",
+    flag: "🇨🇳",
     decimalPlaces: 2,
   },
   {
@@ -149,7 +149,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "HK$",
     name: "Hong Kong Dollar",
     rate: 0.095,
-    flag: "🇭����",
+    flag: "🇭🇰",
     decimalPlaces: 2,
   },
   {
@@ -328,7 +328,17 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   };
 
   const refreshRates = async () => {
+    // Throttle API calls - don't refresh more than once every 2 minutes
+    const now = Date.now();
+    const minInterval = 2 * 60 * 1000; // 2 minutes
+
+    if (now - lastRefreshTime < minInterval) {
+      console.log("💰 Currency refresh throttled, using cached rates");
+      return;
+    }
+
     try {
+      setLastRefreshTime(now);
       // Additional safety wrapper to prevent any unhandled errors
       await _refreshRatesInternal();
     } catch (error) {
