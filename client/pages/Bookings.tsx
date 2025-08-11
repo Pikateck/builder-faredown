@@ -557,7 +557,7 @@ const Bookings: React.FC = () => {
             <div className="space-y-6">
               <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
                 <div className="text-3xl">
-                  {selectedBooking.type === "flight" ? "✈️" : "🏨"}
+                  {selectedBooking.type === "flight" ? "✈��" : "🏨"}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">
@@ -878,6 +878,11 @@ const Bookings: React.FC = () => {
       {/* Ticket/Voucher Modal */}
       <Dialog open={ticketModal} onOpenChange={setTicketModal}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+          {selectedBooking && (
+            <div>
+              {console.log("Ticket modal opened for:", selectedBooking.type, selectedBooking)}
+            </div>
+          )}
           {selectedBooking && (
             <>
               {selectedBooking.type === "flight" && (
