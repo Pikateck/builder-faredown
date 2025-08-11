@@ -189,7 +189,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "R$",
     name: "Brazilian Real",
     rate: 0.072,
-    flag: "���🇷",
+    flag: "🇧🇷",
     decimalPlaces: 2,
   },
   {
@@ -349,6 +349,12 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       // Early exit if fetch is not available (shouldn't happen in modern browsers)
       if (typeof fetch === "undefined") {
         console.log("💰 Fetch API not available, using static rates");
+        return;
+      }
+
+      // Skip if we're in a problematic environment (e.g., with interfering browser extensions)
+      if (typeof window !== "undefined" && window.location?.hostname?.includes("fullstory")) {
+        console.log("💰 Detected analytics environment, using static rates");
         return;
       }
 
