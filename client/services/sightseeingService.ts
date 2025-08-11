@@ -208,6 +208,43 @@ class SightseeingService {
       throw error;
     }
   }
+
+  /**
+   * Calculate price for sightseeing activities
+   */
+  calculatePrice(
+    basePrice: number,
+    adults: number = 1,
+    children: number = 0,
+    currency: string = "INR"
+  ) {
+    const adultPrice = basePrice * adults;
+    const childPrice = basePrice * 0.7 * children; // 30% discount for children
+    const subtotal = adultPrice + childPrice;
+    const taxes = subtotal * 0.18; // 18% GST
+    const totalPrice = subtotal + taxes;
+
+    return {
+      adultPrice,
+      childPrice,
+      subtotal,
+      taxes,
+      totalPrice,
+      currency,
+      priceBreakdown: {
+        adults: {
+          count: adults,
+          pricePerPerson: basePrice,
+          total: adultPrice,
+        },
+        children: {
+          count: children,
+          pricePerPerson: basePrice * 0.7,
+          total: childPrice,
+        },
+      },
+    };
+  }
 }
 
 export const sightseeingService = new SightseeingService();
