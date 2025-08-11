@@ -752,6 +752,7 @@ const Bookings: React.FC = () => {
               <div className="grid grid-cols-1 gap-3">
                 <Button
                   onClick={() => {
+                    console.log("View Voucher clicked for booking:", selectedBooking);
                     setManageBookingModal(false);
                     setTicketModal(true);
                   }}
