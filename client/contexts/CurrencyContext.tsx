@@ -77,7 +77,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "¥",
     name: "Chinese Yuan",
     rate: 0.087,
-    flag: "🇨🇳",
+    flag: "🇨��",
     decimalPlaces: 2,
   },
   {
@@ -149,7 +149,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "HK$",
     name: "Hong Kong Dollar",
     rate: 0.095,
-    flag: "🇭🇰",
+    flag: "🇭����",
     decimalPlaces: 2,
   },
   {
@@ -236,6 +236,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   const [currencies, setCurrencies] = useState<Currency[]>(CURRENCIES);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [lastRefreshTime, setLastRefreshTime] = useState<number>(0);
 
   // Load user preference and live rates on mount
   useEffect(() => {
