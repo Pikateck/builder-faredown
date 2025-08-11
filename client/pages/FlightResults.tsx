@@ -3918,7 +3918,7 @@ export default function FlightResults() {
 
                                             const bargainItem =
                                               createFlightBargainItem({
-                                                id: flight.id,
+                                                id: flight.id.toString(),
                                                 airline: flight.airline,
                                                 route: {
                                                   from:
@@ -3934,6 +3934,11 @@ export default function FlightResults() {
                                                   flight.price?.amount ||
                                                   0,
                                               });
+
+                                            console.log(
+                                              "📱 Starting live API bargain (mobile):",
+                                              bargainItem,
+                                            );
 
                                             bargainHook.startBargain(
                                               bargainItem,
