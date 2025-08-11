@@ -15,7 +15,8 @@
     "deploy": "npm run build && npm start",
     "migrate:ai": "node database/run-ai-migration.js",
     "init:redis": "node scripts/init-redis.js",
-    "test:offerability": "node scripts/test-offerability.js"
+    "test:offerability": "node scripts/test-offerability.js",
+    "test:bargain-api": "node scripts/test-bargain-api.js"
   },
   "keywords": [
     "faredown",
