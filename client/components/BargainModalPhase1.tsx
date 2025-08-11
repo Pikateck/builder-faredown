@@ -304,7 +304,7 @@ export default function BargainModalPhase1({
   );
 
   const renderInitialStep = () => {
-    if (!pricingResult) return null;
+    if (!session) return null;
 
     const savingsInfo = getSavingsInfo();
 
@@ -314,22 +314,16 @@ export default function BargainModalPhase1({
         <Card className="border-blue-200 bg-blue-50">
           <CardContent className="p-6">
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-2">Current Price</p>
+              <p className="text-sm text-gray-600 mb-2">AI Initial Offer</p>
               <p className="text-3xl font-bold text-blue-600 mb-2">
-                {formatPriceNoDecimals(pricingResult.finalPrice)}
+                {formatPriceNoDecimals(session.initial_offer.price)}
               </p>
-              {pricingResult.promoDetails && (
+              {promoCode && (
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Badge className="bg-green-100 text-green-800">
                     <Sparkles className="w-3 h-3 mr-1" />
-                    Promo Applied: {pricingResult.promoDetails.code}
+                    Promo Applied: {promoCode}
                   </Badge>
-                  <span className="text-sm text-green-600">
-                    -
-                    {formatPriceNoDecimals(
-                      pricingResult.promoDetails.discountAmount,
-                    )}
-                  </span>
                 </div>
               )}
               <Button
@@ -339,65 +333,36 @@ export default function BargainModalPhase1({
                 className="text-xs"
               >
                 <Info className="w-3 h-3 mr-1" />
-                {showPricingDetails ? "Hide" : "Show"} Pricing Details
+                {showPricingDetails ? "Hide" : "Show"} Why This Price?
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Pricing Details (Phase 1 Logic) */}
+        {/* AI Explanation */}
         {showPricingDetails && (
           <Card className="border-gray-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm flex items-center gap-2">
                 <Calculator className="w-4 h-4" />
-                Phase 1 Bargain Engine Logic
+                AI Pricing Explanation
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <p className="text-blue-800">
+                  {session.initial_offer.explanation || session.explain || "AI has analyzed market conditions and demand patterns to suggest this optimal starting price."}
+                </p>
+              </div>
               <div className="grid gap-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Base Price:</span>
-                  <span>
-                    {formatPriceNoDecimals(pricingResult.originalPrice)}
-                  </span>
+                  <span className="text-gray-600">Minimum Floor:</span>
+                  <span>{formatPriceNoDecimals(session.min_floor)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">
-                    Markup (
-                    {pricingResult.markupDetails.markupPercentage.toFixed(2)}%):
-                  </span>
-                  <span>
-                    +
-                    {formatPriceNoDecimals(
-                      pricingResult.markupDetails.markupAmount,
-                    )}
-                  </span>
+                  <span className="text-gray-600">Your Target Range:</span>
+                  <span>{formatPriceNoDecimals(session.min_floor)} - {formatPriceNoDecimals(Math.round(session.initial_offer.price * 0.9))}</span>
                 </div>
-                {pricingResult.promoDetails && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Promo Discount:</span>
-                    <span>
-                      -
-                      {formatPriceNoDecimals(
-                        pricingResult.promoDetails.discountAmount,
-                      )}
-                    </span>
-                  </div>
-                )}
-                <hr className="my-2" />
-                <div className="flex justify-between font-semibold">
-                  <span>Final Price:</span>
-                  <span>{formatPriceNoDecimals(pricingResult.finalPrice)}</span>
-                </div>
-              </div>
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <p className="text-xs text-blue-800">
-                  <strong>Randomized Markup:</strong>{" "}
-                  {pricingResult.markupDetails.markupPercentage.toFixed(2)}%
-                  (Range: {pricingResult.markupDetails.markupRange.min}% -{" "}
-                  {pricingResult.markupDetails.markupRange.max}%)
-                </p>
               </div>
             </CardContent>
           </Card>
@@ -432,20 +397,11 @@ export default function BargainModalPhase1({
 
             <div className="bg-yellow-50 p-3 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>Bargain Range:</strong>{" "}
-                {formatPriceNoDecimals(
-                  pricingResult.bargainRange.minimumAcceptable,
-                )}{" "}
-                -{" "}
-                {formatPriceNoDecimals(
-                  pricingResult.bargainRange.maximumCounterOffer,
-                )}
+                <strong>AI Suggestion:</strong> Try offering around{" "}
+                {formatPriceNoDecimals(Math.round(session.initial_offer.price * 0.8))}
               </p>
               <p className="text-xs text-yellow-700 mt-1">
-                Recommended target:{" "}
-                {formatPriceNoDecimals(
-                  pricingResult.bargainRange.recommendedTarget,
-                )}
+                Minimum acceptable: {formatPriceNoDecimals(session.min_floor)}
               </p>
             </div>
 
@@ -457,18 +413,18 @@ export default function BargainModalPhase1({
 
             <Button
               onClick={handleUserOffer}
-              disabled={isNegotiating || !userOfferPrice}
+              disabled={isLoading || !userOfferPrice}
               className="w-full"
             >
-              {isNegotiating ? (
+              {isLoading ? (
                 <>
                   <Clock className="w-4 h-4 mr-2 animate-spin" />
-                  Processing Your Offer...
+                  AI is thinking...
                 </>
               ) : (
                 <>
                   <Zap className="w-4 h-4 mr-2" />
-                  Start Bargaining
+                  Submit Offer to AI
                 </>
               )}
             </Button>
@@ -479,7 +435,7 @@ export default function BargainModalPhase1({
   };
 
   const renderNegotiatingStep = () => {
-    if (!counterOfferResponse) return null;
+    if (!lastOffer) return null;
 
     const savingsInfo = getSavingsInfo();
 
@@ -521,9 +477,9 @@ export default function BargainModalPhase1({
                 </div>
               )}
 
-              {counterOfferResponse.counterOffer && !isCounterOfferExpired && (
+              {lastOffer.counter_offer && !isCounterOfferExpired && (
                 <p className="text-2xl font-bold text-orange-600 mb-2">
-                  {formatPriceNoDecimals(counterOfferResponse.counterOffer)}
+                  {formatPriceNoDecimals(lastOffer.counter_offer)}
                 </p>
               )}
 
@@ -532,7 +488,7 @@ export default function BargainModalPhase1({
               >
                 {isCounterOfferExpired
                   ? "This counter-offer has expired. You can make a new offer below."
-                  : counterOfferResponse.reasoning}
+                  : lastOffer.explain}
               </p>
             </div>
           </CardContent>
@@ -563,16 +519,19 @@ export default function BargainModalPhase1({
         )}
 
         {/* Action Buttons for Active Counter-Offer */}
-        {!isCounterOfferExpired && counterOfferResponse.counterOffer && (
+        {!isCounterOfferExpired && lastOffer.counter_offer && (
           <div className="flex gap-3">
             <Button
               onClick={handleAcceptCounterOffer}
               className="flex-1 bg-green-600 hover:bg-green-700"
-              disabled={isCounterOfferExpired}
+              disabled={isCounterOfferExpired || isLoading}
             >
-              <ThumbsUp className="w-4 h-4 mr-2" />
-              Accept Offer (₹
-              {formatPriceNoDecimals(counterOfferResponse.counterOffer)})
+              {isLoading ? (
+                <Clock className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <ThumbsUp className="w-4 h-4 mr-2" />
+              )}
+              Accept Offer (₹{formatPriceNoDecimals(lastOffer.counter_offer)})
             </Button>
             <Button
               onClick={handleRejectCounterOffer}
@@ -619,13 +578,13 @@ export default function BargainModalPhase1({
 
                 <Button
                   onClick={handleUserOffer}
-                  disabled={isNegotiating || !userOfferPrice}
+                  disabled={isLoading || !userOfferPrice}
                   className="w-full"
                 >
-                  {isNegotiating ? (
+                  {isLoading ? (
                     <>
                       <Clock className="w-4 h-4 mr-2 animate-spin" />
-                      Processing...
+                      AI is thinking...
                     </>
                   ) : (
                     <>
@@ -642,7 +601,7 @@ export default function BargainModalPhase1({
         <div className="text-center">
           <p className="text-sm text-gray-600">
             Attempts: {attemptCount}/3 •{" "}
-            {counterOfferResponse.nextRecommendation}
+            {lastOffer.explain || "Keep trying for better deals!"}
           </p>
           {usedPrices.size > 0 && (
             <p className="text-xs text-gray-500 mt-1">
@@ -655,10 +614,7 @@ export default function BargainModalPhase1({
   };
 
   const renderSuccessStep = () => {
-    const finalPrice =
-      counterOfferResponse?.finalPrice ||
-      counterOfferResponse?.counterOffer ||
-      parseFloat(userOfferPrice);
+    const finalPrice = lastOffer?.counter_offer || parseFloat(userOfferPrice) || session?.initial_offer?.price || 0;
     const savingsInfo = getSavingsInfo();
 
     return (
@@ -706,9 +662,9 @@ export default function BargainModalPhase1({
           We couldn't reach an agreement this time, but you can still book at
           the current price.
         </p>
-        {pricingResult && (
+        {session && (
           <p className="text-2xl font-bold text-blue-600">
-            {formatPriceNoDecimals(pricingResult.finalPrice)}
+            {formatPriceNoDecimals(session.initial_offer.price)}
           </p>
         )}
       </div>
