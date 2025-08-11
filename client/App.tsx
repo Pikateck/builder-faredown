@@ -205,6 +205,10 @@ function App() {
                     path="/admin/ai-bargaining"
                     element={<AIBargainingDashboard />}
                   />
+                  <Route
+                    path="/admin/api-testing"
+                    element={<APITestingDashboard />}
+                  />
 
                   {/* Mobile App Routes */}
                   <Route path="/mobile" element={<MobileSplash />} />
