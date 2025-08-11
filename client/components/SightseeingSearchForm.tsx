@@ -711,11 +711,30 @@ export function SightseeingSearchForm() {
                         <div
                           key={dest.id}
                           className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
-                          onPointerDown={(e) => {
+                          onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             const fullName = `${dest.name}, ${dest.country}`;
                             console.log(
                               "🎯 Sightseeing test destination selected:",
+                              {
+                                name: fullName,
+                                code: dest.code,
+                                type: dest.type,
+                              },
+                            );
+                            setDestination(fullName); // visible label
+                            setDestinationCode(dest.code); // hidden code
+                            setIsUserTyping(false);
+                            setInputValue("");
+                            setIsDestinationOpen(false);
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const fullName = `${dest.name}, ${dest.country}`;
+                            console.log(
+                              "🎯 [MOBILE] Sightseeing test destination selected:",
                               {
                                 name: fullName,
                                 code: dest.code,
