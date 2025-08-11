@@ -1,233 +1,266 @@
 #!/bin/bash
-# Master Validation Script for AI Bargaining Platform Go-Live
-# Runs all validation checks in sequence with pass/fail gates
+set -euo pipefail
 
-set -e
+# Master Validation Script - AI Bargaining Platform
+# Final production readiness gate - ALL TESTS MUST PASS
 
-# Colors for output
+echo "🚀 AI BARGAINING PLATFORM - MASTER VALIDATION SUITE"
+echo "===================================================="
+echo "Timestamp: $(date -u)"
+echo "Environment: ${NODE_ENV:-production}"
+echo "API URL: ${API_URL:-https://api.company.com}"
+echo ""
+
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Configuration
-API_HOST=${API_HOST:-localhost:3000}
-API_TOKEN=${API_TOKEN:-validation_token}
-DB_HOST=${DB_HOST:-localhost}
-REDIS_HOST=${REDIS_HOST:-localhost}
+# Validation results
+VALIDATION_RESULTS=()
+TOTAL_CHECKS=0
+PASSED_CHECKS=0
+FAILED_CHECKS=0
 
-echo -e "${BLUE}🚀 AI BARGAINING PLATFORM - GO-LIVE VALIDATION${NC}"
-echo "=================================================="
-echo "Target: $API_HOST"
-echo "Timestamp: $(date)"
-echo ""
-
-# Test results tracking
-TOTAL_TESTS=0
-PASSED_TESTS=0
-FAILED_TESTS=0
-CRITICAL_FAILURES=()
-
-# Function to run test and track results
-run_test() {
-    local test_name="$1"
-    local test_command="$2"
-    local is_critical="$3"
-    
-    echo -e "${BLUE}Running: $test_name${NC}"
-    TOTAL_TESTS=$((TOTAL_TESTS + 1))
-    
-    if eval "$test_command"; then
-        echo -e "${GREEN}✅ PASSED: $test_name${NC}"
-        PASSED_TESTS=$((PASSED_TESTS + 1))
-        return 0
-    else
-        echo -e "${RED}❌ FAILED: $test_name${NC}"
-        FAILED_TESTS=$((FAILED_TESTS + 1))
-        
-        if [ "$is_critical" = "true" ]; then
-            CRITICAL_FAILURES+=("$test_name")
-        fi
-        return 1
-    fi
-}
-
-# Function to check if service is running
-check_service() {
-    local service_name="$1"
+# Function to run validation check
+validate() {
+    local check_name="$1"
     local check_command="$2"
+    local is_critical="${3:-true}"
     
-    echo -e "${YELLOW}Checking $service_name...${NC}"
+    ((TOTAL_CHECKS++))
+    echo -e "\n${BLUE}[$TOTAL_CHECKS] Validating: $check_name${NC}"
+    echo "Command: $check_command"
     
-    if eval "$check_command" > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ $service_name is running${NC}"
+    if eval "$check_command" >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ PASS: $check_name${NC}"
+        VALIDATION_RESULTS+=("✅ $check_name")
+        ((PASSED_CHECKS++))
         return 0
     else
-        echo -e "${RED}❌ $service_name is not accessible${NC}"
+        if [[ "$is_critical" == "true" ]]; then
+            echo -e "${RED}❌ FAIL (CRITICAL): $check_name${NC}"
+            VALIDATION_RESULTS+=("❌ $check_name (CRITICAL)")
+        else
+            echo -e "${YELLOW}⚠️ WARN: $check_name${NC}"
+            VALIDATION_RESULTS+=("⚠️ $check_name (WARNING)")
+        fi
+        ((FAILED_CHECKS++))
         return 1
     fi
 }
 
-# Pre-flight checks
-echo -e "${YELLOW}📋 PRE-FLIGHT CHECKS${NC}"
-echo "===================="
+echo -e "${YELLOW}Starting comprehensive validation...${NC}"
 
-check_service "API Server" "curl -s -f http://$API_HOST/health"
-check_service "Redis" "redis-cli -h $REDIS_HOST ping"
-check_service "PostgreSQL" "pg_isready -h $DB_HOST"
-
-echo ""
-
-# 1. SMOKE TESTS (15-minute validation)
-echo -e "${YELLOW}🧪 SMOKE TESTS${NC}"
-echo "==============="
-
-run_test "API Smoke Test" "node api/scripts/smoke-test.js" true
-
-# Check if smoke test generated results
-if [ -f "smoke-test-results.json" ]; then
-    P95_LATENCY=$(node -p "JSON.parse(require('fs').readFileSync('smoke-test-results.json')).latency.p95")
-    if (( $(echo "$P95_LATENCY < 300" | bc -l) )); then
-        echo -e "${GREEN}✅ P95 Latency: ${P95_LATENCY}ms < 300ms${NC}"
-    else
-        echo -e "${RED}❌ P95 Latency: ${P95_LATENCY}ms >= 300ms${NC}"
-        CRITICAL_FAILURES+=("High Latency")
-    fi
-fi
-
-echo ""
-
-# 2. FLOOR ENFORCEMENT CHECK
-echo -e "${YELLOW}🛡️ NEVER-LOSS VALIDATION${NC}"
-echo "=========================="
-
-run_test "Floor Enforcement Check" "psql -h $DB_HOST -d faredown -f api/scripts/floor-enforcement-check.sql | grep 'below_floor_count.*0'" true
-
-echo ""
-
-# 3. PERFORMANCE VALIDATION
-echo -e "${YELLOW}⚡ PERFORMANCE VALIDATION${NC}"
-echo "========================="
-
-# Cache warming
-run_test "Cache Warming" "node api/scripts/cache-warmer.js" false
-
-# Load testing (if k6 is available)
-if command -v k6 &> /dev/null; then
-    run_test "Load Test (150 VUs, 3min)" "k6 run --duration 3m --vus 150 api/scripts/load-test.js" true
-else
-    echo -e "${YELLOW}⏭️ SKIPPED: k6 not installed for load testing${NC}"
-fi
-
-echo ""
-
-# 4. FUNCTIONAL QA MATRIX
-echo -e "${YELLOW}🔍 FUNCTIONAL QA TESTS${NC}"
+# 1. DATABASE VALIDATION
+echo -e "\n🗄️ DATABASE VALIDATION"
 echo "======================"
 
-run_test "Functional QA Matrix" "node api/scripts/qa-test-runner.js" true
+validate "Database connectivity" \
+    "psql \"\$DATABASE_URL\" -c 'SELECT 1;'"
 
-echo ""
+validate "AI schema exists" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT 1 FROM information_schema.schemata WHERE schema_name = 'ai'\" | grep -q '1'"
 
-# 5. MONITORING SETUP
-echo -e "${YELLOW}📊 MONITORING SETUP${NC}"
-echo "==================="
+validate "Required tables present (15+)" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'ai'\" | awk '{if(\$1 >= 15) exit 0; else exit 1}'"
 
-run_test "Monitoring Configuration" "node api/scripts/monitoring-setup.js" false
+validate "Materialized views present (3+)" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM pg_matviews WHERE schemaname = 'ai'\" | awk '{if(\$1 >= 3) exit 0; else exit 1}'"
 
-echo ""
+validate "Never-loss function exists" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT 1 FROM pg_proc WHERE proname = 'assert_never_loss'\" | grep -q '1'"
 
-# 6. SEED & REFRESH (Dashboard Demo)
-echo -e "${YELLOW}🌱 DASHBOARD PREPARATION${NC}"
-echo "========================"
+validate "Active models in registry (2+)" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.model_registry WHERE is_active = true\" | awk '{if(\$1 >= 2) exit 0; else exit 1}'"
 
-run_test "Seed & Refresh for Demo" "node api/scripts/seed-refresh.js" false
+validate "Supplier policies loaded (3+)" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.policies WHERE is_active = true\" | awk '{if(\$1 >= 3) exit 0; else exit 1}'"
 
-echo ""
+validate "Zero never-loss violations" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.bargain_events e JOIN LATERAL (SELECT MAX(counter_price) AS final_price FROM ai.bargain_events e2 WHERE e2.session_id = e.session_id) f ON TRUE WHERE e.accepted IS TRUE AND f.final_price < e.true_cost_usd\" | grep -q '^0$'"
 
-# 7. HEALTH CHECK VALIDATION
-echo -e "${YELLOW}💊 HEALTH CHECK VALIDATION${NC}"
-echo "==========================="
+# 2. REDIS VALIDATION
+echo -e "\n🔴 REDIS VALIDATION"
+echo "=================="
 
-# Test all health endpoints
-run_test "Basic Health Check" "curl -s -f http://$API_HOST/health | grep 'healthy'" true
-run_test "Bargain Health Check" "curl -s -f http://$API_HOST/health/bargain | grep 'healthy'" true
+validate "Redis connectivity" \
+    "curl -s -f \"\$API_URL/api/cache/health\" | jq -e '.redis_connected == true'"
 
-# Check Redis cache hit rate
-CACHE_HIT_RATE=$(redis-cli -h $REDIS_HOST eval "
-local hits = redis.call('get', 'cache:hits') or 0
-local misses = redis.call('get', 'cache:misses') or 0
-local total = hits + misses
-if total > 0 then
-    return (hits / total) * 100
-else
-    return 0
-end
-" 0 2>/dev/null || echo "0")
+validate "Redis TTL configuration" \
+    "curl -s \"\$API_URL/api/cache/config\" | jq -e '.ttl_policies.RATES == 300'"
 
-if (( $(echo "$CACHE_HIT_RATE > 70" | bc -l) )); then
-    echo -e "${GREEN}✅ Cache Hit Rate: ${CACHE_HIT_RATE}% > 70%${NC}"
-else
-    echo -e "${YELLOW}⚠️ Cache Hit Rate: ${CACHE_HIT_RATE}% < 70% (consider warming)${NC}"
-fi
+validate "Cache hit rate >= 85%" \
+    "curl -s \"\$API_URL/api/cache/stats\" | jq -e '.hit_rate >= 0.85'"
 
-echo ""
+# 3. API VALIDATION  
+echo -e "\n🌐 API VALIDATION"
+echo "================"
 
-# 8. FEATURE FLAGS CHECK
-echo -e "${YELLOW}🚩 FEATURE FLAGS VALIDATION${NC}"
+validate "API health endpoint" \
+    "curl -s -f \"\$API_URL/api/health\" | jq -e '.status == \"healthy\"'"
+
+validate "Metrics endpoint responding" \
+    "curl -s -f \"\$API_URL/metrics\" | grep -q 'bargain_response_seconds'"
+
+validate "Bargain API session start <300ms" \
+    "timeout 30 bash -c '
+        start=\$(date +%s%N)
+        curl -s -H \"Authorization: Bearer \$AUTH_TOKEN\" -H \"Content-Type: application/json\" \
+        -d \"{\\\"user\\\":{\\\"id\\\":\\\"val-u1\\\",\\\"tier\\\":\\\"GOLD\\\"},\\\"productCPO\\\":{\\\"type\\\":\\\"hotel\\\",\\\"canonical_key\\\":\\\"HT:12345:DLX:BRD-BB:CXL-FLEX\\\",\\\"displayed_price\\\":142,\\\"currency\\\":\\\"USD\\\"}}\" \
+        \"\$API_URL/api/bargain/v1/session/start\" >/dev/null
+        end=\$(date +%s%N)
+        duration=\$(((\$end - \$start) / 1000000))
+        if [[ \$duration -lt 300 ]]; then exit 0; else exit 1; fi
+    '"
+
+validate "Feature flags responding" \
+    "curl -s -f \"\$API_URL/api/feature-flags\" | jq -e 'has(\"AI_TRAFFIC\")'"
+
+# 4. SUPPLIER FABRIC VALIDATION
+echo -e "\n🏭 SUPPLIER FABRIC VALIDATION"
 echo "============================"
 
-# Check that critical flags are set correctly
-AI_ENABLED=$(redis-cli -h $REDIS_HOST get feature_flag_AI_KILL_SWITCH 2>/dev/null || echo "false")
-TRAFFIC_PCT=$(redis-cli -h $REDIS_HOST get feature_flag_AI_TRAFFIC 2>/dev/null || echo "0")
+validate "Recent rate snapshots (last 10min)" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.supplier_rates WHERE updated_at > NOW() - INTERVAL '10 minutes'\" | awk '{if(\$1 > 0) exit 0; else exit 1}'"
 
-if [ "$AI_ENABLED" = "false" ] || [ "$AI_ENABLED" = "" ]; then
-    echo -e "${GREEN}✅ AI Kill Switch: OFF (ready for traffic)${NC}"
-else
-    echo -e "${RED}❌ AI Kill Switch: ON (blocks all traffic)${NC}"
-    CRITICAL_FAILURES+=("AI Kill Switch Enabled")
-fi
+validate "Amadeus adapter functional" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.supplier_rates WHERE supplier_id = 'amadeus' AND updated_at > NOW() - INTERVAL '1 hour'\" | awk '{if(\$1 > 0) exit 0; else exit 1}'"
 
-echo -e "${BLUE}ℹ️ Traffic Percentage: ${TRAFFIC_PCT}${NC}"
+validate "Hotelbeds adapter functional" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.supplier_rates WHERE supplier_id = 'hotelbeds' AND updated_at > NOW() - INTERVAL '1 hour'\" | awk '{if(\$1 > 0) exit 0; else exit 1}'"
 
+# 5. MONITORING VALIDATION
+echo -e "\n📊 MONITORING VALIDATION"
+echo "======================="
+
+validate "Prometheus alerts loaded" \
+    "curl -s -f \"http://prometheus:9090/api/v1/rules\" | jq -e '.data.groups[] | select(.name == \"bargain-slo\")'"
+
+validate "Grafana dashboard accessible" \
+    "curl -s -f \"http://grafana:3000/api/health\" | jq -e '.database == \"ok\"'" \
+    "false"
+
+validate "Alertmanager configured" \
+    "curl -s -f \"http://alertmanager:9093/api/v1/status\" | jq -e '.data.uptime'" \
+    "false"
+
+# 6. LOAD TEST VALIDATION
+echo -e "\n⚡ LOAD TEST VALIDATION"
+echo "======================"
+
+validate "k6 load test passes SLA" \
+    "cd \$(dirname \$0) && k6 run --quiet load-test.js | grep -q 'passed_sla.*true'"
+
+# 7. SECURITY VALIDATION
+echo -e "\n🔒 SECURITY VALIDATION"
+echo "====================="
+
+validate "No secrets in environment response" \
+    "! curl -s \"\$API_URL/api/health\" | grep -i -E '(password|secret|key|token)'"
+
+validate "HTTPS enforced" \
+    "curl -s -I \"\$API_URL/api/health\" | grep -q 'Strict-Transport-Security'"
+
+validate "Rate limiting configured" \
+    "curl -s -I \"\$API_URL/api/bargain/v1/session/start\" | grep -q 'X-RateLimit'" \
+    "false"
+
+# 8. BUSINESS LOGIC VALIDATION
+echo -e "\n💼 BUSINESS LOGIC VALIDATION"
+echo "============================"
+
+validate "Offerability engine responding" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.offerability_cache WHERE updated_at > NOW() - INTERVAL '1 hour'\" | awk '{if(\$1 > 0) exit 0; else exit 1}'"
+
+validate "Model inference working" \
+    "curl -s \"\$API_URL/metrics\" | grep -q 'bargain_model_infer_ms'"
+
+validate "Policy engine active" \
+    "psql \"\$DATABASE_URL\" -tAc \"SELECT COUNT(*) FROM ai.policy_evaluations WHERE created_at > NOW() - INTERVAL '1 hour'\" | awk '{if(\$1 > 0) exit 0; else exit 1}'" \
+    "false"
+
+# 9. FINAL SMOKE TEST
+echo -e "\n🔥 FINAL SMOKE TEST"
+echo "=================="
+
+validate "Complete bargain flow (end-to-end)" \
+    "bash \$(dirname \$0)/smoke-tests.sh | grep -q 'ALL SMOKE TESTS PASSED'"
+
+# RESULTS SUMMARY
+echo ""
+echo "=============================================="
+echo "🎯 VALIDATION SUMMARY"
+echo "=============================================="
+echo "Total Checks: $TOTAL_CHECKS"
+echo "Passed: $PASSED_CHECKS"
+echo "Failed: $FAILED_CHECKS"
 echo ""
 
-# FINAL REPORT
-echo -e "${BLUE}📊 VALIDATION SUMMARY${NC}"
-echo "====================="
-echo "Total Tests: $TOTAL_TESTS"
-echo -e "Passed: ${GREEN}$PASSED_TESTS${NC}"
-echo -e "Failed: ${RED}$FAILED_TESTS${NC}"
+echo "Detailed Results:"
+for result in "${VALIDATION_RESULTS[@]}"; do
+    echo "  $result"
+done
 
-if [ ${#CRITICAL_FAILURES[@]} -eq 0 ]; then
+echo ""
+echo "=============================================="
+
+# Final decision
+CRITICAL_FAILURES=$(echo "${VALIDATION_RESULTS[@]}" | grep -c "CRITICAL" || true)
+
+if [[ $FAILED_CHECKS -eq 0 ]]; then
+    echo -e "${GREEN}"
+    echo "██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗"
+    echo "██╔══██╗██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝"
+    echo "██████╔╝█████╗  ███████║██║  ██║ ╚████╔╝ "
+    echo "██╔══██╗██╔══╝  ██╔══██║██║  ██║  ╚██╔╝  "
+    echo "██║  ██║███████╗██║  ██║██████╔╝   ██║   "
+    echo "╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝    ╚═╝   "
     echo ""
-    echo -e "${GREEN}🎉 ALL CRITICAL VALIDATIONS PASSED${NC}"
-    echo -e "${GREEN}✅ READY FOR PRODUCTION ROLLOUT${NC}"
+    echo "███████╗ ██████╗ ██████╗     ██████╗ ██████╗  ██████╗ ██████╗ ██╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗"
+    echo "██╔════╝██╔═══██╗██╔══██╗    ██╔══██╗██╔══██╗██╔═══██╗██╔══██╗██║   ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║"
+    echo "█████╗  ██║   ██║██████╔╝    ██████╔╝██████╔╝██║   ██║██║  ██║██║   ██║██║        ██║   ██║██║   ██║██╔██╗ ██║"
+    echo "██╔══╝  ██║   ██║██╔══██╗    ██╔═══╝ ██╔══██╗██║   ██║██║  ██║██║   ██║██║        ██║   ██║██║   ██║██║╚██╗██║"
+    echo "██║     ╚██████╔╝██║  ██║    ██║     ██║  ██║╚██████╔╝██████╔╝╚██████╔╝╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║"
+    echo "╚═╝      ╚═════╝ ╚═╝  ╚═╝    ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝"
     echo ""
-    echo "Recommended next steps:"
-    echo "1. Start with Shadow mode (24h): AI_SHADOW=true, AI_TRAFFIC=0"
-    echo "2. Monitor for 24h, then move to 10% traffic"
-    echo "3. Gradually increase: 10% → 50% → 100%"
-    echo "4. Keep auto-rollback enabled"
+    echo "██████╗  ██████╗ ██╗     ██╗      ██████╗ ██╗   ██╗████████╗"
+    echo "██╔══██╗██╔═══██╗██║     ██║     ██╔═══██╗██║   ██║╚══██╔══╝"
+    echo "██████╔╝██║   ██║██║     ██║     ██║   ██║██║   ██║   ██║   "
+    echo "██╔══██╗██║   ██║██║     ██║     ██║   ██║██║   ██║   ██║   "
+    echo "██║  ██║╚██████╔╝███████╗███████╗╚��█████╔╝╚██████╔╝   ██║   "
+    echo "╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝   "
+    echo -e "${NC}"
     echo ""
-    echo -e "${BLUE}Shadow mode command:${NC}"
-    echo "curl -X POST http://$API_HOST/api/admin/feature-flags \\"
-    echo "     -H 'Content-Type: application/json' \\"
-    echo "     -d '{\"AI_SHADOW\":true,\"AI_TRAFFIC\":0}'"
+    echo "🎉 ALL VALIDATION CHECKS PASSED!"
+    echo "🚀 System is READY FOR PRODUCTION ROLLOUT!"
+    echo ""
+    echo "Next steps:"
+    echo "1. Set AI_TRAFFIC=0.1 for 10% rollout"
+    echo "2. Monitor SLA metrics for 1 hour"
+    echo "3. Gradually increase to 50% then 100%"
+    echo "4. Celebrate successful deployment! 🎊"
     
     exit 0
-else
-    echo ""
-    echo -e "${RED}❌ CRITICAL FAILURES DETECTED${NC}"
-    echo -e "${RED}🚫 NOT READY FOR PRODUCTION${NC}"
-    echo ""
-    echo "Critical issues that must be resolved:"
-    for failure in "${CRITICAL_FAILURES[@]}"; do
-        echo -e "${RED}  • $failure${NC}"
-    done
-    echo ""
-    echo "Please fix these issues and re-run validation."
     
+elif [[ $CRITICAL_FAILURES -eq 0 ]]; then
+    echo -e "${YELLOW}⚠️ VALIDATION COMPLETED WITH WARNINGS${NC}"
+    echo "Non-critical issues found but system may proceed"
+    echo "Review warnings before production rollout"
+    exit 0
+    
+else
+    echo -e "${RED}❌ VALIDATION FAILED${NC}"
+    echo "$CRITICAL_FAILURES critical issues must be resolved"
+    echo "System is NOT ready for production rollout"
+    echo ""
+    echo "Failed checks:"
+    for result in "${VALIDATION_RESULTS[@]}"; do
+        if [[ "$result" == *"❌"* ]]; then
+            echo "  $result"
+        fi
+    done
     exit 1
 fi
