@@ -3,8 +3,9 @@
  * Connects existing bargain UI to live API endpoints
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { authService } from "@/services/authService";
+import { bargainPerformanceService } from "@/services/bargainPerformanceService";
 
 // Types matching the live API
 export interface BargainUser {
@@ -87,22 +88,22 @@ const captureSignals = (): BargainSignals => {
 
 // Start bargain session on first interaction
 export async function startBargain(
-  user: BargainUser, 
-  productCPO: BargainProductCPO, 
+  user: BargainUser,
+  productCPO: BargainProductCPO,
   promo?: string
 ): Promise<BargainSessionStartResponse> {
   const token = authService.getToken();
-  
-  const res = await fetch('/api/bargain/v1/session/start', {
+
+  const res = await bargainPerformanceService.enhancedFetch('/api/bargain/v1/session/start', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token ? `Bearer ${token}` : ''
     },
-    body: JSON.stringify({ 
-      user, 
-      productCPO, 
-      promo_code: promo 
+    body: JSON.stringify({
+      user,
+      productCPO,
+      promo_code: promo
     })
   });
 
@@ -116,21 +117,21 @@ export async function startBargain(
 
 // Send user offer / get counter
 export async function sendOffer(
-  sessionId: string, 
+  sessionId: string,
   userOffer?: number
 ): Promise<BargainOfferResponse> {
   const token = authService.getToken();
-  
-  const res = await fetch('/api/bargain/v1/session/offer', {
+
+  const res = await bargainPerformanceService.enhancedFetch('/api/bargain/v1/session/offer', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token ? `Bearer ${token}` : ''
     },
-    body: JSON.stringify({ 
-      session_id: sessionId, 
-      user_offer: userOffer, 
-      signals: captureSignals() 
+    body: JSON.stringify({
+      session_id: sessionId,
+      user_offer: userOffer,
+      signals: captureSignals()
     })
   });
 
@@ -145,8 +146,8 @@ export async function sendOffer(
 // Accept flow (with inventory reprice handling)
 export async function acceptOffer(sessionId: string): Promise<BargainAcceptResponse> {
   const token = authService.getToken();
-  
-  const res = await fetch('/api/bargain/v1/session/accept', {
+
+  const res = await bargainPerformanceService.enhancedFetch('/api/bargain/v1/session/accept', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -174,6 +175,11 @@ export function useBargain() {
   const [error, setError] = useState<string | null>(null);
   const [session, setSession] = useState<BargainSessionStartResponse | null>(null);
   const [lastOffer, setLastOffer] = useState<BargainOfferResponse | null>(null);
+
+  // Initialize performance service
+  useEffect(() => {
+    bargainPerformanceService.init();
+  }, []);
 
   const startBargainSession = useCallback(async (
     productCPO: BargainProductCPO,
@@ -279,7 +285,10 @@ export function useBargain() {
     hasActiveSession: !!session,
     currentPrice: lastOffer?.counter_offer || session?.initial_offer?.price,
     minFloor: lastOffer?.min_floor || session?.min_floor,
-    explanation: lastOffer?.explain || session?.explain || session?.initial_offer?.explanation
+    explanation: lastOffer?.explain || session?.explain || session?.initial_offer?.explanation,
+
+    // Performance metrics
+    getPerformanceStats: () => bargainPerformanceService.getPerformanceStats()
   };
 }
 
