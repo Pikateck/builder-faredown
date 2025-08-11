@@ -157,7 +157,7 @@ export function SightseeingCard({
     <>
       <div
         className={cn(
-          "bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group mb-4",
+          "bg-white rounded-lg border-2 border-gray-200 overflow-hidden hover:shadow-xl hover:border-[#003580] transition-all duration-300 cursor-pointer group mb-4",
           className,
         )}
         onClick={handleViewDetails}
