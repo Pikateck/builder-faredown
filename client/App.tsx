@@ -209,6 +209,10 @@ function App() {
                     path="/admin/api-testing"
                     element={<APITestingDashboard />}
                   />
+                  <Route
+                    path="/admin/APITestingDashboard"
+                    element={<APITestingDashboard />}
+                  />
 
                   {/* Mobile App Routes */}
                   <Route path="/mobile" element={<MobileSplash />} />
