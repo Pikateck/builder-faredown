@@ -224,6 +224,7 @@ app.use("/api/reports", authenticateToken, reportsRoutes);
 app.use("/api/suppliers", authenticateToken, suppliersRoutes);
 app.use("/api/vouchers", voucherRoutes);
 app.use("/api/admin/bookings", adminBookingsRoutes);
+app.use("/api/db-test", dbTestRoutes);
 app.use(
   "/api/admin/sightseeing",
   authenticateToken,
