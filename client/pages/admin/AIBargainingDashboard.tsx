@@ -673,12 +673,12 @@ const AIBargainingDashboard: React.FC = () => {
                     className="flex items-center justify-between p-2 bg-gray-50 rounded"
                   >
                     <div>
-                      {row.airline} {row.origin}→{row.dest}
+                      {row.airline} {row.route}
                     </div>
                     <div className="flex space-x-4 text-sm">
-                      <span>{row.offers} offers</span>
-                      <span>{row.accept_rate_pct}% accept</span>
-                      <span>{formatCurrency(row.profit_usd || 0)} profit</span>
+                      <span>{row.sessions} sessions</span>
+                      <span>{row.accepted} accepted</span>
+                      <span>{formatCurrency(row.avg_profit || 0)} profit</span>
                     </div>
                   </div>
                 ))}
