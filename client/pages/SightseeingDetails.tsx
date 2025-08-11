@@ -573,6 +573,12 @@ export default function SightseeingDetails() {
         onBargain={handleBargainClick}
         onBookNow={handleBookNow}
         onBack={handleBackToResults}
+        initialTime={selectedTime}
+        initialTicketType={selectedTicketType}
+        initialPassengers={passengerQuantities}
+        onTimeChange={setSelectedTime}
+        onTicketTypeChange={setSelectedTicketType}
+        onPassengersChange={setPassengerQuantities}
       />
     );
   }
