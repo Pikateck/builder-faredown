@@ -952,6 +952,7 @@ export function SightseeingSearchForm() {
           setSelectedReturnDate={(date) => setCheckOutDate(date)}
           selectingDeparture={true}
           setSelectingDeparture={() => {}}
+          bookingType="hotels"
         />
       </div>
     </>
