@@ -21,6 +21,7 @@ import SupplierManagement from "./SupplierManagement";
 import LoyaltyManagement from "./LoyaltyManagement";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
 import AIBargainingDashboard from "./AIBargainingDashboard";
+import APITestingDashboard from "./APITestingDashboard";
 import { supplierService } from "@/services/supplierService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
