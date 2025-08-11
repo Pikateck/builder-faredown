@@ -972,7 +972,7 @@ export default function SightseeingDetails() {
                     </div>
                     {selectedTime && (
                       <div className="mt-2 text-sm text-green-600 font-medium">
-                        ��� Selected: {selectedTime}
+                        ✓ Selected: {selectedTime}
                       </div>
                     )}
                   </div>
