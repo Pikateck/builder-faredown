@@ -802,54 +802,359 @@ const APITestingDashboard: React.FC = () => {
 
         {/* Documentation Tab */}
         <TabsContent value="documentation">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            {/* API Overview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Complete API Documentation
+                </CardTitle>
+                <CardDescription>
+                  Comprehensive documentation for all Faredown APIs including authentication, endpoints, parameters, and examples.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="text-center p-4 bg-blue-50 rounded">
+                    <div className="font-semibold text-2xl text-blue-600">
+                      {API_CATEGORIES.reduce((sum, cat) => sum + cat.endpoints.length, 0)}
+                    </div>
+                    <div className="text-sm text-gray-600">Total Endpoints</div>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded">
+                    <div className="font-semibold text-2xl text-green-600">
+                      {API_CATEGORIES.length}
+                    </div>
+                    <div className="text-sm text-gray-600">API Categories</div>
+                  </div>
+                  <div className="text-center p-4 bg-purple-50 rounded">
+                    <div className="font-semibold text-2xl text-purple-600">REST</div>
+                    <div className="text-sm text-gray-600">API Type</div>
+                  </div>
+                </div>
+
+                <Alert className="mb-6">
+                  <Key className="h-4 w-4" />
+                  <AlertDescription>
+                    <div className="space-y-1">
+                      <div><strong>Base URL:</strong> https://faredown-api.onrender.com</div>
+                      <div><strong>Authentication:</strong> Bearer token required for protected endpoints</div>
+                      <div><strong>Content-Type:</strong> application/json</div>
+                      <div><strong>Rate Limit:</strong> 100 requests per 15 minutes</div>
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+
+            {/* Detailed API Documentation by Category */}
             {API_CATEGORIES.map((category) => (
               <Card key={category.id}>
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <category.icon className="w-5 h-5 mr-2" />
-                    {category.name}
+                    {category.name} API Reference
                   </CardTitle>
                   <CardDescription>{category.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-8">
                     {category.endpoints.map((endpoint) => (
-                      <Collapsible key={endpoint.id}>
-                        <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-gray-50 rounded">
-                          <div className="flex items-center space-x-2">
-                            <Badge variant="outline" className="text-xs">
-                              {endpoint.method}
+                      <div key={endpoint.id} className="border-l-4 border-blue-500 pl-6 py-4">
+                        {/* Endpoint Header */}
+                        <div className="flex items-center space-x-3 mb-4">
+                          <Badge
+                            variant={endpoint.method === "GET" ? "default" :
+                                   endpoint.method === "POST" ? "destructive" :
+                                   endpoint.method === "PUT" ? "secondary" : "outline"}
+                            className="text-sm px-3 py-1"
+                          >
+                            {endpoint.method}
+                          </Badge>
+                          <h3 className="font-bold text-xl">{endpoint.name}</h3>
+                          {endpoint.auth_required && (
+                            <Badge variant="destructive">
+                              <Lock className="w-3 h-3 mr-1" />
+                              Auth Required
                             </Badge>
-                            <span className="font-medium">{endpoint.name}</span>
-                            {endpoint.auth_required && (
-                              <Lock className="w-3 h-3 text-gray-500" />
-                            )}
-                          </div>
-                          <ChevronDown className="w-4 h-4" />
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="px-2 py-2">
-                          <div className="space-y-2 text-sm">
-                            <div className="font-mono text-xs bg-gray-100 p-2 rounded">
-                              {endpoint.url}
+                          )}
+                        </div>
+
+                        <div className="space-y-6">
+                          {/* Endpoint URL */}
+                          <div>
+                            <h4 className="font-semibold mb-2 text-gray-700">Endpoint</h4>
+                            <div className="bg-gray-900 text-green-400 p-4 rounded font-mono">
+                              {endpoint.method} {endpoint.url}
                             </div>
-                            <p className="text-gray-600">{endpoint.description}</p>
-                            {endpoint.examples && endpoint.examples.length > 0 && (
-                              <div>
-                                <strong>Example:</strong>
-                                <pre className="bg-gray-50 p-2 rounded text-xs mt-1">
-                                  {JSON.stringify(endpoint.examples[0], null, 2)}
+                          </div>
+
+                          {/* Description */}
+                          <div>
+                            <h4 className="font-semibold mb-2 text-gray-700">Description</h4>
+                            <p className="text-gray-700 text-base">{endpoint.description}</p>
+                          </div>
+
+                          {/* Request Schema */}
+                          {endpoint.body_schema && (
+                            <div>
+                              <h4 className="font-semibold mb-2 text-gray-700">Request Body</h4>
+                              <div className="bg-gray-50 border p-4 rounded">
+                                <pre className="text-sm overflow-auto">
+                                  {JSON.stringify(endpoint.body_schema, null, 2)}
                                 </pre>
                               </div>
-                            )}
+                            </div>
+                          )}
+
+                          {/* Examples */}
+                          {endpoint.examples && endpoint.examples.length > 0 && (
+                            <div>
+                              <h4 className="font-semibold mb-2 text-gray-700">Examples</h4>
+                              {endpoint.examples.map((example, idx) => (
+                                <div key={idx} className="border rounded mb-4">
+                                  <div className="bg-gray-100 px-4 py-2 border-b">
+                                    <span className="font-medium">
+                                      {example.name || `Example ${idx + 1}`}
+                                    </span>
+                                  </div>
+                                  <div className="p-4">
+                                    <h5 className="font-medium mb-2">Request:</h5>
+                                    <pre className="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-auto mb-4">
+                                      {JSON.stringify(example.body || example.params || {}, null, 2)}
+                                    </pre>
+                                    <h5 className="font-medium mb-2">Response:</h5>
+                                    <pre className="bg-gray-900 text-blue-400 p-3 rounded text-sm overflow-auto">
+                                      {JSON.stringify(example.response || {
+                                        success: true,
+                                        data: "Response data here",
+                                        timestamp: "2025-01-15T10:30:00Z"
+                                      }, null, 2)}
+                                    </pre>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Response Codes */}
+                          <div>
+                            <h4 className="font-semibold mb-2 text-gray-700">Response Codes</h4>
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead className="w-20">Code</TableHead>
+                                  <TableHead>Description</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="font-mono font-bold text-green-600">200</TableCell>
+                                  <TableCell>Success - Request completed successfully</TableCell>
+                                </TableRow>
+                                {endpoint.method === "POST" && (
+                                  <TableRow>
+                                    <TableCell className="font-mono font-bold text-green-600">201</TableCell>
+                                    <TableCell>Created - Resource created successfully</TableCell>
+                                  </TableRow>
+                                )}
+                                <TableRow>
+                                  <TableCell className="font-mono font-bold text-yellow-600">400</TableCell>
+                                  <TableCell>Bad Request - Invalid request parameters or body</TableCell>
+                                </TableRow>
+                                {endpoint.auth_required && (
+                                  <>
+                                    <TableRow>
+                                      <TableCell className="font-mono font-bold text-red-600">401</TableCell>
+                                      <TableCell>Unauthorized - Missing or invalid authentication token</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell className="font-mono font-bold text-red-600">403</TableCell>
+                                      <TableCell>Forbidden - Insufficient permissions for this resource</TableCell>
+                                    </TableRow>
+                                  </>
+                                )}
+                                <TableRow>
+                                  <TableCell className="font-mono font-bold text-red-600">404</TableCell>
+                                  <TableCell>Not Found - Requested resource does not exist</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-mono font-bold text-red-600">429</TableCell>
+                                  <TableCell>Too Many Requests - Rate limit exceeded</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="font-mono font-bold text-red-600">500</TableCell>
+                                  <TableCell>Internal Server Error - Unexpected server error</TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
                           </div>
-                        </CollapsibleContent>
-                      </Collapsible>
+
+                          {/* Test Button */}
+                          <div className="pt-4 border-t">
+                            <Button
+                              variant="default"
+                              onClick={() => {
+                                setActiveMainTab("testing");
+                                selectEndpoint(endpoint);
+                              }}
+                              className="w-full sm:w-auto"
+                            >
+                              <Play className="w-4 h-4 mr-2" />
+                              Test This Endpoint
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
             ))}
+
+            {/* Authentication Guide */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Key className="w-5 h-5 mr-2" />
+                  Authentication Guide
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h4 className="font-semibold mb-3">Getting Started</h4>
+                  <ol className="list-decimal list-inside space-y-2">
+                    <li>Use the /api/auth/login endpoint to authenticate and receive a JWT token</li>
+                    <li>Include the token in the Authorization header for protected endpoints</li>
+                    <li>Format: Authorization: Bearer your-jwt-token-here</li>
+                    <li>Tokens expire after 24 hours - use the refresh endpoint before expiration</li>
+                  </ol>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-3">Authentication Flow</h4>
+                  <div className="bg-gray-50 p-4 rounded border">
+                    <div className="space-y-4">
+                      <div>
+                        <strong>Step 1: Login Request</strong>
+                        <pre className="bg-gray-900 text-green-400 p-3 rounded mt-2 text-sm">
+POST /api/auth/login{'\n'}
+Content-Type: application/json{'\n\n'}
+{JSON.stringify({ email: "user@example.com", password: "password123" }, null, 2)}
+                        </pre>
+                      </div>
+                      <div>
+                        <strong>Step 2: Login Response</strong>
+                        <pre className="bg-gray-900 text-blue-400 p-3 rounded mt-2 text-sm">
+{JSON.stringify({
+  success: true,
+  data: {
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    user: { id: "123", email: "user@example.com" },
+    expires_in: 86400
+  }
+}, null, 2)}
+                        </pre>
+                      </div>
+                      <div>
+                        <strong>Step 3: Use Token in Subsequent Requests</strong>
+                        <pre className="bg-gray-900 text-green-400 p-3 rounded mt-2 text-sm">
+GET /api/protected-endpoint{'\n'}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...{'\n'}
+Content-Type: application/json
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Alert>
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Security Best Practices:</strong> Store tokens securely, never expose them in client-side code or logs,
+                    and implement proper token refresh logic before expiration.
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+
+            {/* Rate Limiting */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Clock className="w-5 h-5 mr-2" />
+                  Rate Limiting & Guidelines
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold mb-3">Rate Limits by Category</h4>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Endpoint Category</TableHead>
+                          <TableHead>Rate Limit</TableHead>
+                          <TableHead>Time Window</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>Authentication</TableCell>
+                          <TableCell>5 requests</TableCell>
+                          <TableCell>15 minutes</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Search APIs (Flights/Hotels)</TableCell>
+                          <TableCell>100 requests</TableCell>
+                          <TableCell>15 minutes</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Booking APIs</TableCell>
+                          <TableCell>50 requests</TableCell>
+                          <TableCell>15 minutes</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>AI/Bargain APIs</TableCell>
+                          <TableCell>30 requests</TableCell>
+                          <TableCell>15 minutes</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell>Admin APIs</TableCell>
+                          <TableCell>200 requests</TableCell>
+                          <TableCell>15 minutes</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold mb-3">Development Best Practices</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <h5 className="font-medium">Request Guidelines</h5>
+                        <ul className="text-sm space-y-1 list-disc list-inside">
+                          <li>Always include proper error handling</li>
+                          <li>Use appropriate HTTP methods</li>
+                          <li>Set reasonable request timeouts (30s)</li>
+                          <li>Implement exponential backoff for retries</li>
+                        </ul>
+                      </div>
+                      <div className="space-y-2">
+                        <h5 className="font-medium">Security Guidelines</h5>
+                        <ul className="text-sm space-y-1 list-disc list-inside">
+                          <li>Always use HTTPS in production</li>
+                          <li>Validate input data before sending</li>
+                          <li>Store tokens securely</li>
+                          <li>Implement proper CORS policies</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
 
