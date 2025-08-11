@@ -937,11 +937,9 @@ export function SightseeingSearchForm() {
           selectedDepartureDate={checkInDate || null}
           selectedReturnDate={checkOutDate || null}
           setSelectedDepartureDate={(date) => {
-            console.log("Sightseeing: Setting check-in date:", date);
             setCheckInDate(date || undefined);
           }}
           setSelectedReturnDate={(date) => {
-            console.log("Sightseeing: Setting check-out date:", date);
             setCheckOutDate(date || undefined);
           }}
           selectingDeparture={true}
