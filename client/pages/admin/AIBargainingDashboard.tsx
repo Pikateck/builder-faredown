@@ -306,6 +306,16 @@ const AIBargainingDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Status Alert */}
+      {error && (
+        <Alert>
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            {error}
+          </AlertDescription>
+        </Alert>
+      )}
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-6 lg:grid-cols-11 gap-1 h-auto">
           <TabsTrigger value="live-monitor" className="text-xs">
