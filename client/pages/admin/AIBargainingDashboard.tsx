@@ -91,19 +91,47 @@ const AIBargainingDashboard: React.FC = () => {
     const fetchLiveData = async () => {
       try {
         const response = await fetch("/api/admin/ai/live");
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
         const data = await response.json();
         setLiveData(data);
+        setError(null);
         setLoading(false);
       } catch (err) {
-        setError("Failed to fetch live data");
+        console.warn("API not available, using mock data:", err.message);
+        // Provide fallback mock data when API is not available
+        setLiveData({
+          data: {
+            sessions: [
+              {
+                session_id: "sess_demo_001",
+                product_type: "flight",
+                canonical_key: "FL:AI:DEL-BOM:2025-02-15",
+                round_count: 2,
+                latest_offer: 145.50,
+                latest_accept_prob: 0.73,
+                is_accepted: false,
+                time_active_minutes: 3.2
+              }
+            ],
+            performance: {
+              active_sessions: 5,
+              acceptance_rate: 0.68,
+              avg_revenue_per_session: 142.33,
+              hourly_profit: 650.45
+            }
+          }
+        });
+        setError(`API offline - showing demo data (${err.message})`);
         setLoading(false);
       }
     };
 
     fetchLiveData();
 
-    // Auto-refresh every 3 seconds
-    const interval = autoRefresh ? setInterval(fetchLiveData, 3000) : null;
+    // Auto-refresh every 10 seconds (reduced frequency to avoid spam)
+    const interval = autoRefresh ? setInterval(fetchLiveData, 10000) : null;
     return () => {
       if (interval) clearInterval(interval);
     };
