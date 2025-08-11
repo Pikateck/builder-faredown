@@ -733,46 +733,12 @@ export function SightseeingSearchForm() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            const fullName = `${dest.name}, ${dest.country}`;
-                            console.log(
-                              "🎯 [CLICK] Sightseeing test destination selected:",
-                              {
-                                name: fullName,
-                                code: dest.code,
-                                type: dest.type,
-                                currentDestination: destination,
-                                isUserTyping,
-                              },
-                            );
-                            setDestination(fullName); // visible label
-                            setDestinationCode(dest.code); // hidden code
-                            setIsUserTyping(false);
-                            setInputValue("");
-                            setIsDestinationOpen(false);
-                            // Force component update
-                            console.log("🔄 State updated - destination should now show:", fullName);
+                            selectDestination(dest, "POPULAR_CLICK");
                           }}
                           onTouchEnd={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            const fullName = `${dest.name}, ${dest.country}`;
-                            console.log(
-                              "🎯 [TOUCH] Sightseeing test destination selected:",
-                              {
-                                name: fullName,
-                                code: dest.code,
-                                type: dest.type,
-                                currentDestination: destination,
-                                isUserTyping,
-                              },
-                            );
-                            setDestination(fullName); // visible label
-                            setDestinationCode(dest.code); // hidden code
-                            setIsUserTyping(false);
-                            setInputValue("");
-                            setIsDestinationOpen(false);
-                            // Force component update
-                            console.log("🔄 [TOUCH] State updated - destination should now show:", fullName);
+                            selectDestination(dest, "POPULAR_TOUCH");
                           }}
                         >
                           {/* Elegant location icon */}
