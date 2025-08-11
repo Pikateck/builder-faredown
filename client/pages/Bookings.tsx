@@ -752,7 +752,6 @@ const Bookings: React.FC = () => {
               <div className="grid grid-cols-1 gap-3">
                 <Button
                   onClick={() => {
-                    console.log("View Voucher clicked for booking:", selectedBooking);
                     setManageBookingModal(false);
                     setTicketModal(true);
                   }}
@@ -1008,7 +1007,7 @@ const Bookings: React.FC = () => {
                     selectedBooking.type === "flight"
                       ? `${selectedBooking.route} • ${selectedBooking.date} ${selectedBooking.time}`
                       : selectedBooking.type === "hotel"
-                        ? `${selectedBooking.location} ��� ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
+                        ? `${selectedBooking.location} • ${selectedBooking.checkIn} to ${selectedBooking.checkOut}`
                         : `${selectedBooking.location || "Dubai, UAE"} • ${selectedBooking.date || selectedBooking.visitDate}`,
                   totalAmount: selectedBooking.totalAmount,
                   currency: "₹",
