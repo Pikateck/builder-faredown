@@ -637,7 +637,7 @@ export default function SightseeingDetails() {
               rating: attraction.rating,
               image: attraction.images[0],
             }}
-            isOpen={isBargainModalOpen}
+            isOpen={isBargainModalOpen || false}
             onClose={() => setIsBargainModalOpen(false)}
             onBargainSuccess={handleBargainSuccess}
           />
