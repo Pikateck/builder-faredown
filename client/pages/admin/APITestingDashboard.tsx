@@ -407,6 +407,7 @@ const API_CATEGORIES: APICategory[] = [
 ];
 
 const APITestingDashboard: React.FC = () => {
+  const [activeMainTab, setActiveMainTab] = useState("testing");
   const [selectedCategory, setSelectedCategory] = useState("auth");
   const [selectedEndpoint, setSelectedEndpoint] = useState<APIEndpoint | null>(null);
   const [requestUrl, setRequestUrl] = useState("");
