@@ -48,7 +48,10 @@ class SightseeingService {
           popularOnly: query === "", // Popular when empty query
         });
       } catch (apiError) {
-        console.warn("❌ Sightseeing destinations API request failed:", apiError);
+        console.warn(
+          "❌ Sightseeing destinations API request failed:",
+          apiError,
+        );
         return this.getFallbackDestinations(query);
       }
 
@@ -66,7 +69,10 @@ class SightseeingService {
       // Check if destinations data exists
       const destinationsData = response.data.data?.destinations;
       if (!destinationsData || !Array.isArray(destinationsData)) {
-        console.warn("❌ Sightseeing destinations data is invalid:", response.data.data);
+        console.warn(
+          "❌ Sightseeing destinations data is invalid:",
+          response.data.data,
+        );
         return this.getFallbackDestinations(query);
       }
 
@@ -81,7 +87,7 @@ class SightseeingService {
       }));
 
       console.log(
-        `✅ Found ${destinations.length} sightseeing destinations from API`
+        `✅ Found ${destinations.length} sightseeing destinations from API`,
       );
       return destinations;
     } catch (error) {
@@ -94,7 +100,7 @@ class SightseeingService {
    * Fallback destinations when API fails
    */
   private getFallbackDestinations(
-    query: string = ""
+    query: string = "",
   ): SightseeingDestination[] {
     const fallbackDestinations: SightseeingDestination[] = [
       {
@@ -177,7 +183,7 @@ class SightseeingService {
         (dest) =>
           dest.name.toLowerCase().includes(query.toLowerCase()) ||
           dest.country.toLowerCase().includes(query.toLowerCase()) ||
-          dest.code.toLowerCase().includes(query.toLowerCase())
+          dest.code.toLowerCase().includes(query.toLowerCase()),
       );
       return filtered.slice(0, 15); // Fixed limit like hotels
     }
@@ -216,7 +222,7 @@ class SightseeingService {
     basePrice: number,
     adults: number = 1,
     children: number = 0,
-    currency: string = "INR"
+    currency: string = "INR",
   ) {
     const adultPrice = basePrice * adults;
     const childPrice = basePrice * 0.7 * children; // 30% discount for children

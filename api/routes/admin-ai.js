@@ -3,21 +3,24 @@
  * Backend endpoints for AI Bargaining Dashboard
  */
 
-const express = require('express');
-const { Pool } = require('pg');
-const redisService = require('../services/redisService');
-const policyParser = require('../services/policyParser');
-const offerabilityEngine = require('../services/offerabilityEngine');
-const scoringEngine = require('../services/scoringEngine');
-const supplierAdapterManager = require('../services/adapters/supplierAdapterManager');
-const yaml = require('js-yaml');
+const express = require("express");
+const { Pool } = require("pg");
+const redisService = require("../services/redisService");
+const policyParser = require("../services/policyParser");
+const offerabilityEngine = require("../services/offerabilityEngine");
+const scoringEngine = require("../services/scoringEngine");
+const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
+const yaml = require("js-yaml");
 
 const router = express.Router();
 
 // Database connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 // ==========================================
@@ -28,7 +31,7 @@ const pool = new Pool({
  * GET /api/admin/ai/live
  * Real-time session monitoring
  */
-router.get('/live', async (req, res) => {
+router.get("/live", async (req, res) => {
   try {
     // Get active sessions from last 30 minutes
     const result = await pool.query(`
@@ -50,7 +53,7 @@ router.get('/live', async (req, res) => {
       LIMIT 50
     `);
 
-    const sessions = result.rows.map(row => ({
+    const sessions = result.rows.map((row) => ({
       session_id: row.session_id,
       product_type: row.product_type,
       canonical_key: row.canonical_key,
@@ -60,25 +63,26 @@ router.get('/live', async (req, res) => {
       latest_accept_prob: parseFloat(row.latest_accept_prob) || null,
       is_accepted: row.is_accepted,
       last_activity: row.last_activity,
-      time_active_minutes: Math.round((Date.now() - new Date(row.started_at)) / 60000)
+      time_active_minutes: Math.round(
+        (Date.now() - new Date(row.started_at)) / 60000,
+      ),
     }));
 
     // Get performance metrics
     const performanceMetrics = {
       offerability: offerabilityEngine.getPerformanceMetrics(),
       scoring: scoringEngine.getPerformanceMetrics(),
-      adapters: supplierAdapterManager.getAdapterMetrics()
+      adapters: supplierAdapterManager.getAdapterMetrics(),
     };
 
     res.json({
       sessions: sessions,
       performance: performanceMetrics,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Live monitor error:', error);
-    res.status(500).json({ error: 'Failed to get live data' });
+    console.error("Live monitor error:", error);
+    res.status(500).json({ error: "Failed to get live data" });
   }
 });
 
@@ -86,23 +90,24 @@ router.get('/live', async (req, res) => {
  * POST /api/admin/ai/config
  * Update live configuration
  */
-router.post('/config', async (req, res) => {
+router.post("/config", async (req, res) => {
   try {
     const { exploration_pct, aggressiveness, pause_exploration } = req.body;
 
     // Update Redis configuration
     const updates = {};
-    if (exploration_pct !== undefined) updates.exploration_pct = exploration_pct;
+    if (exploration_pct !== undefined)
+      updates.exploration_pct = exploration_pct;
     if (aggressiveness !== undefined) updates.aggressiveness = aggressiveness;
-    if (pause_exploration !== undefined) updates.pause_exploration = pause_exploration;
+    if (pause_exploration !== undefined)
+      updates.pause_exploration = pause_exploration;
 
-    await redisService.set('config:live_adjustments', updates, 3600);
+    await redisService.set("config:live_adjustments", updates, 3600);
 
     res.json({ success: true, updates });
-
   } catch (error) {
-    console.error('Config update error:', error);
-    res.status(500).json({ error: 'Failed to update configuration' });
+    console.error("Config update error:", error);
+    res.status(500).json({ error: "Failed to update configuration" });
   }
 });
 
@@ -114,10 +119,10 @@ router.post('/config', async (req, res) => {
  * GET /api/admin/ai/price-watch
  * Price volatility charts
  */
-router.get('/price-watch', async (req, res) => {
+router.get("/price-watch", async (req, res) => {
   try {
     const { ckey, from, to, product_type } = req.query;
-    
+
     let query = `
       SELECT 
         DATE_TRUNC('hour', snapshot_at) as hour,
@@ -130,8 +135,11 @@ router.get('/price-watch', async (req, res) => {
       JOIN ai.products p ON p.canonical_key = srs.canonical_key
       WHERE snapshot_at >= $1 AND snapshot_at <= $2
     `;
-    
-    const params = [from || new Date(Date.now() - 24*60*60*1000), to || new Date()];
+
+    const params = [
+      from || new Date(Date.now() - 24 * 60 * 60 * 1000),
+      to || new Date(),
+    ];
     let paramCount = 2;
 
     if (ckey) {
@@ -156,12 +164,11 @@ router.get('/price-watch', async (req, res) => {
 
     res.json({
       data: result.rows,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Price watch error:', error);
-    res.status(500).json({ error: 'Failed to get price data' });
+    console.error("Price watch error:", error);
+    res.status(500).json({ error: "Failed to get price data" });
   }
 });
 
@@ -173,7 +180,7 @@ router.get('/price-watch', async (req, res) => {
  * GET /api/admin/ai/policies
  * Get current policies
  */
-router.get('/policies', async (req, res) => {
+router.get("/policies", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT version, dsl_yaml, checksum, activated_at, created_at
@@ -184,12 +191,11 @@ router.get('/policies', async (req, res) => {
 
     res.json({
       policies: result.rows,
-      active_policy: await redisService.getActivePolicy()
+      active_policy: await redisService.getActivePolicy(),
     });
-
   } catch (error) {
-    console.error('Policies get error:', error);
-    res.status(500).json({ error: 'Failed to get policies' });
+    console.error("Policies get error:", error);
+    res.status(500).json({ error: "Failed to get policies" });
   }
 });
 
@@ -197,60 +203,61 @@ router.get('/policies', async (req, res) => {
  * POST /api/admin/ai/policies/validate
  * Validate policy YAML
  */
-router.post('/policies/validate', async (req, res) => {
+router.post("/policies/validate", async (req, res) => {
   try {
     const { dsl_yaml } = req.body;
 
     // Parse YAML
     const parsed = yaml.load(dsl_yaml);
-    
+
     // Validate structure
-    const validation = policyParser.validatePolicyStructure ? 
-      policyParser.validatePolicyStructure(parsed) : 
-      { valid: true, errors: [] };
+    const validation = policyParser.validatePolicyStructure
+      ? policyParser.validatePolicyStructure(parsed)
+      : { valid: true, errors: [] };
 
     if (!validation.valid) {
       return res.status(400).json({
         valid: false,
-        errors: validation.errors
+        errors: validation.errors,
       });
     }
 
     // Preview feasible actions for sample CPO
     const sampleContext = {
-      canonical_key: 'FL:AI-BOM-DXB-2025-10-01-Y',
-      product_type: 'flight',
-      supplier_snapshots: [{
-        supplier_id: 1,
-        currency: 'USD',
-        net: 285.00,
-        taxes: 45.50,
-        fees: 12.00,
-        inventory_state: 'AVAILABLE'
-      }],
-      user_profile: { tier: 'GOLD', style: 'persistent' },
-      session_context: { round: 1, inventory_age_minutes: 2 }
+      canonical_key: "FL:AI-BOM-DXB-2025-10-01-Y",
+      product_type: "flight",
+      supplier_snapshots: [
+        {
+          supplier_id: 1,
+          currency: "USD",
+          net: 285.0,
+          taxes: 45.5,
+          fees: 12.0,
+          inventory_state: "AVAILABLE",
+        },
+      ],
+      user_profile: { tier: "GOLD", style: "persistent" },
+      session_context: { round: 1, inventory_age_minutes: 2 },
     };
 
     // This would require temporarily applying the policy
     const preview = {
-      min_price: 348.50,
+      min_price: 348.5,
       max_price: 380.25,
       allow_perks: false,
-      action_count: 8
+      action_count: 8,
     };
 
     res.json({
       valid: true,
       parsed: parsed,
-      preview: preview
+      preview: preview,
     });
-
   } catch (error) {
-    console.error('Policy validation error:', error);
+    console.error("Policy validation error:", error);
     res.status(400).json({
       valid: false,
-      errors: [error.message]
+      errors: [error.message],
     });
   }
 });
@@ -259,23 +266,29 @@ router.post('/policies/validate', async (req, res) => {
  * PUT /api/admin/ai/policies
  * Publish new policy
  */
-router.put('/policies', async (req, res) => {
+router.put("/policies", async (req, res) => {
   try {
     const { version, dsl_yaml } = req.body;
 
     // Validate first
     const parsed = yaml.load(dsl_yaml);
-    const checksum = require('crypto').createHash('sha256').update(dsl_yaml).digest('hex');
+    const checksum = require("crypto")
+      .createHash("sha256")
+      .update(dsl_yaml)
+      .digest("hex");
 
     // Insert into database
-    await pool.query(`
+    await pool.query(
+      `
       INSERT INTO ai.policies (version, dsl_yaml, checksum, activated_at)
       VALUES ($1, $2, $3, NOW())
       ON CONFLICT (version) DO UPDATE SET
         dsl_yaml = $2,
         checksum = $3,
         activated_at = NOW()
-    `, [version, dsl_yaml, checksum]);
+    `,
+      [version, dsl_yaml, checksum],
+    );
 
     // Update Redis and trigger policy refresh
     await policyParser.refreshPolicyCache();
@@ -283,12 +296,11 @@ router.put('/policies', async (req, res) => {
     res.json({
       success: true,
       version: version,
-      published_at: new Date().toISOString()
+      published_at: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Policy publish error:', error);
-    res.status(500).json({ error: 'Failed to publish policy' });
+    console.error("Policy publish error:", error);
+    res.status(500).json({ error: "Failed to publish policy" });
   }
 });
 
@@ -300,7 +312,7 @@ router.put('/policies', async (req, res) => {
  * GET /api/admin/markups
  * Get markup rules
  */
-router.get('/markups', async (req, res) => {
+router.get("/markups", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -313,10 +325,9 @@ router.get('/markups', async (req, res) => {
     `);
 
     res.json({ markup_rules: result.rows });
-
   } catch (error) {
-    console.error('Markups get error:', error);
-    res.status(500).json({ error: 'Failed to get markup rules' });
+    console.error("Markups get error:", error);
+    res.status(500).json({ error: "Failed to get markup rules" });
   }
 });
 
@@ -324,7 +335,7 @@ router.get('/markups', async (req, res) => {
  * POST /api/admin/markups
  * Create markup rule
  */
-router.post('/markups', async (req, res) => {
+router.post("/markups", async (req, res) => {
   try {
     const {
       product_type,
@@ -334,21 +345,32 @@ router.post('/markups', async (req, res) => {
       markup_percent,
       markup_flat,
       valid_from,
-      valid_to
+      valid_to,
     } = req.body;
 
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       INSERT INTO ai.markup_rules 
       (product_type, supplier_id, scope, min_margin, markup_percent, markup_flat, valid_from, valid_to, active)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
       RETURNING *
-    `, [product_type, supplier_id, JSON.stringify(scope), min_margin, markup_percent, markup_flat, valid_from, valid_to]);
+    `,
+      [
+        product_type,
+        supplier_id,
+        JSON.stringify(scope),
+        min_margin,
+        markup_percent,
+        markup_flat,
+        valid_from,
+        valid_to,
+      ],
+    );
 
     res.json({ markup_rule: result.rows[0] });
-
   } catch (error) {
-    console.error('Markup create error:', error);
-    res.status(500).json({ error: 'Failed to create markup rule' });
+    console.error("Markup create error:", error);
+    res.status(500).json({ error: "Failed to create markup rule" });
   }
 });
 
@@ -360,11 +382,12 @@ router.post('/markups', async (req, res) => {
  * GET /api/admin/ai/elasticity
  * Elasticity analysis
  */
-router.get('/elasticity', async (req, res) => {
+router.get("/elasticity", async (req, res) => {
   try {
-    const { product_type = 'flight', from, to } = req.query;
-    
-    const result = await pool.query(`
+    const { product_type = "flight", from, to } = req.query;
+
+    const result = await pool.query(
+      `
       SELECT 
         width_bucket((e.counter_price - e.true_cost_usd)/NULLIF(e.true_cost_usd,0), 0.00, 0.30, 10) AS bucket,
         COUNT(*) FILTER (WHERE e.accepted) AS accepts,
@@ -379,17 +402,18 @@ router.get('/elasticity', async (req, res) => {
         AND e.true_cost_usd IS NOT NULL
       GROUP BY bucket 
       ORDER BY bucket
-    `, [product_type, from, to]);
+    `,
+      [product_type, from, to],
+    );
 
     res.json({
       product_type: product_type,
       elasticity_data: result.rows,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Elasticity error:', error);
-    res.status(500).json({ error: 'Failed to get elasticity data' });
+    console.error("Elasticity error:", error);
+    res.status(500).json({ error: "Failed to get elasticity data" });
   }
 });
 
@@ -401,11 +425,12 @@ router.get('/elasticity', async (req, res) => {
  * GET /api/admin/ai/reports/airline-route
  * Airline/route performance
  */
-router.get('/reports/airline-route', async (req, res) => {
+router.get("/reports/airline-route", async (req, res) => {
   try {
     const { from, to, airline, origin, dest } = req.query;
-    
-    const result = await pool.query(`
+
+    const result = await pool.query(
+      `
       SELECT day, airline, origin, dest, offers, accepts,
              ROUND(100.0*accepts/NULLIF(offers,0),2) AS accept_rate_pct,
              profit_usd
@@ -417,17 +442,18 @@ router.get('/reports/airline-route', async (req, res) => {
         AND ($5 IS NULL OR dest = $5)
       ORDER BY day DESC
       LIMIT 500
-    `, [from, to, airline, origin, dest]);
+    `,
+      [from, to, airline, origin, dest],
+    );
 
     res.json({
       data: result.rows,
       filters: { from, to, airline, origin, dest },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Airline route report error:', error);
-    res.status(500).json({ error: 'Failed to get airline route data' });
+    console.error("Airline route report error:", error);
+    res.status(500).json({ error: "Failed to get airline route data" });
   }
 });
 
@@ -435,11 +461,12 @@ router.get('/reports/airline-route', async (req, res) => {
  * GET /api/admin/ai/reports/hotel-city
  * Hotel/city performance
  */
-router.get('/reports/hotel-city', async (req, res) => {
+router.get("/reports/hotel-city", async (req, res) => {
   try {
     const { from, to, city, hotel_id } = req.query;
-    
-    const result = await pool.query(`
+
+    const result = await pool.query(
+      `
       SELECT day, city, hotel_id, offers, accepts,
              ROUND(100.0*accepts/NULLIF(offers,0),2) AS accept_rate_pct,
              profit_usd
@@ -450,17 +477,18 @@ router.get('/reports/hotel-city', async (req, res) => {
         AND ($4 IS NULL OR hotel_id = $4)
       ORDER BY day DESC
       LIMIT 500
-    `, [from, to, city, hotel_id]);
+    `,
+      [from, to, city, hotel_id],
+    );
 
     res.json({
       data: result.rows,
       filters: { from, to, city, hotel_id },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Hotel city report error:', error);
-    res.status(500).json({ error: 'Failed to get hotel city data' });
+    console.error("Hotel city report error:", error);
+    res.status(500).json({ error: "Failed to get hotel city data" });
   }
 });
 
@@ -468,7 +496,7 @@ router.get('/reports/hotel-city', async (req, res) => {
  * GET /api/admin/ai/reports/daily
  * Daily KPIs
  */
-router.get('/reports/daily', async (req, res) => {
+router.get("/reports/daily", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -486,12 +514,11 @@ router.get('/reports/daily', async (req, res) => {
 
     res.json({
       daily_kpis: result.rows,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Daily report error:', error);
-    res.status(500).json({ error: 'Failed to get daily data' });
+    console.error("Daily report error:", error);
+    res.status(500).json({ error: "Failed to get daily data" });
   }
 });
 
@@ -503,7 +530,7 @@ router.get('/reports/daily', async (req, res) => {
  * GET /api/admin/ai/reports/promo-effectiveness
  * Promo uplift analysis
  */
-router.get('/reports/promo-effectiveness', async (req, res) => {
+router.get("/reports/promo-effectiveness", async (req, res) => {
   try {
     const result = await pool.query(`
       WITH base AS (
@@ -527,12 +554,11 @@ router.get('/reports/promo-effectiveness', async (req, res) => {
 
     res.json({
       promo_effectiveness: result.rows,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Promo effectiveness error:', error);
-    res.status(500).json({ error: 'Failed to get promo effectiveness data' });
+    console.error("Promo effectiveness error:", error);
+    res.status(500).json({ error: "Failed to get promo effectiveness data" });
   }
 });
 
@@ -544,7 +570,7 @@ router.get('/reports/promo-effectiveness', async (req, res) => {
  * GET /api/admin/ai/models
  * Model registry
  */
-router.get('/models', async (req, res) => {
+router.get("/models", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT * FROM ai.model_registry
@@ -552,10 +578,9 @@ router.get('/models', async (req, res) => {
     `);
 
     res.json({ models: result.rows });
-
   } catch (error) {
-    console.error('Models get error:', error);
-    res.status(500).json({ error: 'Failed to get models' });
+    console.error("Models get error:", error);
+    res.status(500).json({ error: "Failed to get models" });
   }
 });
 
@@ -563,7 +588,7 @@ router.get('/models', async (req, res) => {
  * GET /api/admin/ai/experiments
  * A/B test experiments
  */
-router.get('/experiments', async (req, res) => {
+router.get("/experiments", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT * FROM ai.ab_tests
@@ -571,10 +596,9 @@ router.get('/experiments', async (req, res) => {
     `);
 
     res.json({ experiments: result.rows });
-
   } catch (error) {
-    console.error('Experiments get error:', error);
-    res.status(500).json({ error: 'Failed to get experiments' });
+    console.error("Experiments get error:", error);
+    res.status(500).json({ error: "Failed to get experiments" });
   }
 });
 
@@ -586,18 +610,16 @@ router.get('/experiments', async (req, res) => {
  * GET /api/admin/ai/health
  * System health overview
  */
-router.get('/health', async (req, res) => {
+router.get("/health", async (req, res) => {
   try {
     // Get component health
-    const [
-      offerabilityHealth,
-      redisHealth,
-      supplierHealth
-    ] = await Promise.all([
-      offerabilityEngine.healthCheck(),
-      redisService.getHealthMetrics(),
-      supplierAdapterManager.getAdapterHealthStatus()
-    ]);
+    const [offerabilityHealth, redisHealth, supplierHealth] = await Promise.all(
+      [
+        offerabilityEngine.healthCheck(),
+        redisService.getHealthMetrics(),
+        supplierAdapterManager.getAdapterHealthStatus(),
+      ],
+    );
 
     // Get recent materialized view refresh times
     const mvHealth = await pool.query(`
@@ -615,14 +637,13 @@ router.get('/health', async (req, res) => {
         offerability: offerabilityHealth,
         redis: redisHealth,
         suppliers: supplierHealth,
-        materialized_views: mvHealth.rows
+        materialized_views: mvHealth.rows,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Health check error:', error);
-    res.status(500).json({ error: 'Failed to get health status' });
+    console.error("Health check error:", error);
+    res.status(500).json({ error: "Failed to get health status" });
   }
 });
 
@@ -631,11 +652,11 @@ router.get('/health', async (req, res) => {
 // ==========================================
 
 router.use((error, req, res, next) => {
-  console.error('AI Admin API error:', error);
+  console.error("AI Admin API error:", error);
   res.status(500).json({
-    error: 'AI_ADMIN_API_ERROR',
+    error: "AI_ADMIN_API_ERROR",
     message: error.message,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

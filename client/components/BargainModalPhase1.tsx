@@ -115,12 +115,15 @@ export default function BargainModalPhase1({
     getErrorMessage,
     currentPrice,
     minFloor,
-    explanation
+    explanation,
   } = useBargain();
 
   const [error, setError] = useState<string | null>(null);
   const [showRepriceModal, setShowRepriceModal] = useState(false);
-  const [repriceData, setRepriceData] = useState<{ oldPrice: number; newPrice?: number } | null>(null);
+  const [repriceData, setRepriceData] = useState<{
+    oldPrice: number;
+    newPrice?: number;
+  } | null>(null);
 
   // 30-second timer for counter-offers (Zubin's requirement)
   const [counterOfferTimer, setCounterOfferTimer] = useState(0);
@@ -165,11 +168,11 @@ export default function BargainModalPhase1({
         supplier: itemDetails.airline || "hotelbeds", // Determine supplier
         product_id: itemDetails.itemId,
         ...(itemDetails.route && {
-          route: `${itemDetails.route.from}-${itemDetails.route.to}`
+          route: `${itemDetails.route.from}-${itemDetails.route.to}`,
         }),
         ...(itemDetails.city && { city: itemDetails.city }),
         ...(itemDetails.category && { activity_type: itemDetails.category }),
-        ...(itemDetails.class && { class_of_service: itemDetails.class })
+        ...(itemDetails.class && { class_of_service: itemDetails.class }),
       };
 
       const result = await startBargainSession(productCPO, promoCode);
@@ -185,7 +188,7 @@ export default function BargainModalPhase1({
       setError(errorMsg);
 
       // For network errors, still allow offline mode
-      if (step === "loading" && errorMsg.includes('Network')) {
+      if (step === "loading" && errorMsg.includes("Network")) {
         setStep("initial");
         // Fallback pricing based on base price
         const fallbackPrice = Math.round(itemDetails.basePrice * 0.8);
@@ -248,11 +251,11 @@ export default function BargainModalPhase1({
         onBookingConfirmed(lastOffer.counter_offer);
       } catch (err: any) {
         setError(getErrorMessage(err));
-        if (err.code === 'INVENTORY_CHANGED') {
+        if (err.code === "INVENTORY_CHANGED") {
           // Show reprice modal
           setRepriceData({
             oldPrice: lastOffer.counter_offer,
-            newPrice: err.new_price // If provided by API
+            newPrice: err.new_price, // If provided by API
           });
           setShowRepriceModal(true);
         }
@@ -288,7 +291,8 @@ export default function BargainModalPhase1({
     if (!session) return null;
 
     const initialPrice = session.initial_offer.price;
-    const finalPrice = lastOffer?.counter_offer || parseFloat(userOfferPrice) || initialPrice;
+    const finalPrice =
+      lastOffer?.counter_offer || parseFloat(userOfferPrice) || initialPrice;
     const savings = initialPrice - finalPrice;
     const savingsPercentage = (savings / initialPrice) * 100;
 
@@ -298,9 +302,7 @@ export default function BargainModalPhase1({
     };
   };
 
-  const renderLoadingStep = () => (
-    <RotatingBargainSkeleton />
-  );
+  const renderLoadingStep = () => <RotatingBargainSkeleton />;
 
   const renderInitialStep = () => {
     if (!session) return null;
@@ -350,7 +352,9 @@ export default function BargainModalPhase1({
             <CardContent className="space-y-3 text-sm">
               <div className="bg-blue-50 p-3 rounded-lg">
                 <p className="text-blue-800">
-                  {session.initial_offer.explanation || session.explain || "AI has analyzed market conditions and demand patterns to suggest this optimal starting price."}
+                  {session.initial_offer.explanation ||
+                    session.explain ||
+                    "AI has analyzed market conditions and demand patterns to suggest this optimal starting price."}
                 </p>
               </div>
               <div className="grid gap-2">
@@ -360,7 +364,12 @@ export default function BargainModalPhase1({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Your Target Range:</span>
-                  <span>{formatPriceNoDecimals(session.min_floor)} - {formatPriceNoDecimals(Math.round(session.initial_offer.price * 0.9))}</span>
+                  <span>
+                    {formatPriceNoDecimals(session.min_floor)} -{" "}
+                    {formatPriceNoDecimals(
+                      Math.round(session.initial_offer.price * 0.9),
+                    )}
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -397,7 +406,9 @@ export default function BargainModalPhase1({
             <div className="bg-yellow-50 p-3 rounded-lg">
               <p className="text-sm text-yellow-800">
                 <strong>AI Suggestion:</strong> Try offering around{" "}
-                {formatPriceNoDecimals(Math.round(session.initial_offer.price * 0.8))}
+                {formatPriceNoDecimals(
+                  Math.round(session.initial_offer.price * 0.8),
+                )}
               </p>
               <p className="text-xs text-yellow-700 mt-1">
                 Minimum acceptable: {formatPriceNoDecimals(session.min_floor)}
@@ -613,7 +624,11 @@ export default function BargainModalPhase1({
   };
 
   const renderSuccessStep = () => {
-    const finalPrice = lastOffer?.counter_offer || parseFloat(userOfferPrice) || session?.initial_offer?.price || 0;
+    const finalPrice =
+      lastOffer?.counter_offer ||
+      parseFloat(userOfferPrice) ||
+      session?.initial_offer?.price ||
+      0;
     const savingsInfo = getSavingsInfo();
 
     return (
@@ -681,59 +696,59 @@ export default function BargainModalPhase1({
 
   return (
     <>
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Target className="w-5 h-5" />
-            AI Bargaining Platform
-            {(error && error.includes("Network")) && (
-              <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
-                Offline Mode
-              </span>
-            )}
-          </DialogTitle>
-          <DialogDescription>
-            {itemDetails.title} • Live AI-powered price negotiation
-            {(error && error.includes("Network")) && (
-              <span className="block text-yellow-600 text-sm mt-1">
-                ⚠️ Using fallback pricing - bargaining still works!
-              </span>
-            )}
-          </DialogDescription>
-        </DialogHeader>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5" />
+              AI Bargaining Platform
+              {error && error.includes("Network") && (
+                <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
+                  Offline Mode
+                </span>
+              )}
+            </DialogTitle>
+            <DialogDescription>
+              {itemDetails.title} • Live AI-powered price negotiation
+              {error && error.includes("Network") && (
+                <span className="block text-yellow-600 text-sm mt-1">
+                  ⚠️ Using fallback pricing - bargaining still works!
+                </span>
+              )}
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="mt-4">
-          {step === "loading" && renderLoadingStep()}
-          {step === "initial" && renderInitialStep()}
-          {step === "negotiating" && renderNegotiatingStep()}
-          {step === "success" && renderSuccessStep()}
-          {step === "rejected" && renderRejectedStep()}
-        </div>
-      </DialogContent>
-    </Dialog>
+          <div className="mt-4">
+            {step === "loading" && renderLoadingStep()}
+            {step === "initial" && renderInitialStep()}
+            {step === "negotiating" && renderNegotiatingStep()}
+            {step === "success" && renderSuccessStep()}
+            {step === "rejected" && renderRejectedStep()}
+          </div>
+        </DialogContent>
+      </Dialog>
 
-    {/* Reprice Modal */}
-    {showRepriceModal && (
-      <RepriceModal
-        isOpen={showRepriceModal}
-        onClose={() => {
-          setShowRepriceModal(false);
-          setRepriceData(null);
-          onClose(); // Close main modal too
-        }}
-        onRefresh={() => {
-          setShowRepriceModal(false);
-          setRepriceData(null);
-          setStep("loading");
-          initializeBargainSession(); // Restart with fresh data
-        }}
-        oldPrice={repriceData?.oldPrice || 0}
-        newPrice={repriceData?.newPrice}
-        itemTitle={itemDetails.title}
-        reason="Inventory has changed during bargaining"
-      />
-    )}
+      {/* Reprice Modal */}
+      {showRepriceModal && (
+        <RepriceModal
+          isOpen={showRepriceModal}
+          onClose={() => {
+            setShowRepriceModal(false);
+            setRepriceData(null);
+            onClose(); // Close main modal too
+          }}
+          onRefresh={() => {
+            setShowRepriceModal(false);
+            setRepriceData(null);
+            setStep("loading");
+            initializeBargainSession(); // Restart with fresh data
+          }}
+          oldPrice={repriceData?.oldPrice || 0}
+          newPrice={repriceData?.newPrice}
+          itemTitle={itemDetails.title}
+          reason="Inventory has changed during bargaining"
+        />
+      )}
     </>
   );
 }

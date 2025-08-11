@@ -3,42 +3,46 @@
  * Executes the AI schema and seed data migrations
  */
 
-const { Pool } = require('pg');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config();
+const { Pool } = require("pg");
+const fs = require("fs");
+const path = require("path");
+require("dotenv").config();
 
 // Database configuration
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || process.env.DB_CONNECTION_STRING,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString:
+    process.env.DATABASE_URL || process.env.DB_CONNECTION_STRING,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 async function runMigration() {
   const client = await pool.connect();
-  
+
   try {
-    console.log('🚀 Starting AI Bargaining Platform migration...');
-    
+    console.log("🚀 Starting AI Bargaining Platform migration...");
+
     // Read schema file
-    const schemaPath = path.join(__dirname, 'ai-bargaining-schema.sql');
-    const schemaSQL = fs.readFileSync(schemaPath, 'utf8');
-    
+    const schemaPath = path.join(__dirname, "ai-bargaining-schema.sql");
+    const schemaSQL = fs.readFileSync(schemaPath, "utf8");
+
     // Read seed file
-    const seedPath = path.join(__dirname, 'ai-bargaining-seed.sql');
-    const seedSQL = fs.readFileSync(seedPath, 'utf8');
-    
+    const seedPath = path.join(__dirname, "ai-bargaining-seed.sql");
+    const seedSQL = fs.readFileSync(seedPath, "utf8");
+
     // Begin transaction
-    await client.query('BEGIN');
-    
-    console.log('📊 Creating AI schema and tables...');
+    await client.query("BEGIN");
+
+    console.log("📊 Creating AI schema and tables...");
     await client.query(schemaSQL);
-    
-    console.log('🌱 Inserting seed data...');
+
+    console.log("🌱 Inserting seed data...");
     await client.query(seedSQL);
-    
+
     // Create unique indexes for materialized views (for concurrent refresh)
-    console.log('📈 Creating materialized view indexes...');
+    console.log("📈 Creating materialized view indexes...");
     await client.query(`
       CREATE UNIQUE INDEX IF NOT EXISTS mv_daily_agg_pkey 
       ON ai.mv_daily_agg (day, product_type, COALESCE(primary_supplier_id, 0));
@@ -49,12 +53,12 @@ async function runMigration() {
       CREATE UNIQUE INDEX IF NOT EXISTS mv_hotel_city_daily_pkey 
       ON ai.mv_hotel_city_daily (day, COALESCE(city, ''), COALESCE(hotel_id, ''));
     `);
-    
+
     // Commit transaction
-    await client.query('COMMIT');
-    
-    console.log('✅ AI Bargaining Platform migration completed successfully!');
-    
+    await client.query("COMMIT");
+
+    console.log("✅ AI Bargaining Platform migration completed successfully!");
+
     // Display summary
     const summary = await client.query(`
       SELECT 
@@ -75,22 +79,24 @@ async function runMigration() {
       SELECT 'user_profiles', COUNT(*) FROM ai.user_profiles
       ORDER BY table_name;
     `);
-    
-    console.log('\n📋 Migration Summary:');
-    summary.rows.forEach(row => {
+
+    console.log("\n📋 Migration Summary:");
+    summary.rows.forEach((row) => {
       console.log(`  ${row.table_name}: ${row.count} records`);
     });
-    
+
     // Test policy parsing
-    const policyTest = await client.query('SELECT version, LEFT(dsl_yaml, 100) as preview FROM ai.policies WHERE version = $1', ['v1']);
+    const policyTest = await client.query(
+      "SELECT version, LEFT(dsl_yaml, 100) as preview FROM ai.policies WHERE version = $1",
+      ["v1"],
+    );
     if (policyTest.rows.length > 0) {
-      console.log('\n🎯 Policy v1 loaded successfully');
-      console.log('Preview:', policyTest.rows[0].preview + '...');
+      console.log("\n🎯 Policy v1 loaded successfully");
+      console.log("Preview:", policyTest.rows[0].preview + "...");
     }
-    
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('❌ Migration failed:', error);
+    await client.query("ROLLBACK");
+    console.error("❌ Migration failed:", error);
     process.exit(1);
   } finally {
     client.release();
@@ -99,16 +105,16 @@ async function runMigration() {
 }
 
 // Handle graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('\n🛑 Migration interrupted');
+process.on("SIGINT", async () => {
+  console.log("\n🛑 Migration interrupted");
   await pool.end();
   process.exit(0);
 });
 
 // Run migration
 if (require.main === module) {
-  runMigration().catch(error => {
-    console.error('❌ Fatal error:', error);
+  runMigration().catch((error) => {
+    console.error("❌ Fatal error:", error);
     process.exit(1);
   });
 }

@@ -1,4 +1,5 @@
 # 🚀 AI Bargaining Platform - Pre-Rollout Validation
+
 ## Builder Execution Checklist
 
 **Objective:** Confirm production readiness before moving from **Shadow Mode → 10% traffic rollout**
@@ -63,7 +64,8 @@ SELECT * FROM report ORDER BY CASE WHEN check LIKE 'CRITICAL:%' THEN 1 WHEN chec
 
 ## ⚡ STEP 2: Redis Hit-Rate Verification (no Grafana wait)
 
-**Action:** 
+**Action:**
+
 ```bash
 curl -s https://<YOUR_RENDER_API_URL>/metrics | grep '^bargain_redis_hit_rate'
 ```
@@ -75,11 +77,13 @@ curl -s https://<YOUR_RENDER_API_URL>/metrics | grep '^bargain_redis_hit_rate'
 ## 🎯 STEP 3: Feature Flags Check
 
 **Action:** Check feature flags via API or config:
+
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" https://<YOUR_RENDER_API_URL>/api/feature-flags
 ```
 
 **Expected JSON:**
+
 ```json
 {
   "AI_TRAFFIC": 0.0,
@@ -95,6 +99,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" https://<YOUR_RENDER_API_URL>/api/fea
 ## 🔄 STEP 4: Worker/Cron Health Check
 
 **Expected in Render logs (last 24h, all green):**
+
 - ✅ Hotset refresh – every 5 min
 - ✅ Cache warmer – hourly
 - ✅ MV refresh – hourly
@@ -106,19 +111,20 @@ curl -H "Authorization: Bearer YOUR_TOKEN" https://<YOUR_RENDER_API_URL>/api/fea
 
 **Submit screenshots/outputs for:**
 
-| Check | Evidence Required | Status |
-|-------|------------------|---------|
-| **Database Validation** | Screenshot of SQL output table with all ✅ PASS, no 🚨 CRITICAL FAIL | ⬜ |
-| **Redis Performance** | Output showing `bargain_redis_hit_rate >= 0.90` | ⬜ |
-| **Feature Flags** | Screenshot/output showing exact shadow mode values | ⬜ |
-| **Worker Health** | Screenshot of Render cron logs (last 24h, all green) | ⬜ |
-| **Grafana P95** | Screenshot of p95 latency panel < 300ms (15-min window) | ⬜ |
+| Check                   | Evidence Required                                                    | Status |
+| ----------------------- | -------------------------------------------------------------------- | ------ |
+| **Database Validation** | Screenshot of SQL output table with all ✅ PASS, no 🚨 CRITICAL FAIL | ⬜     |
+| **Redis Performance**   | Output showing `bargain_redis_hit_rate >= 0.90`                      | ⬜     |
+| **Feature Flags**       | Screenshot/output showing exact shadow mode values                   | ⬜     |
+| **Worker Health**       | Screenshot of Render cron logs (last 24h, all green)                 | ⬜     |
+| **Grafana P95**         | Screenshot of p95 latency panel < 300ms (15-min window)              | ⬜     |
 
 ---
 
 ## ��� GO/NO-GO CRITERIA
 
 ### ✅ **GO** - Proceed to 10% Rollout
+
 - All database checks show **✅ PASS**
 - **ZERO** never-loss violations (🚨 CRITICAL)
 - Redis hit rate **≥ 90%**
@@ -126,6 +132,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" https://<YOUR_RENDER_API_URL>/api/fea
 - All worker logs **green**
 
 ### ❌ **NO-GO** - Hold Rollout
+
 - Any **❌ FAIL** or **🚨 CRITICAL FAIL** found
 - Redis hit rate **< 90%**
 - P95 latency **≥ 300ms**
@@ -136,8 +143,9 @@ curl -H "Authorization: Bearer YOUR_TOKEN" https://<YOUR_RENDER_API_URL>/api/fea
 ## 🆘 SUPPORT CONTACTS
 
 **If any step fails:**
+
 - **Technical Issues:** AI Team Lead
-- **Database Problems:** DevOps Team  
+- **Database Problems:** DevOps Team
 - **Monitoring Issues:** Platform Team
 - **Business Questions:** Product Owner
 
@@ -146,6 +154,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" https://<YOUR_RENDER_API_URL>/api/fea
 ## 🎯 NEXT STEPS AFTER GO
 
 **10% Rollout Command:**
+
 ```bash
 curl -X POST -H "Authorization: Bearer $TOKEN" \
   -d '{"flag": "AI_TRAFFIC", "value": 0.1}' \
@@ -153,9 +162,10 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
 ```
 
 **Rollout Schedule:**
+
 - Shadow mode (24h) → 10% (24h) → 50% (48h) → 100%
 - Auto-rollback armed on profit margin drop >3% vs control
 
 ---
 
-*Return completed checklist with evidence to confirm production readiness* 🚀
+_Return completed checklist with evidence to confirm production readiness_ 🚀

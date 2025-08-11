@@ -1,4 +1,5 @@
 # AI Bargaining Platform – Pre-Rollout Validation
+
 ## Builder Checklist
 
 **Objective:** Confirm production readiness before moving from **Shadow Mode** to **10% live traffic**.
@@ -11,8 +12,8 @@
 
 ```sql
 -- SCHEMA CHECK
-SELECT table_name 
-FROM information_schema.tables 
+SELECT table_name
+FROM information_schema.tables
 WHERE table_schema='ai'
 ORDER BY table_name;
 
@@ -33,6 +34,7 @@ WHERE created_at > now() - interval '24 hours';
 ```
 
 **Expected:**
+
 - All 15+ `ai.*` tables present
 - **violations = 0** 🚨 **If >0 → STOP rollout**
 - Recent sessions > 0
@@ -85,23 +87,25 @@ WHERE last_run > now() - interval '15 minutes';
 
 ## 5️⃣ GO/NO-GO Decision
 
-| Check | Pass? | Evidence (screenshot/output) |
-|-------|-------|------------------------------|
-| SQL schema + floor audit | ☐ | |
-| Redis hit rate ≥90% | ☐ | |
-| Feature flags correct | ☐ | |
-| Workers healthy | ☐ | |
+| Check                    | Pass? | Evidence (screenshot/output) |
+| ------------------------ | ----- | ---------------------------- |
+| SQL schema + floor audit | ☐     |                              |
+| Redis hit rate ≥90%      | ☐     |                              |
+| Feature flags correct    | ☐     |                              |
+| Workers healthy          | ☐     |                              |
 
 ---
 
 ## Rollout Instructions
 
 ### If all ✅:
+
 - Set `AI_TRAFFIC=0.10`
 - Keep `AI_SHADOW=false`
 - Monitor Grafana p95 latency (<300ms) for 24h
 
 ### If any ❌:
+
 - **Stop rollout**
 - Investigate failing area
 - Re-run checklist after fix
@@ -111,6 +115,7 @@ WHERE last_run > now() - interval '15 minutes';
 ## Contact Information
 
 **If any step fails:**
+
 - **Technical Issues:** AI Team Lead
 - **Database Problems:** DevOps Team
 - **Business Questions:** Product Owner
@@ -120,7 +125,7 @@ WHERE last_run > now() - interval '15 minutes';
 ## Expected Timeline
 
 1. **Shadow Mode:** 24 hours
-2. **10% Rollout:** 24 hours  
+2. **10% Rollout:** 24 hours
 3. **50% Rollout:** 48 hours
 4. **100% Full:** After validation
 
@@ -128,4 +133,4 @@ WHERE last_run > now() - interval '15 minutes';
 
 ---
 
-*Return completed checklist with evidence to confirm production readiness* 🚀
+_Return completed checklist with evidence to confirm production readiness_ 🚀

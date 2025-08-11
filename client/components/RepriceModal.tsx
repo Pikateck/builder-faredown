@@ -33,7 +33,7 @@ export function RepriceModal({
   oldPrice,
   newPrice,
   itemTitle,
-  reason = "Inventory has changed"
+  reason = "Inventory has changed",
 }: RepriceModalProps) {
   const priceDifference = newPrice ? newPrice - oldPrice : 0;
   const isPriceIncrease = priceDifference > 0;
@@ -65,24 +65,34 @@ export function RepriceModal({
                 {formatPriceNoDecimals(oldPrice)}
               </span>
             </div>
-            
+
             {newPrice && (
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">New Price:</span>
-                <span className={`font-semibold ${
-                  isPriceIncrease ? 'text-red-600' : 'text-green-600'
-                }`}>
+                <span
+                  className={`font-semibold ${
+                    isPriceIncrease ? "text-red-600" : "text-green-600"
+                  }`}
+                >
                   {formatPriceNoDecimals(newPrice)}
                 </span>
               </div>
             )}
 
             {newPrice && priceDifference !== 0 && (
-              <Alert className={isPriceIncrease ? 'border-red-200' : 'border-green-200'}>
-                <AlertDescription className={
-                  isPriceIncrease ? 'text-red-700' : 'text-green-700'
-                }>
-                  {isPriceIncrease ? 'Price increased by' : 'Price decreased by'} {' '}
+              <Alert
+                className={
+                  isPriceIncrease ? "border-red-200" : "border-green-200"
+                }
+              >
+                <AlertDescription
+                  className={
+                    isPriceIncrease ? "text-red-700" : "text-green-700"
+                  }
+                >
+                  {isPriceIncrease
+                    ? "Price increased by"
+                    : "Price decreased by"}{" "}
                   {formatPriceNoDecimals(Math.abs(priceDifference))}
                 </AlertDescription>
               </Alert>
@@ -91,18 +101,11 @@ export function RepriceModal({
 
           {/* Actions */}
           <div className="flex gap-3 pt-4">
-            <Button
-              onClick={onRefresh}
-              className="flex-1"
-            >
+            <Button onClick={onRefresh} className="flex-1">
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh Price & Continue
             </Button>
-            <Button
-              onClick={onClose}
-              variant="outline"
-              className="flex-1"
-            >
+            <Button onClick={onClose} variant="outline" className="flex-1">
               <X className="w-4 h-4 mr-2" />
               Cancel Bargain
             </Button>

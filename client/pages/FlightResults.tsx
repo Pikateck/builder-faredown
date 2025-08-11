@@ -461,7 +461,9 @@ export default function FlightResults() {
       console.log("✅ Live bargain successful!", { item, finalPrice });
 
       // Create flight object for booking flow
-      const flightForBooking = flightData.find(f => f.id.toString() === item.itemId);
+      const flightForBooking = flightData.find(
+        (f) => f.id.toString() === item.itemId,
+      );
       if (flightForBooking) {
         handleBooking(flightForBooking, {
           id: "bargained",
@@ -469,7 +471,7 @@ export default function FlightResults() {
           price: finalPrice,
           refundability: "Non-Refundable",
           features: ["AI Bargained Price"],
-          baggage: "23kg"
+          baggage: "23kg",
         });
       }
     },

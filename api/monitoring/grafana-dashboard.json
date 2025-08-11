@@ -34,7 +34,7 @@
             "op": "gt"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }
       },
       {
         "id": 2,
@@ -55,7 +55,7 @@
         "thresholds": "0.85,0.90",
         "colorBackground": true,
         "format": "percentunit",
-        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+        "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 }
       },
       {
         "id": 3,
@@ -70,7 +70,7 @@
         "thresholds": "0.015,0.020",
         "colorBackground": true,
         "format": "percentunit",
-        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
+        "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 }
       },
       {
         "id": 4,
@@ -88,7 +88,7 @@
             "min": 0
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
       },
       {
         "id": 5,
@@ -107,7 +107,7 @@
             "min": 0
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
       },
       {
         "id": 6,
@@ -122,7 +122,7 @@
         "format": "ms",
         "thresholds": "100,200",
         "colorBackground": true,
-        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 16}
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 16 }
       },
       {
         "id": 7,
@@ -137,7 +137,7 @@
         "format": "ms",
         "thresholds": "50,100",
         "colorBackground": true,
-        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 16}
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 16 }
       },
       {
         "id": 8,
@@ -152,7 +152,7 @@
         "format": "s",
         "thresholds": "30,60",
         "colorBackground": true,
-        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 16}
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 16 }
       },
       {
         "id": 9,
@@ -167,7 +167,7 @@
         "format": "percentunit",
         "thresholds": "0.12,0.15",
         "colorBackground": true,
-        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 16}
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 16 }
       },
       {
         "id": 10,
@@ -185,7 +185,7 @@
             "min": 0
           }
         ],
-        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 20}
+        "gridPos": { "h": 6, "w": 8, "x": 0, "y": 20 }
       },
       {
         "id": 11,
@@ -204,7 +204,7 @@
             "max": 100
           }
         ],
-        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 20}
+        "gridPos": { "h": 6, "w": 8, "x": 8, "y": 20 }
       },
       {
         "id": 12,
@@ -219,7 +219,7 @@
         "colorBackground": true,
         "thresholds": "0,1",
         "colors": ["green", "red", "red"],
-        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 20}
+        "gridPos": { "h": 6, "w": 8, "x": 16, "y": 20 }
       },
       {
         "id": 13,
@@ -237,7 +237,7 @@
             "instant": true
           }
         ],
-        "gridPos": {"h": 4, "w": 12, "x": 0, "y": 26}
+        "gridPos": { "h": 4, "w": 12, "x": 0, "y": 26 }
       },
       {
         "id": 14,
@@ -249,7 +249,7 @@
             "legendFormat": "{{variant}}"
           }
         ],
-        "gridPos": {"h": 4, "w": 12, "x": 12, "y": 26}
+        "gridPos": { "h": 4, "w": 12, "x": 12, "y": 26 }
       }
     ],
     "annotations": {

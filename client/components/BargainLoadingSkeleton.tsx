@@ -10,30 +10,30 @@ interface BargainLoadingSkeletonProps {
   stage?: "initializing" | "analyzing" | "calculating" | "finalizing";
 }
 
-export function BargainLoadingSkeleton({ 
-  stage = "initializing" 
+export function BargainLoadingSkeleton({
+  stage = "initializing",
 }: BargainLoadingSkeletonProps) {
   const stages = {
     initializing: {
       title: "Initializing AI Session",
       description: "Setting up your personalized bargaining environment...",
-      progress: 25
+      progress: 25,
     },
     analyzing: {
       title: "Analyzing Market Data",
       description: "Checking real-time prices and demand patterns...",
-      progress: 50
+      progress: 50,
     },
     calculating: {
       title: "Calculating Optimal Offer",
       description: "AI is determining the best starting price for you...",
-      progress: 75
+      progress: 75,
     },
     finalizing: {
       title: "Finalizing Session",
       description: "Preparing your bargaining interface...",
-      progress: 90
-    }
+      progress: 90,
+    },
   };
 
   const currentStage = stages[stage];
@@ -46,14 +46,16 @@ export function BargainLoadingSkeleton({
           <span className="text-white font-bold text-lg">AI</span>
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-bold text-gray-900">{currentStage.title}</h3>
+          <h3 className="text-xl font-bold text-gray-900">
+            {currentStage.title}
+          </h3>
           <p className="text-sm text-gray-600">{currentStage.description}</p>
         </div>
       </div>
 
       {/* Progress Bar */}
       <div className="w-full bg-gray-200 rounded-full h-2">
-        <div 
+        <div
           className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-1000 ease-out"
           style={{ width: `${currentStage.progress}%` }}
         ></div>
@@ -121,8 +123,14 @@ export function BargainLoadingSkeleton({
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center space-x-2">
           <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-          <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          <div
+            className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.1s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
         </div>
         <p className="text-xs text-gray-500">
           This may take a few seconds on first load
@@ -139,10 +147,10 @@ export function RotatingBargainSkeleton() {
   >("initializing");
 
   React.useEffect(() => {
-    const stages: Array<"initializing" | "analyzing" | "calculating" | "finalizing"> = [
-      "initializing", "analyzing", "calculating", "finalizing"
-    ];
-    
+    const stages: Array<
+      "initializing" | "analyzing" | "calculating" | "finalizing"
+    > = ["initializing", "analyzing", "calculating", "finalizing"];
+
     let stageIndex = 0;
     const interval = setInterval(() => {
       stageIndex = (stageIndex + 1) % stages.length;

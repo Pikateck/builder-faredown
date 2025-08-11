@@ -334,9 +334,14 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       // Final safety net - never let errors escape from refreshRates
       // This catches any errors including browser extension interference
       if (error instanceof Error && error.message.includes("Failed to fetch")) {
-        console.log("💰 Network error (possibly browser extension interference), using static rates");
+        console.log(
+          "💰 Network error (possibly browser extension interference), using static rates",
+        );
       } else {
-        console.warn("📈 Currency refresh failed with unexpected error:", error);
+        console.warn(
+          "📈 Currency refresh failed with unexpected error:",
+          error,
+        );
       }
       // Always continue gracefully with static rates
     }
@@ -353,7 +358,10 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       }
 
       // Skip if we're in a problematic environment (e.g., with interfering browser extensions)
-      if (typeof window !== "undefined" && window.location?.hostname?.includes("fullstory")) {
+      if (
+        typeof window !== "undefined" &&
+        window.location?.hostname?.includes("fullstory")
+      ) {
         console.log("💰 Detected analytics environment, using static rates");
         return;
       }

@@ -46,7 +46,7 @@ groups:
           runbook_url: "https://docs.faredown.ai/runbooks/never-loss-violation"
           escalation: "immediate"
 
-  - name: redis_cache_monitoring  
+  - name: redis_cache_monitoring
     interval: 60s
     rules:
       # Redis miss rate < 10%
@@ -201,51 +201,51 @@ groups:
 
 # Notification routing rules
 route:
-  group_by: ['alertname', 'severity']
+  group_by: ["alertname", "severity"]
   group_wait: 10s
   group_interval: 5m
   repeat_interval: 12h
-  receiver: 'default'
+  receiver: "default"
   routes:
     - match:
         severity: emergency
-      receiver: 'pager-duty-emergency'
+      receiver: "pager-duty-emergency"
       group_wait: 0s
       repeat_interval: 5m
-    
+
     - match:
         severity: critical
-      receiver: 'pager-duty-critical'
+      receiver: "pager-duty-critical"
       group_wait: 30s
       repeat_interval: 30m
-    
+
     - match:
         auto_rollback: "true"
-      receiver: 'auto-rollback-webhook'
+      receiver: "auto-rollback-webhook"
       group_wait: 0s
 
 # Receivers configuration
 receivers:
-  - name: 'default'
+  - name: "default"
     slack_configs:
       - api_url: '{{ env "SLACK_WEBHOOK_URL" }}'
-        channel: '#bargain-alerts'
-        title: 'Bargain Platform Alert'
+        channel: "#bargain-alerts"
+        title: "Bargain Platform Alert"
         text: '{{ range .Alerts }}{{ .Annotations.summary }}\n{{ .Annotations.description }}{{ end }}'
 
-  - name: 'pager-duty-emergency'
+  - name: "pager-duty-emergency"
     pagerduty_configs:
       - routing_key: '{{ env "PAGERDUTY_EMERGENCY_KEY" }}'
-        description: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
-        
-  - name: 'pager-duty-critical'
+        description: "{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}"
+
+  - name: "pager-duty-critical"
     pagerduty_configs:
       - routing_key: '{{ env "PAGERDUTY_CRITICAL_KEY" }}'
-        description: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+        description: "{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}"
 
-  - name: 'auto-rollback-webhook'
+  - name: "auto-rollback-webhook"
     webhook_configs:
-      - url: 'https://api.faredown.ai/api/admin/auto-rollback'
+      - url: "https://api.faredown.ai/api/admin/auto-rollback"
         send_resolved: false
         http_config:
           bearer_token: '{{ env "AUTO_ROLLBACK_TOKEN" }}'
@@ -253,13 +253,13 @@ receivers:
 # Inhibition rules
 inhibit_rules:
   - source_match:
-      severity: 'critical'
+      severity: "critical"
     target_match:
-      severity: 'warning'
-    equal: ['alertname', 'component']
-    
+      severity: "warning"
+    equal: ["alertname", "component"]
+
   - source_match:
-      alertname: 'BargainAPI_HighLatency_Critical'
+      alertname: "BargainAPI_HighLatency_Critical"
     target_match:
-      alertname: 'BargainAPI_HighErrorRate_Critical'
-    equal: ['component']
+      alertname: "BargainAPI_HighErrorRate_Critical"
+    equal: ["component"]

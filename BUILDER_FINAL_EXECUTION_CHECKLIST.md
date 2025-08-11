@@ -1,4 +1,5 @@
 # **Faredown AI Bargaining Platform**
+
 ## Final Go-Live Execution & Validation Checklist – Builder
 
 This package contains **all final commands and queries** needed to validate readiness for 10% production rollout.
@@ -90,24 +91,24 @@ report AS (
     'Data activity indicator'
   FROM stats
 )
-SELECT * FROM report ORDER BY 
-  CASE 
-    WHEN check LIKE 'CRITICAL:%' THEN 1 
+SELECT * FROM report ORDER BY
+  CASE
+    WHEN check LIKE 'CRITICAL:%' THEN 1
     WHEN check LIKE 'Schema:%' THEN 2
     WHEN check LIKE 'Recent activity:%' THEN 3
     WHEN check LIKE 'Policy readiness:%' THEN 4
     WHEN check LIKE 'Model readiness:%' THEN 5
-    ELSE 6 
+    ELSE 6
   END, check;
 
 -- =====================================================
 -- EXPECTED RESULTS SUMMARY:
--- ✅ Schema: tables in ai schema: 15+ 
+-- ✅ Schema: tables in ai schema: 15+
 -- ✅ Schema: materialized views in ai: 3+
 -- ✅ Guardrail function present: true
 -- ✅ CRITICAL: never-loss floor violations: 0 (MUST BE ZERO)
--- ✅ Recent activity: supplier rates (24h): >0 
--- ✅ Recent activity: bargain sessions (24h): >=0 
+-- ✅ Recent activity: supplier rates (24h): >0
+-- ✅ Recent activity: bargain sessions (24h): >=0
 -- ✅ Policy readiness: active policies: 3+
 -- ✅ Model readiness: active models: 2+
 -- ✅ Last bargain event timestamp: recent date
@@ -127,6 +128,7 @@ curl -s https://<YOUR_RENDER_API_URL>/metrics | grep '^bargain_redis_hit_rate'
 ```
 
 **Expected output:**
+
 ```
 # TYPE bargain_redis_hit_rate gauge
 bargain_redis_hit_rate 0.92
@@ -162,24 +164,28 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 ## **📊 MONITORING & HEALTH CHECKS**
 
 ### Prometheus/Grafana (when live)
-* **Grafana p95 latency**: `< 300ms` for `/session/*` routes (15-min window)
-* **Metrics endpoint responding**: 
+
+- **Grafana p95 latency**: `< 300ms` for `/session/*` routes (15-min window)
+- **Metrics endpoint responding**:
   ```bash
   curl https://<YOUR_RENDER_API_URL>/metrics | grep "bargain_response_seconds"
   ```
 
 ### Cron & Worker Health
+
 Confirm in Render logs (last 24h, no failures):
-* Hotset refresh every 5 min
-* Cache warmer hourly  
-* MV refresh hourly
-* Model retrain nightly at 02:00 UTC
+
+- Hotset refresh every 5 min
+- Cache warmer hourly
+- MV refresh hourly
+- Model retrain nightly at 02:00 UTC
 
 ### Frontend Integration
-* Uses `/api/bargain/v1/*` endpoints
-* "Why this price?" shows model confidence & explanation
-* Reprice modal triggers on `INVENTORY_CHANGED`
-* No UI/design changes from approved build
+
+- Uses `/api/bargain/v1/*` endpoints
+- "Why this price?" shows model confidence & explanation
+- Reprice modal triggers on `INVENTORY_CHANGED`
+- No UI/design changes from approved build
 
 ---
 
@@ -189,7 +195,7 @@ Confirm in Render logs (last 24h, no failures):
 
 2. **Rollout Phases**:
    - **Shadow mode (24h)**: AI_TRAFFIC=0.0, AI_SHADOW=true
-   - **10% canary (24h)**: AI_TRAFFIC=0.1, AI_SHADOW=true  
+   - **10% canary (24h)**: AI_TRAFFIC=0.1, AI_SHADOW=true
    - **50% partial (48h)**: AI_TRAFFIC=0.5, AI_SHADOW=false
    - **100% full**: AI_TRAFFIC=1.0, AI_SHADOW=false
 
@@ -202,23 +208,28 @@ Confirm in Render logs (last 24h, no failures):
 **Fill YES/NO + evidence for each:**
 
 ### Critical Validation (5-second script)
+
 - [ ] **Single DB validation script**: ✅ (Paste complete SQL results - all rows must show ✅ PASS)
 - [ ] **Never-loss violations**: ✅ (Confirm CRITICAL check shows 0 violations)
 
-### Performance & Cache  
+### Performance & Cache
+
 - [ ] **Redis hit rate**: ✅ (Paste curl result showing ≥0.90)
 - [ ] **Metrics endpoint**: ✅ (Paste curl result showing bargain metrics)
 
 ### Configuration
+
 - [ ] **Feature flags**: ✅ (Paste API response showing exact shadow mode values)
 - [ ] **Cron job logs**: ✅ (Screenshot of green Render cron logs - no failures 24h)
 
 ### Monitoring (when available)
+
 - [ ] **Grafana p95 latency**: ✅ (Screenshot showing <300ms)
 - [ ] **Master validation**: ✅ (Paste "READY FOR PRODUCTION ROLLOUT" banner)
 
 ### Integration
-- [ ] **Frontend endpoints**: ✅ (Confirm flights/hotels use /api/bargain/v1/*)
+
+- [ ] **Frontend endpoints**: ✅ (Confirm flights/hotels use /api/bargain/v1/\*)
 
 ---
 
@@ -227,6 +238,7 @@ Confirm in Render logs (last 24h, no failures):
 **Once all items above are ✅ with evidence attached:**
 
 ### GO: Proceed to 10% traffic rollout
+
 ```bash
 curl -X POST -H "Authorization: Bearer $TOKEN" \
   -d '{"flag": "AI_TRAFFIC", "value": 0.1}' \
@@ -234,6 +246,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
 ```
 
 ### NO-GO: Any ❌ FAIL or 🚨 CRITICAL FAIL found
+
 - **DO NOT PROCEED** to production rollout
 - **INVESTIGATE** and fix all failing checks
 - **RE-RUN** validation until all ✅ PASS

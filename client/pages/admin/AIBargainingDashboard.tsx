@@ -3,18 +3,49 @@
  * Complete admin interface for AI bargaining platform
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Activity, DollarSign, TrendingUp, TrendingDown, Users, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
+import {
+  Activity,
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+} from "lucide-react";
 
 interface LiveSession {
   session_id: string;
@@ -34,8 +65,10 @@ interface DashboardData {
 }
 
 const AIBargainingDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('live-monitor');
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [activeTab, setActiveTab] = useState("live-monitor");
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,7 +77,7 @@ const AIBargainingDashboard: React.FC = () => {
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Policy editor
-  const [policyYaml, setPolicyYaml] = useState('');
+  const [policyYaml, setPolicyYaml] = useState("");
   const [policyValidation, setPolicyValidation] = useState<any>(null);
 
   // Reports data
@@ -57,12 +90,12 @@ const AIBargainingDashboard: React.FC = () => {
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
-        const response = await fetch('/api/admin/ai/live');
+        const response = await fetch("/api/admin/ai/live");
         const data = await response.json();
         setLiveData(data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch live data');
+        setError("Failed to fetch live data");
         setLoading(false);
       }
     };
@@ -81,26 +114,34 @@ const AIBargainingDashboard: React.FC = () => {
     const fetchReportData = async () => {
       try {
         switch (activeTab) {
-          case 'airline-reports':
-            const airlineResponse = await fetch('/api/admin/ai/reports/airline-route');
+          case "airline-reports":
+            const airlineResponse = await fetch(
+              "/api/admin/ai/reports/airline-route",
+            );
             const airlineResult = await airlineResponse.json();
             setAirlineData(airlineResult.data);
             break;
 
-          case 'hotel-reports':
-            const hotelResponse = await fetch('/api/admin/ai/reports/hotel-city');
+          case "hotel-reports":
+            const hotelResponse = await fetch(
+              "/api/admin/ai/reports/hotel-city",
+            );
             const hotelResult = await hotelResponse.json();
             setHotelData(hotelResult.data);
             break;
 
-          case 'elasticity':
-            const elasticityResponse = await fetch('/api/admin/ai/elasticity?product_type=flight');
+          case "elasticity":
+            const elasticityResponse = await fetch(
+              "/api/admin/ai/elasticity?product_type=flight",
+            );
             const elasticityResult = await elasticityResponse.json();
             setElasticityData(elasticityResult.elasticity_data);
             break;
 
-          case 'promo-lab':
-            const promoResponse = await fetch('/api/admin/ai/reports/promo-effectiveness');
+          case "promo-lab":
+            const promoResponse = await fetch(
+              "/api/admin/ai/reports/promo-effectiveness",
+            );
             const promoResult = await promoResponse.json();
             setPromoData(promoResult.promo_effectiveness);
             break;
@@ -109,11 +150,11 @@ const AIBargainingDashboard: React.FC = () => {
             break;
         }
       } catch (err) {
-        console.error('Failed to fetch report data:', err);
+        console.error("Failed to fetch report data:", err);
       }
     };
 
-    if (activeTab !== 'live-monitor') {
+    if (activeTab !== "live-monitor") {
       fetchReportData();
     }
   }, [activeTab]);
@@ -122,61 +163,64 @@ const AIBargainingDashboard: React.FC = () => {
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
-        const response = await fetch('/api/admin/ai/policies');
+        const response = await fetch("/api/admin/ai/policies");
         const data = await response.json();
         if (data.policies && data.policies.length > 0) {
           setPolicyYaml(data.policies[0].dsl_yaml);
         }
       } catch (err) {
-        console.error('Failed to fetch policy:', err);
+        console.error("Failed to fetch policy:", err);
       }
     };
 
-    if (activeTab === 'policy-manager') {
+    if (activeTab === "policy-manager") {
       fetchPolicy();
     }
   }, [activeTab]);
 
   const validatePolicy = async () => {
     try {
-      const response = await fetch('/api/admin/ai/policies/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dsl_yaml: policyYaml })
+      const response = await fetch("/api/admin/ai/policies/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dsl_yaml: policyYaml }),
       });
       const result = await response.json();
       setPolicyValidation(result);
     } catch (err) {
-      setPolicyValidation({ valid: false, errors: ['Validation request failed'] });
+      setPolicyValidation({
+        valid: false,
+        errors: ["Validation request failed"],
+      });
     }
   };
 
   const publishPolicy = async () => {
     try {
-      const response = await fetch('/api/admin/ai/policies', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          version: `v${Date.now()}`, 
-          dsl_yaml: policyYaml 
-        })
+      const response = await fetch("/api/admin/ai/policies", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          version: `v${Date.now()}`,
+          dsl_yaml: policyYaml,
+        }),
       });
-      
+
       if (response.ok) {
-        alert('Policy published successfully!');
+        alert("Policy published successfully!");
         setPolicyValidation(null);
       } else {
-        alert('Failed to publish policy');
+        alert("Failed to publish policy");
       }
     } catch (err) {
-      alert('Error publishing policy');
+      alert("Error publishing policy");
     }
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
@@ -197,32 +241,54 @@ const AIBargainingDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">AI Bargaining Dashboard</h1>
         <div className="flex items-center space-x-2">
-          <Badge variant={liveData ? 'default' : 'destructive'}>
-            {liveData ? 'Connected' : 'Disconnected'}
+          <Badge variant={liveData ? "default" : "destructive"}>
+            {liveData ? "Connected" : "Disconnected"}
           </Badge>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            {autoRefresh ? 'Pause' : 'Resume'} Auto-refresh
+            {autoRefresh ? "Pause" : "Resume"} Auto-refresh
           </Button>
         </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-6 lg:grid-cols-11 gap-1 h-auto">
-          <TabsTrigger value="live-monitor" className="text-xs">Live Monitor</TabsTrigger>
-          <TabsTrigger value="price-watch" className="text-xs">Price Watch</TabsTrigger>
-          <TabsTrigger value="policy-manager" className="text-xs">Policy</TabsTrigger>
-          <TabsTrigger value="markup-manager" className="text-xs">Markup</TabsTrigger>
-          <TabsTrigger value="promo-lab" className="text-xs">Promo Lab</TabsTrigger>
-          <TabsTrigger value="elasticity" className="text-xs">Elasticity</TabsTrigger>
-          <TabsTrigger value="airline-reports" className="text-xs">Airlines</TabsTrigger>
-          <TabsTrigger value="hotel-reports" className="text-xs">Hotels</TabsTrigger>
-          <TabsTrigger value="replay" className="text-xs">Replay</TabsTrigger>
-          <TabsTrigger value="models" className="text-xs">Models</TabsTrigger>
-          <TabsTrigger value="health" className="text-xs">Health</TabsTrigger>
+          <TabsTrigger value="live-monitor" className="text-xs">
+            Live Monitor
+          </TabsTrigger>
+          <TabsTrigger value="price-watch" className="text-xs">
+            Price Watch
+          </TabsTrigger>
+          <TabsTrigger value="policy-manager" className="text-xs">
+            Policy
+          </TabsTrigger>
+          <TabsTrigger value="markup-manager" className="text-xs">
+            Markup
+          </TabsTrigger>
+          <TabsTrigger value="promo-lab" className="text-xs">
+            Promo Lab
+          </TabsTrigger>
+          <TabsTrigger value="elasticity" className="text-xs">
+            Elasticity
+          </TabsTrigger>
+          <TabsTrigger value="airline-reports" className="text-xs">
+            Airlines
+          </TabsTrigger>
+          <TabsTrigger value="hotel-reports" className="text-xs">
+            Hotels
+          </TabsTrigger>
+          <TabsTrigger value="replay" className="text-xs">
+            Replay
+          </TabsTrigger>
+          <TabsTrigger value="models" className="text-xs">
+            Models
+          </TabsTrigger>
+          <TabsTrigger value="health" className="text-xs">
+            Health
+          </TabsTrigger>
         </TabsList>
 
         {/* 1. LIVE MONITOR */}
@@ -230,44 +296,69 @@ const AIBargainingDashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Active Sessions
+                </CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{liveData?.sessions?.length || 0}</div>
+                <div className="text-2xl font-bold">
+                  {liveData?.sessions?.length || 0}
+                </div>
                 <p className="text-xs text-muted-foreground">Last 30 minutes</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Avg Response Time</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Avg Response Time
+                </CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {Math.round(liveData?.performance?.offerability?.avg_time_ms || 0)}ms
+                  {Math.round(
+                    liveData?.performance?.offerability?.avg_time_ms || 0,
+                  )}
+                  ms
                 </div>
-                <p className="text-xs text-muted-foreground">Target: &lt;300ms</p>
+                <p className="text-xs text-muted-foreground">
+                  Target: &lt;300ms
+                </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Success Rate
+                </CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {((1 - (liveData?.performance?.offerability?.error_rate || 0)) * 100).toFixed(1)}%
+                  {(
+                    (1 -
+                      (liveData?.performance?.offerability?.error_rate || 0)) *
+                    100
+                  ).toFixed(1)}
+                  %
                 </div>
-                <p className="text-xs text-muted-foreground">Error rate: {formatPercentage(liveData?.performance?.offerability?.error_rate || 0)}</p>
+                <p className="text-xs text-muted-foreground">
+                  Error rate:{" "}
+                  {formatPercentage(
+                    liveData?.performance?.offerability?.error_rate || 0,
+                  )}
+                </p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Redis Hit Rate</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Redis Hit Rate
+                </CardTitle>
                 <CheckCircle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -284,29 +375,45 @@ const AIBargainingDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {liveData?.sessions?.slice(0, 10).map((session: LiveSession) => (
-                  <div key={session.session_id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Badge variant="outline">{session.product_type}</Badge>
-                      <span className="font-mono text-sm">{session.session_id.substring(0, 8)}...</span>
-                      <span className="text-sm text-gray-600">Round {session.round_count}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      {session.latest_offer && (
-                        <span className="text-sm">{formatCurrency(session.latest_offer)}</span>
-                      )}
-                      {session.latest_accept_prob && (
-                        <Badge variant="secondary">
-                          {formatPercentage(session.latest_accept_prob)} accept
+                {liveData?.sessions
+                  ?.slice(0, 10)
+                  .map((session: LiveSession) => (
+                    <div
+                      key={session.session_id}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <Badge variant="outline">{session.product_type}</Badge>
+                        <span className="font-mono text-sm">
+                          {session.session_id.substring(0, 8)}...
+                        </span>
+                        <span className="text-sm text-gray-600">
+                          Round {session.round_count}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        {session.latest_offer && (
+                          <span className="text-sm">
+                            {formatCurrency(session.latest_offer)}
+                          </span>
+                        )}
+                        {session.latest_accept_prob && (
+                          <Badge variant="secondary">
+                            {formatPercentage(session.latest_accept_prob)}{" "}
+                            accept
+                          </Badge>
+                        )}
+                        <Badge
+                          variant={session.is_accepted ? "default" : "outline"}
+                        >
+                          {session.is_accepted ? "Accepted" : "Active"}
                         </Badge>
-                      )}
-                      <Badge variant={session.is_accepted ? 'default' : 'outline'}>
-                        {session.is_accepted ? 'Accepted' : 'Active'}
-                      </Badge>
-                      <span className="text-xs text-gray-500">{session.time_active_minutes}m</span>
+                        <span className="text-xs text-gray-500">
+                          {session.time_active_minutes}m
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -317,7 +424,9 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Price Volatility Monitor</CardTitle>
-              <CardDescription>Track supplier rate changes and inventory fluctuations</CardDescription>
+              <CardDescription>
+                Track supplier rate changes and inventory fluctuations
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-96">
@@ -327,7 +436,11 @@ const AIBargainingDashboard: React.FC = () => {
                     <XAxis dataKey="hour" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="avg_total_price" stroke="#8884d8" />
+                    <Line
+                      type="monotone"
+                      dataKey="avg_total_price"
+                      stroke="#8884d8"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -347,7 +460,9 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Policy Editor</CardTitle>
-              <CardDescription>Edit and validate bargaining policies</CardDescription>
+              <CardDescription>
+                Edit and validate bargaining policies
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -365,8 +480,8 @@ const AIBargainingDashboard: React.FC = () => {
                 <Button onClick={validatePolicy} variant="outline">
                   Validate Policy
                 </Button>
-                <Button 
-                  onClick={publishPolicy} 
+                <Button
+                  onClick={publishPolicy}
                   disabled={!policyValidation?.valid}
                 >
                   Publish Policy
@@ -374,14 +489,17 @@ const AIBargainingDashboard: React.FC = () => {
               </div>
 
               {policyValidation && (
-                <Alert variant={policyValidation.valid ? 'default' : 'destructive'}>
+                <Alert
+                  variant={policyValidation.valid ? "default" : "destructive"}
+                >
                   <AlertDescription>
                     {policyValidation.valid ? (
                       <div>
                         <p>✅ Policy validation passed</p>
                         {policyValidation.preview && (
                           <div className="mt-2 text-sm">
-                            Preview: Min ${policyValidation.preview.min_price} - Max ${policyValidation.preview.max_price}
+                            Preview: Min ${policyValidation.preview.min_price} -
+                            Max ${policyValidation.preview.max_price}
                           </div>
                         )}
                       </div>
@@ -389,9 +507,11 @@ const AIBargainingDashboard: React.FC = () => {
                       <div>
                         <p>❌ Policy validation failed:</p>
                         <ul className="list-disc list-inside mt-1">
-                          {policyValidation.errors?.map((error: string, index: number) => (
-                            <li key={index}>{error}</li>
-                          ))}
+                          {policyValidation.errors?.map(
+                            (error: string, index: number) => (
+                              <li key={index}>{error}</li>
+                            ),
+                          )}
                         </ul>
                       </div>
                     )}
@@ -407,11 +527,14 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Markup Rules</CardTitle>
-              <CardDescription>Manage markup rules and cost floors</CardDescription>
+              <CardDescription>
+                Manage markup rules and cost floors
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8 text-gray-500">
-                Markup management interface - Add CRUD operations for ai.markup_rules
+                Markup management interface - Add CRUD operations for
+                ai.markup_rules
               </div>
             </CardContent>
           </Card>
@@ -422,7 +545,9 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Promo Effectiveness</CardTitle>
-              <CardDescription>Analyze promo code performance and incremental profit</CardDescription>
+              <CardDescription>
+                Analyze promo code performance and incremental profit
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-64">
@@ -445,7 +570,9 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Price Elasticity Analysis</CardTitle>
-              <CardDescription>Discount depth vs acceptance rate curves</CardDescription>
+              <CardDescription>
+                Discount depth vs acceptance rate curves
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-64">
@@ -455,7 +582,11 @@ const AIBargainingDashboard: React.FC = () => {
                     <XAxis dataKey="bucket" />
                     <YAxis />
                     <Tooltip />
-                    <Line type="monotone" dataKey="accept_rate" stroke="#8884d8" />
+                    <Line
+                      type="monotone"
+                      dataKey="accept_rate"
+                      stroke="#8884d8"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -468,13 +599,20 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Airline Route Performance</CardTitle>
-              <CardDescription>Per airline/destination analysis</CardDescription>
+              <CardDescription>
+                Per airline/destination analysis
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
                 {airlineData.slice(0, 10).map((row, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                    <div>{row.airline} {row.origin}→{row.dest}</div>
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                  >
+                    <div>
+                      {row.airline} {row.origin}→{row.dest}
+                    </div>
                     <div className="flex space-x-4 text-sm">
                       <span>{row.offers} offers</span>
                       <span>{row.accept_rate_pct}% accept</span>
@@ -497,8 +635,13 @@ const AIBargainingDashboard: React.FC = () => {
             <CardContent>
               <div className="space-y-2">
                 {hotelData.slice(0, 10).map((row, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                    <div>{row.city} - Hotel {row.hotel_id}</div>
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                  >
+                    <div>
+                      {row.city} - Hotel {row.hotel_id}
+                    </div>
                     <div className="flex space-x-4 text-sm">
                       <span>{row.offers} offers</span>
                       <span>{row.accept_rate_pct}% accept</span>
@@ -516,14 +659,16 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Session Replay & Audit</CardTitle>
-              <CardDescription>View complete session traces and signed capsules</CardDescription>
+              <CardDescription>
+                View complete session traces and signed capsules
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="session-id">Session ID</Label>
-                  <Input 
-                    id="session-id" 
+                  <Input
+                    id="session-id"
                     placeholder="Enter session ID to replay..."
                     className="max-w-md"
                   />
@@ -539,7 +684,9 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Model Registry & A/B Tests</CardTitle>
-              <CardDescription>Manage ML models and experiments</CardDescription>
+              <CardDescription>
+                Manage ML models and experiments
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8 text-gray-500">
@@ -554,7 +701,9 @@ const AIBargainingDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>System Health</CardTitle>
-              <CardDescription>Monitor components, jobs, and SLAs</CardDescription>
+              <CardDescription>
+                Monitor components, jobs, and SLAs
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -564,7 +713,11 @@ const AIBargainingDashboard: React.FC = () => {
                     <span className="font-medium">Offerability Engine</span>
                   </div>
                   <div className="text-sm text-gray-600 mt-1">
-                    Avg: {Math.round(liveData?.performance?.offerability?.avg_time_ms || 0)}ms
+                    Avg:{" "}
+                    {Math.round(
+                      liveData?.performance?.offerability?.avg_time_ms || 0,
+                    )}
+                    ms
                   </div>
                 </div>
 
@@ -583,9 +736,7 @@ const AIBargainingDashboard: React.FC = () => {
                     <CheckCircle className="h-5 w-5 text-green-600" />
                     <span className="font-medium">Redis Cache</span>
                   </div>
-                  <div className="text-sm text-gray-600 mt-1">
-                    Connected
-                  </div>
+                  <div className="text-sm text-gray-600 mt-1">Connected</div>
                 </div>
               </div>
             </CardContent>

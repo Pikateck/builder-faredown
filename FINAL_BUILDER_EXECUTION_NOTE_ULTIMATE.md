@@ -18,67 +18,67 @@ Builder must run these **exactly** and mark **YES/NO** for each, with screenshot
 -- =====================================================
 
 -- 1. SCHEMA VALIDATION
-SELECT 
+SELECT
   'SCHEMA_CHECK' as check_type,
   'ai_tables_count' as metric,
   COUNT(*) as value,
   CASE WHEN COUNT(*) >= 15 THEN '✅ PASS' ELSE '❌ FAIL' END as status
-FROM information_schema.tables 
+FROM information_schema.tables
 WHERE table_schema = 'ai'
 
 UNION ALL
 
-SELECT 
+SELECT
   'SCHEMA_CHECK' as check_type,
   'materialized_views_count' as metric,
   COUNT(*) as value,
   CASE WHEN COUNT(*) >= 3 THEN '✅ PASS' ELSE '❌ FAIL' END as status
-FROM pg_matviews 
+FROM pg_matviews
 WHERE schemaname = 'ai'
 
 UNION ALL
 
-SELECT 
+SELECT
   'SCHEMA_CHECK' as check_type,
   'never_loss_function_exists' as metric,
   COUNT(*) as value,
   CASE WHEN COUNT(*) >= 1 THEN '✅ PASS' ELSE '❌ FAIL' END as status
-FROM pg_proc 
+FROM pg_proc
 WHERE proname = 'assert_never_loss'
 
 UNION ALL
 
 -- 2. CRITICAL FLOOR AUDIT (NEVER-LOSS VALIDATION)
-SELECT 
+SELECT
   'FLOOR_AUDIT' as check_type,
   'never_loss_violations' as metric,
   COALESCE(
-    (SELECT COUNT(*) 
+    (SELECT COUNT(*)
      FROM ai.bargain_events e
      JOIN LATERAL (
        SELECT MAX(counter_price) AS final_price
        FROM ai.bargain_events e2
        WHERE e2.session_id = e.session_id
      ) f ON TRUE
-     WHERE e.accepted IS TRUE 
+     WHERE e.accepted IS TRUE
        AND f.final_price < e.true_cost_usd), 0
   ) as value,
   CASE WHEN COALESCE(
-    (SELECT COUNT(*) 
+    (SELECT COUNT(*)
      FROM ai.bargain_events e
      JOIN LATERAL (
        SELECT MAX(counter_price) AS final_price
        FROM ai.bargain_events e2
        WHERE e2.session_id = e.session_id
      ) f ON TRUE
-     WHERE e.accepted IS TRUE 
+     WHERE e.accepted IS TRUE
        AND f.final_price < e.true_cost_usd), 0
   ) = 0 THEN '✅ PASS' ELSE '🚨 CRITICAL FAIL' END as status
 
 UNION ALL
 
 -- 3. RECENT ACTIVITY VALIDATION
-SELECT 
+SELECT
   'ACTIVITY_CHECK' as check_type,
   'recent_supplier_rates_1h' as metric,
   COALESCE(
@@ -90,7 +90,7 @@ SELECT
 
 UNION ALL
 
-SELECT 
+SELECT
   'ACTIVITY_CHECK' as check_type,
   'recent_bargain_sessions_24h' as metric,
   COALESCE(
@@ -103,7 +103,7 @@ SELECT
 UNION ALL
 
 -- 4. DATA INTEGRITY VALIDATION
-SELECT 
+SELECT
   'INTEGRITY_CHECK' as check_type,
   'active_policies_count' as metric,
   COALESCE(
@@ -115,7 +115,7 @@ SELECT
 
 UNION ALL
 
-SELECT 
+SELECT
   'INTEGRITY_CHECK' as check_type,
   'active_models_count' as metric,
   COALESCE(
@@ -129,7 +129,7 @@ ORDER BY check_type, metric;
 
 -- =====================================================
 -- EXPECTED RESULTS SUMMARY:
--- ✅ ai_tables_count: 15+ 
+-- ✅ ai_tables_count: 15+
 -- ✅ materialized_views_count: 3+
 -- ✅ never_loss_function_exists: 1
 -- ✅ never_loss_violations: 0 (CRITICAL - MUST BE ZERO)
@@ -153,6 +153,7 @@ curl -s https://<YOUR_RENDER_API_URL>/metrics | grep bargain_redis_hit_rate
 ```
 
 **Expected output:**
+
 ```
 # TYPE bargain_redis_hit_rate gauge
 bargain_redis_hit_rate 0.92
@@ -189,12 +190,12 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 Once live scrape data is available:
 
-* **Grafana p95 latency**: `< 300ms` for `/session/*` routes
-* **Metrics endpoint responding**: 
+- **Grafana p95 latency**: `< 300ms` for `/session/*` routes
+- **Metrics endpoint responding**:
   ```bash
   curl https://<YOUR_RENDER_API_URL>/metrics | grep "bargain_response_seconds"
   ```
-* **Capsule ECDSA verify**: ✅ on at least 1 replayed session
+- **Capsule ECDSA verify**: ✅ on at least 1 replayed session
 
 ---
 
@@ -202,19 +203,19 @@ Once live scrape data is available:
 
 Confirm in Render logs (last 24h, no failures):
 
-* Hotset refresh every 5 min
-* Cache warmer hourly  
-* MV refresh hourly
-* Model retrain nightly at 02:00 UTC
+- Hotset refresh every 5 min
+- Cache warmer hourly
+- MV refresh hourly
+- Model retrain nightly at 02:00 UTC
 
 ---
 
 ## **🎯 FRONTEND INTEGRATION**
 
-* Uses `/api/bargain/v1/*` endpoints
-* "Why this price?" shows model confidence & explanation
-* Reprice modal triggers on `INVENTORY_CHANGED`
-* No UI/design changes from approved build
+- Uses `/api/bargain/v1/*` endpoints
+- "Why this price?" shows model confidence & explanation
+- Reprice modal triggers on `INVENTORY_CHANGED`
+- No UI/design changes from approved build
 
 ---
 
@@ -235,20 +236,24 @@ Confirm in Render logs (last 24h, no failures):
 **Copy and fill YES/NO + evidence:**
 
 ### Critical Database Validation (5-second script)
+
 - [ ] **Single DB validation script**: ✅ (Paste complete SQL results - all rows must show ✅ PASS)
 - [ ] **Never-loss violations**: ✅ (Confirm value = 0 in results)
 
-### Performance & Monitoring  
+### Performance & Monitoring
+
 - [ ] **Redis hit rate**: ✅ (Paste curl result showing ≥0.90)
 - [ ] **Metrics endpoint**: ✅ (Paste curl result showing bargain metrics)
 - [ ] **Feature flags**: ✅ (Paste API response showing shadow mode values)
 
 ### System Health
+
 - [ ] **Cron job logs**: ✅ (Screenshot of green Render cron logs)
 - [ ] **Grafana p95 latency**: ✅ (Screenshot showing <300ms when available)
 
 ### Integration & Final Gate
-- [ ] **Frontend endpoints**: ✅ (Confirm flights/hotels use /api/bargain/v1/*)
+
+- [ ] **Frontend endpoints**: ✅ (Confirm flights/hotels use /api/bargain/v1/\*)
 - [ ] **Master validation**: ✅ (Paste "READY FOR PRODUCTION ROLLOUT" banner)
 
 ---
@@ -257,4 +262,4 @@ Confirm in Render logs (last 24h, no failures):
 
 ---
 
-*Single SQL script validates entire system in under 5 seconds. All other commands are copy-paste ready for instant verification.*
+_Single SQL script validates entire system in under 5 seconds. All other commands are copy-paste ready for instant verification._

@@ -4,15 +4,15 @@
  * Implements the CPO specification from the AI Bargaining Platform
  */
 
-const crypto = require('crypto');
-const winston = require('winston');
+const crypto = require("crypto");
+const winston = require("winston");
 
 class CPOService {
   constructor() {
     this.logger = winston.createLogger({
-      level: 'info',
+      level: "info",
       format: winston.format.json(),
-      transports: [new winston.transports.Console()]
+      transports: [new winston.transports.Console()],
     });
   }
 
@@ -26,18 +26,25 @@ class CPOService {
       origin,
       destination,
       departureDate,
-      fareBasis = 'Y'
+      fareBasis = "Y",
     } = flightData;
 
     // Normalize inputs
-    const normalizedAirline = (airline || '').toUpperCase().trim();
-    const normalizedOrigin = (origin || '').toUpperCase().trim();
-    const normalizedDest = (destination || '').toUpperCase().trim();
+    const normalizedAirline = (airline || "").toUpperCase().trim();
+    const normalizedOrigin = (origin || "").toUpperCase().trim();
+    const normalizedDest = (destination || "").toUpperCase().trim();
     const normalizedDate = this.normalizeDate(departureDate);
-    const normalizedFareBasis = (fareBasis || 'Y').toUpperCase().trim();
+    const normalizedFareBasis = (fareBasis || "Y").toUpperCase().trim();
 
-    if (!normalizedAirline || !normalizedOrigin || !normalizedDest || !normalizedDate) {
-      throw new Error('Missing required flight data for canonical key generation');
+    if (
+      !normalizedAirline ||
+      !normalizedOrigin ||
+      !normalizedDest ||
+      !normalizedDate
+    ) {
+      throw new Error(
+        "Missing required flight data for canonical key generation",
+      );
     }
 
     return `FL:${normalizedAirline}-${normalizedOrigin}-${normalizedDest}-${normalizedDate}-${normalizedFareBasis}`;
@@ -52,19 +59,19 @@ class CPOService {
       hotelId,
       roomCode,
       rateCode,
-      boardCode = 'RO',
-      cancellationPolicy = 'STANDARD'
+      boardCode = "RO",
+      cancellationPolicy = "STANDARD",
     } = hotelData;
 
     // Normalize inputs
-    const normalizedHotelId = String(hotelId || '').trim();
-    const normalizedRoomCode = (roomCode || 'STD').toUpperCase().trim();
-    const normalizedRateCode = (rateCode || 'STANDARD').toUpperCase().trim();
-    const normalizedBoard = (boardCode || 'RO').toUpperCase().trim();
+    const normalizedHotelId = String(hotelId || "").trim();
+    const normalizedRoomCode = (roomCode || "STD").toUpperCase().trim();
+    const normalizedRateCode = (rateCode || "STANDARD").toUpperCase().trim();
+    const normalizedBoard = (boardCode || "RO").toUpperCase().trim();
     const cancelHash = this.hashCancellationPolicy(cancellationPolicy);
 
     if (!normalizedHotelId) {
-      throw new Error('Missing hotel ID for canonical key generation');
+      throw new Error("Missing hotel ID for canonical key generation");
     }
 
     return `HT:${normalizedHotelId}:${normalizedRoomCode}:${normalizedRateCode}-${normalizedBoard}:${cancelHash}`;
@@ -78,18 +85,26 @@ class CPOService {
     const {
       location,
       activityName,
-      category = 'GENERAL',
-      duration = '4H'
+      category = "GENERAL",
+      duration = "4H",
     } = sightseeingData;
 
     // Normalize inputs
-    const normalizedLocation = (location || '').toUpperCase().replace(/\s+/g, '').trim();
-    const normalizedActivity = (activityName || '').toUpperCase().replace(/\s+/g, '').trim();
-    const normalizedCategory = (category || 'GENERAL').toLowerCase().trim();
-    const normalizedDuration = (duration || '4H').toUpperCase().trim();
+    const normalizedLocation = (location || "")
+      .toUpperCase()
+      .replace(/\s+/g, "")
+      .trim();
+    const normalizedActivity = (activityName || "")
+      .toUpperCase()
+      .replace(/\s+/g, "")
+      .trim();
+    const normalizedCategory = (category || "GENERAL").toLowerCase().trim();
+    const normalizedDuration = (duration || "4H").toUpperCase().trim();
 
     if (!normalizedLocation || !normalizedActivity) {
-      throw new Error('Missing required sightseeing data for canonical key generation');
+      throw new Error(
+        "Missing required sightseeing data for canonical key generation",
+      );
     }
 
     return `ST:${normalizedLocation}-${normalizedActivity}:${normalizedCategory}:${normalizedDuration}`;
@@ -101,38 +116,38 @@ class CPOService {
   createFlightCPO(flightData, supplierData = {}) {
     try {
       const canonicalKey = this.generateFlightKey(flightData);
-      
+
       return {
-        type: 'flight',
+        type: "flight",
         canonical_key: canonicalKey,
         attrs: {
           airline: flightData.airline?.toUpperCase(),
           origin: flightData.origin?.toUpperCase(),
           dest: flightData.destination?.toUpperCase(),
           dep_date: this.normalizeDate(flightData.departureDate),
-          fare_basis: flightData.fareBasis || 'Y',
-          class: flightData.class || 'Economy',
+          fare_basis: flightData.fareBasis || "Y",
+          class: flightData.class || "Economy",
           flight_number: flightData.flightNumber,
           departure_time: flightData.departureTime,
           arrival_time: flightData.arrivalTime,
           duration_minutes: flightData.durationMinutes,
           stops: flightData.stops || 0,
-          aircraft_type: flightData.aircraftType
+          aircraft_type: flightData.aircraftType,
         },
         displayed_price: parseFloat(flightData.price || 0),
-        currency: flightData.currency || 'USD',
+        currency: flightData.currency || "USD",
         supplier_metadata: {
           supplier_id: supplierData.supplierId,
           supplier_code: supplierData.supplierCode,
           original_id: flightData.originalId,
           booking_class: flightData.bookingClass,
           fare_rules: flightData.fareRules,
-          baggage_allowance: flightData.baggageAllowance
+          baggage_allowance: flightData.baggageAllowance,
         },
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
     } catch (error) {
-      this.logger.error('Failed to create flight CPO:', error);
+      this.logger.error("Failed to create flight CPO:", error);
       throw error;
     }
   }
@@ -143,9 +158,9 @@ class CPOService {
   createHotelCPO(hotelData, supplierData = {}) {
     try {
       const canonicalKey = this.generateHotelKey(hotelData);
-      
+
       return {
-        type: 'hotel',
+        type: "hotel",
         canonical_key: canonicalKey,
         attrs: {
           hotel_id: String(hotelData.hotelId),
@@ -155,7 +170,7 @@ class CPOService {
           room_code: hotelData.roomCode?.toUpperCase(),
           room_name: hotelData.roomName,
           rate_code: hotelData.rateCode?.toUpperCase(),
-          board: hotelData.boardCode?.toUpperCase() || 'RO',
+          board: hotelData.boardCode?.toUpperCase() || "RO",
           cancel_policy: hotelData.cancellationPolicy,
           star_rating: parseFloat(hotelData.starRating || 0),
           check_in: this.normalizeDate(hotelData.checkIn),
@@ -163,23 +178,23 @@ class CPOService {
           nights: hotelData.nights || 1,
           guests: {
             adults: hotelData.adults || 1,
-            children: hotelData.children || 0
-          }
+            children: hotelData.children || 0,
+          },
         },
         displayed_price: parseFloat(hotelData.price || 0),
-        currency: hotelData.currency || 'USD',
+        currency: hotelData.currency || "USD",
         supplier_metadata: {
           supplier_id: supplierData.supplierId,
           supplier_code: supplierData.supplierCode,
           original_id: hotelData.originalId,
           hotel_code: hotelData.hotelCode,
           rate_key: hotelData.rateKey,
-          booking_remarks: hotelData.bookingRemarks
+          booking_remarks: hotelData.bookingRemarks,
         },
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
     } catch (error) {
-      this.logger.error('Failed to create hotel CPO:', error);
+      this.logger.error("Failed to create hotel CPO:", error);
       throw error;
     }
   }
@@ -190,39 +205,39 @@ class CPOService {
   createSightseeingCPO(sightseeingData, supplierData = {}) {
     try {
       const canonicalKey = this.generateSightseeingKey(sightseeingData);
-      
+
       return {
-        type: 'sightseeing',
+        type: "sightseeing",
         canonical_key: canonicalKey,
         attrs: {
           location: sightseeingData.location?.toUpperCase(),
           activity: sightseeingData.activityName,
-          category: sightseeingData.category?.toLowerCase() || 'general',
-          duration: sightseeingData.duration || '4H',
+          category: sightseeingData.category?.toLowerCase() || "general",
+          duration: sightseeingData.duration || "4H",
           city: sightseeingData.city?.toUpperCase(),
           country: sightseeingData.country?.toUpperCase(),
           activity_date: this.normalizeDate(sightseeingData.activityDate),
           time_slot: sightseeingData.timeSlot,
-          language: sightseeingData.language || 'EN',
+          language: sightseeingData.language || "EN",
           inclusions: sightseeingData.inclusions || [],
           exclusions: sightseeingData.exclusions || [],
           pickup_point: sightseeingData.pickupPoint,
-          difficulty_level: sightseeingData.difficultyLevel || 'easy'
+          difficulty_level: sightseeingData.difficultyLevel || "easy",
         },
         displayed_price: parseFloat(sightseeingData.price || 0),
-        currency: sightseeingData.currency || 'USD',
+        currency: sightseeingData.currency || "USD",
         supplier_metadata: {
           supplier_id: supplierData.supplierId,
           supplier_code: supplierData.supplierCode,
           original_id: sightseeingData.originalId,
           activity_code: sightseeingData.activityCode,
           modality_code: sightseeingData.modalityCode,
-          booking_remarks: sightseeingData.bookingRemarks
+          booking_remarks: sightseeingData.bookingRemarks,
         },
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       };
     } catch (error) {
-      this.logger.error('Failed to create sightseeing CPO:', error);
+      this.logger.error("Failed to create sightseeing CPO:", error);
       throw error;
     }
   }
@@ -234,29 +249,29 @@ class CPOService {
     const errors = [];
 
     // Required fields
-    if (!cpo.type || !['flight', 'hotel', 'sightseeing'].includes(cpo.type)) {
-      errors.push('Invalid or missing type');
+    if (!cpo.type || !["flight", "hotel", "sightseeing"].includes(cpo.type)) {
+      errors.push("Invalid or missing type");
     }
 
-    if (!cpo.canonical_key || typeof cpo.canonical_key !== 'string') {
-      errors.push('Invalid or missing canonical_key');
+    if (!cpo.canonical_key || typeof cpo.canonical_key !== "string") {
+      errors.push("Invalid or missing canonical_key");
     }
 
-    if (!cpo.attrs || typeof cpo.attrs !== 'object') {
-      errors.push('Invalid or missing attrs');
+    if (!cpo.attrs || typeof cpo.attrs !== "object") {
+      errors.push("Invalid or missing attrs");
     }
 
-    if (typeof cpo.displayed_price !== 'number' || cpo.displayed_price < 0) {
-      errors.push('Invalid displayed_price');
+    if (typeof cpo.displayed_price !== "number" || cpo.displayed_price < 0) {
+      errors.push("Invalid displayed_price");
     }
 
-    if (!cpo.currency || typeof cpo.currency !== 'string') {
-      errors.push('Invalid or missing currency');
+    if (!cpo.currency || typeof cpo.currency !== "string") {
+      errors.push("Invalid or missing currency");
     }
 
     // Type-specific validations
-    if (cpo.type === 'flight') {
-      const required = ['airline', 'origin', 'dest', 'dep_date'];
+    if (cpo.type === "flight") {
+      const required = ["airline", "origin", "dest", "dep_date"];
       for (const field of required) {
         if (!cpo.attrs[field]) {
           errors.push(`Missing required flight field: ${field}`);
@@ -264,8 +279,8 @@ class CPOService {
       }
     }
 
-    if (cpo.type === 'hotel') {
-      const required = ['hotel_id', 'city'];
+    if (cpo.type === "hotel") {
+      const required = ["hotel_id", "city"];
       for (const field of required) {
         if (!cpo.attrs[field]) {
           errors.push(`Missing required hotel field: ${field}`);
@@ -273,8 +288,8 @@ class CPOService {
       }
     }
 
-    if (cpo.type === 'sightseeing') {
-      const required = ['location', 'activity'];
+    if (cpo.type === "sightseeing") {
+      const required = ["location", "activity"];
       for (const field of required) {
         if (!cpo.attrs[field]) {
           errors.push(`Missing required sightseeing field: ${field}`);
@@ -284,7 +299,7 @@ class CPOService {
 
     return {
       valid: errors.length === 0,
-      errors: errors
+      errors: errors,
     };
   }
 
@@ -295,7 +310,7 @@ class CPOService {
     const results = {
       success: [],
       failed: [],
-      duplicates: []
+      duplicates: [],
     };
 
     const seenKeys = new Set();
@@ -306,13 +321,13 @@ class CPOService {
         const supplierData = supplierMapping[product.supplier] || {};
 
         switch (product.type) {
-          case 'flight':
+          case "flight":
             cpo = this.createFlightCPO(product, supplierData);
             break;
-          case 'hotel':
+          case "hotel":
             cpo = this.createHotelCPO(product, supplierData);
             break;
-          case 'sightseeing':
+          case "sightseeing":
             cpo = this.createSightseeingCPO(product, supplierData);
             break;
           default:
@@ -324,7 +339,7 @@ class CPOService {
         if (!validation.valid) {
           results.failed.push({
             original: product,
-            errors: validation.errors
+            errors: validation.errors,
           });
           continue;
         }
@@ -333,23 +348,24 @@ class CPOService {
         if (seenKeys.has(cpo.canonical_key)) {
           results.duplicates.push({
             canonical_key: cpo.canonical_key,
-            original: product
+            original: product,
           });
           continue;
         }
 
         seenKeys.add(cpo.canonical_key);
         results.success.push(cpo);
-
       } catch (error) {
         results.failed.push({
           original: product,
-          error: error.message
+          error: error.message,
         });
       }
     }
 
-    this.logger.info(`CPO processing complete: ${results.success.length} success, ${results.failed.length} failed, ${results.duplicates.length} duplicates`);
+    this.logger.info(
+      `CPO processing complete: ${results.success.length} success, ${results.failed.length} failed, ${results.duplicates.length} duplicates`,
+    );
 
     return results;
   }
@@ -367,11 +383,11 @@ class CPOService {
     try {
       const date = new Date(dateInput);
       if (isNaN(date.getTime())) {
-        throw new Error('Invalid date');
+        throw new Error("Invalid date");
       }
-      return date.toISOString().split('T')[0]; // YYYY-MM-DD
+      return date.toISOString().split("T")[0]; // YYYY-MM-DD
     } catch (error) {
-      this.logger.warn('Failed to normalize date:', dateInput);
+      this.logger.warn("Failed to normalize date:", dateInput);
       return null;
     }
   }
@@ -380,13 +396,13 @@ class CPOService {
    * Create hash for cancellation policy
    */
   hashCancellationPolicy(policy) {
-    if (!policy || typeof policy !== 'object') {
-      return 'STD';
+    if (!policy || typeof policy !== "object") {
+      return "STD";
     }
 
     // Create deterministic hash of policy object
     const policyString = JSON.stringify(policy, Object.keys(policy).sort());
-    const hash = crypto.createHash('md5').update(policyString).digest('hex');
+    const hash = crypto.createHash("md5").update(policyString).digest("hex");
     return hash.substring(0, 8).toUpperCase();
   }
 
@@ -395,49 +411,49 @@ class CPOService {
    */
   parseCanonicalKey(canonicalKey) {
     try {
-      const parts = canonicalKey.split(':');
+      const parts = canonicalKey.split(":");
       const type = parts[0].toLowerCase();
 
       switch (type) {
-        case 'fl':
+        case "fl":
           const [, flightInfo, fareBasis] = parts;
-          const [airline, origin, dest, date] = flightInfo.split('-');
+          const [airline, origin, dest, date] = flightInfo.split("-");
           return {
-            type: 'flight',
+            type: "flight",
             airline,
             origin,
             dest,
             date,
-            fare_basis: fareBasis
+            fare_basis: fareBasis,
           };
 
-        case 'ht':
+        case "ht":
           const [, hotelId, roomInfo, policyInfo] = parts;
-          const [rateCode, board] = roomInfo.split('-');
+          const [rateCode, board] = roomInfo.split("-");
           return {
-            type: 'hotel',
+            type: "hotel",
             hotel_id: hotelId,
             rate_code: rateCode,
             board,
-            policy_hash: policyInfo
+            policy_hash: policyInfo,
           };
 
-        case 'st':
+        case "st":
           const [, locationActivity, category, duration] = parts;
-          const [location, activity] = locationActivity.split('-');
+          const [location, activity] = locationActivity.split("-");
           return {
-            type: 'sightseeing',
+            type: "sightseeing",
             location,
             activity,
             category,
-            duration
+            duration,
           };
 
         default:
           throw new Error(`Unknown canonical key type: ${type}`);
       }
     } catch (error) {
-      this.logger.error('Failed to parse canonical key:', canonicalKey, error);
+      this.logger.error("Failed to parse canonical key:", canonicalKey, error);
       return null;
     }
   }
@@ -448,25 +464,25 @@ class CPOService {
   generateSearchableAttrs(cpo) {
     const searchable = {
       type: cpo.type,
-      canonical_key: cpo.canonical_key
+      canonical_key: cpo.canonical_key,
     };
 
     switch (cpo.type) {
-      case 'flight':
+      case "flight":
         searchable.route = `${cpo.attrs.origin}-${cpo.attrs.dest}`;
         searchable.airline = cpo.attrs.airline;
         searchable.date = cpo.attrs.dep_date;
         searchable.class = cpo.attrs.class;
         break;
 
-      case 'hotel':
+      case "hotel":
         searchable.destination = cpo.attrs.city;
         searchable.hotel_name = cpo.attrs.hotel_name;
         searchable.star_rating = cpo.attrs.star_rating;
         searchable.board = cpo.attrs.board;
         break;
 
-      case 'sightseeing':
+      case "sightseeing":
         searchable.destination = cpo.attrs.location;
         searchable.activity = cpo.attrs.activity;
         searchable.category = cpo.attrs.category;

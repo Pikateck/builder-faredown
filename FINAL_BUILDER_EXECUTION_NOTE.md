@@ -11,33 +11,33 @@ Proceed with the **Render database verification**, **monitoring validation**, an
 
 Confirm **in the Render Postgres instance**:
 
-* All `ai.*` tables exist (15+ tables)
-* Materialized views:
-  * `supplier_rates_mv`
-  * `session_analytics_mv`
-  * `profit_margins_mv`
-* Performance indexes on `canonical_key`, `session_id`, `created_at`
-* Function `ai.assert_never_loss()` exists and returns **OK** on run
-* Data is live from the last 24h
+- All `ai.*` tables exist (15+ tables)
+- Materialized views:
+  - `supplier_rates_mv`
+  - `session_analytics_mv`
+  - `profit_margins_mv`
+- Performance indexes on `canonical_key`, `session_id`, `created_at`
+- Function `ai.assert_never_loss()` exists and returns **OK** on run
+- Data is live from the last 24h
 
 **SQL Commands to verify in Render SQL Console:**
 
 ```sql
 -- 1. Check AI schema tables (should return 15+)
-SELECT COUNT(*) as table_count 
-FROM information_schema.tables 
+SELECT COUNT(*) as table_count
+FROM information_schema.tables
 WHERE table_schema = 'ai';
 
 -- 2. Check materialized views (should return 3+)
-SELECT COUNT(*) as mv_count 
-FROM pg_matviews 
+SELECT COUNT(*) as mv_count
+FROM pg_matviews
 WHERE schemaname = 'ai';
 
 -- 3. Verify never-loss function exists
 SELECT 1 FROM pg_proc WHERE proname = 'assert_never_loss';
 
 -- 4. Check recent data activity (should have entries from last 24h)
-SELECT 
+SELECT
   (SELECT COUNT(*) FROM ai.supplier_rates WHERE updated_at > NOW() - INTERVAL '24 hours') as recent_rates,
   (SELECT COUNT(*) FROM ai.bargain_sessions WHERE created_at > NOW() - INTERVAL '24 hours') as recent_sessions;
 ```
@@ -48,10 +48,10 @@ SELECT
 
 Send proof for each:
 
-* **Grafana p95** latency < 300 ms for `/session/*` routes (15-min window)
-* **Redis hit rate** ≥ 90% (after cache warm)
-* **Floor audit query** result = 0 accepts below cost floor
-* Capsule ECDSA verify = ✅ on at least 1 replayed session
+- **Grafana p95** latency < 300 ms for `/session/*` routes (15-min window)
+- **Redis hit rate** ≥ 90% (after cache warm)
+- **Floor audit query** result = 0 accepts below cost floor
+- Capsule ECDSA verify = ✅ on at least 1 replayed session
 
 **CRITICAL: Floor Audit Query (paste in Render SQL Console)**
 
@@ -65,7 +65,7 @@ JOIN LATERAL (
   FROM ai.bargain_events e2
   WHERE e2.session_id = e.session_id
 ) f ON TRUE
-WHERE e.accepted IS TRUE 
+WHERE e.accepted IS TRUE
   AND f.final_price < e.true_cost_usd;
 
 -- Expected result: 0 (zero violations)
@@ -78,21 +78,21 @@ WHERE e.accepted IS TRUE
 
 Verify in Render logs:
 
-* Hotset refresh running every 5 min
-* Cache warmer hourly
-* MV refresh hourly  
-* Model retrain nightly at 02:00 UTC
-* No worker or cron job failures in last 24 h
+- Hotset refresh running every 5 min
+- Cache warmer hourly
+- MV refresh hourly
+- Model retrain nightly at 02:00 UTC
+- No worker or cron job failures in last 24 h
 
 **Quick health check query:**
 
 ```sql
 -- Check if supplier fabric worker is active (should have recent entries)
-SELECT 
+SELECT
   supplier_id,
   MAX(updated_at) as last_update,
   COUNT(*) as rate_count
-FROM ai.supplier_rates 
+FROM ai.supplier_rates
 WHERE updated_at > NOW() - INTERVAL '1 hour'
 GROUP BY supplier_id;
 
@@ -116,6 +116,7 @@ Set exactly in Render environment:
 ```
 
 **API endpoint to verify flags:**
+
 ```bash
 curl -H "Authorization: Bearer YOUR_TOKEN" \
   https://your-render-url.com/api/feature-flags
@@ -125,10 +126,10 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 ### **5️⃣ Frontend Wiring**
 
-* Flights & Hotels use live `/api/bargain/v1/*` endpoints
-* "Why this price?" displays model confidence + explain string
-* Reprice modal fires on `INVENTORY_CHANGED`
-* No design/UI changes from approved builds
+- Flights & Hotels use live `/api/bargain/v1/*` endpoints
+- "Why this price?" displays model confidence + explain string
+- Reprice modal fires on `INVENTORY_CHANGED`
+- No design/UI changes from approved builds
 
 ---
 
@@ -149,7 +150,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 Please respond with:
 
 - [ ] **Database tables**: ✅ (15+ tables in ai schema)
-- [ ] **Materialized views**: ✅ (3+ MVs present) 
+- [ ] **Materialized views**: ✅ (3+ MVs present)
 - [ ] **Never-loss function**: ✅ (ai.assert_never_loss exists)
 - [ ] **Floor audit result**: ✅ (query returns 0 violations)
 - [ ] **Recent data**: ✅ (supplier rates updated in last hour)
@@ -163,4 +164,4 @@ Please respond with:
 
 ---
 
-*All SQL queries above can be copy-pasted directly into Render's SQL console for instant verification.*
+_All SQL queries above can be copy-pasted directly into Render's SQL console for instant verification._

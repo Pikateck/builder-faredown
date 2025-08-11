@@ -44,7 +44,7 @@ function createCPO(item: BargainItem): BargainProductCPO {
   const cpo: BargainProductCPO = {
     type: item.type,
     supplier: item.airline || "hotelbeds", // Default supplier based on type
-    product_id: item.itemId
+    product_id: item.itemId,
   };
 
   // Add type-specific fields
@@ -88,9 +88,9 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
       if (options.useLiveAPI && liveBargain.hasActiveSession) {
         try {
           const result = await liveBargain.acceptCurrentOffer();
-          console.log('✅ Booking confirmed via live API:', result);
+          console.log("✅ Booking confirmed via live API:", result);
         } catch (err) {
-          console.error('❌ Failed to complete booking via live API:', err);
+          console.error("❌ Failed to complete booking via live API:", err);
           // Continue with fallback flow
         }
       }
@@ -109,7 +109,9 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
           bargainApplied: "true",
           promoCode: options.promoCode || "",
           // Add live API session info if available
-          ...(liveBargain.session && { sessionId: liveBargain.session.session_id })
+          ...(liveBargain.session && {
+            sessionId: liveBargain.session.session_id,
+          }),
         });
 
         if (currentBargainItem.type === "flight") {
@@ -159,7 +161,7 @@ export function useBargainPhase1(options: UseBargainPhase1Options = {}) {
       startLiveBargain: async (item: BargainItem) => {
         const cpo = createCPO(item);
         return liveBargain.startBargainSession(cpo, options.promoCode);
-      }
+      },
     }),
   };
 }

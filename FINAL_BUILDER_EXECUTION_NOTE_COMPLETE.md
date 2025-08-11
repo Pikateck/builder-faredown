@@ -15,20 +15,20 @@ Confirm **in the Render Postgres instance**:
 
 ```sql
 -- 1. Check AI schema tables (should return 15+)
-SELECT COUNT(*) as table_count 
-FROM information_schema.tables 
+SELECT COUNT(*) as table_count
+FROM information_schema.tables
 WHERE table_schema = 'ai';
 
 -- 2. Check materialized views (should return 3+)
-SELECT COUNT(*) as mv_count 
-FROM pg_matviews 
+SELECT COUNT(*) as mv_count
+FROM pg_matviews
 WHERE schemaname = 'ai';
 
 -- 3. Verify never-loss function exists
 SELECT 1 FROM pg_proc WHERE proname = 'assert_never_loss';
 
 -- 4. Check recent data activity (should have entries from last 24h)
-SELECT 
+SELECT
   (SELECT COUNT(*) FROM ai.supplier_rates WHERE updated_at > NOW() - INTERVAL '24 hours') as recent_rates,
   (SELECT COUNT(*) FROM ai.bargain_sessions WHERE created_at > NOW() - INTERVAL '24 hours') as recent_sessions;
 ```
@@ -79,18 +79,18 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 ```sql
 -- Verify cache is being used (should show recent cache operations)
-SELECT 
+SELECT
   'rates' as cache_type,
   COUNT(*) as entries_count,
   MAX(updated_at) as last_updated
-FROM ai.supplier_rates 
+FROM ai.supplier_rates
 WHERE updated_at > NOW() - INTERVAL '1 hour'
 UNION ALL
-SELECT 
+SELECT
   'sessions' as cache_type,
   COUNT(*) as entries_count,
   MAX(created_at) as last_updated
-FROM ai.bargain_sessions 
+FROM ai.bargain_sessions
 WHERE created_at > NOW() - INTERVAL '1 hour';
 ```
 
@@ -100,12 +100,12 @@ WHERE created_at > NOW() - INTERVAL '1 hour';
 
 ## **4️⃣ Prometheus / Grafana Checks**
 
-* **Grafana p95 latency**: `< 300ms` for `/session/*` routes (15-min window)
-* **Metrics endpoint responding**: 
+- **Grafana p95 latency**: `< 300ms` for `/session/*` routes (15-min window)
+- **Metrics endpoint responding**:
   ```bash
   curl https://your-render-url.com/metrics | grep "bargain_response_seconds"
   ```
-* **Capsule ECDSA verify**: ✅ on at least 1 replayed session
+- **Capsule ECDSA verify**: ✅ on at least 1 replayed session
 
 ---
 
@@ -115,11 +115,11 @@ WHERE created_at > NOW() - INTERVAL '1 hour';
 
 ```sql
 -- Check if supplier fabric worker is active (should have recent entries)
-SELECT 
+SELECT
   supplier_id,
   MAX(updated_at) as last_update,
   COUNT(*) as rate_count
-FROM ai.supplier_rates 
+FROM ai.supplier_rates
 WHERE updated_at > NOW() - INTERVAL '1 hour'
 GROUP BY supplier_id;
 
@@ -127,10 +127,11 @@ GROUP BY supplier_id;
 ```
 
 Confirm in Render logs (no failures in last 24h):
-* Hotset refresh every 5 min
-* Cache warmer hourly
-* MV refresh hourly
-* Model retrain nightly at 02:00 UTC
+
+- Hotset refresh every 5 min
+- Cache warmer hourly
+- MV refresh hourly
+- Model retrain nightly at 02:00 UTC
 
 ---
 
@@ -159,10 +160,10 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 ## **7️⃣ Frontend Wiring**
 
-* Flights & Hotels using `/api/bargain/v1/*` endpoints
-* "Why this price?" shows model confidence + explain string
-* Reprice modal triggers on `INVENTORY_CHANGED`
-* No UI/design changes from approved build
+- Flights & Hotels using `/api/bargain/v1/*` endpoints
+- "Why this price?" shows model confidence + explain string
+- Reprice modal triggers on `INVENTORY_CHANGED`
+- No UI/design changes from approved build
 
 ---
 
@@ -183,26 +184,31 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 **Copy this format and fill YES/NO + evidence:**
 
 ### Database Verification
+
 - [ ] **AI tables count**: ✅ (Paste SQL result showing 15+ tables)
 - [ ] **Materialized views**: ✅ (Paste SQL result showing 3+ MVs)
 - [ ] **Never-loss function**: ✅ (Paste SQL result showing function exists)
 - [ ] **Recent data activity**: ✅ (Paste SQL result showing recent rates/sessions)
 
 ### Critical Business Rule
+
 - [ ] **Floor audit result**: ✅ (Paste SQL result showing 0 violations)
 
 ### Performance & Monitoring
+
 - [ ] **Redis hit rate**: ✅ (Paste API response showing ≥90% hit rate)
 - [ ] **Metrics endpoint**: ✅ (Paste curl result showing bargain metrics)
 - [ ] **Grafana p95 latency**: ✅ (Screenshot showing <300ms)
 
 ### System Health
+
 - [ ] **Supplier worker health**: ✅ (Paste SQL result showing recent amadeus/hotelbeds rates)
 - [ ] **Cron job logs**: ✅ (Screenshot of green Render cron logs)
 - [ ] **Feature flags**: ✅ (Paste API response showing shadow mode values)
 
 ### Integration
-- [ ] **Frontend endpoints**: ✅ (Confirm flights/hotels use /api/bargain/v1/*)
+
+- [ ] **Frontend endpoints**: ✅ (Confirm flights/hotels use /api/bargain/v1/\*)
 - [ ] **Master validation**: ✅ (Paste "READY FOR PRODUCTION ROLLOUT" banner)
 
 ---
@@ -211,4 +217,4 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 
 ---
 
-*All SQL queries and API calls above can be copy-pasted directly for instant verification.*
+_All SQL queries and API calls above can be copy-pasted directly for instant verification._

@@ -11,12 +11,7 @@ import {
 import { BookingCalendar } from "@/components/BookingCalendar";
 import { MobileDatePicker } from "@/components/MobileDropdowns";
 import { format, addDays } from "date-fns";
-import {
-  MapPin,
-  CalendarIcon,
-  Search,
-  X,
-} from "lucide-react";
+import { MapPin, CalendarIcon, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
@@ -35,7 +30,7 @@ export function SightseeingSearchForm() {
   const [searchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
-  
+
   // EXACT HOTELS STATE PATTERN - WHOLESALE COPY
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState(""); // Store destination code
@@ -44,7 +39,7 @@ export function SightseeingSearchForm() {
     DestinationOption[]
   >([]);
   const [loadingDestinations, setLoadingDestinations] = useState(false);
-  
+
   // Set default dates to future dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -92,7 +87,9 @@ export function SightseeingSearchForm() {
   useEffect(() => {
     const loadPopularDestinations = async () => {
       try {
-        console.log("🎆 Loading popular sightseeing destinations from database...");
+        console.log(
+          "🎆 Loading popular sightseeing destinations from database...",
+        );
         const popular = await sightseeingService.searchDestinations(""); // Empty query for popular
         const formattedPopular = popular.map((dest) => ({
           id: dest.code,
@@ -513,14 +510,17 @@ export function SightseeingSearchForm() {
                           onPointerDown={(e) => {
                             e.preventDefault();
                             const fullName = `${dest.name}, ${dest.country}`;
-                            console.log("🎯 Sightseeing destination selected:", {
-                              name: fullName,
-                              code: dest.code || dest.id,
-                              type: dest.type,
-                              popular: (dest as any).popular,
-                            });
-                            setDestination(fullName);          // visible label
-                            setDestinationCode(dest.code || dest.id);     // hidden code
+                            console.log(
+                              "🎯 Sightseeing destination selected:",
+                              {
+                                name: fullName,
+                                code: dest.code || dest.id,
+                                type: dest.type,
+                                popular: (dest as any).popular,
+                              },
+                            );
+                            setDestination(fullName); // visible label
+                            setDestinationCode(dest.code || dest.id); // hidden code
                             setIsUserTyping(false);
                             setInputValue("");
                             setIsDestinationOpen(false);
@@ -722,8 +722,8 @@ export function SightseeingSearchForm() {
                                 type: dest.type,
                               },
                             );
-                            setDestination(fullName);          // visible label
-                            setDestinationCode(dest.code);     // hidden code
+                            setDestination(fullName); // visible label
+                            setDestinationCode(dest.code); // hidden code
                             setIsUserTyping(false);
                             setInputValue("");
                             setIsDestinationOpen(false);
@@ -799,7 +799,8 @@ export function SightseeingSearchForm() {
                         <p className="text-xs text-blue-600 flex items-center gap-1">
                           <span>💡</span>
                           <span>
-                            Use the cities above for testing live Hotelbeds Activities API
+                            Use the cities above for testing live Hotelbeds
+                            Activities API
                           </span>
                         </p>
                       </div>
@@ -895,9 +896,13 @@ export function SightseeingSearchForm() {
                 "h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150",
                 destinationCode
                   ? "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed",
               )}
-              title={destinationCode ? "Search sightseeing activities" : "Please select a destination first"}
+              title={
+                destinationCode
+                  ? "Search sightseeing activities"
+                  : "Please select a destination first"
+              }
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               <span className="text-sm sm:text-base">Search</span>
