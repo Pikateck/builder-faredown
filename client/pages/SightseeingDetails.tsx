@@ -608,39 +608,18 @@ export default function SightseeingDetails() {
 
         {/* Sightseeing Bargain Modal for Mobile */}
         {attraction && (
-          <FlightStyleBargainModal
-            type="sightseeing"
-            roomType={{
-              id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
-              name:
-                attraction.ticketTypes[bargainTicketType]?.name ||
-                "Standard Admission",
-              description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
-              image: attraction.images[0],
-              marketPrice:
-                getTicketTotalPrice(bargainTicketType) ||
-                attraction.ticketTypes[bargainTicketType]?.price ||
-                149,
-              totalPrice:
-                getTicketTotalPrice(bargainTicketType) ||
-                attraction.ticketTypes[bargainTicketType]?.price ||
-                149,
-              features: attraction.ticketTypes[bargainTicketType]?.features || [],
-              maxOccupancy: getTotalPassengers(),
-              bedType: attraction.duration,
-              size: attraction.category,
-              cancellation: "Free cancellation up to 24 hours before visit date",
-            }}
-            hotel={{
-              id: attraction.id,
-              name: attraction.name,
-              address: attraction.location,
-              rating: attraction.rating,
-              image: attraction.images[0],
-            }}
+          <MobileBargainModal
             isOpen={isBargainModalOpen}
             onClose={() => setIsBargainModalOpen(false)}
             onBargainSuccess={handleBargainSuccess}
+            ticketName={attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}
+            originalPrice={
+              getTicketTotalPrice(bargainTicketType) ||
+              attraction.ticketTypes[bargainTicketType]?.price ||
+              149
+            }
+            venueName={attraction.name}
+            ticketFeatures={attraction.ticketTypes[bargainTicketType]?.features || []}
           />
         )}
       </>
