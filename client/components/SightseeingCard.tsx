@@ -275,25 +275,36 @@ export function SightseeingCard({
                       handleViewDetails();
                     }}
                     style={{
-                      backgroundColor: "#003580",
+                      backgroundColor: "#ff6b00",
                       color: "#ffffff",
-                      border: "none",
-                      borderRadius: "6px",
+                      border: "2px solid #ff6b00",
+                      borderRadius: "8px",
                       padding: "12px 10px",
-                      fontWeight: "600",
-                      fontSize: "12px",
-                      minHeight: "42px",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      minHeight: "44px",
                       width: "100%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "4px",
+                      gap: "6px",
                       cursor: "pointer",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                      boxShadow: "0 3px 6px rgba(255,107,0,0.25)",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#e55a00";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                      e.currentTarget.style.boxShadow = "0 4px 8px rgba(255,107,0,0.35)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#ff6b00";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "0 3px 6px rgba(255,107,0,0.25)";
                     }}
                   >
-                    <Eye size={12} />
-                    View Details
+                    <Eye size={14} />
+                    SELECT
                   </button>
                 </div>
               </div>
