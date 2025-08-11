@@ -109,6 +109,36 @@ router.get("/active", (req, res) => {
   }
 });
 
+// GET /api/currency/rates - Get exchange rates for all currencies
+router.get("/rates", (req, res) => {
+  try {
+    const activeCurrencies = currencies.filter(
+      (currency) => currency.status === "active",
+    );
+
+    // Return rates data in format expected by CurrencyContext
+    const ratesData = activeCurrencies.map(currency => ({
+      code: currency.code,
+      name: currency.name,
+      symbol: currency.symbol,
+      exchangeRate: currency.exchangeRate,
+      lastUpdated: currency.lastUpdated
+    }));
+
+    res.json({
+      success: true,
+      data: ratesData,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Error fetching currency rates:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch exchange rates"
+    });
+  }
+});
+
 // GET /api/currency/:id - Get currency by ID
 router.get("/:id", (req, res) => {
   try {
