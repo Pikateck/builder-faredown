@@ -48,6 +48,7 @@ import {
   type BargainOfferResponse,
 } from "@/hooks/useBargain";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
+import RepriceModal from "@/components/RepriceModal";
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
@@ -117,6 +118,8 @@ export default function BargainModalPhase1({
   } = useBargain();
 
   const [error, setError] = useState<string | null>(null);
+  const [showRepriceModal, setShowRepriceModal] = useState(false);
+  const [repriceData, setRepriceData] = useState<{ oldPrice: number; newPrice?: number } | null>(null);
 
   // 30-second timer for counter-offers (Zubin's requirement)
   const [counterOfferTimer, setCounterOfferTimer] = useState(0);
@@ -245,9 +248,12 @@ export default function BargainModalPhase1({
       } catch (err: any) {
         setError(getErrorMessage(err));
         if (err.code === 'INVENTORY_CHANGED') {
-          // Show reprice modal or refresh session
-          setStep("loading");
-          initializeBargainSession();
+          // Show reprice modal
+          setRepriceData({
+            oldPrice: lastOffer.counter_offer,
+            newPrice: err.new_price // If provided by API
+          });
+          setShowRepriceModal(true);
         }
       }
     }
