@@ -49,6 +49,7 @@ import {
 } from "@/hooks/useBargain";
 import { formatPriceNoDecimals } from "@/lib/formatPrice";
 import RepriceModal from "@/components/RepriceModal";
+import { RotatingBargainSkeleton } from "@/components/BargainLoadingSkeleton";
 
 interface BargainModalPhase1Props {
   isOpen: boolean;
@@ -298,15 +299,7 @@ export default function BargainModalPhase1({
   };
 
   const renderLoadingStep = () => (
-    <div className="text-center py-8">
-      <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-      <p className="text-gray-600">
-        Analyzing pricing and preparing your bargain session...
-      </p>
-      <p className="text-sm text-gray-500 mt-2">
-        Calculating optimal markup ranges and promo applications
-      </p>
-    </div>
+    <RotatingBargainSkeleton />
   );
 
   const renderInitialStep = () => {
