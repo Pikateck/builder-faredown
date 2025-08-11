@@ -118,10 +118,10 @@ router.get("/rates", (req, res) => {
 
     // Return rates data in format expected by CurrencyContext
     const ratesData = activeCurrencies.map(currency => ({
-      code: currency.code,
+      to: currency.code,
+      rate: currency.exchangeRate,
       name: currency.name,
       symbol: currency.symbol,
-      exchangeRate: currency.exchangeRate,
       lastUpdated: currency.lastUpdated
     }));
 
