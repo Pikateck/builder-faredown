@@ -275,12 +275,19 @@ price_rules:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dsl_yaml: policyYaml }),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const result = await response.json();
       setPolicyValidation(result);
     } catch (err) {
+      console.error("Policy validation error:", err);
       setPolicyValidation({
+        success: false,
         valid: false,
-        errors: ["Validation request failed"],
+        errors: [`Validation request failed: ${err.message}`],
       });
     }
   };
