@@ -187,6 +187,7 @@ const adminModules = [
   },
   { id: "bargains", name: "Bargain Engine", icon: Brain, color: "bg-red-500" },
   { id: "ai-bargaining", name: "AI Bargaining Dashboard", icon: Activity, color: "bg-purple-500" },
+  { id: "api-testing", name: "API Testing Dashboard", icon: TestTube, color: "bg-cyan-500" },
   {
     id: "suppliers",
     name: "Supplier Management",
