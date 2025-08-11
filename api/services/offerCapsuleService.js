@@ -142,7 +142,7 @@ class OfferCapsuleService {
   /**
    * Verify offer capsule signature
    */
-  verifyCapsu​le(capsule) {
+  verifyCapsule(capsule) {
     try {
       const { canonical, signature } = capsule;
       
