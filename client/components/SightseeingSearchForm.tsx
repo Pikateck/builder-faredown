@@ -836,11 +836,11 @@ export function SightseeingSearchForm() {
             {isMobile ? (
               <Button
                 variant="outline"
-                className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 hover:bg-white rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 hover:bg-white rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation text-black"
                 onClick={() => setShowMobileDatePicker(true)}
               >
-                <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                <span className="truncate text-xs sm:text-sm">
+                <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-600" />
+                <span className="truncate text-xs sm:text-sm text-black">
                   {checkInDate && checkOutDate ? (
                     <>
                       {format(checkInDate, "dd-MMM-yyyy")} -{" "}
