@@ -189,7 +189,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "R$",
     name: "Brazilian Real",
     rate: 0.072,
-    flag: "🇧🇷",
+    flag: "���🇷",
     decimalPlaces: 2,
   },
   {
@@ -332,7 +332,13 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       await _refreshRatesInternal();
     } catch (error) {
       // Final safety net - never let errors escape from refreshRates
-      console.warn("📈 Currency refresh failed with unexpected error:", error);
+      // This catches any errors including browser extension interference
+      if (error instanceof Error && error.message.includes("Failed to fetch")) {
+        console.log("💰 Network error (possibly browser extension interference), using static rates");
+      } else {
+        console.warn("📈 Currency refresh failed with unexpected error:", error);
+      }
+      // Always continue gracefully with static rates
     }
   };
 
