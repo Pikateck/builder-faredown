@@ -577,7 +577,7 @@ const APITestingDashboard: React.FC = () => {
         </div>
       </div>
 
-      <Tabs value="testing" className="space-y-6">
+      <Tabs value={activeMainTab} onValueChange={setActiveMainTab} className="space-y-6">
         <TabsList>
           <TabsTrigger value="testing">API Testing</TabsTrigger>
           <TabsTrigger value="documentation">Documentation</TabsTrigger>
