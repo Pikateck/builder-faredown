@@ -187,7 +187,7 @@ export function SightseeingSearchForm() {
             name: "Paris",
             country: "France",
             type: "city",
-            flag: "🇫🇷",
+            flag: "🇫��",
           },
           {
             id: "BOM",
@@ -913,7 +913,7 @@ export function SightseeingSearchForm() {
               className={cn(
                 "h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150",
                 destinationCode
-                  ? "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white"
+                  ? "bg-[#003580] hover:bg-[#002a66] active:bg-[#001f4d] text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed",
               )}
               title={
