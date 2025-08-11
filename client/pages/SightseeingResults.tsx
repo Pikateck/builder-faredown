@@ -74,7 +74,9 @@ export default function SightseeingResults() {
   // Extract search parameters
   const destination = searchParams.get("destination") || "";
   const destinationName = searchParams.get("destinationName") || "";
-  const visitDate = searchParams.get("visitDate") || "";
+  const checkIn = searchParams.get("checkIn") || "";
+  const checkOut = searchParams.get("checkOut") || "";
+  const visitDate = checkIn; // Use checkIn as visitDate for backward compatibility
   const adults = searchParams.get("adults") || "2";
   const children = searchParams.get("children") || "0";
   const experienceType = searchParams.get("experienceType") || "any";
