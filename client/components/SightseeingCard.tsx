@@ -500,8 +500,8 @@ export function SightseeingCard({
                       boxShadow: "0 3px 6px rgba(255,107,0,0.25)",
                     }}
                   >
-                    <Eye size={14} />
-                    View Details
+                    <Eye size={16} />
+                    SELECT
                   </button>
                 </div>
               </div>
