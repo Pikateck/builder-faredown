@@ -297,7 +297,7 @@ router.put("/policies", async (req, res) => {
 // Policy validation endpoint
 router.post("/policies/validate", async (req, res) => {
   try {
-    const { yaml_content } = req.body;
+    const { dsl_yaml } = req.body;
     
     // Basic YAML validation (in production, use proper YAML parser)
     const isValid = yaml_content && yaml_content.includes("version:");
