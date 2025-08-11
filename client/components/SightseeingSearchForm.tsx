@@ -856,7 +856,7 @@ export function SightseeingSearchForm() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 hover:bg-white rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
