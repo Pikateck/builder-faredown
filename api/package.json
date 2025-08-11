@@ -12,7 +12,8 @@
     "lint:fix": "eslint . --ext .js --fix",
     "docs": "apidoc -i routes/ -o public/docs/",
     "build": "npm run lint && npm run test",
-    "deploy": "npm run build && npm start"
+    "deploy": "npm run build && npm start",
+    "migrate:ai": "node database/run-ai-migration.js"
   },
   "keywords": [
     "faredown",
