@@ -300,8 +300,8 @@ router.post("/policies/validate", async (req, res) => {
     const { dsl_yaml } = req.body;
     
     // Basic YAML validation (in production, use proper YAML parser)
-    const isValid = yaml_content && yaml_content.includes("version:");
-    
+    const isValid = dsl_yaml && dsl_yaml.includes("version:");
+
     if (isValid) {
       res.json({
         success: true,
