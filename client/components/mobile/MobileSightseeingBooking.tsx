@@ -71,10 +71,22 @@ export const MobileSightseeingBooking: React.FC<MobileSightseeingBookingProps> =
 
   // Helper functions
   const updatePassengerQuantity = (type: keyof typeof passengerQuantities, change: number) => {
-    setPassengerQuantities(prev => ({
-      ...prev,
-      [type]: Math.max(0, prev[type] + change)
-    }));
+    const newQuantities = {
+      ...passengerQuantities,
+      [type]: Math.max(type === 'adults' ? 1 : 0, passengerQuantities[type] + change)
+    };
+    setPassengerQuantities(newQuantities);
+    onPassengersChange?.(newQuantities);
+  };
+
+  const handleTimeSelect = (time: string) => {
+    setSelectedTime(time);
+    onTimeChange?.(time);
+  };
+
+  const handleTicketTypeSelect = (index: number) => {
+    setSelectedTicketType(index);
+    onTicketTypeChange?.(index);
   };
 
   const getTotalPassengers = () => 
