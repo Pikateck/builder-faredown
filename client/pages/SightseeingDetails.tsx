@@ -395,7 +395,7 @@ export default function SightseeingDetails() {
     const ticketToBook =
       ticketIndex !== undefined ? ticketIndex : selectedTicketType;
 
-    console.log("🎫 Book Now clicked!", {
+    console.log("��� Book Now clicked!", {
       selectedTime,
       ticketIndex: ticketToBook,
       attractionId: attraction?.id,
@@ -440,8 +440,14 @@ export default function SightseeingDetails() {
 
   // Bargain functionality
   const handleBargainClick = (ticketIndex: number) => {
+    console.log("🎯 handleBargainClick called!", {
+      ticketIndex,
+      currentModalState: isBargainModalOpen,
+      attraction: attraction?.name
+    });
     setBargainTicketType(ticketIndex);
     setIsBargainModalOpen(true);
+    console.log("🎯 Modal should now be open!");
   };
 
   const handleBargainSuccess = (finalPrice: number) => {
