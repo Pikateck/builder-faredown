@@ -382,13 +382,33 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       try {
         // Check if we're in development/production with proper API
         const apiUrl = "/api/currency/rates";
-        response = await fetch(apiUrl, {
-          signal: controller.signal,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+
+        // Use a more defensive approach to handle browser extension interference
+        const safeFetch = async () => {
+          try {
+            return await fetch(apiUrl, {
+              signal: controller.signal,
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            });
+          } catch (innerError: any) {
+            // Handle specific browser extension interference
+            if (innerError.message?.includes("Failed to fetch") ||
+                innerError.name === "TypeError") {
+              console.log("💰 Browser extension interference detected, using static rates");
+              return null;
+            }
+            throw innerError;
+          }
+        };
+
+        response = await safeFetch();
+        if (!response) {
+          // safeFetch returned null due to extension interference
+          return;
+        }
       } catch (fetchError: any) {
         // Catch any network errors immediately and handle gracefully
         console.warn(
