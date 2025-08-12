@@ -154,101 +154,7 @@ export default function TransferBooking() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="text-xl font-bold">
-              faredown.com
-            </Link>
-
-            {/* Navigation Tabs */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link
-                to="/flights"
-                className="flex items-center space-x-1 hover:text-blue-200 transition-colors"
-              >
-                <span>✈️</span>
-                <span>Flights</span>
-              </Link>
-              <Link
-                to="/hotels"
-                className="flex items-center space-x-1 hover:text-blue-200 transition-colors"
-              >
-                <span>🏨</span>
-                <span>Hotels</span>
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-1 text-sm hover:text-blue-200">
-                  <span>🌐</span>
-                  <span>English (UK)</span>
-                  <ChevronDown className="w-3 h-3" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>🇬🇧 English (UK)</DropdownMenuItem>
-                  <DropdownMenuItem>����🇸 English (US)</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-1 text-sm hover:text-blue-200">
-                  <span>INR</span>
-                  <ChevronDown className="w-3 h-3" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>₹ INR - Indian Rupee</DropdownMenuItem>
-                  <DropdownMenuItem>$ USD - US Dollar</DropdownMenuItem>
-                  <DropdownMenuItem>€ EUR - Euro</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <div className="flex items-center space-x-3">
-                {isLoggedIn ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-3 py-2 hover:bg-blue-800">
-                      <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-black">
-                          {userName.charAt(0)}
-                        </span>
-                      </div>
-                      <span className="text-sm text-white">{userName}</span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <User className="w-4 h-4 mr-2" />
-                        My account
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={handleSignOut}>
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Sign out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="bg-white text-blue-700 border-white hover:bg-gray-100"
-                    >
-                      Register
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-800 text-white"
-                    >
-                      Sign in
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -270,9 +176,44 @@ export default function TransferBooking() {
           <div className="lg:col-span-2 space-y-6">
             {/* Transfer Summary */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-center justify-between mb-4">
+              <div className="mb-4">
                 <h2 className="text-lg font-semibold text-gray-900">Your journey</h2>
-                <div className="flex bg-gray-100 rounded-lg p-1">
+              </div>
+              
+              <div className="flex items-center space-x-4 mb-4">
+                <div className="w-20 h-16 rounded-lg overflow-hidden">
+                  <img
+                    src={transferData.image}
+                    alt={transferData.vehicle}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <h3 className="font-semibold text-gray-900">
+                      {transferData.type} - {transferData.vehicle}
+                    </h3>
+                    <Badge className="bg-blue-100 text-blue-800">{transferData.type}</Badge>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
+                    <div className="flex items-center space-x-1">
+                      <Users className="w-4 h-4" />
+                      <span>Maximum 7 passengers</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <span>Powered by GO Technologies FZ-LLC</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <span>Passenger selection</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 space-y-3">
+                <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
                   <button
                     onClick={() => setActiveTab('outbound')}
                     className={cn(
@@ -296,41 +237,6 @@ export default function TransferBooking() {
                     Return
                   </button>
                 </div>
-              </div>
-              
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-20 h-16 rounded-lg overflow-hidden">
-                  <img
-                    src={transferData.image}
-                    alt={transferData.vehicle}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h3 className="font-semibold text-gray-900">
-                      {transferData.type} - {transferData.vehicle}
-                    </h3>
-                    <Badge className="bg-blue-100 text-blue-800">{transferData.type}</Badge>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
-                    <div className="flex items-center space-x-1">
-                      <Users className="w-4 h-4" />
-                      <span>Maximum 7 passengers</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <span>Powered by GO Technologies FZ-LLC</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <span>Passenger selection</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border-t pt-4 space-y-3">
                 <div className="text-sm">
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
@@ -342,7 +248,7 @@ export default function TransferBooking() {
                     <div className="text-gray-500 text-xs">United Arab Emirates</div>
                   </div>
                 </div>
-
+                
                 <div className="text-sm">
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -353,7 +259,7 @@ export default function TransferBooking() {
                     <div className="text-gray-500 text-xs">United Arab Emirates</div>
                   </div>
                 </div>
-
+                
                 <div className="border-t pt-3 mt-3">
                   <div className="text-sm">
                     <div className="font-medium text-gray-900">Vehicle</div>
@@ -361,7 +267,7 @@ export default function TransferBooking() {
                     <div className="text-gray-500 text-xs">Powered by GO Technologies FZ-LLC</div>
                   </div>
                 </div>
-
+                
                 <div className="border-t pt-3 mt-3">
                   <div className="text-sm">
                     <div className="font-medium text-gray-900">Pick-up details</div>
@@ -443,20 +349,21 @@ export default function TransferBooking() {
                       value={formData.primaryGuest.countryCode}
                       onValueChange={(value) => handleInputChange('primaryGuest', 'countryCode', value)}
                     >
-                      <SelectTrigger className="w-24">
+                      <SelectTrigger className="w-32 border-2 border-[#003580] focus-visible:ring-2 focus-visible:ring-[#003580] focus-visible:ring-offset-2">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="+91">+91</SelectItem>
                         <SelectItem value="+1">+1</SelectItem>
                         <SelectItem value="+44">+44</SelectItem>
+                        <SelectItem value="+971">+971</SelectItem>
                       </SelectContent>
                     </Select>
                     <Input
                       value={formData.primaryGuest.phone}
                       onChange={(e) => handleInputChange('primaryGuest', 'phone', e.target.value)}
                       placeholder="Enter phone number"
-                      className="ml-2 flex-1"
+                      className="flex-1 ml-2"
                       required
                     />
                   </div>
@@ -546,7 +453,7 @@ export default function TransferBooking() {
                     <span>£{transferData.outbound.price.toFixed(2)}</span>
                   </div>
                 )}
-
+                
                 <div className="border-t pt-3">
                   <div className="flex justify-between">
                     <span className="font-semibold text-gray-900">Total price</span>
@@ -555,10 +462,6 @@ export default function TransferBooking() {
                   <div className="text-xs text-gray-500 mt-1">Including taxes</div>
                 </div>
               </div>
-
-              {/* Promo codes handled via bargain feature - no separate promo input needed */}
-
-              {/* Bargain functionality removed - user has already decided to book */}
 
               {/* Book Now Button */}
               <Button
