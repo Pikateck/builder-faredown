@@ -387,6 +387,8 @@ export function FlightStyleBargainModal({
                     <p className="text-sm text-gray-600">
                       {type === "sightseeing"
                         ? `${roomType.size} • ${roomType.bedType}`
+                        : type === "transfer"
+                        ? `${roomType.maxOccupancy} passengers • ${roomType.bedType}`
                         : `${roomType.name} • ${hotel.name}`}
                     </p>
                   </div>
