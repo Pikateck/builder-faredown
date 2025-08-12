@@ -68,8 +68,8 @@ export function TransfersSearchForm() {
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [dropoffLocationCode, setDropoffLocationCode] = useState("");
   const [sameAsPickup, setSameAsPickup] = useState(false);
-  const [driverAge, setDriverAge] = useState("");
-  const [vehicleType, setVehicleType] = useState("");
+  const [driverAge, setDriverAge] = useState("any");
+  const [vehicleType, setVehicleType] = useState("any");
   
   // Location dropdown states
   const [isAirportOpen, setIsAirportOpen] = useState(false);
