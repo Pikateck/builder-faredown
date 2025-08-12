@@ -238,6 +238,17 @@ const Bookings: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="mb-4 flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
+
           <h1 className="text-3xl font-bold text-gray-900 mb-2">My Bookings</h1>
           <p className="text-gray-600">
             Manage your flights, hotels, and sightseeing reservations
@@ -494,13 +505,13 @@ const Bookings: React.FC = () => {
                         ? booking.location
                         : `${booking.location} • ${booking.ticketType}`}
                   </div>
-                  <div className="flex space-x-3">
+                  <div className="flex gap-3">
                     <button
                       onClick={() => {
                         setSelectedBooking(booking);
                         setViewDetailsModal(true);
                       }}
-                      className="px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50"
+                      className="flex-1 bg-white border border-blue-600 text-blue-600 font-semibold py-3 px-4 rounded-lg hover:bg-blue-50 transition-all duration-200 min-h-[44px] flex items-center justify-center"
                     >
                       View Details
                     </button>
@@ -509,7 +520,7 @@ const Bookings: React.FC = () => {
                         setSelectedBooking(booking);
                         setManageBookingModal(true);
                       }}
-                      className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 min-h-[44px] flex items-center justify-center"
                     >
                       Manage Booking
                     </button>
