@@ -495,7 +495,7 @@ export function FlightStyleBargainModal({
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 AI Negotiating with{" "}
-                {type === "sightseeing" ? hotel.name : hotel.name}
+                {type === "sightseeing" ? hotel.name : type === "transfer" ? hotel.name : hotel.name}
               </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Analyzing market rates and finding the best deal for you...
