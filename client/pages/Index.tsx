@@ -2071,7 +2071,7 @@ export default function Index() {
                             `/flights/results?${searchParams.toString()}`,
                           );
                         }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation"
                       >
                         Search
                       </Button>
