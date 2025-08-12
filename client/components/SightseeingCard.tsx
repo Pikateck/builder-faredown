@@ -457,24 +457,35 @@ export function SightseeingCard({
                       handleViewDetails();
                     }}
                     style={{
-                      backgroundColor: "#ff6b00",
+                      backgroundColor: "#003580",
                       color: "#ffffff",
-                      border: "2px solid #ff6b00",
-                      borderRadius: "8px",
-                      padding: "14px 18px",
-                      fontWeight: "700",
-                      fontSize: "14px",
-                      minHeight: "46px",
+                      border: "1px solid #003580",
+                      borderRadius: "6px",
+                      padding: "10px 16px",
+                      fontWeight: "600",
+                      fontSize: "13px",
+                      minHeight: "40px",
                       width: "100%",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "8px",
+                      gap: "6px",
                       cursor: "pointer",
-                      boxShadow: "0 3px 6px rgba(255,107,0,0.25)",
+                      boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#002a66";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                      e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#003580";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
                     }}
                   >
-                    <Eye size={16} />
+                    <Eye size={14} />
                     SELECT
                   </button>
                 </div>
