@@ -511,7 +511,7 @@ const Bookings: React.FC = () => {
                         setSelectedBooking(booking);
                         setViewDetailsModal(true);
                       }}
-                      className="flex-1 bg-white border border-blue-600 text-blue-600 font-semibold py-3 px-4 rounded-lg hover:bg-blue-50 transition-all duration-200 min-h-[44px] flex items-center justify-center"
+                      className="flex-1 bg-blue-600 text-white font-semibold py-3"
                     >
                       View Details
                     </button>
@@ -520,7 +520,7 @@ const Bookings: React.FC = () => {
                         setSelectedBooking(booking);
                         setManageBookingModal(true);
                       }}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 min-h-[44px] flex items-center justify-center"
+                      className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 flex items-center justify-center gap-2 min-h-[44px]"
                     >
                       Manage Booking
                     </button>
