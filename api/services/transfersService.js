@@ -640,6 +640,118 @@ class TransfersService {
     };
   }
 
+  /**
+   * Get transfer destinations
+   * @param {string} query - Search query
+   * @param {number} limit - Maximum number of results
+   * @param {boolean} popularOnly - Return only popular destinations
+   * @returns {Promise<Object>} - Destinations result
+   */
+  async getDestinations(query = "", limit = 15, popularOnly = false) {
+    try {
+      this.logger.info("Getting transfer destinations", { query, limit, popularOnly });
+
+      // For transfers, we can use a combination of airports and major cities
+      // This is a comprehensive list of major airports and cities for transfers
+      const transferDestinations = [
+        // Major Indian Airports
+        { code: "DEL", name: "Delhi Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "BOM", name: "Mumbai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "BLR", name: "Bangalore Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "MAA", name: "Chennai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "CCU", name: "Kolkata Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "HYD", name: "Hyderabad Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "GOI", name: "Goa Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "PNQ", name: "Pune Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "AMD", name: "Ahmedabad Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        { code: "COK", name: "Kochi Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+
+        // Major Indian Cities
+        { code: "DELHI", name: "Delhi City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "MUMBAI", name: "Mumbai City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "BANGALORE", name: "Bangalore City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "CHENNAI", name: "Chennai City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "KOLKATA", name: "Kolkata City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "HYDERABAD", name: "Hyderabad City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "GOA", name: "Goa Hotels", country: "India", countryCode: "IN", type: "city", popular: true },
+        { code: "PUNE", name: "Pune City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+
+        // International Airports
+        { code: "DXB", name: "Dubai Airport", country: "UAE", countryCode: "AE", type: "airport", popular: true },
+        { code: "SIN", name: "Singapore Airport", country: "Singapore", countryCode: "SG", type: "airport", popular: true },
+        { code: "BKK", name: "Bangkok Airport", country: "Thailand", countryCode: "TH", type: "airport", popular: true },
+        { code: "LHR", name: "London Heathrow", country: "United Kingdom", countryCode: "GB", type: "airport", popular: true },
+        { code: "CDG", name: "Paris Charles de Gaulle", country: "France", countryCode: "FR", type: "airport", popular: true },
+        { code: "JFK", name: "New York JFK", country: "United States", countryCode: "US", type: "airport", popular: true },
+        { code: "LAX", name: "Los Angeles Airport", country: "United States", countryCode: "US", type: "airport", popular: true },
+        { code: "NRT", name: "Tokyo Narita", country: "Japan", countryCode: "JP", type: "airport", popular: true },
+        { code: "HKG", name: "Hong Kong Airport", country: "Hong Kong", countryCode: "HK", type: "airport", popular: true },
+        { code: "SYD", name: "Sydney Airport", country: "Australia", countryCode: "AU", type: "airport", popular: true },
+
+        // International Cities
+        { code: "DUBAI", name: "Dubai City Center", country: "UAE", countryCode: "AE", type: "city", popular: true },
+        { code: "SINGAPORE", name: "Singapore City Center", country: "Singapore", countryCode: "SG", type: "city", popular: true },
+        { code: "BANGKOK", name: "Bangkok City Center", country: "Thailand", countryCode: "TH", type: "city", popular: true },
+        { code: "LONDON", name: "London City Center", country: "United Kingdom", countryCode: "GB", type: "city", popular: true },
+        { code: "PARIS", name: "Paris City Center", country: "France", countryCode: "FR", type: "city", popular: true },
+        { code: "NEW_YORK", name: "New York City Center", country: "United States", countryCode: "US", type: "city", popular: true },
+        { code: "LOS_ANGELES", name: "Los Angeles City Center", country: "United States", countryCode: "US", type: "city", popular: true },
+        { code: "TOKYO", name: "Tokyo City Center", country: "Japan", countryCode: "JP", type: "city", popular: true },
+        { code: "HONG_KONG", name: "Hong Kong City Center", country: "Hong Kong", countryCode: "HK", type: "city", popular: true },
+        { code: "SYDNEY", name: "Sydney City Center", country: "Australia", countryCode: "AU", type: "city", popular: true },
+      ];
+
+      let destinations = [...transferDestinations];
+
+      // Filter by query if provided
+      if (query && query.length > 0) {
+        const lowerQuery = query.toLowerCase();
+        destinations = destinations.filter(
+          (dest) =>
+            dest.name.toLowerCase().includes(lowerQuery) ||
+            dest.country.toLowerCase().includes(lowerQuery) ||
+            dest.code.toLowerCase().includes(lowerQuery) ||
+            dest.type.toLowerCase().includes(lowerQuery)
+        );
+      }
+
+      // If popularOnly is requested, filter to popular destinations
+      if (popularOnly) {
+        destinations = destinations.filter((dest) => dest.popular);
+      }
+
+      // Sort by popularity first, then by name
+      destinations.sort((a, b) => {
+        if (a.popular && !b.popular) return -1;
+        if (!a.popular && b.popular) return 1;
+        return a.name.localeCompare(b.name);
+      });
+
+      // Limit results
+      destinations = destinations.slice(0, limit);
+
+      this.logger.info("Transfer destinations retrieved", {
+        query,
+        count: destinations.length,
+      });
+
+      return {
+        success: true,
+        data: { destinations },
+      };
+    } catch (error) {
+      this.logger.error("Failed to get transfer destinations", {
+        query,
+        error: error.message,
+      });
+
+      return {
+        success: false,
+        error: `Failed to get transfer destinations: ${error.message}`,
+      };
+    }
+  }
+
   // Additional helper methods would go here...
   // (getCachedResults, cacheResults, enhanceTransferDetails, calculateFinalPricing, etc.)
 }
