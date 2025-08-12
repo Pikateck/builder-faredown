@@ -1245,6 +1245,25 @@ export default function Index() {
           </div>
         </div>
 
+        {/* Mobile Transfers Section */}
+        <div
+          className={`bg-[#003580] text-white pb-8 ${activeTab === "transfers" ? "" : "hidden"}`}
+        >
+          <div className="px-4 pt-6">
+            <div className="text-center mb-6">
+              <h1 className="text-2xl font-bold mb-2">
+                Reliable Airport Transfers
+              </h1>
+              <p className="text-blue-200 text-sm mb-3">
+                Book safe, comfortable transfers with professional drivers and competitive rates.
+              </p>
+            </div>
+
+            {/* Mobile Transfers Search Form */}
+            <TransfersSearchForm />
+          </div>
+        </div>
+
         {/* Mobile Hotels Section */}
         <div
           className={`bg-[#003580] text-white pb-8 ${activeTab === "hotels" ? "" : "hidden"}`}
