@@ -81,7 +81,7 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
   return (
     <div className="bg-white text-black print:shadow-none print:border-none max-w-4xl mx-auto">
       {/* Print Styles */}
-      <style jsx>{`
+      <style>{`
         @media print {
           .no-print {
             display: none !important;
