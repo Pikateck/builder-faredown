@@ -314,7 +314,9 @@ export function TransfersSearchForm() {
                   {filterDestinations(pickupLocation).map((dest) => (
                     <button
                       key={dest.id}
-                      onClick={() => {
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setPickupLocation(`${dest.name}, ${dest.country}`);
                         setIsPickupOpen(false);
                       }}
