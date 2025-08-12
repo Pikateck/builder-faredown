@@ -766,16 +766,9 @@ export default function TransferResults() {
                       <div className="space-y-2">
                         <Button
                           onClick={() => navigate(`/transfer-details/${transfer.id}`)}
-                          variant="outline"
-                          className="w-full py-3 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[44px] rounded-xl active:scale-95 touch-manipulation"
-                        >
-                          View Details
-                        </Button>
-                        <Button
-                          onClick={() => handleBookNow(transfer)}
                           className="w-full py-3 bg-[#003580] hover:bg-[#002860] active:bg-[#001f4a] text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
-                          Book Now
+                          View Details
                         </Button>
                         <Button
                           onClick={() => handleBargain(transfer)}
