@@ -94,11 +94,25 @@ export function TransferDetails() {
 
       try {
         setLoading(true);
-        const response = await transfersService.getTransferDetails(id);
-        if (response.success) {
-          setTransfer(response.data);
+        const transferData = await transfersService.getTransferDetails(id);
+
+        // The service now returns transfer data directly (with fallback)
+        if (transferData) {
+          setTransfer({
+            ...transferData,
+            // Add any missing fields for the UI
+            images: [transferData.vehicleImage || "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800"],
+            description: `Experience comfortable and reliable transport with our ${transferData.vehicleName}. Professional service with ${transferData.features?.join(", ") || "premium features"}.`,
+            termsAndConditions: [
+              "Professional driver included",
+              "Meet and greet service",
+              `${transferData.freeWaitingTime || 60} minutes free waiting time`,
+              "Flight monitoring available",
+              "Cancel up to " + (transferData.cancellationPolicy?.freeUntil || "24 hours") + " before departure"
+            ]
+          });
         } else {
-          setError(response.error || "Failed to load transfer details");
+          setError("Transfer not found");
         }
       } catch (err) {
         console.error("Error loading transfer details:", err);
