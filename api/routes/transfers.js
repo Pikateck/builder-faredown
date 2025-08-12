@@ -1,14 +1,32 @@
 /**
  * Transfers API Routes
- * Handles all transfer-related API endpoints
+ * Handles all transfer-related API endpoints following Hotels/Sightseeing pattern
  */
 
 const express = require("express");
 const transfersService = require("../services/transfersService");
 const transfersRepository = require("../repositories/transfersRepository");
+const markupService = require("../services/markupService");
+const promoService = require("../services/promoService");
+const voucherService = require("../services/voucherService");
+const emailService = require("../services/emailService");
 const { validateBookingData } = require("../middleware/validation");
 const { auditRequest } = require("../middleware/audit");
+const { requireAuth, requireAdmin } = require("../middleware/auth");
+const winston = require("winston");
+
 const router = express.Router();
+
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message, ...meta }) => {
+      return `${timestamp} [${level.toUpperCase()}] [TRANSFERS-API] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
+    })
+  ),
+  transports: [new winston.transports.Console()],
+});
 
 /**
  * @route POST /api/transfers/destinations
@@ -19,27 +37,26 @@ router.post("/destinations", auditRequest, async (req, res) => {
   try {
     const { query = "", limit = 15, popularOnly = false } = req.body;
 
-    console.log(`🎯 Transfers destinations API called with query: "${query}"`);
+    logger.info("Transfers destinations API called", { query, limit, popularOnly });
 
-    // Get destinations from Hotelbeds Transfers API
     const result = await transfersService.getDestinations(query, limit, popularOnly);
 
     if (!result.success) {
-      console.error("❌ Hotelbeds Transfers destinations API failed:", result.error);
+      logger.error("Transfers destinations API failed", { error: result.error });
       return res.status(500).json({
         success: false,
         error: "Failed to fetch transfer destinations",
       });
     }
 
-    console.log(`✅ Found ${result.data.destinations.length} transfer destinations`);
+    logger.info(`Found ${result.data.destinations.length} transfer destinations`);
 
     res.json({
       success: true,
       data: result.data,
     });
   } catch (error) {
-    console.error("❌ Transfers destinations API error:", error);
+    logger.error("Transfers destinations API error", { error: error.message });
     res.status(500).json({
       success: false,
       error: error.message || "Internal server error",
@@ -49,7 +66,7 @@ router.post("/destinations", auditRequest, async (req, res) => {
 
 /**
  * @route POST /api/transfers/search
- * @desc Search for available transfers
+ * @desc Search for available transfers with caching and normalization
  * @access Public
  */
 router.post("/search", auditRequest, async (req, res) => {
@@ -66,6 +83,7 @@ router.post("/search", auditRequest, async (req, res) => {
       vehicleType,
       currency = "INR",
       promoCode,
+      flightNumber
     } = req.body;
 
     // Validate required fields
@@ -88,385 +106,516 @@ router.post("/search", auditRequest, async (req, res) => {
       vehicleType,
       currency,
       promoCode,
+      flightNumber,
       userAgent: req.headers["user-agent"],
       ipAddress: req.ip,
+      sessionId: req.sessionID
     };
+
+    logger.info("Transfer search initiated", { searchParams });
 
     const results = await transfersService.searchTransfers(searchParams);
 
+    if (!results.success) {
+      logger.error("Transfer search failed", { error: results.error });
+      return res.status(500).json({
+        success: false,
+        error: results.error || "Search failed",
+      });
+    }
+
+    logger.info(`Transfer search completed`, { 
+      offerCount: results.data?.offers?.length || 0,
+      cached: results.data?.cached || false
+    });
+
     res.json({
       success: true,
-      data: results,
+      data: results.data,
       timestamp: new Date().toISOString(),
     });
+
   } catch (error) {
-    console.error("Transfer search error:", error);
+    logger.error("Transfer search error", { error: error.message, stack: error.stack });
     res.status(500).json({
       success: false,
-      error: error.message || "Failed to search transfers",
+      error: error.message || "Internal server error",
     });
   }
 });
 
 /**
- * @route GET /api/transfers/product/:transferId
- * @desc Get detailed information about a specific transfer
+ * @route GET /api/transfers/product/:id
+ * @desc Get transfer product details with current pricing
  * @access Public
  */
-router.get("/product/:transferId", auditRequest, async (req, res) => {
+router.get("/product/:id", auditRequest, async (req, res) => {
   try {
-    const { transferId } = req.params;
-    const searchParams = req.query;
+    const { id } = req.params;
+    const { currency = "INR", promoCode } = req.query;
 
-    if (!transferId) {
-      return res.status(400).json({
+    logger.info("Transfer product details requested", { id, currency, promoCode });
+
+    const product = await transfersService.getProduct(id, {
+      currency,
+      promoCode,
+      userAgent: req.headers["user-agent"],
+      ipAddress: req.ip
+    });
+
+    if (!product.success) {
+      logger.error("Transfer product not found", { id, error: product.error });
+      return res.status(404).json({
         success: false,
-        error: "Transfer ID is required",
+        error: "Product not found",
       });
     }
-
-    const details = await transfersService.getTransferDetails(transferId, searchParams);
 
     res.json({
       success: true,
-      data: details,
+      data: product.data,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
-    console.error("Get transfer details error:", error);
-    
-    if (error.message.includes("not found")) {
-      return res.status(404).json({
-        success: false,
-        error: "Transfer not found",
-      });
-    }
 
+  } catch (error) {
+    logger.error("Transfer product details error", { error: error.message, id: req.params.id });
     res.status(500).json({
       success: false,
-      error: error.message || "Failed to get transfer details",
+      error: error.message || "Internal server error",
     });
   }
 });
 
 /**
- * @route POST /api/transfers/book
- * @desc Book a transfer
- * @access Public (should be protected with auth in production)
+ * @route POST /api/transfers/checkout/price
+ * @desc Calculate final pricing with markups, promos, and never-loss protection
+ * @access Public
  */
-router.post("/book", auditRequest, validateBookingData, async (req, res) => {
+router.post("/checkout/price", auditRequest, async (req, res) => {
   try {
     const {
-      transferId,
-      guestDetails,
-      pickupLocation,
-      dropoffLocation,
-      pickupDate,
-      pickupTime,
-      returnDate,
-      returnTime,
-      isRoundTrip = false,
-      passengers,
-      flightNumber,
-      specialRequests,
-      mobilityRequirements,
-      childSeatsRequired = 0,
-      totalAmount,
-      currency = "INR",
+      offerId,
       promoCode,
-      paymentMethod = "card",
+      currency = "INR",
+      bargainAmount
     } = req.body;
 
-    // Validate required fields
-    if (!transferId || !guestDetails || !totalAmount) {
+    if (!offerId) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields: transferId, guestDetails, totalAmount",
+        error: "Missing required field: offerId",
       });
     }
 
-    // Validate guest details
-    const requiredGuestFields = ["firstName", "lastName", "email", "phone"];
-    for (const field of requiredGuestFields) {
-      if (!guestDetails[field]) {
-        return res.status(400).json({
-          success: false,
-          error: `Missing required guest field: ${field}`,
-        });
-      }
+    logger.info("Transfer checkout pricing requested", { offerId, promoCode, currency, bargainAmount });
+
+    const pricing = await transfersService.calculateCheckoutPrice({
+      offerId,
+      promoCode,
+      currency,
+      bargainAmount,
+      userAgent: req.headers["user-agent"],
+      ipAddress: req.ip
+    });
+
+    if (!pricing.success) {
+      logger.error("Transfer pricing calculation failed", { offerId, error: pricing.error });
+      return res.status(400).json({
+        success: false,
+        error: pricing.error || "Pricing calculation failed",
+      });
+    }
+
+    res.json({
+      success: true,
+      data: pricing.data,
+      timestamp: new Date().toISOString(),
+    });
+
+  } catch (error) {
+    logger.error("Transfer checkout pricing error", { error: error.message });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
+    });
+  }
+});
+
+/**
+ * @route POST /api/transfers/checkout/book
+ * @desc Book transfer with payment processing
+ * @access Private (requires authentication)
+ */
+router.post("/checkout/book", requireAuth, validateBookingData, auditRequest, async (req, res) => {
+  try {
+    const {
+      offerId,
+      guestDetails,
+      contactDetails,
+      flightDetails,
+      specialRequests,
+      promoCode,
+      bargainAmount,
+      paymentMethod = "online",
+      currency = "INR"
+    } = req.body;
+
+    if (!offerId || !guestDetails || !contactDetails) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required fields: offerId, guestDetails, contactDetails",
+      });
     }
 
     const bookingData = {
-      transferId,
+      offerId,
       guestDetails,
-      pickupLocation,
-      dropoffLocation,
-      pickupDate,
-      pickupTime,
-      returnDate,
-      returnTime,
-      isRoundTrip,
-      passengers,
-      flightNumber,
+      contactDetails,
+      flightDetails,
       specialRequests,
-      mobilityRequirements,
-      childSeatsRequired,
-      totalAmount,
-      currency,
       promoCode,
+      bargainAmount,
       paymentMethod,
-      userId: req.user?.id, // From auth middleware if implemented
-      userAgent: req.headers["user-agent"],
-      ipAddress: req.ip,
-    };
-
-    const booking = await transfersService.bookTransfer(bookingData);
-
-    res.json({
-      success: true,
-      data: booking,
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error("Transfer booking error:", error);
-    
-    if (error.message.includes("validation")) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
-
-    res.status(500).json({
-      success: false,
-      error: error.message || "Failed to book transfer",
-    });
-  }
-});
-
-/**
- * @route GET /api/transfers/booking/:bookingRef
- * @desc Get booking details by reference
- * @access Public (should be protected with auth in production)
- */
-router.get("/booking/:bookingRef", auditRequest, async (req, res) => {
-  try {
-    const { bookingRef } = req.params;
-
-    if (!bookingRef) {
-      return res.status(400).json({
-        success: false,
-        error: "Booking reference is required",
-      });
-    }
-
-    const booking = await transfersService.getBookingDetails(bookingRef);
-
-    if (!booking) {
-      return res.status(404).json({
-        success: false,
-        error: "Booking not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: booking,
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error("Get booking details error:", error);
-    
-    if (error.message.includes("not found")) {
-      return res.status(404).json({
-        success: false,
-        error: "Booking not found",
-      });
-    }
-
-    res.status(500).json({
-      success: false,
-      error: error.message || "Failed to get booking details",
-    });
-  }
-});
-
-/**
- * @route POST /api/transfers/booking/:bookingRef/cancel
- * @desc Cancel a transfer booking
- * @access Public (should be protected with auth in production)
- */
-router.post("/booking/:bookingRef/cancel", auditRequest, async (req, res) => {
-  try {
-    const { bookingRef } = req.params;
-    const { reason, cancellationFlag = "CANCELLATION" } = req.body;
-
-    if (!bookingRef) {
-      return res.status(400).json({
-        success: false,
-        error: "Booking reference is required",
-      });
-    }
-
-    const cancellationData = {
-      reason,
-      cancellationFlag,
+      currency,
       userId: req.user?.id,
       userAgent: req.headers["user-agent"],
       ipAddress: req.ip,
+      sessionId: req.sessionID
     };
 
-    const result = await transfersService.cancelTransfer(bookingRef, cancellationData);
+    logger.info("Transfer booking initiated", { 
+      offerId, 
+      userId: req.user?.id,
+      paymentMethod,
+      guestEmail: guestDetails.email 
+    });
+
+    const booking = await transfersService.createBooking(bookingData);
+
+    if (!booking.success) {
+      logger.error("Transfer booking failed", { offerId, userId: req.user?.id, error: booking.error });
+      return res.status(400).json({
+        success: false,
+        error: booking.error || "Booking failed",
+      });
+    }
+
+    logger.info("Transfer booking successful", { 
+      bookingId: booking.data.id,
+      bookingRef: booking.data.reference,
+      userId: req.user?.id
+    });
 
     res.json({
       success: true,
-      data: result,
+      data: booking.data,
       timestamp: new Date().toISOString(),
     });
+
   } catch (error) {
-    console.error("Transfer cancellation error:", error);
-    
-    if (error.message.includes("not found")) {
+    logger.error("Transfer booking error", { error: error.message, userId: req.user?.id });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
+    });
+  }
+});
+
+/**
+ * @route GET /api/transfers/booking/:id
+ * @desc Get booking details
+ * @access Private (user's own bookings or admin)
+ */
+router.get("/booking/:id", requireAuth, auditRequest, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    const isAdmin = req.user?.role === 'admin';
+
+    logger.info("Transfer booking details requested", { bookingId: id, userId, isAdmin });
+
+    const booking = await transfersService.getBooking(id, { userId, isAdmin });
+
+    if (!booking.success) {
+      logger.error("Transfer booking not found", { bookingId: id, userId, error: booking.error });
       return res.status(404).json({
         success: false,
         error: "Booking not found",
       });
     }
 
-    if (error.message.includes("already cancelled")) {
-      return res.status(400).json({
-        success: false,
-        error: "Booking is already cancelled",
-      });
-    }
+    res.json({
+      success: true,
+      data: booking.data,
+      timestamp: new Date().toISOString(),
+    });
 
+  } catch (error) {
+    logger.error("Transfer booking details error", { error: error.message, bookingId: req.params.id });
     res.status(500).json({
       success: false,
-      error: error.message || "Failed to cancel transfer",
+      error: error.message || "Internal server error",
     });
   }
 });
 
 /**
- * @route GET /api/transfers/bookings/user/:userId
- * @desc Get all bookings for a user
- * @access Private (requires auth)
+ * @route POST /api/transfers/booking/:id/cancel
+ * @desc Cancel transfer booking with refund processing
+ * @access Private (user's own bookings or admin)
  */
-router.get("/bookings/user/:userId", auditRequest, async (req, res) => {
+router.post("/booking/:id/cancel", requireAuth, auditRequest, async (req, res) => {
   try {
-    const { userId } = req.params;
-    const { limit = 20, offset = 0, status } = req.query;
+    const { id } = req.params;
+    const { reason = "Customer requested cancellation" } = req.body;
+    const userId = req.user?.id;
+    const isAdmin = req.user?.role === 'admin';
 
-    if (!userId) {
+    logger.info("Transfer booking cancellation requested", { bookingId: id, userId, isAdmin, reason });
+
+    const cancellation = await transfersService.cancelBooking(id, {
+      reason,
+      userId,
+      isAdmin,
+      userAgent: req.headers["user-agent"],
+      ipAddress: req.ip
+    });
+
+    if (!cancellation.success) {
+      logger.error("Transfer booking cancellation failed", { bookingId: id, userId, error: cancellation.error });
       return res.status(400).json({
         success: false,
-        error: "User ID is required",
+        error: cancellation.error || "Cancellation failed",
       });
     }
 
-    const options = {
-      limit: parseInt(limit),
-      offset: parseInt(offset),
-      status,
-    };
-
-    const bookings = await transfersRepository.getBookingsByUser(parseInt(userId), options);
+    logger.info("Transfer booking cancelled successfully", { 
+      bookingId: id, 
+      userId,
+      refundAmount: cancellation.data?.refundAmount 
+    });
 
     res.json({
       success: true,
-      data: bookings,
-      pagination: {
-        limit: options.limit,
-        offset: options.offset,
-        total: bookings.length,
-      },
+      data: cancellation.data,
       timestamp: new Date().toISOString(),
     });
+
   } catch (error) {
-    console.error("Get user bookings error:", error);
+    logger.error("Transfer booking cancellation error", { error: error.message, bookingId: req.params.id });
     res.status(500).json({
       success: false,
-      error: error.message || "Failed to get user bookings",
+      error: error.message || "Internal server error",
     });
   }
 });
 
+// =============================================================================
+// ADMIN ROUTES
+// =============================================================================
+
 /**
- * @route POST /api/transfers/repricing
- * @desc Re-price a transfer with updated parameters
- * @access Public
+ * @route GET /api/transfers/admin/bookings
+ * @desc Get all transfer bookings with filtering
+ * @access Admin
  */
-router.post("/repricing", auditRequest, async (req, res) => {
+router.get("/admin/bookings", requireAdmin, auditRequest, async (req, res) => {
   try {
     const {
-      transferId,
-      promoCode,
-      passengers,
-      additionalServices,
-    } = req.body;
+      status,
+      dateFrom,
+      dateTo,
+      supplier,
+      page = 1,
+      limit = 50
+    } = req.query;
 
-    if (!transferId) {
-      return res.status(400).json({
-        success: false,
-        error: "Transfer ID is required for repricing",
-      });
-    }
+    logger.info("Admin transfer bookings list requested", { 
+      status, dateFrom, dateTo, supplier, page, limit 
+    });
 
-    // This would typically re-calculate pricing with new parameters
-    // For now, return a placeholder response
-    const repricingResult = {
-      transferId,
-      originalPrice: 1000,
-      adjustments: {
-        promoDiscount: promoCode ? -100 : 0,
-        additionalServices: additionalServices?.length ? 50 : 0,
-      },
-      finalPrice: 950,
-      currency: "INR",
-      validUntil: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes
-    };
+    const bookings = await transfersService.getAdminBookings({
+      status,
+      dateFrom,
+      dateTo,
+      supplier,
+      page: parseInt(page),
+      limit: parseInt(limit)
+    });
 
     res.json({
       success: true,
-      data: repricingResult,
+      data: bookings.data,
+      pagination: bookings.pagination,
       timestamp: new Date().toISOString(),
     });
+
   } catch (error) {
-    console.error("Transfer repricing error:", error);
+    logger.error("Admin transfer bookings error", { error: error.message });
     res.status(500).json({
       success: false,
-      error: error.message || "Failed to reprice transfer",
+      error: error.message || "Internal server error",
     });
   }
 });
 
 /**
- * @route GET /api/transfers/stats
- * @desc Get transfer booking statistics
- * @access Private (Admin only)
+ * @route GET/POST /api/transfers/admin/markup
+ * @desc Manage transfer pricing rules and markups
+ * @access Admin
  */
-router.get("/stats", auditRequest, async (req, res) => {
+router.get("/admin/markup", requireAdmin, async (req, res) => {
   try {
-    const { startDate, endDate, status } = req.query;
+    const rules = await markupService.getTransferRules();
+    res.json({ success: true, data: rules });
+  } catch (error) {
+    logger.error("Get transfer markup rules error", { error: error.message });
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
-    const filters = {};
-    if (startDate) filters.startDate = new Date(startDate);
-    if (endDate) filters.endDate = new Date(endDate);
-    if (status) filters.status = status;
+router.post("/admin/markup", requireAdmin, auditRequest, async (req, res) => {
+  try {
+    const rule = await markupService.createTransferRule(req.body);
+    logger.info("Transfer markup rule created", { ruleId: rule.id, adminId: req.user?.id });
+    res.json({ success: true, data: rule });
+  } catch (error) {
+    logger.error("Create transfer markup rule error", { error: error.message });
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
-    const stats = await transfersRepository.getBookingStats(filters);
+/**
+ * @route GET/POST /api/transfers/admin/promos
+ * @desc Manage transfer promotional codes
+ * @access Admin
+ */
+router.get("/admin/promos", requireAdmin, async (req, res) => {
+  try {
+    const promos = await promoService.getTransferPromos();
+    res.json({ success: true, data: promos });
+  } catch (error) {
+    logger.error("Get transfer promos error", { error: error.message });
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post("/admin/promos", requireAdmin, auditRequest, async (req, res) => {
+  try {
+    const promo = await promoService.createTransferPromo(req.body);
+    logger.info("Transfer promo created", { promoCode: promo.code, adminId: req.user?.id });
+    res.json({ success: true, data: promo });
+  } catch (error) {
+    logger.error("Create transfer promo error", { error: error.message });
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * @route GET /api/transfers/admin/reports/revenue
+ * @desc Transfer revenue analytics
+ * @access Admin
+ */
+router.get("/admin/reports/revenue", requireAdmin, async (req, res) => {
+  try {
+    const {
+      dateFrom = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      dateTo = new Date().toISOString().split('T')[0],
+      supplier,
+      vehicleType
+    } = req.query;
+
+    const report = await transfersService.getRevenueReport({
+      dateFrom,
+      dateTo,
+      supplier,
+      vehicleType
+    });
 
     res.json({
       success: true,
-      data: stats,
-      filters,
+      data: report,
       timestamp: new Date().toISOString(),
     });
+
   } catch (error) {
-    console.error("Get transfer stats error:", error);
+    logger.error("Transfer revenue report error", { error: error.message });
     res.status(500).json({
       success: false,
-      error: error.message || "Failed to get transfer statistics",
+      error: error.message || "Internal server error",
+    });
+  }
+});
+
+/**
+ * @route GET /api/transfers/admin/reports/never-loss
+ * @desc Never-loss incidents report
+ * @access Admin
+ */
+router.get("/admin/reports/never-loss", requireAdmin, async (req, res) => {
+  try {
+    const {
+      dateFrom = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      dateTo = new Date().toISOString().split('T')[0]
+    } = req.query;
+
+    const report = await transfersService.getNeverLossReport({
+      dateFrom,
+      dateTo
+    });
+
+    res.json({
+      success: true,
+      data: report,
+      timestamp: new Date().toISOString(),
+    });
+
+  } catch (error) {
+    logger.error("Transfer never-loss report error", { error: error.message });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
+    });
+  }
+});
+
+/**
+ * @route GET /api/transfers/admin/audit-logs
+ * @desc Get transfer audit logs
+ * @access Admin
+ */
+router.get("/admin/audit-logs", requireAdmin, async (req, res) => {
+  try {
+    const {
+      bookingId,
+      eventType,
+      dateFrom,
+      dateTo,
+      page = 1,
+      limit = 100
+    } = req.query;
+
+    const logs = await transfersService.getAuditLogs({
+      bookingId,
+      eventType,
+      dateFrom,
+      dateTo,
+      page: parseInt(page),
+      limit: parseInt(limit)
+    });
+
+    res.json({
+      success: true,
+      data: logs.data,
+      pagination: logs.pagination,
+      timestamp: new Date().toISOString(),
+    });
+
+  } catch (error) {
+    logger.error("Transfer audit logs error", { error: error.message });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
     });
   }
 });
@@ -478,57 +627,37 @@ router.get("/stats", auditRequest, async (req, res) => {
  */
 router.get("/health", async (req, res) => {
   try {
-    // Check database connectivity
-    const dbHealth = await transfersRepository.connect()
-      .then(() => ({ status: "healthy", timestamp: new Date().toISOString() }))
-      .catch((error) => ({ status: "unhealthy", error: error.message, timestamp: new Date().toISOString() }));
-
-    // Check supplier adapters
-    const supplierHealth = {};
+    const health = await transfersService.healthCheck();
     
-    // This would typically check each adapter's health
-    supplierHealth.hotelbeds = {
-      status: "healthy",
+    res.json({
+      success: true,
+      data: health,
       timestamp: new Date().toISOString(),
-    };
-
-    const overallHealth = {
-      status: dbHealth.status === "healthy" && supplierHealth.hotelbeds.status === "healthy" ? "healthy" : "unhealthy",
-      components: {
-        database: dbHealth,
-        suppliers: supplierHealth,
-      },
-      timestamp: new Date().toISOString(),
-    };
-
-    res.status(overallHealth.status === "healthy" ? 200 : 503).json({
-      success: overallHealth.status === "healthy",
-      data: overallHealth,
     });
+
   } catch (error) {
-    console.error("Health check error:", error);
-    res.status(503).json({
+    logger.error("Transfer health check error", { error: error.message });
+    res.status(500).json({
       success: false,
-      error: "Health check failed",
+      error: error.message || "Service unhealthy",
       timestamp: new Date().toISOString(),
     });
   }
 });
 
-/**
- * Error handling middleware for transfers routes
- */
+// Error handling middleware for transfers routes
 router.use((error, req, res, next) => {
-  console.error("Transfers API error:", error);
-
-  // Don't leak error details in production
-  const isDevelopment = process.env.NODE_ENV === "development";
+  logger.error("Unhandled transfers route error", { 
+    error: error.message, 
+    stack: error.stack,
+    url: req.url,
+    method: req.method
+  });
 
   res.status(500).json({
     success: false,
-    error: isDevelopment ? error.message : "Internal server error",
+    error: "Internal server error",
     timestamp: new Date().toISOString(),
-    ...(isDevelopment && { stack: error.stack }),
   });
 });
 
