@@ -392,7 +392,9 @@ export function TransfersSearchForm() {
                     {filterDestinations(dropoffLocation).map((dest) => (
                       <button
                         key={dest.id}
-                        onClick={() => {
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           setDropoffLocation(`${dest.name}, ${dest.country}`);
                           setIsDropoffOpen(false);
                         }}
