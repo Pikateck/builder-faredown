@@ -245,7 +245,7 @@ export default function Index() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get("tab");
-    if (tabParam && ["flights", "hotels", "sightseeing"].includes(tabParam)) {
+    if (tabParam && ["flights", "hotels", "sightseeing", "transfers"].includes(tabParam)) {
       setActiveTab(tabParam);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
