@@ -1177,6 +1177,46 @@ export default function SightseeingResults() {
           navigate(`/sightseeing/booking?${searchParams.toString()}`);
         }}
       />
+
+      {/* Bottom Selection Bar - Fixed */}
+      {showBottomBar && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-200 shadow-lg z-40 p-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-between gap-4">
+              {/* Selection Info */}
+              <div className="flex-1">
+                <div className="text-sm text-gray-600 mb-1">
+                  {selectedAttractions.size} experience{selectedAttractions.size > 1 ? 's' : ''} selected
+                </div>
+                <div className="text-xl font-bold text-gray-900">
+                  {formatPrice(calculateTotalPrice())}
+                </div>
+                <div className="text-xs text-gray-500">
+                  Total for {searchParams.get("adults") || "2"} adult{parseInt(searchParams.get("adults") || "2") > 1 ? 's' : ''}
+                  {parseInt(searchParams.get("children") || "0") > 0 && `, ${searchParams.get("children")} children`}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={handleBottomBarBargain}
+                  className="bg-[#febb02] hover:bg-[#e6a700] text-black font-semibold py-3 px-6 rounded-lg flex items-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98]"
+                >
+                  <TrendingDown className="w-4 h-4" />
+                  <span>Bargain Now</span>
+                </button>
+                <button
+                  onClick={handleBottomBarBookNow}
+                  className="bg-[#ff6b00] hover:bg-[#e55a00] text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98]"
+                >
+                  <span>Book Now</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
