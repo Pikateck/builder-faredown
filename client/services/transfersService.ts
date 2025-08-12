@@ -534,6 +534,100 @@ class TransfersService {
   }
 
   /**
+   * Search destinations using Hotelbeds Transfers API
+   * Matches hotels/sightseeing service signature exactly
+   */
+  async searchDestinations(query: string): Promise<TransferDestination[]> {
+    try {
+      console.log(`🎯 Searching transfer destinations: "${query}"`);
+
+      let response;
+      try {
+        // Call the backend Hotelbeds Transfers API
+        response = await this.api.post<{
+          success: boolean;
+          data: { destinations: any[] };
+        }>("/api/transfers/destinations", {
+          query,
+          limit: 15, // Fixed limit like hotels/sightseeing
+          popularOnly: query === "", // Popular when empty query
+        });
+      } catch (apiError) {
+        console.warn(
+          "❌ Transfer destinations API request failed:",
+          apiError,
+        );
+        return this.getFallbackDestinations(query);
+      }
+
+      // Check if response or response.data is null/undefined
+      if (!response || !response.data) {
+        console.warn("❌ Transfer destinations API returned null response");
+        return this.getFallbackDestinations(query);
+      }
+
+      if (!response.data.success) {
+        console.warn("❌ Transfer destinations API failed:", response.data);
+        return this.getFallbackDestinations(query);
+      }
+
+      // Check if destinations data exists
+      const destinationsData = response.data.data?.destinations;
+      if (!destinationsData || !Array.isArray(destinationsData)) {
+        console.warn(
+          "❌ Transfer destinations data is invalid:",
+          response.data.data,
+        );
+        return this.getFallbackDestinations(query);
+      }
+
+      const destinations = destinationsData.map((dest: any) => ({
+        id: dest.code,
+        code: dest.code,
+        name: dest.name,
+        type: dest.type || "destination",
+        country: dest.country,
+        countryCode: dest.countryCode,
+        popular: dest.popular || false,
+      }));
+
+      console.log(
+        `✅ Found ${destinations.length} transfer destinations from API`,
+      );
+      return destinations;
+    } catch (error) {
+      console.error("❌ Transfer destinations search error:", error);
+      return this.getFallbackDestinations(query);
+    }
+  }
+
+  /**
+   * Fallback destinations when API fails
+   */
+  private getFallbackDestinations(query: string): TransferDestination[] {
+    const fallbackDestinations: TransferDestination[] = [
+      { id: "DEL", code: "DEL", name: "Delhi Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "BOM", code: "BOM", name: "Mumbai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "BLR", code: "BLR", name: "Bangalore Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "MAA", code: "MAA", name: "Chennai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "CCU", code: "CCU", name: "Kolkata Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "HYD", code: "HYD", name: "Hyderabad Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "GOI", code: "GOI", name: "Goa Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "PNQ", code: "PNQ", name: "Pune Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+      { id: "DXB", code: "DXB", name: "Dubai Airport", country: "UAE", countryCode: "AE", type: "airport", popular: true },
+      { id: "SIN", code: "SIN", name: "Singapore Airport", country: "Singapore", countryCode: "SG", type: "airport", popular: true },
+    ];
+
+    if (!query) return fallbackDestinations;
+
+    return fallbackDestinations.filter(dest =>
+      dest.name.toLowerCase().includes(query.toLowerCase()) ||
+      dest.country.toLowerCase().includes(query.toLowerCase()) ||
+      dest.code.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  /**
    * Get vehicle type display name
    */
   getVehicleTypeDisplayName(vehicleType: string): string {
