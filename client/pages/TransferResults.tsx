@@ -565,7 +565,7 @@ export default function TransferResults() {
 
               {/* Price Range */}
               <div className="mb-4">
-                <h4 className="font-medium mb-3">Price Range</h4>
+                <h4 className="font-medium mb-2">Price Range</h4>
                 <Slider
                   value={priceRange}
                   onValueChange={setPriceRange}
@@ -583,7 +583,7 @@ export default function TransferResults() {
               {/* Vehicle Type */}
               {availableFilters.vehicleType.length > 0 && (
                 <div className="mb-4">
-                  <h4 className="font-medium mb-3">Vehicle Type</h4>
+                  <h4 className="font-medium mb-2">Vehicle Type</h4>
                   <div className="space-y-2">
                     {availableFilters.vehicleType.map(type => (
                       <label key={type} className="flex items-center space-x-2">
@@ -601,7 +601,7 @@ export default function TransferResults() {
               {/* Vehicle Class */}
               {availableFilters.vehicleClass.length > 0 && (
                 <div className="mb-4">
-                  <h4 className="font-medium mb-3">Vehicle Class</h4>
+                  <h4 className="font-medium mb-2">Vehicle Class</h4>
                   <div className="space-y-2">
                     {availableFilters.vehicleClass.map(cls => (
                       <label key={cls} className="flex items-center space-x-2">
@@ -618,7 +618,7 @@ export default function TransferResults() {
 
               {/* Features */}
               <div className="mb-4">
-                <h4 className="font-medium mb-3">Features</h4>
+                <h4 className="font-medium mb-2">Features</h4>
                 <div className="space-y-2">
                   {availableFilters.features.map(feature => (
                     <label key={feature} className="flex items-center space-x-2">
@@ -743,7 +743,7 @@ export default function TransferResults() {
                     {/* Right Section - Pricing and Actions */}
                     <div className="flex-shrink-0 lg:w-56 text-right">
                       {/* Pricing */}
-                      <div className="mb-3">
+                      <div className="mb-2">
                         {transfer.pricing.savings > 0 && (
                           <div className="text-sm text-green-600 mb-1">
                             Save {formatPrice(transfer.pricing.savings)}
