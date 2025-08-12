@@ -657,30 +657,32 @@ export function TransfersSearchForm() {
         onClose={() => setShowError(false)}
       />
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        {/* Sub-tabs for Transfer Mode */}
-        <div className="flex items-center space-x-4 mb-3 border-b border-gray-200 pb-2">
-          <button
-            onClick={() => setTransferMode("airport")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-              transferMode === "airport"
-                ? "bg-blue-600 text-white"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Plane className="w-4 h-4" />
-            <span>Airport transport</span>
-          </button>
-          <button
-            onClick={() => setTransferMode("rental")}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-              transferMode === "rental"
-                ? "bg-blue-600 text-white"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Car className="w-4 h-4" />
-            <span>Car rentals</span>
-          </button>
+        {/* Header for Airport Transfers */}
+        <div className="mb-3">
+          <h2 className="text-xl font-semibold text-gray-900 mb-1">Find the right ride for your trip</h2>
+          <p className="text-sm text-gray-600">Easy airport transfers to and from your accommodation.</p>
+        </div>
+
+        {/* Trip Type Selection */}
+        <div className="flex items-center space-x-6 mb-3">
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              checked={!isRoundTrip}
+              onChange={() => setIsRoundTrip(false)}
+              className="w-4 h-4 text-blue-600"
+            />
+            <span className="text-sm font-medium text-gray-800">One-way</span>
+          </label>
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              checked={isRoundTrip}
+              onChange={() => setIsRoundTrip(true)}
+              className="w-4 h-4 text-blue-600"
+            />
+            <span className="text-sm font-medium text-gray-800">Return</span>
+          </label>
         </div>
 
         {transferMode === "airport" ? (
