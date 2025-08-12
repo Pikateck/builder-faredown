@@ -478,27 +478,7 @@ export default function TransferBooking() {
                 </div>
               </div>
 
-              {/* Promo Code */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Promo Code
-                </label>
-                <div className="flex">
-                  <Input
-                    value={formData.promoCode}
-                    onChange={(e) => setFormData(prev => ({ ...prev, promoCode: e.target.value }))}
-                    placeholder="Enter promo code"
-                    className="rounded-r-none"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded-l-none border-l-0"
-                  >
-                    Apply
-                  </Button>
-                </div>
-              </div>
+              {/* Promo codes handled via bargain feature - no separate promo input needed */}
 
               {/* Bargain functionality removed - user has already decided to book */}
 
