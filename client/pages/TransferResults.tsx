@@ -766,7 +766,7 @@ export default function TransferResults() {
                       {/* Action Buttons */}
                       <div className="space-y-2">
                         <Button
-                          onClick={() => navigate(`/transfer-details/${transfer.id}`)}
+                          onClick={() => navigate(`/transfer-details/${transfer.id}?price=${transfer.pricing.totalPrice}&from=${encodeURIComponent(transfer.pickupLocation)}&to=${encodeURIComponent(transfer.dropoffLocation)}&vehicle=${encodeURIComponent(transfer.vehicleName)}`)}
                           className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
                           View Details
