@@ -169,7 +169,10 @@ export function SightseeingCard({
     <>
       <div
         className={cn(
-          "bg-white rounded-lg border-2 border-gray-200 overflow-hidden hover:shadow-xl hover:border-[#003580] transition-all duration-300 cursor-pointer group mb-4",
+          "bg-white rounded-lg border-2 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group mb-4",
+          isSelected
+            ? "border-[#ff6b00] shadow-lg ring-2 ring-[#ff6b00] ring-opacity-30"
+            : "border-gray-200 hover:border-[#003580]",
           className,
         )}
         onClick={handleViewDetails}
