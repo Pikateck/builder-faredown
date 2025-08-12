@@ -220,30 +220,32 @@ export default function TransferBooking() {
               </div>
 
               <div className="border-t pt-4 space-y-3">
-                <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
-                  <button
-                    onClick={() => setActiveTab('outbound')}
-                    className={cn(
-                      "px-4 py-2 text-sm font-medium rounded-md transition-colors",
-                      activeTab === 'outbound'
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700"
-                    )}
-                  >
-                    Outbound
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('return')}
-                    className={cn(
-                      "px-4 py-2 text-sm font-medium rounded-md transition-colors",
-                      activeTab === 'return'
-                        ? "bg-white text-blue-600 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700"
-                    )}
-                  >
-                    Return
-                  </button>
-                </div>
+                {isRoundTrip && transferData.return && (
+                  <div className="flex bg-gray-100 rounded-lg p-1 mb-4">
+                    <button
+                      onClick={() => setActiveTab('outbound')}
+                      className={cn(
+                        "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                        activeTab === 'outbound'
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      Outbound
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('return')}
+                      className={cn(
+                        "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                        activeTab === 'return'
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      Return
+                    </button>
+                  </div>
+                )}
                 <div className="text-sm">
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
