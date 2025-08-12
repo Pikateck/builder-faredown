@@ -166,6 +166,10 @@ function App() {
                     path="/transfer-booking"
                     element={<TransferBooking />}
                   />
+                  <Route
+                    path="/transfer-confirmation"
+                    element={<TransferConfirmation />}
+                  />
                   <Route path="/help" element={<HelpCenter />} />
                   <Route path="/help-center" element={<HelpCenter />} />
                   <Route path="/support" element={<HelpCenter />} />
