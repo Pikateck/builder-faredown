@@ -75,21 +75,6 @@ export default function SightseeingBookingConfirmation() {
   const lastName = searchParams.get("lastName") || "User";
   const email = searchParams.get("email") || "guest@example.com";
 
-  // Calculate total price
-  const totalPrice = (() => {
-    if (!attraction) return 0;
-    const ticketPrice = attraction.ticketTypes[ticketTypeIndex]?.price || 0;
-    return (ticketPrice * adults) + (ticketPrice * 0.5 * children); // Assuming children are 50% price
-  })();
-
-  // Format visit date for display
-  const formattedVisitDate = new Date(visitDate).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
   // Load attraction data
   useEffect(() => {
     const loadAttraction = async () => {
