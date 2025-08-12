@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { EnhancedBargainModal } from "@/components/EnhancedBargainModal";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { formatPrice } from "@/lib/formatPrice";
+import { formatPriceNoDecimals as formatPrice } from "@/lib/formatPrice";
 import { transfersService } from "@/services/transfersService";
 import {
   MapPin,
