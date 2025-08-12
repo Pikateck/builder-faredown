@@ -551,7 +551,7 @@ export default function TransferResults() {
             isMobile && !showFilters && "hidden"
           )}>
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Filters</h3>
                 <Button
                   variant="ghost"
@@ -564,7 +564,7 @@ export default function TransferResults() {
               </div>
 
               {/* Price Range */}
-              <div className="mb-6">
+              <div className="mb-4">
                 <h4 className="font-medium mb-3">Price Range</h4>
                 <Slider
                   value={priceRange}
@@ -582,7 +582,7 @@ export default function TransferResults() {
 
               {/* Vehicle Type */}
               {availableFilters.vehicleType.length > 0 && (
-                <div className="mb-6">
+                <div className="mb-4">
                   <h4 className="font-medium mb-3">Vehicle Type</h4>
                   <div className="space-y-2">
                     {availableFilters.vehicleType.map(type => (
@@ -600,7 +600,7 @@ export default function TransferResults() {
 
               {/* Vehicle Class */}
               {availableFilters.vehicleClass.length > 0 && (
-                <div className="mb-6">
+                <div className="mb-4">
                   <h4 className="font-medium mb-3">Vehicle Class</h4>
                   <div className="space-y-2">
                     {availableFilters.vehicleClass.map(cls => (
@@ -617,7 +617,7 @@ export default function TransferResults() {
               )}
 
               {/* Features */}
-              <div className="mb-6">
+              <div className="mb-4">
                 <h4 className="font-medium mb-3">Features</h4>
                 <div className="space-y-2">
                   {availableFilters.features.map(feature => (
@@ -639,7 +639,7 @@ export default function TransferResults() {
           {/* Results */}
           <div className="lg:col-span-3">
             {/* Results Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">
                 {filteredTransfers.length} transfer{filteredTransfers.length !== 1 ? 's' : ''} found
               </h2>
