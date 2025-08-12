@@ -496,6 +496,13 @@ export default function TransferResults() {
         />
       )}
 
+      {/* Search Form at Top */}
+      <div className="bg-white border-b border-gray-200 py-4">
+        <div className="max-w-7xl mx-auto px-4">
+          <TransfersSearchForm />
+        </div>
+      </div>
+
       {/* Search Summary Bar */}
       <div className="bg-white border-b border-gray-200 py-4">
         <div className="max-w-7xl mx-auto px-4">
