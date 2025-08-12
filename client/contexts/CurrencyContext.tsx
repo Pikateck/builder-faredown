@@ -245,9 +245,17 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       loadUserPreference();
 
       // Try to refresh rates, but don't block the app if it fails
+      // Add a delay and check environment to prevent issues
       setTimeout(() => {
         const safeRefreshRates = async () => {
           try {
+            // Skip fetching if we're in an embedded environment or if there are known issues
+            if (typeof window !== 'undefined' &&
+                (window.location.hostname.includes('fly.dev') ||
+                 window.location.search.includes('reload='))) {
+              console.log("💰 Skipping currency fetch in embedded/reload environment, using static rates");
+              return;
+            }
             await refreshRates();
           } catch (error) {
             console.log(
