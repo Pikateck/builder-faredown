@@ -66,13 +66,6 @@ export default function TransferBooking() {
   const [userName, setUserName] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState('outbound');
-
-  // Reset to outbound tab if return tab is active but no return data
-  useEffect(() => {
-    if (activeTab === 'return' && !transferData.return) {
-      setActiveTab('outbound');
-    }
-  }, [activeTab, transferData.return]);
   const [formData, setFormData] = useState({
     primaryGuest: {
       title: "",
