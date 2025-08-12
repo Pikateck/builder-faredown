@@ -405,17 +405,12 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
               },
             });
           } catch (innerError: any) {
-            // Handle specific browser extension interference
-            if (
-              innerError.message?.includes("Failed to fetch") ||
-              innerError.name === "TypeError"
-            ) {
-              console.log(
-                "💰 Browser extension interference detected, using static rates",
-              );
-              return null;
-            }
-            throw innerError;
+            // Handle any fetch errors - never let them bubble up
+            console.log(
+              "💰 Fetch failed (network/extension interference), using static rates:",
+              innerError?.message || "Unknown error"
+            );
+            return null;
           }
         };
 
