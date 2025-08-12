@@ -502,13 +502,7 @@ export default function TransferBooking() {
                 </div>
               </div>
 
-              {/* Bargain Button */}
-              <Button
-                onClick={() => setShowBargainModal(true)}
-                className="w-full mb-3 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
-              >
-                🔥 Bargain for Better Price
-              </Button>
+              {/* Bargain functionality removed - user has already decided to book */}
 
               {/* Book Now Button */}
               <Button
