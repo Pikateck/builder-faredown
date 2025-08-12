@@ -275,26 +275,26 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* SELECT Button - Full Width */}
+            {/* SELECT Button - Native App Style */}
             <div className="pt-2">
               <button
                 onClick={handleSelect}
                 className={cn(
-                  "w-full py-4 px-4 rounded-lg font-bold text-sm transition-all duration-200 shadow-md active:scale-[0.98] flex items-center justify-center gap-2 border-2",
+                  "w-full py-3 px-4 rounded-full font-semibold text-sm transition-all duration-200 shadow-sm active:scale-95 flex items-center justify-center gap-2 border",
                   isSelected
-                    ? "bg-[#ff6b00] text-white border-[#ff6b00] hover:bg-[#e55a00] hover:border-[#e55a00] shadow-lg"
-                    : "bg-white border-[#ff6b00] text-[#ff6b00] hover:bg-[#ff6b00] hover:text-white hover:shadow-lg"
+                    ? "bg-[#003580] text-white border-[#003580] hover:bg-[#002a66] shadow-md"
+                    : "bg-white border-[#003580] text-[#003580] hover:bg-[#f0f4ff] hover:shadow-md"
                 )}
               >
                 {isSelected ? (
                   <>
-                    <CheckCircle className="w-5 h-5" />
-                    <span className="text-base">SELECTED</span>
+                    <CheckCircle className="w-4 h-4" />
+                    <span className="text-sm">SELECTED</span>
                   </>
                 ) : (
                   <>
-                    <Eye className="w-5 h-5" />
-                    <span className="text-base">SELECT</span>
+                    <Eye className="w-4 h-4" />
+                    <span className="text-sm">SELECT</span>
                   </>
                 )}
               </button>
