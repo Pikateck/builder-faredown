@@ -268,20 +268,24 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       // Update rates every 30 minutes (reduced frequency to prevent spam)
       const interval = setInterval(
         () => {
-          try {
-            refreshRates().catch((error) => {
+          const safePeriodicRefresh = async () => {
+            try {
+              await refreshRates();
+            } catch (error) {
               // Silent fail for periodic updates
               console.log(
                 "💰 Periodic currency rate update failed:",
                 error?.message || "Unknown error",
               );
-            });
-          } catch (syncError) {
+            }
+          };
+
+          safePeriodicRefresh().catch((error) => {
             console.log(
               "💰 Periodic currency rate update setup failed:",
-              syncError?.message || "Unknown error",
+              error?.message || "Unknown error",
             );
-          }
+          });
         },
         30 * 60 * 1000,
       );
