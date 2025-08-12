@@ -246,19 +246,23 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
       // Try to refresh rates, but don't block the app if it fails
       setTimeout(() => {
-        try {
-          refreshRates().catch((error) => {
+        const safeRefreshRates = async () => {
+          try {
+            await refreshRates();
+          } catch (error) {
             console.log(
               "💰 Initial currency rate fetch failed, using static rates:",
               error?.message || "Unknown error",
             );
-          });
-        } catch (syncError) {
+          }
+        };
+
+        safeRefreshRates().catch((error) => {
           console.log(
-            "💰 Currency rate refresh setup failed, using static rates:",
-            syncError?.message || "Unknown error",
+            "💰 Currency rate refresh setup failed completely, using static rates:",
+            error?.message || "Unknown error",
           );
-        }
+        });
       }, 100); // Delay to ensure provider is fully initialized
 
       // Update rates every 30 minutes (reduced frequency to prevent spam)
