@@ -316,7 +316,7 @@ export default function TransferBooking() {
                     value={formData.primaryGuest.title}
                     onValueChange={(value) => handleInputChange('primaryGuest', 'title', value)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                       <SelectValue placeholder="Select title" />
                     </SelectTrigger>
                     <SelectContent>
