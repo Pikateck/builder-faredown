@@ -590,7 +590,7 @@ export function FlightStyleBargainModal({
                 Perfect Match!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The {type === "sightseeing" ? "venue" : "hotel"} accepted your
+                The {type === "sightseeing" ? "venue" : type === "transfer" ? "transfer provider" : "hotel"} accepted your
                 exact price!
               </p>
             </div>
