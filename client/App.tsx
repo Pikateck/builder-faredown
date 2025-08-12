@@ -34,6 +34,7 @@ import SightseeingBooking from "./pages/SightseeingBooking";
 import SightseeingBookingConfirmation from "./pages/SightseeingBookingConfirmation";
 import SportsEvents from "./pages/SportsEvents";
 import Transfers from "./pages/Transfers";
+import TransferResults from "./pages/TransferResults";
 import HelpCenter from "./pages/HelpCenter";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
