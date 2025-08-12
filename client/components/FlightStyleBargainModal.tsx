@@ -374,6 +374,8 @@ export function FlightStyleBargainModal({
                   <div className="w-12 h-12 bg-[#003580]/10 rounded-lg flex items-center justify-center">
                     {type === "sightseeing" ? (
                       <Camera className="w-6 h-6 text-[#003580]" />
+                    ) : type === "transfer" ? (
+                      <Clock className="w-6 h-6 text-[#003580]" />
                     ) : (
                       <Bed className="w-6 h-6 text-[#003580]" />
                     )}
