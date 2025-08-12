@@ -196,16 +196,6 @@ export function SightseeingCard({
               </Badge>
             </div>
 
-            {/* Price Badge - Top Right */}
-            <div className="absolute top-3 right-3 bg-white bg-opacity-95 px-3 py-2 rounded-lg shadow-lg">
-              <div className="text-lg font-bold text-gray-900">
-                {formatPrice(totalPrice)}
-              </div>
-              <div className="text-xs text-gray-600 text-center">
-                {formatPrice(pricePerPerson)}/person
-              </div>
-            </div>
-
             {/* Selection Indicator - Bottom Right */}
             <div className="absolute bottom-3 right-3">
               <div className="w-8 h-8 bg-[#ff6b00] rounded-full flex items-center justify-center shadow-lg">
