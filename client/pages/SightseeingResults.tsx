@@ -677,6 +677,59 @@ export default function SightseeingResults() {
     setIsBargainModalOpen(true);
   };
 
+  // Handle attraction selection
+  const handleAttractionSelect = (attraction: SightseeingAttraction) => {
+    const newSelected = new Set(selectedAttractions);
+    if (newSelected.has(attraction.id)) {
+      newSelected.delete(attraction.id);
+    } else {
+      newSelected.add(attraction.id);
+    }
+    setSelectedAttractions(newSelected);
+    setShowBottomBar(newSelected.size > 0);
+  };
+
+  // Calculate total price for selected attractions
+  const calculateTotalPrice = () => {
+    const adultsCount = parseInt(searchParams.get("adults") || "2");
+    const childrenCount = parseInt(searchParams.get("children") || "0");
+    const infantsCount = parseInt(searchParams.get("infants") || "0");
+
+    return Array.from(selectedAttractions).reduce((total, attractionId) => {
+      const attraction = attractions.find(a => a.id === attractionId);
+      if (attraction) {
+        const priceCalc = sightseeingService.calculatePrice(
+          attraction.currentPrice,
+          adultsCount,
+          childrenCount,
+          infantsCount
+        );
+        return total + priceCalc.totalPrice;
+      }
+      return total;
+    }, 0);
+  };
+
+  // Handle bottom bar actions
+  const handleBottomBarBargain = () => {
+    if (selectedAttractions.size > 0) {
+      const firstSelected = attractions.find(a => selectedAttractions.has(a.id));
+      if (firstSelected) {
+        handleBargainClick(firstSelected, searchParams);
+      }
+    }
+  };
+
+  const handleBottomBarBookNow = () => {
+    if (selectedAttractions.size > 0) {
+      const firstSelected = attractions.find(a => selectedAttractions.has(a.id));
+      if (firstSelected) {
+        const params = new URLSearchParams(searchParams);
+        navigate(`/sightseeing/${firstSelected.id}?${params.toString()}`);
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
