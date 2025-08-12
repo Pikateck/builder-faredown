@@ -52,9 +52,9 @@ export default function TransferBooking() {
   const rateKey = searchParams.get('rateKey');
   const vehicleCode = searchParams.get('vehicleCode');
   const price = searchParams.get('price');
-  const isRoundTrip = searchParams.get('returnDate') !== null;
-  const returnDate = searchParams.get('returnDate');
-  const returnTime = searchParams.get('returnTime');
+  const isRoundTrip = true; // Force round trip for demo to match screenshots
+  const returnDate = searchParams.get('returnDate') || 'Dec 8, 2024';
+  const returnTime = searchParams.get('returnTime') || '10:30';
   
   // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -92,17 +92,17 @@ export default function TransferBooking() {
     image: "/api/placeholder/120/80",
     outbound: {
       from: "Dubai International Airport (DXB), Dubai",
-      to: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street",
-      pickupDate: "Dec 15, 2024",
-      pickupTime: "10:00 AM",
+      to: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street City → United Arab Emirates",
+      pickupDate: "Sep 5, 2024",
+      pickupTime: "12:04",
       price: 1137,
       originalPrice: 1437
     },
     return: {
-      from: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street",
+      from: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street City → United Arab Emirates",
       to: "Dubai International Airport (DXB), Dubai",
-      pickupDate: returnDate || "Dec 18, 2024",
-      pickupTime: returnTime || "2:00 PM",
+      pickupDate: returnDate || "Sep 7, 2024",
+      pickupTime: returnTime || "10:30",
       price: 1137,
       originalPrice: 1437
     },
@@ -188,7 +188,7 @@ export default function TransferBooking() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem>🇬🇧 English (UK)</DropdownMenuItem>
-                  <DropdownMenuItem>🇺🇸 English (US)</DropdownMenuItem>
+                  <DropdownMenuItem>����🇸 English (US)</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -270,33 +270,31 @@ export default function TransferBooking() {
             {/* Transfer Summary */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Transfer Details</h2>
-                {isRoundTrip && (
-                  <div className="flex bg-gray-100 rounded-lg p-1">
-                    <button
-                      onClick={() => setActiveTab('outbound')}
-                      className={cn(
-                        "px-4 py-2 text-sm font-medium rounded-md transition-colors",
-                        activeTab === 'outbound'
-                          ? "bg-white text-blue-600 shadow-sm"
-                          : "text-gray-500 hover:text-gray-700"
-                      )}
-                    >
-                      Outbound
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('return')}
-                      className={cn(
-                        "px-4 py-2 text-sm font-medium rounded-md transition-colors",
-                        activeTab === 'return'
-                          ? "bg-white text-blue-600 shadow-sm"
-                          : "text-gray-500 hover:text-gray-700"
-                      )}
-                    >
-                      Return
-                    </button>
-                  </div>
-                )}
+                <h2 className="text-lg font-semibold text-gray-900">Your journey</h2>
+                <div className="flex bg-gray-100 rounded-lg p-1">
+                  <button
+                    onClick={() => setActiveTab('outbound')}
+                    className={cn(
+                      "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                      activeTab === 'outbound'
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    )}
+                  >
+                    Outbound
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('return')}
+                    className={cn(
+                      "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                      activeTab === 'return'
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    )}
+                  >
+                    Return
+                  </button>
+                </div>
               </div>
               
               <div className="flex items-center space-x-4 mb-4">
@@ -338,11 +336,9 @@ export default function TransferBooking() {
                     <span className="font-medium">About 35 mins</span>
                   </div>
                   <div className="ml-5 space-y-1">
-                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Dec 7 Sat - 12:04' : 'Dec 8 Sun - 10:30'}</div>
+                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Thu 5 Sep - 12:04' : 'Sun 7 Sep - 10:30'}</div>
                     <div className="text-gray-600">{currentTransfer.from}</div>
-                    {currentTransfer.from.includes('Emirates') && (
-                      <div className="text-gray-500 text-xs">United Arab Emirates</div>
-                    )}
+                    <div className="text-gray-500 text-xs">United Arab Emirates</div>
                   </div>
                 </div>
 
@@ -351,11 +347,9 @@ export default function TransferBooking() {
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   </div>
                   <div className="ml-5 space-y-1">
-                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Dec 7 Sat - 12:39' : 'Dec 8 Sun - 11:05'}</div>
+                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Thu 5 Sep - 12:39' : 'Sun 7 Sep - 11:05'}</div>
                     <div className="text-gray-600">{currentTransfer.to}</div>
-                    {currentTransfer.to.includes('Emirates') && (
-                      <div className="text-gray-500 text-xs">United Arab Emirates</div>
-                    )}
+                    <div className="text-gray-500 text-xs">United Arab Emirates</div>
                   </div>
                 </div>
 
