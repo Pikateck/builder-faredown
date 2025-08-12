@@ -53,7 +53,10 @@ export default function TransferBooking() {
   const rateKey = searchParams.get('rateKey');
   const vehicleCode = searchParams.get('vehicleCode');
   const price = searchParams.get('price');
-  const isRoundTrip = true; // Force round trip for demo to match screenshots
+  const bargainApplied = searchParams.get('bargainApplied');
+  const pickupLocation = searchParams.get('pickupLocation') || 'Mumbai Airport (BOM)';
+  const dropoffLocation = searchParams.get('dropoffLocation') || 'Hotel Taj Mahal Palace';
+  const isRoundTrip = searchParams.get('returnDate') !== null;
   const returnDate = searchParams.get('returnDate') || 'Dec 8, 2024';
   const returnTime = searchParams.get('returnTime') || '10:30';
   
@@ -79,39 +82,42 @@ export default function TransferBooking() {
     specialRequests: ""
   });
 
-  // Mock transfer data (in real app, fetch based on transferId)
+  // Transfer data based on URL parameters (matches selected transfer from results)
   const transferData = {
-    id: transferId || "transfer_1",
+    id: transferId || "hotelbeds_1",
     type: "Economy",
     vehicle: "Sedan",
-    provider: "Dubai International Airport (DXB), Dubai",
-    rating: 4.6,
+    vehicleName: "Sedan - Economy",
+    provider: "Mumbai Transfers Ltd",
+    rating: 4.3,
     maxPassengers: 3,
     duration: "45 minutes",
-    distance: "33 km",
+    distance: "25 km",
     features: ["Professional Driver", "Meet & Greet", "Free Waiting"],
     image: "/api/placeholder/120/80",
+    basePrice: parseInt(price) || 1200,
+    finalPrice: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
     outbound: {
-      from: "Dubai International Airport (DXB), Dubai",
-      to: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street City → United Arab Emirates",
-      pickupDate: "Sep 5, 2024",
-      pickupTime: "12:04",
-      price: 1137,
-      originalPrice: 1437
+      from: pickupLocation,
+      to: dropoffLocation,
+      pickupDate: "Dec 15, 2024",
+      pickupTime: "10:00 AM",
+      price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
+      originalPrice: 1500
     },
-    return: {
-      from: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street City → United Arab Emirates",
-      to: "Dubai International Airport (DXB), Dubai",
-      pickupDate: returnDate || "Sep 7, 2024",
-      pickupTime: returnTime || "10:30",
-      price: 1137,
-      originalPrice: 1437
-    },
+    return: isRoundTrip ? {
+      from: dropoffLocation,
+      to: pickupLocation,
+      pickupDate: returnDate || "Dec 18, 2024",
+      pickupTime: returnTime || "2:00 PM",
+      price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
+      originalPrice: 1500
+    } : null,
     isRoundTrip
   };
 
   const currentTransfer = activeTab === 'outbound' ? transferData.outbound : transferData.return;
-  const totalPrice = isRoundTrip ? transferData.outbound.price + transferData.return.price : transferData.outbound.price;
+  const totalPrice = isRoundTrip && transferData.return ? transferData.outbound.price + transferData.return.price : transferData.outbound.price;
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
@@ -192,7 +198,7 @@ export default function TransferBooking() {
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <h3 className="font-semibold text-gray-900">
-                      {transferData.type} - {transferData.vehicle}
+                      {transferData.vehicleName || `${transferData.type} - ${transferData.vehicle}`}
                     </h3>
                     <Badge className="bg-blue-100 text-blue-800">{transferData.type}</Badge>
                   </div>
@@ -200,13 +206,13 @@ export default function TransferBooking() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
-                      <span>Maximum 7 passengers</span>
+                      <span>Up to {transferData.maxPassengers} passengers</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <span>Powered by GO Technologies FZ-LLC</span>
+                      <span>{transferData.duration}</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <span>Passenger selection</span>
+                      <span>{transferData.distance}</span>
                     </div>
                   </div>
                 </div>
@@ -240,12 +246,11 @@ export default function TransferBooking() {
                 <div className="text-sm">
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="font-medium">About 35 mins</span>
+                    <span className="font-medium">{transferData.duration}</span>
                   </div>
                   <div className="ml-5 space-y-1">
-                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Thu 5 Sep - 12:04' : 'Sun 7 Sep - 10:30'}</div>
+                    <div className="text-gray-900 font-medium">{currentTransfer.pickupDate} at {currentTransfer.pickupTime}</div>
                     <div className="text-gray-600">{currentTransfer.from}</div>
-                    <div className="text-gray-500 text-xs">United Arab Emirates</div>
                   </div>
                 </div>
                 
@@ -254,25 +259,24 @@ export default function TransferBooking() {
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                   </div>
                   <div className="ml-5 space-y-1">
-                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Thu 5 Sep - 12:39' : 'Sun 7 Sep - 11:05'}</div>
+                    <div className="text-gray-900 font-medium">Drop-off</div>
                     <div className="text-gray-600">{currentTransfer.to}</div>
-                    <div className="text-gray-500 text-xs">United Arab Emirates</div>
                   </div>
                 </div>
                 
                 <div className="border-t pt-3 mt-3">
                   <div className="text-sm">
                     <div className="font-medium text-gray-900">Vehicle</div>
-                    <div className="text-gray-600">Standard Sedan, 3 passengers</div>
-                    <div className="text-gray-500 text-xs">Powered by GO Technologies FZ-LLC</div>
+                    <div className="text-gray-600">{transferData.vehicleName}, {transferData.maxPassengers} passengers</div>
+                    <div className="text-gray-500 text-xs">By {transferData.provider}</div>
                   </div>
                 </div>
                 
                 <div className="border-t pt-3 mt-3">
                   <div className="text-sm">
-                    <div className="font-medium text-gray-900">Pick-up details</div>
-                    <div className="text-gray-600">Driver will meet you in arrivals</div>
-                    <div className="text-gray-500 text-xs">Please follow directions to meet your driver upon arrival and pick up, we will confirm.</div>
+                    <div className="font-medium text-gray-900">Features</div>
+                    <div className="text-gray-600">{transferData.features.join(", ")}</div>
+                    <div className="text-gray-500 text-xs">Professional service with meet & greet</div>
                   </div>
                 </div>
               </div>
@@ -436,30 +440,24 @@ export default function TransferBooking() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Booking Summary</h2>
               
               <div className="space-y-3 mb-4">
-                {isRoundTrip ? (
-                  <>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Outbound</span>
-                      <span>£{transferData.outbound.price.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Return</span>
-                      <span>£{transferData.return.price.toFixed(2)}</span>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Transfer Fare</span>
-                    <span>£{transferData.outbound.price.toFixed(2)}</span>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Transfer Fare</span>
+                  <span>₹{transferData.outbound.originalPrice}</span>
+                </div>
+
+                {bargainApplied && (
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Discount Applied</span>
+                    <span>-₹{transferData.outbound.originalPrice - transferData.outbound.price}</span>
                   </div>
                 )}
-                
+
                 <div className="border-t pt-3">
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-900">Total price</span>
-                    <span className="font-bold text-xl text-gray-900">£{totalPrice.toFixed(2)}</span>
+                    <span className="font-semibold text-gray-900">Total Amount</span>
+                    <span className="font-bold text-xl text-gray-900">₹{totalPrice}</span>
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">Including taxes</div>
+                  <div className="text-xs text-gray-500 mt-1">per transfer</div>
                 </div>
               </div>
 
@@ -477,7 +475,7 @@ export default function TransferBooking() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4 mr-2" />
-                    Book Now - £{totalPrice.toFixed(2)}
+                    Book Now - ₹{totalPrice}
                   </>
                 )}
               </Button>
