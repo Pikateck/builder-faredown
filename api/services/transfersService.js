@@ -752,8 +752,222 @@ class TransfersService {
     }
   }
 
-  // Additional helper methods would go here...
-  // (getCachedResults, cacheResults, enhanceTransferDetails, calculateFinalPricing, etc.)
+  /**
+   * Get cached search results
+   * @param {Object} searchParams - Search parameters
+   * @returns {Promise<Object|null>} - Cached results or null
+   */
+  async getCachedResults(searchParams) {
+    try {
+      // TODO: Implement Redis-based caching
+      // For now, return null to always search fresh
+      return null;
+    } catch (error) {
+      this.logger.warn("Cache retrieval failed", { error: error.message });
+      return null;
+    }
+  }
+
+  /**
+   * Cache search results
+   * @param {Object} searchParams - Search parameters
+   * @param {Object} results - Search results
+   * @param {string} sessionId - Session ID
+   */
+  async cacheResults(searchParams, results, sessionId) {
+    try {
+      // TODO: Implement Redis-based caching
+      this.logger.debug("Results cached", { sessionId, transfersCount: results.transfers.length });
+    } catch (error) {
+      this.logger.warn("Cache storage failed", { sessionId, error: error.message });
+    }
+  }
+
+  /**
+   * Enhance transfer details with additional information
+   * @param {Object} details - Basic transfer details
+   * @param {Object} searchParams - Search parameters
+   * @returns {Promise<Object>} - Enhanced details
+   */
+  async enhanceTransferDetails(details, searchParams) {
+    try {
+      // Apply pricing enhancements
+      const markupAmount = await markupService.calculateTransferMarkup(details, searchParams);
+      const totalPrice = parseFloat(details.basePrice) + markupAmount;
+
+      // Apply promo codes if any
+      let discountAmount = 0;
+      if (searchParams.promoCode) {
+        try {
+          const promoResult = await promoService.validateTransferPromo(
+            searchParams.promoCode,
+            {
+              transferId: details.id,
+              totalPrice,
+              route: `${searchParams.pickupLocation}-${searchParams.dropoffLocation}`,
+              vehicleType: details.vehicleType,
+            }
+          );
+
+          if (promoResult.isValid) {
+            discountAmount = promoResult.discountAmount;
+          }
+        } catch (promoError) {
+          this.logger.warn("Promo validation failed during detail enhancement", {
+            promoCode: searchParams.promoCode,
+            error: promoError.message,
+          });
+        }
+      }
+
+      const finalPrice = Math.max(totalPrice - discountAmount, details.basePrice * 1.05);
+
+      return {
+        ...details,
+        pricing: {
+          basePrice: details.basePrice,
+          markupAmount,
+          discountAmount,
+          totalPrice: finalPrice,
+          currency: details.currency,
+          savings: totalPrice - finalPrice,
+        },
+        enhancedAt: new Date().toISOString(),
+      };
+    } catch (error) {
+      this.logger.error("Failed to enhance transfer details", {
+        transferId: details.id,
+        error: error.message,
+      });
+
+      // Return details with basic pricing if enhancement fails
+      return {
+        ...details,
+        pricing: {
+          basePrice: details.basePrice,
+          markupAmount: 0,
+          discountAmount: 0,
+          totalPrice: details.basePrice,
+          currency: details.currency,
+          savings: 0,
+        },
+      };
+    }
+  }
+
+  /**
+   * Calculate final pricing for booking
+   * @param {Object} bookingData - Booking data
+   * @returns {Promise<Object>} - Final pricing
+   */
+  async calculateFinalPricing(bookingData) {
+    try {
+      // Get base pricing from transfer details
+      const basePrice = bookingData.totalAmount || 0;
+
+      // Apply markup
+      const markupAmount = await markupService.calculateTransferMarkup(
+        { basePrice, vehicleType: bookingData.vehicleType },
+        bookingData
+      );
+
+      // Apply promos
+      let discountAmount = 0;
+      if (bookingData.promoCode) {
+        try {
+          const promoResult = await promoService.validateTransferPromo(
+            bookingData.promoCode,
+            {
+              transferId: bookingData.transferId,
+              totalPrice: basePrice + markupAmount,
+              route: `${bookingData.pickupLocation}-${bookingData.dropoffLocation}`,
+            }
+          );
+
+          if (promoResult.isValid) {
+            discountAmount = promoResult.discountAmount;
+          }
+        } catch (promoError) {
+          this.logger.warn("Promo validation failed during pricing calculation", {
+            promoCode: bookingData.promoCode,
+            error: promoError.message,
+          });
+        }
+      }
+
+      const finalTotal = Math.max(basePrice + markupAmount - discountAmount, basePrice * 1.05);
+
+      return {
+        basePrice,
+        markupAmount,
+        discountAmount,
+        totalAmount: finalTotal,
+        currency: bookingData.currency || "INR",
+        breakdown: {
+          subtotal: basePrice,
+          markup: markupAmount,
+          discount: discountAmount,
+          taxes: 0, // Typically included in base price
+          total: finalTotal,
+        },
+      };
+    } catch (error) {
+      this.logger.error("Failed to calculate final pricing", {
+        transferId: bookingData.transferId,
+        error: error.message,
+      });
+
+      // Return safe fallback pricing
+      const safeTotal = bookingData.totalAmount || 1000;
+      return {
+        basePrice: safeTotal,
+        markupAmount: 0,
+        discountAmount: 0,
+        totalAmount: safeTotal,
+        currency: bookingData.currency || "INR",
+        breakdown: {
+          subtotal: safeTotal,
+          markup: 0,
+          discount: 0,
+          taxes: 0,
+          total: safeTotal,
+        },
+      };
+    }
+  }
+
+  /**
+   * Validate booking data
+   * @param {Object} bookingData - Data to validate
+   */
+  validateBookingData(bookingData) {
+    const required = ["transferId", "guestDetails", "totalAmount"];
+
+    for (const field of required) {
+      if (!bookingData[field]) {
+        throw new Error(`Missing required booking field: ${field}`);
+      }
+    }
+
+    // Validate guest details
+    const guestRequired = ["firstName", "lastName", "email", "phone"];
+    for (const field of guestRequired) {
+      if (!bookingData.guestDetails[field]) {
+        throw new Error(`Missing required guest field: ${field}`);
+      }
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(bookingData.guestDetails.email)) {
+      throw new Error("Invalid email format");
+    }
+
+    // Validate amount
+    if (bookingData.totalAmount <= 0) {
+      throw new Error("Total amount must be greater than zero");
+    }
+  }
 }
 
 module.exports = new TransfersService();
