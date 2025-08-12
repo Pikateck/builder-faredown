@@ -843,32 +843,69 @@ export default function TransferResults() {
         </MobileBottomBar>
       )}
 
-      {/* Bargain Modal */}
-      {showBargainModal && selectedTransfer && (
-        <FlightStyleBargainModal
-          isOpen={showBargainModal}
-          onClose={() => {
-            setShowBargainModal(false);
-            setSelectedTransfer(null);
-          }}
-          transfer={{
-            id: selectedTransfer.id,
-            vehicleName: selectedTransfer.vehicleName,
-            route: `${pickupLocation} → ${dropoffLocation}`,
-            departureTime: pickupTime,
-            duration: formatDuration(selectedTransfer.estimatedDuration),
-            originalPrice: selectedTransfer.pricing.totalPrice,
-            currency: selectedTransfer.currency,
-            passengers: parseInt(passengers),
-          }}
-          onBargainSuccess={(newPrice) => {
-            // Handle bargain success
-            console.log("Bargain successful:", newPrice);
-            setShowBargainModal(false);
-            setSelectedTransfer(null);
-          }}
-        />
-      )}
+      {/* Transfer Bargain Modal */}
+      <FlightStyleBargainModal
+        type="transfer"
+        roomType={
+          selectedTransfer
+            ? {
+                id: selectedTransfer.id,
+                name: `${selectedTransfer.vehicleClass} - ${selectedTransfer.vehicleName}`,
+                description: `${selectedTransfer.vehicleClass} transfer for up to ${selectedTransfer.maxPassengers} passengers`,
+                image: selectedTransfer.vehicleImage || "/api/placeholder/120/80",
+                marketPrice: selectedTransfer.pricing.totalPrice * 1.2, // Show higher market price
+                totalPrice: selectedTransfer.pricing.totalPrice,
+                total: selectedTransfer.pricing.totalPrice,
+                features: selectedTransfer.features || [],
+                maxOccupancy: selectedTransfer.maxPassengers,
+                bedType: `${formatDuration(selectedTransfer.estimatedDuration)} journey`,
+                size: selectedTransfer.vehicleType,
+                cancellation: "Free cancellation",
+              }
+            : null
+        }
+        hotel={
+          selectedTransfer
+            ? {
+                id: parseInt(selectedTransfer.id.replace(/\D/g, '') || "1"),
+                name: selectedTransfer.providerName || "Transfer Service",
+                location: `${pickupLocation} → ${dropoffLocation}`,
+                rating: selectedTransfer.providerRating || 4.5,
+                image: selectedTransfer.vehicleImage || "/api/placeholder/120/80",
+              }
+            : null
+        }
+        isOpen={showBargainModal}
+        onClose={() => {
+          setShowBargainModal(false);
+          setSelectedTransfer(null);
+        }}
+        checkInDate={new Date()} // Transfer date
+        checkOutDate={new Date()} // Same day for transfers
+        roomsCount={1} // One transfer booking
+        onBookingSuccess={(finalPrice) => {
+          setShowBargainModal(false);
+          setSelectedTransfer(null);
+
+          // Navigate to transfer booking with bargained price
+          const bookingParams = new URLSearchParams({
+            transferId: selectedTransfer?.id || "",
+            rateKey: selectedTransfer?.rateKey || "",
+            vehicleCode: selectedTransfer?.vehicleCode || "",
+            price: finalPrice.toString(),
+            bargainApplied: "true",
+            pickupLocation: pickupLocation,
+            dropoffLocation: dropoffLocation,
+            pickupDate: pickupDate,
+            pickupTime: pickupTime,
+            adults: passengers,
+            children: "0",
+            infants: "0",
+          });
+
+          navigate(`/transfer-booking?${bookingParams.toString()}`);
+        }}
+      />
     </div>
   );
 }
