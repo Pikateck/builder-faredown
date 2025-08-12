@@ -600,7 +600,9 @@ export function TransfersSearchForm() {
                       ) : isHotelUserTyping && hotelInputValue.length >= 2 ? (
                         <div className="p-4 text-center text-gray-500">No locations found</div>
                       ) : (
-                        <div className="p-4 text-center text-gray-500">Start typing to search...</div>
+                        <div className="p-4 text-center text-gray-500">
+                          {hotelSuggestions.length === 0 ? "Loading popular destinations..." : "Start typing to search..."}
+                        </div>
                       )}
                     </div>
                   </PopoverContent>
