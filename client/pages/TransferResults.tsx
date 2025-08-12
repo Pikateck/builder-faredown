@@ -29,7 +29,7 @@ import {
   Navigation,
   Luggage,
   Baby,
-  Wheelchair,
+  Accessibility,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
