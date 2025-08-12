@@ -11,7 +11,10 @@ class TransfersRepository {
   constructor() {
     this.pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
     });
 
     this.logger = winston.createLogger({
@@ -20,7 +23,7 @@ class TransfersRepository {
         winston.format.timestamp(),
         winston.format.printf(({ timestamp, level, message, ...meta }) => {
           return `${timestamp} [${level.toUpperCase()}] [TRANSFERS-REPO] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
-        })
+        }),
       ),
       transports: [new winston.transports.Console()],
     });
@@ -52,20 +55,22 @@ class TransfersRepository {
         JSON.stringify(results.normalized || results),
         ttlSeconds,
         new Date(Date.now() + ttlSeconds * 1000),
-        1 // Default to Hotelbeds supplier ID
+        1, // Default to Hotelbeds supplier ID
       ];
 
       const result = await this.pool.query(query, values);
-      
-      this.logger.info("Search cache saved", { 
-        searchHash: searchHash.substring(0, 8),
-        cacheId: result.rows[0]?.id 
-      });
-      
-      return result.rows[0];
 
+      this.logger.info("Search cache saved", {
+        searchHash: searchHash.substring(0, 8),
+        cacheId: result.rows[0]?.id,
+      });
+
+      return result.rows[0];
     } catch (error) {
-      this.logger.error("Error saving search cache", { error: error.message, searchHash });
+      this.logger.error("Error saving search cache", {
+        error: error.message,
+        searchHash,
+      });
       throw error;
     }
   }
@@ -81,24 +86,26 @@ class TransfersRepository {
       `;
 
       const result = await this.pool.query(query, [searchHash]);
-      
+
       if (result.rows.length > 0) {
         // Update hit count
         await this.pool.query(
           `UPDATE transfer_routes_cache SET hit_count = hit_count + 1 WHERE id = $1`,
-          [result.rows[0].id]
+          [result.rows[0].id],
         );
 
-        this.logger.info("Search cache hit", { 
+        this.logger.info("Search cache hit", {
           searchHash: searchHash.substring(0, 8),
-          hitCount: result.rows[0].hit_count + 1
+          hitCount: result.rows[0].hit_count + 1,
         });
       }
 
       return result.rows[0] || null;
-
     } catch (error) {
-      this.logger.error("Error getting search cache", { error: error.message, searchHash });
+      this.logger.error("Error getting search cache", {
+        error: error.message,
+        searchHash,
+      });
       return null;
     }
   }
@@ -129,42 +136,44 @@ class TransfersRepository {
           searchId,
           1, // Default supplier ID for Hotelbeds
           offer.supplierReference || offer.id,
-          offer.vehicleName || 'Private Transfer',
-          offer.vehicleType || 'sedan',
-          offer.vehicleClass || 'Standard',
+          offer.vehicleName || "Private Transfer",
+          offer.vehicleType || "sedan",
+          offer.vehicleClass || "Standard",
           offer.maxPassengers || 4,
           offer.maxLuggage || 2,
-          offer.meta?.searchParams?.pickupLocation?.name || '',
-          offer.meta?.searchParams?.pickupLocation?.code || '',
-          offer.meta?.searchParams?.pickupLocation?.type || 'airport',
-          offer.meta?.searchParams?.dropoffLocation?.name || '',
-          offer.meta?.searchParams?.dropoffLocation?.code || '',
-          offer.meta?.searchParams?.dropoffLocation?.type || 'hotel',
+          offer.meta?.searchParams?.pickupLocation?.name || "",
+          offer.meta?.searchParams?.pickupLocation?.code || "",
+          offer.meta?.searchParams?.pickupLocation?.type || "airport",
+          offer.meta?.searchParams?.dropoffLocation?.name || "",
+          offer.meta?.searchParams?.dropoffLocation?.code || "",
+          offer.meta?.searchParams?.dropoffLocation?.type || "hotel",
           offer.distance || null,
           offer.duration || null,
           offer.pricing?.netAmount || 0,
-          offer.pricing?.currency || 'INR',
+          offer.pricing?.currency || "INR",
           JSON.stringify(offer.features || []),
           JSON.stringify(offer.inclusions || []),
           JSON.stringify(offer.cancellationPolicy || {}),
-          offer.supplier?.name || 'Hotelbeds Transfers',
+          offer.supplier?.name || "Hotelbeds Transfers",
           offer.supplier?.rating || null,
-          JSON.stringify(offer.meta?.originalService || offer)
+          JSON.stringify(offer.meta?.originalService || offer),
         ];
 
         const result = await this.pool.query(query, values);
         savedProducts.push({ ...offer, dbId: result.rows[0].id });
       }
 
-      this.logger.info("Transfer products saved", { 
+      this.logger.info("Transfer products saved", {
         searchId,
-        productCount: savedProducts.length 
+        productCount: savedProducts.length,
       });
 
       return savedProducts;
-
     } catch (error) {
-      this.logger.error("Error saving transfer products", { error: error.message, searchId });
+      this.logger.error("Error saving transfer products", {
+        error: error.message,
+        searchId,
+      });
       throw error;
     }
   }
@@ -183,9 +192,11 @@ class TransfersRepository {
 
       const result = await this.pool.query(query, [productId]);
       return result.rows[0] || null;
-
     } catch (error) {
-      this.logger.error("Error getting transfer product", { error: error.message, productId });
+      this.logger.error("Error getting transfer product", {
+        error: error.message,
+        productId,
+      });
       throw error;
     }
   }
@@ -195,9 +206,9 @@ class TransfersRepository {
    */
   async createBooking(bookingData) {
     const client = await this.pool.connect();
-    
+
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
       // Generate booking reference
       const bookingRef = this.generateBookingReference();
@@ -227,7 +238,7 @@ class TransfersRepository {
         bookingData.supplierId || 1,
         bookingData.userId,
         bookingData.productId,
-        bookingData.transferType || 'one_way',
+        bookingData.transferType || "one_way",
         bookingData.vehicleType,
         bookingData.vehicleClass,
         bookingData.productCode,
@@ -247,7 +258,8 @@ class TransfersRepository {
         bookingData.passengers?.adults || 2,
         bookingData.passengers?.children || 0,
         bookingData.passengers?.infants || 0,
-        (bookingData.passengers?.adults || 2) + (bookingData.passengers?.children || 0),
+        (bookingData.passengers?.adults || 2) +
+          (bookingData.passengers?.children || 0),
         JSON.stringify(bookingData.guestDetails),
         bookingData.flightDetails?.flightNumber,
         bookingData.flightDetails?.arrivalTime,
@@ -256,16 +268,16 @@ class TransfersRepository {
         bookingData.pricing?.markupAmount || 0,
         bookingData.pricing?.discountAmount || 0,
         bookingData.pricing?.totalAmount || 0,
-        bookingData.currency || 'INR',
+        bookingData.currency || "INR",
         bookingData.promoCode,
         bookingData.bargainSessionId,
         bookingData.bargainSavings || 0,
-        'pending',
+        "pending",
         bookingData.supplierBookingRef,
         JSON.stringify(bookingData.supplierResponse || {}),
-        bookingData.paymentStatus || 'pending',
-        bookingData.paymentMethod || 'online',
-        bookingData.internalNotes
+        bookingData.paymentStatus || "pending",
+        bookingData.paymentMethod || "online",
+        bookingData.internalNotes,
       ];
 
       const result = await client.query(query, values);
@@ -274,29 +286,30 @@ class TransfersRepository {
       // Save audit log
       await this.saveAuditLog(client, {
         bookingId: booking.id,
-        eventType: 'booking_created',
-        eventDescription: 'Transfer booking created',
+        eventType: "booking_created",
+        eventDescription: "Transfer booking created",
         userId: bookingData.userId,
         userEmail: bookingData.guestDetails?.email,
         ipAddress: bookingData.ipAddress,
         userAgent: bookingData.userAgent,
         requestPayload: bookingData,
-        sessionId: bookingData.sessionId
+        sessionId: bookingData.sessionId,
       });
 
-      await client.query('COMMIT');
+      await client.query("COMMIT");
 
-      this.logger.info("Transfer booking created", { 
+      this.logger.info("Transfer booking created", {
         bookingId: booking.id,
         bookingRef: booking.booking_ref,
-        userId: bookingData.userId
+        userId: bookingData.userId,
       });
 
       return booking;
-
     } catch (error) {
-      await client.query('ROLLBACK');
-      this.logger.error("Error creating transfer booking", { error: error.message });
+      await client.query("ROLLBACK");
+      this.logger.error("Error creating transfer booking", {
+        error: error.message,
+      });
       throw error;
     } finally {
       client.release();
@@ -306,11 +319,16 @@ class TransfersRepository {
   /**
    * Update booking status
    */
-  async updateBookingStatus(bookingId, status, supplierResponse = null, userId = null) {
+  async updateBookingStatus(
+    bookingId,
+    status,
+    supplierResponse = null,
+    userId = null,
+  ) {
     const client = await this.pool.connect();
-    
+
     try {
-      await client.query('BEGIN');
+      await client.query("BEGIN");
 
       const query = `
         UPDATE transfer_bookings 
@@ -327,36 +345,39 @@ class TransfersRepository {
       const result = await client.query(query, [
         status,
         supplierResponse ? JSON.stringify(supplierResponse) : null,
-        bookingId
+        bookingId,
       ]);
 
       if (result.rows.length === 0) {
-        throw new Error('Booking not found');
+        throw new Error("Booking not found");
       }
 
       // Save audit log
       await this.saveAuditLog(client, {
         bookingId,
-        eventType: 'status_changed',
+        eventType: "status_changed",
         eventDescription: `Booking status changed to ${status}`,
         userId,
         newValues: { status },
-        responsePayload: supplierResponse
+        responsePayload: supplierResponse,
       });
 
-      await client.query('COMMIT');
+      await client.query("COMMIT");
 
-      this.logger.info("Booking status updated", { 
+      this.logger.info("Booking status updated", {
         bookingId,
         status,
-        bookingRef: result.rows[0].booking_ref
+        bookingRef: result.rows[0].booking_ref,
       });
 
       return result.rows[0];
-
     } catch (error) {
-      await client.query('ROLLBACK');
-      this.logger.error("Error updating booking status", { error: error.message, bookingId, status });
+      await client.query("ROLLBACK");
+      this.logger.error("Error updating booking status", {
+        error: error.message,
+        bookingId,
+        status,
+      });
       throw error;
     } finally {
       client.release();
@@ -386,9 +407,12 @@ class TransfersRepository {
 
       const result = await this.pool.query(query, params);
       return result.rows[0] || null;
-
     } catch (error) {
-      this.logger.error("Error getting booking", { error: error.message, bookingId, userId });
+      this.logger.error("Error getting booking", {
+        error: error.message,
+        bookingId,
+        userId,
+      });
       throw error;
     }
   }
@@ -405,7 +429,7 @@ class TransfersRepository {
         supplier,
         page = 1,
         limit = 50,
-        userId
+        userId,
       } = filters;
 
       let query = `
@@ -466,12 +490,14 @@ class TransfersRepository {
           page,
           limit,
           total,
-          pages: Math.ceil(total / limit)
-        }
+          pages: Math.ceil(total / limit),
+        },
       };
-
     } catch (error) {
-      this.logger.error("Error getting bookings", { error: error.message, filters });
+      this.logger.error("Error getting bookings", {
+        error: error.message,
+        filters,
+      });
       throw error;
     }
   }
@@ -499,13 +525,16 @@ class TransfersRepository {
         logData.userAgent,
         logData.oldValues ? JSON.stringify(logData.oldValues) : null,
         logData.newValues ? JSON.stringify(logData.newValues) : null,
-        logData.requestPayload ? this.encryptPayload(JSON.stringify(logData.requestPayload)) : null,
-        logData.responsePayload ? this.encryptPayload(JSON.stringify(logData.responsePayload)) : null,
-        logData.sessionId
+        logData.requestPayload
+          ? this.encryptPayload(JSON.stringify(logData.requestPayload))
+          : null,
+        logData.responsePayload
+          ? this.encryptPayload(JSON.stringify(logData.responsePayload))
+          : null,
+        logData.sessionId,
       ];
 
       await client.query(query, values);
-
     } catch (error) {
       this.logger.error("Error saving audit log", { error: error.message });
       // Don't throw - audit logging should not break the main flow
@@ -523,7 +552,7 @@ class TransfersRepository {
         dateFrom,
         dateTo,
         page = 1,
-        limit = 100
+        limit = 100,
       } = filters;
 
       let query = `
@@ -577,12 +606,14 @@ class TransfersRepository {
           page,
           limit,
           total,
-          pages: Math.ceil(total / limit)
-        }
+          pages: Math.ceil(total / limit),
+        },
       };
-
     } catch (error) {
-      this.logger.error("Error getting audit logs", { error: error.message, filters });
+      this.logger.error("Error getting audit logs", {
+        error: error.message,
+        filters,
+      });
       throw error;
     }
   }
@@ -590,7 +621,12 @@ class TransfersRepository {
   /**
    * Get revenue analytics
    */
-  async getRevenueAnalytics(dateFrom, dateTo, supplier = null, vehicleType = null) {
+  async getRevenueAnalytics(
+    dateFrom,
+    dateTo,
+    supplier = null,
+    vehicleType = null,
+  ) {
     try {
       let query = `
         SELECT 
@@ -631,9 +667,10 @@ class TransfersRepository {
       const result = await this.pool.query(query, params);
 
       return result.rows;
-
     } catch (error) {
-      this.logger.error("Error getting revenue analytics", { error: error.message });
+      this.logger.error("Error getting revenue analytics", {
+        error: error.message,
+      });
       throw error;
     }
   }
@@ -642,7 +679,7 @@ class TransfersRepository {
    * Generate unique booking reference
    */
   generateBookingReference() {
-    const prefix = 'TR';
+    const prefix = "TR";
     const timestamp = Date.now().toString().slice(-8);
     const random = Math.random().toString(36).substring(2, 6).toUpperCase();
     return `${prefix}${timestamp}${random}`;
@@ -653,17 +690,23 @@ class TransfersRepository {
    */
   generateSearchHash(searchParams) {
     const normalized = {
-      pickup: searchParams.pickupLocation?.code || searchParams.pickupLocation?.name,
-      dropoff: searchParams.dropoffLocation?.code || searchParams.dropoffLocation?.name,
+      pickup:
+        searchParams.pickupLocation?.code || searchParams.pickupLocation?.name,
+      dropoff:
+        searchParams.dropoffLocation?.code ||
+        searchParams.dropoffLocation?.name,
       date: searchParams.pickupDate,
       time: searchParams.pickupTime,
       passengers: `${searchParams.passengers?.adults || 2}-${searchParams.passengers?.children || 0}`,
-      vehicle: searchParams.vehicleType || 'any',
+      vehicle: searchParams.vehicleType || "any",
       roundTrip: searchParams.isRoundTrip || false,
-      returnDate: searchParams.returnDate || null
+      returnDate: searchParams.returnDate || null,
     };
 
-    return crypto.createHash('md5').update(JSON.stringify(normalized)).digest('hex');
+    return crypto
+      .createHash("md5")
+      .update(JSON.stringify(normalized))
+      .digest("hex");
   }
 
   /**
@@ -671,14 +714,14 @@ class TransfersRepository {
    */
   encryptPayload(payload) {
     try {
-      const secret = process.env.AUDIT_ENCRYPTION_KEY || 'default-secret-key';
-      const cipher = crypto.createCipher('aes-256-cbc', secret);
-      let encrypted = cipher.update(payload, 'utf8', 'hex');
-      encrypted += cipher.final('hex');
+      const secret = process.env.AUDIT_ENCRYPTION_KEY || "default-secret-key";
+      const cipher = crypto.createCipher("aes-256-cbc", secret);
+      let encrypted = cipher.update(payload, "utf8", "hex");
+      encrypted += cipher.final("hex");
       return encrypted;
     } catch (error) {
       this.logger.error("Error encrypting payload", { error: error.message });
-      return '[ENCRYPTION_FAILED]';
+      return "[ENCRYPTION_FAILED]";
     }
   }
 
@@ -688,14 +731,15 @@ class TransfersRepository {
   async cleanupExpiredCache() {
     try {
       const result = await this.pool.query(
-        `DELETE FROM transfer_routes_cache WHERE expires_at < CURRENT_TIMESTAMP`
+        `DELETE FROM transfer_routes_cache WHERE expires_at < CURRENT_TIMESTAMP`,
       );
 
       this.logger.info(`Cleaned up ${result.rowCount} expired cache entries`);
       return result.rowCount;
-
     } catch (error) {
-      this.logger.error("Error cleaning up expired cache", { error: error.message });
+      this.logger.error("Error cleaning up expired cache", {
+        error: error.message,
+      });
       throw error;
     }
   }
@@ -705,11 +749,17 @@ class TransfersRepository {
    */
   async healthCheck() {
     try {
-      const result = await this.pool.query('SELECT 1 as health');
-      return { status: 'healthy', database: 'connected' };
+      const result = await this.pool.query("SELECT 1 as health");
+      return { status: "healthy", database: "connected" };
     } catch (error) {
-      this.logger.error("Database health check failed", { error: error.message });
-      return { status: 'unhealthy', database: 'disconnected', error: error.message };
+      this.logger.error("Database health check failed", {
+        error: error.message,
+      });
+      return {
+        status: "unhealthy",
+        database: "disconnected",
+        error: error.message,
+      };
     }
   }
 }

@@ -388,8 +388,8 @@ export function FlightStyleBargainModal({
                       {type === "sightseeing"
                         ? `${roomType.size} • ${roomType.bedType}`
                         : type === "transfer"
-                        ? `${roomType.maxOccupancy} passengers • ${roomType.bedType}`
-                        : `${roomType.name} • ${hotel.name}`}
+                          ? `${roomType.maxOccupancy} passengers • ${roomType.bedType}`
+                          : `${roomType.name} • ${hotel.name}`}
                     </p>
                   </div>
                 </div>
@@ -417,7 +417,12 @@ export function FlightStyleBargainModal({
                   </p>
                   <p className="text-sm text-gray-600">
                     Tell me your target price and I'll negotiate with the{" "}
-                    {type === "sightseeing" ? "venue" : type === "transfer" ? "transfer provider" : "hotel"}!
+                    {type === "sightseeing"
+                      ? "venue"
+                      : type === "transfer"
+                        ? "transfer provider"
+                        : "hotel"}
+                    !
                   </p>
                 </div>
               </div>
@@ -495,7 +500,11 @@ export function FlightStyleBargainModal({
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 AI Negotiating with{" "}
-                {type === "sightseeing" ? hotel.name : type === "transfer" ? hotel.name : hotel.name}
+                {type === "sightseeing"
+                  ? hotel.name
+                  : type === "transfer"
+                    ? hotel.name
+                    : hotel.name}
               </h3>
               <p className="text-sm text-gray-600 mb-4">
                 Analyzing market rates and finding the best deal for you...
@@ -526,8 +535,13 @@ export function FlightStyleBargainModal({
                 AI Counter Offer!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The {type === "sightseeing" ? "venue" : type === "transfer" ? "transfer provider" : "hotel"} couldn't match
-                your price, but here's their best offer!
+                The{" "}
+                {type === "sightseeing"
+                  ? "venue"
+                  : type === "transfer"
+                    ? "transfer provider"
+                    : "hotel"}{" "}
+                couldn't match your price, but here's their best offer!
               </p>
             </div>
 
@@ -590,8 +604,13 @@ export function FlightStyleBargainModal({
                 Perfect Match!
               </h3>
               <p className="text-gray-600 mb-1 text-lg">
-                The {type === "sightseeing" ? "venue" : type === "transfer" ? "transfer provider" : "hotel"} accepted your
-                exact price!
+                The{" "}
+                {type === "sightseeing"
+                  ? "venue"
+                  : type === "transfer"
+                    ? "transfer provider"
+                    : "hotel"}{" "}
+                accepted your exact price!
               </p>
             </div>
 

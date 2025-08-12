@@ -12,22 +12,24 @@ const winston = require("winston");
 class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     super("HOTELBEDS_TRANSFERS", {
-      baseUrl: process.env.TRANSFERS__BASE_URL_TRANSFERS || 
-               (process.env.TRANSFERS__HOTELBEDS__ENV === 'live' 
-                 ? "https://api.hotelbeds.com/transfers-api/1.0"
-                 : "https://api.test.hotelbeds.com/transfers-api/1.0"),
-      contentUrl: process.env.TRANSFERS__BASE_URL_CONTENT ||
-                  (process.env.TRANSFERS__HOTELBEDS__ENV === 'live'
-                    ? "https://api.hotelbeds.com/transfers-cache-api/1.0"
-                    : "https://api.test.hotelbeds.com/transfers-cache-api/1.0"),
+      baseUrl:
+        process.env.TRANSFERS__BASE_URL_TRANSFERS ||
+        (process.env.TRANSFERS__HOTELBEDS__ENV === "live"
+          ? "https://api.hotelbeds.com/transfers-api/1.0"
+          : "https://api.test.hotelbeds.com/transfers-api/1.0"),
+      contentUrl:
+        process.env.TRANSFERS__BASE_URL_CONTENT ||
+        (process.env.TRANSFERS__HOTELBEDS__ENV === "live"
+          ? "https://api.hotelbeds.com/transfers-cache-api/1.0"
+          : "https://api.test.hotelbeds.com/transfers-cache-api/1.0"),
       apiKey: process.env.TRANSFERS__HOTELBEDS__API_KEY,
       secret: process.env.TRANSFERS__HOTELBEDS__SECRET,
-      environment: process.env.TRANSFERS__HOTELBEDS__ENV || 'test',
+      environment: process.env.TRANSFERS__HOTELBEDS__ENV || "test",
       timeout: parseInt(process.env.TRANSFERS__TIMEOUT_MS) || 15000,
       retryMax: parseInt(process.env.TRANSFERS__RETRY_MAX) || 2,
       rateLimit: {
         windowMs: parseInt(process.env.TRANSFERS__RATE_LIMIT_WINDOW_MS) || 4000,
-        maxRequests: parseInt(process.env.TRANSFERS__RATE_LIMIT_MAX) || 8
+        maxRequests: parseInt(process.env.TRANSFERS__RATE_LIMIT_MAX) || 8,
       },
       ...config,
     });
@@ -38,7 +40,7 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
         winston.format.timestamp(),
         winston.format.printf(({ timestamp, level, message, ...meta }) => {
           return `${timestamp} [${level.toUpperCase()}] [HOTELBEDS-TRANSFERS] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
-        })
+        }),
       ),
       transports: [new winston.transports.Console()],
     });
@@ -46,7 +48,7 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     // Rate limiting state
     this.rateLimitState = {
       requests: [],
-      lastWindowReset: Date.now()
+      lastWindowReset: Date.now(),
     };
 
     // Initialize HTTP clients
@@ -73,21 +75,33 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     });
 
     // Add authentication interceptors
-    this.transfersClient.interceptors.request.use(this.addAuthHeaders.bind(this));
+    this.transfersClient.interceptors.request.use(
+      this.addAuthHeaders.bind(this),
+    );
     this.contentClient.interceptors.request.use(this.addAuthHeaders.bind(this));
 
     // Add rate limiting interceptors
-    this.transfersClient.interceptors.request.use(this.rateLimitRequest.bind(this));
-    this.contentClient.interceptors.request.use(this.rateLimitRequest.bind(this));
+    this.transfersClient.interceptors.request.use(
+      this.rateLimitRequest.bind(this),
+    );
+    this.contentClient.interceptors.request.use(
+      this.rateLimitRequest.bind(this),
+    );
 
     // Add retry interceptors
-    this.transfersClient.interceptors.response.use(null, this.retryRequest.bind(this));
-    this.contentClient.interceptors.response.use(null, this.retryRequest.bind(this));
+    this.transfersClient.interceptors.response.use(
+      null,
+      this.retryRequest.bind(this),
+    );
+    this.contentClient.interceptors.response.use(
+      null,
+      this.retryRequest.bind(this),
+    );
 
     this.logger.info("Hotelbeds Transfers adapter initialized", {
       environment: this.config.environment,
       baseUrl: this.config.baseUrl,
-      hasCredentials: !!(this.config.apiKey && this.config.secret)
+      hasCredentials: !!(this.config.apiKey && this.config.secret),
     });
   }
 
@@ -97,7 +111,7 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   generateSignature(timestamp) {
     const payload = this.config.apiKey + this.config.secret + timestamp;
-    return crypto.createHash('sha256').update(payload).digest('hex');
+    return crypto.createHash("sha256").update(payload).digest("hex");
   }
 
   /**
@@ -111,9 +125,9 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     const timestamp = Date.now();
     const signature = this.generateSignature(timestamp);
 
-    config.headers['Api-key'] = this.config.apiKey;
-    config.headers['X-Signature'] = signature;
-    config.headers['X-Timestamp'] = timestamp.toString();
+    config.headers["Api-key"] = this.config.apiKey;
+    config.headers["X-Signature"] = signature;
+    config.headers["X-Timestamp"] = timestamp.toString();
 
     return config;
   }
@@ -136,8 +150,8 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     if (this.rateLimitState.requests.length >= maxRequests) {
       const waitTime = windowMs - (now - this.rateLimitState.lastWindowReset);
       this.logger.warn(`Rate limit reached, waiting ${waitTime}ms`);
-      await new Promise(resolve => setTimeout(resolve, waitTime));
-      
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
+
       // Reset after waiting
       this.rateLimitState.requests = [];
       this.rateLimitState.lastWindowReset = Date.now();
@@ -145,7 +159,7 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
 
     // Add this request to the window
     this.rateLimitState.requests.push(now);
-    
+
     return config;
   }
 
@@ -161,27 +175,31 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     }
 
     // Only retry on 5xx errors or timeouts
-    const shouldRetry = error.response?.status >= 500 || 
-                       error.code === 'ECONNABORTED' || 
-                       error.code === 'ETIMEDOUT';
+    const shouldRetry =
+      error.response?.status >= 500 ||
+      error.code === "ECONNABORTED" ||
+      error.code === "ETIMEDOUT";
 
     if (!shouldRetry) {
       return Promise.reject(error);
     }
 
     config.__retryCount = (config.__retryCount || 0) + 1;
-    
+
     // Exponential backoff with jitter
     const delay = Math.min(1000 * Math.pow(2, config.__retryCount - 1), 5000);
     const jitter = Math.random() * 500;
-    
-    this.logger.warn(`Retrying request (${config.__retryCount}/${this.config.retryMax}) after ${delay + jitter}ms`, {
-      url: config.url,
-      error: error.message
-    });
 
-    await new Promise(resolve => setTimeout(resolve, delay + jitter));
-    
+    this.logger.warn(
+      `Retrying request (${config.__retryCount}/${this.config.retryMax}) after ${delay + jitter}ms`,
+      {
+        url: config.url,
+        error: error.message,
+      },
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, delay + jitter));
+
     return this.transfersClient(config);
   }
 
@@ -193,28 +211,32 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       this.logger.info("Searching airport taxi transfers", { params });
 
       const searchPayload = this.buildSearchPayload(params);
-      
-      const response = await this.transfersClient.post('/availability', searchPayload);
-      
+
+      const response = await this.transfersClient.post(
+        "/availability",
+        searchPayload,
+      );
+
       if (!response.data?.services) {
-        this.logger.warn("No services found in response", { response: response.data });
+        this.logger.warn("No services found in response", {
+          response: response.data,
+        });
         return [];
       }
 
       const offers = this.normalizeOffers(response.data.services, params);
-      
-      this.logger.info(`Found ${offers.length} transfer offers`);
-      
-      return offers;
 
+      this.logger.info(`Found ${offers.length} transfer offers`);
+
+      return offers;
     } catch (error) {
-      this.logger.error("Error searching airport taxi transfers", { 
+      this.logger.error("Error searching airport taxi transfers", {
         error: error.message,
         params,
         status: error.response?.status,
-        data: error.response?.data
+        data: error.response?.data,
       });
-      
+
       throw this.normalizeError(error);
     }
   }
@@ -233,12 +255,15 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       passengers = { adults: 2, children: 0, infants: 0 },
       isRoundTrip = false,
       vehicleType,
-      currency = "INR"
+      currency = "INR",
     } = params;
 
     // Determine transfer type based on locations
     let transferType = "PRIVATE";
-    if (pickupLocation.type === "airport" || dropoffLocation.type === "airport") {
+    if (
+      pickupLocation.type === "airport" ||
+      dropoffLocation.type === "airport"
+    ) {
       transferType = "AIRPORT";
     }
 
@@ -246,20 +271,20 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       language: "ENG",
       from: {
         type: this.mapLocationType(pickupLocation.type),
-        code: pickupLocation.code || pickupLocation.name
+        code: pickupLocation.code || pickupLocation.name,
       },
       to: {
         type: this.mapLocationType(dropoffLocation.type),
-        code: dropoffLocation.code || dropoffLocation.name
+        code: dropoffLocation.code || dropoffLocation.name,
       },
       outbound: `${pickupDate}T${pickupTime}:00`,
       occupancies: [
         {
           adults: passengers.adults,
           children: passengers.children,
-          infants: passengers.infants
-        }
-      ]
+          infants: passengers.infants,
+        },
+      ],
     };
 
     // Add return journey for round trips
@@ -280,12 +305,12 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   mapLocationType(type) {
     const typeMap = {
-      'airport': 'IATA',
-      'hotel': 'ATLAS',
-      'city': 'ATLAS',
-      'address': 'GIATA'
+      airport: "IATA",
+      hotel: "ATLAS",
+      city: "ATLAS",
+      address: "GIATA",
     };
-    return typeMap[type] || 'ATLAS';
+    return typeMap[type] || "ATLAS";
   }
 
   /**
@@ -293,50 +318,55 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   mapVehicleType(vehicleType) {
     const typeMap = {
-      'sedan': 'PRIVATE',
-      'suv': 'PRIVATE',
-      'minivan': 'PRIVATE',
-      'luxury': 'LUXURY',
-      'wheelchair': 'WHEELCHAIR'
+      sedan: "PRIVATE",
+      suv: "PRIVATE",
+      minivan: "PRIVATE",
+      luxury: "LUXURY",
+      wheelchair: "WHEELCHAIR",
     };
-    return typeMap[vehicleType] || 'PRIVATE';
+    return typeMap[vehicleType] || "PRIVATE";
   }
 
   /**
    * Normalize API response to standard format
    */
   normalizeOffers(services, originalParams) {
-    return services.map(service => ({
+    return services.map((service) => ({
       id: service.id,
       supplierReference: service.code,
       vehicleType: this.normalizeVehicleType(service.content?.vehicle?.name),
-      vehicleClass: service.content?.category?.name || 'Standard',
-      vehicleName: service.content?.vehicle?.name || 'Private Transfer',
-      maxPassengers: service.content?.vehicle?.maxPax || originalParams.passengers.adults + originalParams.passengers.children,
+      vehicleClass: service.content?.category?.name || "Standard",
+      vehicleName: service.content?.vehicle?.name || "Private Transfer",
+      maxPassengers:
+        service.content?.vehicle?.maxPax ||
+        originalParams.passengers.adults + originalParams.passengers.children,
       maxLuggage: service.content?.vehicle?.maxLuggage || 2,
       features: this.extractFeatures(service),
       distance: service.content?.distance,
       duration: service.content?.time,
       pickupInstructions: service.content?.pickupInstructions,
-      cancellationPolicy: this.normalizeCancellationPolicy(service.cancellationPolicies),
+      cancellationPolicy: this.normalizeCancellationPolicy(
+        service.cancellationPolicies,
+      ),
       pricing: {
-        currency: service.price?.currencyCode || originalParams.currency || 'INR',
+        currency:
+          service.price?.currencyCode || originalParams.currency || "INR",
         netAmount: parseFloat(service.price?.totalAmount || 0),
         breakdown: {
           basePrice: parseFloat(service.price?.totalAmount || 0),
           taxes: 0,
-          fees: 0
-        }
+          fees: 0,
+        },
       },
       supplier: {
-        code: 'hotelbeds-transfers',
-        name: 'Hotelbeds Transfers',
-        reference: service.code
+        code: "hotelbeds-transfers",
+        name: "Hotelbeds Transfers",
+        reference: service.code,
       },
       meta: {
         originalService: service,
-        searchParams: originalParams
-      }
+        searchParams: originalParams,
+      },
     }));
   }
 
@@ -344,15 +374,16 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    * Normalize vehicle type
    */
   normalizeVehicleType(vehicleName) {
-    if (!vehicleName) return 'sedan';
-    
+    if (!vehicleName) return "sedan";
+
     const name = vehicleName.toLowerCase();
-    if (name.includes('suv') || name.includes('4x4')) return 'suv';
-    if (name.includes('van') || name.includes('minibus')) return 'minivan';
-    if (name.includes('luxury') || name.includes('premium')) return 'luxury';
-    if (name.includes('wheelchair') || name.includes('accessible')) return 'wheelchair';
-    
-    return 'sedan';
+    if (name.includes("suv") || name.includes("4x4")) return "suv";
+    if (name.includes("van") || name.includes("minibus")) return "minivan";
+    if (name.includes("luxury") || name.includes("premium")) return "luxury";
+    if (name.includes("wheelchair") || name.includes("accessible"))
+      return "wheelchair";
+
+    return "sedan";
   }
 
   /**
@@ -360,23 +391,23 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   extractFeatures(service) {
     const features = [];
-    
+
     if (service.content?.vehicle?.driverIncluded) {
-      features.push('professional_driver');
+      features.push("professional_driver");
     }
-    
-    if (service.content?.pickupInstructions?.includes('meet')) {
-      features.push('meet_greet');
+
+    if (service.content?.pickupInstructions?.includes("meet")) {
+      features.push("meet_greet");
     }
-    
+
     if (service.content?.waitingTime > 0) {
-      features.push('free_waiting');
+      features.push("free_waiting");
     }
-    
+
     if (service.content?.vehicle?.airConditioning) {
-      features.push('air_conditioning');
+      features.push("air_conditioning");
     }
-    
+
     return features;
   }
 
@@ -386,18 +417,20 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
   normalizeCancellationPolicy(policies) {
     if (!policies || !policies.length) {
       return {
-        type: 'moderate',
-        freeUntil: '24h',
-        feePercentage: 100
+        type: "moderate",
+        freeUntil: "24h",
+        feePercentage: 100,
       };
     }
 
     const policy = policies[0];
     return {
-      type: 'custom',
-      freeUntil: policy.daysBeforeArrival ? `${policy.daysBeforeArrival * 24}h` : '24h',
+      type: "custom",
+      freeUntil: policy.daysBeforeArrival
+        ? `${policy.daysBeforeArrival * 24}h`
+        : "24h",
       feePercentage: policy.penaltyPercentage || 100,
-      description: policy.description
+      description: policy.description,
     };
   }
 
@@ -406,33 +439,40 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   async book(bookingInput) {
     try {
-      this.logger.info("Booking transfer", { bookingReference: bookingInput.reference });
+      this.logger.info("Booking transfer", {
+        bookingReference: bookingInput.reference,
+      });
 
       const bookingPayload = this.buildBookingPayload(bookingInput);
-      
-      const response = await this.transfersClient.post('/bookings', bookingPayload);
-      
+
+      const response = await this.transfersClient.post(
+        "/bookings",
+        bookingPayload,
+      );
+
       if (!response.data?.reference) {
         throw new Error("No booking reference returned from supplier");
       }
 
-      const booking = this.normalizeBookingResponse(response.data, bookingInput);
-      
-      this.logger.info("Transfer booking successful", { 
-        supplierReference: booking.supplierReference,
-        status: booking.status 
-      });
-      
-      return booking;
+      const booking = this.normalizeBookingResponse(
+        response.data,
+        bookingInput,
+      );
 
+      this.logger.info("Transfer booking successful", {
+        supplierReference: booking.supplierReference,
+        status: booking.status,
+      });
+
+      return booking;
     } catch (error) {
-      this.logger.error("Error booking transfer", { 
+      this.logger.error("Error booking transfer", {
         error: error.message,
         bookingInput,
         status: error.response?.status,
-        data: error.response?.data
+        data: error.response?.data,
       });
-      
+
       throw this.normalizeError(error);
     }
   }
@@ -441,14 +481,15 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    * Build booking payload
    */
   buildBookingPayload(bookingInput) {
-    const { offer, guestDetails, flightDetails, specialRequests } = bookingInput;
+    const { offer, guestDetails, flightDetails, specialRequests } =
+      bookingInput;
 
     const payload = {
       language: "ENG",
       clientReference: bookingInput.reference,
       welcomeMessage: "",
       remark: specialRequests || "",
-      
+
       // Transfer service
       transfers: [
         {
@@ -458,9 +499,9 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
           pickupInformation: {
             date: offer.meta.searchParams.pickupDate,
             time: offer.meta.searchParams.pickupTime || "10:00",
-            instructions: ""
-          }
-        }
+            instructions: "",
+          },
+        },
       ],
 
       // Primary passenger
@@ -468,8 +509,8 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
         name: guestDetails.firstName,
         surname: guestDetails.lastName,
         email: guestDetails.email,
-        phone: guestDetails.phone
-      }
+        phone: guestDetails.phone,
+      },
     };
 
     // Add flight information if provided
@@ -477,7 +518,7 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       payload.transfers[0].pickupInformation.flight = {
         number: flightDetails.flightNumber,
         company: flightDetails.airline || "",
-        arrivalTime: flightDetails.arrivalTime || ""
+        arrivalTime: flightDetails.arrivalTime || "",
       };
     }
 
@@ -492,21 +533,22 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       supplierReference: response.reference,
       status: this.mapBookingStatus(response.status),
       confirmationNumber: response.reference,
-      serviceDetails: response.transfers?.map(transfer => ({
-        transferId: transfer.id,
-        vehicleDetails: transfer.vehicle,
-        driverDetails: transfer.driver,
-        pickupDetails: transfer.pickup,
-        trackingInfo: transfer.tracking
-      })) || [],
+      serviceDetails:
+        response.transfers?.map((transfer) => ({
+          transferId: transfer.id,
+          vehicleDetails: transfer.vehicle,
+          driverDetails: transfer.driver,
+          pickupDetails: transfer.pickup,
+          trackingInfo: transfer.tracking,
+        })) || [],
       voucher: {
         url: response.voucher?.url,
-        instructions: response.voucher?.instructions
+        instructions: response.voucher?.instructions,
       },
       meta: {
         originalResponse: response,
-        bookingInput: originalInput
-      }
+        bookingInput: originalInput,
+      },
     };
   }
 
@@ -515,12 +557,12 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   mapBookingStatus(status) {
     const statusMap = {
-      'CONFIRMED': 'confirmed',
-      'PENDING': 'pending',
-      'CANCELLED': 'cancelled',
-      'FAILED': 'failed'
+      CONFIRMED: "confirmed",
+      PENDING: "pending",
+      CANCELLED: "cancelled",
+      FAILED: "failed",
     };
-    return statusMap[status] || 'pending';
+    return statusMap[status] || "pending";
   }
 
   /**
@@ -531,20 +573,22 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       this.logger.info("Getting booking details", { reference });
 
       const response = await this.transfersClient.get(`/bookings/${reference}`);
-      
-      const booking = this.normalizeBookingResponse(response.data, {});
-      
-      this.logger.info("Booking details retrieved", { reference, status: booking.status });
-      
-      return booking;
 
+      const booking = this.normalizeBookingResponse(response.data, {});
+
+      this.logger.info("Booking details retrieved", {
+        reference,
+        status: booking.status,
+      });
+
+      return booking;
     } catch (error) {
-      this.logger.error("Error getting booking details", { 
+      this.logger.error("Error getting booking details", {
         error: error.message,
         reference,
-        status: error.response?.status
+        status: error.response?.status,
       });
-      
+
       throw this.normalizeError(error);
     }
   }
@@ -557,37 +601,39 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
       this.logger.info("Cancelling booking", { reference, reason });
 
       const cancelPayload = {
-        reason: reason || "Customer requested cancellation"
+        reason: reason || "Customer requested cancellation",
       };
 
-      const response = await this.transfersClient.post(`/bookings/${reference}/cancel`, cancelPayload);
-      
+      const response = await this.transfersClient.post(
+        `/bookings/${reference}/cancel`,
+        cancelPayload,
+      );
+
       const result = {
-        success: response.data?.status === 'CANCELLED',
+        success: response.data?.status === "CANCELLED",
         status: this.mapBookingStatus(response.data?.status),
         refundAmount: response.data?.refund?.amount || 0,
-        refundCurrency: response.data?.refund?.currency || 'INR',
+        refundCurrency: response.data?.refund?.currency || "INR",
         cancellationFee: response.data?.cancellationFee?.amount || 0,
         meta: {
-          originalResponse: response.data
-        }
+          originalResponse: response.data,
+        },
       };
-      
-      this.logger.info("Booking cancellation processed", { 
-        reference, 
-        success: result.success,
-        refundAmount: result.refundAmount
-      });
-      
-      return result;
 
+      this.logger.info("Booking cancellation processed", {
+        reference,
+        success: result.success,
+        refundAmount: result.refundAmount,
+      });
+
+      return result;
     } catch (error) {
-      this.logger.error("Error cancelling booking", { 
+      this.logger.error("Error cancelling booking", {
         error: error.message,
         reference,
-        status: error.response?.status
+        status: error.response?.status,
       });
-      
+
       throw this.normalizeError(error);
     }
   }
@@ -604,32 +650,32 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
         fields: "code,name,country,type,coordinates",
         ...(query && { name: query }),
         ...(type && { type: type.toUpperCase() }),
-        limit
+        limit,
       };
 
-      const response = await this.contentClient.get('/locations', { params });
-      
-      const destinations = response.data?.map(location => ({
-        id: location.code,
-        code: location.code,
-        name: location.name,
-        country: location.country?.name || "",
-        type: location.type?.toLowerCase() || "city",
-        coordinates: location.coordinates,
-        popular: location.popular || false
-      })) || [];
-      
-      this.logger.info(`Found ${destinations.length} destinations`);
-      
-      return destinations;
+      const response = await this.contentClient.get("/locations", { params });
 
+      const destinations =
+        response.data?.map((location) => ({
+          id: location.code,
+          code: location.code,
+          name: location.name,
+          country: location.country?.name || "",
+          type: location.type?.toLowerCase() || "city",
+          coordinates: location.coordinates,
+          popular: location.popular || false,
+        })) || [];
+
+      this.logger.info(`Found ${destinations.length} destinations`);
+
+      return destinations;
     } catch (error) {
-      this.logger.error("Error getting destinations", { 
+      this.logger.error("Error getting destinations", {
         error: error.message,
         query,
-        status: error.response?.status
+        status: error.response?.status,
       });
-      
+
       // Return fallback data on error
       return this.getFallbackDestinations(query, type);
     }
@@ -640,27 +686,84 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   getFallbackDestinations(query = "", type = "") {
     const fallbackDestinations = [
-      { id: "BOM", code: "BOM", name: "Mumbai Airport", country: "India", type: "airport", popular: true },
-      { id: "DEL", code: "DEL", name: "Delhi Airport", country: "India", type: "airport", popular: true },
-      { id: "BLR", code: "BLR", name: "Bangalore Airport", country: "India", type: "airport", popular: true },
-      { id: "MAA", code: "MAA", name: "Chennai Airport", country: "India", type: "airport", popular: true },
-      { id: "mumbai-taj", code: "mumbai-taj", name: "Hotel Taj Mahal Palace", country: "India", type: "hotel", popular: true },
-      { id: "mumbai-oberoi", code: "mumbai-oberoi", name: "The Oberoi Mumbai", country: "India", type: "hotel", popular: true },
-      { id: "mumbai-city", code: "mumbai-city", name: "Mumbai City Center", country: "India", type: "city", popular: true },
-      { id: "delhi-city", code: "delhi-city", name: "Delhi City Center", country: "India", type: "city", popular: true }
+      {
+        id: "BOM",
+        code: "BOM",
+        name: "Mumbai Airport",
+        country: "India",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "DEL",
+        code: "DEL",
+        name: "Delhi Airport",
+        country: "India",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "BLR",
+        code: "BLR",
+        name: "Bangalore Airport",
+        country: "India",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "MAA",
+        code: "MAA",
+        name: "Chennai Airport",
+        country: "India",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "mumbai-taj",
+        code: "mumbai-taj",
+        name: "Hotel Taj Mahal Palace",
+        country: "India",
+        type: "hotel",
+        popular: true,
+      },
+      {
+        id: "mumbai-oberoi",
+        code: "mumbai-oberoi",
+        name: "The Oberoi Mumbai",
+        country: "India",
+        type: "hotel",
+        popular: true,
+      },
+      {
+        id: "mumbai-city",
+        code: "mumbai-city",
+        name: "Mumbai City Center",
+        country: "India",
+        type: "city",
+        popular: true,
+      },
+      {
+        id: "delhi-city",
+        code: "delhi-city",
+        name: "Delhi City Center",
+        country: "India",
+        type: "city",
+        popular: true,
+      },
     ];
 
     let filtered = fallbackDestinations;
 
     if (type) {
-      filtered = filtered.filter(dest => dest.type === type.toLowerCase());
+      filtered = filtered.filter((dest) => dest.type === type.toLowerCase());
     }
 
     if (query) {
       const queryLower = query.toLowerCase();
-      filtered = filtered.filter(dest => 
-        dest.name.toLowerCase().includes(queryLower) ||
-        dest.code.toLowerCase().includes(queryLower)
+      filtered = filtered.filter(
+        (dest) =>
+          dest.name.toLowerCase().includes(queryLower) ||
+          dest.code.toLowerCase().includes(queryLower),
       );
     }
 
@@ -672,31 +775,34 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
    */
   normalizeError(error) {
     const errorMap = {
-      400: 'INVALID_REQUEST',
-      401: 'AUTHENTICATION_FAILED', 
-      403: 'ACCESS_DENIED',
-      404: 'NOT_FOUND',
-      429: 'RATE_LIMIT_EXCEEDED',
-      500: 'SUPPLIER_ERROR',
-      502: 'SUPPLIER_UNAVAILABLE',
-      503: 'SERVICE_UNAVAILABLE',
-      504: 'TIMEOUT'
+      400: "INVALID_REQUEST",
+      401: "AUTHENTICATION_FAILED",
+      403: "ACCESS_DENIED",
+      404: "NOT_FOUND",
+      429: "RATE_LIMIT_EXCEEDED",
+      500: "SUPPLIER_ERROR",
+      502: "SUPPLIER_UNAVAILABLE",
+      503: "SERVICE_UNAVAILABLE",
+      504: "TIMEOUT",
     };
 
     const status = error.response?.status;
-    const code = errorMap[status] || 'UNKNOWN_ERROR';
-    
+    const code = errorMap[status] || "UNKNOWN_ERROR";
+
     let message = error.message;
-    
+
     if (error.response?.data?.error) {
-      message = error.response.data.error.description || error.response.data.error.message || message;
+      message =
+        error.response.data.error.description ||
+        error.response.data.error.message ||
+        message;
     }
 
     return {
       code,
       message,
       status,
-      originalError: error.response?.data || error.message
+      originalError: error.response?.data || error.message,
     };
   }
 
@@ -707,12 +813,12 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     try {
       // Simple destinations call to check API health
       await this.getDestinations("", "", 1);
-      return { status: 'healthy', timestamp: new Date().toISOString() };
+      return { status: "healthy", timestamp: new Date().toISOString() };
     } catch (error) {
-      return { 
-        status: 'unhealthy', 
+      return {
+        status: "unhealthy",
         error: error.message,
-        timestamp: new Date().toISOString() 
+        timestamp: new Date().toISOString(),
       };
     }
   }

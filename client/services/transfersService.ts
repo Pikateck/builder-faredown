@@ -187,7 +187,9 @@ class TransfersService {
   /**
    * Search for available transfers
    */
-  async searchTransfers(params: TransferSearchParams): Promise<TransferSearchResponse> {
+  async searchTransfers(
+    params: TransferSearchParams,
+  ): Promise<TransferSearchResponse> {
     try {
       console.log("🔍 Searching transfers:", params);
 
@@ -205,11 +207,11 @@ class TransfersService {
       return response.data.data;
     } catch (error: any) {
       console.error("❌ Transfer search failed:", error);
-      
+
       if (error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      
+
       throw new Error(error.message || "Failed to search transfers");
     }
   }
@@ -217,13 +219,16 @@ class TransfersService {
   /**
    * Get detailed information about a specific transfer
    */
-  async getTransferDetails(transferId: string, searchParams?: any): Promise<Transfer> {
+  async getTransferDetails(
+    transferId: string,
+    searchParams?: any,
+  ): Promise<Transfer> {
     try {
       console.log("🔍 Getting transfer details:", transferId);
 
       const queryParams = new URLSearchParams();
       if (searchParams) {
-        Object.keys(searchParams).forEach(key => {
+        Object.keys(searchParams).forEach((key) => {
           if (searchParams[key] !== undefined && searchParams[key] !== null) {
             queryParams.append(key, searchParams[key].toString());
           }
@@ -234,7 +239,9 @@ class TransfersService {
       const response = await api.get(url);
 
       if (!response.data.success) {
-        throw new Error(response.data.error || "Failed to get transfer details");
+        throw new Error(
+          response.data.error || "Failed to get transfer details",
+        );
       }
 
       console.log("✅ Transfer details retrieved:", {
@@ -274,7 +281,8 @@ class TransfersService {
         vehicleType: "luxury",
         vehicleClass: "luxury",
         vehicleName: "Mercedes E-Class",
-        vehicleImage: "https://images.unsplash.com/photo-1563720223185-11003d516935?w=800",
+        vehicleImage:
+          "https://images.unsplash.com/photo-1563720223185-11003d516935?w=800",
         maxPassengers: 3,
         maxLuggage: 3,
         pickupLocation: "Mumbai Airport (BOM)",
@@ -292,8 +300,21 @@ class TransfersService {
           currency: "INR",
           savings: 0,
         },
-        features: ["meet_greet", "professional_driver", "free_waiting", "wifi", "air_conditioning", "flight_monitoring"],
-        inclusions: ["Professional chauffeur", "VIP service", "Flight monitoring", "Complimentary refreshments", "120 minutes free waiting"],
+        features: [
+          "meet_greet",
+          "professional_driver",
+          "free_waiting",
+          "wifi",
+          "air_conditioning",
+          "flight_monitoring",
+        ],
+        inclusions: [
+          "Professional chauffeur",
+          "VIP service",
+          "Flight monitoring",
+          "Complimentary refreshments",
+          "120 minutes free waiting",
+        ],
         exclusions: ["Tolls", "Parking fees"],
         providerName: "Luxury Chauffeurs",
         providerRating: 4.9,
@@ -307,7 +328,8 @@ class TransfersService {
         vehicleType: "suv",
         vehicleClass: "premium",
         vehicleName: "SUV - Premium",
-        vehicleImage: "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800",
+        vehicleImage:
+          "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800",
         maxPassengers: 6,
         maxLuggage: 4,
         pickupLocation: "Mumbai Airport (BOM)",
@@ -325,8 +347,20 @@ class TransfersService {
           currency: "INR",
           savings: 0,
         },
-        features: ["meet_greet", "professional_driver", "free_waiting", "wifi", "air_conditioning"],
-        inclusions: ["Professional driver", "Meet & greet service", "Free WiFi", "Air conditioning", "90 minutes free waiting"],
+        features: [
+          "meet_greet",
+          "professional_driver",
+          "free_waiting",
+          "wifi",
+          "air_conditioning",
+        ],
+        inclusions: [
+          "Professional driver",
+          "Meet & greet service",
+          "Free WiFi",
+          "Air conditioning",
+          "90 minutes free waiting",
+        ],
         exclusions: ["Tolls", "Parking fees"],
         providerName: "Premium Transfers",
         providerRating: 4.7,
@@ -340,7 +374,8 @@ class TransfersService {
         vehicleType: "sedan",
         vehicleClass: "economy",
         vehicleName: "Sedan - Economy",
-        vehicleImage: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800",
+        vehicleImage:
+          "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800",
         maxPassengers: 3,
         maxLuggage: 2,
         pickupLocation: "Mumbai Airport (BOM)",
@@ -359,7 +394,11 @@ class TransfersService {
           savings: 0,
         },
         features: ["meet_greet", "professional_driver", "free_waiting"],
-        inclusions: ["Professional driver", "Meet & greet service", "60 minutes free waiting"],
+        inclusions: [
+          "Professional driver",
+          "Meet & greet service",
+          "60 minutes free waiting",
+        ],
         exclusions: ["Tolls", "Parking fees"],
         providerName: "Mumbai Transfers Ltd",
         providerRating: 4.3,
@@ -373,7 +412,9 @@ class TransfersService {
   /**
    * Book a transfer
    */
-  async bookTransfer(bookingData: TransferBookingData): Promise<TransferBookingResponse> {
+  async bookTransfer(
+    bookingData: TransferBookingData,
+  ): Promise<TransferBookingResponse> {
     try {
       console.log("📝 Booking transfer:", {
         transferId: bookingData.transferId,
@@ -396,11 +437,11 @@ class TransfersService {
       return response.data.data;
     } catch (error: any) {
       console.error("❌ Transfer booking failed:", error);
-      
+
       if (error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      
+
       throw new Error(error.message || "Failed to book transfer");
     }
   }
@@ -408,7 +449,9 @@ class TransfersService {
   /**
    * Get booking details by reference
    */
-  async getBookingDetails(bookingReference: string): Promise<TransferBookingDetails> {
+  async getBookingDetails(
+    bookingReference: string,
+  ): Promise<TransferBookingDetails> {
     try {
       console.log("🔍 Getting booking details:", bookingReference);
 
@@ -426,15 +469,15 @@ class TransfersService {
       return response.data.data;
     } catch (error: any) {
       console.error("❌ Get booking details failed:", error);
-      
+
       if (error.response?.status === 404) {
         throw new Error("Booking not found");
       }
-      
+
       if (error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      
+
       throw new Error(error.message || "Failed to get booking details");
     }
   }
@@ -446,9 +489,12 @@ class TransfersService {
     try {
       console.log("❌ Cancelling transfer booking:", bookingReference);
 
-      const response = await api.post(`/transfers/booking/${bookingReference}/cancel`, {
-        reason,
-      });
+      const response = await api.post(
+        `/transfers/booking/${bookingReference}/cancel`,
+        {
+          reason,
+        },
+      );
 
       if (!response.data.success) {
         throw new Error(response.data.error || "Failed to cancel booking");
@@ -462,15 +508,15 @@ class TransfersService {
       return response.data.data;
     } catch (error: any) {
       console.error("❌ Cancel booking failed:", error);
-      
+
       if (error.response?.status === 404) {
         throw new Error("Booking not found");
       }
-      
+
       if (error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      
+
       throw new Error(error.message || "Failed to cancel booking");
     }
   }
@@ -478,13 +524,17 @@ class TransfersService {
   /**
    * Get user's transfer bookings
    */
-  async getUserBookings(userId: number, options: { limit?: number; offset?: number; status?: string } = {}): Promise<any[]> {
+  async getUserBookings(
+    userId: number,
+    options: { limit?: number; offset?: number; status?: string } = {},
+  ): Promise<any[]> {
     try {
       console.log("🔍 Getting user transfer bookings:", userId);
 
       const queryParams = new URLSearchParams();
       if (options.limit) queryParams.append("limit", options.limit.toString());
-      if (options.offset) queryParams.append("offset", options.offset.toString());
+      if (options.offset)
+        queryParams.append("offset", options.offset.toString());
       if (options.status) queryParams.append("status", options.status);
 
       const url = `/transfers/bookings/user/${userId}${queryParams.toString() ? `?${queryParams.toString()}` : ""}`;
@@ -502,11 +552,11 @@ class TransfersService {
       return response.data.data;
     } catch (error: any) {
       console.error("❌ Get user bookings failed:", error);
-      
+
       if (error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      
+
       throw new Error(error.message || "Failed to get user bookings");
     }
   }
@@ -514,7 +564,14 @@ class TransfersService {
   /**
    * Re-price a transfer with updated parameters
    */
-  async repriceTransfer(transferId: string, options: { promoCode?: string; passengers?: any; additionalServices?: any[] } = {}): Promise<any> {
+  async repriceTransfer(
+    transferId: string,
+    options: {
+      promoCode?: string;
+      passengers?: any;
+      additionalServices?: any[];
+    } = {},
+  ): Promise<any> {
     try {
       console.log("💰 Re-pricing transfer:", transferId);
 
@@ -536,11 +593,11 @@ class TransfersService {
       return response.data.data;
     } catch (error: any) {
       console.error("❌ Reprice transfer failed:", error);
-      
+
       if (error.response?.data?.error) {
         throw new Error(error.response.data.error);
       }
-      
+
       throw new Error(error.message || "Failed to reprice transfer");
     }
   }
@@ -578,10 +635,7 @@ class TransfersService {
           popularOnly: query === "", // Popular when empty query
         });
       } catch (apiError) {
-        console.warn(
-          "❌ Transfer destinations API request failed:",
-          apiError,
-        );
+        console.warn("❌ Transfer destinations API request failed:", apiError);
         return this.getFallbackDestinations(query);
       }
 
@@ -631,31 +685,115 @@ class TransfersService {
    */
   private getFallbackDestinations(query: string): TransferDestination[] {
     const fallbackDestinations: TransferDestination[] = [
-      { id: "DEL", code: "DEL", name: "Delhi Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "BOM", code: "BOM", name: "Mumbai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "BLR", code: "BLR", name: "Bangalore Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "MAA", code: "MAA", name: "Chennai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "CCU", code: "CCU", name: "Kolkata Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "HYD", code: "HYD", name: "Hyderabad Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "GOI", code: "GOI", name: "Goa Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "PNQ", code: "PNQ", name: "Pune Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-      { id: "DXB", code: "DXB", name: "Dubai Airport", country: "UAE", countryCode: "AE", type: "airport", popular: true },
-      { id: "SIN", code: "SIN", name: "Singapore Airport", country: "Singapore", countryCode: "SG", type: "airport", popular: true },
+      {
+        id: "DEL",
+        code: "DEL",
+        name: "Delhi Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "BOM",
+        code: "BOM",
+        name: "Mumbai Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "BLR",
+        code: "BLR",
+        name: "Bangalore Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "MAA",
+        code: "MAA",
+        name: "Chennai Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "CCU",
+        code: "CCU",
+        name: "Kolkata Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "HYD",
+        code: "HYD",
+        name: "Hyderabad Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "GOI",
+        code: "GOI",
+        name: "Goa Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "PNQ",
+        code: "PNQ",
+        name: "Pune Airport",
+        country: "India",
+        countryCode: "IN",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "DXB",
+        code: "DXB",
+        name: "Dubai Airport",
+        country: "UAE",
+        countryCode: "AE",
+        type: "airport",
+        popular: true,
+      },
+      {
+        id: "SIN",
+        code: "SIN",
+        name: "Singapore Airport",
+        country: "Singapore",
+        countryCode: "SG",
+        type: "airport",
+        popular: true,
+      },
     ];
 
     if (!query) return fallbackDestinations;
 
-    return fallbackDestinations.filter(dest =>
-      dest.name.toLowerCase().includes(query.toLowerCase()) ||
-      dest.country.toLowerCase().includes(query.toLowerCase()) ||
-      dest.code.toLowerCase().includes(query.toLowerCase())
+    return fallbackDestinations.filter(
+      (dest) =>
+        dest.name.toLowerCase().includes(query.toLowerCase()) ||
+        dest.country.toLowerCase().includes(query.toLowerCase()) ||
+        dest.code.toLowerCase().includes(query.toLowerCase()),
     );
   }
 
   /**
    * Validate search parameters
    */
-  validateSearchParams(params: TransferSearchParams): { isValid: boolean; errors: string[] } {
+  validateSearchParams(params: TransferSearchParams): {
+    isValid: boolean;
+    errors: string[];
+  } {
     const errors: string[] = [];
 
     if (!params.pickupLocation?.trim()) {
@@ -713,7 +851,7 @@ class TransfersService {
   formatDuration(minutes: number): string {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    
+
     if (hours > 0) {
       return `${hours}h ${mins}m`;
     }
@@ -750,7 +888,10 @@ class TransfersService {
       child_seats: "Child Seats Available",
     };
 
-    return featureMap[feature] || feature.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+    return (
+      featureMap[feature] ||
+      feature.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+    );
   }
 }
 

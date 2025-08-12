@@ -253,8 +253,10 @@ export function SightseeingCard({
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-gray-500 mb-1">
-                    For {searchParams.get("adults") || "2"} adult{parseInt(searchParams.get("adults") || "2") > 1 ? 's' : ''}
-                    {parseInt(searchParams.get("children") || "0") > 0 && `, ${searchParams.get("children")} children`}
+                    For {searchParams.get("adults") || "2"} adult
+                    {parseInt(searchParams.get("adults") || "2") > 1 ? "s" : ""}
+                    {parseInt(searchParams.get("children") || "0") > 0 &&
+                      `, ${searchParams.get("children")} children`}
                   </div>
                   <div className="text-xs text-green-600 font-medium">
                     • Free cancellation
@@ -283,7 +285,7 @@ export function SightseeingCard({
                   "w-full py-3 px-4 rounded-full font-semibold text-sm transition-all duration-200 shadow-sm active:scale-95 flex items-center justify-center gap-2 border",
                   isSelected
                     ? "bg-[#003580] text-white border-[#003580] hover:bg-[#002a66] shadow-md"
-                    : "bg-white border-[#003580] text-[#003580] hover:bg-[#f0f4ff] hover:shadow-md"
+                    : "bg-white border-[#003580] text-[#003580] hover:bg-[#f0f4ff] hover:shadow-md",
                 )}
               >
                 {isSelected ? (
@@ -477,12 +479,14 @@ export function SightseeingCard({
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = "#002a66";
                       e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+                      e.currentTarget.style.boxShadow =
+                        "0 2px 8px rgba(0,53,128,0.25)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "#003580";
                       e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+                      e.currentTarget.style.boxShadow =
+                        "0 1px 3px rgba(0,53,128,0.15)";
                     }}
                   >
                     <Eye size={14} />

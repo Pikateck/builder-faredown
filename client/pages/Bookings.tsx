@@ -243,8 +243,18 @@ const Bookings: React.FC = () => {
             onClick={() => navigate(-1)}
             className="mb-4 flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
             Back
           </button>
@@ -376,16 +386,46 @@ const Bookings: React.FC = () => {
                       }`}
                     >
                       {booking.type === "flight" ? (
-                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        <svg
+                          className="w-5 h-5 text-blue-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
                         </svg>
                       ) : booking.type === "hotel" ? (
-                        <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        <svg
+                          className="w-5 h-5 text-amber-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                          />
                         </svg>
                       ) : (
-                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        <svg
+                          className="w-5 h-5 text-purple-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                          />
                         </svg>
                       )}
                     </div>
@@ -418,17 +458,25 @@ const Bookings: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-500 block">Date & Time</span>
-                        <p className="font-medium text-gray-900">{booking.date}</p>
-                        <p className="font-medium text-gray-900">{booking.time}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.date}
+                        </p>
+                        <p className="font-medium text-gray-900">
+                          {booking.time}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Passengers</span>
-                        <p className="font-medium text-gray-900">{booking.passengers}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.passengers}
+                        </p>
                       </div>
                     </div>
                     <div>
                       <span className="text-gray-500 text-sm block">Route</span>
-                      <p className="font-medium text-gray-900">{booking.route}</p>
+                      <p className="font-medium text-gray-900">
+                        {booking.route}
+                      </p>
                     </div>
                   </div>
                 ) : booking.type === "hotel" ? (
@@ -436,24 +484,36 @@ const Bookings: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-500 block">Check-in</span>
-                        <p className="font-medium text-gray-900">{booking.checkIn}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.checkIn}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Check-out</span>
-                        <p className="font-medium text-gray-900">{booking.checkOut}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.checkOut}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Guests</span>
-                        <p className="font-medium text-gray-900">{booking.guests}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.guests}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Rooms</span>
-                        <p className="font-medium text-gray-900">{booking.rooms}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.rooms}
+                        </p>
                       </div>
                     </div>
                     <div>
-                      <span className="text-gray-500 text-sm block">Location</span>
-                      <p className="font-medium text-gray-900">{booking.location}</p>
+                      <span className="text-gray-500 text-sm block">
+                        Location
+                      </span>
+                      <p className="font-medium text-gray-900">
+                        {booking.location}
+                      </p>
                     </div>
                   </div>
                 ) : (
@@ -461,24 +521,36 @@ const Bookings: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-gray-500 block">Visit Date</span>
-                        <p className="font-medium text-gray-900">{booking.visitDate}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.visitDate}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Time</span>
-                        <p className="font-medium text-gray-900">{booking.time}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.time}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Duration</span>
-                        <p className="font-medium text-gray-900">{booking.duration}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.duration}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500 block">Guests</span>
-                        <p className="font-medium text-gray-900">{booking.guests}</p>
+                        <p className="font-medium text-gray-900">
+                          {booking.guests}
+                        </p>
                       </div>
                     </div>
                     <div>
-                      <span className="text-gray-500 text-sm block">Location & Type</span>
-                      <p className="font-medium text-gray-900">{booking.location} • {booking.ticketType}</p>
+                      <span className="text-gray-500 text-sm block">
+                        Location & Type
+                      </span>
+                      <p className="font-medium text-gray-900">
+                        {booking.location} • {booking.ticketType}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -624,15 +696,15 @@ const Bookings: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-gray-600">Location:</span>{" "}
-                        {selectedBooking.location || 'Dubai, UAE'}
+                        {selectedBooking.location || "Dubai, UAE"}
                       </div>
                       <div>
                         <span className="text-gray-600">Address:</span>{" "}
-                        {selectedBooking.address || 'Downtown Dubai'}
+                        {selectedBooking.address || "Downtown Dubai"}
                       </div>
                       <div>
                         <span className="text-gray-600">Phone:</span>{" "}
-                        {selectedBooking.phone || '+971 4 888 3888'}
+                        {selectedBooking.phone || "+971 4 888 3888"}
                       </div>
                     </div>
                   </div>
@@ -641,23 +713,23 @@ const Bookings: React.FC = () => {
                     <div className="space-y-2 text-sm">
                       <div>
                         <span className="text-gray-600">Check-in:</span>{" "}
-                        {selectedBooking.checkIn || '2024-08-16'}
+                        {selectedBooking.checkIn || "2024-08-16"}
                       </div>
                       <div>
                         <span className="text-gray-600">Check-out:</span>{" "}
-                        {selectedBooking.checkOut || '2024-08-18'}
+                        {selectedBooking.checkOut || "2024-08-18"}
                       </div>
                       <div>
                         <span className="text-gray-600">Room Type:</span>{" "}
-                        {selectedBooking.roomType || 'Deluxe Room'}
+                        {selectedBooking.roomType || "Deluxe Room"}
                       </div>
                       <div>
                         <span className="text-gray-600">Bed Type:</span>{" "}
-                        {selectedBooking.bedType || 'King Size'}
+                        {selectedBooking.bedType || "King Size"}
                       </div>
                       <div>
                         <span className="text-gray-600">Guests:</span>{" "}
-                        {selectedBooking.guests || '2 Adults'}
+                        {selectedBooking.guests || "2 Adults"}
                       </div>
                     </div>
                   </div>
@@ -669,23 +741,24 @@ const Bookings: React.FC = () => {
                     <div className="space-y-2 text-sm">
                       <div>
                         <span className="text-gray-600">Experience:</span>{" "}
-                        {selectedBooking.name || 'Burj Khalifa: Floors 124 and 125'}
+                        {selectedBooking.name ||
+                          "Burj Khalifa: Floors 124 and 125"}
                       </div>
                       <div>
                         <span className="text-gray-600">Location:</span>{" "}
-                        {selectedBooking.location || 'Downtown Dubai, UAE'}
+                        {selectedBooking.location || "Downtown Dubai, UAE"}
                       </div>
                       <div>
                         <span className="text-gray-600">Duration:</span>{" "}
-                        {selectedBooking.duration || '1-2 Hours'}
+                        {selectedBooking.duration || "1-2 Hours"}
                       </div>
                       <div>
                         <span className="text-gray-600">Category:</span>{" "}
-                        {selectedBooking.category || 'Landmark & Attractions'}
+                        {selectedBooking.category || "Landmark & Attractions"}
                       </div>
                       <div>
                         <span className="text-gray-600">Ticket Type:</span>{" "}
-                        {selectedBooking.ticketType || 'Standard Admission'}
+                        {selectedBooking.ticketType || "Standard Admission"}
                       </div>
                     </div>
                   </div>
@@ -694,15 +767,15 @@ const Bookings: React.FC = () => {
                     <div className="space-y-2 text-sm">
                       <div>
                         <span className="text-gray-600">Visit Date:</span>{" "}
-                        {selectedBooking.visitDate || '2024-08-16'}
+                        {selectedBooking.visitDate || "2024-08-16"}
                       </div>
                       <div>
                         <span className="text-gray-600">Time Slot:</span>{" "}
-                        {selectedBooking.time || '2:00 PM'}
+                        {selectedBooking.time || "2:00 PM"}
                       </div>
                       <div>
                         <span className="text-gray-600">Guests:</span>{" "}
-                        {selectedBooking.guests || '2 Adults'}
+                        {selectedBooking.guests || "2 Adults"}
                       </div>
                       <div>
                         <span className="text-gray-600">Status:</span>
@@ -714,7 +787,9 @@ const Bookings: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-gray-600">Confirmation:</span>{" "}
-                        <span className="text-green-600 font-medium">Confirmed</span>
+                        <span className="text-green-600 font-medium">
+                          Confirmed
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -753,8 +828,8 @@ const Bookings: React.FC = () => {
                     selectedBooking.type === "flight"
                       ? "bg-blue-100"
                       : selectedBooking.type === "hotel"
-                      ? "bg-amber-100"
-                      : "bg-purple-100"
+                        ? "bg-amber-100"
+                        : "bg-purple-100"
                   }`}
                 >
                   {selectedBooking.type === "flight" ? (
@@ -803,7 +878,7 @@ const Bookings: React.FC = () => {
                 </div>
                 <h4 className="font-medium">
                   {selectedBooking.type === "flight"
-                    ? `${selectedBooking.airline || 'Air India'} ${selectedBooking.flightNumber || 'AI 131'}`
+                    ? `${selectedBooking.airline || "Air India"} ${selectedBooking.flightNumber || "AI 131"}`
                     : selectedBooking.name}
                 </h4>
                 <p className="text-sm text-gray-600">

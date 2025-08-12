@@ -246,7 +246,10 @@ export default function Index() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tabParam = urlParams.get("tab");
-    if (tabParam && ["flights", "hotels", "sightseeing", "transfers"].includes(tabParam)) {
+    if (
+      tabParam &&
+      ["flights", "hotels", "sightseeing", "transfers"].includes(tabParam)
+    ) {
       setActiveTab(tabParam);
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1255,7 +1258,8 @@ export default function Index() {
                 Reliable Airport Transfers
               </h1>
               <p className="text-blue-200 text-sm mb-3">
-                Book safe, comfortable transfers with professional drivers and competitive rates.
+                Book safe, comfortable transfers with professional drivers and
+                competitive rates.
               </p>
             </div>
 
@@ -2215,7 +2219,8 @@ export default function Index() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Book safe, comfortable transfers with professional drivers and competitive rates.
+                Book safe, comfortable transfers with professional drivers and
+                competitive rates.
               </h1>
             </div>
 

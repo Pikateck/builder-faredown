@@ -19,7 +19,7 @@ class TransfersService {
         winston.format.timestamp(),
         winston.format.printf(({ timestamp, level, message, ...meta }) => {
           return `${timestamp} [${level.toUpperCase()}] [TRANSFERS] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
-        })
+        }),
       ),
       transports: [new winston.transports.Console()],
     });
@@ -80,7 +80,11 @@ class TransfersService {
       await this.cacheResults(searchParams, results, sessionId);
 
       // Apply business logic (markup, promos, etc.)
-      const finalResults = await this.applyBusinessLogic(results, searchParams, sessionId);
+      const finalResults = await this.applyBusinessLogic(
+        results,
+        searchParams,
+        sessionId,
+      );
 
       const duration = Date.now() - startTime;
       this.logger.info("Transfer search completed", {
@@ -126,7 +130,10 @@ class TransfersService {
       const details = await adapter.getTransferDetails(productId, searchParams);
 
       // Apply business logic
-      const enhancedDetails = await this.enhanceTransferDetails(details, searchParams);
+      const enhancedDetails = await this.enhanceTransferDetails(
+        details,
+        searchParams,
+      );
 
       this.logger.info("Transfer details retrieved", {
         transferId,
@@ -165,7 +172,9 @@ class TransfersService {
       this.validateBookingData(bookingData);
 
       // Parse supplier from transfer ID
-      const { supplierCode, productId } = this.parseTransferId(bookingData.transferId);
+      const { supplierCode, productId } = this.parseTransferId(
+        bookingData.transferId,
+      );
       const adapter = this.adapters[supplierCode];
 
       if (!adapter) {
@@ -193,7 +202,8 @@ class TransfersService {
       await transfersRepository.updateBooking(dbBooking.id, {
         supplierBookingRef: supplierBooking.bookingReference,
         supplierResponse: supplierBooking.rawResponse,
-        status: supplierBooking.status === "CONFIRMED" ? "confirmed" : "pending",
+        status:
+          supplierBooking.status === "CONFIRMED" ? "confirmed" : "pending",
         confirmationDate: supplierBooking.confirmationDate,
       });
 
@@ -266,7 +276,8 @@ class TransfersService {
       this.logger.info("Cancelling transfer", { bookingReference });
 
       // Get booking from database
-      const booking = await transfersRepository.getBookingByRef(bookingReference);
+      const booking =
+        await transfersRepository.getBookingByRef(bookingReference);
       if (!booking) {
         throw new Error("Booking not found");
       }
@@ -284,7 +295,7 @@ class TransfersService {
       // Cancel with supplier
       const cancellationResult = await adapter.cancelTransfer(
         booking.supplierBookingRef,
-        cancellationData.cancellationFlag
+        cancellationData.cancellationFlag,
       );
 
       // Update booking in database
@@ -338,7 +349,8 @@ class TransfersService {
     try {
       this.logger.info("Getting booking details", { bookingReference });
 
-      const booking = await transfersRepository.getBookingByRef(bookingReference);
+      const booking =
+        await transfersRepository.getBookingByRef(bookingReference);
       if (!booking) {
         throw new Error("Booking not found");
       }
@@ -348,8 +360,10 @@ class TransfersService {
         try {
           const adapter = this.adapters[booking.supplierCode];
           if (adapter) {
-            const liveDetails = await adapter.getBookingDetails(booking.supplierBookingRef);
-            
+            const liveDetails = await adapter.getBookingDetails(
+              booking.supplierBookingRef,
+            );
+
             // Update status if changed
             if (liveDetails.status !== booking.status) {
               await transfersRepository.updateBooking(booking.id, {
@@ -392,16 +406,18 @@ class TransfersService {
           confirmationDate: booking.confirmationDate,
           cancellationDate: booking.cancellationDate,
         },
-        driverDetails: booking.driverName ? {
-          name: booking.driverName,
-          phone: booking.driverPhone,
-          vehicle: {
-            make: booking.vehicleMake,
-            model: booking.vehicleModel,
-            color: booking.vehicleColor,
-            licensePlate: booking.vehicleLicensePlate,
-          },
-        } : null,
+        driverDetails: booking.driverName
+          ? {
+              name: booking.driverName,
+              phone: booking.driverPhone,
+              vehicle: {
+                make: booking.vehicleMake,
+                model: booking.vehicleModel,
+                color: booking.vehicleColor,
+                licensePlate: booking.vehicleLicensePlate,
+              },
+            }
+          : null,
         trackingUrl: booking.trackingUrl,
         voucherUrl: booking.receiptUrl,
       };
@@ -441,7 +457,7 @@ class TransfersService {
             });
             supplierResults.hotelbeds = [];
             return [];
-          })
+          }),
       );
     }
 
@@ -452,8 +468,15 @@ class TransfersService {
     const combinedTransfers = allResults.flat();
 
     // If no results from suppliers and in development mode, provide mock data
-    if (combinedTransfers.length === 0 && (process.env.NODE_ENV === 'development' || process.env.ENABLE_MOCK_DATA === 'true')) {
-      this.logger.info("No supplier results, providing mock data for development", { sessionId });
+    if (
+      combinedTransfers.length === 0 &&
+      (process.env.NODE_ENV === "development" ||
+        process.env.ENABLE_MOCK_DATA === "true")
+    ) {
+      this.logger.info(
+        "No supplier results, providing mock data for development",
+        { sessionId },
+      );
       return this.getMockTransferResults(searchParams, sessionId);
     }
 
@@ -479,11 +502,14 @@ class TransfersService {
     for (const transfer of results.transfers) {
       try {
         // Apply markup rules
-        const markupAmount = await markupService.calculateTransferMarkup(transfer, searchParams);
-        
+        const markupAmount = await markupService.calculateTransferMarkup(
+          transfer,
+          searchParams,
+        );
+
         // Calculate total price with markup
         const totalPrice = parseFloat(transfer.basePrice) + markupAmount;
-        
+
         // Check for applicable promo codes
         let discountAmount = 0;
         if (searchParams.promoCode) {
@@ -495,9 +521,9 @@ class TransfersService {
                 totalPrice,
                 route: `${searchParams.pickupLocation}-${searchParams.dropoffLocation}`,
                 vehicleType: transfer.vehicleType,
-              }
+              },
             );
-            
+
             if (promoResult.isValid) {
               discountAmount = promoResult.discountAmount;
             }
@@ -511,7 +537,10 @@ class TransfersService {
         }
 
         // Calculate final price
-        const finalPrice = Math.max(totalPrice - discountAmount, transfer.basePrice * 1.05); // Never-loss protection
+        const finalPrice = Math.max(
+          totalPrice - discountAmount,
+          transfer.basePrice * 1.05,
+        ); // Never-loss protection
 
         enhancedTransfers.push({
           ...transfer,
@@ -552,7 +581,9 @@ class TransfersService {
     }
 
     // Sort by price
-    enhancedTransfers.sort((a, b) => a.pricing.totalPrice - b.pricing.totalPrice);
+    enhancedTransfers.sort(
+      (a, b) => a.pricing.totalPrice - b.pricing.totalPrice,
+    );
 
     return {
       transfers: enhancedTransfers,
@@ -560,13 +591,20 @@ class TransfersService {
       sessionId,
       summary: {
         totalResults: enhancedTransfers.length,
-        priceRange: enhancedTransfers.length > 0 ? {
-          min: Math.min(...enhancedTransfers.map(t => t.pricing.totalPrice)),
-          max: Math.max(...enhancedTransfers.map(t => t.pricing.totalPrice)),
-          currency: enhancedTransfers[0]?.pricing.currency || "INR",
-        } : null,
-        vehicleTypes: [...new Set(enhancedTransfers.map(t => t.vehicleType))],
-        suppliers: [...new Set(enhancedTransfers.map(t => t.supplierCode))],
+        priceRange:
+          enhancedTransfers.length > 0
+            ? {
+                min: Math.min(
+                  ...enhancedTransfers.map((t) => t.pricing.totalPrice),
+                ),
+                max: Math.max(
+                  ...enhancedTransfers.map((t) => t.pricing.totalPrice),
+                ),
+                currency: enhancedTransfers[0]?.pricing.currency || "INR",
+              }
+            : null,
+        vehicleTypes: [...new Set(enhancedTransfers.map((t) => t.vehicleType))],
+        suppliers: [...new Set(enhancedTransfers.map((t) => t.supplierCode))],
       },
       searchedAt: new Date().toISOString(),
     };
@@ -578,7 +616,7 @@ class TransfersService {
    */
   validateSearchParams(searchParams) {
     const required = ["pickupLocation", "dropoffLocation", "pickupDate"];
-    
+
     for (const field of required) {
       if (!searchParams[field]) {
         throw new Error(`Missing required field: ${field}`);
@@ -655,56 +693,326 @@ class TransfersService {
    */
   async getDestinations(query = "", limit = 15, popularOnly = false) {
     try {
-      this.logger.info("Getting transfer destinations", { query, limit, popularOnly });
+      this.logger.info("Getting transfer destinations", {
+        query,
+        limit,
+        popularOnly,
+      });
 
       // For transfers, we can use a combination of airports and major cities
       // This is a comprehensive list of major airports and cities for transfers
       const transferDestinations = [
         // Major Indian Airports
-        { code: "DEL", name: "Delhi Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "BOM", name: "Mumbai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "BLR", name: "Bangalore Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "MAA", name: "Chennai Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "CCU", name: "Kolkata Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "HYD", name: "Hyderabad Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "GOI", name: "Goa Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "PNQ", name: "Pune Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "AMD", name: "Ahmedabad Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
-        { code: "COK", name: "Kochi Airport", country: "India", countryCode: "IN", type: "airport", popular: true },
+        {
+          code: "DEL",
+          name: "Delhi Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "BOM",
+          name: "Mumbai Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "BLR",
+          name: "Bangalore Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "MAA",
+          name: "Chennai Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "CCU",
+          name: "Kolkata Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "HYD",
+          name: "Hyderabad Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "GOI",
+          name: "Goa Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "PNQ",
+          name: "Pune Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "AMD",
+          name: "Ahmedabad Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "COK",
+          name: "Kochi Airport",
+          country: "India",
+          countryCode: "IN",
+          type: "airport",
+          popular: true,
+        },
 
         // Major Indian Cities
-        { code: "DELHI", name: "Delhi City Center", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "MUMBAI", name: "Mumbai City Center", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "BANGALORE", name: "Bangalore City Center", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "CHENNAI", name: "Chennai City Center", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "KOLKATA", name: "Kolkata City Center", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "HYDERABAD", name: "Hyderabad City Center", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "GOA", name: "Goa Hotels", country: "India", countryCode: "IN", type: "city", popular: true },
-        { code: "PUNE", name: "Pune City Center", country: "India", countryCode: "IN", type: "city", popular: true },
+        {
+          code: "DELHI",
+          name: "Delhi City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "MUMBAI",
+          name: "Mumbai City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "BANGALORE",
+          name: "Bangalore City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "CHENNAI",
+          name: "Chennai City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "KOLKATA",
+          name: "Kolkata City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "HYDERABAD",
+          name: "Hyderabad City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "GOA",
+          name: "Goa Hotels",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "PUNE",
+          name: "Pune City Center",
+          country: "India",
+          countryCode: "IN",
+          type: "city",
+          popular: true,
+        },
 
         // International Airports
-        { code: "DXB", name: "Dubai Airport", country: "UAE", countryCode: "AE", type: "airport", popular: true },
-        { code: "SIN", name: "Singapore Airport", country: "Singapore", countryCode: "SG", type: "airport", popular: true },
-        { code: "BKK", name: "Bangkok Airport", country: "Thailand", countryCode: "TH", type: "airport", popular: true },
-        { code: "LHR", name: "London Heathrow", country: "United Kingdom", countryCode: "GB", type: "airport", popular: true },
-        { code: "CDG", name: "Paris Charles de Gaulle", country: "France", countryCode: "FR", type: "airport", popular: true },
-        { code: "JFK", name: "New York JFK", country: "United States", countryCode: "US", type: "airport", popular: true },
-        { code: "LAX", name: "Los Angeles Airport", country: "United States", countryCode: "US", type: "airport", popular: true },
-        { code: "NRT", name: "Tokyo Narita", country: "Japan", countryCode: "JP", type: "airport", popular: true },
-        { code: "HKG", name: "Hong Kong Airport", country: "Hong Kong", countryCode: "HK", type: "airport", popular: true },
-        { code: "SYD", name: "Sydney Airport", country: "Australia", countryCode: "AU", type: "airport", popular: true },
+        {
+          code: "DXB",
+          name: "Dubai Airport",
+          country: "UAE",
+          countryCode: "AE",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "SIN",
+          name: "Singapore Airport",
+          country: "Singapore",
+          countryCode: "SG",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "BKK",
+          name: "Bangkok Airport",
+          country: "Thailand",
+          countryCode: "TH",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "LHR",
+          name: "London Heathrow",
+          country: "United Kingdom",
+          countryCode: "GB",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "CDG",
+          name: "Paris Charles de Gaulle",
+          country: "France",
+          countryCode: "FR",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "JFK",
+          name: "New York JFK",
+          country: "United States",
+          countryCode: "US",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "LAX",
+          name: "Los Angeles Airport",
+          country: "United States",
+          countryCode: "US",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "NRT",
+          name: "Tokyo Narita",
+          country: "Japan",
+          countryCode: "JP",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "HKG",
+          name: "Hong Kong Airport",
+          country: "Hong Kong",
+          countryCode: "HK",
+          type: "airport",
+          popular: true,
+        },
+        {
+          code: "SYD",
+          name: "Sydney Airport",
+          country: "Australia",
+          countryCode: "AU",
+          type: "airport",
+          popular: true,
+        },
 
         // International Cities
-        { code: "DUBAI", name: "Dubai City Center", country: "UAE", countryCode: "AE", type: "city", popular: true },
-        { code: "SINGAPORE", name: "Singapore City Center", country: "Singapore", countryCode: "SG", type: "city", popular: true },
-        { code: "BANGKOK", name: "Bangkok City Center", country: "Thailand", countryCode: "TH", type: "city", popular: true },
-        { code: "LONDON", name: "London City Center", country: "United Kingdom", countryCode: "GB", type: "city", popular: true },
-        { code: "PARIS", name: "Paris City Center", country: "France", countryCode: "FR", type: "city", popular: true },
-        { code: "NEW_YORK", name: "New York City Center", country: "United States", countryCode: "US", type: "city", popular: true },
-        { code: "LOS_ANGELES", name: "Los Angeles City Center", country: "United States", countryCode: "US", type: "city", popular: true },
-        { code: "TOKYO", name: "Tokyo City Center", country: "Japan", countryCode: "JP", type: "city", popular: true },
-        { code: "HONG_KONG", name: "Hong Kong City Center", country: "Hong Kong", countryCode: "HK", type: "city", popular: true },
-        { code: "SYDNEY", name: "Sydney City Center", country: "Australia", countryCode: "AU", type: "city", popular: true },
+        {
+          code: "DUBAI",
+          name: "Dubai City Center",
+          country: "UAE",
+          countryCode: "AE",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "SINGAPORE",
+          name: "Singapore City Center",
+          country: "Singapore",
+          countryCode: "SG",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "BANGKOK",
+          name: "Bangkok City Center",
+          country: "Thailand",
+          countryCode: "TH",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "LONDON",
+          name: "London City Center",
+          country: "United Kingdom",
+          countryCode: "GB",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "PARIS",
+          name: "Paris City Center",
+          country: "France",
+          countryCode: "FR",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "NEW_YORK",
+          name: "New York City Center",
+          country: "United States",
+          countryCode: "US",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "LOS_ANGELES",
+          name: "Los Angeles City Center",
+          country: "United States",
+          countryCode: "US",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "TOKYO",
+          name: "Tokyo City Center",
+          country: "Japan",
+          countryCode: "JP",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "HONG_KONG",
+          name: "Hong Kong City Center",
+          country: "Hong Kong",
+          countryCode: "HK",
+          type: "city",
+          popular: true,
+        },
+        {
+          code: "SYDNEY",
+          name: "Sydney City Center",
+          country: "Australia",
+          countryCode: "AU",
+          type: "city",
+          popular: true,
+        },
       ];
 
       let destinations = [...transferDestinations];
@@ -717,7 +1025,7 @@ class TransfersService {
             dest.name.toLowerCase().includes(lowerQuery) ||
             dest.country.toLowerCase().includes(lowerQuery) ||
             dest.code.toLowerCase().includes(lowerQuery) ||
-            dest.type.toLowerCase().includes(lowerQuery)
+            dest.type.toLowerCase().includes(lowerQuery),
         );
       }
 
@@ -783,9 +1091,15 @@ class TransfersService {
   async cacheResults(searchParams, results, sessionId) {
     try {
       // TODO: Implement Redis-based caching
-      this.logger.debug("Results cached", { sessionId, transfersCount: results.transfers.length });
+      this.logger.debug("Results cached", {
+        sessionId,
+        transfersCount: results.transfers.length,
+      });
     } catch (error) {
-      this.logger.warn("Cache storage failed", { sessionId, error: error.message });
+      this.logger.warn("Cache storage failed", {
+        sessionId,
+        error: error.message,
+      });
     }
   }
 
@@ -798,7 +1112,10 @@ class TransfersService {
   async enhanceTransferDetails(details, searchParams) {
     try {
       // Apply pricing enhancements
-      const markupAmount = await markupService.calculateTransferMarkup(details, searchParams);
+      const markupAmount = await markupService.calculateTransferMarkup(
+        details,
+        searchParams,
+      );
       const totalPrice = parseFloat(details.basePrice) + markupAmount;
 
       // Apply promo codes if any
@@ -812,21 +1129,27 @@ class TransfersService {
               totalPrice,
               route: `${searchParams.pickupLocation}-${searchParams.dropoffLocation}`,
               vehicleType: details.vehicleType,
-            }
+            },
           );
 
           if (promoResult.isValid) {
             discountAmount = promoResult.discountAmount;
           }
         } catch (promoError) {
-          this.logger.warn("Promo validation failed during detail enhancement", {
-            promoCode: searchParams.promoCode,
-            error: promoError.message,
-          });
+          this.logger.warn(
+            "Promo validation failed during detail enhancement",
+            {
+              promoCode: searchParams.promoCode,
+              error: promoError.message,
+            },
+          );
         }
       }
 
-      const finalPrice = Math.max(totalPrice - discountAmount, details.basePrice * 1.05);
+      const finalPrice = Math.max(
+        totalPrice - discountAmount,
+        details.basePrice * 1.05,
+      );
 
       return {
         ...details,
@@ -874,7 +1197,7 @@ class TransfersService {
       // Apply markup
       const markupAmount = await markupService.calculateTransferMarkup(
         { basePrice, vehicleType: bookingData.vehicleType },
-        bookingData
+        bookingData,
       );
 
       // Apply promos
@@ -887,21 +1210,27 @@ class TransfersService {
               transferId: bookingData.transferId,
               totalPrice: basePrice + markupAmount,
               route: `${bookingData.pickupLocation}-${bookingData.dropoffLocation}`,
-            }
+            },
           );
 
           if (promoResult.isValid) {
             discountAmount = promoResult.discountAmount;
           }
         } catch (promoError) {
-          this.logger.warn("Promo validation failed during pricing calculation", {
-            promoCode: bookingData.promoCode,
-            error: promoError.message,
-          });
+          this.logger.warn(
+            "Promo validation failed during pricing calculation",
+            {
+              promoCode: bookingData.promoCode,
+              error: promoError.message,
+            },
+          );
         }
       }
 
-      const finalTotal = Math.max(basePrice + markupAmount - discountAmount, basePrice * 1.05);
+      const finalTotal = Math.max(
+        basePrice + markupAmount - discountAmount,
+        basePrice * 1.05,
+      );
 
       return {
         basePrice,
@@ -995,7 +1324,8 @@ class TransfersService {
         maxLuggage: 2,
         pickupLocation: searchParams.pickupLocation || "Mumbai Airport (BOM)",
         pickupInstructions: "Meet at Arrivals Hall - Terminal 2",
-        dropoffLocation: searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
+        dropoffLocation:
+          searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
         estimatedDuration: 45,
         distance: "33 km",
         pricing: {
@@ -1005,20 +1335,22 @@ class TransfersService {
           breakdown: {
             base: 1000,
             surcharges: 100,
-            taxes: 100
-          }
+            taxes: 100,
+          },
         },
         features: ["Professional Driver", "Meet & Greet", "Free Waiting"],
         providerName: "Mumbai Transfers Ltd",
         providerRating: 4.6,
         cancellationPolicy: {
           freeUntil: "24h",
-          feePercentage: 10
+          feePercentage: 10,
         },
         availability: {
           available: true,
-          lastAvailableDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        }
+          lastAvailableDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+        },
       },
       {
         id: "hotelbeds_2",
@@ -1032,7 +1364,8 @@ class TransfersService {
         maxLuggage: 4,
         pickupLocation: searchParams.pickupLocation || "Mumbai Airport (BOM)",
         pickupInstructions: "Meet at Arrivals Hall - Terminal 2",
-        dropoffLocation: searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
+        dropoffLocation:
+          searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
         estimatedDuration: 45,
         distance: "33 km",
         pricing: {
@@ -1042,20 +1375,28 @@ class TransfersService {
           breakdown: {
             base: 1800,
             surcharges: 150,
-            taxes: 150
-          }
+            taxes: 150,
+          },
         },
-        features: ["Luxury Vehicle", "Professional Driver", "Meet & Greet", "Free Waiting", "WiFi"],
+        features: [
+          "Luxury Vehicle",
+          "Professional Driver",
+          "Meet & Greet",
+          "Free Waiting",
+          "WiFi",
+        ],
         providerName: "Premium Transfers Ltd",
         providerRating: 4.8,
         cancellationPolicy: {
           freeUntil: "24h",
-          feePercentage: 15
+          feePercentage: 15,
         },
         availability: {
           available: true,
-          lastAvailableDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        }
+          lastAvailableDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+        },
       },
       {
         id: "hotelbeds_3",
@@ -1069,7 +1410,8 @@ class TransfersService {
         maxLuggage: 6,
         pickupLocation: searchParams.pickupLocation || "Mumbai Airport (BOM)",
         pickupInstructions: "Meet at Arrivals Hall - Terminal 2",
-        dropoffLocation: searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
+        dropoffLocation:
+          searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
         estimatedDuration: 45,
         distance: "33 km",
         pricing: {
@@ -1079,32 +1421,41 @@ class TransfersService {
           breakdown: {
             base: 2500,
             surcharges: 250,
-            taxes: 250
-          }
+            taxes: 250,
+          },
         },
-        features: ["Spacious Vehicle", "Professional Driver", "Meet & Greet", "Free Waiting", "WiFi", "Air Conditioning"],
+        features: [
+          "Spacious Vehicle",
+          "Professional Driver",
+          "Meet & Greet",
+          "Free Waiting",
+          "WiFi",
+          "Air Conditioning",
+        ],
         providerName: "Business Transfers Ltd",
         providerRating: 4.7,
         cancellationPolicy: {
           freeUntil: "48h",
-          feePercentage: 20
+          feePercentage: 20,
         },
         availability: {
           available: true,
-          lastAvailableDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        }
-      }
+          lastAvailableDate: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+        },
+      },
     ];
 
     return {
       transfers: mockTransfers,
       supplierResults: {
-        hotelbeds: mockTransfers
+        hotelbeds: mockTransfers,
       },
       searchParams,
       sessionId,
       searchedAt: new Date().toISOString(),
-      mockData: true
+      mockData: true,
     };
   }
 }

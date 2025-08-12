@@ -23,7 +23,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     winston.format.printf(({ timestamp, level, message, ...meta }) => {
       return `${timestamp} [${level.toUpperCase()}] [TRANSFERS-API] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
-    })
+    }),
   ),
   transports: [new winston.transports.Console()],
 });
@@ -37,19 +37,31 @@ router.post("/destinations", auditRequest, async (req, res) => {
   try {
     const { query = "", limit = 15, popularOnly = false } = req.body;
 
-    logger.info("Transfers destinations API called", { query, limit, popularOnly });
+    logger.info("Transfers destinations API called", {
+      query,
+      limit,
+      popularOnly,
+    });
 
-    const result = await transfersService.getDestinations(query, limit, popularOnly);
+    const result = await transfersService.getDestinations(
+      query,
+      limit,
+      popularOnly,
+    );
 
     if (!result.success) {
-      logger.error("Transfers destinations API failed", { error: result.error });
+      logger.error("Transfers destinations API failed", {
+        error: result.error,
+      });
       return res.status(500).json({
         success: false,
         error: "Failed to fetch transfer destinations",
       });
     }
 
-    logger.info(`Found ${result.data.destinations.length} transfer destinations`);
+    logger.info(
+      `Found ${result.data.destinations.length} transfer destinations`,
+    );
 
     res.json({
       success: true,
@@ -83,14 +95,15 @@ router.post("/search", auditRequest, async (req, res) => {
       vehicleType,
       currency = "INR",
       promoCode,
-      flightNumber
+      flightNumber,
     } = req.body;
 
     // Validate required fields
     if (!pickupLocation || !dropoffLocation || !pickupDate) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields: pickupLocation, dropoffLocation, pickupDate",
+        error:
+          "Missing required fields: pickupLocation, dropoffLocation, pickupDate",
       });
     }
 
@@ -109,7 +122,7 @@ router.post("/search", auditRequest, async (req, res) => {
       flightNumber,
       userAgent: req.headers["user-agent"],
       ipAddress: req.ip,
-      sessionId: req.sessionID
+      sessionId: req.sessionID,
     };
 
     logger.info("Transfer search initiated", { searchParams });
@@ -124,9 +137,9 @@ router.post("/search", auditRequest, async (req, res) => {
       });
     }
 
-    logger.info(`Transfer search completed`, { 
+    logger.info(`Transfer search completed`, {
       offerCount: results.data?.offers?.length || 0,
-      cached: results.data?.cached || false
+      cached: results.data?.cached || false,
     });
 
     res.json({
@@ -134,9 +147,11 @@ router.post("/search", auditRequest, async (req, res) => {
       data: results.data,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    logger.error("Transfer search error", { error: error.message, stack: error.stack });
+    logger.error("Transfer search error", {
+      error: error.message,
+      stack: error.stack,
+    });
     res.status(500).json({
       success: false,
       error: error.message || "Internal server error",
@@ -154,13 +169,17 @@ router.get("/product/:id", auditRequest, async (req, res) => {
     const { id } = req.params;
     const { currency = "INR", promoCode } = req.query;
 
-    logger.info("Transfer product details requested", { id, currency, promoCode });
+    logger.info("Transfer product details requested", {
+      id,
+      currency,
+      promoCode,
+    });
 
     const product = await transfersService.getProduct(id, {
       currency,
       promoCode,
       userAgent: req.headers["user-agent"],
-      ipAddress: req.ip
+      ipAddress: req.ip,
     });
 
     if (!product.success) {
@@ -176,9 +195,11 @@ router.get("/product/:id", auditRequest, async (req, res) => {
       data: product.data,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    logger.error("Transfer product details error", { error: error.message, id: req.params.id });
+    logger.error("Transfer product details error", {
+      error: error.message,
+      id: req.params.id,
+    });
     res.status(500).json({
       success: false,
       error: error.message || "Internal server error",
@@ -193,12 +214,7 @@ router.get("/product/:id", auditRequest, async (req, res) => {
  */
 router.post("/checkout/price", auditRequest, async (req, res) => {
   try {
-    const {
-      offerId,
-      promoCode,
-      currency = "INR",
-      bargainAmount
-    } = req.body;
+    const { offerId, promoCode, currency = "INR", bargainAmount } = req.body;
 
     if (!offerId) {
       return res.status(400).json({
@@ -207,7 +223,12 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
       });
     }
 
-    logger.info("Transfer checkout pricing requested", { offerId, promoCode, currency, bargainAmount });
+    logger.info("Transfer checkout pricing requested", {
+      offerId,
+      promoCode,
+      currency,
+      bargainAmount,
+    });
 
     const pricing = await transfersService.calculateCheckoutPrice({
       offerId,
@@ -215,11 +236,14 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
       currency,
       bargainAmount,
       userAgent: req.headers["user-agent"],
-      ipAddress: req.ip
+      ipAddress: req.ip,
     });
 
     if (!pricing.success) {
-      logger.error("Transfer pricing calculation failed", { offerId, error: pricing.error });
+      logger.error("Transfer pricing calculation failed", {
+        offerId,
+        error: pricing.error,
+      });
       return res.status(400).json({
         success: false,
         error: pricing.error || "Pricing calculation failed",
@@ -231,7 +255,6 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
       data: pricing.data,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     logger.error("Transfer checkout pricing error", { error: error.message });
     res.status(500).json({
@@ -246,80 +269,93 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
  * @desc Book transfer with payment processing
  * @access Private (requires authentication)
  */
-router.post("/checkout/book", requireAuth, validateBookingData, auditRequest, async (req, res) => {
-  try {
-    const {
-      offerId,
-      guestDetails,
-      contactDetails,
-      flightDetails,
-      specialRequests,
-      promoCode,
-      bargainAmount,
-      paymentMethod = "online",
-      currency = "INR"
-    } = req.body;
+router.post(
+  "/checkout/book",
+  requireAuth,
+  validateBookingData,
+  auditRequest,
+  async (req, res) => {
+    try {
+      const {
+        offerId,
+        guestDetails,
+        contactDetails,
+        flightDetails,
+        specialRequests,
+        promoCode,
+        bargainAmount,
+        paymentMethod = "online",
+        currency = "INR",
+      } = req.body;
 
-    if (!offerId || !guestDetails || !contactDetails) {
-      return res.status(400).json({
+      if (!offerId || !guestDetails || !contactDetails) {
+        return res.status(400).json({
+          success: false,
+          error:
+            "Missing required fields: offerId, guestDetails, contactDetails",
+        });
+      }
+
+      const bookingData = {
+        offerId,
+        guestDetails,
+        contactDetails,
+        flightDetails,
+        specialRequests,
+        promoCode,
+        bargainAmount,
+        paymentMethod,
+        currency,
+        userId: req.user?.id,
+        userAgent: req.headers["user-agent"],
+        ipAddress: req.ip,
+        sessionId: req.sessionID,
+      };
+
+      logger.info("Transfer booking initiated", {
+        offerId,
+        userId: req.user?.id,
+        paymentMethod,
+        guestEmail: guestDetails.email,
+      });
+
+      const booking = await transfersService.createBooking(bookingData);
+
+      if (!booking.success) {
+        logger.error("Transfer booking failed", {
+          offerId,
+          userId: req.user?.id,
+          error: booking.error,
+        });
+        return res.status(400).json({
+          success: false,
+          error: booking.error || "Booking failed",
+        });
+      }
+
+      logger.info("Transfer booking successful", {
+        bookingId: booking.data.id,
+        bookingRef: booking.data.reference,
+        userId: req.user?.id,
+      });
+
+      res.json({
+        success: true,
+        data: booking.data,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error("Transfer booking error", {
+        error: error.message,
+        userId: req.user?.id,
+      });
+      res.status(500).json({
         success: false,
-        error: "Missing required fields: offerId, guestDetails, contactDetails",
+        error: error.message || "Internal server error",
       });
     }
-
-    const bookingData = {
-      offerId,
-      guestDetails,
-      contactDetails,
-      flightDetails,
-      specialRequests,
-      promoCode,
-      bargainAmount,
-      paymentMethod,
-      currency,
-      userId: req.user?.id,
-      userAgent: req.headers["user-agent"],
-      ipAddress: req.ip,
-      sessionId: req.sessionID
-    };
-
-    logger.info("Transfer booking initiated", { 
-      offerId, 
-      userId: req.user?.id,
-      paymentMethod,
-      guestEmail: guestDetails.email 
-    });
-
-    const booking = await transfersService.createBooking(bookingData);
-
-    if (!booking.success) {
-      logger.error("Transfer booking failed", { offerId, userId: req.user?.id, error: booking.error });
-      return res.status(400).json({
-        success: false,
-        error: booking.error || "Booking failed",
-      });
-    }
-
-    logger.info("Transfer booking successful", { 
-      bookingId: booking.data.id,
-      bookingRef: booking.data.reference,
-      userId: req.user?.id
-    });
-
-    res.json({
-      success: true,
-      data: booking.data,
-      timestamp: new Date().toISOString(),
-    });
-
-  } catch (error) {
-    logger.error("Transfer booking error", { error: error.message, userId: req.user?.id });
-    res.status(500).json({
-      success: false,
-      error: error.message || "Internal server error",
-    });
-  }
-});
+  },
+);
 
 /**
  * @route GET /api/transfers/booking/:id
@@ -330,14 +366,22 @@ router.get("/booking/:id", requireAuth, auditRequest, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
-    const isAdmin = req.user?.role === 'admin';
+    const isAdmin = req.user?.role === "admin";
 
-    logger.info("Transfer booking details requested", { bookingId: id, userId, isAdmin });
+    logger.info("Transfer booking details requested", {
+      bookingId: id,
+      userId,
+      isAdmin,
+    });
 
     const booking = await transfersService.getBooking(id, { userId, isAdmin });
 
     if (!booking.success) {
-      logger.error("Transfer booking not found", { bookingId: id, userId, error: booking.error });
+      logger.error("Transfer booking not found", {
+        bookingId: id,
+        userId,
+        error: booking.error,
+      });
       return res.status(404).json({
         success: false,
         error: "Booking not found",
@@ -349,9 +393,11 @@ router.get("/booking/:id", requireAuth, auditRequest, async (req, res) => {
       data: booking.data,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    logger.error("Transfer booking details error", { error: error.message, bookingId: req.params.id });
+    logger.error("Transfer booking details error", {
+      error: error.message,
+      bookingId: req.params.id,
+    });
     res.status(500).json({
       success: false,
       error: error.message || "Internal server error",
@@ -364,51 +410,67 @@ router.get("/booking/:id", requireAuth, auditRequest, async (req, res) => {
  * @desc Cancel transfer booking with refund processing
  * @access Private (user's own bookings or admin)
  */
-router.post("/booking/:id/cancel", requireAuth, auditRequest, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { reason = "Customer requested cancellation" } = req.body;
-    const userId = req.user?.id;
-    const isAdmin = req.user?.role === 'admin';
+router.post(
+  "/booking/:id/cancel",
+  requireAuth,
+  auditRequest,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { reason = "Customer requested cancellation" } = req.body;
+      const userId = req.user?.id;
+      const isAdmin = req.user?.role === "admin";
 
-    logger.info("Transfer booking cancellation requested", { bookingId: id, userId, isAdmin, reason });
+      logger.info("Transfer booking cancellation requested", {
+        bookingId: id,
+        userId,
+        isAdmin,
+        reason,
+      });
 
-    const cancellation = await transfersService.cancelBooking(id, {
-      reason,
-      userId,
-      isAdmin,
-      userAgent: req.headers["user-agent"],
-      ipAddress: req.ip
-    });
+      const cancellation = await transfersService.cancelBooking(id, {
+        reason,
+        userId,
+        isAdmin,
+        userAgent: req.headers["user-agent"],
+        ipAddress: req.ip,
+      });
 
-    if (!cancellation.success) {
-      logger.error("Transfer booking cancellation failed", { bookingId: id, userId, error: cancellation.error });
-      return res.status(400).json({
+      if (!cancellation.success) {
+        logger.error("Transfer booking cancellation failed", {
+          bookingId: id,
+          userId,
+          error: cancellation.error,
+        });
+        return res.status(400).json({
+          success: false,
+          error: cancellation.error || "Cancellation failed",
+        });
+      }
+
+      logger.info("Transfer booking cancelled successfully", {
+        bookingId: id,
+        userId,
+        refundAmount: cancellation.data?.refundAmount,
+      });
+
+      res.json({
+        success: true,
+        data: cancellation.data,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error("Transfer booking cancellation error", {
+        error: error.message,
+        bookingId: req.params.id,
+      });
+      res.status(500).json({
         success: false,
-        error: cancellation.error || "Cancellation failed",
+        error: error.message || "Internal server error",
       });
     }
-
-    logger.info("Transfer booking cancelled successfully", { 
-      bookingId: id, 
-      userId,
-      refundAmount: cancellation.data?.refundAmount 
-    });
-
-    res.json({
-      success: true,
-      data: cancellation.data,
-      timestamp: new Date().toISOString(),
-    });
-
-  } catch (error) {
-    logger.error("Transfer booking cancellation error", { error: error.message, bookingId: req.params.id });
-    res.status(500).json({
-      success: false,
-      error: error.message || "Internal server error",
-    });
-  }
-});
+  },
+);
 
 // =============================================================================
 // ADMIN ROUTES
@@ -427,11 +489,16 @@ router.get("/admin/bookings", requireAdmin, auditRequest, async (req, res) => {
       dateTo,
       supplier,
       page = 1,
-      limit = 50
+      limit = 50,
     } = req.query;
 
-    logger.info("Admin transfer bookings list requested", { 
-      status, dateFrom, dateTo, supplier, page, limit 
+    logger.info("Admin transfer bookings list requested", {
+      status,
+      dateFrom,
+      dateTo,
+      supplier,
+      page,
+      limit,
     });
 
     const bookings = await transfersService.getAdminBookings({
@@ -440,7 +507,7 @@ router.get("/admin/bookings", requireAdmin, auditRequest, async (req, res) => {
       dateTo,
       supplier,
       page: parseInt(page),
-      limit: parseInt(limit)
+      limit: parseInt(limit),
     });
 
     res.json({
@@ -449,7 +516,6 @@ router.get("/admin/bookings", requireAdmin, auditRequest, async (req, res) => {
       pagination: bookings.pagination,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     logger.error("Admin transfer bookings error", { error: error.message });
     res.status(500).json({
@@ -477,7 +543,10 @@ router.get("/admin/markup", requireAdmin, async (req, res) => {
 router.post("/admin/markup", requireAdmin, auditRequest, async (req, res) => {
   try {
     const rule = await markupService.createTransferRule(req.body);
-    logger.info("Transfer markup rule created", { ruleId: rule.id, adminId: req.user?.id });
+    logger.info("Transfer markup rule created", {
+      ruleId: rule.id,
+      adminId: req.user?.id,
+    });
     res.json({ success: true, data: rule });
   } catch (error) {
     logger.error("Create transfer markup rule error", { error: error.message });
@@ -503,7 +572,10 @@ router.get("/admin/promos", requireAdmin, async (req, res) => {
 router.post("/admin/promos", requireAdmin, auditRequest, async (req, res) => {
   try {
     const promo = await promoService.createTransferPromo(req.body);
-    logger.info("Transfer promo created", { promoCode: promo.code, adminId: req.user?.id });
+    logger.info("Transfer promo created", {
+      promoCode: promo.code,
+      adminId: req.user?.id,
+    });
     res.json({ success: true, data: promo });
   } catch (error) {
     logger.error("Create transfer promo error", { error: error.message });
@@ -519,17 +591,19 @@ router.post("/admin/promos", requireAdmin, auditRequest, async (req, res) => {
 router.get("/admin/reports/revenue", requireAdmin, async (req, res) => {
   try {
     const {
-      dateFrom = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      dateTo = new Date().toISOString().split('T')[0],
+      dateFrom = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
+      dateTo = new Date().toISOString().split("T")[0],
       supplier,
-      vehicleType
+      vehicleType,
     } = req.query;
 
     const report = await transfersService.getRevenueReport({
       dateFrom,
       dateTo,
       supplier,
-      vehicleType
+      vehicleType,
     });
 
     res.json({
@@ -537,7 +611,6 @@ router.get("/admin/reports/revenue", requireAdmin, async (req, res) => {
       data: report,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     logger.error("Transfer revenue report error", { error: error.message });
     res.status(500).json({
@@ -555,13 +628,15 @@ router.get("/admin/reports/revenue", requireAdmin, async (req, res) => {
 router.get("/admin/reports/never-loss", requireAdmin, async (req, res) => {
   try {
     const {
-      dateFrom = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      dateTo = new Date().toISOString().split('T')[0]
+      dateFrom = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
+      dateTo = new Date().toISOString().split("T")[0],
     } = req.query;
 
     const report = await transfersService.getNeverLossReport({
       dateFrom,
-      dateTo
+      dateTo,
     });
 
     res.json({
@@ -569,7 +644,6 @@ router.get("/admin/reports/never-loss", requireAdmin, async (req, res) => {
       data: report,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     logger.error("Transfer never-loss report error", { error: error.message });
     res.status(500).json({
@@ -592,7 +666,7 @@ router.get("/admin/audit-logs", requireAdmin, async (req, res) => {
       dateFrom,
       dateTo,
       page = 1,
-      limit = 100
+      limit = 100,
     } = req.query;
 
     const logs = await transfersService.getAuditLogs({
@@ -601,7 +675,7 @@ router.get("/admin/audit-logs", requireAdmin, async (req, res) => {
       dateFrom,
       dateTo,
       page: parseInt(page),
-      limit: parseInt(limit)
+      limit: parseInt(limit),
     });
 
     res.json({
@@ -610,7 +684,6 @@ router.get("/admin/audit-logs", requireAdmin, async (req, res) => {
       pagination: logs.pagination,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     logger.error("Transfer audit logs error", { error: error.message });
     res.status(500).json({
@@ -628,13 +701,12 @@ router.get("/admin/audit-logs", requireAdmin, async (req, res) => {
 router.get("/health", async (req, res) => {
   try {
     const health = await transfersService.healthCheck();
-    
+
     res.json({
       success: true,
       data: health,
       timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     logger.error("Transfer health check error", { error: error.message });
     res.status(500).json({
@@ -647,11 +719,11 @@ router.get("/health", async (req, res) => {
 
 // Error handling middleware for transfers routes
 router.use((error, req, res, next) => {
-  logger.error("Unhandled transfers route error", { 
-    error: error.message, 
+  logger.error("Unhandled transfers route error", {
+    error: error.message,
     stack: error.stack,
     url: req.url,
-    method: req.method
+    method: req.method,
   });
 
   res.status(500).json({

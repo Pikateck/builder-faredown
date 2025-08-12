@@ -192,7 +192,8 @@ export default function TransferConfirmation() {
                 <div>
                   <p className="text-sm text-gray-500">Primary Guest</p>
                   <p className="font-medium text-gray-900">
-                    {bookingData.primaryGuest.title} {bookingData.primaryGuest.firstName}{" "}
+                    {bookingData.primaryGuest.title}{" "}
+                    {bookingData.primaryGuest.firstName}{" "}
                     {bookingData.primaryGuest.lastName}
                   </p>
                 </div>
@@ -205,7 +206,8 @@ export default function TransferConfirmation() {
                 <div>
                   <p className="text-sm text-gray-500">Phone</p>
                   <p className="font-medium text-gray-900">
-                    {bookingData.primaryGuest.countryCode} {bookingData.primaryGuest.phone}
+                    {bookingData.primaryGuest.countryCode}{" "}
+                    {bookingData.primaryGuest.phone}
                   </p>
                 </div>
                 {bookingData.flightDetails.flightNumber && (
@@ -213,7 +215,8 @@ export default function TransferConfirmation() {
                     <p className="text-sm text-gray-500">Flight Details</p>
                     <p className="font-medium text-gray-900">
                       {bookingData.flightDetails.flightNumber}
-                      {bookingData.flightDetails.airline && ` - ${bookingData.flightDetails.airline}`}
+                      {bookingData.flightDetails.airline &&
+                        ` - ${bookingData.flightDetails.airline}`}
                     </p>
                   </div>
                 )}
@@ -224,7 +227,9 @@ export default function TransferConfirmation() {
           {/* Pricing Summary */}
           <div className="border-t pt-6 mt-6">
             <div className="max-w-md ml-auto">
-              <h3 className="font-semibold text-gray-900 mb-3">Payment Summary</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">
+                Payment Summary
+              </h3>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Transfer Fare</span>
@@ -250,16 +255,18 @@ export default function TransferConfirmation() {
         {/* Actions */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-lg">
           <h3 className="font-semibold text-gray-900 mb-4">What's Next?</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <Mail className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <h4 className="font-medium text-gray-900 mb-1">Confirmation Email</h4>
+              <h4 className="font-medium text-gray-900 mb-1">
+                Confirmation Email
+              </h4>
               <p className="text-sm text-gray-600">
                 Sent to {bookingData.primaryGuest.email}
               </p>
             </div>
-            
+
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <Phone className="w-8 h-8 text-green-600 mx-auto mb-2" />
               <h4 className="font-medium text-gray-900 mb-1">Driver Contact</h4>
@@ -267,7 +274,7 @@ export default function TransferConfirmation() {
                 Details will be sent 24hrs before pickup
               </p>
             </div>
-            
+
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <Car className="w-8 h-8 text-purple-600 mx-auto mb-2" />
               <h4 className="font-medium text-gray-900 mb-1">Track Transfer</h4>
@@ -278,24 +285,17 @@ export default function TransferConfirmation() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              variant="outline"
-              className="flex items-center"
-            >
+            <Button variant="outline" className="flex items-center">
               <Download className="w-4 h-4 mr-2" />
               Download Voucher
             </Button>
-            
+
             <Link to="/my-trips">
-              <Button>
-                View My Bookings
-              </Button>
+              <Button>View My Bookings</Button>
             </Link>
-            
+
             <Link to="/transfers">
-              <Button variant="outline">
-                Book Another Transfer
-              </Button>
+              <Button variant="outline">Book Another Transfer</Button>
             </Link>
           </div>
         </div>
@@ -306,11 +306,17 @@ export default function TransferConfirmation() {
             Need help? Contact our support team
           </p>
           <div className="flex items-center justify-center space-x-4 text-sm">
-            <a href="tel:+91-1234567890" className="flex items-center text-blue-600 hover:text-blue-800">
+            <a
+              href="tel:+91-1234567890"
+              className="flex items-center text-blue-600 hover:text-blue-800"
+            >
               <Phone className="w-4 h-4 mr-1" />
               +91-1234567890
             </a>
-            <a href="mailto:support@faredown.com" className="flex items-center text-blue-600 hover:text-blue-800">
+            <a
+              href="mailto:support@faredown.com"
+              className="flex items-center text-blue-600 hover:text-blue-800"
+            >
               <Mail className="w-4 h-4 mr-1" />
               support@faredown.com
             </a>

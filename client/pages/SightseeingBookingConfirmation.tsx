@@ -246,16 +246,16 @@ export default function SightseeingBookingConfirmation() {
     // Generate ticket data
     const ticketData = {
       bookingRef,
-      attractionName: attraction?.name || '',
-      location: attraction?.location || '',
+      attractionName: attraction?.name || "",
+      location: attraction?.location || "",
       visitDate: formattedVisitDate,
       selectedTime,
       guestName: `${firstName} ${lastName}`,
       email,
       adults,
       children,
-      ticketType: attraction?.ticketTypes[ticketTypeIndex]?.name || '',
-      totalPrice
+      ticketType: attraction?.ticketTypes[ticketTypeIndex]?.name || "",
+      totalPrice,
     };
 
     // Create and download ticket as JSON/text file
@@ -278,9 +278,9 @@ Total Paid: ${formatPrice(ticketData.totalPrice)}
 Please present this ticket at the venue.
 For support: support@faredown.com`;
 
-    const blob = new Blob([ticketContent], { type: 'text/plain' });
+    const blob = new Blob([ticketContent], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `faredown-ticket-${bookingRef}.txt`;
     document.body.appendChild(link);
@@ -289,7 +289,7 @@ For support: support@faredown.com`;
     URL.revokeObjectURL(url);
 
     // Show success message
-    alert('Ticket downloaded successfully! Please present this at the venue.');
+    alert("Ticket downloaded successfully! Please present this at the venue.");
   };
 
   const handleShareBooking = () => {
@@ -306,15 +306,17 @@ Booked through Faredown.com 🌟`;
 
     if (navigator.share) {
       // Use native sharing on mobile devices
-      navigator.share({
-        title: `My ${attraction?.name} Booking - Faredown`,
-        text: shareText,
-        url: shareUrl,
-      }).catch((error) => {
-        console.log('Error sharing:', error);
-        // Fallback to clipboard
-        fallbackShare();
-      });
+      navigator
+        .share({
+          title: `My ${attraction?.name} Booking - Faredown`,
+          text: shareText,
+          url: shareUrl,
+        })
+        .catch((error) => {
+          console.log("Error sharing:", error);
+          // Fallback to clipboard
+          fallbackShare();
+        });
     } else {
       // Fallback for desktop or unsupported devices
       fallbackShare();
@@ -324,17 +326,20 @@ Booked through Faredown.com 🌟`;
       const fullShareText = `${shareText}\n\nView booking: ${shareUrl}`;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(fullShareText)
+        navigator.clipboard
+          .writeText(fullShareText)
           .then(() => {
-            alert('Booking details copied to clipboard! You can now paste and share.');
+            alert(
+              "Booking details copied to clipboard! You can now paste and share.",
+            );
           })
           .catch(() => {
             // Final fallback - show text in a prompt for manual copy
-            prompt('Copy this text to share your booking:', fullShareText);
+            prompt("Copy this text to share your booking:", fullShareText);
           });
       } else {
         // Final fallback - show text in a prompt for manual copy
-        prompt('Copy this text to share your booking:', fullShareText);
+        prompt("Copy this text to share your booking:", fullShareText);
       }
     }
   };

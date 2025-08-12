@@ -250,10 +250,14 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         const safeRefreshRates = async () => {
           try {
             // Skip fetching if we're in an embedded environment or if there are known issues
-            if (typeof window !== 'undefined' &&
-                (window.location.hostname.includes('fly.dev') ||
-                 window.location.search.includes('reload='))) {
-              console.log("💰 Skipping currency fetch in embedded/reload environment, using static rates");
+            if (
+              typeof window !== "undefined" &&
+              (window.location.hostname.includes("fly.dev") ||
+                window.location.search.includes("reload="))
+            ) {
+              console.log(
+                "💰 Skipping currency fetch in embedded/reload environment, using static rates",
+              );
               return;
             }
             await refreshRates();
@@ -361,7 +365,10 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       } catch (error) {
         // Final safety net - never let errors escape from refreshRates
         // This catches any errors including browser extension interference
-        if (error instanceof Error && error.message.includes("Failed to fetch")) {
+        if (
+          error instanceof Error &&
+          error.message.includes("Failed to fetch")
+        ) {
           console.log(
             "💰 Network error (possibly browser extension interference), using static rates",
           );
@@ -379,7 +386,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
       // Absolute final safety net - never allow any error to escape
       console.log(
         "💰 Currency refresh failed at global level, using static rates:",
-        globalError
+        globalError,
       );
       setIsLoading(false);
     }
@@ -432,15 +439,18 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
             // Add a timeout to prevent hanging
             const timeoutPromise = new Promise((_, reject) =>
-              setTimeout(() => reject(new Error("Request timeout")), 5000)
+              setTimeout(() => reject(new Error("Request timeout")), 5000),
             );
 
-            return await Promise.race([fetchPromise, timeoutPromise]) as Response;
+            return (await Promise.race([
+              fetchPromise,
+              timeoutPromise,
+            ])) as Response;
           } catch (innerError: any) {
             // Handle any fetch errors - never let them bubble up
             console.log(
               "💰 Fetch failed (network/timeout/extension interference), using static rates:",
-              innerError?.message || "Unknown error"
+              innerError?.message || "Unknown error",
             );
             return null;
           }

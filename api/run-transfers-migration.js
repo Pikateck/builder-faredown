@@ -36,22 +36,38 @@ async function runTransfersMigration() {
 
     // Test the connection and validate some key tables
     try {
-      const supplierResult = await db.query("SELECT COUNT(*) FROM transfer_suppliers");
+      const supplierResult = await db.query(
+        "SELECT COUNT(*) FROM transfer_suppliers",
+      );
       console.log(`📊 Transfer suppliers: ${supplierResult.rows[0].count}`);
 
-      const pricingResult = await db.query("SELECT COUNT(*) FROM transfer_pricing_rules");
+      const pricingResult = await db.query(
+        "SELECT COUNT(*) FROM transfer_pricing_rules",
+      );
       console.log(`📊 Transfer pricing rules: ${pricingResult.rows[0].count}`);
 
-      const promoResult = await db.query("SELECT COUNT(*) FROM transfer_promos");
+      const promoResult = await db.query(
+        "SELECT COUNT(*) FROM transfer_promos",
+      );
       console.log(`📊 Transfer promos: ${promoResult.rows[0].count}`);
 
       console.log("\n✨ Transfers database schema is ready!");
       console.log("🎯 Next steps:");
-      console.log("  • API endpoints are already implemented in api/routes/transfers.js");
-      console.log("  • Repository is ready in api/repositories/transfersRepository.js");
-      console.log("  • Hotelbeds adapter is ready in api/services/adapters/hotelbedsTransfersAdapter.js");
-      console.log("  • Set HOTELBEDS_API_KEY and HOTELBEDS_SECRET environment variables");
-      console.log("  • Test the search functionality through /api/transfers/search");
+      console.log(
+        "  • API endpoints are already implemented in api/routes/transfers.js",
+      );
+      console.log(
+        "  • Repository is ready in api/repositories/transfersRepository.js",
+      );
+      console.log(
+        "  • Hotelbeds adapter is ready in api/services/adapters/hotelbedsTransfersAdapter.js",
+      );
+      console.log(
+        "  • Set HOTELBEDS_API_KEY and HOTELBEDS_SECRET environment variables",
+      );
+      console.log(
+        "  • Test the search functionality through /api/transfers/search",
+      );
     } catch (validationError) {
       console.warn("⚠️  Validation check failed:", validationError.message);
     }

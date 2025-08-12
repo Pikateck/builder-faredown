@@ -6,14 +6,16 @@ const path = require("path");
 
 async function testTransfersMigration() {
   const client = new Client({
-    host: process.env.DB_HOST || "dpg-d2086mndiees739731t0-a.singapore-postgres.render.com",
+    host:
+      process.env.DB_HOST ||
+      "dpg-d2086mndiees739731t0-a.singapore-postgres.render.com",
     port: process.env.DB_PORT || 5432,
     database: process.env.DB_NAME || "faredown_booking_db",
     user: process.env.DB_USER || "faredown_user",
     password: process.env.DB_PASSWORD || "VFEkJ35EShYkok2OfgabKLRCKIluidqb",
     ssl: {
-      rejectUnauthorized: false
-    }
+      rejectUnauthorized: false,
+    },
   });
 
   try {
@@ -31,14 +33,18 @@ async function testTransfersMigration() {
     `);
 
     console.log(`\n📋 Found ${tablesCheck.rows.length} transfer tables:`);
-    tablesCheck.rows.forEach(row => {
+    tablesCheck.rows.forEach((row) => {
       console.log(`  • ${row.table_name}`);
     });
 
     if (tablesCheck.rows.length === 0) {
       console.log("\n🚀 Running transfers schema migration...");
-      
-      const schemaPath = path.join(__dirname, "database", "transfers-schema.sql");
+
+      const schemaPath = path.join(
+        __dirname,
+        "database",
+        "transfers-schema.sql",
+      );
       const schema = fs.readFileSync(schemaPath, "utf8");
 
       // Execute the full schema
@@ -54,8 +60,10 @@ async function testTransfersMigration() {
         ORDER BY table_name
       `);
 
-      console.log(`\n📋 Created ${newTablesCheck.rows.length} transfer tables:`);
-      newTablesCheck.rows.forEach(row => {
+      console.log(
+        `\n📋 Created ${newTablesCheck.rows.length} transfer tables:`,
+      );
+      newTablesCheck.rows.forEach((row) => {
         console.log(`  ✅ ${row.table_name}`);
       });
     } else {
@@ -63,9 +71,11 @@ async function testTransfersMigration() {
     }
 
     // Test sample data
-    const pricingRules = await client.query("SELECT COUNT(*) FROM transfer_pricing_rules");
+    const pricingRules = await client.query(
+      "SELECT COUNT(*) FROM transfer_pricing_rules",
+    );
     const promos = await client.query("SELECT COUNT(*) FROM transfer_promos");
-    
+
     console.log(`\n📊 Database validation:`);
     console.log(`  • Pricing rules: ${pricingRules.rows[0].count}`);
     console.log(`  • Promo codes: ${promos.rows[0].count}`);
@@ -80,10 +90,9 @@ async function testTransfersMigration() {
     console.log("  1. Set real Hotelbeds API credentials");
     console.log("  2. Test transfer search via /api/transfers/search");
     console.log("  3. Implement frontend transfer components");
-
   } catch (error) {
     console.error("❌ Error:", error.message);
-    if (error.code === 'ENOTFOUND') {
+    if (error.code === "ENOTFOUND") {
       console.error("💡 Check database connection details");
     }
   } finally {

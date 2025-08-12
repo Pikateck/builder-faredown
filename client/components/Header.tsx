@@ -139,7 +139,8 @@ export function Header({ className }: HeaderProps) {
                 to="/transfers"
                 className={cn(
                   "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
-                  location.pathname === "/transfers" || location.pathname.startsWith("/transfer")
+                  location.pathname === "/transfers" ||
+                    location.pathname.startsWith("/transfer")
                     ? "font-semibold border-b-2 border-white"
                     : "",
                 )}

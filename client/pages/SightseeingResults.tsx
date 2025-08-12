@@ -107,7 +107,9 @@ export default function SightseeingResults() {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
   // Selection state for multiple attractions
-  const [selectedAttractions, setSelectedAttractions] = useState<Set<string>>(new Set());
+  const [selectedAttractions, setSelectedAttractions] = useState<Set<string>>(
+    new Set(),
+  );
   const [showBottomBar, setShowBottomBar] = useState(false);
 
   // Mobile detection
@@ -697,13 +699,13 @@ export default function SightseeingResults() {
     const infantsCount = parseInt(searchParams.get("infants") || "0");
 
     return Array.from(selectedAttractions).reduce((total, attractionId) => {
-      const attraction = attractions.find(a => a.id === attractionId);
+      const attraction = attractions.find((a) => a.id === attractionId);
       if (attraction) {
         const priceCalc = sightseeingService.calculatePrice(
           attraction.currentPrice,
           adultsCount,
           childrenCount,
-          infantsCount
+          infantsCount,
         );
         return total + priceCalc.totalPrice;
       }
@@ -714,7 +716,9 @@ export default function SightseeingResults() {
   // Handle bottom bar actions
   const handleBottomBarBargain = () => {
     if (selectedAttractions.size > 0) {
-      const firstSelected = attractions.find(a => selectedAttractions.has(a.id));
+      const firstSelected = attractions.find((a) =>
+        selectedAttractions.has(a.id),
+      );
       if (firstSelected) {
         handleBargainClick(firstSelected, searchParams);
       }
@@ -723,7 +727,9 @@ export default function SightseeingResults() {
 
   const handleBottomBarBookNow = () => {
     if (selectedAttractions.size > 0) {
-      const firstSelected = attractions.find(a => selectedAttractions.has(a.id));
+      const firstSelected = attractions.find((a) =>
+        selectedAttractions.has(a.id),
+      );
       if (firstSelected) {
         const params = new URLSearchParams(searchParams);
         navigate(`/sightseeing/${firstSelected.id}?${params.toString()}`);
@@ -1187,10 +1193,14 @@ export default function SightseeingResults() {
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="text-sm font-semibold text-gray-900 mb-1">
-                    {selectedAttractions.size} experience{selectedAttractions.size > 1 ? 's' : ''} selected
+                    {selectedAttractions.size} experience
+                    {selectedAttractions.size > 1 ? "s" : ""} selected
                   </div>
                   <div className="text-xs text-gray-600">
-                    {formatPrice(calculateTotalPrice() / selectedAttractions.size)} per experience
+                    {formatPrice(
+                      calculateTotalPrice() / selectedAttractions.size,
+                    )}{" "}
+                    per experience
                   </div>
                 </div>
                 <div className="text-right">

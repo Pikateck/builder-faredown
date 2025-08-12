@@ -528,7 +528,9 @@ export default function Hotels() {
               to="/sightseeing"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
               onClick={() =>
-                console.log("Sightseeing button clicked - navigating to /sightseeing")
+                console.log(
+                  "Sightseeing button clicked - navigating to /sightseeing",
+                )
               }
             >
               <Camera className="w-5 h-5 text-gray-400" />

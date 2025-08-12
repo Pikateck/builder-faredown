@@ -79,21 +79,28 @@ class TransfersMigrationRunner {
 
     for (const table of requiredTables) {
       try {
-        const result = await this.client.query(`
+        const result = await this.client.query(
+          `
           SELECT EXISTS (
             SELECT FROM information_schema.tables 
             WHERE table_schema = 'public' 
             AND table_name = $1
           )
-        `, [table]);
+        `,
+          [table],
+        );
 
         if (!result.rows[0].exists) {
-          throw new Error(`Required table '${table}' does not exist. Please run base schema migration first.`);
+          throw new Error(
+            `Required table '${table}' does not exist. Please run base schema migration first.`,
+          );
         }
         console.log(`  ✅ ${table} table exists`);
       } catch (error) {
         console.error(`  ❌ ${table} table check failed:`, error.message);
-        this.validationResults.errors.push(`Prerequisite: ${table} table missing`);
+        this.validationResults.errors.push(
+          `Prerequisite: ${table} table missing`,
+        );
         throw error;
       }
     }
@@ -129,7 +136,7 @@ class TransfersMigrationRunner {
 
       for (const table of requiredTables) {
         if (existingTables.includes(table)) {
-          const tableInfo = result.rows.find(row => row.table_name === table);
+          const tableInfo = result.rows.find((row) => row.table_name === table);
           console.log(`  ✅ ${table} (${tableInfo.column_count} columns)`);
           this.validationResults.tables.push({
             name: table,
@@ -181,7 +188,7 @@ class TransfersMigrationRunner {
         "idx_transfer_promos_is_active",
       ];
 
-      const existingIndexes = result.rows.map(row => row.indexname);
+      const existingIndexes = result.rows.map((row) => row.indexname);
 
       for (const expectedIndex of expectedIndexes) {
         if (existingIndexes.includes(expectedIndex)) {
@@ -192,7 +199,9 @@ class TransfersMigrationRunner {
           });
         } else {
           console.log(`  ⚠️  ${expectedIndex} - NOT FOUND`);
-          this.validationResults.errors.push(`Index: ${expectedIndex} not created`);
+          this.validationResults.errors.push(
+            `Index: ${expectedIndex} not created`,
+          );
         }
       }
 
@@ -220,7 +229,7 @@ class TransfersMigrationRunner {
         ORDER BY table_name
       `);
 
-      const existingViews = result.rows.map(row => row.table_name);
+      const existingViews = result.rows.map((row) => row.table_name);
       console.log(`  Found ${existingViews.length} transfers views`);
 
       for (const view of expectedViews) {
@@ -269,7 +278,7 @@ class TransfersMigrationRunner {
         "update_transfer_promos_updated_at",
       ];
 
-      const existingTriggers = result.rows.map(row => row.trigger_name);
+      const existingTriggers = result.rows.map((row) => row.trigger_name);
 
       for (const trigger of expectedTriggers) {
         if (existingTriggers.includes(trigger)) {
@@ -337,9 +346,10 @@ class TransfersMigrationRunner {
 
   generateValidationReport() {
     console.log("📊 TRANSFERS MIGRATION VALIDATION REPORT");
-    console.log("=" .repeat(50));
+    console.log("=".repeat(50));
 
-    const { tables, indexes, views, triggers, sample_data, errors } = this.validationResults;
+    const { tables, indexes, views, triggers, sample_data, errors } =
+      this.validationResults;
 
     // Summary
     console.log(`\n📈 SUMMARY:`);
@@ -377,7 +387,7 @@ class TransfersMigrationRunner {
       console.log(`Please review and fix the errors above.`);
     }
 
-    console.log("\n" + "=" .repeat(50));
+    console.log("\n" + "=".repeat(50));
   }
 }
 

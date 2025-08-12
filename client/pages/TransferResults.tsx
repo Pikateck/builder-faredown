@@ -98,7 +98,9 @@ export default function TransferResults() {
   // Filter and sort states
   const [showFilters, setShowFilters] = useState(true);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000]);
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string[]>
+  >({});
   const [sortBy, setSortBy] = useState("price_low");
 
   // Mobile states
@@ -107,56 +109,83 @@ export default function TransferResults() {
 
   // Bargain modal states
   const [showBargainModal, setShowBargainModal] = useState(false);
-  const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(null);
+  const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(
+    null,
+  );
 
   // Available filters based on current data
   const availableFilters = useMemo(() => {
-    const vehicleTypes = [...new Set(transfers.map(t => t.vehicleType))];
-    const vehicleClasses = [...new Set(transfers.map(t => t.vehicleClass))];
-    const providers = [...new Set(transfers.map(t => t.providerName))];
-    const maxCapacities = [...new Set(transfers.map(t => t.maxPassengers))].sort((a, b) => a - b);
+    const vehicleTypes = [...new Set(transfers.map((t) => t.vehicleType))];
+    const vehicleClasses = [...new Set(transfers.map((t) => t.vehicleClass))];
+    const providers = [...new Set(transfers.map((t) => t.providerName))];
+    const maxCapacities = [
+      ...new Set(transfers.map((t) => t.maxPassengers)),
+    ].sort((a, b) => a - b);
 
     return {
       vehicleType: vehicleTypes,
       vehicleClass: vehicleClasses,
       provider: providers,
       capacity: maxCapacities,
-      features: ["meet_greet", "flight_monitoring", "free_waiting", "professional_driver", "wifi", "air_conditioning"],
+      features: [
+        "meet_greet",
+        "flight_monitoring",
+        "free_waiting",
+        "professional_driver",
+        "wifi",
+        "air_conditioning",
+      ],
     };
   }, [transfers]);
 
   // Filter transfers based on selected filters and price range
   const filteredTransfers = useMemo(() => {
-    let filtered = transfers.filter(transfer => {
+    let filtered = transfers.filter((transfer) => {
       // Price range filter
-      if (transfer.pricing.totalPrice < priceRange[0] || transfer.pricing.totalPrice > priceRange[1]) {
+      if (
+        transfer.pricing.totalPrice < priceRange[0] ||
+        transfer.pricing.totalPrice > priceRange[1]
+      ) {
         return false;
       }
 
       // Vehicle type filter
-      if (selectedFilters.vehicleType?.length && !selectedFilters.vehicleType.includes(transfer.vehicleType)) {
+      if (
+        selectedFilters.vehicleType?.length &&
+        !selectedFilters.vehicleType.includes(transfer.vehicleType)
+      ) {
         return false;
       }
 
       // Vehicle class filter
-      if (selectedFilters.vehicleClass?.length && !selectedFilters.vehicleClass.includes(transfer.vehicleClass)) {
+      if (
+        selectedFilters.vehicleClass?.length &&
+        !selectedFilters.vehicleClass.includes(transfer.vehicleClass)
+      ) {
         return false;
       }
 
       // Provider filter
-      if (selectedFilters.provider?.length && !selectedFilters.provider.includes(transfer.providerName)) {
+      if (
+        selectedFilters.provider?.length &&
+        !selectedFilters.provider.includes(transfer.providerName)
+      ) {
         return false;
       }
 
       // Capacity filter
       if (selectedFilters.capacity?.length) {
-        const capacityMatch = selectedFilters.capacity.some(cap => transfer.maxPassengers >= parseInt(cap));
+        const capacityMatch = selectedFilters.capacity.some(
+          (cap) => transfer.maxPassengers >= parseInt(cap),
+        );
         if (!capacityMatch) return false;
       }
 
       // Features filter
       if (selectedFilters.features?.length) {
-        const featuresMatch = selectedFilters.features.every(feature => transfer.features.includes(feature));
+        const featuresMatch = selectedFilters.features.every((feature) =>
+          transfer.features.includes(feature),
+        );
         if (!featuresMatch) return false;
       }
 
@@ -178,7 +207,9 @@ export default function TransferResults() {
         filtered.sort((a, b) => b.maxPassengers - a.maxPassengers);
         break;
       case "rating":
-        filtered.sort((a, b) => (b.providerRating || 0) - (a.providerRating || 0));
+        filtered.sort(
+          (a, b) => (b.providerRating || 0) - (a.providerRating || 0),
+        );
         break;
       default:
         // Keep original order (recommended)
@@ -235,13 +266,15 @@ export default function TransferResults() {
         }
 
         const data = await response.json();
-        
+
         if (data.success) {
           setTransfers(data.data.transfers || []);
-          
+
           // Set initial price range based on results
           if (data.data.transfers.length > 0) {
-            const prices = data.data.transfers.map((t: Transfer) => t.pricing.totalPrice);
+            const prices = data.data.transfers.map(
+              (t: Transfer) => t.pricing.totalPrice,
+            );
             const minPrice = Math.min(...prices);
             const maxPrice = Math.max(...prices);
             setPriceRange([minPrice, maxPrice]);
@@ -250,7 +283,9 @@ export default function TransferResults() {
           throw new Error(data.error || "Failed to load transfers");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load transfers");
+        setError(
+          err instanceof Error ? err.message : "Failed to load transfers",
+        );
         // Load sample data for demo
         loadSampleData();
       } finally {
@@ -259,7 +294,19 @@ export default function TransferResults() {
     };
 
     loadTransfers();
-  }, [pickupLocation, dropoffLocation, pickupDate, pickupTime, returnDate, returnTime, adults, children, infants, vehicleType, isRoundTrip]);
+  }, [
+    pickupLocation,
+    dropoffLocation,
+    pickupDate,
+    pickupTime,
+    returnDate,
+    returnTime,
+    adults,
+    children,
+    infants,
+    vehicleType,
+    isRoundTrip,
+  ]);
 
   // Load sample data for demo
   const loadSampleData = () => {
@@ -289,7 +336,11 @@ export default function TransferResults() {
           savings: 0,
         },
         features: ["meet_greet", "professional_driver", "free_waiting"],
-        inclusions: ["Professional driver", "Meet & greet service", "60 minutes free waiting"],
+        inclusions: [
+          "Professional driver",
+          "Meet & greet service",
+          "60 minutes free waiting",
+        ],
         exclusions: ["Tolls", "Parking fees"],
         providerName: "Mumbai Transfers Ltd",
         providerRating: 4.3,
@@ -322,8 +373,20 @@ export default function TransferResults() {
           currency: "INR",
           savings: 0,
         },
-        features: ["meet_greet", "professional_driver", "free_waiting", "wifi", "air_conditioning"],
-        inclusions: ["Professional driver", "Meet & greet service", "Free WiFi", "Air conditioning", "90 minutes free waiting"],
+        features: [
+          "meet_greet",
+          "professional_driver",
+          "free_waiting",
+          "wifi",
+          "air_conditioning",
+        ],
+        inclusions: [
+          "Professional driver",
+          "Meet & greet service",
+          "Free WiFi",
+          "Air conditioning",
+          "90 minutes free waiting",
+        ],
         exclusions: ["Tolls", "Parking fees"],
         providerName: "Premium Transfers",
         providerRating: 4.7,
@@ -356,8 +419,21 @@ export default function TransferResults() {
           currency: "INR",
           savings: 0,
         },
-        features: ["meet_greet", "professional_driver", "free_waiting", "wifi", "air_conditioning", "flight_monitoring"],
-        inclusions: ["Professional chauffeur", "VIP service", "Flight monitoring", "Complimentary refreshments", "120 minutes free waiting"],
+        features: [
+          "meet_greet",
+          "professional_driver",
+          "free_waiting",
+          "wifi",
+          "air_conditioning",
+          "flight_monitoring",
+        ],
+        inclusions: [
+          "Professional chauffeur",
+          "VIP service",
+          "Flight monitoring",
+          "Complimentary refreshments",
+          "120 minutes free waiting",
+        ],
         exclusions: ["Tolls", "Parking fees"],
         providerName: "Luxury Chauffeurs",
         providerRating: 4.9,
@@ -369,26 +445,30 @@ export default function TransferResults() {
     ];
 
     setTransfers(sampleTransfers);
-    
+
     // Set price range
-    const prices = sampleTransfers.map(t => t.pricing.totalPrice);
+    const prices = sampleTransfers.map((t) => t.pricing.totalPrice);
     setPriceRange([Math.min(...prices), Math.max(...prices)]);
   };
 
-  const handleFilterChange = (filterType: string, value: string, checked: boolean) => {
-    setSelectedFilters(prev => {
+  const handleFilterChange = (
+    filterType: string,
+    value: string,
+    checked: boolean,
+  ) => {
+    setSelectedFilters((prev) => {
       const current = prev[filterType] || [];
       if (checked) {
         return { ...prev, [filterType]: [...current, value] };
       } else {
-        return { ...prev, [filterType]: current.filter(v => v !== value) };
+        return { ...prev, [filterType]: current.filter((v) => v !== value) };
       }
     });
   };
 
   const clearFilters = () => {
     setSelectedFilters({});
-    const prices = transfers.map(t => t.pricing.totalPrice);
+    const prices = transfers.map((t) => t.pricing.totalPrice);
     if (prices.length > 0) {
       setPriceRange([Math.min(...prices), Math.max(...prices)]);
     }
@@ -474,7 +554,7 @@ export default function TransferResults() {
                 <div className="h-96 bg-gray-200 rounded"></div>
               </div>
               <div className="lg:col-span-3 space-y-4">
-                {[1, 2, 3].map(i => (
+                {[1, 2, 3].map((i) => (
                   <div key={i} className="h-32 bg-gray-200 rounded"></div>
                 ))}
               </div>
@@ -490,12 +570,7 @@ export default function TransferResults() {
       <Header />
 
       {/* Error Banner */}
-      {error && (
-        <ErrorBanner
-          message={error}
-          onClose={() => setError("")}
-        />
-      )}
+      {error && <ErrorBanner message={error} onClose={() => setError("")} />}
 
       {/* Search Form at Top */}
       <div className="bg-white border-b border-gray-200 py-2">
@@ -527,10 +602,12 @@ export default function TransferResults() {
               </div>
               <div className="flex items-center space-x-1">
                 <Users className="w-4 h-4" />
-                <span>{passengers} passenger{parseInt(passengers) !== 1 ? 's' : ''}</span>
+                <span>
+                  {passengers} passenger{parseInt(passengers) !== 1 ? "s" : ""}
+                </span>
               </div>
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -547,10 +624,12 @@ export default function TransferResults() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Filters Sidebar */}
-          <div className={cn(
-            "lg:col-span-1",
-            isMobile && !showFilters && "hidden"
-          )}>
+          <div
+            className={cn(
+              "lg:col-span-1",
+              isMobile && !showFilters && "hidden",
+            )}
+          >
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">Filters</h3>
@@ -570,8 +649,14 @@ export default function TransferResults() {
                 <Slider
                   value={priceRange}
                   onValueChange={setPriceRange}
-                  max={Math.max(...transfers.map(t => t.pricing.totalPrice), 10000)}
-                  min={Math.min(...transfers.map(t => t.pricing.totalPrice), 0)}
+                  max={Math.max(
+                    ...transfers.map((t) => t.pricing.totalPrice),
+                    10000,
+                  )}
+                  min={Math.min(
+                    ...transfers.map((t) => t.pricing.totalPrice),
+                    0,
+                  )}
                   step={100}
                   className="mb-2"
                 />
@@ -586,11 +671,15 @@ export default function TransferResults() {
                 <div className="mb-4">
                   <h4 className="font-medium mb-2">Vehicle Type</h4>
                   <div className="space-y-2">
-                    {availableFilters.vehicleType.map(type => (
+                    {availableFilters.vehicleType.map((type) => (
                       <label key={type} className="flex items-center space-x-2">
                         <Checkbox
-                          checked={selectedFilters.vehicleType?.includes(type) || false}
-                          onCheckedChange={(checked) => handleFilterChange('vehicleType', type, !!checked)}
+                          checked={
+                            selectedFilters.vehicleType?.includes(type) || false
+                          }
+                          onCheckedChange={(checked) =>
+                            handleFilterChange("vehicleType", type, !!checked)
+                          }
                         />
                         <span className="text-sm capitalize">{type}</span>
                       </label>
@@ -604,11 +693,15 @@ export default function TransferResults() {
                 <div className="mb-4">
                   <h4 className="font-medium mb-2">Vehicle Class</h4>
                   <div className="space-y-2">
-                    {availableFilters.vehicleClass.map(cls => (
+                    {availableFilters.vehicleClass.map((cls) => (
                       <label key={cls} className="flex items-center space-x-2">
                         <Checkbox
-                          checked={selectedFilters.vehicleClass?.includes(cls) || false}
-                          onCheckedChange={(checked) => handleFilterChange('vehicleClass', cls, !!checked)}
+                          checked={
+                            selectedFilters.vehicleClass?.includes(cls) || false
+                          }
+                          onCheckedChange={(checked) =>
+                            handleFilterChange("vehicleClass", cls, !!checked)
+                          }
                         />
                         <span className="text-sm capitalize">{cls}</span>
                       </label>
@@ -621,14 +714,23 @@ export default function TransferResults() {
               <div className="mb-4">
                 <h4 className="font-medium mb-2">Features</h4>
                 <div className="space-y-2">
-                  {availableFilters.features.map(feature => (
-                    <label key={feature} className="flex items-center space-x-2">
+                  {availableFilters.features.map((feature) => (
+                    <label
+                      key={feature}
+                      className="flex items-center space-x-2"
+                    >
                       <Checkbox
-                        checked={selectedFilters.features?.includes(feature) || false}
-                        onCheckedChange={(checked) => handleFilterChange('features', feature, !!checked)}
+                        checked={
+                          selectedFilters.features?.includes(feature) || false
+                        }
+                        onCheckedChange={(checked) =>
+                          handleFilterChange("features", feature, !!checked)
+                        }
                       />
                       <span className="text-sm">
-                        {feature.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        {feature
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (l) => l.toUpperCase())}
                       </span>
                     </label>
                   ))}
@@ -642,9 +744,10 @@ export default function TransferResults() {
             {/* Results Header */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">
-                {filteredTransfers.length} transfer{filteredTransfers.length !== 1 ? 's' : ''} found
+                {filteredTransfers.length} transfer
+                {filteredTransfers.length !== 1 ? "s" : ""} found
               </h2>
-              
+
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-600">Sort by:</span>
                 <select
@@ -665,7 +768,10 @@ export default function TransferResults() {
             {/* Transfer Cards */}
             <div className="space-y-3">
               {filteredTransfers.map((transfer) => (
-                <div key={transfer.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                <div
+                  key={transfer.id}
+                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+                >
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                     {/* Left Section - Transfer Details */}
                     <div className="flex-1 min-w-0">
@@ -689,7 +795,9 @@ export default function TransferResults() {
                           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm text-gray-600 mb-2">
                             <div className="flex items-center space-x-1">
                               <Users className="w-4 h-4" />
-                              <span>Up to {transfer.maxPassengers} passengers</span>
+                              <span>
+                                Up to {transfer.maxPassengers} passengers
+                              </span>
                             </div>
                             <div className="flex items-center space-x-1">
                               <Luggage className="w-4 h-4" />
@@ -697,7 +805,9 @@ export default function TransferResults() {
                             </div>
                             <div className="flex items-center space-x-1">
                               <Clock className="w-4 h-4" />
-                              <span>{formatDuration(transfer.estimatedDuration)}</span>
+                              <span>
+                                {formatDuration(transfer.estimatedDuration)}
+                              </span>
                             </div>
                             {transfer.distance && (
                               <div className="flex items-center space-x-1">
@@ -710,10 +820,15 @@ export default function TransferResults() {
                           {/* Features */}
                           <div className="flex flex-wrap gap-2 mb-2">
                             {transfer.features.slice(0, 4).map((feature) => (
-                              <div key={feature} className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                              <div
+                                key={feature}
+                                className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded"
+                              >
                                 {getFeatureIcon(feature)}
                                 <span>
-                                  {feature.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                  {feature
+                                    .replace(/_/g, " ")
+                                    .replace(/\b\w/g, (l) => l.toUpperCase())}
                                 </span>
                               </div>
                             ))}
@@ -726,15 +841,24 @@ export default function TransferResults() {
 
                           {/* Provider Info */}
                           <div className="flex items-center space-x-3 text-sm">
-                            <span className="text-gray-600">By {transfer.providerName}</span>
+                            <span className="text-gray-600">
+                              By {transfer.providerName}
+                            </span>
                             {transfer.providerRating && (
                               <div className="flex items-center space-x-1">
                                 <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                                <span className="text-gray-600">{transfer.providerRating}</span>
+                                <span className="text-gray-600">
+                                  {transfer.providerRating}
+                                </span>
                               </div>
                             )}
-                            <Badge variant="outline" className="text-xs text-green-600 border-green-200">
-                              {transfer.confirmationType === "INSTANT" ? "Instant Confirmation" : "Confirmation Required"}
+                            <Badge
+                              variant="outline"
+                              className="text-xs text-green-600 border-green-200"
+                            >
+                              {transfer.confirmationType === "INSTANT"
+                                ? "Instant Confirmation"
+                                : "Confirmation Required"}
                             </Badge>
                           </div>
                         </div>
@@ -766,7 +890,11 @@ export default function TransferResults() {
                       {/* Action Buttons */}
                       <div className="space-y-2">
                         <Button
-                          onClick={() => navigate(`/transfer-details/${transfer.id}?price=${transfer.pricing.totalPrice}&from=${encodeURIComponent(transfer.pickupLocation)}&to=${encodeURIComponent(transfer.dropoffLocation)}&vehicle=${encodeURIComponent(transfer.vehicleName)}`)}
+                          onClick={() =>
+                            navigate(
+                              `/transfer-details/${transfer.id}?price=${transfer.pricing.totalPrice}&from=${encodeURIComponent(transfer.pickupLocation)}&to=${encodeURIComponent(transfer.dropoffLocation)}&vehicle=${encodeURIComponent(transfer.vehicleName)}`,
+                            )
+                          }
                           className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
                           View Details
@@ -782,7 +910,8 @@ export default function TransferResults() {
 
                       {/* Cancellation Policy */}
                       <div className="text-xs text-gray-500 mt-2">
-                        Free cancellation up to {transfer.cancellationPolicy?.freeUntil || "24h"}
+                        Free cancellation up to{" "}
+                        {transfer.cancellationPolicy?.freeUntil || "24h"}
                       </div>
                     </div>
                   </div>
@@ -819,10 +948,18 @@ export default function TransferResults() {
           <div className="flex items-center justify-between px-4 py-3">
             <div>
               <div className="text-sm font-semibold">
-                {filteredTransfers.length} transfer{filteredTransfers.length !== 1 ? 's' : ''}
+                {filteredTransfers.length} transfer
+                {filteredTransfers.length !== 1 ? "s" : ""}
               </div>
               <div className="text-xs text-gray-600">
-                From {filteredTransfers.length > 0 ? formatPrice(Math.min(...filteredTransfers.map(t => t.pricing.totalPrice))) : "N/A"}
+                From{" "}
+                {filteredTransfers.length > 0
+                  ? formatPrice(
+                      Math.min(
+                        ...filteredTransfers.map((t) => t.pricing.totalPrice),
+                      ),
+                    )
+                  : "N/A"}
               </div>
             </div>
             <Button
@@ -846,7 +983,8 @@ export default function TransferResults() {
                 id: selectedTransfer.id,
                 name: selectedTransfer.vehicleName,
                 description: `${selectedTransfer.vehicleClass.charAt(0).toUpperCase() + selectedTransfer.vehicleClass.slice(1)} transfer for up to ${selectedTransfer.maxPassengers} passengers`,
-                image: selectedTransfer.vehicleImage || "/api/placeholder/120/80",
+                image:
+                  selectedTransfer.vehicleImage || "/api/placeholder/120/80",
                 marketPrice: selectedTransfer.pricing.totalPrice * 1.2, // Show higher market price
                 totalPrice: selectedTransfer.pricing.totalPrice,
                 total: selectedTransfer.pricing.totalPrice,
@@ -861,11 +999,12 @@ export default function TransferResults() {
         hotel={
           selectedTransfer
             ? {
-                id: parseInt(selectedTransfer.id.replace(/\D/g, '') || "1"),
+                id: parseInt(selectedTransfer.id.replace(/\D/g, "") || "1"),
                 name: `${selectedTransfer.vehicleClass.charAt(0).toUpperCase() + selectedTransfer.vehicleClass.slice(1)} - ${selectedTransfer.vehicleType.charAt(0).toUpperCase() + selectedTransfer.vehicleType.slice(1)}`,
                 location: `${pickupLocation} → ${dropoffLocation}`,
                 rating: selectedTransfer.providerRating || 4.5,
-                image: selectedTransfer.vehicleImage || "/api/placeholder/120/80",
+                image:
+                  selectedTransfer.vehicleImage || "/api/placeholder/120/80",
               }
             : null
         }

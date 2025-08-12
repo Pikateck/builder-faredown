@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Link,
+  useSearchParams,
+} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,10 +34,10 @@ export default function TransferDetails() {
   const [userName, setUserName] = useState("");
 
   // Extract parameters from URL
-  const price = searchParams.get('price') || '1200';
-  const fromLocation = searchParams.get('from') || 'Mumbai Airport (BOM)';
-  const toLocation = searchParams.get('to') || 'Hotel Taj Mahal Palace';
-  const vehicleName = searchParams.get('vehicle') || 'Sedan - Economy';
+  const price = searchParams.get("price") || "1200";
+  const fromLocation = searchParams.get("from") || "Mumbai Airport (BOM)";
+  const toLocation = searchParams.get("to") || "Hotel Taj Mahal Palace";
+  const vehicleName = searchParams.get("vehicle") || "Sedan - Economy";
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
@@ -41,7 +46,7 @@ export default function TransferDetails() {
 
   // Transfer data based on URL parameters
   const transfer = {
-    id: id || '1',
+    id: id || "1",
     type: "Economy",
     vehicle: "Sedan",
     vehicleName: vehicleName,
@@ -54,7 +59,7 @@ export default function TransferDetails() {
     image: "/api/placeholder/120/80",
     from: fromLocation,
     to: toLocation,
-    description: `Experience comfortable and reliable transport with our ${vehicleName}. Professional service with meet & greet, professional driver, free waiting.`
+    description: `Experience comfortable and reliable transport with our ${vehicleName}. Professional service with meet & greet, professional driver, free waiting.`,
   };
 
   return (
@@ -225,7 +230,9 @@ export default function TransferDetails() {
             </h1>
             <p className="text-gray-600 flex items-center space-x-2 mt-1">
               <MapPin className="w-4 h-4" />
-              <span>{transfer.from} → {transfer.to}</span>
+              <span>
+                {transfer.from} → {transfer.to}
+              </span>
             </p>
           </div>
           <Button
@@ -283,9 +290,7 @@ export default function TransferDetails() {
                       {feature.includes("Driver") && (
                         <User className="w-3 h-3" />
                       )}
-                      {feature.includes("WiFi") && (
-                        <Wifi className="w-3 h-3" />
-                      )}
+                      {feature.includes("WiFi") && <Wifi className="w-3 h-3" />}
                       {feature.includes("VIP") && (
                         <Shield className="w-3 h-3" />
                       )}
@@ -315,13 +320,13 @@ export default function TransferDetails() {
                       rateKey: "sample_rate_1",
                       pickupLocation: transfer.from,
                       dropoffLocation: transfer.to,
-                      pickupDate: new Date().toISOString().split('T')[0],
+                      pickupDate: new Date().toISOString().split("T")[0],
                       pickupTime: "10:00",
                       adults: "2",
                       children: "0",
                       infants: "0",
                       price: transfer.price.toString(),
-                      vehicleName: transfer.vehicleName
+                      vehicleName: transfer.vehicleName,
                     });
                     navigate(`/transfer-booking?${bookingParams.toString()}`);
                   }}
@@ -335,13 +340,17 @@ export default function TransferDetails() {
 
           {/* Description */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <h4 className="text-lg font-semibold text-gray-900 mb-3">Description</h4>
+            <h4 className="text-lg font-semibold text-gray-900 mb-3">
+              Description
+            </h4>
             <p className="text-gray-600">{transfer.description}</p>
           </div>
 
           {/* Route Information */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <h4 className="text-lg font-semibold text-gray-900 mb-3">Route Information</h4>
+            <h4 className="text-lg font-semibold text-gray-900 mb-3">
+              Route Information
+            </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm font-medium text-gray-700">Pickup</p>
@@ -353,7 +362,9 @@ export default function TransferDetails() {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-700">Distance</p>
-                <p className="text-gray-600">33 km • Duration: {transfer.duration}</p>
+                <p className="text-gray-600">
+                  33 km • Duration: {transfer.duration}
+                </p>
               </div>
             </div>
           </div>
