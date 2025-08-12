@@ -593,6 +593,15 @@ export default function Hotels() {
                 >
                   <span>Sightseeing</span>
                 </Link>
+                <Link
+                  to="/?tab=transfers"
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
+                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
+                >
+                  <span>Transfers</span>
+                </Link>
               </nav>
 
               <div className="flex items-center space-x-2 md:space-x-6">
