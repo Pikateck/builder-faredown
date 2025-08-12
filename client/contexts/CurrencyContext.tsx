@@ -414,17 +414,24 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
         // Use a more defensive approach to handle browser extension interference
         const safeFetch = async () => {
           try {
-            return await fetch(apiUrl, {
+            const fetchPromise = fetch(apiUrl, {
               signal: controller.signal,
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
             });
+
+            // Add a timeout to prevent hanging
+            const timeoutPromise = new Promise((_, reject) =>
+              setTimeout(() => reject(new Error("Request timeout")), 5000)
+            );
+
+            return await Promise.race([fetchPromise, timeoutPromise]) as Response;
           } catch (innerError: any) {
             // Handle any fetch errors - never let them bubble up
             console.log(
-              "💰 Fetch failed (network/extension interference), using static rates:",
+              "💰 Fetch failed (network/timeout/extension interference), using static rates:",
               innerError?.message || "Unknown error"
             );
             return null;
