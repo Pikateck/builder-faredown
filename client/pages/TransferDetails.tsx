@@ -222,7 +222,7 @@ export default function TransferDetails() {
           </div>
           <Button
             variant="outline"
-            onClick={() => navigate("/transfers")}
+            onClick={() => navigate("/transfer-results")}
             className="text-blue-600 border-blue-600 hover:bg-blue-50"
           >
             ← Back to Results
