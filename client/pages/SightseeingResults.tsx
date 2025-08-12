@@ -964,6 +964,8 @@ export default function SightseeingResults() {
                     }
                     searchParams={searchParams}
                     className="transition-all hover:shadow-md"
+                    isSelected={selectedAttractions.has(attraction.id)}
+                    onSelect={handleAttractionSelect}
                   />
                 ))}
               </div>
