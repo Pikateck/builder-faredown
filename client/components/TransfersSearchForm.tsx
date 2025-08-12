@@ -419,6 +419,10 @@ export function TransfersSearchForm() {
                             setAirportInputValue(airport);
                             setIsAirportUserTyping(true);
                           }
+                          // Show popular destinations on focus
+                          if (airportSuggestions.length === 0) {
+                            searchDestinations("", "airport");
+                          }
                         }}
                         onMouseDown={() => {
                           if (!isAirportOpen) {
