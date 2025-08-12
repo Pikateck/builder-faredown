@@ -117,7 +117,7 @@ export default function TransferBooking() {
     isRoundTrip
   };
 
-  const currentTransfer = activeTab === 'outbound' ? transferData.outbound : transferData.return;
+  const currentTransfer = activeTab === 'outbound' ? transferData.outbound : (transferData.return || transferData.outbound);
   const totalPrice = isRoundTrip && transferData.return ? transferData.outbound.price + transferData.return.price : transferData.outbound.price;
 
   const handleSignOut = () => {
@@ -476,7 +476,7 @@ export default function TransferBooking() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4 mr-2" />
-                    Book Now - ₹{totalPrice}
+                    Book Now - ��{totalPrice}
                   </>
                 )}
               </Button>
