@@ -217,7 +217,7 @@ export function TransfersSearchForm() {
   };
 
   return (
-    <div className="mx-auto">
+    <div>
       {showError && (
         <ErrorBanner
           message={errorMessage}
