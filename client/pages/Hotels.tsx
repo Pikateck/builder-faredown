@@ -49,6 +49,7 @@ import {
   Twitter,
   BookOpen,
   Camera,
+  Car,
 } from "lucide-react";
 import {
   MobileCityDropdown,
