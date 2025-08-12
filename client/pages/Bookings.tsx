@@ -752,7 +752,9 @@ const Bookings: React.FC = () => {
                   className={`w-16 h-16 mx-auto mb-2 rounded-full flex items-center justify-center ${
                     selectedBooking.type === "flight"
                       ? "bg-blue-100"
-                      : "bg-amber-100"
+                      : selectedBooking.type === "hotel"
+                      ? "bg-amber-100"
+                      : "bg-purple-100"
                   }`}
                 >
                   {selectedBooking.type === "flight" ? (
