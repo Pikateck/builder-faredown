@@ -51,7 +51,7 @@ export default function TransferDetails() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header - Same as original Transfers page */}
       <header className="bg-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -95,10 +95,64 @@ export default function TransferDetails() {
                   <span>INR</span>
                   <ChevronDown className="w-3 h-3" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent className="max-h-64 overflow-y-auto">
                   <DropdownMenuItem>₹ INR - Indian Rupee</DropdownMenuItem>
                   <DropdownMenuItem>$ USD - US Dollar</DropdownMenuItem>
                   <DropdownMenuItem>€ EUR - Euro</DropdownMenuItem>
+                  <DropdownMenuItem>£ GBP - British Pound</DropdownMenuItem>
+                  <DropdownMenuItem>¥ JPY - Japanese Yen</DropdownMenuItem>
+                  <DropdownMenuItem>C$ CAD - Canadian Dollar</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    A$ AUD - Australian Dollar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>CHF - Swiss Franc</DropdownMenuItem>
+                  <DropdownMenuItem>¥ CNY - Chinese Yuan</DropdownMenuItem>
+                  <DropdownMenuItem>kr SEK - Swedish Krona</DropdownMenuItem>
+                  <DropdownMenuItem>kr NOK - Norwegian Krone</DropdownMenuItem>
+                  <DropdownMenuItem>kr DKK - Danish Krone</DropdownMenuItem>
+                  <DropdownMenuItem>₩ KRW - South Korean Won</DropdownMenuItem>
+                  <DropdownMenuItem>S$ SGD - Singapore Dollar</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    HK$ HKD - Hong Kong Dollar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    NZ$ NZD - New Zealand Dollar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>₽ RUB - Russian Ruble</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    R ZAR - South African Rand
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>₺ TRY - Turkish Lira</DropdownMenuItem>
+                  <DropdownMenuItem>R$ BRL - Brazilian Real</DropdownMenuItem>
+                  <DropdownMenuItem>Mex$ MXN - Mexican Peso</DropdownMenuItem>
+                  <DropdownMenuItem>₪ ILS - Israeli Shekel</DropdownMenuItem>
+                  <DropdownMenuItem>₦ NGN - Nigerian Naira</DropdownMenuItem>
+                  <DropdownMenuItem>EGP - Egyptian Pound</DropdownMenuItem>
+                  <DropdownMenuItem>₨ PKR - Pakistani Rupee</DropdownMenuItem>
+                  <DropdownMenuItem>৳ BDT - Bangladeshi Taka</DropdownMenuItem>
+                  <DropdownMenuItem>₨ LKR - Sri Lankan Rupee</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    Rp IDR - Indonesian Rupiah
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>₱ PHP - Philippine Peso</DropdownMenuItem>
+                  <DropdownMenuItem>₫ VND - Vietnamese Dong</DropdownMenuItem>
+                  <DropdownMenuItem>฿ THB - Thai Baht</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    RM MYR - Malaysian Ringgit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>AED - UAE Dirham</DropdownMenuItem>
+                  <DropdownMenuItem>SAR - Saudi Riyal</DropdownMenuItem>
+                  <DropdownMenuItem>QAR - Qatari Riyal</DropdownMenuItem>
+                  <DropdownMenuItem>KWD - Kuwaiti Dinar</DropdownMenuItem>
+                  <DropdownMenuItem>BHD - Bahraini Dinar</DropdownMenuItem>
+                  <DropdownMenuItem>OMR - Omani Rial</DropdownMenuItem>
+                  <DropdownMenuItem>zł PLN - Polish Zloty</DropdownMenuItem>
+                  <DropdownMenuItem>Kč CZK - Czech Koruna</DropdownMenuItem>
+                  <DropdownMenuItem>Ft HUF - Hungarian Forint</DropdownMenuItem>
+                  <DropdownMenuItem>RON - Romanian Leu</DropdownMenuItem>
+                  <DropdownMenuItem>BGN - Bulgarian Lev</DropdownMenuItem>
+                  <DropdownMenuItem>kn HRK - Croatian Kuna</DropdownMenuItem>
+                  <DropdownMenuItem>₴ UAH - Ukrainian Hryvnia</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
