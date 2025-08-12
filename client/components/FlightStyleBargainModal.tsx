@@ -417,7 +417,7 @@ export function FlightStyleBargainModal({
                   </p>
                   <p className="text-sm text-gray-600">
                     Tell me your target price and I'll negotiate with the{" "}
-                    {type === "sightseeing" ? "venue" : "hotel"}!
+                    {type === "sightseeing" ? "venue" : type === "transfer" ? "transfer provider" : "hotel"}!
                   </p>
                 </div>
               </div>
