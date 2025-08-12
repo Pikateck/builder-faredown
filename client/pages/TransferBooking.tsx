@@ -56,7 +56,6 @@ export default function TransferBooking() {
   // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
-  const [showBargainModal, setShowBargainModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     primaryGuest: {
