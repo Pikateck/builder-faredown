@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,29 +24,37 @@ import {
 export default function TransferDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
+
+  // Extract parameters from URL
+  const price = searchParams.get('price') || '1200';
+  const fromLocation = searchParams.get('from') || 'Mumbai Airport (BOM)';
+  const toLocation = searchParams.get('to') || 'Hotel Taj Mahal Palace';
+  const vehicleName = searchParams.get('vehicle') || 'Sedan - Economy';
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
     setUserName("");
   };
 
-  // Mock transfer data based on ID
+  // Transfer data based on URL parameters
   const transfer = {
-    id: 1,
+    id: id || '1',
     type: "Economy",
     vehicle: "Sedan",
+    vehicleName: vehicleName,
     capacity: "Up to 3 passengers",
     duration: "45 minutes",
-    price: 1200,
-    originalPrice: 1500,
-    rating: 4.6,
+    price: parseInt(price),
+    originalPrice: parseInt(price) + 300,
+    rating: 4.3,
     features: ["Professional Driver", "Meet & Greet", "Free Waiting"],
     image: "/api/placeholder/120/80",
-    from: "Mumbai Airport (BOM)",
-    to: "Hotel Taj Mahal Palace",
-    description: "Experience comfortable and reliable transport with our Sedan - Economy. Professional service with meet & greet, professional driver, free waiting."
+    from: fromLocation,
+    to: toLocation,
+    description: `Experience comfortable and reliable transport with our ${vehicleName}. Professional service with meet & greet, professional driver, free waiting.`
   };
 
   return (
@@ -213,7 +221,7 @@ export default function TransferDetails() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              {transfer.type} - {transfer.vehicle}
+              {transfer.vehicleName}
             </h1>
             <p className="text-gray-600 flex items-center space-x-2 mt-1">
               <MapPin className="w-4 h-4" />
@@ -244,7 +252,7 @@ export default function TransferDetails() {
               <div>
                 <div className="flex items-center space-x-2 mb-2">
                   <h3 className="text-xl font-bold text-gray-900">
-                    {transfer.type} - {transfer.vehicle}
+                    {transfer.vehicleName}
                   </h3>
                   <Badge className="bg-blue-100 text-blue-800">
                     {transfer.type}
@@ -312,7 +320,8 @@ export default function TransferDetails() {
                       adults: "2",
                       children: "0",
                       infants: "0",
-                      price: transfer.price.toString()
+                      price: transfer.price.toString(),
+                      vehicleName: transfer.vehicleName
                     });
                     navigate(`/transfer-booking?${bookingParams.toString()}`);
                   }}
