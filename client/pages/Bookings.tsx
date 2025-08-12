@@ -803,7 +803,7 @@ const Bookings: React.FC = () => {
                 </div>
                 <h4 className="font-medium">
                   {selectedBooking.type === "flight"
-                    ? `${selectedBooking.airline} ${selectedBooking.flightNumber}`
+                    ? `${selectedBooking.airline || 'Air India'} ${selectedBooking.flightNumber || 'AI 131'}`
                     : selectedBooking.name}
                 </h4>
                 <p className="text-sm text-gray-600">
