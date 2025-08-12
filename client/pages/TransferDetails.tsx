@@ -300,7 +300,24 @@ export default function TransferDetails() {
               <p className="text-sm text-gray-500 mb-4">per transfer</p>
 
               <div className="space-y-2">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full px-6 py-3">
+                <Button
+                  onClick={() => {
+                    const bookingParams = new URLSearchParams({
+                      transferId: id || "hotelbeds_1",
+                      rateKey: "sample_rate_1",
+                      pickupLocation: transfer.from,
+                      dropoffLocation: transfer.to,
+                      pickupDate: new Date().toISOString().split('T')[0],
+                      pickupTime: "10:00",
+                      adults: "2",
+                      children: "0",
+                      infants: "0",
+                      price: transfer.price.toString()
+                    });
+                    navigate(`/transfer-booking?${bookingParams.toString()}`);
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white w-full px-6 py-3"
+                >
                   Book This Transfer
                 </Button>
               </div>
