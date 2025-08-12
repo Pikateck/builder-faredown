@@ -41,7 +41,6 @@ import {
   Hotel,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { EnhancedBargainModal } from "@/components/EnhancedBargainModal";
 
 export default function TransferBooking() {
   const navigate = useNavigate();
