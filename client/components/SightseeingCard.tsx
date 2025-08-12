@@ -136,6 +136,14 @@ export function SightseeingCard({
     navigate(`/sightseeing/${attraction.id}?${params.toString()}`);
   };
 
+  // Selection handler
+  const handleSelect = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onSelect) {
+      onSelect(attraction);
+    }
+  };
+
   // Image navigation
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
