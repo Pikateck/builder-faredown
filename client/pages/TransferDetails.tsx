@@ -99,10 +99,37 @@ export function TransferDetails() {
         // The service now returns transfer data directly (with fallback)
         if (transferData) {
           setTransfer({
-            ...transferData,
-            // Add any missing fields for the UI
-            images: [transferData.vehicleImage || "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800"],
+            id: transferData.id,
+            name: transferData.vehicleName,
             description: `Experience comfortable and reliable transport with our ${transferData.vehicleName}. Professional service with ${transferData.features?.join(", ") || "premium features"}.`,
+            images: [transferData.vehicleImage || "https://images.unsplash.com/photo-1549317336-206569e8475c?w=800"],
+            vehicleType: transferData.vehicleType,
+            category: transferData.vehicleClass,
+            maxPassengers: transferData.maxPassengers,
+            maxLuggage: transferData.maxLuggage,
+            duration: `${transferData.estimatedDuration} minutes`,
+            distance: transferData.distance || "N/A",
+            pickupLocation: transferData.pickupLocation,
+            dropoffLocation: transferData.dropoffLocation,
+            features: transferData.features || [],
+            amenities: transferData.features || [],
+            pricing: {
+              basePrice: transferData.pricing?.basePrice || transferData.basePrice || 0,
+              totalPrice: transferData.pricing?.totalPrice || transferData.totalPrice || 0,
+              currency: transferData.pricing?.currency || transferData.currency || "INR",
+              priceBreakdown: {
+                basePrice: transferData.pricing?.basePrice || transferData.basePrice || 0,
+                taxes: 0,
+                fees: 0,
+              },
+            },
+            supplier: {
+              name: transferData.providerName || "Transfer Provider",
+              rating: transferData.providerRating || 4.5,
+              reviews: 124,
+            },
+            cancellationPolicy: `Free cancellation up to ${transferData.cancellationPolicy?.freeUntil || "24 hours"} before departure`,
+            pickupInstructions: transferData.pickupInstructions || "Your driver will meet you at the designated pickup point with a name sign.",
             termsAndConditions: [
               "Professional driver included",
               "Meet and greet service",
