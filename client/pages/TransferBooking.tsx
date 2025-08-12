@@ -106,10 +106,10 @@ export default function TransferBooking() {
       price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
       originalPrice: 1500
     },
-    return: isRoundTrip ? {
+    return: isRoundTrip && returnDate ? {
       from: dropoffLocation,
       to: pickupLocation,
-      pickupDate: returnDate || "Dec 18, 2024",
+      pickupDate: returnDate,
       pickupTime: returnTime || "2:00 PM",
       price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
       originalPrice: 1500
