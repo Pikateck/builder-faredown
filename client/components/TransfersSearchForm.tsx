@@ -101,6 +101,10 @@ export function TransfersSearchForm() {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
 
+  // Debounced search refs
+  const debouncedPickupSearchRef = useRef<NodeJS.Timeout>();
+  const debouncedDropoffSearchRef = useRef<NodeJS.Timeout>();
+
   // Options for transfers
   const transferOptions = [
     { value: "any", label: "Any vehicle type" },
