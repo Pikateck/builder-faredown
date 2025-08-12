@@ -262,26 +262,28 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Action Buttons - Full Width Native Style */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            {/* SELECT Button - Full Width */}
+            <div className="pt-2">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onBargainClick();
-                }}
-                className="bg-[#febb02] hover:bg-[#e6a700] text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98]"
+                onClick={handleSelect}
+                className={cn(
+                  "w-full py-3 px-4 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm active:scale-[0.98] flex items-center justify-center gap-2",
+                  isSelected
+                    ? "bg-[#ff6b00] text-white hover:bg-[#e55a00]"
+                    : "bg-white border-2 border-[#ff6b00] text-[#ff6b00] hover:bg-[#ff6b00] hover:text-white"
+                )}
               >
-                <TrendingDown className="w-4 h-4" />
-                <span className="text-sm">Bargain</span>
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleViewDetails();
-                }}
-                className="bg-[#ff6b00] hover:bg-[#e55a00] text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98]"
-              >
-                <span className="text-sm">Book Now</span>
+                {isSelected ? (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    <span>SELECTED</span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4" />
+                    <span>SELECT</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
