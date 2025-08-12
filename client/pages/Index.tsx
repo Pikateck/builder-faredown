@@ -1360,6 +1360,17 @@ export default function Index() {
                 >
                   <span>Sightseeing</span>
                 </button>
+                <button
+                  onClick={() => {
+                    setActiveTab("transfers");
+                    window.history.pushState({}, "", "/?tab=transfers");
+                  }}
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "transfers" ? "border-b-2 border-white" : ""
+                  }`}
+                >
+                  <span>Transfers</span>
+                </button>
               </nav>
 
               <div className="flex items-center space-x-2 md:space-x-6">
