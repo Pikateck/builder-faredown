@@ -411,6 +411,7 @@ export default function TransferResults() {
       adults,
       children,
       infants,
+      price: transfer.pricing.totalPrice.toString(),
     });
 
     navigate(`/transfer-booking?${bookingParams.toString()}`);
