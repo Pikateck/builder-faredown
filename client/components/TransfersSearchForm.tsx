@@ -753,7 +753,7 @@ export function TransfersSearchForm() {
                             setIsAirportUserTyping(true);
                           }
                         }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
+                        className="pl-10 pr-8 h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
                         placeholder="Airport"
                         autoComplete="off"
                       />
@@ -813,7 +813,7 @@ export function TransfersSearchForm() {
                             setIsHotelUserTyping(true);
                           }
                         }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
+                        className="pl-10 pr-8 h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
                         placeholder="Hotel / address"
                         autoComplete="off"
                       />
@@ -854,7 +854,7 @@ export function TransfersSearchForm() {
                 {isMobile ? (
                   <button
                     onClick={() => setShowMobileDatePicker(true)}
-                    className="w-full h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left"
+                    className="w-full h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left"
                   >
                     <CalendarIcon className="w-4 h-4 mr-2 text-blue-600" />
                     <span className="truncate">
@@ -865,7 +865,7 @@ export function TransfersSearchForm() {
                 ) : (
                   <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                     <PopoverTrigger asChild>
-                      <button className="w-full h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
+                      <button className="w-full h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
                         <CalendarIcon className="w-4 h-4 mr-2 text-blue-600" />
                         <span className="truncate">
                           {pickupDate ? format(pickupDate, "dd MMM") : "Select date"}
@@ -901,7 +901,7 @@ export function TransfersSearchForm() {
                   Time
                 </label>
                 <Select value={pickupTime} onValueChange={setPickupTime}>
-                  <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation">
+                  <SelectTrigger className="h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation">
                     <Clock className="w-4 h-4 mr-2 text-blue-600" />
                     <SelectValue placeholder="Time" />
                   </SelectTrigger>
@@ -922,7 +922,7 @@ export function TransfersSearchForm() {
                 </label>
                 <Popover open={isPassengerPopoverOpen} onOpenChange={setIsPassengerPopoverOpen}>
                   <PopoverTrigger asChild>
-                    <button className="w-full h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
+                    <button className="w-full h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
                       <Users className="w-4 h-4 mr-2 text-blue-600" />
                       <span className="truncate">{passengersText}</span>
                     </button>
@@ -1006,7 +1006,7 @@ export function TransfersSearchForm() {
                 </label>
                 <Button
                   onClick={handleSearch}
-                  className="w-full lg:w-auto h-10 sm:h-12 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 font-bold text-xs sm:text-sm touch-manipulation"
+                  className="w-full lg:w-auto h-9 sm:h-10 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 font-bold text-xs sm:text-sm touch-manipulation"
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Search
@@ -1058,7 +1058,7 @@ export function TransfersSearchForm() {
                             setIsPickupUserTyping(true);
                           }
                         }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
+                        className="pl-10 pr-8 h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
                         placeholder="Pick-up location"
                         autoComplete="off"
                       />
@@ -1122,7 +1122,7 @@ export function TransfersSearchForm() {
                           }
                         }}
                         disabled={sameAsPickup}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation disabled:bg-gray-100 disabled:text-gray-500"
+                        className="pl-10 pr-8 h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation disabled:bg-gray-100 disabled:text-gray-500"
                         placeholder={sameAsPickup ? "Same as pick-up" : "Drop-off location"}
                         autoComplete="off"
                       />
@@ -1165,7 +1165,7 @@ export function TransfersSearchForm() {
                 {isMobile ? (
                   <button
                     onClick={() => setShowMobileDatePicker(true)}
-                    className="w-full h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left"
+                    className="w-full h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left"
                   >
                     <CalendarIcon className="w-4 h-4 mr-2 text-blue-600" />
                     <span className="truncate">
@@ -1175,7 +1175,7 @@ export function TransfersSearchForm() {
                 ) : (
                   <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                     <PopoverTrigger asChild>
-                      <button className="w-full h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
+                      <button className="w-full h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
                         <CalendarIcon className="w-4 h-4 mr-2 text-blue-600" />
                         <span className="truncate">
                           {pickupDate ? format(pickupDate, "dd MMM") : "Pick-up date"}
@@ -1201,7 +1201,7 @@ export function TransfersSearchForm() {
                 </label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <button className="w-full h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
+                    <button className="w-full h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation flex items-center justify-center text-left">
                       <CalendarIcon className="w-4 h-4 mr-2 text-blue-600" />
                       <span className="truncate">
                         {returnDate ? format(returnDate, "dd MMM") : "Drop-off date"}
@@ -1225,7 +1225,7 @@ export function TransfersSearchForm() {
                   Time
                 </label>
                 <Select value={pickupTime} onValueChange={setPickupTime}>
-                  <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation">
+                  <SelectTrigger className="h-9 sm:h-10 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation">
                     <Clock className="w-4 h-4 mr-2 text-blue-600" />
                     <SelectValue placeholder="Time" />
                   </SelectTrigger>
@@ -1246,7 +1246,7 @@ export function TransfersSearchForm() {
                 </label>
                 <Button
                   onClick={handleSearch}
-                  className="w-full lg:w-auto h-10 sm:h-12 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 font-bold text-xs sm:text-sm touch-manipulation"
+                  className="w-full lg:w-auto h-9 sm:h-10 bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 font-bold text-xs sm:text-sm touch-manipulation"
                 >
                   <Search className="w-4 h-4 mr-2" />
                   Search
