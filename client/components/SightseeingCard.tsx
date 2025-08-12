@@ -162,10 +162,10 @@ export function SightseeingCard({
         )}
         onClick={handleViewDetails}
       >
-        {/* Mobile Layout */}
+        {/* Mobile Layout - Native App Style */}
         <div className="md:hidden">
           {/* Mobile Image */}
-          <div className="relative h-36 overflow-hidden">
+          <div className="relative h-48 overflow-hidden">
             <img
               src={attraction.images[currentImageIndex]}
               alt={attraction.name}
@@ -174,158 +174,100 @@ export function SightseeingCard({
 
             {/* Category Badge */}
             <div className="absolute top-3 left-3">
-              <Badge className="bg-white text-gray-800 shadow-sm">
+              <Badge className="bg-black bg-opacity-70 text-white shadow-lg border-0">
                 <CategoryIcon className="w-3 h-3 mr-1" />
                 {attraction.category.charAt(0).toUpperCase() +
                   attraction.category.slice(1)}
               </Badge>
             </div>
 
-            {/* Wishlist */}
-            <button
-              onClick={toggleWishlist}
-              className="absolute top-3 right-3 w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-sm"
-            >
-              <Heart
-                className={cn(
-                  "w-4 h-4",
-                  isWishlisted ? "text-red-500 fill-current" : "text-gray-600",
-                )}
-              />
-            </button>
-          </div>
-
-          {/* Mobile Content */}
-          <div className="p-4 min-h-[320px] flex flex-col">
-            {/* Content arranged in two columns */}
-            <div className="flex gap-4 mb-4">
-              {/* Left Column - Main Content */}
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 text-lg line-clamp-2 mb-2">
-                  {attraction.name}
-                </h3>
-                <div className="flex items-center text-sm text-gray-600 mb-2">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  <span className="truncate">{attraction.location}</span>
-                </div>
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className="flex items-center cursor-pointer hover:bg-gray-50 px-2 py-1 rounded-md transition-colors"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleReviewsClick();
-                    }}
-                    title="Click to view reviews"
-                  >
-                    <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded text-sm font-medium">
-                      <Star className="w-3 h-3 mr-1 fill-current" />
-                      {attraction.rating}
-                    </div>
-                    <span className="text-sm text-blue-600 ml-2 font-medium underline decoration-1 underline-offset-2">
-                      {attraction.reviews.toLocaleString()} reviews
-                    </span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {attraction.duration}
-                  </div>
-                </div>
+            {/* Price Badge - Top Right */}
+            <div className="absolute top-3 right-3 bg-white bg-opacity-95 px-3 py-2 rounded-lg shadow-lg">
+              <div className="text-lg font-bold text-gray-900">
+                {formatPrice(totalPrice)}
               </div>
-
-              {/* Right Column - Price and Buttons */}
-              <div className="w-40 text-right flex-shrink-0">
-                <div className="text-xl font-bold text-gray-900 mb-1">
-                  {formatPrice(totalPrice)}
-                </div>
-                <div className="text-xs text-gray-600 mb-3">
-                  {formatPrice(pricePerPerson)} per person
-                </div>
-
-                {/* Mobile Buttons - Below Price */}
-                <div className="space-y-3">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onBargainClick();
-                    }}
-                    style={{
-                      backgroundColor: "#febb02",
-                      color: "#000000",
-                      border: "none",
-                      borderRadius: "6px",
-                      padding: "12px 10px",
-                      fontWeight: "600",
-                      fontSize: "12px",
-                      minHeight: "42px",
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "4px",
-                      cursor: "pointer",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    <TrendingDown size={12} />
-                    Bargain Now
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewDetails();
-                    }}
-                    style={{
-                      backgroundColor: "#ff6b00",
-                      color: "#ffffff",
-                      border: "2px solid #ff6b00",
-                      borderRadius: "8px",
-                      padding: "12px 10px",
-                      fontWeight: "700",
-                      fontSize: "13px",
-                      minHeight: "44px",
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "6px",
-                      cursor: "pointer",
-                      boxShadow: "0 3px 6px rgba(255,107,0,0.25)",
-                      transition: "all 0.2s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#e55a00";
-                      e.currentTarget.style.transform = "translateY(-1px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 4px 8px rgba(255,107,0,0.35)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#ff6b00";
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 3px 6px rgba(255,107,0,0.25)";
-                    }}
-                  >
-                    <Eye size={14} />
-                    SELECT
-                  </button>
-                </div>
+              <div className="text-xs text-gray-600 text-center">
+                {formatPrice(pricePerPerson)}/person
               </div>
             </div>
 
-            {/* Features and Highlights - Left Side */}
-            <div className="mb-4 space-y-2 flex-grow">
+            {/* Selection Indicator - Bottom Right */}
+            <div className="absolute bottom-3 right-3">
+              <div className="w-8 h-8 bg-[#ff6b00] rounded-full flex items-center justify-center shadow-lg">
+                <Eye className="w-4 h-4 text-white" />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Content */}
+          <div className="p-4">
+            {/* Header Section */}
+            <div className="mb-3">
+              <h3 className="font-bold text-gray-900 text-lg leading-tight mb-2">
+                {attraction.name}
+              </h3>
+              <div className="flex items-center text-sm text-gray-600 mb-2">
+                <MapPin className="w-4 h-4 mr-1 text-gray-400" />
+                <span className="flex-1">{attraction.location}</span>
+              </div>
+            </div>
+
+            {/* Rating and Duration Row */}
+            <div className="flex items-center justify-between mb-3">
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleReviewsClick();
+                }}
+              >
+                <div className="flex items-center bg-[#003580] text-white px-2 py-1 rounded-md text-sm font-medium">
+                  <Star className="w-3 h-3 mr-1 fill-current" />
+                  {attraction.rating}
+                </div>
+                <span className="text-sm text-[#003580] ml-2 font-medium">
+                  {attraction.reviews.toLocaleString()} reviews
+                </span>
+              </div>
+              <div className="flex items-center text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded-md">
+                <Clock className="w-4 h-4 mr-1" />
+                {attraction.duration}
+              </div>
+            </div>
+
+            {/* Features - Compact Grid */}
+            <div className="grid grid-cols-1 gap-2 mb-4">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="truncate">{attraction.highlights[0]}</span>
+                <span className="flex-1">{attraction.highlights[0]}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span>Free cancellation</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                <span>Reserve now, pay later</span>
-              </div>
+            </div>
+
+            {/* Action Buttons - Full Width Native Style */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onBargainClick();
+                }}
+                className="bg-[#febb02] hover:bg-[#e6a700] text-black font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98]"
+              >
+                <TrendingDown className="w-4 h-4" />
+                <span className="text-sm">Bargain</span>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleViewDetails();
+                }}
+                className="bg-[#ff6b00] hover:bg-[#e55a00] text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-sm active:scale-[0.98]"
+              >
+                <span className="text-sm">Book Now</span>
+              </button>
             </div>
           </div>
         </div>
