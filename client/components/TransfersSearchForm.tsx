@@ -575,6 +575,12 @@ export function TransfersSearchForm() {
                     align="start"
                     side="bottom"
                     sideOffset={5}
+                    onInteractOutside={(e) => {
+                      // Only close if clicking outside, not on the input
+                      if (!e.target?.closest('[data-radix-popper-content-wrapper]')) {
+                        setIsHotelOpen(false);
+                      }
+                    }}
                   >
                     <div className="max-h-64 overflow-y-auto">
                       {loadingHotelDestinations ? (
