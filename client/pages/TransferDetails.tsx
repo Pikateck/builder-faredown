@@ -19,7 +19,7 @@ import {
   Star,
   TrendingDown,
   ArrowRight,
-  Suitcase,
+  Luggage,
   Wifi,
   Snowflake,
   Shield,
@@ -133,7 +133,7 @@ export function TransferDetails() {
     const iconMap: { [key: string]: any } = {
       "air conditioning": Snowflake,
       "wifi": Wifi,
-      "luggage space": Suitcase,
+      "luggage space": Luggage,
       "child seat": Baby,
       "wheelchair accessible": Accessibility,
       "professional driver": Shield,
@@ -340,7 +340,7 @@ export function TransferDetails() {
                   <div className="text-sm text-gray-600">Max Passengers</div>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg text-center">
-                  <Suitcase className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                  <Luggage className="w-6 h-6 text-blue-600 mx-auto mb-2" />
                   <div className="font-semibold">{transfer.maxLuggage}</div>
                   <div className="text-sm text-gray-600">Luggage Pieces</div>
                 </div>
