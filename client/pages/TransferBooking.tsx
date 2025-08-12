@@ -529,20 +529,6 @@ export default function TransferBooking() {
         </div>
       </div>
 
-      {/* Bargain Modal */}
-      {showBargainModal && (
-        <EnhancedBargainModal
-          isOpen={showBargainModal}
-          onClose={() => setShowBargainModal(false)}
-          initialPrice={transfer.price}
-          itemType="transfer"
-          itemDetails={{
-            title: `${transfer.type} - ${transfer.vehicle}`,
-            subtitle: `${transfer.from} → ${transfer.to}`,
-            features: transfer.features
-          }}
-        />
-      )}
     </div>
   );
 }
