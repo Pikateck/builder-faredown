@@ -354,18 +354,20 @@ const Bookings: React.FC = () => {
           </div>
         </div>
 
-        {/* Bookings List */}
-        <div className="space-y-6">
+        {/* Mobile-First Responsive Bookings List */}
+        <div className="space-y-4">
           {getFilteredBookings().map((booking) => (
             <div
               key={booking.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
             >
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
+              {/* Mobile Header */}
+              <div className="p-4">
+                {/* Top Row - Icon, Title and Status */}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-start space-x-3 flex-1">
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                      className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                         booking.type === "flight"
                           ? "bg-blue-100"
                           : booking.type === "hotel"
@@ -374,157 +376,133 @@ const Bookings: React.FC = () => {
                       }`}
                     >
                       {booking.type === "flight" ? (
-                        <svg
-                          className="w-6 h-6 text-blue-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                          />
+                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
                       ) : booking.type === "hotel" ? (
-                        <svg
-                          className="w-6 h-6 text-amber-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                          />
+                        <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                       ) : (
-                        <svg
-                          className="w-6 h-6 text-purple-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                          />
+                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
                       )}
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 text-base leading-tight truncate">
                         {booking.type === "flight"
                           ? `${booking.airline} - ${booking.route}`
                           : booking.name}
                       </h3>
-                      <p className="text-sm text-gray-600">
-                        Booking Reference: {booking.bookingRef}
+                      <p className="text-sm text-gray-600 mt-1">
+                        {booking.bookingRef}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
+                  <div className="flex flex-col items-end space-y-2 flex-shrink-0">
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}
+                      className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${getStatusColor(booking.status)}`}
                     >
                       {booking.status}
                     </span>
-                    <span className="text-xl font-bold text-blue-600">
+                    <span className="text-lg font-bold text-blue-600 whitespace-nowrap">
                       {booking.totalAmount}
                     </span>
                   </div>
                 </div>
 
+                {/* Mobile Details Grid */}
                 {booking.type === "flight" ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-500">Date & Time:</span>
-                      <p className="font-medium">
-                        {booking.date} at {booking.time}
-                      </p>
+                  <div className="space-y-3 mb-4">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="text-gray-500 block">Date & Time</span>
+                        <p className="font-medium text-gray-900">{booking.date}</p>
+                        <p className="font-medium text-gray-900">{booking.time}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Passengers</span>
+                        <p className="font-medium text-gray-900">{booking.passengers}</p>
+                      </div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Passengers:</span>
-                      <p className="font-medium">{booking.passengers}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Route:</span>
-                      <p className="font-medium">{booking.route}</p>
+                      <span className="text-gray-500 text-sm block">Route</span>
+                      <p className="font-medium text-gray-900">{booking.route}</p>
                     </div>
                   </div>
                 ) : booking.type === "hotel" ? (
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-500">Check-in:</span>
-                      <p className="font-medium">{booking.checkIn}</p>
+                  <div className="space-y-3 mb-4">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="text-gray-500 block">Check-in</span>
+                        <p className="font-medium text-gray-900">{booking.checkIn}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Check-out</span>
+                        <p className="font-medium text-gray-900">{booking.checkOut}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Guests</span>
+                        <p className="font-medium text-gray-900">{booking.guests}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Rooms</span>
+                        <p className="font-medium text-gray-900">{booking.rooms}</p>
+                      </div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Check-out:</span>
-                      <p className="font-medium">{booking.checkOut}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Guests:</span>
-                      <p className="font-medium">{booking.guests}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Rooms:</span>
-                      <p className="font-medium">{booking.rooms}</p>
+                      <span className="text-gray-500 text-sm block">Location</span>
+                      <p className="font-medium text-gray-900">{booking.location}</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-500">Visit Date:</span>
-                      <p className="font-medium">{booking.visitDate}</p>
+                  <div className="space-y-3 mb-4">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="text-gray-500 block">Visit Date</span>
+                        <p className="font-medium text-gray-900">{booking.visitDate}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Time</span>
+                        <p className="font-medium text-gray-900">{booking.time}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Duration</span>
+                        <p className="font-medium text-gray-900">{booking.duration}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Guests</span>
+                        <p className="font-medium text-gray-900">{booking.guests}</p>
+                      </div>
                     </div>
                     <div>
-                      <span className="text-gray-500">Time:</span>
-                      <p className="font-medium">{booking.time}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Duration:</span>
-                      <p className="font-medium">{booking.duration}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Guests:</span>
-                      <p className="font-medium">{booking.guests}</p>
+                      <span className="text-gray-500 text-sm block">Location & Type</span>
+                      <p className="font-medium text-gray-900">{booking.location} • {booking.ticketType}</p>
                     </div>
                   </div>
                 )}
 
-                <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-200">
-                  <div className="text-sm text-gray-600">
-                    {booking.type === "flight"
-                      ? `Airline: ${booking.airline}`
-                      : booking.type === "hotel"
-                        ? booking.location
-                        : `${booking.location} • ${booking.ticketType}`}
-                  </div>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => {
-                        setSelectedBooking(booking);
-                        setViewDetailsModal(true);
-                      }}
-                      className="flex-1 bg-blue-600 text-white font-semibold py-3"
-                    >
-                      View Details
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedBooking(booking);
-                        setManageBookingModal(true);
-                      }}
-                      className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 flex items-center justify-center gap-2 min-h-[44px]"
-                    >
-                      Manage Booking
-                    </button>
-                  </div>
+                {/* Mobile Action Buttons */}
+                <div className="flex gap-3 pt-3 border-t border-gray-100">
+                  <button
+                    onClick={() => {
+                      setSelectedBooking(booking);
+                      setViewDetailsModal(true);
+                    }}
+                    className="flex-1 bg-blue-600 text-white font-semibold py-3 rounded-lg text-sm"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedBooking(booking);
+                      setManageBookingModal(true);
+                    }}
+                    className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 rounded-lg text-sm flex items-center justify-center gap-2 min-h-[44px]"
+                  >
+                    Manage
+                  </button>
                 </div>
               </div>
             </div>
