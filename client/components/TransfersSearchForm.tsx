@@ -521,6 +521,10 @@ export function TransfersSearchForm() {
                             setHotelInputValue(hotel);
                             setIsHotelUserTyping(true);
                           }
+                          // Show popular destinations on focus
+                          if (hotelSuggestions.length === 0) {
+                            searchDestinations("", "hotel");
+                          }
                         }}
                         onMouseDown={() => {
                           if (!isHotelOpen) {
