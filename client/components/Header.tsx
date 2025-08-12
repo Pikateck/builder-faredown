@@ -136,6 +136,17 @@ export function Header({ className }: HeaderProps) {
                 <span>Sightseeing</span>
               </Link>
               <Link
+                to="/transfers"
+                className={cn(
+                  "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
+                  location.pathname === "/transfers" || location.pathname.startsWith("/transfer")
+                    ? "font-semibold border-b-2 border-white"
+                    : "",
+                )}
+              >
+                <span>Transfers</span>
+              </Link>
+              <Link
                 to="/admin/testing"
                 className={cn(
                   "text-red-300 hover:text-red-100 cursor-pointer flex items-center py-4 bg-red-500/20 px-3 rounded-md",
