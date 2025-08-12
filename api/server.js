@@ -209,7 +209,7 @@ app.use("/api/flights", flightRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/bargain", bargainRoutes);
-app.use("/api/currency", currencyAdminRoutes);
+app.use("/api/currency", currencyRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/analytics", authenticateToken, analyticsRoutes);
 app.use("/api/payments", authenticateToken, paymentRoutes);
