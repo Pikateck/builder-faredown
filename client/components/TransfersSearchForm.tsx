@@ -537,26 +537,58 @@ export function TransfersSearchForm() {
                   </svg>
                   <Input
                     type="text"
-                    value={dropoffLocation}
+                    value={isDropoffUserTyping ? dropoffInputValue : dropoffLocation || ""}
                     onChange={(e) => {
-                      setDropoffLocation(e.target.value);
-                      setIsDropoffOpen(true);
+                      const value = e.target.value;
+                      setDropoffInputValue(value);
+                      setIsDropoffUserTyping(true);
                       if (sameAsPickup) setSameAsPickup(false);
+                      // Auto-open dropdown when user starts typing
+                      if (!isDropoffOpen) {
+                        setIsDropoffOpen(true);
+                      }
+                      // Search destinations
+                      searchDropoffDestinations(value);
                     }}
-                    onFocus={() => setIsDropoffOpen(true)}
+                    onFocus={(e) => {
+                      e.stopPropagation();
+                      if (!sameAsPickup) {
+                        setIsDropoffOpen(true);
+                        // Set inputValue to current destination when focusing for editing
+                        if (!isDropoffUserTyping && dropoffLocation) {
+                          setDropoffInputValue(dropoffLocation);
+                          setIsDropoffUserTyping(true);
+                        }
+                      }
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!sameAsPickup) {
+                        setIsDropoffOpen(true);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      e.stopPropagation();
+                    }}
+                    readOnly={false}
                     disabled={sameAsPickup}
-                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation disabled:bg-gray-100 disabled:text-gray-500"
+                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation disabled:bg-gray-100 disabled:text-gray-500 relative z-10"
                     placeholder={sameAsPickup ? "Same as pickup" : "Drop-off location"}
                     autoComplete="off"
+                    data-destination-input="true"
                   />
-                  {dropoffLocation && !sameAsPickup && (
+                  {(dropoffLocation || (isDropoffUserTyping && dropoffInputValue)) && !sameAsPickup && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setDropoffLocation("");
+                        setDropoffInputValue("");
+                        setIsDropoffUserTyping(false);
+                        setDropoffLocationCode("");
                         setIsDropoffOpen(false);
                       }}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                      title="Clear dropoff location"
                     >
                       <X className="w-3 h-3" />
                     </button>
