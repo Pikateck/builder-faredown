@@ -414,7 +414,6 @@ export function TransfersSearchForm() {
                         }}
                         onFocus={(e) => {
                           e.stopPropagation();
-                          setIsAirportOpen(true);
                           if (!isAirportUserTyping && airport) {
                             setAirportInputValue(airport);
                             setIsAirportUserTyping(true);
@@ -423,8 +422,10 @@ export function TransfersSearchForm() {
                           if (airportSuggestions.length === 0) {
                             searchDestinations("", "airport");
                           }
+                          setIsAirportOpen(true);
                         }}
-                        onMouseDown={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (!isAirportOpen) {
                             setIsAirportOpen(true);
                             // Show popular destinations when opening
