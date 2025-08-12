@@ -120,6 +120,13 @@ export default function TransferBooking() {
   const currentTransfer = activeTab === 'outbound' ? transferData.outbound : (transferData.return || transferData.outbound);
   const totalPrice = isRoundTrip && transferData.return ? transferData.outbound.price + transferData.return.price : transferData.outbound.price;
 
+  // Reset to outbound tab if return tab is active but no return data
+  useEffect(() => {
+    if (activeTab === 'return' && !transferData.return) {
+      setActiveTab('outbound');
+    }
+  }, [activeTab, transferData.return]);
+
   const handleSignOut = () => {
     setIsLoggedIn(false);
     setUserName("");
