@@ -501,3 +501,5 @@ export function TransferDetails() {
     </div>
   );
 }
+
+export default TransferDetails;
