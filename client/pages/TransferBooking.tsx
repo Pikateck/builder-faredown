@@ -58,8 +58,8 @@ export default function TransferBooking() {
   const dropoffLocation = searchParams.get('dropoffLocation') || 'Hotel Taj Mahal Palace';
   const vehicleName = searchParams.get('vehicleName') || 'Sedan - Economy';
   const isRoundTrip = searchParams.get('returnDate') !== null;
-  const returnDate = searchParams.get('returnDate') || 'Dec 8, 2024';
-  const returnTime = searchParams.get('returnTime') || '10:30';
+  const returnDate = searchParams.get('returnDate');
+  const returnTime = searchParams.get('returnTime');
   
   // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
