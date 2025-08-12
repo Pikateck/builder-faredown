@@ -11,6 +11,43 @@ const { auditRequest } = require("../middleware/audit");
 const router = express.Router();
 
 /**
+ * @route POST /api/transfers/destinations
+ * @desc Search transfer destinations using Hotelbeds Transfers API
+ * @access Public
+ */
+router.post("/destinations", auditRequest, async (req, res) => {
+  try {
+    const { query = "", limit = 15, popularOnly = false } = req.body;
+
+    console.log(`🎯 Transfers destinations API called with query: "${query}"`);
+
+    // Get destinations from Hotelbeds Transfers API
+    const result = await transfersService.getDestinations(query, limit, popularOnly);
+
+    if (!result.success) {
+      console.error("❌ Hotelbeds Transfers destinations API failed:", result.error);
+      return res.status(500).json({
+        success: false,
+        error: "Failed to fetch transfer destinations",
+      });
+    }
+
+    console.log(`✅ Found ${result.data.destinations.length} transfer destinations`);
+
+    res.json({
+      success: true,
+      data: result.data,
+    });
+  } catch (error) {
+    console.error("❌ Transfers destinations API error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
+    });
+  }
+});
+
+/**
  * @route POST /api/transfers/search
  * @desc Search for available transfers
  * @access Public
