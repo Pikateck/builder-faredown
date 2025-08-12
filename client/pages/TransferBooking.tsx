@@ -88,7 +88,7 @@ export default function TransferBooking() {
     id: transferId || "hotelbeds_1",
     type: "Economy",
     vehicle: "Sedan",
-    vehicleName: "Sedan - Economy",
+    vehicleName: vehicleName,
     provider: "Mumbai Transfers Ltd",
     rating: 4.3,
     maxPassengers: 3,
