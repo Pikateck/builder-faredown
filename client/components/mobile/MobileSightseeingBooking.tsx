@@ -325,9 +325,7 @@ export const MobileSightseeingBooking: React.FC<
                           {ticket.name}
                         </h4>
                         <Badge
-                          variant={
-                            ticket.refundable ? "secondary" : "destructive"
-                          }
+                          variant="secondary"
                           className="text-xs"
                         >
                           {ticket.refundable ? "Refundable" : "Non-refundable"}
