@@ -656,9 +656,9 @@ export function TransfersSearchForm() {
         isVisible={showError}
         onClose={() => setShowError(false)}
       />
-      <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
+      <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg max-w-6xl mx-auto border border-gray-200">
         {/* Sub-tabs for Transfer Mode */}
-        <div className="flex items-center space-x-4 mb-4 border-b border-gray-200 pb-3">
+        <div className="flex items-center space-x-4 mb-3 border-b border-gray-200 pb-2">
           <button
             onClick={() => setTransferMode("airport")}
             className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
@@ -725,7 +725,7 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Airport Transport Search Form */}
-            <div className="flex flex-col lg:flex-row gap-2 mb-4">
+            <div className="flex flex-col lg:flex-row gap-2 mb-3">
               {/* Airport Field */}
               <div className="flex-1 lg:max-w-[240px] relative">
                 <label className="text-xs font-medium text-gray-800 mb-1 block lg:hidden">
@@ -1030,7 +1030,7 @@ export function TransfersSearchForm() {
         ) : (
           <>
             {/* Car Rental Search Form */}
-            <div className="flex flex-col lg:flex-row gap-2 mb-4">
+            <div className="flex flex-col lg:flex-row gap-2 mb-3">
               {/* Pickup Location */}
               <div className="flex-1 lg:max-w-[240px] relative">
                 <label className="text-xs font-medium text-gray-800 mb-1 block lg:hidden">
