@@ -37,6 +37,7 @@ import Transfers from "./pages/Transfers";
 import TransferResults from "./pages/TransferResults";
 import TransferDetails from "./pages/TransferDetails";
 import TransferBooking from "./pages/TransferBooking";
+import TransferConfirmation from "./pages/TransferConfirmation";
 import HelpCenter from "./pages/HelpCenter";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
