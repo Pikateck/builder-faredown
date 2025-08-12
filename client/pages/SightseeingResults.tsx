@@ -1180,8 +1180,8 @@ export default function SightseeingResults() {
       />
 
       {/* Hotel-Style Bottom Panel */}
-      {showBottomBar && (
-        <div className="md:hidden fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
+      {showBottomBar && selectedAttractions.size > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
           <div className="p-4">
             <div className="bg-gray-50 rounded-lg p-3 mb-3">
               <div className="flex items-center justify-between">
