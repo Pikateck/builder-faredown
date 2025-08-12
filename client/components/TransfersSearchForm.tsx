@@ -854,18 +854,66 @@ export function TransfersSearchForm() {
                           </span>
                         </div>
                         {popularDestinations.slice(0, 8).map((dest, index) => (
-                          <button
+                          <div
                             key={dest.id}
+                            className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer transition-all duration-200 border-b border-gray-100 last:border-b-0 group"
                             onMouseDown={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               selectDropoffDestination(dest);
                             }}
-                            className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
                           >
-                            <div className="font-medium text-gray-900">{dest.name}</div>
-                            <div className="text-sm text-gray-600">{dest.type}, {dest.country}</div>
-                          </button>
+                            {/* Elegant destination icon */}
+                            <div className="flex items-center justify-center w-8 h-8 mr-3 flex-shrink-0">
+                              {getDestinationIcon(dest.type)}
+                            </div>
+
+                            {/* Main content area */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1 min-w-0">
+                                  {/* Destination name and badges */}
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="font-medium text-gray-900 text-sm truncate">
+                                      {dest.name}
+                                    </span>
+                                    {dest.popular && (
+                                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                        Popular
+                                      </span>
+                                    )}
+                                    {dest.type === "airport" && (
+                                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
+                                        Airport
+                                      </span>
+                                    )}
+                                    {dest.type === "city" && (
+                                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                        City
+                                    </span>
+                                    )}
+                                  </div>
+
+                                  {/* Country and type info */}
+                                  <div className="text-xs text-gray-500">
+                                    <span className="capitalize">
+                                      {dest.type === "airport" ? "Airport" : dest.type}
+                                    </span>
+                                    {dest.country && (
+                                      <span> in {dest.country}</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Destination code aligned right */}
+                                <div className="flex-shrink-0 ml-3">
+                                  <span className="text-xs font-mono text-gray-400 uppercase tracking-wide">
+                                    {dest.code}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         ))}
                       </div>
                     )}
