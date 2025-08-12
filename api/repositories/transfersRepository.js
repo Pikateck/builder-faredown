@@ -1,66 +1,207 @@
 /**
  * Transfers Repository
- * Handles all database operations for transfers module
+ * Handles all database operations for transfers
  */
 
-const { Client } = require("pg");
+const { Pool } = require("pg");
+const crypto = require("crypto");
 const winston = require("winston");
 
 class TransfersRepository {
   constructor() {
+    this.pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    });
+
     this.logger = winston.createLogger({
       level: "info",
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.printf(({ timestamp, level, message, ...meta }) => {
-          return `${timestamp} [${level.toUpperCase()}] [TRANSFERS_REPO] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
+          return `${timestamp} [${level.toUpperCase()}] [TRANSFERS-REPO] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
         })
       ),
       transports: [new winston.transports.Console()],
     });
-
-    this.client = new Client({
-      host: process.env.DB_HOST || "localhost",
-      port: process.env.DB_PORT || 5432,
-      database: process.env.DB_NAME || "faredown",
-      user: process.env.DB_USER || "postgres",
-      password: process.env.DB_PASSWORD,
-    });
-
-    this.connected = false;
   }
 
   /**
-   * Connect to database
+   * Save search cache
    */
-  async connect() {
-    if (!this.connected) {
-      await this.client.connect();
-      this.connected = true;
-      this.logger.info("Connected to PostgreSQL");
+  async saveSearchCache(searchHash, searchParams, results, ttlSeconds = 3600) {
+    try {
+      const query = `
+        INSERT INTO transfer_routes_cache (
+          search_hash, request_params, raw_response, normalized_products,
+          ttl_seconds, expires_at, supplier_id
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (search_hash) DO UPDATE SET
+          raw_response = EXCLUDED.raw_response,
+          normalized_products = EXCLUDED.normalized_products,
+          expires_at = EXCLUDED.expires_at,
+          hit_count = transfer_routes_cache.hit_count + 1,
+          updated_at = CURRENT_TIMESTAMP
+        RETURNING id
+      `;
+
+      const values = [
+        searchHash,
+        JSON.stringify(searchParams),
+        JSON.stringify(results.raw || results),
+        JSON.stringify(results.normalized || results),
+        ttlSeconds,
+        new Date(Date.now() + ttlSeconds * 1000),
+        1 // Default to Hotelbeds supplier ID
+      ];
+
+      const result = await this.pool.query(query, values);
+      
+      this.logger.info("Search cache saved", { 
+        searchHash: searchHash.substring(0, 8),
+        cacheId: result.rows[0]?.id 
+      });
+      
+      return result.rows[0];
+
+    } catch (error) {
+      this.logger.error("Error saving search cache", { error: error.message, searchHash });
+      throw error;
     }
   }
 
   /**
-   * Disconnect from database
+   * Get search cache
    */
-  async disconnect() {
-    if (this.connected) {
-      await this.client.end();
-      this.connected = false;
-      this.logger.info("Disconnected from PostgreSQL");
+  async getSearchCache(searchHash) {
+    try {
+      const query = `
+        SELECT * FROM transfer_routes_cache 
+        WHERE search_hash = $1 AND expires_at > CURRENT_TIMESTAMP
+      `;
+
+      const result = await this.pool.query(query, [searchHash]);
+      
+      if (result.rows.length > 0) {
+        // Update hit count
+        await this.pool.query(
+          `UPDATE transfer_routes_cache SET hit_count = hit_count + 1 WHERE id = $1`,
+          [result.rows[0].id]
+        );
+
+        this.logger.info("Search cache hit", { 
+          searchHash: searchHash.substring(0, 8),
+          hitCount: result.rows[0].hit_count + 1
+        });
+      }
+
+      return result.rows[0] || null;
+
+    } catch (error) {
+      this.logger.error("Error getting search cache", { error: error.message, searchHash });
+      return null;
     }
   }
 
   /**
-   * Create a new transfer booking
-   * @param {Object} bookingData - Booking data
-   * @returns {Promise<Object>} - Created booking record
+   * Save transfer products/offers
+   */
+  async saveTransferProducts(searchId, offers) {
+    try {
+      const query = `
+        INSERT INTO transfer_products (
+          search_session_id, supplier_id, product_code, product_name,
+          vehicle_type, vehicle_class, max_passengers, max_luggage,
+          pickup_location, pickup_location_code, pickup_type,
+          dropoff_location, dropoff_location_code, dropoff_type,
+          distance_km, estimated_duration_minutes,
+          base_price, currency, features, inclusions,
+          cancellation_policy, provider_name, provider_rating,
+          supplier_data
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)
+        RETURNING id
+      `;
+
+      const savedProducts = [];
+
+      for (const offer of offers) {
+        const values = [
+          searchId,
+          1, // Default supplier ID for Hotelbeds
+          offer.supplierReference || offer.id,
+          offer.vehicleName || 'Private Transfer',
+          offer.vehicleType || 'sedan',
+          offer.vehicleClass || 'Standard',
+          offer.maxPassengers || 4,
+          offer.maxLuggage || 2,
+          offer.meta?.searchParams?.pickupLocation?.name || '',
+          offer.meta?.searchParams?.pickupLocation?.code || '',
+          offer.meta?.searchParams?.pickupLocation?.type || 'airport',
+          offer.meta?.searchParams?.dropoffLocation?.name || '',
+          offer.meta?.searchParams?.dropoffLocation?.code || '',
+          offer.meta?.searchParams?.dropoffLocation?.type || 'hotel',
+          offer.distance || null,
+          offer.duration || null,
+          offer.pricing?.netAmount || 0,
+          offer.pricing?.currency || 'INR',
+          JSON.stringify(offer.features || []),
+          JSON.stringify(offer.inclusions || []),
+          JSON.stringify(offer.cancellationPolicy || {}),
+          offer.supplier?.name || 'Hotelbeds Transfers',
+          offer.supplier?.rating || null,
+          JSON.stringify(offer.meta?.originalService || offer)
+        ];
+
+        const result = await this.pool.query(query, values);
+        savedProducts.push({ ...offer, dbId: result.rows[0].id });
+      }
+
+      this.logger.info("Transfer products saved", { 
+        searchId,
+        productCount: savedProducts.length 
+      });
+
+      return savedProducts;
+
+    } catch (error) {
+      this.logger.error("Error saving transfer products", { error: error.message, searchId });
+      throw error;
+    }
+  }
+
+  /**
+   * Get transfer product by ID
+   */
+  async getTransferProduct(productId) {
+    try {
+      const query = `
+        SELECT tp.*, s.name as supplier_name
+        FROM transfer_products tp
+        LEFT JOIN suppliers s ON tp.supplier_id = s.id
+        WHERE tp.id = $1 AND tp.is_active = true
+      `;
+
+      const result = await this.pool.query(query, [productId]);
+      return result.rows[0] || null;
+
+    } catch (error) {
+      this.logger.error("Error getting transfer product", { error: error.message, productId });
+      throw error;
+    }
+  }
+
+  /**
+   * Create transfer booking
    */
   async createBooking(bookingData) {
-    await this.connect();
-
+    const client = await this.pool.connect();
+    
     try {
+      await client.query('BEGIN');
+
+      // Generate booking reference
+      const bookingRef = this.generateBookingReference();
+
       const query = `
         INSERT INTO transfer_bookings (
           booking_ref, supplier_id, user_id, product_id,
@@ -70,26 +211,23 @@ class TransfersRepository {
           pickup_date, pickup_time, return_date, return_time,
           adults_count, children_count, infants_count, total_passengers,
           guest_details, flight_number, flight_arrival_time,
-          special_requests, mobility_requirements, child_seats_required,
-          base_price, return_price, markup_amount, markup_percentage,
-          discount_amount, taxes, fees, surcharges, total_amount, currency,
-          promo_code, promo_discount_type, promo_discount_value,
-          status, payment_status, internal_notes
+          special_requests, base_price, markup_amount, discount_amount,
+          total_amount, currency, promo_code, bargain_session_id,
+          bargain_savings, status, supplier_booking_ref, supplier_response,
+          payment_status, payment_method, internal_notes
         ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-          $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-          $21, $22, $23, $24, $25, $26, $27, $28, $29, $30,
-          $31, $32, $33, $34, $35, $36, $37, $38, $39, $40,
-          $41, $42, $43, $44, $45, $46, $47
-        ) RETURNING *
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,
+          $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32,
+          $33, $34, $35, $36, $37, $38, $39, $40, $41, $42
+        ) RETURNING id, booking_ref
       `;
 
       const values = [
-        bookingData.bookingRef,
-        bookingData.supplierId || 1, // Default to Hotelbeds
+        bookingRef,
+        bookingData.supplierId || 1,
         bookingData.userId,
         bookingData.productId,
-        bookingData.transferType || "one_way",
+        bookingData.transferType || 'one_way',
         bookingData.vehicleType,
         bookingData.vehicleClass,
         bookingData.productCode,
@@ -106,557 +244,472 @@ class TransfersRepository {
         bookingData.pickupTime,
         bookingData.returnDate,
         bookingData.returnTime,
-        bookingData.adultsCount || 2,
-        bookingData.childrenCount || 0,
-        bookingData.infantsCount || 0,
-        bookingData.totalPassengers,
+        bookingData.passengers?.adults || 2,
+        bookingData.passengers?.children || 0,
+        bookingData.passengers?.infants || 0,
+        (bookingData.passengers?.adults || 2) + (bookingData.passengers?.children || 0),
         JSON.stringify(bookingData.guestDetails),
-        bookingData.flightNumber,
-        bookingData.flightArrivalTime,
+        bookingData.flightDetails?.flightNumber,
+        bookingData.flightDetails?.arrivalTime,
         bookingData.specialRequests,
-        bookingData.mobilityRequirements,
-        bookingData.childSeatsRequired || 0,
-        bookingData.basePrice,
-        bookingData.returnPrice || 0,
-        bookingData.markupAmount || 0,
-        bookingData.markupPercentage || 0,
-        bookingData.discountAmount || 0,
-        bookingData.taxes || 0,
-        bookingData.fees || 0,
-        bookingData.surcharges || 0,
-        bookingData.totalAmount,
-        bookingData.currency || "INR",
+        bookingData.pricing?.netAmount || 0,
+        bookingData.pricing?.markupAmount || 0,
+        bookingData.pricing?.discountAmount || 0,
+        bookingData.pricing?.totalAmount || 0,
+        bookingData.currency || 'INR',
         bookingData.promoCode,
-        bookingData.promoDiscountType,
-        bookingData.promoDiscountValue,
-        bookingData.status || "pending",
-        bookingData.paymentStatus || "pending",
-        bookingData.internalNotes,
+        bookingData.bargainSessionId,
+        bookingData.bargainSavings || 0,
+        'pending',
+        bookingData.supplierBookingRef,
+        JSON.stringify(bookingData.supplierResponse || {}),
+        bookingData.paymentStatus || 'pending',
+        bookingData.paymentMethod || 'online',
+        bookingData.internalNotes
       ];
 
-      const result = await this.client.query(query, values);
-      
-      this.logger.info("Transfer booking created", {
-        bookingId: result.rows[0].id,
-        bookingRef: result.rows[0].booking_ref,
-        totalAmount: result.rows[0].total_amount,
+      const result = await client.query(query, values);
+      const booking = result.rows[0];
+
+      // Save audit log
+      await this.saveAuditLog(client, {
+        bookingId: booking.id,
+        eventType: 'booking_created',
+        eventDescription: 'Transfer booking created',
+        userId: bookingData.userId,
+        userEmail: bookingData.guestDetails?.email,
+        ipAddress: bookingData.ipAddress,
+        userAgent: bookingData.userAgent,
+        requestPayload: bookingData,
+        sessionId: bookingData.sessionId
       });
 
-      return result.rows[0];
-    } catch (error) {
-      this.logger.error("Failed to create transfer booking", {
-        error: error.message,
-        bookingRef: bookingData.bookingRef,
+      await client.query('COMMIT');
+
+      this.logger.info("Transfer booking created", { 
+        bookingId: booking.id,
+        bookingRef: booking.booking_ref,
+        userId: bookingData.userId
       });
+
+      return booking;
+
+    } catch (error) {
+      await client.query('ROLLBACK');
+      this.logger.error("Error creating transfer booking", { error: error.message });
       throw error;
+    } finally {
+      client.release();
     }
   }
 
   /**
-   * Update a transfer booking
-   * @param {number} bookingId - Booking ID
-   * @param {Object} updateData - Data to update
-   * @returns {Promise<Object>} - Updated booking record
+   * Update booking status
    */
-  async updateBooking(bookingId, updateData) {
-    await this.connect();
-
+  async updateBookingStatus(bookingId, status, supplierResponse = null, userId = null) {
+    const client = await this.pool.connect();
+    
     try {
-      const setClause = [];
-      const values = [];
-      let paramIndex = 1;
-
-      // Build dynamic SET clause
-      Object.keys(updateData).forEach((key) => {
-        const dbColumn = this.camelToSnakeCase(key);
-        setClause.push(`${dbColumn} = $${paramIndex}`);
-        
-        // Handle JSON fields
-        if (["guestDetails", "supplierResponse", "auditLog"].includes(key)) {
-          values.push(JSON.stringify(updateData[key]));
-        } else {
-          values.push(updateData[key]);
-        }
-        paramIndex++;
-      });
-
-      // Add updated_at
-      setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+      await client.query('BEGIN');
 
       const query = `
         UPDATE transfer_bookings 
-        SET ${setClause.join(", ")}
-        WHERE id = $${paramIndex}
-        RETURNING *
+        SET status = $1, 
+            supplier_response = COALESCE($2, supplier_response),
+            updated_at = CURRENT_TIMESTAMP,
+            confirmation_date = CASE WHEN $1 = 'confirmed' THEN CURRENT_TIMESTAMP ELSE confirmation_date END,
+            cancellation_date = CASE WHEN $1 = 'cancelled' THEN CURRENT_TIMESTAMP ELSE cancellation_date END,
+            completion_date = CASE WHEN $1 = 'completed' THEN CURRENT_TIMESTAMP ELSE completion_date END
+        WHERE id = $3
+        RETURNING booking_ref, status
       `;
 
-      values.push(bookingId);
-
-      const result = await this.client.query(query, values);
+      const result = await client.query(query, [
+        status,
+        supplierResponse ? JSON.stringify(supplierResponse) : null,
+        bookingId
+      ]);
 
       if (result.rows.length === 0) {
-        throw new Error("Booking not found");
+        throw new Error('Booking not found');
       }
 
-      this.logger.info("Transfer booking updated", {
+      // Save audit log
+      await this.saveAuditLog(client, {
         bookingId,
-        updatedFields: Object.keys(updateData),
+        eventType: 'status_changed',
+        eventDescription: `Booking status changed to ${status}`,
+        userId,
+        newValues: { status },
+        responsePayload: supplierResponse
+      });
+
+      await client.query('COMMIT');
+
+      this.logger.info("Booking status updated", { 
+        bookingId,
+        status,
+        bookingRef: result.rows[0].booking_ref
       });
 
       return result.rows[0];
+
     } catch (error) {
-      this.logger.error("Failed to update transfer booking", {
-        error: error.message,
-        bookingId,
-        updateData,
-      });
+      await client.query('ROLLBACK');
+      this.logger.error("Error updating booking status", { error: error.message, bookingId, status });
       throw error;
+    } finally {
+      client.release();
     }
   }
 
   /**
-   * Update booking by reference
-   * @param {string} bookingRef - Booking reference
-   * @param {Object} updateData - Data to update
-   * @returns {Promise<Object>} - Updated booking record
+   * Get booking by ID
    */
-  async updateBookingByRef(bookingRef, updateData) {
-    await this.connect();
-
+  async getBooking(bookingId, userId = null, isAdmin = false) {
     try {
-      const booking = await this.getBookingByRef(bookingRef);
-      if (!booking) {
-        throw new Error("Booking not found");
-      }
-
-      return await this.updateBooking(booking.id, updateData);
-    } catch (error) {
-      this.logger.error("Failed to update booking by reference", {
-        error: error.message,
-        bookingRef,
-      });
-      throw error;
-    }
-  }
-
-  /**
-   * Get transfer booking by reference
-   * @param {string} bookingRef - Booking reference
-   * @returns {Promise<Object|null>} - Booking record or null
-   */
-  async getBookingByRef(bookingRef) {
-    await this.connect();
-
-    try {
-      const query = `
-        SELECT tb.*, s.name as supplier_name
+      let query = `
+        SELECT tb.*, s.name as supplier_name, u.email as user_email
         FROM transfer_bookings tb
         LEFT JOIN suppliers s ON tb.supplier_id = s.id
-        WHERE tb.booking_ref = $1
+        LEFT JOIN users u ON tb.user_id = u.id
+        WHERE tb.id = $1
       `;
 
-      const result = await this.client.query(query, [bookingRef]);
+      const params = [bookingId];
 
-      if (result.rows.length === 0) {
-        return null;
-      }
-
-      const booking = result.rows[0];
-      
-      // Parse JSON fields
-      if (booking.guest_details) {
-        booking.guestDetails = JSON.parse(booking.guest_details);
-      }
-      if (booking.supplier_response) {
-        booking.supplierResponse = JSON.parse(booking.supplier_response);
-      }
-      if (booking.audit_log) {
-        booking.auditLog = JSON.parse(booking.audit_log);
+      // Add user filter for non-admin users
+      if (!isAdmin && userId) {
+        query += ` AND tb.user_id = $2`;
+        params.push(userId);
       }
 
-      return booking;
+      const result = await this.pool.query(query, params);
+      return result.rows[0] || null;
+
     } catch (error) {
-      this.logger.error("Failed to get booking by reference", {
-        error: error.message,
-        bookingRef,
-      });
+      this.logger.error("Error getting booking", { error: error.message, bookingId, userId });
       throw error;
     }
   }
 
   /**
-   * Get transfer bookings by user ID
-   * @param {number} userId - User ID
-   * @param {Object} options - Query options (limit, offset, status)
-   * @returns {Promise<Array>} - Array of booking records
+   * Get bookings with filters (admin)
    */
-  async getBookingsByUser(userId, options = {}) {
-    await this.connect();
-
+  async getBookings(filters = {}) {
     try {
-      const { limit = 20, offset = 0, status } = options;
+      const {
+        status,
+        dateFrom,
+        dateTo,
+        supplier,
+        page = 1,
+        limit = 50,
+        userId
+      } = filters;
 
-      let whereClause = "WHERE tb.user_id = $1";
-      const values = [userId];
-      let paramIndex = 2;
+      let query = `
+        SELECT tb.*, s.name as supplier_name, u.email as user_email
+        FROM transfer_bookings tb
+        LEFT JOIN suppliers s ON tb.supplier_id = s.id
+        LEFT JOIN users u ON tb.user_id = u.id
+        WHERE 1=1
+      `;
+
+      const params = [];
+      let paramCount = 0;
 
       if (status) {
-        whereClause += ` AND tb.status = $${paramIndex}`;
-        values.push(status);
-        paramIndex++;
+        paramCount++;
+        query += ` AND tb.status = $${paramCount}`;
+        params.push(status);
       }
 
-      const query = `
-        SELECT 
-          tb.id, tb.booking_ref, tb.status, tb.vehicle_type,
-          tb.pickup_location, tb.dropoff_location, tb.pickup_date, tb.pickup_time,
-          tb.total_amount, tb.currency, tb.payment_status,
-          tb.created_at, tb.updated_at,
-          s.name as supplier_name
-        FROM transfer_bookings tb
-        LEFT JOIN suppliers s ON tb.supplier_id = s.id
-        ${whereClause}
-        ORDER BY tb.created_at DESC
-        LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-      `;
-
-      values.push(limit, offset);
-
-      const result = await this.client.query(query, values);
-
-      return result.rows;
-    } catch (error) {
-      this.logger.error("Failed to get bookings by user", {
-        error: error.message,
-        userId,
-        options,
-      });
-      throw error;
-    }
-  }
-
-  /**
-   * Cache transfer search results
-   * @param {Object} searchParams - Search parameters
-   * @param {Object} results - Search results
-   * @param {string} sessionId - Session ID
-   * @returns {Promise<Object>} - Cache record
-   */
-  async cacheSearchResults(searchParams, results, sessionId) {
-    await this.connect();
-
-    try {
-      const searchHash = this.generateSearchHash(searchParams);
-      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-
-      const query = `
-        INSERT INTO transfer_routes_cache (
-          supplier_id, search_hash, pickup_location_code, dropoff_location_code,
-          pickup_type, dropoff_type, request_params, raw_response,
-          normalized_products, ttl_seconds, expires_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-        ON CONFLICT (search_hash) 
-        DO UPDATE SET 
-          raw_response = EXCLUDED.raw_response,
-          normalized_products = EXCLUDED.normalized_products,
-          expires_at = EXCLUDED.expires_at,
-          hit_count = transfer_routes_cache.hit_count + 1,
-          updated_at = CURRENT_TIMESTAMP
-        RETURNING *
-      `;
-
-      const values = [
-        1, // Default supplier ID (Hotelbeds)
-        searchHash,
-        searchParams.pickupLocationCode,
-        searchParams.dropoffLocationCode,
-        searchParams.pickupType || "address",
-        searchParams.dropoffType || "address",
-        JSON.stringify(searchParams),
-        JSON.stringify(results.supplierResults),
-        JSON.stringify(results.transfers),
-        3600, // 1 hour TTL
-        expiresAt,
-      ];
-
-      const result = await this.client.query(query, values);
-
-      this.logger.info("Search results cached", {
-        searchHash,
-        sessionId,
-        transfersCount: results.transfers.length,
-        expiresAt,
-      });
-
-      return result.rows[0];
-    } catch (error) {
-      this.logger.error("Failed to cache search results", {
-        error: error.message,
-        sessionId,
-      });
-      // Don't throw error for caching failures
-      return null;
-    }
-  }
-
-  /**
-   * Get cached search results
-   * @param {Object} searchParams - Search parameters
-   * @returns {Promise<Object|null>} - Cached results or null
-   */
-  async getCachedSearchResults(searchParams) {
-    await this.connect();
-
-    try {
-      const searchHash = this.generateSearchHash(searchParams);
-
-      const query = `
-        SELECT normalized_products, expires_at, hit_count, created_at
-        FROM transfer_routes_cache 
-        WHERE search_hash = $1 
-        AND expires_at > CURRENT_TIMESTAMP
-        ORDER BY created_at DESC
-        LIMIT 1
-      `;
-
-      const result = await this.client.query(query, [searchHash]);
-
-      if (result.rows.length === 0) {
-        return null;
+      if (dateFrom) {
+        paramCount++;
+        query += ` AND tb.pickup_date >= $${paramCount}`;
+        params.push(dateFrom);
       }
 
-      const cached = result.rows[0];
+      if (dateTo) {
+        paramCount++;
+        query += ` AND tb.pickup_date <= $${paramCount}`;
+        params.push(dateTo);
+      }
 
-      // Update hit count
-      await this.client.query(
-        "UPDATE transfer_routes_cache SET hit_count = hit_count + 1 WHERE search_hash = $1",
-        [searchHash]
-      );
+      if (supplier) {
+        paramCount++;
+        query += ` AND s.name ILIKE $${paramCount}`;
+        params.push(`%${supplier}%`);
+      }
+
+      if (userId) {
+        paramCount++;
+        query += ` AND tb.user_id = $${paramCount}`;
+        params.push(userId);
+      }
+
+      // Get total count
+      const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered_bookings`;
+      const countResult = await this.pool.query(countQuery, params);
+      const total = parseInt(countResult.rows[0].total);
+
+      // Add pagination
+      query += ` ORDER BY tb.created_at DESC LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}`;
+      params.push(limit, (page - 1) * limit);
+
+      const result = await this.pool.query(query, params);
 
       return {
-        transfers: JSON.parse(cached.normalized_products),
-        cachedAt: cached.created_at,
-        hitCount: cached.hit_count,
-        expiresAt: cached.expires_at,
+        data: result.rows,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit)
+        }
       };
+
     } catch (error) {
-      this.logger.error("Failed to get cached search results", {
-        error: error.message,
-        searchHash: this.generateSearchHash(searchParams),
-      });
-      return null;
+      this.logger.error("Error getting bookings", { error: error.message, filters });
+      throw error;
     }
   }
 
   /**
-   * Store transfer product details
-   * @param {Object} productData - Product data
-   * @returns {Promise<Object>} - Created product record
+   * Save audit log
    */
-  async storeProduct(productData) {
-    await this.connect();
-
+  async saveAuditLog(client, logData) {
     try {
       const query = `
-        INSERT INTO transfer_products (
-          supplier_id, product_code, product_name, vehicle_type, vehicle_class,
-          max_passengers, max_luggage, pickup_location, pickup_location_code,
-          pickup_type, dropoff_location, dropoff_location_code, dropoff_type,
-          distance_km, estimated_duration_minutes, base_price, currency,
-          features, inclusions, exclusions, cancellation_policy,
-          provider_name, provider_rating, is_active, supplier_data, search_session_id
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-          $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
-          $21, $22, $23, $24, $25, $26
-        ) RETURNING *
+        INSERT INTO transfer_audit_logs (
+          booking_id, event_type, event_description, user_id, user_email,
+          ip_address, user_agent, old_values, new_values, request_payload,
+          response_payload, session_id
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
       `;
 
       const values = [
-        productData.supplierId || 1,
-        productData.productCode,
-        productData.productName,
-        productData.vehicleType,
-        productData.vehicleClass,
-        productData.maxPassengers,
-        productData.maxLuggage,
-        productData.pickupLocation,
-        productData.pickupLocationCode,
-        productData.pickupType,
-        productData.dropoffLocation,
-        productData.dropoffLocationCode,
-        productData.dropoffType,
-        productData.distanceKm,
-        productData.estimatedDurationMinutes,
-        productData.basePrice,
-        productData.currency,
-        JSON.stringify(productData.features || []),
-        JSON.stringify(productData.inclusions || []),
-        JSON.stringify(productData.exclusions || []),
-        JSON.stringify(productData.cancellationPolicy || {}),
-        productData.providerName,
-        productData.providerRating,
-        productData.isActive !== false,
-        JSON.stringify(productData.supplierData || {}),
-        productData.searchSessionId,
+        logData.bookingId,
+        logData.eventType,
+        logData.eventDescription,
+        logData.userId,
+        logData.userEmail,
+        logData.ipAddress,
+        logData.userAgent,
+        logData.oldValues ? JSON.stringify(logData.oldValues) : null,
+        logData.newValues ? JSON.stringify(logData.newValues) : null,
+        logData.requestPayload ? this.encryptPayload(JSON.stringify(logData.requestPayload)) : null,
+        logData.responsePayload ? this.encryptPayload(JSON.stringify(logData.responsePayload)) : null,
+        logData.sessionId
       ];
 
-      const result = await this.client.query(query, values);
+      await client.query(query, values);
 
-      this.logger.info("Transfer product stored", {
-        productId: result.rows[0].id,
-        productCode: result.rows[0].product_code,
-        vehicleType: result.rows[0].vehicle_type,
-      });
-
-      return result.rows[0];
     } catch (error) {
-      this.logger.error("Failed to store transfer product", {
-        error: error.message,
-        productCode: productData.productCode,
-      });
+      this.logger.error("Error saving audit log", { error: error.message });
+      // Don't throw - audit logging should not break the main flow
+    }
+  }
+
+  /**
+   * Get audit logs
+   */
+  async getAuditLogs(filters = {}) {
+    try {
+      const {
+        bookingId,
+        eventType,
+        dateFrom,
+        dateTo,
+        page = 1,
+        limit = 100
+      } = filters;
+
+      let query = `
+        SELECT id, booking_id, event_type, event_description, user_id, user_email,
+               ip_address, user_agent, old_values, new_values, session_id, created_at
+        FROM transfer_audit_logs
+        WHERE 1=1
+      `;
+
+      const params = [];
+      let paramCount = 0;
+
+      if (bookingId) {
+        paramCount++;
+        query += ` AND booking_id = $${paramCount}`;
+        params.push(bookingId);
+      }
+
+      if (eventType) {
+        paramCount++;
+        query += ` AND event_type = $${paramCount}`;
+        params.push(eventType);
+      }
+
+      if (dateFrom) {
+        paramCount++;
+        query += ` AND created_at >= $${paramCount}`;
+        params.push(dateFrom);
+      }
+
+      if (dateTo) {
+        paramCount++;
+        query += ` AND created_at <= $${paramCount}`;
+        params.push(dateTo);
+      }
+
+      // Get total count
+      const countQuery = `SELECT COUNT(*) as total FROM (${query}) as filtered_logs`;
+      const countResult = await this.pool.query(countQuery, params);
+      const total = parseInt(countResult.rows[0].total);
+
+      // Add pagination
+      query += ` ORDER BY created_at DESC LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}`;
+      params.push(limit, (page - 1) * limit);
+
+      const result = await this.pool.query(query, params);
+
+      return {
+        data: result.rows,
+        pagination: {
+          page,
+          limit,
+          total,
+          pages: Math.ceil(total / limit)
+        }
+      };
+
+    } catch (error) {
+      this.logger.error("Error getting audit logs", { error: error.message, filters });
       throw error;
     }
   }
 
   /**
-   * Get transfer pricing rules
-   * @param {Object} criteria - Matching criteria
-   * @returns {Promise<Array>} - Array of pricing rules
+   * Get revenue analytics
    */
-  async getPricingRules(criteria = {}) {
-    await this.connect();
-
+  async getRevenueAnalytics(dateFrom, dateTo, supplier = null, vehicleType = null) {
     try {
-      let whereClause = "WHERE is_active = true";
-      const values = [];
-      let paramIndex = 1;
-
-      if (criteria.vehicleType) {
-        whereClause += ` AND (vehicle_type IS NULL OR vehicle_type = $${paramIndex})`;
-        values.push(criteria.vehicleType);
-        paramIndex++;
-      }
-
-      if (criteria.pickupLocationCode) {
-        whereClause += ` AND (pickup_location_code IS NULL OR pickup_location_code = $${paramIndex})`;
-        values.push(criteria.pickupLocationCode);
-        paramIndex++;
-      }
-
-      if (criteria.supplierId) {
-        whereClause += ` AND (supplier_id IS NULL OR supplier_id = $${paramIndex})`;
-        values.push(criteria.supplierId);
-        paramIndex++;
-      }
-
-      const query = `
-        SELECT * FROM transfer_pricing_rules 
-        ${whereClause}
-        ORDER BY priority ASC, created_at DESC
+      let query = `
+        SELECT 
+          DATE_TRUNC('day', tb.created_at) as booking_date,
+          s.name as supplier_name,
+          tb.vehicle_type,
+          COUNT(*) as total_bookings,
+          COUNT(CASE WHEN tb.status = 'confirmed' THEN 1 END) as confirmed_bookings,
+          COUNT(CASE WHEN tb.status = 'cancelled' THEN 1 END) as cancelled_bookings,
+          SUM(tb.base_price) as total_base_amount,
+          SUM(tb.markup_amount) as total_markup_amount,
+          SUM(tb.total_amount) as total_revenue,
+          AVG(tb.total_amount) as average_booking_value,
+          SUM(CASE WHEN tb.payment_status = 'paid' THEN tb.total_amount ELSE 0 END) as paid_revenue
+        FROM transfer_bookings tb
+        LEFT JOIN suppliers s ON tb.supplier_id = s.id
+        WHERE tb.created_at >= $1 AND tb.created_at <= $2
       `;
 
-      const result = await this.client.query(query, values);
+      const params = [dateFrom, dateTo];
+      let paramCount = 2;
+
+      if (supplier) {
+        paramCount++;
+        query += ` AND s.name ILIKE $${paramCount}`;
+        params.push(`%${supplier}%`);
+      }
+
+      if (vehicleType) {
+        paramCount++;
+        query += ` AND tb.vehicle_type = $${paramCount}`;
+        params.push(vehicleType);
+      }
+
+      query += ` GROUP BY DATE_TRUNC('day', tb.created_at), s.name, tb.vehicle_type
+                 ORDER BY booking_date DESC, total_revenue DESC`;
+
+      const result = await this.pool.query(query, params);
 
       return result.rows;
+
     } catch (error) {
-      this.logger.error("Failed to get pricing rules", {
-        error: error.message,
-        criteria,
-      });
+      this.logger.error("Error getting revenue analytics", { error: error.message });
       throw error;
     }
+  }
+
+  /**
+   * Generate unique booking reference
+   */
+  generateBookingReference() {
+    const prefix = 'TR';
+    const timestamp = Date.now().toString().slice(-8);
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `${prefix}${timestamp}${random}`;
   }
 
   /**
    * Generate search hash for caching
-   * @param {Object} searchParams - Search parameters
-   * @returns {string} - MD5 hash
    */
   generateSearchHash(searchParams) {
-    const crypto = require("crypto");
-    const normalizedParams = {
-      pickup: searchParams.pickupLocation,
-      dropoff: searchParams.dropoffLocation,
+    const normalized = {
+      pickup: searchParams.pickupLocation?.code || searchParams.pickupLocation?.name,
+      dropoff: searchParams.dropoffLocation?.code || searchParams.dropoffLocation?.name,
       date: searchParams.pickupDate,
       time: searchParams.pickupTime,
-      passengers: searchParams.passengers,
-      isRoundTrip: searchParams.isRoundTrip,
-      returnDate: searchParams.returnDate,
+      passengers: `${searchParams.passengers?.adults || 2}-${searchParams.passengers?.children || 0}`,
+      vehicle: searchParams.vehicleType || 'any',
+      roundTrip: searchParams.isRoundTrip || false,
+      returnDate: searchParams.returnDate || null
     };
 
-    const hashString = JSON.stringify(normalizedParams);
-    return crypto.createHash("md5").update(hashString).digest("hex");
+    return crypto.createHash('md5').update(JSON.stringify(normalized)).digest('hex');
   }
 
   /**
-   * Convert camelCase to snake_case
-   * @param {string} str - CamelCase string
-   * @returns {string} - snake_case string
+   * Encrypt sensitive payload data
    */
-  camelToSnakeCase(str) {
-    return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-  }
-
-  /**
-   * Get booking statistics
-   * @param {Object} filters - Filter criteria
-   * @returns {Promise<Object>} - Booking statistics
-   */
-  async getBookingStats(filters = {}) {
-    await this.connect();
-
+  encryptPayload(payload) {
     try {
-      const { startDate, endDate, status } = filters;
-
-      let whereClause = "WHERE 1=1";
-      const values = [];
-      let paramIndex = 1;
-
-      if (startDate) {
-        whereClause += ` AND created_at >= $${paramIndex}`;
-        values.push(startDate);
-        paramIndex++;
-      }
-
-      if (endDate) {
-        whereClause += ` AND created_at <= $${paramIndex}`;
-        values.push(endDate);
-        paramIndex++;
-      }
-
-      if (status) {
-        whereClause += ` AND status = $${paramIndex}`;
-        values.push(status);
-        paramIndex++;
-      }
-
-      const query = `
-        SELECT 
-          COUNT(*) as total_bookings,
-          COUNT(CASE WHEN status = 'confirmed' THEN 1 END) as confirmed_bookings,
-          COUNT(CASE WHEN status = 'cancelled' THEN 1 END) as cancelled_bookings,
-          SUM(total_amount) as total_revenue,
-          AVG(total_amount) as average_booking_value,
-          COUNT(DISTINCT vehicle_type) as unique_vehicle_types,
-          COUNT(DISTINCT supplier_id) as unique_suppliers
-        FROM transfer_bookings 
-        ${whereClause}
-      `;
-
-      const result = await this.client.query(query, values);
-
-      return {
-        ...result.rows[0],
-        total_revenue: parseFloat(result.rows[0].total_revenue || 0),
-        average_booking_value: parseFloat(result.rows[0].average_booking_value || 0),
-      };
+      const secret = process.env.AUDIT_ENCRYPTION_KEY || 'default-secret-key';
+      const cipher = crypto.createCipher('aes-256-cbc', secret);
+      let encrypted = cipher.update(payload, 'utf8', 'hex');
+      encrypted += cipher.final('hex');
+      return encrypted;
     } catch (error) {
-      this.logger.error("Failed to get booking statistics", {
-        error: error.message,
-        filters,
-      });
+      this.logger.error("Error encrypting payload", { error: error.message });
+      return '[ENCRYPTION_FAILED]';
+    }
+  }
+
+  /**
+   * Clean up expired cache entries
+   */
+  async cleanupExpiredCache() {
+    try {
+      const result = await this.pool.query(
+        `DELETE FROM transfer_routes_cache WHERE expires_at < CURRENT_TIMESTAMP`
+      );
+
+      this.logger.info(`Cleaned up ${result.rowCount} expired cache entries`);
+      return result.rowCount;
+
+    } catch (error) {
+      this.logger.error("Error cleaning up expired cache", { error: error.message });
       throw error;
+    }
+  }
+
+  /**
+   * Health check
+   */
+  async healthCheck() {
+    try {
+      const result = await this.pool.query('SELECT 1 as health');
+      return { status: 'healthy', database: 'connected' };
+    } catch (error) {
+      this.logger.error("Database health check failed", { error: error.message });
+      return { status: 'unhealthy', database: 'disconnected', error: error.message };
     }
   }
 }
