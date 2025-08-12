@@ -598,21 +598,67 @@ export function TransfersSearchForm() {
               {!sameAsPickup && (
                 <PopoverContent className="w-80 sm:w-[480px] p-0 border border-gray-200 shadow-2xl rounded-lg" align="start">
                   <div className="max-h-80 overflow-y-auto">
-                    {filterDestinations(dropoffLocation).map((dest) => (
-                      <button
-                        key={dest.id}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setDropoffLocation(`${dest.name}, ${dest.country}`);
-                          setIsDropoffOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
-                      >
-                        <div className="font-medium text-gray-900">{dest.name}</div>
-                        <div className="text-sm text-gray-600">{dest.type}, {dest.country}</div>
-                      </button>
-                    ))}
+                    {!popularDestinationsLoaded ? (
+                      <div className="flex items-center justify-center p-4">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                        <span className="text-sm text-gray-600">
+                          Loading destinations...
+                        </span>
+                      </div>
+                    ) : loadingDropoffDestinations ? (
+                      <div className="flex items-center justify-center p-3">
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
+                        <span className="text-xs text-gray-600">
+                          🔍 Searching...
+                        </span>
+                      </div>
+                    ) : isDropoffUserTyping &&
+                      dropoffInputValue.length > 0 &&
+                      dropoffSuggestions.length > 0 ? (
+                      <div>
+                        <div className="px-4 py-2 bg-gray-50 border-b">
+                          <span className="text-xs font-medium text-gray-600">
+                            🔍 Search Results
+                          </span>
+                        </div>
+                        {dropoffSuggestions.map((dest, index) => (
+                          <button
+                            key={dest.id}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              selectDropoffDestination(dest);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                          >
+                            <div className="font-medium text-gray-900">{dest.name}</div>
+                            <div className="text-sm text-gray-600">{dest.type}, {dest.country}</div>
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="px-4 py-2 bg-gray-50 border-b">
+                          <span className="text-xs font-medium text-gray-600">
+                            ✈️ Popular Destinations
+                          </span>
+                        </div>
+                        {popularDestinations.slice(0, 8).map((dest, index) => (
+                          <button
+                            key={dest.id}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              selectDropoffDestination(dest);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
+                          >
+                            <div className="font-medium text-gray-900">{dest.name}</div>
+                            <div className="text-sm text-gray-600">{dest.type}, {dest.country}</div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </PopoverContent>
               )}
