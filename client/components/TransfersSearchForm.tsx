@@ -98,7 +98,7 @@ export function TransfersSearchForm() {
 
   // Options for transfers
   const transferOptions = [
-    { value: "", label: "Any vehicle type" },
+    { value: "any", label: "Any vehicle type" },
     { value: "sedan", label: "Sedan" },
     { value: "suv", label: "SUV" },
     { value: "minivan", label: "Minivan" },
