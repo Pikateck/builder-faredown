@@ -974,6 +974,139 @@ class TransfersService {
       throw new Error("Total amount must be greater than zero");
     }
   }
+
+  /**
+   * Generate mock transfer results for development
+   * @param {Object} searchParams - Search parameters
+   * @param {string} sessionId - Session ID
+   * @returns {Object} - Mock transfer results
+   */
+  getMockTransferResults(searchParams, sessionId) {
+    const mockTransfers = [
+      {
+        id: "hotelbeds_1",
+        rateKey: "sample_rate_1",
+        supplierCode: "hotelbeds",
+        vehicleType: "sedan",
+        vehicleClass: "economy",
+        vehicleName: "Economy Sedan",
+        vehicleImage: "/api/placeholder/120/80",
+        maxPassengers: 3,
+        maxLuggage: 2,
+        pickupLocation: searchParams.pickupLocation || "Mumbai Airport (BOM)",
+        pickupInstructions: "Meet at Arrivals Hall - Terminal 2",
+        dropoffLocation: searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
+        estimatedDuration: 45,
+        distance: "33 km",
+        pricing: {
+          basePrice: 1000,
+          currency: "INR",
+          totalPrice: 1200,
+          breakdown: {
+            base: 1000,
+            surcharges: 100,
+            taxes: 100
+          }
+        },
+        features: ["Professional Driver", "Meet & Greet", "Free Waiting"],
+        providerName: "Mumbai Transfers Ltd",
+        providerRating: 4.6,
+        cancellationPolicy: {
+          freeUntil: "24h",
+          feePercentage: 10
+        },
+        availability: {
+          available: true,
+          lastAvailableDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      },
+      {
+        id: "hotelbeds_2",
+        rateKey: "sample_rate_2",
+        supplierCode: "hotelbeds",
+        vehicleType: "suv",
+        vehicleClass: "premium",
+        vehicleName: "Premium SUV",
+        vehicleImage: "/api/placeholder/120/80",
+        maxPassengers: 6,
+        maxLuggage: 4,
+        pickupLocation: searchParams.pickupLocation || "Mumbai Airport (BOM)",
+        pickupInstructions: "Meet at Arrivals Hall - Terminal 2",
+        dropoffLocation: searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
+        estimatedDuration: 45,
+        distance: "33 km",
+        pricing: {
+          basePrice: 1800,
+          currency: "INR",
+          totalPrice: 2100,
+          breakdown: {
+            base: 1800,
+            surcharges: 150,
+            taxes: 150
+          }
+        },
+        features: ["Luxury Vehicle", "Professional Driver", "Meet & Greet", "Free Waiting", "WiFi"],
+        providerName: "Premium Transfers Ltd",
+        providerRating: 4.8,
+        cancellationPolicy: {
+          freeUntil: "24h",
+          feePercentage: 15
+        },
+        availability: {
+          available: true,
+          lastAvailableDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      },
+      {
+        id: "hotelbeds_3",
+        rateKey: "sample_rate_3",
+        supplierCode: "hotelbeds",
+        vehicleType: "minivan",
+        vehicleClass: "business",
+        vehicleName: "Business Minivan",
+        vehicleImage: "/api/placeholder/120/80",
+        maxPassengers: 8,
+        maxLuggage: 6,
+        pickupLocation: searchParams.pickupLocation || "Mumbai Airport (BOM)",
+        pickupInstructions: "Meet at Arrivals Hall - Terminal 2",
+        dropoffLocation: searchParams.dropoffLocation || "Hotel Taj Mahal Palace",
+        estimatedDuration: 45,
+        distance: "33 km",
+        pricing: {
+          basePrice: 2500,
+          currency: "INR",
+          totalPrice: 3000,
+          breakdown: {
+            base: 2500,
+            surcharges: 250,
+            taxes: 250
+          }
+        },
+        features: ["Spacious Vehicle", "Professional Driver", "Meet & Greet", "Free Waiting", "WiFi", "Air Conditioning"],
+        providerName: "Business Transfers Ltd",
+        providerRating: 4.7,
+        cancellationPolicy: {
+          freeUntil: "48h",
+          feePercentage: 20
+        },
+        availability: {
+          available: true,
+          lastAvailableDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        }
+      }
+    ];
+
+    return {
+      transfers: mockTransfers,
+      supplierResults: {
+        hotelbeds: mockTransfers
+      },
+      searchParams,
+      sessionId,
+      searchedAt: new Date().toISOString(),
+      mockData: true
+    };
+  }
 }
 
 module.exports = new TransfersService();
