@@ -387,24 +387,53 @@ export function TransfersSearchForm() {
                   </svg>
                   <Input
                     type="text"
-                    value={pickupLocation}
+                    value={isPickupUserTyping ? pickupInputValue : pickupLocation || ""}
                     onChange={(e) => {
-                      setPickupLocation(e.target.value);
+                      const value = e.target.value;
+                      setPickupInputValue(value);
+                      setIsPickupUserTyping(true);
+                      // Auto-open dropdown when user starts typing
+                      if (!isPickupOpen) {
+                        setIsPickupOpen(true);
+                      }
+                      // Search destinations
+                      searchPickupDestinations(value);
+                    }}
+                    onFocus={(e) => {
+                      e.stopPropagation();
+                      setIsPickupOpen(true);
+                      // Set inputValue to current destination when focusing for editing
+                      if (!isPickupUserTyping && pickupLocation) {
+                        setPickupInputValue(pickupLocation);
+                        setIsPickupUserTyping(true);
+                      }
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setIsPickupOpen(true);
                     }}
-                    onFocus={() => setIsPickupOpen(true)}
-                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation"
+                    onKeyDown={(e) => {
+                      e.stopPropagation();
+                    }}
+                    readOnly={false}
+                    disabled={false}
+                    className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
                     placeholder="Pickup location"
                     autoComplete="off"
+                    data-destination-input="true"
                   />
-                  {pickupLocation && (
+                  {(pickupLocation || (isPickupUserTyping && pickupInputValue)) && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setPickupLocation("");
+                        setPickupInputValue("");
+                        setIsPickupUserTyping(false);
+                        setPickupLocationCode("");
                         setIsPickupOpen(false);
                       }}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
+                      title="Clear pickup location"
                     >
                       <X className="w-3 h-3" />
                     </button>
