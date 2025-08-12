@@ -32,22 +32,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { transfersService, TransferDestination } from "@/services/transfersService";
 
 interface PassengerConfig {
   adults: number;
   children: number;
   childrenAges: number[];
   infants: number;
-}
-
-interface DestinationOption {
-  id: string;
-  code: string;
-  name: string;
-  country: string;
-  type: string;
-  flag?: string;
-  popular?: boolean;
 }
 
 export function TransfersSearchForm() {
