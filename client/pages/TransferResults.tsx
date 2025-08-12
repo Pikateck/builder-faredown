@@ -758,6 +758,13 @@ export default function TransferResults() {
                       {/* Action Buttons */}
                       <div className="space-y-2">
                         <Button
+                          onClick={() => navigate(`/transfer-details/${transfer.id}`)}
+                          variant="outline"
+                          className="w-full text-gray-700 border-gray-300 hover:bg-gray-50"
+                        >
+                          View Details
+                        </Button>
+                        <Button
                           onClick={() => handleBookNow(transfer)}
                           className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                         >
