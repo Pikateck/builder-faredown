@@ -74,6 +74,8 @@ export function SightseeingCard({
   onBargainClick,
   searchParams,
   className,
+  isSelected = false,
+  onSelect,
 }: SightseeingCardProps) {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
