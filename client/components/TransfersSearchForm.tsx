@@ -913,15 +913,24 @@ export function TransfersSearchForm() {
                       }}
                       onFocus={(e) => {
                         e.stopPropagation();
-                        setIsPickupOpen(true);
                         if (!isPickupUserTyping && pickupLocation) {
                           setPickupInputValue(pickupLocation);
                           setIsPickupUserTyping(true);
                         }
+                        // Show popular destinations on focus
+                        if (pickupSuggestions.length === 0) {
+                          searchDestinations("", "pickup");
+                        }
+                        setIsPickupOpen(true);
                       }}
-                      onMouseDown={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         if (!isPickupOpen) {
                           setIsPickupOpen(true);
+                          // Show popular destinations when opening
+                          if (pickupSuggestions.length === 0) {
+                            searchDestinations("", "pickup");
+                          }
                         }
                       }}
                       className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
