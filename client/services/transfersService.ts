@@ -177,6 +177,12 @@ export interface TransferBookingDetails {
   voucherUrl?: string;
 }
 
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
 class TransfersService {
   /**
    * Search for available transfers
@@ -442,108 +448,6 @@ class TransfersService {
   }
 
   /**
-   * Validate search parameters
-   */
-  validateSearchParams(params: TransferSearchParams): { isValid: boolean; errors: string[] } {
-    const errors: string[] = [];
-
-    if (!params.pickupLocation?.trim()) {
-      errors.push("Pickup location is required");
-    }
-
-    if (!params.dropoffLocation?.trim()) {
-      errors.push("Drop-off location is required");
-    }
-
-    if (!params.pickupDate) {
-      errors.push("Pickup date is required");
-    } else {
-      const pickupDate = new Date(params.pickupDate);
-      if (pickupDate < new Date()) {
-        errors.push("Pickup date cannot be in the past");
-      }
-    }
-
-    if (params.isRoundTrip) {
-      if (!params.returnDate) {
-        errors.push("Return date is required for round trip");
-      } else {
-        const pickupDate = new Date(params.pickupDate);
-        const returnDate = new Date(params.returnDate);
-        if (returnDate <= pickupDate) {
-          errors.push("Return date must be after pickup date");
-        }
-      }
-    }
-
-    if (!params.passengers) {
-      errors.push("Passenger information is required");
-    } else {
-      if (params.passengers.adults < 1 || params.passengers.adults > 8) {
-        errors.push("Adults count must be between 1 and 8");
-      }
-      if (params.passengers.children < 0 || params.passengers.children > 6) {
-        errors.push("Children count must be between 0 and 6");
-      }
-      if (params.passengers.infants < 0 || params.passengers.infants > 3) {
-        errors.push("Infants count must be between 0 and 3");
-      }
-    }
-
-    return {
-      isValid: errors.length === 0,
-      errors,
-    };
-  }
-
-  /**
-   * Format transfer duration
-   */
-  formatDuration(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    
-    if (hours > 0) {
-      return `${hours}h ${mins}m`;
-    }
-    return `${mins}m`;
-  }
-
-  /**
-   * Get transfer details by ID
-   */
-  async getTransferDetails(transferId: string): Promise<ApiResponse<any>> {
-    try {
-      const response = await fetch(`${this.baseUrl}/transfers/product/${transferId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        return {
-          success: false,
-          error: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
-        };
-      }
-
-      const data = await response.json();
-      return {
-        success: true,
-        data: data.data,
-      };
-    } catch (error) {
-      console.error("Error fetching transfer details:", error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Failed to fetch transfer details",
-      };
-    }
-  }
-
-  /**
    * Search destinations using Hotelbeds Transfers API
    * Matches hotels/sightseeing service signature exactly
    */
@@ -554,7 +458,7 @@ class TransfersService {
       let response;
       try {
         // Call the backend Hotelbeds Transfers API
-        response = await this.api.post<{
+        response = await api.post<{
           success: boolean;
           data: { destinations: any[] };
         }>("/api/transfers/destinations", {
@@ -635,6 +539,74 @@ class TransfersService {
       dest.country.toLowerCase().includes(query.toLowerCase()) ||
       dest.code.toLowerCase().includes(query.toLowerCase())
     );
+  }
+
+  /**
+   * Validate search parameters
+   */
+  validateSearchParams(params: TransferSearchParams): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!params.pickupLocation?.trim()) {
+      errors.push("Pickup location is required");
+    }
+
+    if (!params.dropoffLocation?.trim()) {
+      errors.push("Drop-off location is required");
+    }
+
+    if (!params.pickupDate) {
+      errors.push("Pickup date is required");
+    } else {
+      const pickupDate = new Date(params.pickupDate);
+      if (pickupDate < new Date()) {
+        errors.push("Pickup date cannot be in the past");
+      }
+    }
+
+    if (params.isRoundTrip) {
+      if (!params.returnDate) {
+        errors.push("Return date is required for round trip");
+      } else {
+        const pickupDate = new Date(params.pickupDate);
+        const returnDate = new Date(params.returnDate);
+        if (returnDate <= pickupDate) {
+          errors.push("Return date must be after pickup date");
+        }
+      }
+    }
+
+    if (!params.passengers) {
+      errors.push("Passenger information is required");
+    } else {
+      if (params.passengers.adults < 1 || params.passengers.adults > 8) {
+        errors.push("Adults count must be between 1 and 8");
+      }
+      if (params.passengers.children < 0 || params.passengers.children > 6) {
+        errors.push("Children count must be between 0 and 6");
+      }
+      if (params.passengers.infants < 0 || params.passengers.infants > 3) {
+        errors.push("Infants count must be between 0 and 3");
+      }
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  }
+
+  /**
+   * Format transfer duration
+   */
+  formatDuration(minutes: number): string {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    
+    if (hours > 0) {
+      return `${hours}h ${mins}m`;
+    }
+    return `${mins}m`;
   }
 
   /**
