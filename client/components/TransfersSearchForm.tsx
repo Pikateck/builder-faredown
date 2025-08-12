@@ -289,15 +289,15 @@ export function TransfersSearchForm() {
         onClose={() => setShowError(false)}
       />
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        {/* Mode Segmented Control */}
-        <div className="flex bg-gray-100 rounded-lg p-1 mb-4 w-fit">
+        {/* Mode Segmented Control - using same chip styles as Hotels */}
+        <div className="flex bg-slate-50 rounded-lg p-1 mb-4 w-fit">
           <button
             onClick={() => setTransferMode("airport")}
             className={cn(
               "px-4 py-2 rounded-md text-sm font-medium transition-colors",
               transferMode === "airport"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-white text-slate-900 shadow-sm border border-slate-200"
+                : "text-slate-600 hover:text-slate-900"
             )}
           >
             Airport taxi
@@ -307,8 +307,8 @@ export function TransfersSearchForm() {
             className={cn(
               "px-4 py-2 rounded-md text-sm font-medium transition-colors",
               transferMode === "rental"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-white text-slate-900 shadow-sm border border-slate-200"
+                : "text-slate-600 hover:text-slate-900"
             )}
           >
             Car rentals
@@ -318,15 +318,15 @@ export function TransfersSearchForm() {
         {/* Airport Taxi Mode */}
         {transferMode === "airport" && (
           <>
-            {/* Direction Toggles */}
+            {/* Direction Toggles - using same chip styles as Hotels Round trip/One way */}
             <div className="flex gap-2 mb-4 flex-wrap">
               <button
                 onClick={() => setAirportDirection("airport-to-hotel")}
                 className={cn(
                   "px-3 py-2 rounded-full text-xs font-medium border transition-colors",
                   airportDirection === "airport-to-hotel"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
+                    ? "bg-slate-50 text-slate-700 border-slate-200"
+                    : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
                 )}
               >
                 Airport → Hotel
@@ -336,8 +336,8 @@ export function TransfersSearchForm() {
                 className={cn(
                   "px-3 py-2 rounded-full text-xs font-medium border transition-colors",
                   airportDirection === "hotel-to-airport"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
+                    ? "bg-slate-50 text-slate-700 border-slate-200"
+                    : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
                 )}
               >
                 Hotel → Airport
@@ -347,15 +347,15 @@ export function TransfersSearchForm() {
                 className={cn(
                   "px-3 py-2 rounded-full text-xs font-medium border transition-colors",
                   airportDirection === "return"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-gray-600 border-gray-300 hover:border-gray-400"
+                    ? "bg-slate-50 text-slate-700 border-slate-200"
+                    : "bg-white text-slate-600 border-slate-300 hover:border-slate-400"
                 )}
               >
                 Return
               </button>
             </div>
 
-            {/* Main Search Form */}
+            {/* Main Search Form - exact styling as Hotels */}
             <div className="flex flex-col lg:flex-row gap-2 mb-4">
               {/* Airport Field */}
               <div className="flex-1 lg:max-w-[280px] relative">
@@ -391,7 +391,7 @@ export function TransfersSearchForm() {
                           e.stopPropagation();
                           setIsAirportOpen(true);
                         }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Departure airport"
                         autoComplete="off"
                       />
@@ -405,9 +405,9 @@ export function TransfersSearchForm() {
                             setAirportCode("");
                             setIsAirportOpen(false);
                           }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
                         >
-                          <X className="w-4 h-4" />
+                          <X className="w-3 h-3" />
                         </button>
                       )}
                     </div>
@@ -492,7 +492,7 @@ export function TransfersSearchForm() {
                           e.stopPropagation();
                           setIsHotelOpen(true);
                         }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Hotel or address"
                         autoComplete="off"
                       />
@@ -506,9 +506,9 @@ export function TransfersSearchForm() {
                             setHotelCode("");
                             setIsHotelOpen(false);
                           }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
                         >
-                          <X className="w-4 h-4" />
+                          <X className="w-3 h-3" />
                         </button>
                       )}
                     </div>
@@ -572,7 +572,7 @@ export function TransfersSearchForm() {
                         type="text"
                         value={pickupDate ? format(pickupDate, "MMM d") : ""}
                         readOnly
-                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm cursor-pointer"
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm cursor-pointer touch-manipulation"
                         placeholder="Select date"
                       />
                     </div>
@@ -596,7 +596,7 @@ export function TransfersSearchForm() {
                 </label>
                 
                 <Select value={pickupTime} onValueChange={setPickupTime}>
-                  <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm">
+                  <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm">
                     <div className="flex items-center">
                       <Clock className="w-4 h-4 text-blue-600 mr-2" />
                       <SelectValue placeholder="Time" />
@@ -629,7 +629,7 @@ export function TransfersSearchForm() {
                         type="text"
                         value={passengerSummary()}
                         readOnly
-                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm cursor-pointer"
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm cursor-pointer touch-manipulation"
                         placeholder="Passengers"
                       />
                     </div>
@@ -789,7 +789,7 @@ export function TransfersSearchForm() {
                     type="text"
                     value={flightNumber}
                     onChange={(e) => setFlightNumber(e.target.value)}
-                    className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
+                    className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm touch-manipulation"
                     placeholder="e.g. AI 102"
                   />
                 </div>
@@ -811,7 +811,7 @@ export function TransfersSearchForm() {
                         type="text"
                         value={returnDate ? format(returnDate, "MMM d") : ""}
                         readOnly
-                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm cursor-pointer"
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm cursor-pointer touch-manipulation"
                         placeholder="Return date"
                         onClick={() => {
                           // Add return date picker logic here
@@ -824,7 +824,7 @@ export function TransfersSearchForm() {
                       Return Time
                     </label>
                     <Select value={returnTime} onValueChange={setReturnTime}>
-                      <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm">
+                      <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm">
                         <div className="flex items-center">
                           <Clock className="w-4 h-4 text-blue-600 mr-2" />
                           <SelectValue placeholder="Time" />
@@ -882,7 +882,7 @@ export function TransfersSearchForm() {
                         e.stopPropagation();
                         setIsPickupOpen(true);
                       }}
-                      className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
+                      className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
                       placeholder="Pick-up location"
                       autoComplete="off"
                     />
@@ -896,9 +896,9 @@ export function TransfersSearchForm() {
                           setPickupLocationCode("");
                           setIsPickupOpen(false);
                         }}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-3 h-3" />
                       </button>
                     )}
                   </div>
@@ -983,7 +983,7 @@ export function TransfersSearchForm() {
                           e.stopPropagation();
                           setIsDropoffOpen(true);
                         }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Drop-off location"
                         autoComplete="off"
                       />
@@ -997,9 +997,9 @@ export function TransfersSearchForm() {
                             setDropoffLocationCode("");
                             setIsDropoffOpen(false);
                           }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-1 transition-colors"
                         >
-                          <X className="w-4 h-4" />
+                          <X className="w-3 h-3" />
                         </button>
                       )}
                     </div>
@@ -1062,7 +1062,7 @@ export function TransfersSearchForm() {
                   type="text"
                   value={pickupDate ? format(pickupDate, "MMM d") : ""}
                   readOnly
-                  className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm cursor-pointer"
+                  className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm cursor-pointer touch-manipulation"
                   placeholder="Pick-up date"
                 />
               </div>
@@ -1075,7 +1075,7 @@ export function TransfersSearchForm() {
               </label>
               
               <Select value={pickupTime} onValueChange={setPickupTime}>
-                <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm">
+                <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm">
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 text-blue-600 mr-2" />
                     <SelectValue placeholder="Time" />
@@ -1103,7 +1103,7 @@ export function TransfersSearchForm() {
                   type="text"
                   value={dropoffDate ? format(dropoffDate, "MMM d") : ""}
                   readOnly
-                  className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm cursor-pointer"
+                  className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm cursor-pointer touch-manipulation"
                   placeholder="Drop-off date"
                 />
               </div>
@@ -1116,7 +1116,7 @@ export function TransfersSearchForm() {
               </label>
               
               <Select value={dropoffTime} onValueChange={setDropoffTime}>
-                <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm">
+                <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm">
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 text-blue-600 mr-2" />
                     <SelectValue placeholder="Time" />
@@ -1190,14 +1190,17 @@ export function TransfersSearchForm() {
           )}
         </div>
 
-        {/* Search Button */}
-        <div className="flex justify-center sm:justify-start">
+        {/* Search Button - exact same styling as Hotels */}
+        <div className="flex-shrink-0 w-full sm:w-auto">
           <Button
             onClick={handleSearch}
-            className="bg-[#003580] hover:bg-[#002c66] text-white px-8 py-3 text-sm font-medium rounded-lg shadow-sm"
+            className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 touch-manipulation transition-all duration-150"
+            title={`Search ${transferMode === "airport" ? "transfers" : "car rentals"}`}
           >
-            <Search className="w-4 h-4 mr-2" />
-            Search {transferMode === "airport" ? "Transfers" : "Car Rentals"}
+            <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-sm sm:text-base">
+              Search {transferMode === "airport" ? "Transfers" : "Car Rentals"}
+            </span>
           </Button>
         </div>
       </div>
