@@ -75,6 +75,21 @@ export default function SightseeingBookingConfirmation() {
   const lastName = searchParams.get("lastName") || "User";
   const email = searchParams.get("email") || "guest@example.com";
 
+  // Calculate total price
+  const totalPrice = (() => {
+    if (!attraction) return 0;
+    const ticketPrice = attraction.ticketTypes[ticketTypeIndex]?.price || 0;
+    return (ticketPrice * adults) + (ticketPrice * 0.5 * children); // Assuming children are 50% price
+  })();
+
+  // Format visit date for display
+  const formattedVisitDate = new Date(visitDate).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   // Load attraction data
   useEffect(() => {
     const loadAttraction = async () => {
@@ -243,22 +258,99 @@ export default function SightseeingBookingConfirmation() {
   };
 
   const handleDownloadTicket = () => {
-    // In a real app, this would download the actual ticket PDF
-    alert(
-      "Ticket download would start here. Check your email for the mobile ticket.",
-    );
+    // Generate ticket data
+    const ticketData = {
+      bookingRef,
+      attractionName: attraction?.name || '',
+      location: attraction?.location || '',
+      visitDate: formattedVisitDate,
+      selectedTime,
+      guestName: `${firstName} ${lastName}`,
+      email,
+      adults,
+      children,
+      ticketType: attraction?.ticketTypes[ticketTypeIndex]?.name || '',
+      totalPrice
+    };
+
+    // Create and download ticket as JSON/text file
+    const ticketContent = `FAREDOWN SIGHTSEEING TICKET
+==========================
+
+Booking Reference: ${ticketData.bookingRef}
+Attraction: ${ticketData.attractionName}
+Location: ${ticketData.location}
+Date: ${ticketData.visitDate}
+Time: ${ticketData.selectedTime}
+Guest: ${ticketData.guestName}
+Email: ${ticketData.email}
+Adults: ${ticketData.adults}
+Children: ${ticketData.children}
+Ticket Type: ${ticketData.ticketType}
+Total Paid: ${formatPrice(ticketData.totalPrice)}
+
+==========================
+Please present this ticket at the venue.
+For support: support@faredown.com`;
+
+    const blob = new Blob([ticketContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `faredown-ticket-${bookingRef}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    // Show success message
+    alert('Ticket downloaded successfully! Please present this at the venue.');
   };
 
   const handleShareBooking = () => {
+    const shareText = `🎉 Just booked ${attraction?.name}!
+
+📅 Date: ${formattedVisitDate}
+⏰ Time: ${selectedTime}
+📍 Location: ${attraction?.location}
+🎫 Booking Ref: ${bookingRef}
+
+Booked through Faredown.com 🌟`;
+
+    const shareUrl = window.location.href;
+
     if (navigator.share) {
+      // Use native sharing on mobile devices
       navigator.share({
-        title: `My ${attraction?.name} Booking`,
-        text: `I've booked ${attraction?.name} for ${formattedVisitDate}!`,
-        url: window.location.href,
+        title: `My ${attraction?.name} Booking - Faredown`,
+        text: shareText,
+        url: shareUrl,
+      }).catch((error) => {
+        console.log('Error sharing:', error);
+        // Fallback to clipboard
+        fallbackShare();
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert("Booking link copied to clipboard!");
+      // Fallback for desktop or unsupported devices
+      fallbackShare();
+    }
+
+    function fallbackShare() {
+      const fullShareText = `${shareText}\n\nView booking: ${shareUrl}`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fullShareText)
+          .then(() => {
+            alert('Booking details copied to clipboard! You can now paste and share.');
+          })
+          .catch(() => {
+            // Final fallback - show text in a prompt for manual copy
+            prompt('Copy this text to share your booking:', fullShareText);
+          });
+      } else {
+        // Final fallback - show text in a prompt for manual copy
+        prompt('Copy this text to share your booking:', fullShareText);
+      }
     }
   };
 
