@@ -21,7 +21,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "₹",
     name: "Indian Rupee",
     rate: 1,
-    flag: "🇮🇳",
+    flag: "🇮����",
     decimalPlaces: 0,
   },
   {
@@ -271,7 +271,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
             error?.message || "Unknown error",
           );
         });
-      }, 100); // Delay to ensure provider is fully initialized
+      }, 2000); // Longer delay to ensure app is fully loaded and prevent race conditions
 
       // Update rates every 30 minutes (reduced frequency to prevent spam)
       const interval = setInterval(
