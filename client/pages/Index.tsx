@@ -2872,6 +2872,18 @@ export default function Index() {
                         Sightseeing
                       </button>
                     </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          setActiveTab("transfers");
+                          window.history.pushState({}, "", "/?tab=transfers");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="hover:text-white text-left"
+                      >
+                        Transfers
+                      </button>
+                    </li>
                   </ul>
                 </div>
 
