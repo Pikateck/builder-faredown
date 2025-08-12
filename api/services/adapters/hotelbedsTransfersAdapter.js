@@ -7,22 +7,47 @@
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
 const axios = require("axios");
 const crypto = require("crypto");
+const winston = require("winston");
 
 class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     super("HOTELBEDS_TRANSFERS", {
-      baseUrl:
-        process.env.HOTELBEDS_TRANSFERS_API ||
-        "https://api.test.hotelbeds.com/transfers-api/1.0",
-      contentUrl:
-        process.env.HOTELBEDS_TRANSFERS_CONTENT_API ||
-        "https://api.test.hotelbeds.com/transfers-cache-api/1.0",
-      apiKey: process.env.HOTELBEDS_API_KEY,
-      secret: process.env.HOTELBEDS_SECRET,
-      requestsPerSecond: 8, // Hotelbeds rate limits
-      timeout: 30000,
+      baseUrl: process.env.TRANSFERS__BASE_URL_TRANSFERS || 
+               (process.env.TRANSFERS__HOTELBEDS__ENV === 'live' 
+                 ? "https://api.hotelbeds.com/transfers-api/1.0"
+                 : "https://api.test.hotelbeds.com/transfers-api/1.0"),
+      contentUrl: process.env.TRANSFERS__BASE_URL_CONTENT ||
+                  (process.env.TRANSFERS__HOTELBEDS__ENV === 'live'
+                    ? "https://api.hotelbeds.com/transfers-cache-api/1.0"
+                    : "https://api.test.hotelbeds.com/transfers-cache-api/1.0"),
+      apiKey: process.env.TRANSFERS__HOTELBEDS__API_KEY,
+      secret: process.env.TRANSFERS__HOTELBEDS__SECRET,
+      environment: process.env.TRANSFERS__HOTELBEDS__ENV || 'test',
+      timeout: parseInt(process.env.TRANSFERS__TIMEOUT_MS) || 15000,
+      retryMax: parseInt(process.env.TRANSFERS__RETRY_MAX) || 2,
+      rateLimit: {
+        windowMs: parseInt(process.env.TRANSFERS__RATE_LIMIT_WINDOW_MS) || 4000,
+        maxRequests: parseInt(process.env.TRANSFERS__RATE_LIMIT_MAX) || 8
+      },
       ...config,
     });
+
+    this.logger = winston.createLogger({
+      level: "info",
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.printf(({ timestamp, level, message, ...meta }) => {
+          return `${timestamp} [${level.toUpperCase()}] [HOTELBEDS-TRANSFERS] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
+        })
+      ),
+      transports: [new winston.transports.Console()],
+    });
+
+    // Rate limiting state
+    this.rateLimitState = {
+      requests: [],
+      lastWindowReset: Date.now()
+    };
 
     // Initialize HTTP clients
     this.transfersClient = axios.create({
@@ -48,601 +73,649 @@ class HotelbedsTransfersAdapter extends BaseSupplierAdapter {
     });
 
     // Add authentication interceptors
-    this.addAuthInterceptor(this.transfersClient);
-    this.addAuthInterceptor(this.contentClient);
+    this.transfersClient.interceptors.request.use(this.addAuthHeaders.bind(this));
+    this.contentClient.interceptors.request.use(this.addAuthHeaders.bind(this));
 
-    // Add response interceptors for error handling
-    this.addResponseInterceptor(this.transfersClient);
-    this.addResponseInterceptor(this.contentClient);
-  }
+    // Add rate limiting interceptors
+    this.transfersClient.interceptors.request.use(this.rateLimitRequest.bind(this));
+    this.contentClient.interceptors.request.use(this.rateLimitRequest.bind(this));
 
-  /**
-   * Add Hotelbeds authentication to request
-   */
-  addAuthInterceptor(client) {
-    client.interceptors.request.use((config) => {
-      const timestamp = Math.floor(Date.now() / 1000);
-      const signature = crypto
-        .createHash("sha256")
-        .update(this.config.apiKey + this.config.secret + timestamp)
-        .digest("hex");
+    // Add retry interceptors
+    this.transfersClient.interceptors.response.use(null, this.retryRequest.bind(this));
+    this.contentClient.interceptors.response.use(null, this.retryRequest.bind(this));
 
-      config.headers["Api-key"] = this.config.apiKey;
-      config.headers["X-Signature"] = signature;
-
-      this.logger.debug("Adding Hotelbeds authentication", {
-        endpoint: config.url,
-        timestamp,
-        hasSignature: !!signature,
-      });
-
-      return config;
+    this.logger.info("Hotelbeds Transfers adapter initialized", {
+      environment: this.config.environment,
+      baseUrl: this.config.baseUrl,
+      hasCredentials: !!(this.config.apiKey && this.config.secret)
     });
   }
 
   /**
-   * Add response interceptor for error handling
+   * Generate Hotelbeds authentication signature
+   * X-Signature = SHA256(apiKey + secret + epochMillis)
    */
-  addResponseInterceptor(client) {
-    client.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response) {
-          this.logger.error("Hotelbeds API error", {
-            status: error.response.status,
-            statusText: error.response.statusText,
-            data: error.response.data,
-            endpoint: error.config?.url,
-          });
-
-          // Map Hotelbeds error codes to standard errors
-          const errorCode = error.response.data?.error?.code;
-          const errorMessage = error.response.data?.error?.message || error.response.statusText;
-
-          switch (error.response.status) {
-            case 400:
-              throw new Error(`Invalid request: ${errorMessage}`);
-            case 401:
-              throw new Error(`Authentication failed: ${errorMessage}`);
-            case 403:
-              throw new Error(`Access forbidden: ${errorMessage}`);
-            case 404:
-              throw new Error(`Resource not found: ${errorMessage}`);
-            case 429:
-              throw new Error(`Rate limit exceeded: ${errorMessage}`);
-            case 500:
-              throw new Error(`Server error: ${errorMessage}`);
-            default:
-              throw new Error(`API error: ${errorMessage}`);
-          }
-        }
-
-        this.logger.error("Network error", {
-          message: error.message,
-          code: error.code,
-        });
-
-        throw new Error(`Network error: ${error.message}`);
-      }
-    );
+  generateSignature(timestamp) {
+    const payload = this.config.apiKey + this.config.secret + timestamp;
+    return crypto.createHash('sha256').update(payload).digest('hex');
   }
 
   /**
-   * Search for available transfers
-   * @param {Object} searchParams - Transfer search parameters
-   * @returns {Promise<Array>} - Normalized transfer options
+   * Add authentication headers to requests
    */
-  async searchTransfers(searchParams) {
-    return await this.executeWithRetry(async () => {
-      const {
-        fromLocation,
-        toLocation,
-        outbound,
-        inbound,
-        occupancy,
-        language = "ENG",
-        currency = "EUR",
-      } = this.normalizeSearchParams(searchParams);
+  addAuthHeaders(config) {
+    if (!this.config.apiKey || !this.config.secret) {
+      throw new Error("Hotelbeds Transfers API credentials not configured");
+    }
 
-      this.logger.info("Searching transfers", {
-        fromLocation,
-        toLocation,
-        outbound,
-        inbound: inbound || "N/A",
-        occupancy,
-      });
+    const timestamp = Date.now();
+    const signature = this.generateSignature(timestamp);
 
-      const requestBody = {
-        language,
-        from: fromLocation,
-        to: toLocation,
-        outbound,
-        occupancy: [occupancy],
-        currency,
-        ...(inbound && { inbound }),
-      };
+    config.headers['Api-key'] = this.config.apiKey;
+    config.headers['X-Signature'] = signature;
+    config.headers['X-Timestamp'] = timestamp.toString();
 
-      const response = await this.transfersClient.post("/transfers", requestBody);
+    return config;
+  }
 
-      this.logger.info("Transfers search response", {
-        statusCode: response.status,
-        transfersCount: response.data?.services?.length || 0,
-        currency: response.data?.currency,
-      });
+  /**
+   * Rate limiting implementation - 8 requests per 4 seconds
+   */
+  async rateLimitRequest(config) {
+    const now = Date.now();
+    const windowMs = this.config.rateLimit.windowMs;
+    const maxRequests = this.config.rateLimit.maxRequests;
 
-      return this.normalizeTransferResults(response.data, searchParams);
+    // Reset window if expired
+    if (now - this.rateLimitState.lastWindowReset > windowMs) {
+      this.rateLimitState.requests = [];
+      this.rateLimitState.lastWindowReset = now;
+    }
+
+    // Check if we're at the limit
+    if (this.rateLimitState.requests.length >= maxRequests) {
+      const waitTime = windowMs - (now - this.rateLimitState.lastWindowReset);
+      this.logger.warn(`Rate limit reached, waiting ${waitTime}ms`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+      
+      // Reset after waiting
+      this.rateLimitState.requests = [];
+      this.rateLimitState.lastWindowReset = Date.now();
+    }
+
+    // Add this request to the window
+    this.rateLimitState.requests.push(now);
+    
+    return config;
+  }
+
+  /**
+   * Retry logic for failed requests
+   */
+  async retryRequest(error) {
+    const config = error.config;
+
+    // Don't retry if max retries reached
+    if (!config || config.__retryCount >= this.config.retryMax) {
+      return Promise.reject(error);
+    }
+
+    // Only retry on 5xx errors or timeouts
+    const shouldRetry = error.response?.status >= 500 || 
+                       error.code === 'ECONNABORTED' || 
+                       error.code === 'ETIMEDOUT';
+
+    if (!shouldRetry) {
+      return Promise.reject(error);
+    }
+
+    config.__retryCount = (config.__retryCount || 0) + 1;
+    
+    // Exponential backoff with jitter
+    const delay = Math.min(1000 * Math.pow(2, config.__retryCount - 1), 5000);
+    const jitter = Math.random() * 500;
+    
+    this.logger.warn(`Retrying request (${config.__retryCount}/${this.config.retryMax}) after ${delay + jitter}ms`, {
+      url: config.url,
+      error: error.message
     });
+
+    await new Promise(resolve => setTimeout(resolve, delay + jitter));
+    
+    return this.transfersClient(config);
   }
 
   /**
-   * Get detailed information about a specific transfer
-   * @param {string} transferId - Transfer service ID
-   * @param {Object} searchParams - Original search parameters for context
-   * @returns {Promise<Object>} - Detailed transfer information
+   * Search airport taxi transfers
    */
-  async getTransferDetails(transferId, searchParams) {
-    return await this.executeWithRetry(async () => {
-      this.logger.info("Getting transfer details", { transferId });
-
-      // For Hotelbeds, transfer details are typically included in the search response
-      // If additional details are needed, we may need to make another search call
-      // or use the content API for static information
-
-      const transferSearchResults = await this.searchTransfers(searchParams);
-      const transferDetails = transferSearchResults.find(
-        (transfer) => transfer.id === transferId
-      );
-
-      if (!transferDetails) {
-        throw new Error(`Transfer with ID ${transferId} not found`);
-      }
-
-      // Enhance with additional details from content API if available
-      try {
-        const contentDetails = await this.getTransferContentDetails(transferId);
-        return {
-          ...transferDetails,
-          ...contentDetails,
-        };
-      } catch (error) {
-        this.logger.warn("Could not fetch content details", {
-          transferId,
-          error: error.message,
-        });
-        return transferDetails;
-      }
-    });
-  }
-
-  /**
-   * Book a transfer
-   * @param {Object} bookingData - Booking information
-   * @returns {Promise<Object>} - Booking confirmation
-   */
-  async bookTransfer(bookingData) {
-    return await this.executeWithRetry(async () => {
-      const {
-        rateKey,
-        holder,
-        clientReference,
-        remarks,
-        language = "ENG",
-      } = this.normalizeBookingData(bookingData);
-
-      this.logger.info("Booking transfer", {
-        rateKey,
-        clientReference,
-        holderName: holder?.name,
-      });
-
-      const requestBody = {
-        language,
-        rateKey,
-        holder,
-        clientReference,
-        ...(remarks && { remarks }),
-      };
-
-      const response = await this.transfersClient.post("/bookings", requestBody);
-
-      this.logger.info("Transfer booking response", {
-        statusCode: response.status,
-        bookingId: response.data?.booking?.reference,
-        status: response.data?.booking?.status,
-      });
-
-      return this.normalizeBookingResult(response.data);
-    });
-  }
-
-  /**
-   * Cancel a transfer booking
-   * @param {string} bookingReference - Booking reference
-   * @param {string} cancellationFlag - Cancellation type
-   * @returns {Promise<Object>} - Cancellation result
-   */
-  async cancelTransfer(bookingReference, cancellationFlag = "CANCELLATION") {
-    return await this.executeWithRetry(async () => {
-      this.logger.info("Cancelling transfer", {
-        bookingReference,
-        cancellationFlag,
-      });
-
-      const response = await this.transfersClient.delete(
-        `/bookings/${bookingReference}`,
-        {
-          params: { cancellationFlag },
-        }
-      );
-
-      this.logger.info("Transfer cancellation response", {
-        statusCode: response.status,
-        bookingReference,
-      });
-
-      return {
-        success: true,
-        bookingReference,
-        status: "CANCELLED",
-        cancellationDate: new Date().toISOString(),
-        response: response.data,
-      };
-    });
-  }
-
-  /**
-   * Get booking details
-   * @param {string} bookingReference - Booking reference
-   * @returns {Promise<Object>} - Booking details
-   */
-  async getBookingDetails(bookingReference) {
-    return await this.executeWithRetry(async () => {
-      this.logger.info("Getting booking details", { bookingReference });
-
-      const response = await this.transfersClient.get(`/bookings/${bookingReference}`);
-
-      this.logger.info("Booking details response", {
-        statusCode: response.status,
-        bookingReference,
-        status: response.data?.booking?.status,
-      });
-
-      return this.normalizeBookingResult(response.data);
-    });
-  }
-
-  /**
-   * Get transfer content details from cache API
-   * @param {string} transferId - Transfer ID
-   * @returns {Promise<Object>} - Content details
-   */
-  async getTransferContentDetails(transferId) {
+  async searchAirportTaxi(params) {
     try {
-      // This would typically fetch additional static content
-      // The exact endpoint depends on Hotelbeds content API structure
-      const response = await this.contentClient.get(`/transfers/${transferId}`);
-      return response.data;
+      this.logger.info("Searching airport taxi transfers", { params });
+
+      const searchPayload = this.buildSearchPayload(params);
+      
+      const response = await this.transfersClient.post('/availability', searchPayload);
+      
+      if (!response.data?.services) {
+        this.logger.warn("No services found in response", { response: response.data });
+        return [];
+      }
+
+      const offers = this.normalizeOffers(response.data.services, params);
+      
+      this.logger.info(`Found ${offers.length} transfer offers`);
+      
+      return offers;
+
     } catch (error) {
-      this.logger.warn("Content API not available or transfer not found", {
-        transferId,
+      this.logger.error("Error searching airport taxi transfers", { 
         error: error.message,
+        params,
+        status: error.response?.status,
+        data: error.response?.data
       });
-      return {};
+      
+      throw this.normalizeError(error);
     }
   }
 
   /**
-   * Normalize search parameters for Hotelbeds API
-   * @param {Object} searchParams - Original search parameters
-   * @returns {Object} - Normalized parameters
+   * Build search payload for Hotelbeds API
    */
-  normalizeSearchParams(searchParams) {
+  buildSearchPayload(params) {
     const {
       pickupLocation,
       dropoffLocation,
       pickupDate,
-      pickupTime,
+      pickupTime = "10:00",
       returnDate,
       returnTime,
-      passengers,
-      isRoundTrip,
-    } = searchParams;
+      passengers = { adults: 2, children: 0, infants: 0 },
+      isRoundTrip = false,
+      vehicleType,
+      currency = "INR"
+    } = params;
 
-    // Format locations for Hotelbeds
-    const fromLocation = this.formatLocation(pickupLocation);
-    const toLocation = this.formatLocation(dropoffLocation);
-
-    // Format outbound date/time
-    const outbound = {
-      date: this.formatDate(pickupDate),
-      time: pickupTime || "10:00",
-    };
-
-    // Format inbound date/time for round trip
-    let inbound;
-    if (isRoundTrip && returnDate) {
-      inbound = {
-        date: this.formatDate(returnDate),
-        time: returnTime || "14:00",
-      };
+    // Determine transfer type based on locations
+    let transferType = "PRIVATE";
+    if (pickupLocation.type === "airport" || dropoffLocation.type === "airport") {
+      transferType = "AIRPORT";
     }
 
-    // Format occupancy
-    const occupancy = {
-      adults: passengers.adults || 2,
-      children: passengers.children || 0,
-      infants: passengers.infants || 0,
-    };
-
-    return {
-      fromLocation,
-      toLocation,
-      outbound,
-      inbound,
-      occupancy,
+    const payload = {
       language: "ENG",
-      currency: "EUR", // Will be converted later
-    };
-  }
-
-  /**
-   * Format location for Hotelbeds API
-   * @param {string} location - Location string
-   * @returns {Object} - Formatted location object
-   */
-  formatLocation(location) {
-    // Simple location parsing - in production, this would use a location service
-    const airportCodes = ["BOM", "DEL", "DXB", "SIN", "LHR", "JFK", "LAX"];
-    const locationUpper = location.toUpperCase();
-
-    // Check if it's an airport code
-    const airportCode = airportCodes.find((code) => locationUpper.includes(code));
-    if (airportCode) {
-      return {
-        code: airportCode,
-        type: "IATA",
-      };
-    }
-
-    // For hotels and addresses, we'd typically need geocoding
-    // For now, return as a general location
-    return {
-      description: location,
-      type: "ATLAS",
-    };
-  }
-
-  /**
-   * Format date for Hotelbeds API
-   * @param {Date|string} date - Date to format
-   * @returns {string} - Formatted date (YYYY-MM-DD)
-   */
-  formatDate(date) {
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    return dateObj.toISOString().split("T")[0];
-  }
-
-  /**
-   * Normalize transfer search results
-   * @param {Object} response - Hotelbeds API response
-   * @param {Object} originalParams - Original search parameters
-   * @returns {Array} - Normalized transfer options
-   */
-  normalizeTransferResults(response, originalParams) {
-    if (!response.services || !Array.isArray(response.services)) {
-      this.logger.warn("No services found in response");
-      return [];
-    }
-
-    return response.services.map((service) => ({
-      id: service.rateKey || service.id,
-      rateKey: service.rateKey,
-      supplierCode: this.supplierCode,
-      
-      // Vehicle information
-      vehicleType: this.mapVehicleType(service.content?.vehicle?.category),
-      vehicleClass: service.content?.vehicle?.class || "standard",
-      vehicleName: service.content?.vehicle?.name,
-      vehicleImage: service.content?.vehicle?.image,
-      
-      // Capacity
-      maxPassengers: service.content?.vehicle?.maxPax || 4,
-      maxLuggage: service.content?.vehicle?.maxLuggage || 2,
-      
-      // Route information
-      pickupLocation: service.content?.pickupInformation?.location,
-      pickupInstructions: service.content?.pickupInformation?.instructions,
-      dropoffLocation: service.content?.dropoffInformation?.location,
-      dropoffInstructions: service.content?.dropoffInformation?.instructions,
-      
-      // Duration and distance
-      estimatedDuration: service.content?.duration,
-      distance: service.content?.distance,
-      
-      // Pricing
-      currency: response.currency,
-      basePrice: service.price?.amount || 0,
-      totalPrice: service.price?.amount || 0,
-      priceBreakdown: {
-        base: service.price?.amount || 0,
-        taxes: 0, // Hotelbeds typically includes taxes
-        fees: 0,
+      from: {
+        type: this.mapLocationType(pickupLocation.type),
+        code: pickupLocation.code || pickupLocation.name
       },
-      
-      // Features and amenities
-      features: this.extractFeatures(service.content),
-      inclusions: service.content?.inclusions || [],
-      exclusions: service.content?.exclusions || [],
-      
-      // Service provider
-      providerName: service.content?.supplier?.name,
-      providerRating: service.content?.supplier?.rating,
-      
-      // Policies
-      cancellationPolicy: service.content?.cancellationPolicy,
-      freeWaitingTime: service.content?.waitingTime || 60, // minutes
-      
-      // Booking information
-      bookingCutoff: service.content?.cutoffTime,
-      confirmationType: service.content?.confirmationType || "INSTANT",
-      
-      // Raw data for audit
-      rawData: service,
-      searchParams: originalParams,
-      
-      // Metadata
-      createdAt: new Date().toISOString(),
-      ttl: 3600, // 1 hour cache
+      to: {
+        type: this.mapLocationType(dropoffLocation.type),
+        code: dropoffLocation.code || dropoffLocation.name
+      },
+      outbound: `${pickupDate}T${pickupTime}:00`,
+      occupancies: [
+        {
+          adults: passengers.adults,
+          children: passengers.children,
+          infants: passengers.infants
+        }
+      ]
+    };
+
+    // Add return journey for round trips
+    if (isRoundTrip && returnDate) {
+      payload.inbound = `${returnDate}T${returnTime || "14:00"}:00`;
+    }
+
+    // Add vehicle type filter if specified
+    if (vehicleType) {
+      payload.transferType = this.mapVehicleType(vehicleType);
+    }
+
+    return payload;
+  }
+
+  /**
+   * Map location types to Hotelbeds format
+   */
+  mapLocationType(type) {
+    const typeMap = {
+      'airport': 'IATA',
+      'hotel': 'ATLAS',
+      'city': 'ATLAS',
+      'address': 'GIATA'
+    };
+    return typeMap[type] || 'ATLAS';
+  }
+
+  /**
+   * Map vehicle types to Hotelbeds format
+   */
+  mapVehicleType(vehicleType) {
+    const typeMap = {
+      'sedan': 'PRIVATE',
+      'suv': 'PRIVATE',
+      'minivan': 'PRIVATE',
+      'luxury': 'LUXURY',
+      'wheelchair': 'WHEELCHAIR'
+    };
+    return typeMap[vehicleType] || 'PRIVATE';
+  }
+
+  /**
+   * Normalize API response to standard format
+   */
+  normalizeOffers(services, originalParams) {
+    return services.map(service => ({
+      id: service.id,
+      supplierReference: service.code,
+      vehicleType: this.normalizeVehicleType(service.content?.vehicle?.name),
+      vehicleClass: service.content?.category?.name || 'Standard',
+      vehicleName: service.content?.vehicle?.name || 'Private Transfer',
+      maxPassengers: service.content?.vehicle?.maxPax || originalParams.passengers.adults + originalParams.passengers.children,
+      maxLuggage: service.content?.vehicle?.maxLuggage || 2,
+      features: this.extractFeatures(service),
+      distance: service.content?.distance,
+      duration: service.content?.time,
+      pickupInstructions: service.content?.pickupInstructions,
+      cancellationPolicy: this.normalizeCancellationPolicy(service.cancellationPolicies),
+      pricing: {
+        currency: service.price?.currencyCode || originalParams.currency || 'INR',
+        netAmount: parseFloat(service.price?.totalAmount || 0),
+        breakdown: {
+          basePrice: parseFloat(service.price?.totalAmount || 0),
+          taxes: 0,
+          fees: 0
+        }
+      },
+      supplier: {
+        code: 'hotelbeds-transfers',
+        name: 'Hotelbeds Transfers',
+        reference: service.code
+      },
+      meta: {
+        originalService: service,
+        searchParams: originalParams
+      }
     }));
   }
 
   /**
-   * Map Hotelbeds vehicle category to standard types
-   * @param {string} category - Hotelbeds vehicle category
-   * @returns {string} - Standard vehicle type
+   * Normalize vehicle type
    */
-  mapVehicleType(category) {
-    const categoryMapping = {
-      SEDAN: "sedan",
-      EXECUTIVE: "luxury",
-      LUXURY: "luxury",
-      SUV: "suv",
-      VAN: "minivan",
-      MINIVAN: "minivan",
-      BUS: "bus",
-      WHEELCHAIR: "wheelchair",
-    };
-
-    return categoryMapping[category?.toUpperCase()] || "sedan";
+  normalizeVehicleType(vehicleName) {
+    if (!vehicleName) return 'sedan';
+    
+    const name = vehicleName.toLowerCase();
+    if (name.includes('suv') || name.includes('4x4')) return 'suv';
+    if (name.includes('van') || name.includes('minibus')) return 'minivan';
+    if (name.includes('luxury') || name.includes('premium')) return 'luxury';
+    if (name.includes('wheelchair') || name.includes('accessible')) return 'wheelchair';
+    
+    return 'sedan';
   }
 
   /**
-   * Extract features from service content
-   * @param {Object} content - Service content
-   * @returns {Array} - List of features
+   * Extract service features
    */
-  extractFeatures(content) {
+  extractFeatures(service) {
     const features = [];
-
-    if (content?.meetAndGreet) features.push("meet_greet");
-    if (content?.flightMonitoring) features.push("flight_monitoring");
-    if (content?.waitingTime > 0) features.push("free_waiting");
-    if (content?.vehicle?.airConditioning) features.push("air_conditioning");
-    if (content?.vehicle?.wifi) features.push("wifi");
-    if (content?.professionalDriver) features.push("professional_driver");
-    if (content?.childSeats) features.push("child_seats_available");
-
+    
+    if (service.content?.vehicle?.driverIncluded) {
+      features.push('professional_driver');
+    }
+    
+    if (service.content?.pickupInstructions?.includes('meet')) {
+      features.push('meet_greet');
+    }
+    
+    if (service.content?.waitingTime > 0) {
+      features.push('free_waiting');
+    }
+    
+    if (service.content?.vehicle?.airConditioning) {
+      features.push('air_conditioning');
+    }
+    
     return features;
   }
 
   /**
-   * Normalize booking data for Hotelbeds API
-   * @param {Object} bookingData - Original booking data
-   * @returns {Object} - Normalized booking data
+   * Normalize cancellation policy
    */
-  normalizeBookingData(bookingData) {
-    const {
-      rateKey,
-      guestDetails,
-      clientReference,
-      specialRequests,
-      flightNumber,
-    } = bookingData;
+  normalizeCancellationPolicy(policies) {
+    if (!policies || !policies.length) {
+      return {
+        type: 'moderate',
+        freeUntil: '24h',
+        feePercentage: 100
+      };
+    }
 
-    // Format holder information
-    const holder = {
-      name: guestDetails.firstName || "Unknown",
-      surname: guestDetails.lastName || "Unknown",
-      email: guestDetails.email,
-      phone: guestDetails.phone,
-    };
-
+    const policy = policies[0];
     return {
-      rateKey,
-      holder,
-      clientReference: clientReference || `TR${Date.now()}`,
-      remarks: specialRequests,
+      type: 'custom',
+      freeUntil: policy.daysBeforeArrival ? `${policy.daysBeforeArrival * 24}h` : '24h',
+      feePercentage: policy.penaltyPercentage || 100,
+      description: policy.description
+    };
+  }
+
+  /**
+   * Book a transfer
+   */
+  async book(bookingInput) {
+    try {
+      this.logger.info("Booking transfer", { bookingReference: bookingInput.reference });
+
+      const bookingPayload = this.buildBookingPayload(bookingInput);
+      
+      const response = await this.transfersClient.post('/bookings', bookingPayload);
+      
+      if (!response.data?.reference) {
+        throw new Error("No booking reference returned from supplier");
+      }
+
+      const booking = this.normalizeBookingResponse(response.data, bookingInput);
+      
+      this.logger.info("Transfer booking successful", { 
+        supplierReference: booking.supplierReference,
+        status: booking.status 
+      });
+      
+      return booking;
+
+    } catch (error) {
+      this.logger.error("Error booking transfer", { 
+        error: error.message,
+        bookingInput,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      
+      throw this.normalizeError(error);
+    }
+  }
+
+  /**
+   * Build booking payload
+   */
+  buildBookingPayload(bookingInput) {
+    const { offer, guestDetails, flightDetails, specialRequests } = bookingInput;
+
+    const payload = {
       language: "ENG",
-      ...(flightNumber && { flightNumber }),
+      clientReference: bookingInput.reference,
+      welcomeMessage: "",
+      remark: specialRequests || "",
+      
+      // Transfer service
+      transfers: [
+        {
+          service: offer.supplierReference,
+          from: offer.meta.searchParams.pickupLocation,
+          to: offer.meta.searchParams.dropoffLocation,
+          pickupInformation: {
+            date: offer.meta.searchParams.pickupDate,
+            time: offer.meta.searchParams.pickupTime || "10:00",
+            instructions: ""
+          }
+        }
+      ],
+
+      // Primary passenger
+      holder: {
+        name: guestDetails.firstName,
+        surname: guestDetails.lastName,
+        email: guestDetails.email,
+        phone: guestDetails.phone
+      }
+    };
+
+    // Add flight information if provided
+    if (flightDetails?.flightNumber) {
+      payload.transfers[0].pickupInformation.flight = {
+        number: flightDetails.flightNumber,
+        company: flightDetails.airline || "",
+        arrivalTime: flightDetails.arrivalTime || ""
+      };
+    }
+
+    return payload;
+  }
+
+  /**
+   * Normalize booking response
+   */
+  normalizeBookingResponse(response, originalInput) {
+    return {
+      supplierReference: response.reference,
+      status: this.mapBookingStatus(response.status),
+      confirmationNumber: response.reference,
+      serviceDetails: response.transfers?.map(transfer => ({
+        transferId: transfer.id,
+        vehicleDetails: transfer.vehicle,
+        driverDetails: transfer.driver,
+        pickupDetails: transfer.pickup,
+        trackingInfo: transfer.tracking
+      })) || [],
+      voucher: {
+        url: response.voucher?.url,
+        instructions: response.voucher?.instructions
+      },
+      meta: {
+        originalResponse: response,
+        bookingInput: originalInput
+      }
     };
   }
 
   /**
-   * Normalize booking result
-   * @param {Object} response - Hotelbeds booking response
-   * @returns {Object} - Normalized booking result
+   * Map booking status from Hotelbeds to our format
    */
-  normalizeBookingResult(response) {
-    const booking = response.booking;
+  mapBookingStatus(status) {
+    const statusMap = {
+      'CONFIRMED': 'confirmed',
+      'PENDING': 'pending',
+      'CANCELLED': 'cancelled',
+      'FAILED': 'failed'
+    };
+    return statusMap[status] || 'pending';
+  }
+
+  /**
+   * Get booking details
+   */
+  async getBooking(reference) {
+    try {
+      this.logger.info("Getting booking details", { reference });
+
+      const response = await this.transfersClient.get(`/bookings/${reference}`);
+      
+      const booking = this.normalizeBookingResponse(response.data, {});
+      
+      this.logger.info("Booking details retrieved", { reference, status: booking.status });
+      
+      return booking;
+
+    } catch (error) {
+      this.logger.error("Error getting booking details", { 
+        error: error.message,
+        reference,
+        status: error.response?.status
+      });
+      
+      throw this.normalizeError(error);
+    }
+  }
+
+  /**
+   * Cancel a booking
+   */
+  async cancel(reference, reason = "") {
+    try {
+      this.logger.info("Cancelling booking", { reference, reason });
+
+      const cancelPayload = {
+        reason: reason || "Customer requested cancellation"
+      };
+
+      const response = await this.transfersClient.post(`/bookings/${reference}/cancel`, cancelPayload);
+      
+      const result = {
+        success: response.data?.status === 'CANCELLED',
+        status: this.mapBookingStatus(response.data?.status),
+        refundAmount: response.data?.refund?.amount || 0,
+        refundCurrency: response.data?.refund?.currency || 'INR',
+        cancellationFee: response.data?.cancellationFee?.amount || 0,
+        meta: {
+          originalResponse: response.data
+        }
+      };
+      
+      this.logger.info("Booking cancellation processed", { 
+        reference, 
+        success: result.success,
+        refundAmount: result.refundAmount
+      });
+      
+      return result;
+
+    } catch (error) {
+      this.logger.error("Error cancelling booking", { 
+        error: error.message,
+        reference,
+        status: error.response?.status
+      });
+      
+      throw this.normalizeError(error);
+    }
+  }
+
+  /**
+   * Get destinations/locations for autocomplete
+   */
+  async getDestinations(query = "", type = "", limit = 10) {
+    try {
+      this.logger.info("Getting destinations", { query, type, limit });
+
+      const params = {
+        language: "ENG",
+        fields: "code,name,country,type,coordinates",
+        ...(query && { name: query }),
+        ...(type && { type: type.toUpperCase() }),
+        limit
+      };
+
+      const response = await this.contentClient.get('/locations', { params });
+      
+      const destinations = response.data?.map(location => ({
+        id: location.code,
+        code: location.code,
+        name: location.name,
+        country: location.country?.name || "",
+        type: location.type?.toLowerCase() || "city",
+        coordinates: location.coordinates,
+        popular: location.popular || false
+      })) || [];
+      
+      this.logger.info(`Found ${destinations.length} destinations`);
+      
+      return destinations;
+
+    } catch (error) {
+      this.logger.error("Error getting destinations", { 
+        error: error.message,
+        query,
+        status: error.response?.status
+      });
+      
+      // Return fallback data on error
+      return this.getFallbackDestinations(query, type);
+    }
+  }
+
+  /**
+   * Get fallback destinations when API fails
+   */
+  getFallbackDestinations(query = "", type = "") {
+    const fallbackDestinations = [
+      { id: "BOM", code: "BOM", name: "Mumbai Airport", country: "India", type: "airport", popular: true },
+      { id: "DEL", code: "DEL", name: "Delhi Airport", country: "India", type: "airport", popular: true },
+      { id: "BLR", code: "BLR", name: "Bangalore Airport", country: "India", type: "airport", popular: true },
+      { id: "MAA", code: "MAA", name: "Chennai Airport", country: "India", type: "airport", popular: true },
+      { id: "mumbai-taj", code: "mumbai-taj", name: "Hotel Taj Mahal Palace", country: "India", type: "hotel", popular: true },
+      { id: "mumbai-oberoi", code: "mumbai-oberoi", name: "The Oberoi Mumbai", country: "India", type: "hotel", popular: true },
+      { id: "mumbai-city", code: "mumbai-city", name: "Mumbai City Center", country: "India", type: "city", popular: true },
+      { id: "delhi-city", code: "delhi-city", name: "Delhi City Center", country: "India", type: "city", popular: true }
+    ];
+
+    let filtered = fallbackDestinations;
+
+    if (type) {
+      filtered = filtered.filter(dest => dest.type === type.toLowerCase());
+    }
+
+    if (query) {
+      const queryLower = query.toLowerCase();
+      filtered = filtered.filter(dest => 
+        dest.name.toLowerCase().includes(queryLower) ||
+        dest.code.toLowerCase().includes(queryLower)
+      );
+    }
+
+    return filtered;
+  }
+
+  /**
+   * Normalize API errors to standard format
+   */
+  normalizeError(error) {
+    const errorMap = {
+      400: 'INVALID_REQUEST',
+      401: 'AUTHENTICATION_FAILED', 
+      403: 'ACCESS_DENIED',
+      404: 'NOT_FOUND',
+      429: 'RATE_LIMIT_EXCEEDED',
+      500: 'SUPPLIER_ERROR',
+      502: 'SUPPLIER_UNAVAILABLE',
+      503: 'SERVICE_UNAVAILABLE',
+      504: 'TIMEOUT'
+    };
+
+    const status = error.response?.status;
+    const code = errorMap[status] || 'UNKNOWN_ERROR';
+    
+    let message = error.message;
+    
+    if (error.response?.data?.error) {
+      message = error.response.data.error.description || error.response.data.error.message || message;
+    }
 
     return {
-      success: true,
-      bookingReference: booking.reference,
-      supplierReference: booking.reference,
-      status: booking.status,
-      
-      // Transfer details
-      transferDetails: booking.services?.[0],
-      
-      // Pricing
-      totalAmount: booking.totalNet,
-      currency: booking.currency,
-      
-      // Dates
-      bookingDate: booking.creationDate,
-      confirmationDate: booking.creationDate,
-      
-      // Provider information
-      providerName: booking.services?.[0]?.supplier?.name,
-      providerContact: booking.services?.[0]?.supplier?.vatNumber,
-      
-      // Voucher information
-      voucherUrl: booking.voucher?.url,
-      voucherNumber: booking.voucher?.reference,
-      
-      // Raw response for audit
-      rawResponse: response,
-      
-      // Metadata
-      createdAt: new Date().toISOString(),
+      code,
+      message,
+      status,
+      originalError: error.response?.data || error.message
     };
-  }
-
-  /**
-   * Get supplier ID from database
-   * @returns {Promise<number>} - Supplier ID
-   */
-  async getSupplierId() {
-    // This would typically query the database for the supplier ID
-    // For now, return a default ID
-    return 1; // Hotelbeds supplier ID
   }
 
   /**
    * Health check for the adapter
-   * @returns {Promise<Object>} - Health status
    */
   async healthCheck() {
     try {
-      // Test basic connectivity
-      const response = await this.contentClient.get("/status", { timeout: 5000 });
-      
-      return {
-        status: "healthy",
-        supplier: this.supplierCode,
-        timestamp: new Date().toISOString(),
-        response: response.status === 200,
-      };
+      // Simple destinations call to check API health
+      await this.getDestinations("", "", 1);
+      return { status: 'healthy', timestamp: new Date().toISOString() };
     } catch (error) {
-      return {
-        status: "unhealthy",
-        supplier: this.supplierCode,
-        timestamp: new Date().toISOString(),
+      return { 
+        status: 'unhealthy', 
         error: error.message,
+        timestamp: new Date().toISOString() 
       };
     }
   }
 }
 
-// Export for use in other modules
 module.exports = HotelbedsTransfersAdapter;
