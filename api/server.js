@@ -35,6 +35,7 @@ const testLiveRoutes = require("./routes/test-live");
 const testHotelbedsRoutes = require("./routes/test-hotelbeds");
 const testLiveHotelRoutes = require("./routes/test-live-hotel");
 const sightseeingRoutes = require("./routes/sightseeing");
+const transfersRoutes = require("./routes/transfers");
 
 // New admin module routes
 const usersAdminRoutes = require("./routes/users");
