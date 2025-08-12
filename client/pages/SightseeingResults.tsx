@@ -105,6 +105,10 @@ export default function SightseeingResults() {
     useState<SightseeingAttraction | null>(null);
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
+  // Selection state for multiple attractions
+  const [selectedAttractions, setSelectedAttractions] = useState<Set<string>>(new Set());
+  const [showBottomBar, setShowBottomBar] = useState(false);
+
   // Mobile detection
   useEffect(() => {
     const checkMobile = () => {
