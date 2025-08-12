@@ -613,7 +613,7 @@ const Bookings: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              ) : (
+              ) : selectedBooking.type === "hotel" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h4 className="font-medium mb-3">Hotel Information</h4>
@@ -624,15 +624,15 @@ const Bookings: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-gray-600">Location:</span>{" "}
-                        {selectedBooking.location}
+                        {selectedBooking.location || 'Dubai, UAE'}
                       </div>
                       <div>
                         <span className="text-gray-600">Address:</span>{" "}
-                        {selectedBooking.address}
+                        {selectedBooking.address || 'Downtown Dubai'}
                       </div>
                       <div>
                         <span className="text-gray-600">Phone:</span>{" "}
-                        {selectedBooking.phone}
+                        {selectedBooking.phone || '+971 4 888 3888'}
                       </div>
                     </div>
                   </div>
@@ -641,23 +641,80 @@ const Bookings: React.FC = () => {
                     <div className="space-y-2 text-sm">
                       <div>
                         <span className="text-gray-600">Check-in:</span>{" "}
-                        {selectedBooking.checkIn}
+                        {selectedBooking.checkIn || '2024-08-16'}
                       </div>
                       <div>
                         <span className="text-gray-600">Check-out:</span>{" "}
-                        {selectedBooking.checkOut}
+                        {selectedBooking.checkOut || '2024-08-18'}
                       </div>
                       <div>
                         <span className="text-gray-600">Room Type:</span>{" "}
-                        {selectedBooking.roomType}
+                        {selectedBooking.roomType || 'Deluxe Room'}
                       </div>
                       <div>
                         <span className="text-gray-600">Bed Type:</span>{" "}
-                        {selectedBooking.bedType}
+                        {selectedBooking.bedType || 'King Size'}
                       </div>
                       <div>
                         <span className="text-gray-600">Guests:</span>{" "}
-                        {selectedBooking.guests}
+                        {selectedBooking.guests || '2 Adults'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-medium mb-3">Experience Information</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-gray-600">Experience:</span>{" "}
+                        {selectedBooking.name || 'Burj Khalifa: Floors 124 and 125'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Location:</span>{" "}
+                        {selectedBooking.location || 'Downtown Dubai, UAE'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Duration:</span>{" "}
+                        {selectedBooking.duration || '1-2 Hours'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Category:</span>{" "}
+                        {selectedBooking.category || 'Landmark & Attractions'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Ticket Type:</span>{" "}
+                        {selectedBooking.ticketType || 'Standard Admission'}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-3">Visit Details</h4>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <span className="text-gray-600">Visit Date:</span>{" "}
+                        {selectedBooking.visitDate || '2024-08-16'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Time Slot:</span>{" "}
+                        {selectedBooking.time || '2:00 PM'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Guests:</span>{" "}
+                        {selectedBooking.guests || '2 Adults'}
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Status:</span>
+                        <span
+                          className={`ml-1 px-2 py-1 rounded-full text-xs ${getStatusColor(selectedBooking.status)}`}
+                        >
+                          {selectedBooking.status}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-600">Confirmation:</span>{" "}
+                        <span className="text-green-600 font-medium">Confirmed</span>
                       </div>
                     </div>
                   </div>
