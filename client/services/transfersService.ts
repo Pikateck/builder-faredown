@@ -500,6 +500,40 @@ class TransfersService {
   }
 
   /**
+   * Get transfer details by ID
+   */
+  async getTransferDetails(transferId: string): Promise<ApiResponse<any>> {
+    try {
+      const response = await fetch(`${this.baseUrl}/transfers/product/${transferId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        return {
+          success: false,
+          error: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
+        };
+      }
+
+      const data = await response.json();
+      return {
+        success: true,
+        data: data.data,
+      };
+    } catch (error) {
+      console.error("Error fetching transfer details:", error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to fetch transfer details",
+      };
+    }
+  }
+
+  /**
    * Get vehicle type display name
    */
   getVehicleTypeDisplayName(vehicleType: string): string {
