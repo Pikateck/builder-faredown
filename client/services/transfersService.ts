@@ -5,6 +5,16 @@
 
 import { apiClient as api } from "@/lib/api";
 
+export interface TransferDestination {
+  id: string;
+  code: string;
+  name: string;
+  type: "airport" | "city" | "hotel" | "destination";
+  country: string;
+  countryCode: string;
+  popular?: boolean;
+}
+
 export interface TransferSearchParams {
   pickupLocation: string;
   dropoffLocation: string;
