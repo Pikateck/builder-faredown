@@ -523,7 +523,6 @@ export function TransfersSearchForm() {
                         }}
                         onFocus={(e) => {
                           e.stopPropagation();
-                          setIsHotelOpen(true);
                           if (!isHotelUserTyping && hotel) {
                             setHotelInputValue(hotel);
                             setIsHotelUserTyping(true);
@@ -532,8 +531,10 @@ export function TransfersSearchForm() {
                           if (hotelSuggestions.length === 0) {
                             searchDestinations("", "hotel");
                           }
+                          setIsHotelOpen(true);
                         }}
-                        onMouseDown={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (!isHotelOpen) {
                             setIsHotelOpen(true);
                             // Show popular destinations when opening
