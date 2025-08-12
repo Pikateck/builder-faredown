@@ -533,6 +533,10 @@ export function TransfersSearchForm() {
                         onMouseDown={() => {
                           if (!isHotelOpen) {
                             setIsHotelOpen(true);
+                            // Show popular destinations when opening
+                            if (hotelSuggestions.length === 0) {
+                              searchDestinations("", "hotel");
+                            }
                           }
                         }}
                         className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
