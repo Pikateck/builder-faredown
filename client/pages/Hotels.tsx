@@ -1258,6 +1258,17 @@ export default function Hotels() {
                       Sightseeing
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/?tab=transfers"
+                      onClick={() =>
+                        window.scrollTo({ top: 0, behavior: "smooth" })
+                      }
+                      className="hover:text-white"
+                    >
+                      Transfers
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
