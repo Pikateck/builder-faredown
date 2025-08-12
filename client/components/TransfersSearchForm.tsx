@@ -230,7 +230,7 @@ export function TransfersSearchForm() {
 
       {/* Mobile Design */}
       <div className="md:hidden">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-4">
+        <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200 space-y-4">
           {/* Trip Type Toggle */}
           <div className="flex items-center space-x-4 mb-4">
             <label className="flex items-center space-x-2">
@@ -502,7 +502,7 @@ export function TransfersSearchForm() {
 
       {/* Desktop Design */}
       <div className="hidden md:block">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
           {/* Trip Type Toggle */}
           <div className="flex items-center space-x-6 mb-6">
             <label className="flex items-center space-x-2">
