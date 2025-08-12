@@ -191,7 +191,7 @@ export function TransfersSearchForm() {
         returnDate: returnDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
         returnTime
       }),
-      ...(vehicleType && { vehicleType }),
+      ...(vehicleType && vehicleType !== "any" && { vehicleType }),
     });
 
     navigate(`/transfer-results?${searchParams.toString()}`);
