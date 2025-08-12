@@ -662,21 +662,21 @@ export default function TransferResults() {
             </div>
 
             {/* Transfer Cards */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               {filteredTransfers.map((transfer) => (
                 <div key={transfer.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                     {/* Left Section - Transfer Details */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start gap-3">
                         {/* Vehicle Icon */}
-                        <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <div className="flex-shrink-0 w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center">
                           {getVehicleIcon(transfer.vehicleType)}
                         </div>
 
                         {/* Details */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-2 mb-1">
                             <h3 className="text-lg font-semibold text-gray-900">
                               {transfer.vehicleName}
                             </h3>
@@ -724,7 +724,7 @@ export default function TransferResults() {
                           </div>
 
                           {/* Provider Info */}
-                          <div className="flex items-center space-x-4 text-sm">
+                          <div className="flex items-center space-x-3 text-sm">
                             <span className="text-gray-600">By {transfer.providerName}</span>
                             {transfer.providerRating && (
                               <div className="flex items-center space-x-1">
@@ -741,9 +741,9 @@ export default function TransferResults() {
                     </div>
 
                     {/* Right Section - Pricing and Actions */}
-                    <div className="flex-shrink-0 lg:w-64 text-right">
+                    <div className="flex-shrink-0 lg:w-56 text-right">
                       {/* Pricing */}
-                      <div className="mb-4">
+                      <div className="mb-3">
                         {transfer.pricing.savings > 0 && (
                           <div className="text-sm text-green-600 mb-1">
                             Save {formatPrice(transfer.pricing.savings)}
