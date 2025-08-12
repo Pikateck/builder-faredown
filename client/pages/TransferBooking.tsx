@@ -56,6 +56,7 @@ export default function TransferBooking() {
   const bargainApplied = searchParams.get('bargainApplied');
   const pickupLocation = searchParams.get('pickupLocation') || 'Mumbai Airport (BOM)';
   const dropoffLocation = searchParams.get('dropoffLocation') || 'Hotel Taj Mahal Palace';
+  const vehicleName = searchParams.get('vehicleName') || 'Sedan - Economy';
   const isRoundTrip = searchParams.get('returnDate') !== null;
   const returnDate = searchParams.get('returnDate') || 'Dec 8, 2024';
   const returnTime = searchParams.get('returnTime') || '10:30';
