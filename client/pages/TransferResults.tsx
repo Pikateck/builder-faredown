@@ -664,7 +664,7 @@ export default function TransferResults() {
             {/* Transfer Cards */}
             <div className="space-y-4">
               {filteredTransfers.map((transfer) => (
-                <div key={transfer.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div key={transfer.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                     {/* Left Section - Transfer Details */}
                     <div className="flex-1 min-w-0">
@@ -685,7 +685,7 @@ export default function TransferResults() {
                             </Badge>
                           </div>
 
-                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-sm text-gray-600 mb-2">
                             <div className="flex items-center space-x-1">
                               <Users className="w-4 h-4" />
                               <span>Up to {transfer.maxPassengers} passengers</span>
@@ -707,7 +707,7 @@ export default function TransferResults() {
                           </div>
 
                           {/* Features */}
-                          <div className="flex flex-wrap gap-2 mb-3">
+                          <div className="flex flex-wrap gap-2 mb-2">
                             {transfer.features.slice(0, 4).map((feature) => (
                               <div key={feature} className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
                                 {getFeatureIcon(feature)}
@@ -767,22 +767,21 @@ export default function TransferResults() {
                         <Button
                           onClick={() => navigate(`/transfer-details/${transfer.id}`)}
                           variant="outline"
-                          className="w-full text-gray-700 border-gray-300 hover:bg-gray-50"
+                          className="w-full py-3 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[44px] rounded-xl active:scale-95 touch-manipulation"
                         >
                           View Details
                         </Button>
                         <Button
                           onClick={() => handleBookNow(transfer)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                          className="w-full py-3 bg-[#003580] hover:bg-[#002860] active:bg-[#001f4a] text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
                           Book Now
                         </Button>
                         <Button
-                          variant="outline"
                           onClick={() => handleBargain(transfer)}
-                          className="w-full text-blue-600 border-blue-600 hover:bg-blue-50"
+                          className="w-full py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
-                          <TrendingDown className="w-4 h-4 mr-2" />
+                          <TrendingDown className="w-4 h-4" />
                           Bargain
                         </Button>
                       </div>
