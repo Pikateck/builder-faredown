@@ -137,9 +137,10 @@ export default function TransferBooking() {
       // Navigate to confirmation page
       navigate('/transfer-confirmation', {
         state: {
-          transfer,
+          transfer: transferData,
           bookingData: formData,
-          bookingRef: `TR${Date.now()}`
+          bookingRef: `TR${Date.now()}`,
+          totalPrice
         }
       });
     } catch (error) {
