@@ -101,7 +101,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "₣",
     name: "Swiss Franc",
     rate: 0.011,
-    flag: "🇨🇭",
+    flag: "����🇭",
     decimalPlaces: 2,
   },
   {
@@ -336,34 +336,43 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
   };
 
   const refreshRates = async () => {
-    // Throttle API calls - don't refresh more than once every 2 minutes
-    const now = Date.now();
-    const minInterval = 2 * 60 * 1000; // 2 minutes
-
-    if (now - lastRefreshTime < minInterval) {
-      console.log("💰 Currency refresh throttled, using cached rates");
-      return;
-    }
-
     try {
-      setLastRefreshTime(now);
-      // Additional safety wrapper to prevent any unhandled errors
-      await _refreshRatesInternal();
-    } catch (error) {
-      // Final safety net - never let errors escape from refreshRates
-      // This catches any errors including browser extension interference
-      if (error instanceof Error && error.message.includes("Failed to fetch")) {
-        console.log(
-          "💰 Network error (possibly browser extension interference), using static rates",
-        );
-      } else {
-        console.warn(
-          "📈 Currency refresh failed with unexpected error:",
-          error,
-        );
+      // Throttle API calls - don't refresh more than once every 2 minutes
+      const now = Date.now();
+      const minInterval = 2 * 60 * 1000; // 2 minutes
+
+      if (now - lastRefreshTime < minInterval) {
+        console.log("💰 Currency refresh throttled, using cached rates");
+        return;
       }
-      // Always continue gracefully with static rates
-    } finally {
+
+      try {
+        setLastRefreshTime(now);
+        // Additional safety wrapper to prevent any unhandled errors
+        await _refreshRatesInternal();
+      } catch (error) {
+        // Final safety net - never let errors escape from refreshRates
+        // This catches any errors including browser extension interference
+        if (error instanceof Error && error.message.includes("Failed to fetch")) {
+          console.log(
+            "💰 Network error (possibly browser extension interference), using static rates",
+          );
+        } else {
+          console.warn(
+            "📈 Currency refresh failed with unexpected error:",
+            error,
+          );
+        }
+        // Always continue gracefully with static rates
+      } finally {
+        setIsLoading(false);
+      }
+    } catch (globalError) {
+      // Absolute final safety net - never allow any error to escape
+      console.log(
+        "💰 Currency refresh failed at global level, using static rates:",
+        globalError
+      );
       setIsLoading(false);
     }
   };
