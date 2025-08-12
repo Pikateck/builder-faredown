@@ -2183,6 +2183,28 @@ export default function Index() {
           </div>
         </header>
 
+        {/* Transfers Header Section */}
+        <header
+          className={`py-3 sm:py-6 md:py-8 pb-24 sm:pb-8 ${activeTab === "transfers" ? "" : "hidden"}`}
+          style={{ backgroundColor: "#003580" }}
+        >
+          <div className="max-w-7xl mx-auto px-3 sm:px-4">
+            <div className="text-center mb-2 sm:mb-3">
+              <div className="mb-3 sm:mb-5">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+                  Reliable Airport Transfers
+                </h2>
+              </div>
+              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
+                Book safe, comfortable transfers with professional drivers and competitive rates.
+              </h1>
+            </div>
+
+            {/* Transfers Search Form */}
+            <TransfersSearchForm />
+          </div>
+        </header>
+
         {/* Content sections shown for all tabs */}
         <div className="">
           {/* Upgrade & Add-ons Section */}
