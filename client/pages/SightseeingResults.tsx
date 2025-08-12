@@ -30,6 +30,7 @@ import {
   X,
   ArrowUpDown,
   ChevronDown,
+  TrendingDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
