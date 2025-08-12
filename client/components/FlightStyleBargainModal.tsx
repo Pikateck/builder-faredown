@@ -71,7 +71,7 @@ interface FlightStyleBargainModalProps {
   checkOutDate: Date;
   roomsCount: number;
   onBookingSuccess?: (finalPrice: number) => void;
-  type?: "hotel" | "sightseeing";
+  type?: "hotel" | "sightseeing" | "transfer";
 }
 
 // Helper function to get currency word form
