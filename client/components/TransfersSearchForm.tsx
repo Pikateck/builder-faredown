@@ -46,14 +46,28 @@ export function TransfersSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
   
-  // Location states
+  // Location states - EXACT HOTELS/SIGHTSEEING PATTERN
   const [pickupLocation, setPickupLocation] = useState("");
+  const [pickupLocationCode, setPickupLocationCode] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
+  const [dropoffLocationCode, setDropoffLocationCode] = useState("");
   const [sameAsPickup, setSameAsPickup] = useState(false);
   const [isPickupOpen, setIsPickupOpen] = useState(false);
   const [isDropoffOpen, setIsDropoffOpen] = useState(false);
-  const [pickupSuggestions, setPickupSuggestions] = useState<DestinationOption[]>([]);
-  const [dropoffSuggestions, setDropoffSuggestions] = useState<DestinationOption[]>([]);
+  const [pickupSuggestions, setPickupSuggestions] = useState<TransferDestination[]>([]);
+  const [dropoffSuggestions, setDropoffSuggestions] = useState<TransferDestination[]>([]);
+  const [loadingPickupDestinations, setLoadingPickupDestinations] = useState(false);
+  const [loadingDropoffDestinations, setLoadingDropoffDestinations] = useState(false);
+
+  // Popular destinations state
+  const [popularDestinations, setPopularDestinations] = useState<TransferDestination[]>([]);
+  const [popularDestinationsLoaded, setPopularDestinationsLoaded] = useState(false);
+
+  // User typing states
+  const [isPickupUserTyping, setIsPickupUserTyping] = useState(false);
+  const [isDropoffUserTyping, setIsDropoffUserTyping] = useState(false);
+  const [pickupInputValue, setPickupInputValue] = useState("");
+  const [dropoffInputValue, setDropoffInputValue] = useState("");
   
   // Date and time states
   const tomorrow = new Date();
