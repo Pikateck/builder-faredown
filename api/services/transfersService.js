@@ -451,6 +451,12 @@ class TransfersService {
     // Combine and deduplicate results
     const combinedTransfers = allResults.flat();
 
+    // If no results from suppliers and in development mode, provide mock data
+    if (combinedTransfers.length === 0 && (process.env.NODE_ENV === 'development' || process.env.ENABLE_MOCK_DATA === 'true')) {
+      this.logger.info("No supplier results, providing mock data for development", { sessionId });
+      return this.getMockTransferResults(searchParams, sessionId);
+    }
+
     return {
       transfers: combinedTransfers,
       supplierResults,
