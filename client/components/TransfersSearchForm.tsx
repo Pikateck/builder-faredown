@@ -1020,15 +1020,24 @@ export function TransfersSearchForm() {
                         }}
                         onFocus={(e) => {
                           e.stopPropagation();
-                          setIsDropoffOpen(true);
                           if (!isDropoffUserTyping && dropoffLocation) {
                             setDropoffInputValue(dropoffLocation);
                             setIsDropoffUserTyping(true);
                           }
+                          // Show popular destinations on focus
+                          if (dropoffSuggestions.length === 0) {
+                            searchDestinations("", "dropoff");
+                          }
+                          setIsDropoffOpen(true);
                         }}
-                        onMouseDown={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (!isDropoffOpen) {
                             setIsDropoffOpen(true);
+                            // Show popular destinations when opening
+                            if (dropoffSuggestions.length === 0) {
+                              searchDestinations("", "dropoff");
+                            }
                           }
                         }}
                         className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
