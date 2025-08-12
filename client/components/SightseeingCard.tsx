@@ -240,15 +240,38 @@ export function SightseeingCard({
               </div>
             </div>
 
-            {/* Features - Compact Grid */}
-            <div className="grid grid-cols-1 gap-2 mb-4">
+            {/* Price Section - Above SELECT */}
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {formatPrice(totalPrice)}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {formatPrice(pricePerPerson)} per person
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-gray-500 mb-1">
+                    For {searchParams.get("adults") || "2"} adult{parseInt(searchParams.get("adults") || "2") > 1 ? 's' : ''}
+                    {parseInt(searchParams.get("children") || "0") > 0 && `, ${searchParams.get("children")} children`}
+                  </div>
+                  <div className="text-xs text-green-600 font-medium">
+                    • Free cancellation
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Features - Compact List */}
+            <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                 <span className="flex-1">{attraction.highlights[0]}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Free cancellation</span>
+                <Shield className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <span>Reserve now, pay later</span>
               </div>
             </div>
 
@@ -257,21 +280,21 @@ export function SightseeingCard({
               <button
                 onClick={handleSelect}
                 className={cn(
-                  "w-full py-3 px-4 rounded-lg font-bold text-sm transition-all duration-200 shadow-sm active:scale-[0.98] flex items-center justify-center gap-2",
+                  "w-full py-4 px-4 rounded-lg font-bold text-sm transition-all duration-200 shadow-md active:scale-[0.98] flex items-center justify-center gap-2 border-2",
                   isSelected
-                    ? "bg-[#ff6b00] text-white hover:bg-[#e55a00]"
-                    : "bg-white border-2 border-[#ff6b00] text-[#ff6b00] hover:bg-[#ff6b00] hover:text-white"
+                    ? "bg-[#ff6b00] text-white border-[#ff6b00] hover:bg-[#e55a00] hover:border-[#e55a00] shadow-lg"
+                    : "bg-white border-[#ff6b00] text-[#ff6b00] hover:bg-[#ff6b00] hover:text-white hover:shadow-lg"
                 )}
               >
                 {isSelected ? (
                   <>
-                    <CheckCircle className="w-4 h-4" />
-                    <span>SELECTED</span>
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="text-base">SELECTED</span>
                   </>
                 ) : (
                   <>
-                    <Eye className="w-4 h-4" />
-                    <span>SELECT</span>
+                    <Eye className="w-5 h-5" />
+                    <span className="text-base">SELECT</span>
                   </>
                 )}
               </button>
