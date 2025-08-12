@@ -141,7 +141,7 @@ export function TransfersSearchForm() {
 
   // Vehicle type options for car rentals
   const vehicleOptions = [
-    { value: "", label: "Any vehicle type" },
+    { value: "any", label: "Any vehicle type" },
     { value: "sedan", label: "Sedan" },
     { value: "suv", label: "SUV" },
     { value: "minivan", label: "Minivan" },
@@ -150,7 +150,7 @@ export function TransfersSearchForm() {
 
   // Driver age options
   const driverAgeOptions = [
-    { value: "", label: "Select age" },
+    { value: "any", label: "Select age" },
     { value: "25-29", label: "25-29" },
     { value: "30-65", label: "30-65" },
     { value: "65+", label: "65+" },
