@@ -255,10 +255,10 @@ const Bookings: React.FC = () => {
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="mb-8">
+        {/* Mobile-Optimized Tab Navigation */}
+        <div className="mb-6">
           <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
+            <nav className="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto">
               <button
                 onClick={() => setActiveTab("all")}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
