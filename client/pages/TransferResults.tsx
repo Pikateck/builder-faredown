@@ -436,7 +436,7 @@ export default function TransferResults() {
       case "luxury":
         return <Car className="w-5 h-5" />;
       case "wheelchair":
-        return <Wheelchair className="w-5 h-5" />;
+        return <Accessibility className="w-5 h-5" />;
       default:
         return <Car className="w-5 h-5" />;
     }
