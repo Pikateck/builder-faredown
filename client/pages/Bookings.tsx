@@ -364,8 +364,8 @@ const Bookings: React.FC = () => {
               {/* Mobile Header */}
               <div className="p-4">
                 {/* Top Row - Icon, Title and Status */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-start space-x-3 flex-1">
+                <div className="flex items-start justify-between mb-3 gap-3">
+                  <div className="flex items-start space-x-3 flex-1 min-w-0">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                         booking.type === "flight"
@@ -389,24 +389,24 @@ const Bookings: React.FC = () => {
                         </svg>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pr-2">
                       <h3 className="font-semibold text-gray-900 text-base leading-tight truncate">
                         {booking.type === "flight"
                           ? `${booking.airline} - ${booking.route}`
                           : booking.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-gray-600 mt-1 truncate">
                         {booking.bookingRef}
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end space-y-2 flex-shrink-0">
+                  <div className="flex flex-col items-end space-y-2 flex-shrink-0 min-w-fit">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${getStatusColor(booking.status)}`}
                     >
                       {booking.status}
                     </span>
-                    <span className="text-lg font-bold text-blue-600 whitespace-nowrap">
+                    <span className="text-base font-bold text-blue-600 whitespace-nowrap">
                       {booking.totalAmount}
                     </span>
                   </div>
