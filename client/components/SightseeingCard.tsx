@@ -65,6 +65,8 @@ interface SightseeingCardProps {
   onBargainClick: () => void;
   searchParams: URLSearchParams;
   className?: string;
+  isSelected?: boolean;
+  onSelect?: (attraction: SightseeingAttraction) => void;
 }
 
 export function SightseeingCard({
