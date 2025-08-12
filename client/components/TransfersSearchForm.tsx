@@ -166,39 +166,75 @@ export function TransfersSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Popular destinations for initial display
+  const popularAirports = [
+    { id: "BOM", code: "BOM", name: "Mumbai Airport", type: "airport" },
+    { id: "DEL", code: "DEL", name: "Delhi Airport", type: "airport" },
+    { id: "BLR", code: "BLR", name: "Bangalore Airport", type: "airport" },
+    { id: "MAA", code: "MAA", name: "Chennai Airport", type: "airport" },
+    { id: "HYD", code: "HYD", name: "Hyderabad Airport", type: "airport" },
+    { id: "CCU", code: "CCU", name: "Kolkata Airport", type: "airport" },
+  ];
+
+  const popularHotels = [
+    { id: "mumbai-taj", code: "mumbai-taj", name: "Hotel Taj Mahal Palace", type: "hotel" },
+    { id: "mumbai-oberoi", code: "mumbai-oberoi", name: "The Oberoi Mumbai", type: "hotel" },
+    { id: "mumbai-trident", code: "mumbai-trident", name: "Trident Hotel Mumbai", type: "hotel" },
+    { id: "mumbai-city", code: "mumbai-city", name: "Mumbai City Center", type: "city" },
+    { id: "mumbai-bandra", code: "mumbai-bandra", name: "Bandra West", type: "city" },
+    { id: "mumbai-andheri", code: "mumbai-andheri", name: "Andheri East", type: "city" },
+  ];
+
   // Search destinations (debounced)
   const searchDestinations = useCallback(
     async (
       query: string,
       type: "airport" | "hotel" | "pickup" | "dropoff"
     ) => {
-      if (query.length < 2) return;
+      const setSuggestions = type === "airport" ? setAirportSuggestions :
+                            type === "hotel" ? setHotelSuggestions :
+                            type === "pickup" ? setPickupSuggestions :
+                            setDropoffSuggestions;
 
       const setLoading = type === "airport" ? setLoadingAirportDestinations :
                        type === "hotel" ? setLoadingHotelDestinations :
                        type === "pickup" ? setLoadingPickupDestinations :
                        setLoadingDropoffDestinations;
 
-      const setSuggestions = type === "airport" ? setAirportSuggestions :
-                            type === "hotel" ? setHotelSuggestions :
-                            type === "pickup" ? setPickupSuggestions :
-                            setDropoffSuggestions;
+      // If no query or very short, show popular destinations
+      if (query.length < 2) {
+        if (type === "airport") {
+          setSuggestions(popularAirports);
+        } else if (type === "hotel") {
+          setSuggestions(popularHotels);
+        } else {
+          setSuggestions([...popularAirports, ...popularHotels]);
+        }
+        return;
+      }
 
       try {
         setLoading(true);
         const results = await transfersService.searchDestinations(query);
-        
+
         // Filter results based on type
         const filteredResults = results.filter(dest => {
           if (type === "airport") return dest.type === "airport";
           if (type === "hotel") return dest.type === "hotel" || dest.type === "city";
           return true; // pickup/dropoff can be any type
         });
-        
+
         setSuggestions(filteredResults);
       } catch (error) {
         console.error("Error searching destinations:", error);
-        setSuggestions([]);
+        // Show popular destinations as fallback
+        if (type === "airport") {
+          setSuggestions(popularAirports);
+        } else if (type === "hotel") {
+          setSuggestions(popularHotels);
+        } else {
+          setSuggestions([...popularAirports, ...popularHotels]);
+        }
       } finally {
         setLoading(false);
       }
