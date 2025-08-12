@@ -766,7 +766,7 @@ export default function TransferResults() {
                       <div className="space-y-2">
                         <Button
                           onClick={() => navigate(`/transfer-details/${transfer.id}`)}
-                          className="w-full py-3 bg-[#003580] hover:bg-[#002860] active:bg-[#001f4a] text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                          className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
                           View Details
                         </Button>
