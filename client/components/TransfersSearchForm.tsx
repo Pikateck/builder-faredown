@@ -181,13 +181,16 @@ export function TransfersSearchForm() {
     const searchParams = new URLSearchParams({
       pickup: pickupLocation,
       dropoff: sameAsPickup ? pickupLocation : dropoffLocation,
-      pickupDate: pickupDate.toISOString(),
+      pickupDate: pickupDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
       pickupTime,
       passengers: totalPassengers.toString(),
       adults: passengers.adults.toString(),
       children: passengers.children.toString(),
       infants: passengers.infants.toString(),
-      ...(isRoundTrip && returnDate && { returnDate: returnDate.toISOString(), returnTime }),
+      ...(isRoundTrip && returnDate && {
+        returnDate: returnDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
+        returnTime
+      }),
       ...(vehicleType && { vehicleType }),
     });
 
