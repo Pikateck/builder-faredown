@@ -52,11 +52,15 @@ export default function TransferBooking() {
   const rateKey = searchParams.get('rateKey');
   const vehicleCode = searchParams.get('vehicleCode');
   const price = searchParams.get('price');
+  const isRoundTrip = searchParams.get('returnDate') !== null;
+  const returnDate = searchParams.get('returnDate');
+  const returnTime = searchParams.get('returnTime');
   
   // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeTab, setActiveTab] = useState('outbound');
   const [formData, setFormData] = useState({
     primaryGuest: {
       title: "",
@@ -75,24 +79,38 @@ export default function TransferBooking() {
   });
 
   // Mock transfer data (in real app, fetch based on transferId)
-  const transfer = {
+  const transferData = {
     id: transferId || "transfer_1",
     type: "Economy",
     vehicle: "Sedan",
-    provider: "Mumbai Transfers Ltd",
+    provider: "Dubai International Airport (DXB), Dubai",
     rating: 4.6,
     maxPassengers: 3,
     duration: "45 minutes",
     distance: "33 km",
-    price: parseInt(price || "1200"),
-    originalPrice: parseInt(price || "1200") + 300,
     features: ["Professional Driver", "Meet & Greet", "Free Waiting"],
-    from: "Mumbai Airport (BOM)",
-    to: "Hotel Taj Mahal Palace",
-    pickupDate: "Dec 15, 2024",
-    pickupTime: "10:00 AM",
-    image: "/api/placeholder/120/80"
+    image: "/api/placeholder/120/80",
+    outbound: {
+      from: "Dubai International Airport (DXB), Dubai",
+      to: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street",
+      pickupDate: "Dec 15, 2024",
+      pickupTime: "10:00 AM",
+      price: 1137,
+      originalPrice: 1437
+    },
+    return: {
+      from: "Grand Hyatt Dubai, Garhoud, AE, Riyadh Street",
+      to: "Dubai International Airport (DXB), Dubai",
+      pickupDate: returnDate || "Dec 18, 2024",
+      pickupTime: returnTime || "2:00 PM",
+      price: 1137,
+      originalPrice: 1437
+    },
+    isRoundTrip
   };
+
+  const currentTransfer = activeTab === 'outbound' ? transferData.outbound : transferData.return;
+  const totalPrice = isRoundTrip ? transferData.outbound.price + transferData.return.price : transferData.outbound.price;
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
@@ -250,54 +268,110 @@ export default function TransferBooking() {
           <div className="lg:col-span-2 space-y-6">
             {/* Transfer Summary */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Transfer Details</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Transfer Details</h2>
+                {isRoundTrip && (
+                  <div className="flex bg-gray-100 rounded-lg p-1">
+                    <button
+                      onClick={() => setActiveTab('outbound')}
+                      className={cn(
+                        "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                        activeTab === 'outbound'
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      Outbound
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('return')}
+                      className={cn(
+                        "px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                        activeTab === 'return'
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-gray-500 hover:text-gray-700"
+                      )}
+                    >
+                      Return
+                    </button>
+                  </div>
+                )}
+              </div>
               
               <div className="flex items-center space-x-4 mb-4">
                 <div className="w-20 h-16 rounded-lg overflow-hidden">
                   <img
-                    src={transfer.image}
-                    alt={transfer.vehicle}
+                    src={transferData.image}
+                    alt={transferData.vehicle}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
+
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-1">
                     <h3 className="font-semibold text-gray-900">
-                      {transfer.type} - {transfer.vehicle}
+                      {transferData.type} - {transferData.vehicle}
                     </h3>
-                    <Badge className="bg-blue-100 text-blue-800">{transfer.type}</Badge>
+                    <Badge className="bg-blue-100 text-blue-800">{transferData.type}</Badge>
                   </div>
-                  
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
-                      <span>Up to {transfer.maxPassengers} passengers</span>
+                      <span>Maximum 7 passengers</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{transfer.duration}</span>
+                      <span>Powered by GO Technologies FZ-LLC</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span>{transfer.rating}</span>
+                      <span>Passenger selection</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t pt-4 space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">From:</span>
-                  <span className="font-medium">{transfer.from}</span>
+              <div className="border-t pt-4 space-y-3">
+                <div className="text-sm">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span className="font-medium">About 35 mins</span>
+                  </div>
+                  <div className="ml-5 space-y-1">
+                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Dec 7 Sat - 12:04' : 'Dec 8 Sun - 10:30'}</div>
+                    <div className="text-gray-600">{currentTransfer.from}</div>
+                    {currentTransfer.from.includes('Emirates') && (
+                      <div className="text-gray-500 text-xs">United Arab Emirates</div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">To:</span>
-                  <span className="font-medium">{transfer.to}</span>
+
+                <div className="text-sm">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  </div>
+                  <div className="ml-5 space-y-1">
+                    <div className="text-gray-900 font-medium">{activeTab === 'outbound' ? 'Dec 7 Sat - 12:39' : 'Dec 8 Sun - 11:05'}</div>
+                    <div className="text-gray-600">{currentTransfer.to}</div>
+                    {currentTransfer.to.includes('Emirates') && (
+                      <div className="text-gray-500 text-xs">United Arab Emirates</div>
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">Date & Time:</span>
-                  <span className="font-medium">{transfer.pickupDate} at {transfer.pickupTime}</span>
+
+                <div className="border-t pt-3 mt-3">
+                  <div className="text-sm">
+                    <div className="font-medium text-gray-900">Vehicle</div>
+                    <div className="text-gray-600">Standard Sedan, 3 passengers</div>
+                    <div className="text-gray-500 text-xs">Powered by GO Technologies FZ-LLC</div>
+                  </div>
+                </div>
+
+                <div className="border-t pt-3 mt-3">
+                  <div className="text-sm">
+                    <div className="font-medium text-gray-900">Pick-up details</div>
+                    <div className="text-gray-600">Driver will meet you in arrivals</div>
+                    <div className="text-gray-500 text-xs">Please follow directions to meet your driver upon arrival and pick up, we will confirm.</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -459,21 +533,30 @@ export default function TransferBooking() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Booking Summary</h2>
               
               <div className="space-y-3 mb-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Transfer Fare</span>
-                  <span>₹{transfer.originalPrice}</span>
-                </div>
-                
-                <div className="flex justify-between text-sm text-green-600">
-                  <span>Discount</span>
-                  <span>-₹{transfer.originalPrice - transfer.price}</span>
-                </div>
-                
+                {isRoundTrip ? (
+                  <>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Outbound</span>
+                      <span>£{transferData.outbound.price.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Return</span>
+                      <span>£{transferData.return.price.toFixed(2)}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Transfer Fare</span>
+                    <span>£{transferData.outbound.price.toFixed(2)}</span>
+                  </div>
+                )}
+
                 <div className="border-t pt-3">
                   <div className="flex justify-between">
-                    <span className="font-semibold text-gray-900">Total Amount</span>
-                    <span className="font-bold text-xl text-gray-900">₹{transfer.price}</span>
+                    <span className="font-semibold text-gray-900">Total price</span>
+                    <span className="font-bold text-xl text-gray-900">£{totalPrice.toFixed(2)}</span>
                   </div>
+                  <div className="text-xs text-gray-500 mt-1">Including taxes</div>
                 </div>
               </div>
 
@@ -495,7 +578,7 @@ export default function TransferBooking() {
                 ) : (
                   <>
                     <CreditCard className="w-4 h-4 mr-2" />
-                    Book Now - ₹{transfer.price}
+                    Book Now - £{totalPrice.toFixed(2)}
                   </>
                 )}
               </Button>
