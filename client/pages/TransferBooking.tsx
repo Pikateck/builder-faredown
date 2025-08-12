@@ -71,8 +71,7 @@ export default function TransferBooking() {
       arrivalTime: "",
       airline: ""
     },
-    specialRequests: "",
-    promoCode: ""
+    specialRequests: ""
   });
 
   // Mock transfer data (in real app, fetch based on transferId)
