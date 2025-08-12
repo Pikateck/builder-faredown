@@ -843,8 +843,8 @@ export default function TransferResults() {
           selectedTransfer
             ? {
                 id: selectedTransfer.id,
-                name: `${selectedTransfer.vehicleClass} - ${selectedTransfer.vehicleName}`,
-                description: `${selectedTransfer.vehicleClass} transfer for up to ${selectedTransfer.maxPassengers} passengers`,
+                name: selectedTransfer.vehicleName,
+                description: `${selectedTransfer.vehicleClass.charAt(0).toUpperCase() + selectedTransfer.vehicleClass.slice(1)} transfer for up to ${selectedTransfer.maxPassengers} passengers`,
                 image: selectedTransfer.vehicleImage || "/api/placeholder/120/80",
                 marketPrice: selectedTransfer.pricing.totalPrice * 1.2, // Show higher market price
                 totalPrice: selectedTransfer.pricing.totalPrice,
@@ -861,7 +861,7 @@ export default function TransferResults() {
           selectedTransfer
             ? {
                 id: parseInt(selectedTransfer.id.replace(/\D/g, '') || "1"),
-                name: selectedTransfer.providerName || "Transfer Service",
+                name: `${selectedTransfer.vehicleClass.charAt(0).toUpperCase() + selectedTransfer.vehicleClass.slice(1)} - ${selectedTransfer.vehicleType.charAt(0).toUpperCase() + selectedTransfer.vehicleType.slice(1)}`,
                 location: `${pickupLocation} → ${dropoffLocation}`,
                 rating: selectedTransfer.providerRating || 4.5,
                 image: selectedTransfer.vehicleImage || "/api/placeholder/120/80",
