@@ -982,9 +982,10 @@ export function TransfersSearchForm() {
                             setIsDropoffUserTyping(true);
                           }
                         }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsDropoffOpen(true);
+                        onMouseDown={() => {
+                          if (!isDropoffOpen) {
+                            setIsDropoffOpen(true);
+                          }
                         }}
                         className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded font-medium text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Drop-off location"
