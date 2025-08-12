@@ -1179,46 +1179,55 @@ export default function SightseeingResults() {
         }}
       />
 
-      {/* Bottom Selection Bar - Native App Style */}
+      {/* Hotel-Style Bottom Panel */}
       {showBottomBar && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-2xl z-40">
-          {/* Safe area for iOS */}
-          <div className="safe-area-bottom">
-            <div className="px-4 py-3">
-              <div className="max-w-6xl mx-auto">
-                <div className="flex items-center justify-between gap-4">
-                  {/* Selection Info */}
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-700 mb-1">
-                      {selectedAttractions.size} experience{selectedAttractions.size > 1 ? 's' : ''} selected
-                    </div>
-                    <div className="text-xl font-bold text-gray-900">
-                      {formatPrice(calculateTotalPrice())}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      Total for {searchParams.get("adults") || "2"} adult{parseInt(searchParams.get("adults") || "2") > 1 ? 's' : ''}
-                      {parseInt(searchParams.get("children") || "0") > 0 && `, ${searchParams.get("children")} children`}
-                    </div>
+        <div className="md:hidden fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
+          <div className="p-4">
+            <div className="bg-gray-50 rounded-lg p-3 mb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-gray-900 mb-1">
+                    {selectedAttractions.size} experience{selectedAttractions.size > 1 ? 's' : ''} selected
                   </div>
-
-                  {/* Action Buttons - Native App Style */}
-                  <div className="flex gap-2">
-                    <button
-                      onClick={handleBottomBarBargain}
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-5 rounded-full flex items-center gap-2 transition-all duration-200 shadow-sm active:scale-95 border border-gray-200"
-                    >
-                      <TrendingDown className="w-4 h-4" />
-                      <span className="text-sm">Bargain</span>
-                    </button>
-                    <button
-                      onClick={handleBottomBarBookNow}
-                      className="bg-[#003580] hover:bg-[#002a66] text-white font-semibold py-3 px-6 rounded-full flex items-center gap-2 transition-all duration-200 shadow-md active:scale-95"
-                    >
-                      <span className="text-sm">Select & Continue</span>
-                    </button>
+                  <div className="text-xs text-gray-600">
+                    {formatPrice(calculateTotalPrice() / selectedAttractions.size)} per experience
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg font-bold text-gray-900">
+                    {formatPrice(calculateTotalPrice())}
+                  </div>
+                  <div className="text-xs text-gray-600 font-medium">
+                    Total Price (All Inclusive)
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={() => {
+                  handleBottomBarBookNow();
+                  if (navigator.vibrate) {
+                    navigator.vibrate(100);
+                  }
+                }}
+                className="flex-1 bg-blue-600 text-white font-semibold py-3"
+              >
+                Reserve
+              </Button>
+              <Button
+                onClick={() => {
+                  handleBottomBarBargain();
+                  if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                  }
+                }}
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 flex items-center justify-center gap-2 min-h-[44px]"
+              >
+                <TrendingDown className="w-4 h-4" />
+                Bargain Now
+              </Button>
             </div>
           </div>
         </div>
