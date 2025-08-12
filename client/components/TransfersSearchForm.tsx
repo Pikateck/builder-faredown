@@ -125,33 +125,50 @@ export function TransfersSearchForm() {
     };
   });
 
-  // Mock destinations data
-  const destinations: DestinationOption[] = [
-    { id: "1", code: "DEL", name: "Delhi Airport", country: "India", type: "Airport" },
-    { id: "2", code: "BOM", name: "Mumbai Airport", country: "India", type: "Airport" },
-    { id: "3", code: "BLR", name: "Bangalore Airport", country: "India", type: "Airport" },
-    { id: "4", code: "MAA", name: "Chennai Airport", country: "India", type: "Airport" },
-    { id: "5", code: "CCU", name: "Kolkata Airport", country: "India", type: "Airport" },
-    { id: "6", code: "HYD", name: "Hyderabad Airport", country: "India", type: "Airport" },
-    { id: "7", code: "GOI", name: "Goa Airport", country: "India", type: "Airport" },
-    { id: "8", code: "PNQ", name: "Pune Airport", country: "India", type: "Airport" },
-  ];
-
+  // Mobile detection
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Load popular destinations from Hotelbeds API on component mount - EXACT HOTELS/SIGHTSEEING PATTERN
+  useEffect(() => {
+    const loadPopularDestinations = async () => {
+      try {
+        console.log("🎆 Loading popular transfer destinations from Hotelbeds...");
+        const popular = await transfersService.searchDestinations(""); // Empty query for popular
+        const formattedPopular = popular.map((dest) => ({
+          id: dest.code,
+          code: dest.code,
+          name: dest.name,
+          country: dest.country,
+          countryCode: dest.countryCode,
+          type: dest.type,
+          popular: dest.popular || false,
+        }));
+        setPopularDestinations(formattedPopular);
+        setPopularDestinationsLoaded(true);
+        console.log("✅ Loaded", formattedPopular.length, "popular transfer destinations from Hotelbeds");
+      } catch (error) {
+        console.error("⚠️ Failed to load popular destinations:", error);
+        setPopularDestinationsLoaded(true);
+      }
+    };
+
+    loadPopularDestinations();
+  }, []);
+
   useEffect(() => {
     if (sameAsPickup) {
       setDropoffLocation(pickupLocation);
+      setDropoffLocationCode(pickupLocationCode);
     }
-  }, [sameAsPickup, pickupLocation]);
+  }, [sameAsPickup, pickupLocation, pickupLocationCode]);
 
   useEffect(() => {
     if (isRoundTrip && !returnDate) {
@@ -159,12 +176,88 @@ export function TransfersSearchForm() {
     }
   }, [isRoundTrip]);
 
-  const filterDestinations = useCallback((query: string) => {
-    if (!query.trim()) return destinations.slice(0, 8);
-    return destinations.filter(dest =>
-      dest.name.toLowerCase().includes(query.toLowerCase()) ||
-      dest.code.toLowerCase().includes(query.toLowerCase())
-    ).slice(0, 8);
+  // EXACT HOTELS/SIGHTSEEING SEARCH PATTERN
+  const searchPickupDestinations = useCallback(
+    async (query: string) => {
+      if (query.length < 1) {
+        setPickupSuggestions([]);
+        return;
+      }
+
+      if (debouncedPickupSearchRef.current) {
+        clearTimeout(debouncedPickupSearchRef.current);
+      }
+
+      debouncedPickupSearchRef.current = setTimeout(async () => {
+        try {
+          setLoadingPickupDestinations(true);
+          console.log(`🔍 Real-time pickup search: "${query}"`);
+
+          const results = await transfersService.searchDestinations(query);
+          setPickupSuggestions(results);
+          console.log(`✅ Real-time pickup results: ${results.length} destinations`);
+        } catch (error) {
+          console.error("❌ Pickup search error:", error);
+          setPickupSuggestions([]);
+        } finally {
+          setLoadingPickupDestinations(false);
+        }
+      }, 150); // Ultra-fast response time like Booking.com
+    },
+    [],
+  );
+
+  const searchDropoffDestinations = useCallback(
+    async (query: string) => {
+      if (query.length < 1) {
+        setDropoffSuggestions([]);
+        return;
+      }
+
+      if (debouncedDropoffSearchRef.current) {
+        clearTimeout(debouncedDropoffSearchRef.current);
+      }
+
+      debouncedDropoffSearchRef.current = setTimeout(async () => {
+        try {
+          setLoadingDropoffDestinations(true);
+          console.log(`🔍 Real-time dropoff search: "${query}"`);
+
+          const results = await transfersService.searchDestinations(query);
+          setDropoffSuggestions(results);
+          console.log(`✅ Real-time dropoff results: ${results.length} destinations`);
+        } catch (error) {
+          console.error("❌ Dropoff search error:", error);
+          setDropoffSuggestions([]);
+        } finally {
+          setLoadingDropoffDestinations(false);
+        }
+      }, 150);
+    },
+    [],
+  );
+
+  // Destination selection handlers
+  const selectPickupDestination = useCallback((dest: TransferDestination) => {
+    const fullName = `${dest.name}, ${dest.country}`;
+    console.log("🎯 Pickup destination selected:", fullName);
+
+    setPickupLocation(fullName);
+    setPickupLocationCode(dest.code);
+    setIsPickupUserTyping(false);
+    setPickupInputValue("");
+    setIsPickupOpen(false);
+  }, []);
+
+  const selectDropoffDestination = useCallback((dest: TransferDestination) => {
+    const fullName = `${dest.name}, ${dest.country}`;
+    console.log("🎯 Dropoff destination selected:", fullName);
+
+    setDropoffLocation(fullName);
+    setDropoffLocationCode(dest.code);
+    setIsDropoffUserTyping(false);
+    setDropoffInputValue("");
+    setIsDropoffOpen(false);
   }, []);
 
   const passengersText = `${passengers.adults} adult${passengers.adults > 1 ? 's' : ''}${passengers.children > 0 ? `, ${passengers.children} child${passengers.children > 1 ? 'ren' : ''}` : ''}${passengers.infants > 0 ? `, ${passengers.infants} infant${passengers.infants > 1 ? 's' : ''}` : ''}`;
