@@ -611,7 +611,14 @@ export default function TransferResults() {
               <div className="flex items-center space-x-1">
                 <Users className="w-4 h-4" />
                 <span>
-                  {passengers} passenger{parseInt(passengers) !== 1 ? "s" : ""}
+                  {(() => {
+                    const totalPassengers = parseInt(adults) + parseInt(children) + parseInt(infants);
+                    const parts = [];
+                    if (parseInt(adults) > 0) parts.push(`${adults} adult${parseInt(adults) > 1 ? 's' : ''}`);
+                    if (parseInt(children) > 0) parts.push(`${children} child${parseInt(children) > 1 ? 'ren' : ''}`);
+                    if (parseInt(infants) > 0) parts.push(`${infants} infant${parseInt(infants) > 1 ? 's' : ''}`);
+                    return parts.length > 0 ? parts.join(' • ') : `${totalPassengers} passenger${totalPassengers !== 1 ? 's' : ''}`;
+                  })()}
                 </span>
               </div>
             </div>
