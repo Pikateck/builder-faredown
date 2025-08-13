@@ -64,7 +64,6 @@ export function TransfersSearchForm() {
   const [airportCode, setAirportCode] = useState("");
   const [hotel, setHotel] = useState("Hotel Taj Mahal Palace");
   const [hotelCode, setHotelCode] = useState("");
-  const [flightNumber, setFlightNumber] = useState("");
 
   // Car rental states
   const [pickupLocation, setPickupLocation] = useState("");
@@ -551,9 +550,6 @@ export function TransfersSearchForm() {
         searchParams.set("isRoundTrip", "true");
       }
 
-      if (flightNumber) {
-        searchParams.set("flightNumber", flightNumber);
-      }
     } else {
       // Car rental parameters
       searchParams.set("mode", "rental");
@@ -1199,23 +1195,6 @@ export function TransfersSearchForm() {
               </div>
             </div>
 
-            {/* Optional Flight Number */}
-            {(flightNumber || airportDirection === "return") && (
-              <div className="mt-2">
-                <div className="flex-1 lg:max-w-[200px] relative">
-                  <div className="relative">
-                    <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                    <Input
-                      type="text"
-                      value={flightNumber}
-                      onChange={(e) => setFlightNumber(e.target.value)}
-                      className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation"
-                      placeholder="Flight number (optional)"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Return Trip Fields (if return is selected) */}
             {airportDirection === "return" && (
