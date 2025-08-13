@@ -302,26 +302,28 @@ router.post("/session/offer", async (req, res) => {
     // Generate AI response
     const aiResponse = bargainEngine.generateCounterOffer(sessionData, userOffer, currentRound);
 
-    // Log the negotiation round
-    try {
-      await pgPool.query(
-        `INSERT INTO ai.transfers_bargain_rounds 
-         (session_id, round_number, user_offer, ai_decision, ai_counter_price, 
-          ai_message, savings_amount, user_message)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [
-          sessionId,
-          currentRound,
-          userOffer,
-          aiResponse.decision,
-          aiResponse.counterPrice || aiResponse.finalPrice || null,
-          aiResponse.message,
-          aiResponse.savings || 0,
-          message || null
-        ]
-      );
-    } catch (dbError) {
-      logger.warn("Failed to log bargain round", { error: dbError.message });
+    // Log the negotiation round if database is available
+    if (dbAvailable && pgPool) {
+      try {
+        await pgPool.query(
+          `INSERT INTO ai.transfers_bargain_rounds
+           (session_id, round_number, user_offer, ai_decision, ai_counter_price,
+            ai_message, savings_amount, user_message)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+          [
+            sessionId,
+            currentRound,
+            userOffer,
+            aiResponse.decision,
+            aiResponse.counterPrice || aiResponse.finalPrice || null,
+            aiResponse.message,
+            aiResponse.savings || 0,
+            message || null
+          ]
+        );
+      } catch (dbError) {
+        logger.warn("Failed to log bargain round", { error: dbError.message });
+      }
     }
 
     // Update session status if accepted or rejected
