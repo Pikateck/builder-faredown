@@ -60,12 +60,12 @@ router.post("/destinations", auditRequest, async (req, res) => {
     }
 
     logger.info(
-      `Found ${result.data.destinations.length} transfer destinations`,
+      `Found ${result.destinations.length} transfer destinations`,
     );
 
     res.json({
       success: true,
-      data: result.data,
+      data: { destinations: result.destinations },
     });
   } catch (error) {
     logger.error("Transfers destinations API error", { error: error.message });
