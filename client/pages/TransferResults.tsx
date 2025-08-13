@@ -840,7 +840,12 @@ export default function TransferResults() {
               {filteredTransfers.map((transfer) => (
                 <div
                   key={transfer.id}
-                  className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow"
+                  className={cn(
+                    "bg-white rounded-lg shadow-sm border-2 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group mb-4",
+                    selectedTransfers.has(transfer.id)
+                      ? "border-[#ff6b00] shadow-lg ring-2 ring-[#ff6b00] ring-opacity-30"
+                      : "border-gray-200 hover:border-gray-300"
+                  )}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                     {/* Left Section - Transfer Details */}
