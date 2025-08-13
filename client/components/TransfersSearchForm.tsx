@@ -1736,18 +1736,27 @@ export function TransfersSearchForm() {
         <MobileDatePicker
           isOpen={showMobileDatePicker}
           onClose={() => setShowMobileDatePicker(false)}
-          tripType={airportDirection === "return" ? "round-trip" : "one-way"}
+          tripType={transferMode === "rental" ? "round-trip" : (airportDirection === "return" ? "round-trip" : "one-way")}
           setTripType={(type) => {
-            if (type === "round-trip") {
-              setAirportDirection("return");
-            } else {
-              setAirportDirection("oneway");
+            if (transferMode === "airport") {
+              if (type === "round-trip") {
+                setAirportDirection("return");
+              } else {
+                setAirportDirection("oneway");
+              }
             }
+            // For car rentals, always keep round-trip (no option to change)
           }}
           selectedDepartureDate={pickupDate}
-          selectedReturnDate={returnDate}
+          selectedReturnDate={transferMode === "rental" ? dropoffDate : returnDate}
           setSelectedDepartureDate={(date) => setPickupDate(date)}
-          setSelectedReturnDate={(date) => setReturnDate(date)}
+          setSelectedReturnDate={(date) => {
+            if (transferMode === "rental") {
+              setDropoffDate(date);
+            } else {
+              setReturnDate(date);
+            }
+          }}
           selectingDeparture={true}
           setSelectingDeparture={() => {}}
           bookingType="transfers"
