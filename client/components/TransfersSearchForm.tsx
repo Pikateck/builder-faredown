@@ -399,8 +399,16 @@ export function TransfersSearchForm() {
           setDropoffTime("12:00");
         }
       } else {
-        // For airport taxi, just set the date and close
+        // For airport taxi, set the date and close
         setIsPickupDateOpen(false);
+
+        // If return trip is selected, automatically set return date
+        if (airportDirection === "return") {
+          const returnDay = addDays(date, 3); // Default 3-day trip
+          setReturnDate(returnDay);
+          setCalendarRange({ start: date, end: returnDay });
+          setReturnTime("16:00"); // Afternoon return flight
+        }
 
         // Smart time suggestion for airport transfers
         const currentHour = new Date().getHours();
@@ -417,6 +425,8 @@ export function TransfersSearchForm() {
           // Future date - suggest common flight times
           if (airportDirection === "hotel-to-airport") {
             setPickupTime("06:00"); // Early morning departure
+          } else if (airportDirection === "return") {
+            setPickupTime("10:00"); // Morning outbound for return trips
           } else {
             setPickupTime("14:00"); // Afternoon arrival
           }
