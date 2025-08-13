@@ -508,7 +508,7 @@ export function TransfersSearchForm() {
                             }
                           }
                         }}
-                        className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Departure airport"
                         autoComplete="off"
                       />
@@ -641,7 +641,7 @@ export function TransfersSearchForm() {
                             }
                           }
                         }}
-                        className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Hotel or address"
                         autoComplete="off"
                       />
@@ -1223,7 +1223,7 @@ export function TransfersSearchForm() {
                             }
                           }
                         }}
-                        className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
                         placeholder="Drop-off location"
                         autoComplete="off"
                       />
