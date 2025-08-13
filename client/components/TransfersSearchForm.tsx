@@ -852,10 +852,22 @@ export function TransfersSearchForm() {
 
               {/* Hotel/Address Field */}
               <div className="flex-1 lg:max-w-[200px] relative">
-                <Popover open={isHotelOpen} onOpenChange={setIsHotelOpen}>
-                  <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer">
-                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                {isMobile ? (
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                    onClick={() => setShowMobileToDestination(true)}
+                  >
+                    <MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-xs sm:text-sm">
+                      {hotel || "Destination"}
+                    </span>
+                  </Button>
+                ) : (
+                  <Popover open={isHotelOpen} onOpenChange={setIsHotelOpen}>
+                    <PopoverTrigger asChild>
+                      <div className="relative cursor-pointer">
+                        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                       <Input
                         type="text"
                         value={
@@ -978,6 +990,7 @@ export function TransfersSearchForm() {
                     </div>
                   </PopoverContent>
                 </Popover>
+                )}
               </div>
 
               {/* Date Field */}
