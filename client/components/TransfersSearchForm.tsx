@@ -1127,16 +1127,30 @@ export function TransfersSearchForm() {
                 </h4>
                 <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                   <div className="flex-1 sm:max-w-[140px]">
-                    <div className="relative">
-                      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                      <Input
-                        type="text"
-                        value={returnDate ? format(returnDate, "MMM d") : ""}
-                        readOnly
-                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
-                        placeholder="Return date"
-                      />
-                    </div>
+                    <Popover open={isDropoffDateOpen} onOpenChange={setIsDropoffDateOpen}>
+                      <PopoverTrigger asChild>
+                        <div className="relative cursor-pointer" onClick={handleDropoffDateClick}>
+                          <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                          <Input
+                            type="text"
+                            value={returnDate ? format(returnDate, "MMM d") : ""}
+                            readOnly
+                            className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
+                            placeholder="Return date"
+                          />
+                        </div>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <BookingCalendar
+                          mode="single"
+                          selected={returnDate}
+                          onSelect={(date) => date && handleReturnDateSelect(date)}
+                          disabled={(date) => date < (pickupDate || new Date())}
+                          initialFocus
+                          numberOfMonths={isMobile ? 1 : 2}
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   <div className="flex-1 sm:max-w-[100px]">
                     <Select value={returnTime} onValueChange={setReturnTime}>
