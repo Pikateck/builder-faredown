@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TransferVoucher } from "@/components/vouchers/TransferVoucher";
+import { TransferInvoice } from "@/components/invoices/TransferInvoice";
 import {
   CheckCircle,
   Download,
