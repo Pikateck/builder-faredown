@@ -240,18 +240,18 @@ export default function TransferConfirmation() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Transfer Fare</span>
-                  <span>₹{transfer.originalPrice}</span>
+                  <span>₹{transfer.originalPrice || transfer.totalPrice || "0"}</span>
                 </div>
-                {transfer.originalPrice > transfer.price && (
+                {(transfer.originalPrice || transfer.totalPrice) && (transfer.originalPrice || transfer.totalPrice) > (transfer.price || transfer.finalPrice) && (
                   <div className="flex justify-between text-sm text-green-600">
                     <span>Discount</span>
-                    <span>-₹{transfer.originalPrice - transfer.price}</span>
+                    <span>-₹{(transfer.originalPrice || transfer.totalPrice) - (transfer.price || transfer.finalPrice)}</span>
                   </div>
                 )}
                 <div className="border-t pt-2">
                   <div className="flex justify-between font-semibold">
                     <span>Total Paid</span>
-                    <span className="text-lg">₹{transfer.price}</span>
+                    <span className="text-lg">₹{transfer.price || transfer.finalPrice || transfer.totalPrice || "0"}</span>
                   </div>
                 </div>
               </div>
