@@ -1833,6 +1833,36 @@ export function TransfersSearchForm() {
             });
           }}
         />
+
+        {/* Mobile From Destination Dropdown */}
+        <MobileCityDropdown
+          isOpen={showMobileFromDestination}
+          onClose={() => setShowMobileFromDestination(false)}
+          title="Select pick-up location"
+          cities={transferCities}
+          selectedCity={airport || ""}
+          onSelectCity={(city) => {
+            setAirport(city);
+            setAirportCode(transferCities[city]?.code || "");
+            setShowMobileFromDestination(false);
+          }}
+          context="hotels"
+        />
+
+        {/* Mobile To Destination Dropdown */}
+        <MobileCityDropdown
+          isOpen={showMobileToDestination}
+          onClose={() => setShowMobileToDestination(false)}
+          title="Select destination"
+          cities={transferCities}
+          selectedCity={hotel || ""}
+          onSelectCity={(city) => {
+            setHotel(city);
+            setHotelCode(transferCities[city]?.code || "");
+            setShowMobileToDestination(false);
+          }}
+          context="hotels"
+        />
       </div>
     </>
   );
