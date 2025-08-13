@@ -327,6 +327,15 @@ export default function TransferConfirmation() {
               Download Voucher
             </Button>
 
+            <Button
+              variant="outline"
+              className="flex items-center"
+              onClick={handleDownloadInvoice}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download Invoice
+            </Button>
+
             <Link to="/my-trips">
               <Button>View My Bookings</Button>
             </Link>
