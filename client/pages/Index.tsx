@@ -692,19 +692,45 @@ export default function Index() {
                             onClick={() => {
                               setCurrency(currency);
                             }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors ${
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors duration-150 ${
                               selectedCurrency.code === currency.code
                                 ? "bg-blue-50 text-blue-600 border border-blue-200"
                                 : "text-gray-700"
                             }`}
+                            style={{
+                              WebkitFontSmoothing: 'antialiased',
+                              textRendering: 'optimizeLegibility',
+                              WebkitTapHighlightColor: 'transparent',
+                            }}
                           >
-                            <div className="flex items-center space-x-2">
-                              <span className="text-base">{currency.flag}</span>
-                              <span className="font-medium">
+                            <div className="flex items-center gap-2">
+                              <span
+                                className="text-base leading-none"
+                                style={{ lineHeight: '1' }}
+                              >
+                                {currency.flag}
+                              </span>
+                              <span
+                                className="font-medium leading-none"
+                                style={{
+                                  fontSize: '14px',
+                                  fontWeight: '500',
+                                  letterSpacing: '0.005em',
+                                  lineHeight: '1.2',
+                                }}
+                              >
                                 {currency.name}
                               </span>
                             </div>
-                            <span className="font-semibold text-xs">
+                            <span
+                              className="font-semibold leading-none"
+                              style={{
+                                fontSize: '12px',
+                                fontWeight: '600',
+                                letterSpacing: '0.01em',
+                                lineHeight: '1.2',
+                              }}
+                            >
                               {currency.symbol} {currency.code}
                             </span>
                           </button>
