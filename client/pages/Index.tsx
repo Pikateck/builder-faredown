@@ -828,18 +828,47 @@ export default function Index() {
                   {/* User Section */}
                   {isLoggedIn ? (
                     <div className="mt-8 px-4">
-                      <div className="bg-blue-50 rounded-lg p-4">
-                        <div className="flex items-center space-x-3 mb-3">
+                      <div
+                        className="bg-blue-50 rounded-lg p-4"
+                        style={{
+                          WebkitFontSmoothing: 'antialiased',
+                          textRendering: 'optimizeLegibility',
+                        }}
+                      >
+                        <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
+                            <span
+                              className="text-white font-bold leading-none"
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: '700',
+                                letterSpacing: '0.01em',
+                              }}
+                            >
                               {userName.charAt(0)}
                             </span>
                           </div>
                           <div>
-                            <div className="font-medium text-gray-900">
+                            <div
+                              className="font-medium text-gray-900 leading-none"
+                              style={{
+                                fontSize: '16px',
+                                fontWeight: '500',
+                                letterSpacing: '0.005em',
+                                lineHeight: '1.2',
+                              }}
+                            >
                               {userName}
                             </div>
-                            <div className="text-sm text-gray-600">
+                            <div
+                              className="text-gray-600 leading-none mt-1"
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: '400',
+                                letterSpacing: '0.005em',
+                                lineHeight: '1.2',
+                              }}
+                            >
                               Loyalty Level 1
                             </div>
                           </div>
