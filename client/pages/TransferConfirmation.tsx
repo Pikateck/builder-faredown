@@ -170,7 +170,7 @@ export default function TransferConfirmation() {
                   <MapPin className="w-5 h-5 text-red-600 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Drop-off</p>
-                    <p className="font-medium text-gray-900">{transfer.to}</p>
+                    <p className="font-medium text-gray-900">{transfer.to || transfer.dropoffLocation || "Drop-off location to be confirmed"}</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
