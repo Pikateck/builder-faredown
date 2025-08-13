@@ -488,17 +488,19 @@ router.get("/session/:sessionId", async (req, res) => {
       });
     }
 
-    // Get bargain history from database
+    // Get bargain history from database if available
     let rounds = [];
-    try {
-      const result = await pgPool.query(
-        `SELECT * FROM ai.transfers_bargain_rounds 
-         WHERE session_id = $1 ORDER BY round_number ASC`,
-        [sessionId]
-      );
-      rounds = result.rows;
-    } catch (dbError) {
-      logger.warn("Failed to fetch bargain rounds", { error: dbError.message });
+    if (dbAvailable && pgPool) {
+      try {
+        const result = await pgPool.query(
+          `SELECT * FROM ai.transfers_bargain_rounds
+           WHERE session_id = $1 ORDER BY round_number ASC`,
+          [sessionId]
+        );
+        rounds = result.rows;
+      } catch (dbError) {
+        logger.warn("Failed to fetch bargain rounds", { error: dbError.message });
+      }
     }
 
     res.json({
