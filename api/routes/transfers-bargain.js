@@ -195,33 +195,38 @@ router.post("/session/start", async (req, res) => {
     // Store session in memory (in production, use Redis)
     bargainEngine.activeSessions.set(sessionId, sessionData);
 
-    // Store in database
-    try {
-      await pgPool.query(
-        `INSERT INTO ai.transfers_bargain_sessions 
-         (session_id, transfer_id, vehicle_type, vehicle_class, vehicle_name, 
-          pickup_location, dropoff_location, pickup_date, displayed_price, 
-          base_price, cost_price, min_selling_price, user_tier, status)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'active')
-         ON CONFLICT (session_id) DO NOTHING`,
-        [
-          sessionId,
-          transferData.id,
-          transferData.vehicleType,
-          transferData.vehicleClass,
-          transferData.vehicleName,
-          sessionData.pickupLocation,
-          sessionData.dropoffLocation,
-          sessionData.pickupDate,
-          pricing.displayedPrice,
-          pricing.basePrice,
-          pricing.costPrice,
-          pricing.minSellingPrice,
-          sessionData.userProfile.tier
-        ]
-      );
-    } catch (dbError) {
-      logger.warn("Database storage failed, continuing with memory storage", { error: dbError.message });
+    // Store in database if available
+    if (dbAvailable && pgPool) {
+      try {
+        await pgPool.query(
+          `INSERT INTO ai.transfers_bargain_sessions
+           (session_id, transfer_id, vehicle_type, vehicle_class, vehicle_name,
+            pickup_location, dropoff_location, pickup_date, displayed_price,
+            base_price, cost_price, min_selling_price, user_tier, status)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'active')
+           ON CONFLICT (session_id) DO NOTHING`,
+          [
+            sessionId,
+            transferData.id,
+            transferData.vehicleType,
+            transferData.vehicleClass,
+            transferData.vehicleName,
+            sessionData.pickupLocation,
+            sessionData.dropoffLocation,
+            sessionData.pickupDate,
+            pricing.displayedPrice,
+            pricing.basePrice,
+            pricing.costPrice,
+            pricing.minSellingPrice,
+            sessionData.userProfile.tier
+          ]
+        );
+        logger.info("Session stored in database", { sessionId });
+      } catch (dbError) {
+        logger.warn("Database storage failed, continuing with memory storage", { error: dbError.message });
+      }
+    } else {
+      logger.info("Using in-memory storage only", { sessionId });
     }
 
     // Generate initial AI response
