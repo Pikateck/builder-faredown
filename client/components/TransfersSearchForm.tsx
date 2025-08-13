@@ -186,10 +186,10 @@ export function TransfersSearchForm() {
   const debouncedPickupSearchRef = useRef<NodeJS.Timeout>();
   const debouncedDropoffSearchRef = useRef<NodeJS.Timeout>();
 
-  // Time options
-  const timeOptions = Array.from({ length: 24 * 4 }, (_, i) => {
-    const hour = Math.floor(i / 4);
-    const minute = (i % 4) * 15;
+  // Time options (every 30 minutes for better UX)
+  const timeOptions = Array.from({ length: 24 * 2 }, (_, i) => {
+    const hour = Math.floor(i / 2);
+    const minute = (i % 2) * 30;
     const time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
     return { value: time, label: time };
   });
