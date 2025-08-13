@@ -818,20 +818,23 @@ export default function TransferResults() {
                 {filteredTransfers.length !== 1 ? "s" : ""} found
               </h2>
 
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="recommended">Recommended</option>
-                  <option value="price_low">Price: Low to High</option>
-                  <option value="price_high">Price: High to Low</option>
-                  <option value="duration">Duration</option>
-                  <option value="capacity">Capacity</option>
-                  <option value="rating">Rating</option>
-                </select>
+              <div className="flex items-center space-x-2 sm:space-x-4">
+                <span className="text-xs sm:text-sm text-gray-600 flex-shrink-0">Sort:</span>
+                <div className="relative flex-1 sm:flex-initial">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="w-full sm:w-auto border border-gray-300 rounded px-2 sm:px-3 py-1 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  >
+                    <option value="recommended">Recommended</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="duration">Duration</option>
+                    <option value="capacity">Capacity</option>
+                    <option value="rating">Rating</option>
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-500 pointer-events-none" />
+                </div>
               </div>
             </div>
 
