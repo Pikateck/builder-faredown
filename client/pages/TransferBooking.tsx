@@ -120,8 +120,8 @@ export default function TransferBooking() {
         ? {
             from: dropoffLocation,
             to: pickupLocation,
-            pickupDate: returnDate,
-            pickupTime: returnTime || "2:00 PM",
+            pickupDate: returnDate ? new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : "Return Date TBD",
+            pickupTime: returnTime || "14:00",
             price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
             originalPrice: 1500,
           }
