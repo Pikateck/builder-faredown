@@ -779,9 +779,9 @@ export function TransfersSearchForm() {
 
               {/* Date Field */}
               <div className="flex-1 lg:max-w-[140px]">
-                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
                   <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer">
+                    <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
                       <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                       <Input
                         type="text"
@@ -796,11 +796,10 @@ export function TransfersSearchForm() {
                     <BookingCalendar
                       mode="single"
                       selected={pickupDate}
-                      onSelect={setPickupDate}
-                      className="rounded-md border"
-                      disabled={(date) =>
-                        date < new Date() || date < new Date("1900-01-01")
-                      }
+                      onSelect={(date) => date && handleDateSelect(date, true)}
+                      disabled={(date) => date < new Date()}
+                      initialFocus
+                      numberOfMonths={isMobile ? 1 : 2}
                     />
                   </PopoverContent>
                 </Popover>
