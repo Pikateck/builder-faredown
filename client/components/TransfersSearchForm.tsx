@@ -129,6 +129,12 @@ export function TransfersSearchForm() {
   const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
   const [returnTime, setReturnTime] = useState("14:00");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isPickupDateOpen, setIsPickupDateOpen] = useState(false);
+  const [isDropoffDateOpen, setIsDropoffDateOpen] = useState(false);
+  const [calendarRange, setCalendarRange] = useState<{ start: Date | null; end: Date | null }>({
+    start: null,
+    end: null
+  });
 
   // Passenger states
   const [passengers, setPassengers] = useState<PassengerConfig>({
