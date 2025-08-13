@@ -32,6 +32,7 @@ export default function TransferConfirmation() {
   const location = useLocation();
   const { transfer, bookingData, bookingRef } = location.state || {};
   const [showVoucher, setShowVoucher] = useState(false);
+  const [showInvoice, setShowInvoice] = useState(false);
 
   const handleDownloadVoucher = () => {
     setShowVoucher(true);
@@ -39,6 +40,15 @@ export default function TransferConfirmation() {
     setTimeout(() => {
       window.print();
       setShowVoucher(false);
+    }, 500);
+  };
+
+  const handleDownloadInvoice = () => {
+    setShowInvoice(true);
+    // Print invoice after a short delay to ensure it's rendered
+    setTimeout(() => {
+      window.print();
+      setShowInvoice(false);
     }, 500);
   };
 
