@@ -273,6 +273,46 @@ export function TransfersSearchForm() {
     },
   ];
 
+  // City data for mobile dropdowns (matches MobileCityDropdown interface)
+  const transferCities = {
+    "Mumbai": {
+      code: "BOM",
+      name: "Mumbai",
+      airport: "Mumbai Airport - Chhatrapati Shivaji",
+      fullName: "Mumbai, Maharashtra, India"
+    },
+    "Delhi": {
+      code: "DEL",
+      name: "Delhi",
+      airport: "Delhi Airport - Indira Gandhi",
+      fullName: "Delhi, National Capital Territory, India"
+    },
+    "Bangalore": {
+      code: "BLR",
+      name: "Bangalore",
+      airport: "Bangalore Airport - Kempegowda",
+      fullName: "Bangalore, Karnataka, India"
+    },
+    "Dubai": {
+      code: "DXB",
+      name: "Dubai",
+      airport: "Dubai Airport - International",
+      fullName: "Dubai, United Arab Emirates"
+    },
+    "London": {
+      code: "LHR",
+      name: "London",
+      airport: "London Heathrow Airport",
+      fullName: "London, United Kingdom"
+    },
+    "Singapore": {
+      code: "SIN",
+      name: "Singapore",
+      airport: "Singapore Changi Airport",
+      fullName: "Singapore, Singapore"
+    }
+  };
+
   // Search destinations (debounced)
   const searchDestinations = useCallback(
     async (query: string, type: "airport" | "hotel" | "pickup" | "dropoff") => {
