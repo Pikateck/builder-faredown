@@ -530,9 +530,18 @@ export function BookingCalendar({
             Clear
           </button>
           <button
-            onClick={onClose}
+            onClick={() => {
+              // Apply the selected dates before closing
+              if (onChange && selection[0].startDate) {
+                onChange({
+                  startDate: selection[0].startDate,
+                  endDate: selection[0].endDate,
+                });
+              }
+              onClose?.();
+            }}
             className="px-8 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
-            disabled={!dateInfo.checkIn}
+            disabled={!selection[0].startDate}
           >
             Apply
           </button>
