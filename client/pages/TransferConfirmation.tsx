@@ -178,7 +178,14 @@ export default function TransferConfirmation() {
                   <div>
                     <p className="text-sm text-gray-500">Date & Time</p>
                     <p className="font-medium text-gray-900">
-                      {transfer.pickupDate} at {transfer.pickupTime}
+                      {transfer.pickupDate && transfer.pickupTime
+                        ? `${new Date(transfer.pickupDate).toLocaleDateString('en-GB', {
+                            weekday: 'short',
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                          })} at ${transfer.pickupTime}`
+                        : "Date and time to be confirmed"}
                     </p>
                   </div>
                 </div>
