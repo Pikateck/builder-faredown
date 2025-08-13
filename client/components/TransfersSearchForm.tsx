@@ -789,8 +789,8 @@ export function TransfersSearchForm() {
                       ) : (
                         <div className="p-4 text-center text-gray-500">
                           {airportSuggestions.length === 0
-                            ? "Loading popular airports..."
-                            : "Start typing to search airports..."}
+                            ? "Loading popular locations..."
+                            : "Start typing to search locations..."}
                         </div>
                       )}
                     </div>
