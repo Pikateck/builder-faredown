@@ -110,8 +110,8 @@ export default function TransferBooking() {
     outbound: {
       from: pickupLocation,
       to: dropoffLocation,
-      pickupDate: "Dec 15, 2024",
-      pickupTime: "10:00 AM",
+      pickupDate: pickupDate ? new Date(pickupDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : "Date TBD",
+      pickupTime: pickupTime || "10:00",
       price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
       originalPrice: 1500,
     },
