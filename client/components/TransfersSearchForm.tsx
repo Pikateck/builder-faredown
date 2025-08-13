@@ -954,13 +954,26 @@ export function TransfersSearchForm() {
                   <PopoverContent className="w-auto p-0" align="start">
                     <BookingCalendar
                       onChange={({ startDate, endDate }) => {
-                        if (startDate) {
-                          handleDateSelect(startDate, true);
+                        // For airport transfers, apply dates based on mode
+                        if (airportDirection === "return") {
+                          // For return trips, set both pickup and return dates
+                          if (startDate) setPickupDate(startDate);
+                          if (endDate) setReturnDate(endDate);
+                          // Don't close until Apply is clicked - let user select range
+                        } else {
+                          // For one-way trips, just set pickup date and close
+                          if (startDate) {
+                            handleDateSelect(startDate, true);
+                          }
                         }
                       }}
-                      initialRange={pickupDate ? { startDate: pickupDate, endDate: pickupDate } : undefined}
+                      initialRange={
+                        airportDirection === "return"
+                          ? { startDate: pickupDate || new Date(), endDate: returnDate || addDays(pickupDate || new Date(), 3) }
+                          : { startDate: pickupDate || new Date(), endDate: pickupDate || new Date() }
+                      }
                       onClose={() => setIsPickupDateOpen(false)}
-                      bookingType="sightseeing"
+                      bookingType={airportDirection === "return" ? "hotel" : "sightseeing"}
                     />
                   </PopoverContent>
                 </Popover>
