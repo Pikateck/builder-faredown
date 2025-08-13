@@ -439,8 +439,8 @@ export function TransfersSearchForm() {
           setPickupTime(`${suggestedHour.toString().padStart(2, '0')}:00`);
         } else {
           // Future date - suggest common flight times
-          if (airportDirection === "hotel-to-airport") {
-            setPickupTime("06:00"); // Early morning departure
+          if (airportDirection === "pickup") {
+            setPickupTime("10:00"); // Standard pickup time
           } else if (airportDirection === "return") {
             setPickupTime("10:00"); // Morning outbound for return trips
           } else {
@@ -539,8 +539,8 @@ export function TransfersSearchForm() {
       // Airport taxi parameters
       searchParams.set("mode", "airport");
       searchParams.set("direction", airportDirection);
-      searchParams.set("pickup", airportDirection === "airport-to-hotel" ? airport : hotel);
-      searchParams.set("dropoff", airportDirection === "airport-to-hotel" ? hotel : airport);
+      searchParams.set("pickup", airport); // Pick-up location
+      searchParams.set("dropoff", hotel); // Destination
       searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
       searchParams.set("pickupTime", pickupTime);
 
