@@ -60,6 +60,8 @@ interface BargainState {
   timeRemaining: number;
   isTimerActive: boolean;
   negotiationProgress: number;
+  sessionId?: string;
+  aiMessage?: string;
 }
 
 interface FlightStyleBargainModalProps {
