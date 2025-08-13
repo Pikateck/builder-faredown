@@ -522,6 +522,13 @@ export function TransfersSearchForm() {
       return;
     }
 
+    // Validate return date for return trips
+    if (transferMode === "airport" && airportDirection === "return" && !returnDate) {
+      setErrorMessage("Please select a return date");
+      setShowError(true);
+      return;
+    }
+
     // Build search parameters
     const searchParams = new URLSearchParams();
 
