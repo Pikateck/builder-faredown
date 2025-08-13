@@ -976,7 +976,7 @@ export function TransfersSearchForm() {
                       <SelectValue placeholder="Time" />
                     </div>
                   </SelectTrigger>
-                  <SelectContent className="max-h-60">
+                  <SelectContent className="max-h-40">
                     {timeOptions.map((time) => (
                       <SelectItem key={time.value} value={time.value}>
                         {time.label}
@@ -1240,7 +1240,7 @@ export function TransfersSearchForm() {
                           <SelectValue placeholder="Time" />
                         </div>
                       </SelectTrigger>
-                      <SelectContent className="max-h-60">
+                      <SelectContent className="max-h-40">
                         {timeOptions.map((time) => (
                           <SelectItem key={time.value} value={time.value}>
                             {time.label}
