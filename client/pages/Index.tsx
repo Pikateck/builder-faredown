@@ -683,21 +683,15 @@ export default function Index() {
                   {/* User Section */}
                   {isLoggedIn ? (
                     <div className="mt-8 px-4">
-                      <div
-                        className="bg-blue-50 rounded-lg p-4"
-                        style={{
-                          WebkitFontSmoothing: 'antialiased',
-                          textRendering: 'optimizeLegibility',
-                        }}
-                      >
+                      <div className="bg-blue-50 rounded-lg p-4">
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
                             <span
-                              className="text-white font-bold leading-none"
+                              className="text-white font-bold"
                               style={{
                                 fontSize: '14px',
+                                lineHeight: '18px',
                                 fontWeight: '700',
-                                letterSpacing: '0.01em',
                               }}
                             >
                               {userName.charAt(0)}
@@ -705,23 +699,21 @@ export default function Index() {
                           </div>
                           <div>
                             <div
-                              className="font-medium text-gray-900 leading-none"
+                              className="font-medium text-gray-900"
                               style={{
                                 fontSize: '16px',
+                                lineHeight: '20px',
                                 fontWeight: '500',
-                                letterSpacing: '0.005em',
-                                lineHeight: '1.2',
                               }}
                             >
                               {userName}
                             </div>
                             <div
-                              className="text-gray-600 leading-none mt-1"
+                              className="text-gray-600 mt-1"
                               style={{
                                 fontSize: '14px',
+                                lineHeight: '18px',
                                 fontWeight: '400',
-                                letterSpacing: '0.005em',
-                                lineHeight: '1.2',
                               }}
                             >
                               Loyalty Level 1
@@ -735,26 +727,14 @@ export default function Index() {
                             setShowMobileMenu(false);
                           }}
                           style={{
-                            WebkitFontSmoothing: 'antialiased',
-                            textRendering: 'optimizeLegibility',
                             WebkitTapHighlightColor: 'transparent',
+                            fontSize: '14px',
+                            lineHeight: '18px',
+                            padding: '8px 0',
                           }}
                         >
-                          <LogOut
-                            className="w-4 h-4 flex-shrink-0"
-                            style={{ strokeWidth: '2' }}
-                          />
-                          <span
-                            className="font-medium leading-none"
-                            style={{
-                              fontSize: '14px',
-                              fontWeight: '500',
-                              letterSpacing: '0.005em',
-                              lineHeight: '1.2',
-                            }}
-                          >
-                            Sign Out
-                          </span>
+                          <LogOut className="w-4 h-4 flex-shrink-0" />
+                          <span className="font-medium">Sign Out</span>
                         </button>
 
                         {/* Admin Panel Access */}
@@ -766,11 +746,14 @@ export default function Index() {
                               window.open("/admin/login", "_blank");
                               setShowMobileMenu(false);
                             }}
+                            style={{
+                              fontSize: '14px',
+                              lineHeight: '18px',
+                              padding: '8px 0',
+                            }}
                           >
                             <Shield className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              Admin Panel
-                            </span>
+                            <span className="font-medium">Admin Panel</span>
                           </button>
                           <button
                             className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
@@ -779,11 +762,14 @@ export default function Index() {
                               window.open("/admin/api", "_blank");
                               setShowMobileMenu(false);
                             }}
+                            style={{
+                              fontSize: '14px',
+                              lineHeight: '18px',
+                              padding: '8px 0',
+                            }}
                           >
                             <Code className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              Live API
-                            </span>
+                            <span className="font-medium">Live API</span>
                           </button>
                         </div>
                       </div>
