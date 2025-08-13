@@ -485,6 +485,53 @@ export default function TransferResults() {
     setShowBargainModal(true);
   };
 
+  // Handle transfer selection
+  const handleTransferSelect = (transfer: Transfer) => {
+    const newSelected = new Set(selectedTransfers);
+    if (newSelected.has(transfer.id)) {
+      newSelected.delete(transfer.id);
+    } else {
+      newSelected.add(transfer.id);
+    }
+    setSelectedTransfers(newSelected);
+    setShowBottomBar(newSelected.size > 0);
+  };
+
+  // Calculate total price for selected transfers
+  const calculateTotalPrice = () => {
+    if (selectedTransfers.size === 0) return 0;
+
+    return Array.from(selectedTransfers).reduce((total, transferId) => {
+      const transfer = transfers.find((t) => t.id === transferId);
+      return total + (transfer?.pricing.totalPrice || 0);
+    }, 0);
+  };
+
+  // Handle bottom bar actions
+  const handleBottomBarBargain = () => {
+    if (selectedTransfers.size > 0) {
+      const firstSelected = transfers.find((t) =>
+        selectedTransfers.has(t.id),
+      );
+      if (firstSelected) {
+        handleBargain(firstSelected);
+      }
+    }
+  };
+
+  const handleBottomBarViewDetails = () => {
+    if (selectedTransfers.size > 0) {
+      const firstSelected = transfers.find((t) =>
+        selectedTransfers.has(t.id),
+      );
+      if (firstSelected) {
+        navigate(
+          `/transfer-details/${firstSelected.id}?price=${firstSelected.pricing.totalPrice}&from=${encodeURIComponent(firstSelected.pickupLocation)}&to=${encodeURIComponent(firstSelected.dropoffLocation)}&vehicle=${encodeURIComponent(firstSelected.vehicleName)}`,
+        );
+      }
+    }
+  };
+
   const handleBookNow = (transfer: Transfer) => {
     const bookingParams = new URLSearchParams({
       transferId: transfer.id,
