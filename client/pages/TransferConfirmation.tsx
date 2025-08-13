@@ -345,6 +345,43 @@ export default function TransferConfirmation() {
           </div>
         </div>
       </div>
+
+      {/* Transfer Voucher Modal */}
+      {showVoucher && (
+        <div className="fixed inset-0 bg-white z-50 overflow-auto">
+          <TransferVoucher
+            booking={{
+              id: transfer?.id || "N/A",
+              transferType: transfer?.type || "Transfer",
+              vehicleName: transfer?.vehicle || transfer?.vehicleName || "Vehicle",
+              vehicleClass: transfer?.vehicleClass || "Standard",
+              pickupLocation: transfer?.from || transfer?.pickupLocation || "Pickup Location",
+              dropoffLocation: transfer?.to || transfer?.dropoffLocation || "Drop-off Location",
+              pickupDate: transfer?.pickupDate || new Date().toISOString().split('T')[0],
+              pickupTime: transfer?.pickupTime || "10:00",
+              returnDate: transfer?.returnDate,
+              returnTime: transfer?.returnTime,
+              bookingRef: bookingRef || "FAREDOWN-TXF-001",
+              passengers: transfer?.maxPassengers || 2,
+              totalAmount: `₹${transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0"}`,
+              guestName: bookingData?.primaryGuest ?
+                `${bookingData.primaryGuest.title} ${bookingData.primaryGuest.firstName} ${bookingData.primaryGuest.lastName}` :
+                "Guest Name",
+              phone: bookingData?.primaryGuest?.countryCode && bookingData?.primaryGuest?.phone ?
+                `${bookingData.primaryGuest.countryCode} ${bookingData.primaryGuest.phone}` :
+                undefined,
+              email: bookingData?.primaryGuest?.email,
+              providerName: transfer?.providerName || "Faredown Transfers",
+              duration: transfer?.duration || transfer?.estimatedDuration ? `${transfer.estimatedDuration} min` : undefined,
+              distance: transfer?.distance,
+              isRoundTrip: !!transfer?.returnDate,
+              specialRequests: bookingData?.specialRequests,
+              flightNumber: bookingData?.flightDetails?.flightNumber,
+            }}
+            onPrint={() => setShowVoucher(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }
