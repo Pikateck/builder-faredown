@@ -874,14 +874,32 @@ export default function Index() {
                           </div>
                         </div>
                         <button
-                          className="flex items-center space-x-2 text-red-600 hover:text-red-700 w-full"
+                          className="flex items-center gap-2 text-red-600 hover:text-red-700 w-full transition-colors duration-150"
                           onClick={() => {
                             handleSignOut();
                             setShowMobileMenu(false);
                           }}
+                          style={{
+                            WebkitFontSmoothing: 'antialiased',
+                            textRendering: 'optimizeLegibility',
+                            WebkitTapHighlightColor: 'transparent',
+                          }}
                         >
-                          <LogOut className="w-4 h-4" />
-                          <span className="text-sm font-medium">Sign Out</span>
+                          <LogOut
+                            className="w-4 h-4 flex-shrink-0"
+                            style={{ strokeWidth: '2' }}
+                          />
+                          <span
+                            className="font-medium leading-none"
+                            style={{
+                              fontSize: '14px',
+                              fontWeight: '500',
+                              letterSpacing: '0.005em',
+                              lineHeight: '1.2',
+                            }}
+                          >
+                            Sign Out
+                          </span>
                         </button>
 
                         {/* Admin Panel Access */}
