@@ -1562,33 +1562,52 @@ export function TransfersSearchForm() {
 
             {/* Pick-up Date */}
             <div className="flex-1 lg:max-w-[140px]">
-              <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
-                <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
-                    <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                    <Input
-                      type="text"
-                      value={pickupDate ? format(pickupDate, "MMM d") : ""}
-                      readOnly
-                      className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
-                      placeholder="Pick-up date"
+              {isMobile ? (
+                <Button
+                  variant="outline"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                  onClick={() => setShowMobileDatePicker(true)}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate text-xs sm:text-sm">
+                    {pickupDate && dropoffDate ? (
+                      <>
+                        {format(pickupDate, "dd-MMM")} - {format(dropoffDate, "dd-MMM")}
+                      </>
+                    ) : (
+                      "Select dates"
+                    )}
+                  </span>
+                </Button>
+              ) : (
+                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
+                      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                      <Input
+                        type="text"
+                        value={pickupDate ? format(pickupDate, "MMM d") : ""}
+                        readOnly
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
+                        placeholder="Pick-up date"
+                      />
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <BookingCalendar
+                      onChange={({ startDate, endDate }) => {
+                        // For car rentals, update both pickup and dropoff dates
+                        if (startDate) setPickupDate(startDate);
+                        if (endDate) setDropoffDate(endDate);
+                        // Don't close until Apply is clicked - let user select range
+                      }}
+                      initialRange={pickupDate ? { startDate: pickupDate, endDate: dropoffDate || addDays(pickupDate, 3) } : undefined}
+                      onClose={() => setIsPickupDateOpen(false)}
+                      bookingType="hotel"
                     />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
-                    onChange={({ startDate, endDate }) => {
-                      // For car rentals, update both pickup and dropoff dates
-                      if (startDate) setPickupDate(startDate);
-                      if (endDate) setDropoffDate(endDate);
-                      // Don't close until Apply is clicked - let user select range
-                    }}
-                    initialRange={pickupDate ? { startDate: pickupDate, endDate: dropoffDate || addDays(pickupDate, 3) } : undefined}
-                    onClose={() => setIsPickupDateOpen(false)}
-                    bookingType="hotel"
-                  />
-                </PopoverContent>
-              </Popover>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
 
             {/* Pick-up Time */}
