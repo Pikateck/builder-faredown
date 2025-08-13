@@ -739,7 +739,7 @@ export function TransfersSearchForm() {
                         type="text"
                         value={pickupDate ? format(pickupDate, "MMM d") : ""}
                         readOnly
-                        className="pl-10 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
                         placeholder="Select date"
                       />
                     </div>
@@ -761,7 +761,7 @@ export function TransfersSearchForm() {
               {/* Time Field */}
               <div className="flex-1 lg:max-w-[100px]">
                 <Select value={pickupTime} onValueChange={setPickupTime}>
-                  <SelectTrigger className="h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
+                  <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
                     <div className="flex items-center">
                       <Clock className="h-4 w-4 text-blue-600 mr-2" />
                       <SelectValue placeholder="Time" />
@@ -790,7 +790,7 @@ export function TransfersSearchForm() {
                         type="text"
                         value={passengerSummary()}
                         readOnly
-                        className="pl-10 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
                         placeholder="Passengers"
                       />
                     </div>
@@ -970,11 +970,11 @@ export function TransfersSearchForm() {
                 </Popover>
               </div>
 
-              {/* Search Button - h-11 px-5 */}
+              {/* Search Button - h-10 sm:h-12 px-5 */}
               <div className="flex-shrink-0">
                 <Button
                   onClick={handleSearch}
-                  className="h-11 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
+                  className="h-10 sm:h-12 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
                   title={`Search ${transferMode === "airport" ? "transfers" : "car rentals"}`}
                 >
                   <Search className="mr-2 h-4 w-4" />
@@ -996,7 +996,7 @@ export function TransfersSearchForm() {
                       type="text"
                       value={flightNumber}
                       onChange={(e) => setFlightNumber(e.target.value)}
-                      className="pl-10 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation"
+                      className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation"
                       placeholder="Flight number (optional)"
                     />
                   </div>
@@ -1018,14 +1018,14 @@ export function TransfersSearchForm() {
                         type="text"
                         value={returnDate ? format(returnDate, "MMM d") : ""}
                         readOnly
-                        className="pl-10 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
                         placeholder="Return date"
                       />
                     </div>
                   </div>
                   <div className="flex-1 sm:max-w-[100px]">
                     <Select value={returnTime} onValueChange={setReturnTime}>
-                      <SelectTrigger className="h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
+                      <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
                         <div className="flex items-center">
                           <Clock className="h-4 w-4 text-blue-600 mr-2" />
                           <SelectValue placeholder="Time" />
@@ -1093,7 +1093,7 @@ export function TransfersSearchForm() {
                           }
                         }
                       }}
-                      className="pl-10 pr-8 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
+                      className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm touch-manipulation relative z-10"
                       placeholder="Pick-up location"
                       autoComplete="off"
                     />
@@ -1320,7 +1320,7 @@ export function TransfersSearchForm() {
                   type="text"
                   value={pickupDate ? format(pickupDate, "MMM d") : ""}
                   readOnly
-                  className="pl-10 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
+                  className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
                   placeholder="Pick-up date"
                 />
               </div>
@@ -1329,7 +1329,7 @@ export function TransfersSearchForm() {
             {/* Pick-up Time */}
             <div className="flex-1 lg:max-w-[100px]">
               <Select value={pickupTime} onValueChange={setPickupTime}>
-                <SelectTrigger className="h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
+                <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 text-blue-600 mr-2" />
                     <SelectValue placeholder="Time" />
@@ -1353,7 +1353,7 @@ export function TransfersSearchForm() {
                   type="text"
                   value={dropoffDate ? format(dropoffDate, "MMM d") : ""}
                   readOnly
-                  className="pl-10 h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
+                  className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm cursor-pointer touch-manipulation"
                   placeholder="Drop-off date"
                 />
               </div>
@@ -1362,7 +1362,7 @@ export function TransfersSearchForm() {
             {/* Drop-off Time */}
             <div className="flex-1 lg:max-w-[100px]">
               <Select value={dropoffTime} onValueChange={setDropoffTime}>
-                <SelectTrigger className="h-11 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
+                <SelectTrigger className="h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-sm">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 text-blue-600 mr-2" />
                     <SelectValue placeholder="Time" />
@@ -1382,7 +1382,7 @@ export function TransfersSearchForm() {
             <div className="flex-shrink-0">
               <Button
                 onClick={handleSearch}
-                className="h-11 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
+                className="h-10 sm:h-12 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
                 title="Search car rentals"
               >
                 <Search className="mr-2 h-4 w-4" />
