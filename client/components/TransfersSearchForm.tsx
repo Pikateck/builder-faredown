@@ -351,6 +351,48 @@ export function TransfersSearchForm() {
     [searchDestinations],
   );
 
+  // Handle calendar date selection (similar to booking.com)
+  const handleDateSelect = (date: Date, isStart: boolean = true) => {
+    if (isStart) {
+      // First click - set start date
+      setPickupDate(date);
+      setCalendarRange({ start: date, end: null });
+
+      // For car rentals, automatically set end date to 3 days later
+      if (transferMode === "rental") {
+        const endDate = addDays(date, 3);
+        setDropoffDate(endDate);
+        setCalendarRange({ start: date, end: endDate });
+        setIsPickupDateOpen(false);
+        setIsDropoffDateOpen(false);
+      } else {
+        // For airport taxi, just set the date and close
+        setIsPickupDateOpen(false);
+      }
+    } else {
+      // Second click - set end date
+      setDropoffDate(date);
+      setCalendarRange(prev => ({ ...prev, end: date }));
+      setIsDropoffDateOpen(false);
+    }
+  };
+
+  const handlePickupDateClick = () => {
+    setIsPickupDateOpen(!isPickupDateOpen);
+    setIsDropoffDateOpen(false);
+    if (pickupDate) {
+      setCalendarRange({ start: pickupDate, end: dropoffDate || null });
+    }
+  };
+
+  const handleDropoffDateClick = () => {
+    setIsDropoffDateOpen(!isDropoffDateOpen);
+    setIsPickupDateOpen(false);
+    if (pickupDate) {
+      setCalendarRange({ start: pickupDate, end: dropoffDate || null });
+    }
+  };
+
   // Handle search submission
   const handleSearch = () => {
     if (transferMode === "airport") {
