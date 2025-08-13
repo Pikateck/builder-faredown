@@ -959,8 +959,8 @@ export default function TransferResults() {
 
       {/* Mobile Bottom Bar */}
       {isMobile && (
-        <MobileBottomBar>
-          <div className="flex items-center justify-between px-4 py-3">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
+          <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-semibold">
                 {filteredTransfers.length} transfer
@@ -986,7 +986,7 @@ export default function TransferResults() {
               Filters
             </Button>
           </div>
-        </MobileBottomBar>
+        </div>
       )}
 
       {/* Transfer Bargain Modal */}
