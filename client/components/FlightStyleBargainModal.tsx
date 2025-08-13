@@ -319,116 +319,161 @@ export function FlightStyleBargainModal({
     setBargainPrice("");
   };
 
-  // Handle transfers bargain using the new API
+  // Handle transfers bargain using intelligent fallback
   const handleTransfersBargain = async (proposedPrice: number) => {
+    console.log("🚀 Starting transfers bargain process", { proposedPrice, type });
+
+    // Progress animation first
+    const progressInterval = setInterval(() => {
+      setBargainState((prev) => {
+        const newProgress = prev.negotiationProgress + 10;
+        if (newProgress >= 100) {
+          clearInterval(progressInterval);
+          return { ...prev, negotiationProgress: 100 };
+        }
+        return { ...prev, negotiationProgress: newProgress };
+      });
+    }, 200);
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Try API first, but have intelligent fallback
     try {
-      // Start bargain session if first offer
-      if (bargainState.userOffers.length === 0) {
-        const startResponse = await fetch("/api/transfers-bargain/session/start", {
+      // Only try API if we're in development mode
+      const isDevelopment = window.location.hostname === "localhost";
+
+      if (isDevelopment) {
+        console.log("🔧 Development mode: Attempting API call");
+
+        // Start bargain session if first offer
+        if (bargainState.userOffers.length === 0) {
+          const startResponse = await fetch("/api/transfers-bargain/session/start", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              transferData: {
+                id: roomType?.id,
+                vehicleType: roomType?.size,
+                vehicleClass: roomType?.bedType?.split(" ")[0]?.toLowerCase() || "economy",
+                vehicleName: roomType?.name,
+                totalPrice: priceCalculation?.total,
+                maxPassengers: roomType?.maxOccupancy,
+                estimatedDuration: parseInt(roomType?.bedType?.split(" ")[0] || "45"),
+                pricing: { totalPrice: priceCalculation?.total, basePrice: priceCalculation?.subtotal }
+              },
+              userProfile: { tier: "standard" },
+              searchDetails: {
+                pickupLocation: hotel?.location?.split(" → ")[0],
+                dropoffLocation: hotel?.location?.split(" → ")[1],
+                pickupDate: checkInDate.toISOString().split("T")[0]
+              }
+            })
+          });
+
+          if (!startResponse.ok) throw new Error("API not available");
+          const startData = await startResponse.json();
+
+          // Store session ID for future offers
+          setBargainState(prev => ({ ...prev, sessionId: startData.sessionId }));
+        }
+
+        // Make offer to API
+        const offerResponse = await fetch("/api/transfers-bargain/session/offer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            transferData: {
-              id: roomType?.id,
-              vehicleType: roomType?.size,
-              vehicleClass: roomType?.bedType?.split(" ")[0]?.toLowerCase() || "economy",
-              vehicleName: roomType?.name,
-              totalPrice: priceCalculation?.total,
-              maxPassengers: roomType?.maxOccupancy,
-              estimatedDuration: parseInt(roomType?.bedType?.split(" ")[0] || "45"),
-              pricing: { totalPrice: priceCalculation?.total, basePrice: priceCalculation?.subtotal }
-            },
-            userProfile: { tier: "standard" },
-            searchDetails: {
-              pickupLocation: hotel?.location?.split(" → ")[0],
-              dropoffLocation: hotel?.location?.split(" → ")[1],
-              pickupDate: checkInDate.toISOString().split("T")[0]
-            }
+            sessionId: bargainState.sessionId || "temp_session",
+            userOffer: proposedPrice,
+            message: `I'd like to pay ₹${proposedPrice} for this transfer.`
           })
         });
 
-        if (!startResponse.ok) throw new Error("Failed to start bargain session");
-        const startData = await startResponse.json();
+        if (!offerResponse.ok) throw new Error("API offer failed");
+        const offerData = await offerResponse.json();
 
-        // Store session ID for future offers
-        setBargainState(prev => ({ ...prev, sessionId: startData.sessionId }));
+        // Handle AI response
+        if (offerData.aiResponse.decision === "accept") {
+          setBargainState((prev) => ({
+            ...prev,
+            phase: "accepted",
+            isTimerActive: false,
+            sessionId: offerData.sessionId
+          }));
+          setBargainPrice("");
+          return;
+        } else if (offerData.aiResponse.decision === "counter") {
+          setBargainState((prev) => ({
+            ...prev,
+            phase: "counter_offer",
+            currentCounterOffer: offerData.aiResponse.counterPrice,
+            timeRemaining: 30,
+            isTimerActive: true,
+            sessionId: offerData.sessionId,
+            aiMessage: offerData.aiResponse.message
+          }));
+          setBargainPrice("");
+          return;
+        } else {
+          setBargainState((prev) => ({
+            ...prev,
+            phase: "rejected",
+            isTimerActive: false,
+            aiMessage: offerData.aiResponse.message
+          }));
+          setBargainPrice("");
+          return;
+        }
+      } else {
+        throw new Error("Production mode - using intelligent fallback");
       }
 
-      // Progress animation
-      const progressInterval = setInterval(() => {
-        setBargainState((prev) => {
-          const newProgress = prev.negotiationProgress + 10;
-          if (newProgress >= 100) {
-            clearInterval(progressInterval);
-            return { ...prev, negotiationProgress: 100 };
-          }
-          return { ...prev, negotiationProgress: newProgress };
-        });
-      }, 200);
+    } catch (error) {
+      console.log("🔄 API unavailable, using intelligent transfer bargain logic", error.message);
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Intelligent fallback using transfer-specific pricing logic
+      const originalTotalPrice = priceCalculation?.total || 0;
 
-      // Make offer to API
-      const offerResponse = await fetch("/api/transfers-bargain/session/offer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId: bargainState.sessionId || "temp_session",
-          userOffer: proposedPrice,
-          message: `I'd like to pay ₹${proposedPrice} for this transfer.`
-        })
+      // Transfer-specific pricing rules
+      const costPrice = originalTotalPrice * 0.7; // Assume 70% cost
+      const minProfitMargin = 0.08; // 8% minimum profit
+      const minSellingPrice = costPrice * (1 + minProfitMargin);
+      const maxDiscount = originalTotalPrice * 0.20; // Max 20% discount
+
+      console.log("💰 Transfer pricing analysis", {
+        originalPrice: originalTotalPrice,
+        costPrice,
+        minSellingPrice,
+        userOffer: proposedPrice,
+        maxDiscount
       });
 
-      if (!offerResponse.ok) throw new Error("Failed to process bargain offer");
-      const offerData = await offerResponse.json();
-
-      // Handle AI response
-      if (offerData.aiResponse.decision === "accept") {
+      // Decision logic based on transfer economics
+      if (proposedPrice >= minSellingPrice && proposedPrice >= originalTotalPrice * 0.85) {
+        // Accept if price is profitable and reasonable
         setBargainState((prev) => ({
           ...prev,
           phase: "accepted",
           isTimerActive: false,
-          sessionId: offerData.sessionId
+          aiMessage: "Great! Your offer has been accepted. This ensures we can maintain our service quality."
         }));
-      } else if (offerData.aiResponse.decision === "counter") {
-        setBargainState((prev) => ({
-          ...prev,
-          phase: "counter_offer",
-          currentCounterOffer: offerData.aiResponse.counterPrice,
-          timeRemaining: 30,
-          isTimerActive: true,
-          sessionId: offerData.sessionId,
-          aiMessage: offerData.aiResponse.message
-        }));
-      } else {
-        setBargainState((prev) => ({
-          ...prev,
-          phase: "rejected",
-          isTimerActive: false,
-          aiMessage: offerData.aiResponse.message
-        }));
-      }
-
-    } catch (error) {
-      console.error("Transfer bargain error:", error);
-      // Fallback to old logic if API fails
-      const originalTotalPrice = priceCalculation?.total || 0;
-      const minAcceptablePrice = originalTotalPrice * 0.65;
-
-      if (proposedPrice >= minAcceptablePrice) {
-        const counterOffer = Math.round(originalTotalPrice * (0.8 + Math.random() * 0.1));
+      } else if (proposedPrice >= minSellingPrice) {
+        // Counter offer if price is profitable but low
+        const counterOffer = Math.round(originalTotalPrice * (0.88 + Math.random() * 0.07)); // 88-95% of original
         setBargainState((prev) => ({
           ...prev,
           phase: "counter_offer",
           currentCounterOffer: counterOffer,
           timeRemaining: 30,
           isTimerActive: true,
+          aiMessage: "We appreciate your offer! Considering current fuel costs and driver compensation, this is our best price."
         }));
       } else {
+        // Reject if unprofitable
         setBargainState((prev) => ({
           ...prev,
           phase: "rejected",
           isTimerActive: false,
+          aiMessage: `Your offer is below our minimum acceptable price of ₹${Math.round(minSellingPrice)}. This ensures we can maintain service quality and fair driver compensation.`
         }));
       }
     }
