@@ -1696,6 +1696,27 @@ export function TransfersSearchForm() {
             </div>
           </div>
         )}
+
+        {/* Mobile Date Picker */}
+        <MobileDatePicker
+          isOpen={showMobileDatePicker}
+          onClose={() => setShowMobileDatePicker(false)}
+          tripType={airportDirection === "return" ? "round-trip" : "one-way"}
+          setTripType={(type) => {
+            if (type === "round-trip") {
+              setAirportDirection("return");
+            } else {
+              setAirportDirection("oneway");
+            }
+          }}
+          selectedDepartureDate={pickupDate}
+          selectedReturnDate={returnDate}
+          setSelectedDepartureDate={(date) => setPickupDate(date)}
+          setSelectedReturnDate={(date) => setReturnDate(date)}
+          selectingDeparture={true}
+          setSelectingDeparture={() => {}}
+          bookingType="transfers"
+        />
       </div>
     </>
   );
