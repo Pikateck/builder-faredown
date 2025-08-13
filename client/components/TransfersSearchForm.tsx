@@ -401,9 +401,9 @@ export function TransfersSearchForm() {
           <button
             onClick={() => setTransferMode("airport")}
             className={cn(
-              "h-8 text-sm px-3 rounded-md font-medium transition-colors",
+              "h-8 text-xs sm:text-sm px-3 rounded-md font-medium transition-colors",
               transferMode === "airport"
-                ? "bg-white text-slate-900 shadow-sm border border-slate-200"
+                ? "bg-blue-600 text-white border border-blue-600"
                 : "text-slate-600 hover:text-slate-900 border border-transparent",
             )}
           >
@@ -412,9 +412,9 @@ export function TransfersSearchForm() {
           <button
             onClick={() => setTransferMode("rental")}
             className={cn(
-              "h-8 text-sm px-3 rounded-md font-medium transition-colors",
+              "h-8 text-xs sm:text-sm px-3 rounded-md font-medium transition-colors",
               transferMode === "rental"
-                ? "bg-white text-slate-900 shadow-sm border border-slate-200"
+                ? "bg-blue-600 text-white border border-blue-600"
                 : "text-slate-600 hover:text-slate-900 border border-transparent",
             )}
           >
@@ -430,9 +430,9 @@ export function TransfersSearchForm() {
               <button
                 onClick={() => setAirportDirection("airport-to-hotel")}
                 className={cn(
-                  "h-8 text-sm px-3 rounded-full font-medium border transition-colors",
+                  "h-8 text-xs sm:text-sm px-3 rounded-full font-medium border transition-colors",
                   airportDirection === "airport-to-hotel"
-                    ? "bg-slate-50 text-slate-700 border-slate-200"
+                    ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-slate-600 border-slate-300 hover:border-slate-400",
                 )}
               >
@@ -441,9 +441,9 @@ export function TransfersSearchForm() {
               <button
                 onClick={() => setAirportDirection("hotel-to-airport")}
                 className={cn(
-                  "h-8 text-sm px-3 rounded-full font-medium border transition-colors",
+                  "h-8 text-xs sm:text-sm px-3 rounded-full font-medium border transition-colors",
                   airportDirection === "hotel-to-airport"
-                    ? "bg-slate-50 text-slate-700 border-slate-200"
+                    ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-slate-600 border-slate-300 hover:border-slate-400",
                 )}
               >
@@ -452,9 +452,9 @@ export function TransfersSearchForm() {
               <button
                 onClick={() => setAirportDirection("return")}
                 className={cn(
-                  "h-8 text-sm px-3 rounded-full font-medium border transition-colors",
+                  "h-8 text-xs sm:text-sm px-3 rounded-full font-medium border transition-colors",
                   airportDirection === "return"
-                    ? "bg-slate-50 text-slate-700 border-slate-200"
+                    ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-slate-600 border-slate-300 hover:border-slate-400",
                 )}
               >
