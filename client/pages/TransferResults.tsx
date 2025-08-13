@@ -592,11 +592,19 @@ export default function TransferResults() {
               </div>
               <div className="flex items-center space-x-1">
                 <Calendar className="w-4 h-4" />
-                <span>{new Date(pickupDate).toLocaleDateString()}</span>
-                {isRoundTrip && (
+                <span>
+                  {pickupDate && !isNaN(new Date(pickupDate).getTime())
+                    ? new Date(pickupDate).toLocaleDateString()
+                    : "Date not selected"}
+                </span>
+                {isRoundTrip && returnDate && (
                   <>
                     <span>-</span>
-                    <span>{new Date(returnDate).toLocaleDateString()}</span>
+                    <span>
+                      {!isNaN(new Date(returnDate).getTime())
+                        ? new Date(returnDate).toLocaleDateString()
+                        : "Return date not selected"}
+                    </span>
                   </>
                 )}
               </div>
