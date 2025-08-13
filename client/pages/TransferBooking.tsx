@@ -104,7 +104,7 @@ export default function TransferBooking() {
     vehicleName: vehicleName,
     provider: "Mumbai Transfers Ltd",
     rating: 4.3,
-    maxPassengers: 3,
+    maxPassengers: totalPassengers || 3,
     duration: "45 minutes",
     distance: "25 km",
     features: ["Professional Driver", "Meet & Greet", "Free Waiting"],
