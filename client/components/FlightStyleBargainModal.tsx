@@ -414,11 +414,15 @@ export function FlightStyleBargainModal({
           setBargainPrice("");
           return;
         } else {
+          // Even if API returns reject, convert to counter offer with suggested price
+          const suggestedPrice = offerData.aiResponse.suggestedPrice || Math.round(originalTotalPrice * 0.85);
           setBargainState((prev) => ({
             ...prev,
-            phase: "rejected",
-            isTimerActive: false,
-            aiMessage: offerData.aiResponse.message
+            phase: "counter_offer",
+            currentCounterOffer: suggestedPrice,
+            timeRemaining: 45,
+            isTimerActive: true,
+            aiMessage: offerData.aiResponse.message || "This is our best possible price considering all factors."
           }));
           setBargainPrice("");
           return;
@@ -468,12 +472,15 @@ export function FlightStyleBargainModal({
           aiMessage: "We appreciate your offer! Considering current fuel costs and driver compensation, this is our best price."
         }));
       } else {
-        // Reject if unprofitable
+        // Instead of rejecting, provide a final counter offer at minimum selling price
+        const finalCounterOffer = Math.round(minSellingPrice * 1.05); // 5% above minimum for sustainability
         setBargainState((prev) => ({
           ...prev,
-          phase: "rejected",
-          isTimerActive: false,
-          aiMessage: `Your offer is below our minimum acceptable price of ₹${Math.round(minSellingPrice)}. This ensures we can maintain service quality and fair driver compensation.`
+          phase: "counter_offer",
+          currentCounterOffer: finalCounterOffer,
+          timeRemaining: 45,
+          isTimerActive: true,
+          aiMessage: `This is our absolute final price. It covers all costs and ensures quality service with fair driver compensation.`
         }));
       }
     }
@@ -899,26 +906,46 @@ export function FlightStyleBargainModal({
         );
 
       case "rejected":
+        // Convert rejection to final counter offer - no more "Offer Not Accepted"
+        const emergencyPrice = Math.round((priceCalculation?.total || 0) * 0.80); // 20% discount as emergency offer
         return (
           <div className="text-center space-y-6">
             <div className="text-center">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Offer Not Accepted
+              <h3 className="text-xl font-semibold text-[#003580] mb-2">
+                Final Counter Offer!
               </h3>
               <p className="text-gray-600 text-sm">
-                {bargainState.timeRemaining === 0
-                  ? "Time expired! The offer is no longer available."
-                  : "Your offer was too low. Try a higher amount."}
+                {bargainState.aiMessage || "Here's our absolute best price - this is the lowest we can go while maintaining quality service."}
               </p>
             </div>
 
-            {bargainState.timeRemaining === 0 && (
-              <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-4 shadow-lg">
-                <p className="text-[#003580] font-medium">Offer has expired</p>
+            <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-6 shadow-lg">
+              <div className="text-3xl font-bold text-[#003580] mb-2">
+                {selectedCurrency.symbol}{emergencyPrice.toLocaleString()}
               </div>
-            )}
+              <p className="text-sm text-[#003580] font-medium mb-3">
+                {formatPriceInWords(emergencyPrice)}
+              </p>
+              <div className="text-center">
+                <span className="text-sm font-semibold text-[#003580] bg-[#003580]/10 px-4 py-2 rounded-full">
+                  You save {selectedCurrency.symbol}{((priceCalculation?.total || 0) - emergencyPrice).toLocaleString()}!
+                </span>
+              </div>
+            </div>
 
             <div className="space-y-4">
+              <Button
+                onClick={() => {
+                  onClose();
+                  if (onBookingSuccess) {
+                    onBookingSuccess(emergencyPrice);
+                  }
+                }}
+                className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
+              >
+                Book This Final Deal - {selectedCurrency.symbol}{emergencyPrice.toLocaleString()}
+              </Button>
+
               <Button
                 onClick={() =>
                   setBargainState({
@@ -928,9 +955,10 @@ export function FlightStyleBargainModal({
                     isTimerActive: false,
                   })
                 }
-                className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-4 text-lg font-semibold rounded-xl"
+                variant="outline"
+                className="w-full border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white py-4 text-lg font-semibold rounded-xl"
               >
-                Start New Negotiation
+                Try Different Price
               </Button>
             </div>
           </div>
