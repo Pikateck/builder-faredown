@@ -1733,6 +1733,25 @@ export function TransfersSearchForm() {
           setSelectingDeparture={() => {}}
           bookingType="transfers"
         />
+
+        {/* Mobile Travelers */}
+        <MobileTravelers
+          isOpen={showMobilePassengers}
+          onClose={() => setShowMobilePassengers(false)}
+          travelers={{
+            adults: passengers.adults,
+            children: passengers.children,
+            childAges: passengers.childrenAges,
+          }}
+          setTravelers={(travelers) => {
+            setPassengers({
+              adults: travelers.adults,
+              children: travelers.children,
+              childrenAges: travelers.childAges,
+              infants: passengers.infants,
+            });
+          }}
+        />
       </div>
     </>
   );
