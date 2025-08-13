@@ -559,7 +559,7 @@ export default function Index() {
 
                     <Link
                       to="/hotels"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150 menu-item"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
                         WebkitFontSmoothing: 'antialiased',
@@ -586,7 +586,7 @@ export default function Index() {
 
                     <Link
                       to="/sightseeing"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150 menu-item"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
                         WebkitFontSmoothing: 'antialiased',
@@ -613,7 +613,7 @@ export default function Index() {
 
                     <Link
                       to="/transfers"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150 menu-item"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
                         WebkitFontSmoothing: 'antialiased',
@@ -640,7 +640,7 @@ export default function Index() {
 
                     <Link
                       to="/bookings"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150 menu-item"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
                         WebkitFontSmoothing: 'antialiased',
