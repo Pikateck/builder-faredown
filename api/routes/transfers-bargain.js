@@ -347,21 +347,8 @@ router.post("/session/offer", async (req, res) => {
           logger.warn("Failed to update session status", { error: dbError.message });
         }
       }
-    } else if (aiResponse.decision === "reject" && currentRound >= 5) {
-      sessionData.status = "rejected";
-      bargainEngine.activeSessions.set(sessionId, sessionData);
-
-      if (dbAvailable && pgPool) {
-        try {
-          await pgPool.query(
-            "UPDATE ai.transfers_bargain_sessions SET status = 'rejected' WHERE session_id = $1",
-            [sessionId]
-          );
-        } catch (dbError) {
-          logger.warn("Failed to update session status", { error: dbError.message });
-        }
-      }
     }
+    // Note: We no longer reject offers - we always provide counter offers to ensure conversion
 
     logger.info("Transfers bargain round completed", {
       sessionId,
