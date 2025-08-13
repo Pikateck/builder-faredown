@@ -73,6 +73,15 @@ export function TransfersSearchForm() {
   const [dropoffLocationCode, setDropoffLocationCode] = useState("");
   const [sameAsPickup, setSameAsPickup] = useState(false);
   const [driverAge, setDriverAge] = useState("any");
+
+  // Auto-set sameAsPickup for car rentals
+  useEffect(() => {
+    if (transferMode === "rental") {
+      setSameAsPickup(true);
+    } else {
+      setSameAsPickup(false);
+    }
+  }, [transferMode]);
   const [vehicleType, setVehicleType] = useState("any");
 
   // Location dropdown states
@@ -1410,8 +1419,8 @@ export function TransfersSearchForm() {
               </Popover>
             </div>
 
-            {/* Drop-off Location (conditional) */}
-            {!sameAsPickup && (
+            {/* Drop-off Location (conditional - hidden for car rentals) */}
+            {!sameAsPickup && transferMode !== "rental" && (
               <div className="flex-1 lg:max-w-[200px] relative">
                 <Popover open={isDropoffOpen} onOpenChange={setIsDropoffOpen}>
                   <PopoverTrigger asChild>
@@ -1661,20 +1670,7 @@ export function TransfersSearchForm() {
         {/* Additional Options Row for Car Rentals */}
         {transferMode === "rental" && (
           <div className="flex flex-col sm:flex-row gap-2 mt-2">
-            {/* Same as pickup checkbox */}
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="same-as-pickup"
-                checked={sameAsPickup}
-                onCheckedChange={setSameAsPickup}
-              />
-              <label
-                htmlFor="same-as-pickup"
-                className="text-sm font-medium text-gray-700 cursor-pointer"
-              >
-                Same as pick-up
-              </label>
-            </div>
+            {/* Note: Same as pickup is automatically enabled for car rentals, no checkbox needed */}
 
             {/* Driver age */}
             <div className="flex-1 sm:max-w-[150px]">
