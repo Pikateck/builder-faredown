@@ -358,22 +358,79 @@ export function TransfersSearchForm() {
       setPickupDate(date);
       setCalendarRange({ start: date, end: null });
 
-      // For car rentals, automatically set end date to 3 days later
+      // For car rentals, automatically set end date to 3-7 days later based on pattern
       if (transferMode === "rental") {
-        const endDate = addDays(date, 3);
+        const dayOfWeek = date.getDay();
+        let daysToAdd = 3; // Default 3 days
+
+        // Weekend patterns - extend for longer trips
+        if (dayOfWeek === 5) daysToAdd = 3; // Friday -> Monday
+        if (dayOfWeek === 6) daysToAdd = 2; // Saturday -> Monday
+        if (dayOfWeek === 0) daysToAdd = 1; // Sunday -> Monday
+
+        const endDate = addDays(date, daysToAdd);
         setDropoffDate(endDate);
         setCalendarRange({ start: date, end: endDate });
         setIsPickupDateOpen(false);
         setIsDropoffDateOpen(false);
+
+        // Auto-suggest optimal pickup time based on date
+        const hour = date.getHours();
+        if (hour < 10) setPickupTime("10:00"); // Morning default
+        else if (hour < 14) setPickupTime("14:00"); // Afternoon
+        else setPickupTime("10:00"); // Next day morning
+
+        // Set return time 4 hours later
+        const dropoffHour = hour + 4;
+        if (dropoffHour < 24) {
+          setDropoffTime(`${dropoffHour.toString().padStart(2, '0')}:00`);
+        } else {
+          setDropoffTime("12:00");
+        }
       } else {
         // For airport taxi, just set the date and close
         setIsPickupDateOpen(false);
+
+        // Smart time suggestion for airport transfers
+        const currentHour = new Date().getHours();
+        const isToday = date.toDateString() === new Date().toDateString();
+
+        if (isToday && currentHour >= 22) {
+          // Late night - suggest early morning flight
+          setPickupTime("06:00");
+        } else if (isToday) {
+          // Same day - suggest 2 hours from now
+          const suggestedHour = Math.min(currentHour + 2, 23);
+          setPickupTime(`${suggestedHour.toString().padStart(2, '0')}:00`);
+        } else {
+          // Future date - suggest common flight times
+          if (airportDirection === "hotel-to-airport") {
+            setPickupTime("06:00"); // Early morning departure
+          } else {
+            setPickupTime("14:00"); // Afternoon arrival
+          }
+        }
       }
     } else {
-      // Second click - set end date
+      // Second click - set end date (for car rentals)
+      if (date <= (pickupDate || new Date())) {
+        // Invalid selection - end date must be after start date
+        return;
+      }
+
       setDropoffDate(date);
       setCalendarRange(prev => ({ ...prev, end: date }));
       setIsDropoffDateOpen(false);
+
+      // Suggest return time based on trip length
+      const tripDays = Math.ceil((date.getTime() - (pickupDate?.getTime() || 0)) / (1000 * 60 * 60 * 24));
+      if (tripDays <= 1) {
+        setDropoffTime("18:00"); // Same day return
+      } else if (tripDays <= 3) {
+        setDropoffTime("12:00"); // Short trip
+      } else {
+        setDropoffTime("10:00"); // Longer trip, morning checkout
+      }
     }
   };
 
