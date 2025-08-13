@@ -65,11 +65,11 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "Date TBD";
-    return new Date(dateStr).toLocaleDateString('en-GB', {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
+    return new Date(dateStr).toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
   };
 
@@ -111,7 +111,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
       <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 print:bg-orange-500">
         <div className="text-center">
           <p className="text-sm opacity-90">Booking Reference</p>
-          <p className="text-2xl font-bold tracking-wider">{booking.bookingRef}</p>
+          <p className="text-2xl font-bold tracking-wider">
+            {booking.bookingRef}
+          </p>
         </div>
       </div>
 
@@ -123,8 +125,12 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
             <div className="flex items-center mb-4">
               <Car className="w-8 h-8 text-[#003580] mr-3" />
               <div>
-                <h2 className="text-xl font-bold text-gray-900">{booking.vehicleName}</h2>
-                <p className="text-gray-600">{booking.vehicleClass} • {booking.transferType}</p>
+                <h2 className="text-xl font-bold text-gray-900">
+                  {booking.vehicleName}
+                </h2>
+                <p className="text-gray-600">
+                  {booking.vehicleClass} • {booking.transferType}
+                </p>
               </div>
             </div>
 
@@ -136,7 +142,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                     <span className="text-sm text-gray-600">Pickup</span>
                   </div>
-                  <p className="font-semibold text-gray-900">{booking.pickupLocation}</p>
+                  <p className="font-semibold text-gray-900">
+                    {booking.pickupLocation}
+                  </p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-gray-400" />
                 <div className="flex-1">
@@ -144,7 +152,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
                     <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                     <span className="text-sm text-gray-600">Drop-off</span>
                   </div>
-                  <p className="font-semibold text-gray-900">{booking.dropoffLocation}</p>
+                  <p className="font-semibold text-gray-900">
+                    {booking.dropoffLocation}
+                  </p>
                 </div>
               </div>
             </div>
@@ -155,7 +165,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
                 <Calendar className="w-5 h-5 text-[#003580]" />
                 <div>
                   <p className="text-sm text-gray-600">Pickup Date</p>
-                  <p className="font-semibold">{formatDate(booking.pickupDate)}</p>
+                  <p className="font-semibold">
+                    {formatDate(booking.pickupDate)}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
@@ -170,20 +182,26 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
             {/* Return Trip Details */}
             {booking.isRoundTrip && booking.returnDate && (
               <div className="border-t pt-4 mb-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Return Journey</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Return Journey
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center space-x-2">
                     <Calendar className="w-5 h-5 text-[#003580]" />
                     <div>
                       <p className="text-sm text-gray-600">Return Date</p>
-                      <p className="font-semibold">{formatDate(booking.returnDate)}</p>
+                      <p className="font-semibold">
+                        {formatDate(booking.returnDate)}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Clock className="w-5 h-5 text-[#003580]" />
                     <div>
                       <p className="text-sm text-gray-600">Return Time</p>
-                      <p className="font-semibold">{booking.returnTime || "TBD"}</p>
+                      <p className="font-semibold">
+                        {booking.returnTime || "TBD"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -194,7 +212,10 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div className="flex items-center space-x-2">
                 <Users className="w-4 h-4 text-gray-600" />
-                <span>{booking.passengers} passenger{booking.passengers !== 1 ? 's' : ''}</span>
+                <span>
+                  {booking.passengers} passenger
+                  {booking.passengers !== 1 ? "s" : ""}
+                </span>
               </div>
               {booking.duration && (
                 <div className="flex items-center space-x-2">
@@ -221,22 +242,30 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
           <div>
             {/* Guest Information */}
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Guest Information</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                Guest Information
+              </h3>
               <div className="space-y-2">
                 <div className="flex items-center space-x-2">
                   <User className="w-4 h-4 text-gray-600" />
-                  <span className="font-medium">{booking.guestName || "Guest Name"}</span>
+                  <span className="font-medium">
+                    {booking.guestName || "Guest Name"}
+                  </span>
                 </div>
                 {booking.email && (
                   <div className="flex items-center space-x-2">
                     <Mail className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm text-gray-600">{booking.email}</span>
+                    <span className="text-sm text-gray-600">
+                      {booking.email}
+                    </span>
                   </div>
                 )}
                 {booking.phone && (
                   <div className="flex items-center space-x-2">
                     <Phone className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm text-gray-600">{booking.phone}</span>
+                    <span className="text-sm text-gray-600">
+                      {booking.phone}
+                    </span>
                   </div>
                 )}
               </div>
@@ -244,7 +273,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
 
             {/* Payment Summary */}
             <div className="bg-blue-50 rounded-lg p-4 mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Payment Summary</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                Payment Summary
+              </h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Transfer Fare</span>
@@ -253,7 +284,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
                 <div className="border-t pt-2">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold">Total Paid</span>
-                    <span className="text-xl font-bold text-[#003580]">{booking.totalAmount}</span>
+                    <span className="text-xl font-bold text-[#003580]">
+                      {booking.totalAmount}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -262,10 +295,14 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
             {/* Provider Info */}
             {booking.providerName && (
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Service Provider</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Service Provider
+                </h3>
                 <p className="text-gray-600">{booking.providerName}</p>
                 {booking.driverContact && (
-                  <p className="text-sm text-gray-500">Driver: {booking.driverContact}</p>
+                  <p className="text-sm text-gray-500">
+                    Driver: {booking.driverContact}
+                  </p>
                 )}
               </div>
             )}
@@ -275,14 +312,20 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
         {/* Special Requests */}
         {booking.specialRequests && (
           <div className="border-t pt-6 mt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Special Requests</h3>
-            <p className="text-gray-600 bg-gray-50 p-3 rounded">{booking.specialRequests}</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Special Requests
+            </h3>
+            <p className="text-gray-600 bg-gray-50 p-3 rounded">
+              {booking.specialRequests}
+            </p>
           </div>
         )}
 
         {/* Features */}
         <div className="border-t pt-6 mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Included Services</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Included Services
+          </h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((feature, index) => (
               <div key={index} className="flex items-center space-x-2 text-sm">
@@ -295,16 +338,28 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
 
         {/* Important Information */}
         <div className="border-t pt-6 mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Important Information</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Important Information
+          </h3>
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <div className="flex items-start space-x-2">
               <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
               <div className="text-sm text-yellow-800">
                 <ul className="space-y-1">
-                  <li>• Please be ready 15 minutes before your scheduled pickup time</li>
-                  <li>• Driver contact details will be sent 24 hours before pickup</li>
-                  <li>• For any changes or cancellations, contact us at least 24 hours in advance</li>
-                  <li>• Keep this voucher handy and present it to the driver</li>
+                  <li>
+                    • Please be ready 15 minutes before your scheduled pickup
+                    time
+                  </li>
+                  <li>
+                    • Driver contact details will be sent 24 hours before pickup
+                  </li>
+                  <li>
+                    • For any changes or cancellations, contact us at least 24
+                    hours in advance
+                  </li>
+                  <li>
+                    • Keep this voucher handy and present it to the driver
+                  </li>
                   {booking.flightNumber && (
                     <li>• Driver will monitor your flight for any delays</li>
                   )}
@@ -316,7 +371,9 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
 
         {/* Contact Information */}
         <div className="border-t pt-6 mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Need Help?</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Need Help?
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4 text-[#003580]" />
@@ -338,7 +395,10 @@ export const TransferVoucher: React.FC<TransferVoucherProps> = ({
         {/* Footer */}
         <div className="border-t pt-6 mt-6 text-center text-xs text-gray-500">
           <p>Thank you for choosing Faredown! Have a safe journey.</p>
-          <p className="mt-1">Booking ID: {booking.id} | Generated on {new Date().toLocaleDateString()}</p>
+          <p className="mt-1">
+            Booking ID: {booking.id} | Generated on{" "}
+            {new Date().toLocaleDateString()}
+          </p>
         </div>
       </div>
     </div>

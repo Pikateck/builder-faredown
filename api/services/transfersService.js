@@ -704,20 +704,25 @@ class TransfersService {
         const apiDestinations = await this.adapters.hotelbeds.getDestinations(
           query,
           popularOnly ? "popular" : "",
-          limit
+          limit,
         );
 
         if (apiDestinations && apiDestinations.length > 0) {
-          this.logger.info(`Retrieved ${apiDestinations.length} destinations from Hotelbeds API`);
+          this.logger.info(
+            `Retrieved ${apiDestinations.length} destinations from Hotelbeds API`,
+          );
           return {
             success: true,
             destinations: apiDestinations,
           };
         }
       } catch (apiError) {
-        this.logger.warn("Hotelbeds API failed, falling back to static destinations", {
-          error: apiError.message,
-        });
+        this.logger.warn(
+          "Hotelbeds API failed, falling back to static destinations",
+          {
+            error: apiError.message,
+          },
+        );
       }
 
       // Fallback to static destinations if API fails

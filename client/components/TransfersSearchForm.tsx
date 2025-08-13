@@ -9,7 +9,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { BookingCalendar } from "@/components/BookingCalendar";
-import { MobileDatePicker, MobileTravelers, MobileCityDropdown } from "@/components/MobileDropdowns";
+import {
+  MobileDatePicker,
+  MobileTravelers,
+  MobileCityDropdown,
+} from "@/components/MobileDropdowns";
 import {
   Select,
   SelectContent,
@@ -139,9 +143,12 @@ export function TransfersSearchForm() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isPickupDateOpen, setIsPickupDateOpen] = useState(false);
   const [isDropoffDateOpen, setIsDropoffDateOpen] = useState(false);
-  const [calendarRange, setCalendarRange] = useState<{ start: Date | null; end: Date | null }>({
+  const [calendarRange, setCalendarRange] = useState<{
+    start: Date | null;
+    end: Date | null;
+  }>({
     start: null,
-    end: null
+    end: null,
   });
   const [isSelectingReturnDate, setIsSelectingReturnDate] = useState(false);
 
@@ -157,7 +164,8 @@ export function TransfersSearchForm() {
   // Mobile-specific states
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
-  const [showMobileFromDestination, setShowMobileFromDestination] = useState(false);
+  const [showMobileFromDestination, setShowMobileFromDestination] =
+    useState(false);
   const [showMobileToDestination, setShowMobileToDestination] = useState(false);
   const [showMobilePassengers, setShowMobilePassengers] = useState(false);
 
@@ -168,8 +176,8 @@ export function TransfersSearchForm() {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Auto-set return date when return mode is selected and pickup date exists
@@ -275,42 +283,42 @@ export function TransfersSearchForm() {
 
   // City data for mobile dropdowns (matches MobileCityDropdown interface)
   const transferCities = {
-    "Mumbai": {
+    Mumbai: {
       code: "BOM",
       name: "Mumbai",
       airport: "Mumbai Airport - Chhatrapati Shivaji",
-      fullName: "Mumbai, Maharashtra, India"
+      fullName: "Mumbai, Maharashtra, India",
     },
-    "Delhi": {
+    Delhi: {
       code: "DEL",
       name: "Delhi",
       airport: "Delhi Airport - Indira Gandhi",
-      fullName: "Delhi, National Capital Territory, India"
+      fullName: "Delhi, National Capital Territory, India",
     },
-    "Bangalore": {
+    Bangalore: {
       code: "BLR",
       name: "Bangalore",
       airport: "Bangalore Airport - Kempegowda",
-      fullName: "Bangalore, Karnataka, India"
+      fullName: "Bangalore, Karnataka, India",
     },
-    "Dubai": {
+    Dubai: {
       code: "DXB",
       name: "Dubai",
       airport: "Dubai Airport - International",
-      fullName: "Dubai, United Arab Emirates"
+      fullName: "Dubai, United Arab Emirates",
     },
-    "London": {
+    London: {
       code: "LHR",
       name: "London",
       airport: "London Heathrow Airport",
-      fullName: "London, United Kingdom"
+      fullName: "London, United Kingdom",
     },
-    "Singapore": {
+    Singapore: {
       code: "SIN",
       name: "Singapore",
       airport: "Singapore Changi Airport",
-      fullName: "Singapore, Singapore"
-    }
+      fullName: "Singapore, Singapore",
+    },
   };
 
   // Search destinations (debounced)
@@ -451,14 +459,16 @@ export function TransfersSearchForm() {
 
         // Auto-suggest optimal pickup time based on date
         const hour = date.getHours();
-        if (hour < 10) setPickupTime("10:00"); // Morning default
-        else if (hour < 14) setPickupTime("14:00"); // Afternoon
+        if (hour < 10)
+          setPickupTime("10:00"); // Morning default
+        else if (hour < 14)
+          setPickupTime("14:00"); // Afternoon
         else setPickupTime("10:00"); // Next day morning
 
         // Set return time 4 hours later
         const dropoffHour = hour + 4;
         if (dropoffHour < 24) {
-          setDropoffTime(`${dropoffHour.toString().padStart(2, '0')}:00`);
+          setDropoffTime(`${dropoffHour.toString().padStart(2, "0")}:00`);
         } else {
           setDropoffTime("12:00");
         }
@@ -478,7 +488,7 @@ export function TransfersSearchForm() {
         } else if (isToday) {
           // Same day - suggest 2 hours from now
           const suggestedHour = Math.min(currentHour + 2, 23);
-          setPickupTime(`${suggestedHour.toString().padStart(2, '0')}:00`);
+          setPickupTime(`${suggestedHour.toString().padStart(2, "0")}:00`);
         } else {
           // Future date - suggest common flight times
           if (airportDirection === "pickup") {
@@ -498,10 +508,12 @@ export function TransfersSearchForm() {
       }
 
       setDropoffDate(date);
-      setCalendarRange(prev => ({ ...prev, end: date }));
+      setCalendarRange((prev) => ({ ...prev, end: date }));
 
       // Suggest return time based on trip length
-      const tripDays = Math.ceil((date.getTime() - (pickupDate?.getTime() || 0)) / (1000 * 60 * 60 * 24));
+      const tripDays = Math.ceil(
+        (date.getTime() - (pickupDate?.getTime() || 0)) / (1000 * 60 * 60 * 24),
+      );
       if (tripDays <= 1) {
         setDropoffTime("18:00"); // Same day return
       } else if (tripDays <= 3) {
@@ -524,17 +536,24 @@ export function TransfersSearchForm() {
     setIsDropoffDateOpen(!isDropoffDateOpen);
     setIsPickupDateOpen(false);
     if (pickupDate) {
-      setCalendarRange({ start: pickupDate, end: dropoffDate || returnDate || null });
+      setCalendarRange({
+        start: pickupDate,
+        end: dropoffDate || returnDate || null,
+      });
     }
   };
 
   const handleReturnDateSelect = (date: Date) => {
     setReturnDate(date);
-    setCalendarRange(prev => ({ ...prev, end: date }));
+    setCalendarRange((prev) => ({ ...prev, end: date }));
     setIsDropoffDateOpen(false);
 
     // Smart time suggestion for return flights
-    const tripDays = pickupDate ? Math.ceil((date.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24)) : 1;
+    const tripDays = pickupDate
+      ? Math.ceil(
+          (date.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24),
+        )
+      : 1;
 
     if (tripDays <= 1) {
       setReturnTime("20:00"); // Same day return - evening flight
@@ -568,7 +587,11 @@ export function TransfersSearchForm() {
     }
 
     // Validate return date for return trips
-    if (transferMode === "airport" && airportDirection === "return" && !returnDate) {
+    if (
+      transferMode === "airport" &&
+      airportDirection === "return" &&
+      !returnDate
+    ) {
       setErrorMessage("Please select a return date");
       setShowError(true);
       return;
@@ -583,26 +606,31 @@ export function TransfersSearchForm() {
       searchParams.set("direction", airportDirection);
       searchParams.set("pickup", airport); // Pick-up location
       searchParams.set("dropoff", hotel); // Destination
-      searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
+      searchParams.set("pickupDate", pickupDate.toISOString().split("T")[0]);
       searchParams.set("pickupTime", pickupTime);
 
       // Include return date and time for return trips
       if (airportDirection === "return" && returnDate) {
-        searchParams.set("returnDate", returnDate.toISOString().split('T')[0]);
+        searchParams.set("returnDate", returnDate.toISOString().split("T")[0]);
         searchParams.set("returnTime", returnTime);
         searchParams.set("isRoundTrip", "true");
       }
-
     } else {
       // Car rental parameters
       searchParams.set("mode", "rental");
       searchParams.set("pickup", pickupLocation);
-      searchParams.set("dropoff", sameAsPickup ? pickupLocation : dropoffLocation);
-      searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
+      searchParams.set(
+        "dropoff",
+        sameAsPickup ? pickupLocation : dropoffLocation,
+      );
+      searchParams.set("pickupDate", pickupDate.toISOString().split("T")[0]);
       searchParams.set("pickupTime", pickupTime);
 
       if (dropoffDate) {
-        searchParams.set("dropoffDate", dropoffDate.toISOString().split('T')[0]);
+        searchParams.set(
+          "dropoffDate",
+          dropoffDate.toISOString().split("T")[0],
+        );
         searchParams.set("dropoffTime", dropoffTime);
       }
 
@@ -720,133 +748,133 @@ export function TransfersSearchForm() {
                     <PopoverTrigger asChild>
                       <div className="relative cursor-pointer">
                         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                      <Input
-                        type="text"
-                        value={
-                          isAirportUserTyping
-                            ? airportInputValue
-                            : airport || ""
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setAirportInputValue(value);
-                          setIsAirportUserTyping(true);
-                          if (!isAirportOpen) {
-                            setIsAirportOpen(true);
+                        <Input
+                          type="text"
+                          value={
+                            isAirportUserTyping
+                              ? airportInputValue
+                              : airport || ""
                           }
-                          debouncedAirportSearch(value);
-                        }}
-                        onFocus={(e) => {
-                          e.stopPropagation();
-                          if (!isAirportUserTyping && airport) {
-                            setAirportInputValue(airport);
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setAirportInputValue(value);
                             setIsAirportUserTyping(true);
-                          }
-                          // Show popular destinations on focus
-                          if (airportSuggestions.length === 0) {
-                            searchDestinations("", "airport");
-                          }
-                          setIsAirportOpen(true);
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (!isAirportOpen) {
-                            setIsAirportOpen(true);
-                            // Show popular destinations when opening
+                            if (!isAirportOpen) {
+                              setIsAirportOpen(true);
+                            }
+                            debouncedAirportSearch(value);
+                          }}
+                          onFocus={(e) => {
+                            e.stopPropagation();
+                            if (!isAirportUserTyping && airport) {
+                              setAirportInputValue(airport);
+                              setIsAirportUserTyping(true);
+                            }
+                            // Show popular destinations on focus
                             if (airportSuggestions.length === 0) {
                               searchDestinations("", "airport");
                             }
-                          }
-                        }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
-                        placeholder="Pick-up location"
-                        autoComplete="off"
-                      />
-                      {(airport ||
-                        (isAirportUserTyping && airportInputValue)) && (
-                        <button
+                            setIsAirportOpen(true);
+                          }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setAirport("");
-                            setAirportInputValue("");
-                            setIsAirportUserTyping(false);
-                            setAirportCode("");
-                            setIsAirportOpen(false);
+                            if (!isAirportOpen) {
+                              setIsAirportOpen(true);
+                              // Show popular destinations when opening
+                              if (airportSuggestions.length === 0) {
+                                searchDestinations("", "airport");
+                              }
+                            }
                           }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-0.5 transition-colors z-10"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-80 p-0 border shadow-lg z-50"
-                    align="start"
-                    side="bottom"
-                    sideOffset={5}
-                    onInteractOutside={(e) => {
-                      // Only close if clicking outside, not on the input
-                      if (
-                        !e.target?.closest(
-                          "[data-radix-popper-content-wrapper]",
-                        )
-                      ) {
-                        setIsAirportOpen(false);
-                      }
-                    }}
-                  >
-                    <div className="max-h-64 overflow-y-auto">
-                      {loadingAirportDestinations ? (
-                        <div className="p-4 text-center text-gray-500">
-                          Searching...
-                        </div>
-                      ) : airportSuggestions.length > 0 ? (
-                        <div className="py-2">
-                          {airportSuggestions.map((dest) => (
-                            <div
-                              key={dest.id}
-                              className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                              onClick={() => {
-                                const fullName = `${dest.name} (${dest.code})`;
-                                setAirport(fullName);
-                                setAirportCode(dest.code);
-                                setIsAirportUserTyping(false);
-                                setAirportInputValue("");
-                                setIsAirportOpen(false);
-                              }}
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                  <Plane className="h-4 w-4 text-blue-600" />
-                                </div>
-                                <div>
-                                  <div className="font-medium text-gray-900">
-                                    {dest.name}
+                          className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
+                          placeholder="Pick-up location"
+                          autoComplete="off"
+                        />
+                        {(airport ||
+                          (isAirportUserTyping && airportInputValue)) && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setAirport("");
+                              setAirportInputValue("");
+                              setIsAirportUserTyping(false);
+                              setAirportCode("");
+                              setIsAirportOpen(false);
+                            }}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-0.5 transition-colors z-10"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-80 p-0 border shadow-lg z-50"
+                      align="start"
+                      side="bottom"
+                      sideOffset={5}
+                      onInteractOutside={(e) => {
+                        // Only close if clicking outside, not on the input
+                        if (
+                          !e.target?.closest(
+                            "[data-radix-popper-content-wrapper]",
+                          )
+                        ) {
+                          setIsAirportOpen(false);
+                        }
+                      }}
+                    >
+                      <div className="max-h-64 overflow-y-auto">
+                        {loadingAirportDestinations ? (
+                          <div className="p-4 text-center text-gray-500">
+                            Searching...
+                          </div>
+                        ) : airportSuggestions.length > 0 ? (
+                          <div className="py-2">
+                            {airportSuggestions.map((dest) => (
+                              <div
+                                key={dest.id}
+                                className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                onClick={() => {
+                                  const fullName = `${dest.name} (${dest.code})`;
+                                  setAirport(fullName);
+                                  setAirportCode(dest.code);
+                                  setIsAirportUserTyping(false);
+                                  setAirportInputValue("");
+                                  setIsAirportOpen(false);
+                                }}
+                              >
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <Plane className="h-4 w-4 text-blue-600" />
                                   </div>
-                                  <div className="text-sm text-gray-500">
-                                    {dest.code} • {dest.type}
+                                  <div>
+                                    <div className="font-medium text-gray-900">
+                                      {dest.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {dest.code} • {dest.type}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : isAirportUserTyping &&
-                        airportInputValue.length >= 2 ? (
-                        <div className="p-4 text-center text-gray-500">
-                          No airports found
-                        </div>
-                      ) : (
-                        <div className="p-4 text-center text-gray-500">
-                          {airportSuggestions.length === 0
-                            ? "Loading popular locations..."
-                            : "Start typing to search locations..."}
-                        </div>
-                      )}
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                            ))}
+                          </div>
+                        ) : isAirportUserTyping &&
+                          airportInputValue.length >= 2 ? (
+                          <div className="p-4 text-center text-gray-500">
+                            No airports found
+                          </div>
+                        ) : (
+                          <div className="p-4 text-center text-gray-500">
+                            {airportSuggestions.length === 0
+                              ? "Loading popular locations..."
+                              : "Start typing to search locations..."}
+                          </div>
+                        )}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 )}
               </div>
 
@@ -868,128 +896,128 @@ export function TransfersSearchForm() {
                     <PopoverTrigger asChild>
                       <div className="relative cursor-pointer">
                         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                      <Input
-                        type="text"
-                        value={
-                          isHotelUserTyping ? hotelInputValue : hotel || ""
-                        }
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setHotelInputValue(value);
-                          setIsHotelUserTyping(true);
-                          if (!isHotelOpen) {
-                            setIsHotelOpen(true);
+                        <Input
+                          type="text"
+                          value={
+                            isHotelUserTyping ? hotelInputValue : hotel || ""
                           }
-                          debouncedHotelSearch(value);
-                        }}
-                        onFocus={(e) => {
-                          e.stopPropagation();
-                          if (!isHotelUserTyping && hotel) {
-                            setHotelInputValue(hotel);
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setHotelInputValue(value);
                             setIsHotelUserTyping(true);
-                          }
-                          // Show popular destinations on focus
-                          if (hotelSuggestions.length === 0) {
-                            searchDestinations("", "hotel");
-                          }
-                          setIsHotelOpen(true);
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (!isHotelOpen) {
-                            setIsHotelOpen(true);
-                            // Show popular destinations when opening
+                            if (!isHotelOpen) {
+                              setIsHotelOpen(true);
+                            }
+                            debouncedHotelSearch(value);
+                          }}
+                          onFocus={(e) => {
+                            e.stopPropagation();
+                            if (!isHotelUserTyping && hotel) {
+                              setHotelInputValue(hotel);
+                              setIsHotelUserTyping(true);
+                            }
+                            // Show popular destinations on focus
                             if (hotelSuggestions.length === 0) {
                               searchDestinations("", "hotel");
                             }
-                          }
-                        }}
-                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
-                        placeholder="Destination"
-                        autoComplete="off"
-                      />
-                      {(hotel || (isHotelUserTyping && hotelInputValue)) && (
-                        <button
+                            setIsHotelOpen(true);
+                          }}
                           onClick={(e) => {
                             e.stopPropagation();
-                            setHotel("");
-                            setHotelInputValue("");
-                            setIsHotelUserTyping(false);
-                            setHotelCode("");
-                            setIsHotelOpen(false);
+                            if (!isHotelOpen) {
+                              setIsHotelOpen(true);
+                              // Show popular destinations when opening
+                              if (hotelSuggestions.length === 0) {
+                                searchDestinations("", "hotel");
+                              }
+                            }
                           }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-0.5 transition-colors z-10"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-80 p-0 border shadow-lg z-50"
-                    align="start"
-                    side="bottom"
-                    sideOffset={5}
-                    onInteractOutside={(e) => {
-                      // Only close if clicking outside, not on the input
-                      if (
-                        !e.target?.closest(
-                          "[data-radix-popper-content-wrapper]",
-                        )
-                      ) {
-                        setIsHotelOpen(false);
-                      }
-                    }}
-                  >
-                    <div className="max-h-64 overflow-y-auto">
-                      {loadingHotelDestinations ? (
-                        <div className="p-4 text-center text-gray-500">
-                          Searching...
-                        </div>
-                      ) : hotelSuggestions.length > 0 ? (
-                        <div className="py-2">
-                          {hotelSuggestions.map((dest) => (
-                            <div
-                              key={dest.id}
-                              className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                              onClick={() => {
-                                setHotel(dest.name);
-                                setHotelCode(dest.code);
-                                setIsHotelUserTyping(false);
-                                setHotelInputValue("");
-                                setIsHotelOpen(false);
-                              }}
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                  <Hotel className="h-4 w-4 text-blue-600" />
-                                </div>
-                                <div>
-                                  <div className="font-medium text-gray-900">
-                                    {dest.name}
+                          className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
+                          placeholder="Destination"
+                          autoComplete="off"
+                        />
+                        {(hotel || (isHotelUserTyping && hotelInputValue)) && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setHotel("");
+                              setHotelInputValue("");
+                              setIsHotelUserTyping(false);
+                              setHotelCode("");
+                              setIsHotelOpen(false);
+                            }}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-0.5 transition-colors z-10"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-80 p-0 border shadow-lg z-50"
+                      align="start"
+                      side="bottom"
+                      sideOffset={5}
+                      onInteractOutside={(e) => {
+                        // Only close if clicking outside, not on the input
+                        if (
+                          !e.target?.closest(
+                            "[data-radix-popper-content-wrapper]",
+                          )
+                        ) {
+                          setIsHotelOpen(false);
+                        }
+                      }}
+                    >
+                      <div className="max-h-64 overflow-y-auto">
+                        {loadingHotelDestinations ? (
+                          <div className="p-4 text-center text-gray-500">
+                            Searching...
+                          </div>
+                        ) : hotelSuggestions.length > 0 ? (
+                          <div className="py-2">
+                            {hotelSuggestions.map((dest) => (
+                              <div
+                                key={dest.id}
+                                className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                                onClick={() => {
+                                  setHotel(dest.name);
+                                  setHotelCode(dest.code);
+                                  setIsHotelUserTyping(false);
+                                  setHotelInputValue("");
+                                  setIsHotelOpen(false);
+                                }}
+                              >
+                                <div className="flex items-center space-x-3">
+                                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <Hotel className="h-4 w-4 text-blue-600" />
                                   </div>
-                                  <div className="text-sm text-gray-500">
-                                    {dest.type}
+                                  <div>
+                                    <div className="font-medium text-gray-900">
+                                      {dest.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {dest.type}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : isHotelUserTyping && hotelInputValue.length >= 2 ? (
-                        <div className="p-4 text-center text-gray-500">
-                          No locations found
-                        </div>
-                      ) : (
-                        <div className="p-4 text-center text-gray-500">
-                          {hotelSuggestions.length === 0
-                            ? "Loading popular destinations..."
-                            : "Start typing to search..."}
-                        </div>
-                      )}
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                            ))}
+                          </div>
+                        ) : isHotelUserTyping && hotelInputValue.length >= 2 ? (
+                          <div className="p-4 text-center text-gray-500">
+                            No locations found
+                          </div>
+                        ) : (
+                          <div className="p-4 text-center text-gray-500">
+                            {hotelSuggestions.length === 0
+                              ? "Loading popular destinations..."
+                              : "Start typing to search..."}
+                          </div>
+                        )}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 )}
               </div>
 
@@ -1003,10 +1031,12 @@ export function TransfersSearchForm() {
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
-                      {pickupDate && (airportDirection !== "return" || returnDate) ? (
+                      {pickupDate &&
+                      (airportDirection !== "return" || returnDate) ? (
                         airportDirection === "return" && returnDate ? (
                           <>
-                            {format(pickupDate, "dd-MMM")} - {format(returnDate, "dd-MMM")}
+                            {format(pickupDate, "dd-MMM")} -{" "}
+                            {format(returnDate, "dd-MMM")}
                           </>
                         ) : (
                           format(pickupDate, "dd-MMM-yyyy")
@@ -1017,9 +1047,15 @@ export function TransfersSearchForm() {
                     </span>
                   </Button>
                 ) : (
-                  <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                  <Popover
+                    open={isPickupDateOpen}
+                    onOpenChange={setIsPickupDateOpen}
+                  >
                     <PopoverTrigger asChild>
-                      <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={handlePickupDateClick}
+                      >
                         <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                         <Input
                           type="text"
@@ -1048,11 +1084,23 @@ export function TransfersSearchForm() {
                         }}
                         initialRange={
                           airportDirection === "return"
-                            ? { startDate: pickupDate || new Date(), endDate: returnDate || addDays(pickupDate || new Date(), 3) }
-                            : { startDate: pickupDate || new Date(), endDate: pickupDate || new Date() }
+                            ? {
+                                startDate: pickupDate || new Date(),
+                                endDate:
+                                  returnDate ||
+                                  addDays(pickupDate || new Date(), 3),
+                              }
+                            : {
+                                startDate: pickupDate || new Date(),
+                                endDate: pickupDate || new Date(),
+                              }
                         }
                         onClose={() => setIsPickupDateOpen(false)}
-                        bookingType={airportDirection === "return" ? "hotel" : "sightseeing"}
+                        bookingType={
+                          airportDirection === "return"
+                            ? "hotel"
+                            : "sightseeing"
+                        }
                       />
                     </PopoverContent>
                   </Popover>
@@ -1108,179 +1156,181 @@ export function TransfersSearchForm() {
                         />
                       </div>
                     </PopoverTrigger>
-                  <PopoverContent className="w-80 p-4" align="start">
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-3">
-                          Passengers
-                        </h4>
+                    <PopoverContent className="w-80 p-4" align="start">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-3">
+                            Passengers
+                          </h4>
 
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                Adults
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  Adults
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Age 18+
+                                </div>
                               </div>
-                              <div className="text-xs text-gray-500">
-                                Age 18+
+                              <div className="flex items-center space-x-3">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (passengers.adults > 1) {
+                                      setPassengers({
+                                        ...passengers,
+                                        adults: passengers.adults - 1,
+                                      });
+                                    }
+                                  }}
+                                  disabled={passengers.adults <= 1}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                                <span className="text-sm font-medium w-8 text-center">
+                                  {passengers.adults}
+                                </span>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (passengers.adults < 8) {
+                                      setPassengers({
+                                        ...passengers,
+                                        adults: passengers.adults + 1,
+                                      });
+                                    }
+                                  }}
+                                  disabled={passengers.adults >= 8}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-3">
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (passengers.adults > 1) {
-                                    setPassengers({
-                                      ...passengers,
-                                      adults: passengers.adults - 1,
-                                    });
-                                  }
-                                }}
-                                disabled={passengers.adults <= 1}
-                                className="h-8 w-8 p-0"
-                              >
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="text-sm font-medium w-8 text-center">
-                                {passengers.adults}
-                              </span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (passengers.adults < 8) {
-                                    setPassengers({
-                                      ...passengers,
-                                      adults: passengers.adults + 1,
-                                    });
-                                  }
-                                }}
-                                disabled={passengers.adults >= 8}
-                                className="h-8 w-8 p-0"
-                              >
-                                <Plus className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
 
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                Children
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  Children
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Age 2-17
+                                </div>
                               </div>
-                              <div className="text-xs text-gray-500">
-                                Age 2-17
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (passengers.children > 0) {
-                                    const newChildrenAges = [
-                                      ...passengers.childrenAges,
-                                    ];
-                                    newChildrenAges.pop();
-                                    setPassengers({
-                                      ...passengers,
-                                      children: passengers.children - 1,
-                                      childrenAges: newChildrenAges,
-                                    });
-                                  }
-                                }}
-                                disabled={passengers.children <= 0}
-                                className="h-8 w-8 p-0"
-                              >
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="text-sm font-medium w-8 text-center">
-                                {passengers.children}
-                              </span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (passengers.children < 6) {
-                                    setPassengers({
-                                      ...passengers,
-                                      children: passengers.children + 1,
-                                      childrenAges: [
+                              <div className="flex items-center space-x-3">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (passengers.children > 0) {
+                                      const newChildrenAges = [
                                         ...passengers.childrenAges,
-                                        10,
-                                      ],
-                                    });
-                                  }
-                                }}
-                                disabled={passengers.children >= 6}
-                                className="h-8 w-8 p-0"
-                              >
-                                <Plus className="h-4 w-4" />
-                              </Button>
+                                      ];
+                                      newChildrenAges.pop();
+                                      setPassengers({
+                                        ...passengers,
+                                        children: passengers.children - 1,
+                                        childrenAges: newChildrenAges,
+                                      });
+                                    }
+                                  }}
+                                  disabled={passengers.children <= 0}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                                <span className="text-sm font-medium w-8 text-center">
+                                  {passengers.children}
+                                </span>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (passengers.children < 6) {
+                                      setPassengers({
+                                        ...passengers,
+                                        children: passengers.children + 1,
+                                        childrenAges: [
+                                          ...passengers.childrenAges,
+                                          10,
+                                        ],
+                                      });
+                                    }
+                                  }}
+                                  disabled={passengers.children >= 6}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                Infants
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  Infants
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Under 2
+                                </div>
                               </div>
-                              <div className="text-xs text-gray-500">
-                                Under 2
+                              <div className="flex items-center space-x-3">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (passengers.infants > 0) {
+                                      setPassengers({
+                                        ...passengers,
+                                        infants: passengers.infants - 1,
+                                      });
+                                    }
+                                  }}
+                                  disabled={passengers.infants <= 0}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </Button>
+                                <span className="text-sm font-medium w-8 text-center">
+                                  {passengers.infants}
+                                </span>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    if (
+                                      passengers.infants < passengers.adults
+                                    ) {
+                                      setPassengers({
+                                        ...passengers,
+                                        infants: passengers.infants + 1,
+                                      });
+                                    }
+                                  }}
+                                  disabled={
+                                    passengers.infants >= passengers.adults
+                                  }
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
                               </div>
-                            </div>
-                            <div className="flex items-center space-x-3">
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (passengers.infants > 0) {
-                                    setPassengers({
-                                      ...passengers,
-                                      infants: passengers.infants - 1,
-                                    });
-                                  }
-                                }}
-                                disabled={passengers.infants <= 0}
-                                className="h-8 w-8 p-0"
-                              >
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="text-sm font-medium w-8 text-center">
-                                {passengers.infants}
-                              </span>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  if (passengers.infants < passengers.adults) {
-                                    setPassengers({
-                                      ...passengers,
-                                      infants: passengers.infants + 1,
-                                    });
-                                  }
-                                }}
-                                disabled={
-                                  passengers.infants >= passengers.adults
-                                }
-                                className="h-8 w-8 p-0"
-                              >
-                                <Plus className="h-4 w-4" />
-                              </Button>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                    </PopoverContent>
+                  </Popover>
                 )}
               </div>
 
@@ -1300,7 +1350,6 @@ export function TransfersSearchForm() {
               </div>
             </div>
 
-
             {/* Return Trip Fields (if return is selected) */}
             {airportDirection === "return" && (
               <div className="border-t pt-2 mt-2">
@@ -1309,13 +1358,21 @@ export function TransfersSearchForm() {
                 </h4>
                 <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                   <div className="flex-1 sm:max-w-[140px]">
-                    <Popover open={isDropoffDateOpen} onOpenChange={setIsDropoffDateOpen}>
+                    <Popover
+                      open={isDropoffDateOpen}
+                      onOpenChange={setIsDropoffDateOpen}
+                    >
                       <PopoverTrigger asChild>
-                        <div className="relative cursor-pointer" onClick={handleDropoffDateClick}>
+                        <div
+                          className="relative cursor-pointer"
+                          onClick={handleDropoffDateClick}
+                        >
                           <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                           <Input
                             type="text"
-                            value={returnDate ? format(returnDate, "MMM d") : ""}
+                            value={
+                              returnDate ? format(returnDate, "MMM d") : ""
+                            }
                             readOnly
                             className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
                             placeholder="Return date"
@@ -1330,7 +1387,14 @@ export function TransfersSearchForm() {
                             if (endDate) setReturnDate(endDate);
                             // Don't close until Apply is clicked
                           }}
-                          initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
+                          initialRange={
+                            pickupDate
+                              ? {
+                                  startDate: pickupDate,
+                                  endDate: returnDate || addDays(pickupDate, 3),
+                                }
+                              : undefined
+                          }
                           onClose={() => setIsDropoffDateOpen(false)}
                           bookingType="hotel"
                         />
@@ -1381,127 +1445,129 @@ export function TransfersSearchForm() {
                   <PopoverTrigger asChild>
                     <div className="relative cursor-pointer">
                       <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                    <Input
-                      type="text"
-                      value={
-                        isPickupUserTyping
-                          ? pickupInputValue
-                          : pickupLocation || ""
-                      }
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setPickupInputValue(value);
-                        setIsPickupUserTyping(true);
-                        if (!isPickupOpen) {
-                          setIsPickupOpen(true);
+                      <Input
+                        type="text"
+                        value={
+                          isPickupUserTyping
+                            ? pickupInputValue
+                            : pickupLocation || ""
                         }
-                        debouncedPickupSearch(value);
-                      }}
-                      onFocus={(e) => {
-                        e.stopPropagation();
-                        if (!isPickupUserTyping && pickupLocation) {
-                          setPickupInputValue(pickupLocation);
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setPickupInputValue(value);
                           setIsPickupUserTyping(true);
-                        }
-                        // Show popular destinations on focus
-                        if (pickupSuggestions.length === 0) {
-                          searchDestinations("", "pickup");
-                        }
-                        setIsPickupOpen(true);
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!isPickupOpen) {
-                          setIsPickupOpen(true);
-                          // Show popular destinations when opening
+                          if (!isPickupOpen) {
+                            setIsPickupOpen(true);
+                          }
+                          debouncedPickupSearch(value);
+                        }}
+                        onFocus={(e) => {
+                          e.stopPropagation();
+                          if (!isPickupUserTyping && pickupLocation) {
+                            setPickupInputValue(pickupLocation);
+                            setIsPickupUserTyping(true);
+                          }
+                          // Show popular destinations on focus
                           if (pickupSuggestions.length === 0) {
                             searchDestinations("", "pickup");
                           }
-                        }
-                      }}
-                      className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
-                      placeholder="Pick-up location"
-                      autoComplete="off"
-                    />
-                    {(pickupLocation ||
-                      (isPickupUserTyping && pickupInputValue)) && (
-                      <button
+                          setIsPickupOpen(true);
+                        }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setPickupLocation("");
-                          setPickupInputValue("");
-                          setIsPickupUserTyping(false);
-                          setPickupLocationCode("");
-                          setIsPickupOpen(false);
+                          if (!isPickupOpen) {
+                            setIsPickupOpen(true);
+                            // Show popular destinations when opening
+                            if (pickupSuggestions.length === 0) {
+                              searchDestinations("", "pickup");
+                            }
+                          }
                         }}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-0.5 transition-colors z-10"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-80 p-0 border shadow-lg z-50"
-                  align="start"
-                  side="bottom"
-                  sideOffset={5}
-                  onInteractOutside={(e) => {
-                    // Only close if clicking outside, not on the input
-                    if (
-                      !e.target?.closest("[data-radix-popper-content-wrapper]")
-                    ) {
-                      setIsPickupOpen(false);
-                    }
-                  }}
-                >
-                  <div className="max-h-64 overflow-y-auto">
-                    {loadingPickupDestinations ? (
-                      <div className="p-4 text-center text-gray-500">
-                        Searching...
-                      </div>
-                    ) : pickupSuggestions.length > 0 ? (
-                      <div className="py-2">
-                        {pickupSuggestions.map((dest) => (
-                          <div
-                            key={dest.id}
-                            className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                            onClick={() => {
-                              setPickupLocation(dest.name);
-                              setPickupLocationCode(dest.code);
-                              setIsPickupUserTyping(false);
-                              setPickupInputValue("");
-                              setIsPickupOpen(false);
-                            }}
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <MapPin className="h-4 w-4 text-blue-600" />
-                              </div>
-                              <div>
-                                <div className="font-medium text-gray-900">
-                                  {dest.name}
+                        className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
+                        placeholder="Pick-up location"
+                        autoComplete="off"
+                      />
+                      {(pickupLocation ||
+                        (isPickupUserTyping && pickupInputValue)) && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPickupLocation("");
+                            setPickupInputValue("");
+                            setIsPickupUserTyping(false);
+                            setPickupLocationCode("");
+                            setIsPickupOpen(false);
+                          }}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-0.5 transition-colors z-10"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-80 p-0 border shadow-lg z-50"
+                    align="start"
+                    side="bottom"
+                    sideOffset={5}
+                    onInteractOutside={(e) => {
+                      // Only close if clicking outside, not on the input
+                      if (
+                        !e.target?.closest(
+                          "[data-radix-popper-content-wrapper]",
+                        )
+                      ) {
+                        setIsPickupOpen(false);
+                      }
+                    }}
+                  >
+                    <div className="max-h-64 overflow-y-auto">
+                      {loadingPickupDestinations ? (
+                        <div className="p-4 text-center text-gray-500">
+                          Searching...
+                        </div>
+                      ) : pickupSuggestions.length > 0 ? (
+                        <div className="py-2">
+                          {pickupSuggestions.map((dest) => (
+                            <div
+                              key={dest.id}
+                              className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                              onClick={() => {
+                                setPickupLocation(dest.name);
+                                setPickupLocationCode(dest.code);
+                                setIsPickupUserTyping(false);
+                                setPickupInputValue("");
+                                setIsPickupOpen(false);
+                              }}
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                  <MapPin className="h-4 w-4 text-blue-600" />
                                 </div>
-                                <div className="text-sm text-gray-500">
-                                  {dest.type}
+                                <div>
+                                  <div className="font-medium text-gray-900">
+                                    {dest.name}
+                                  </div>
+                                  <div className="text-sm text-gray-500">
+                                    {dest.type}
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : isPickupUserTyping && pickupInputValue.length >= 2 ? (
-                      <div className="p-4 text-center text-gray-500">
-                        No locations found
-                      </div>
-                    ) : (
-                      <div className="p-4 text-center text-gray-500">
-                        Start typing to search...
-                      </div>
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
+                          ))}
+                        </div>
+                      ) : isPickupUserTyping && pickupInputValue.length >= 2 ? (
+                        <div className="p-4 text-center text-gray-500">
+                          No locations found
+                        </div>
+                      ) : (
+                        <div className="p-4 text-center text-gray-500">
+                          Start typing to search...
+                        </div>
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               )}
             </div>
 
@@ -1651,7 +1717,8 @@ export function TransfersSearchForm() {
                   <span className="truncate text-xs sm:text-sm">
                     {pickupDate && dropoffDate ? (
                       <>
-                        {format(pickupDate, "dd-MMM")} - {format(dropoffDate, "dd-MMM")}
+                        {format(pickupDate, "dd-MMM")} -{" "}
+                        {format(dropoffDate, "dd-MMM")}
                       </>
                     ) : (
                       "Select dates"
@@ -1659,9 +1726,15 @@ export function TransfersSearchForm() {
                   </span>
                 </Button>
               ) : (
-                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                <Popover
+                  open={isPickupDateOpen}
+                  onOpenChange={setIsPickupDateOpen}
+                >
                   <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
+                    <div
+                      className="relative cursor-pointer"
+                      onClick={handlePickupDateClick}
+                    >
                       <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                       <Input
                         type="text"
@@ -1680,7 +1753,14 @@ export function TransfersSearchForm() {
                         if (endDate) setDropoffDate(endDate);
                         // Don't close until Apply is clicked - let user select range
                       }}
-                      initialRange={pickupDate ? { startDate: pickupDate, endDate: dropoffDate || addDays(pickupDate, 3) } : undefined}
+                      initialRange={
+                        pickupDate
+                          ? {
+                              startDate: pickupDate,
+                              endDate: dropoffDate || addDays(pickupDate, 3),
+                            }
+                          : undefined
+                      }
                       onClose={() => setIsPickupDateOpen(false)}
                       bookingType="hotel"
                     />
@@ -1710,9 +1790,15 @@ export function TransfersSearchForm() {
 
             {/* Drop-off Date */}
             <div className="flex-1 lg:max-w-[140px]">
-              <Popover open={isDropoffDateOpen} onOpenChange={setIsDropoffDateOpen}>
+              <Popover
+                open={isDropoffDateOpen}
+                onOpenChange={setIsDropoffDateOpen}
+              >
                 <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer" onClick={handleDropoffDateClick}>
+                  <div
+                    className="relative cursor-pointer"
+                    onClick={handleDropoffDateClick}
+                  >
                     <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                     <Input
                       type="text"
@@ -1731,7 +1817,14 @@ export function TransfersSearchForm() {
                       if (endDate) setDropoffDate(endDate);
                       // Don't close until Apply is clicked
                     }}
-                    initialRange={pickupDate ? { startDate: pickupDate, endDate: dropoffDate || addDays(pickupDate, 3) } : undefined}
+                    initialRange={
+                      pickupDate
+                        ? {
+                            startDate: pickupDate,
+                            endDate: dropoffDate || addDays(pickupDate, 3),
+                          }
+                        : undefined
+                    }
                     onClose={() => setIsDropoffDateOpen(false)}
                     bookingType="hotel"
                   />
@@ -1969,7 +2062,13 @@ export function TransfersSearchForm() {
         <MobileDatePicker
           isOpen={showMobileDatePicker}
           onClose={() => setShowMobileDatePicker(false)}
-          tripType={transferMode === "rental" ? "round-trip" : (airportDirection === "return" ? "round-trip" : "one-way")}
+          tripType={
+            transferMode === "rental"
+              ? "round-trip"
+              : airportDirection === "return"
+                ? "round-trip"
+                : "one-way"
+          }
           setTripType={(type) => {
             if (transferMode === "airport") {
               if (type === "round-trip") {
@@ -1981,7 +2080,9 @@ export function TransfersSearchForm() {
             // For car rentals, always keep round-trip (no option to change)
           }}
           selectedDepartureDate={pickupDate}
-          selectedReturnDate={transferMode === "rental" ? dropoffDate : returnDate}
+          selectedReturnDate={
+            transferMode === "rental" ? dropoffDate : returnDate
+          }
           setSelectedDepartureDate={(date) => setPickupDate(date)}
           setSelectedReturnDate={(date) => {
             if (transferMode === "rental") {
@@ -2020,7 +2121,9 @@ export function TransfersSearchForm() {
           onClose={() => setShowMobileFromDestination(false)}
           title="Select pick-up location"
           cities={transferCities}
-          selectedCity={transferMode === "rental" ? pickupLocation || "" : airport || ""}
+          selectedCity={
+            transferMode === "rental" ? pickupLocation || "" : airport || ""
+          }
           onSelectCity={(city) => {
             if (transferMode === "rental") {
               setPickupLocation(city);

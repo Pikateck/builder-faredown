@@ -486,19 +486,17 @@ export default function Index() {
             />
 
             {/* Menu Panel */}
-            <div
-              className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl menu-panel mobile-menu-enhanced"
-            >
+            <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl menu-panel mobile-menu-enhanced">
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 bg-white">
                   <span
                     className="text-lg font-bold text-gray-900"
                     style={{
-                      fontSize: '18px',
-                      lineHeight: '22px',
-                      letterSpacing: '0.01em',
-                      fontWeight: '700',
+                      fontSize: "18px",
+                      lineHeight: "22px",
+                      letterSpacing: "0.01em",
+                      fontWeight: "700",
                     }}
                   >
                     Menu
@@ -507,10 +505,10 @@ export default function Index() {
                     onClick={() => setShowMobileMenu(false)}
                     className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                     style={{
-                      WebkitTapHighlightColor: 'transparent',
+                      WebkitTapHighlightColor: "transparent",
                     }}
                   >
-                    <X className="w-5 h-5" style={{ strokeWidth: '2' }} />
+                    <X className="w-5 h-5" style={{ strokeWidth: "2" }} />
                   </button>
                 </div>
 
@@ -522,7 +520,7 @@ export default function Index() {
                       className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Plane className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -534,7 +532,7 @@ export default function Index() {
                       className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Hotel className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -546,7 +544,7 @@ export default function Index() {
                       className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Camera className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -558,7 +556,7 @@ export default function Index() {
                       className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Car className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -570,7 +568,7 @@ export default function Index() {
                       className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <BookOpen className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -583,10 +581,10 @@ export default function Index() {
                       <div
                         className="menu-subtext font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center"
                         style={{
-                          fontSize: '12px',
-                          lineHeight: '16px',
-                          fontWeight: '600',
-                          letterSpacing: '0.02em',
+                          fontSize: "12px",
+                          lineHeight: "16px",
+                          fontWeight: "600",
+                          letterSpacing: "0.02em",
                         }}
                       >
                         <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
@@ -605,9 +603,9 @@ export default function Index() {
                                 : "text-gray-700"
                             }`}
                             style={{
-                              WebkitTapHighlightColor: 'transparent',
-                              fontSize: '14px',
-                              lineHeight: '18px',
+                              WebkitTapHighlightColor: "transparent",
+                              fontSize: "14px",
+                              lineHeight: "18px",
                             }}
                           >
                             <div className="flex items-center gap-2">
@@ -615,9 +613,9 @@ export default function Index() {
                               <span
                                 className="font-medium"
                                 style={{
-                                  fontSize: '14px',
-                                  lineHeight: '18px',
-                                  fontWeight: '500',
+                                  fontSize: "14px",
+                                  lineHeight: "18px",
+                                  fontWeight: "500",
                                 }}
                               >
                                 {currency.name}
@@ -626,9 +624,9 @@ export default function Index() {
                             <span
                               className="font-semibold"
                               style={{
-                                fontSize: '12px',
-                                lineHeight: '16px',
-                                fontWeight: '600',
+                                fontSize: "12px",
+                                lineHeight: "16px",
+                                fontWeight: "600",
                               }}
                             >
                               {currency.symbol} {currency.code}
@@ -646,7 +644,7 @@ export default function Index() {
                         setShowMobileMenu(false);
                       }}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Heart className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -659,7 +657,7 @@ export default function Index() {
                         setShowMobileMenu(false);
                       }}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Headphones className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -672,7 +670,7 @@ export default function Index() {
                         setShowMobileMenu(false);
                       }}
                       style={{
-                        WebkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: "transparent",
                       }}
                     >
                       <Settings className="w-5 h-5 text-[#003580] flex-shrink-0" />
@@ -689,9 +687,9 @@ export default function Index() {
                             <span
                               className="text-white font-bold"
                               style={{
-                                fontSize: '14px',
-                                lineHeight: '18px',
-                                fontWeight: '700',
+                                fontSize: "14px",
+                                lineHeight: "18px",
+                                fontWeight: "700",
                               }}
                             >
                               {userName.charAt(0)}
@@ -701,9 +699,9 @@ export default function Index() {
                             <div
                               className="font-medium text-gray-900"
                               style={{
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                fontWeight: '500',
+                                fontSize: "16px",
+                                lineHeight: "20px",
+                                fontWeight: "500",
                               }}
                             >
                               {userName}
@@ -711,9 +709,9 @@ export default function Index() {
                             <div
                               className="text-gray-600 mt-1"
                               style={{
-                                fontSize: '14px',
-                                lineHeight: '18px',
-                                fontWeight: '400',
+                                fontSize: "14px",
+                                lineHeight: "18px",
+                                fontWeight: "400",
                               }}
                             >
                               Loyalty Level 1
@@ -727,10 +725,10 @@ export default function Index() {
                             setShowMobileMenu(false);
                           }}
                           style={{
-                            WebkitTapHighlightColor: 'transparent',
-                            fontSize: '14px',
-                            lineHeight: '18px',
-                            padding: '8px 0',
+                            WebkitTapHighlightColor: "transparent",
+                            fontSize: "14px",
+                            lineHeight: "18px",
+                            padding: "8px 0",
                           }}
                         >
                           <LogOut className="w-4 h-4 flex-shrink-0" />
@@ -747,9 +745,9 @@ export default function Index() {
                               setShowMobileMenu(false);
                             }}
                             style={{
-                              fontSize: '14px',
-                              lineHeight: '18px',
-                              padding: '8px 0',
+                              fontSize: "14px",
+                              lineHeight: "18px",
+                              padding: "8px 0",
                             }}
                           >
                             <Shield className="w-4 h-4" />
@@ -763,9 +761,9 @@ export default function Index() {
                               setShowMobileMenu(false);
                             }}
                             style={{
-                              fontSize: '14px',
-                              lineHeight: '18px',
-                              padding: '8px 0',
+                              fontSize: "14px",
+                              lineHeight: "18px",
+                              padding: "8px 0",
                             }}
                           >
                             <Code className="w-4 h-4" />

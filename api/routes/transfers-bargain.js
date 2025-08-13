@@ -41,7 +41,9 @@ try {
   dbAvailable = true;
   logger.info("Database pool initialized for transfers bargain");
 } catch (error) {
-  logger.warn("Database pool initialization failed, using in-memory storage", { error: error.message });
+  logger.warn("Database pool initialization failed, using in-memory storage", {
+    error: error.message,
+  });
   dbAvailable = false;
 }
 
@@ -50,7 +52,7 @@ class TransfersBargainEngine {
   constructor() {
     this.activeSessions = new Map();
     this.minProfitMarginPercent = 0.08; // 8% minimum profit margin
-    this.maxDiscountPercent = 0.20; // Maximum 20% discount
+    this.maxDiscountPercent = 0.2; // Maximum 20% discount
   }
 
   // Generate session ID
@@ -60,12 +62,14 @@ class TransfersBargainEngine {
 
   // Calculate transfer pricing structure
   calculateTransferPricing(transferData) {
-    const basePrice = transferData.pricing?.basePrice || transferData.totalPrice * 0.8;
-    const displayedPrice = transferData.pricing?.totalPrice || transferData.totalPrice;
+    const basePrice =
+      transferData.pricing?.basePrice || transferData.totalPrice * 0.8;
+    const displayedPrice =
+      transferData.pricing?.totalPrice || transferData.totalPrice;
     const costPrice = basePrice * 0.7; // Assume 70% of base price is cost
     const maxDiscount = displayedPrice * this.maxDiscountPercent;
-    const minSellingPrice = costPrice + (basePrice * this.minProfitMarginPercent);
-    
+    const minSellingPrice = costPrice + basePrice * this.minProfitMarginPercent;
+
     return {
       displayedPrice,
       basePrice,
@@ -73,7 +77,7 @@ class TransfersBargainEngine {
       maxDiscount,
       minSellingPrice,
       maxOfferPrice: Math.max(minSellingPrice, displayedPrice - maxDiscount),
-      profitMargin: basePrice - costPrice
+      profitMargin: basePrice - costPrice,
     };
   }
 
@@ -86,14 +90,14 @@ class TransfersBargainEngine {
     if (userOffer >= minSellingPrice) {
       const profit = userOffer - pricing.costPrice;
       const profitMargin = profit / userOffer;
-      
+
       // Accept if profit margin is good or if it's later rounds
       if (profitMargin >= this.minProfitMarginPercent || round >= 3) {
         return {
           decision: "accept",
           finalPrice: userOffer,
           message: "Great! Your offer has been accepted.",
-          savings: displayedPrice - userOffer
+          savings: displayedPrice - userOffer,
         };
       }
     }
@@ -107,21 +111,21 @@ class TransfersBargainEngine {
         message: `This is our absolute final price of ₹${finalCounterOffer}. It covers all operational costs and ensures quality service with fair driver compensation.`,
         savings: displayedPrice - finalCounterOffer,
         acceptanceProbability: 0.95,
-        isFinalOffer: true
+        isFinalOffer: true,
       };
     }
 
     // Generate counter offer using AI-like logic
     const discountRange = displayedPrice - maxOfferPrice;
     const aggressiveness = Math.min(0.8, round * 0.2); // More aggressive in later rounds
-    
+
     let counterPrice;
     if (round === 1) {
       // First round: modest discount
-      counterPrice = displayedPrice - (discountRange * 0.3);
+      counterPrice = displayedPrice - discountRange * 0.3;
     } else if (round === 2) {
       // Second round: split the difference with slight favor to us
-      counterPrice = (userOffer + displayedPrice) / 2 + (displayedPrice * 0.05);
+      counterPrice = (userOffer + displayedPrice) / 2 + displayedPrice * 0.05;
     } else {
       // Later rounds: more aggressive, closer to user offer
       const halfway = (userOffer + maxOfferPrice) / 2;
@@ -129,14 +133,21 @@ class TransfersBargainEngine {
     }
 
     // Ensure counter price is reasonable
-    counterPrice = Math.max(maxOfferPrice, Math.min(displayedPrice, counterPrice));
-    
+    counterPrice = Math.max(
+      maxOfferPrice,
+      Math.min(displayedPrice, counterPrice),
+    );
+
     return {
       decision: "counter",
       counterPrice: Math.round(counterPrice),
       message: this.generateBargainMessage(sessionData, counterPrice, round),
       savings: displayedPrice - counterPrice,
-      acceptanceProbability: this.calculateAcceptanceProbability(counterPrice, userOffer, displayedPrice)
+      acceptanceProbability: this.calculateAcceptanceProbability(
+        counterPrice,
+        userOffer,
+        displayedPrice,
+      ),
     };
   }
 
@@ -145,16 +156,16 @@ class TransfersBargainEngine {
       "Our pricing reflects current demand and service quality. This is our best offer considering peak travel times.",
       "We've analyzed market conditions and can offer this competitive rate that ensures premium service.",
       "This price includes professional driver service, vehicle maintenance, and insurance coverage.",
-      "Considering fuel costs and driver compensation, this is the most competitive rate we can provide."
+      "Considering fuel costs and driver compensation, this is the most competitive rate we can provide.",
     ];
-    
+
     return messages[Math.min(round - 1, messages.length - 1)];
   }
 
   calculateAcceptanceProbability(counterPrice, userOffer, displayedPrice) {
     const discount = (displayedPrice - counterPrice) / displayedPrice;
     const userDiscount = (displayedPrice - userOffer) / displayedPrice;
-    
+
     // Higher probability if our counter is close to user's offer
     const closeness = 1 - Math.abs(counterPrice - userOffer) / displayedPrice;
     return Math.min(0.9, Math.max(0.1, closeness * 0.8 + discount * 0.3));
@@ -172,7 +183,7 @@ router.post("/session/start", async (req, res) => {
       return res.status(400).json({
         success: false,
         error: "Missing transfer data",
-        code: "INVALID_TRANSFER_DATA"
+        code: "INVALID_TRANSFER_DATA",
       });
     }
 
@@ -186,14 +197,16 @@ router.post("/session/start", async (req, res) => {
       vehicleType: transferData.vehicleType,
       vehicleClass: transferData.vehicleClass,
       vehicleName: transferData.vehicleName,
-      pickupLocation: searchDetails?.pickupLocation || transferData.pickupLocation,
-      dropoffLocation: searchDetails?.dropoffLocation || transferData.dropoffLocation,
+      pickupLocation:
+        searchDetails?.pickupLocation || transferData.pickupLocation,
+      dropoffLocation:
+        searchDetails?.dropoffLocation || transferData.dropoffLocation,
       pickupDate: searchDetails?.pickupDate,
       pricing,
       userProfile: userProfile || { tier: "standard" },
       createdAt: new Date(),
       rounds: 0,
-      status: "active"
+      status: "active",
     };
 
     // Store session in memory (in production, use Redis)
@@ -222,12 +235,14 @@ router.post("/session/start", async (req, res) => {
             pricing.basePrice,
             pricing.costPrice,
             pricing.minSellingPrice,
-            sessionData.userProfile.tier
-          ]
+            sessionData.userProfile.tier,
+          ],
         );
         logger.info("Session stored in database", { sessionId });
       } catch (dbError) {
-        logger.warn("Database storage failed, continuing with memory storage", { error: dbError.message });
+        logger.warn("Database storage failed, continuing with memory storage", {
+          error: dbError.message,
+        });
       }
     } else {
       logger.info("Using in-memory storage only", { sessionId });
@@ -241,7 +256,7 @@ router.post("/session/start", async (req, res) => {
       sessionId,
       transferId: transferData.id,
       displayedPrice: pricing.displayedPrice,
-      minSellingPrice: pricing.minSellingPrice
+      minSellingPrice: pricing.minSellingPrice,
     });
 
     res.json({
@@ -253,25 +268,26 @@ router.post("/session/start", async (req, res) => {
         type: `${transferData.vehicleClass} ${transferData.vehicleType}`,
         route: `${sessionData.pickupLocation} → ${sessionData.dropoffLocation}`,
         maxPassengers: transferData.maxPassengers,
-        estimatedDuration: transferData.estimatedDuration
+        estimatedDuration: transferData.estimatedDuration,
       },
       pricing: {
         displayedPrice: Math.round(pricing.displayedPrice),
-        currency: "INR"
+        currency: "INR",
       },
       aiResponse: {
         message: initialMessage,
         minAcceptablePrice: Math.round(pricing.minSellingPrice),
-        maxSavings: Math.round(pricing.maxDiscount)
-      }
+        maxSavings: Math.round(pricing.maxDiscount),
+      },
     });
-
   } catch (error) {
-    logger.error("Failed to start transfers bargain session", { error: error.message });
+    logger.error("Failed to start transfers bargain session", {
+      error: error.message,
+    });
     res.status(500).json({
       success: false,
       error: "Failed to start bargain session",
-      code: "SESSION_START_ERROR"
+      code: "SESSION_START_ERROR",
     });
   }
 });
@@ -285,7 +301,7 @@ router.post("/session/offer", async (req, res) => {
       return res.status(400).json({
         success: false,
         error: "Missing session ID or offer amount",
-        code: "INVALID_REQUEST"
+        code: "INVALID_REQUEST",
       });
     }
 
@@ -295,7 +311,7 @@ router.post("/session/offer", async (req, res) => {
       return res.status(404).json({
         success: false,
         error: "Bargain session not found or expired",
-        code: "SESSION_NOT_FOUND"
+        code: "SESSION_NOT_FOUND",
       });
     }
 
@@ -304,7 +320,11 @@ router.post("/session/offer", async (req, res) => {
     const currentRound = sessionData.rounds;
 
     // Generate AI response
-    const aiResponse = bargainEngine.generateCounterOffer(sessionData, userOffer, currentRound);
+    const aiResponse = bargainEngine.generateCounterOffer(
+      sessionData,
+      userOffer,
+      currentRound,
+    );
 
     // Log the negotiation round if database is available
     if (dbAvailable && pgPool) {
@@ -322,8 +342,8 @@ router.post("/session/offer", async (req, res) => {
             aiResponse.counterPrice || aiResponse.finalPrice || null,
             aiResponse.message,
             aiResponse.savings || 0,
-            message || null
-          ]
+            message || null,
+          ],
         );
       } catch (dbError) {
         logger.warn("Failed to log bargain round", { error: dbError.message });
@@ -341,10 +361,12 @@ router.post("/session/offer", async (req, res) => {
         try {
           await pgPool.query(
             "UPDATE ai.transfers_bargain_sessions SET status = 'accepted', final_price = $1 WHERE session_id = $2",
-            [aiResponse.finalPrice, sessionId]
+            [aiResponse.finalPrice, sessionId],
           );
         } catch (dbError) {
-          logger.warn("Failed to update session status", { error: dbError.message });
+          logger.warn("Failed to update session status", {
+            error: dbError.message,
+          });
         }
       }
     }
@@ -356,7 +378,7 @@ router.post("/session/offer", async (req, res) => {
       userOffer,
       decision: aiResponse.decision,
       counterPrice: aiResponse.counterPrice,
-      finalPrice: aiResponse.finalPrice
+      finalPrice: aiResponse.finalPrice,
     });
 
     res.json({
@@ -370,17 +392,16 @@ router.post("/session/offer", async (req, res) => {
         counterPrice: aiResponse.counterPrice,
         finalPrice: aiResponse.finalPrice,
         savings: Math.round(aiResponse.savings || 0),
-        acceptanceProbability: aiResponse.acceptanceProbability
+        acceptanceProbability: aiResponse.acceptanceProbability,
       },
-      sessionStatus: sessionData.status
+      sessionStatus: sessionData.status,
     });
-
   } catch (error) {
     logger.error("Failed to process bargain offer", { error: error.message });
     res.status(500).json({
       success: false,
       error: "Failed to process offer",
-      code: "OFFER_PROCESSING_ERROR"
+      code: "OFFER_PROCESSING_ERROR",
     });
   }
 });
@@ -394,7 +415,7 @@ router.post("/session/accept", async (req, res) => {
       return res.status(400).json({
         success: false,
         error: "Missing session ID",
-        code: "INVALID_REQUEST"
+        code: "INVALID_REQUEST",
       });
     }
 
@@ -403,7 +424,7 @@ router.post("/session/accept", async (req, res) => {
       return res.status(404).json({
         success: false,
         error: "No accepted bargain found for this session",
-        code: "NO_ACCEPTED_BARGAIN"
+        code: "NO_ACCEPTED_BARGAIN",
       });
     }
 
@@ -423,7 +444,7 @@ router.post("/session/accept", async (req, res) => {
       currency: "INR",
       bookingReference: `TRF_BARGAIN_${Date.now()}_${crypto.randomBytes(4).toString("hex").toUpperCase()}`,
       expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes
-      negotiationRounds: sessionData.rounds
+      negotiationRounds: sessionData.rounds,
     };
 
     // Update session
@@ -435,10 +456,12 @@ router.post("/session/accept", async (req, res) => {
       try {
         await pgPool.query(
           "UPDATE ai.transfers_bargain_sessions SET status = 'booking_ready', booking_reference = $1 WHERE session_id = $2",
-          [bookingPayload.bookingReference, sessionId]
+          [bookingPayload.bookingReference, sessionId],
         );
       } catch (dbError) {
-        logger.warn("Failed to update session for booking", { error: dbError.message });
+        logger.warn("Failed to update session for booking", {
+          error: dbError.message,
+        });
       }
     }
 
@@ -446,21 +469,21 @@ router.post("/session/accept", async (req, res) => {
       sessionId,
       finalPrice: sessionData.finalPrice,
       savings: bookingPayload.savings,
-      bookingReference: bookingPayload.bookingReference
+      bookingReference: bookingPayload.bookingReference,
     });
 
     res.json({
       success: true,
       bookingPayload,
-      message: "Great! Your negotiated price has been locked in. You can now proceed to booking."
+      message:
+        "Great! Your negotiated price has been locked in. You can now proceed to booking.",
     });
-
   } catch (error) {
     logger.error("Failed to accept bargain", { error: error.message });
     res.status(500).json({
       success: false,
       error: "Failed to accept bargain",
-      code: "ACCEPT_ERROR"
+      code: "ACCEPT_ERROR",
     });
   }
 });
@@ -475,7 +498,7 @@ router.get("/session/:sessionId", async (req, res) => {
       return res.status(404).json({
         success: false,
         error: "Session not found",
-        code: "SESSION_NOT_FOUND"
+        code: "SESSION_NOT_FOUND",
       });
     }
 
@@ -486,11 +509,13 @@ router.get("/session/:sessionId", async (req, res) => {
         const result = await pgPool.query(
           `SELECT * FROM ai.transfers_bargain_rounds
            WHERE session_id = $1 ORDER BY round_number ASC`,
-          [sessionId]
+          [sessionId],
         );
         rounds = result.rows;
       } catch (dbError) {
-        logger.warn("Failed to fetch bargain rounds", { error: dbError.message });
+        logger.warn("Failed to fetch bargain rounds", {
+          error: dbError.message,
+        });
       }
     }
 
@@ -504,18 +529,17 @@ router.get("/session/:sessionId", async (req, res) => {
         status: sessionData.status,
         rounds: sessionData.rounds,
         pricing: sessionData.pricing,
-        finalPrice: sessionData.finalPrice
+        finalPrice: sessionData.finalPrice,
       },
       history: rounds,
-      bookingPayload: sessionData.bookingPayload
+      bookingPayload: sessionData.bookingPayload,
     });
-
   } catch (error) {
     logger.error("Failed to get session details", { error: error.message });
     res.status(500).json({
       success: false,
       error: "Failed to get session details",
-      code: "SESSION_FETCH_ERROR"
+      code: "SESSION_FETCH_ERROR",
     });
   }
 });
@@ -526,7 +550,7 @@ router.get("/health", (req, res) => {
     success: true,
     status: "healthy",
     activeSessions: bargainEngine.activeSessions.size,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

@@ -90,7 +90,9 @@ export default function TransferResults() {
   const children = searchParams.get("children") || "0";
   const infants = searchParams.get("infants") || "0";
   const vehicleType = searchParams.get("vehicleType") || "";
-  const isRoundTrip = searchParams.get("returnDate") !== null || searchParams.get("isRoundTrip") === "true";
+  const isRoundTrip =
+    searchParams.get("returnDate") !== null ||
+    searchParams.get("isRoundTrip") === "true";
 
   // State for transfers data
   const [transfers, setTransfers] = useState<Transfer[]>([]);
@@ -512,9 +514,7 @@ export default function TransferResults() {
   // Handle bottom bar actions
   const handleBottomBarBargain = () => {
     if (selectedTransfers.size > 0) {
-      const firstSelected = transfers.find((t) =>
-        selectedTransfers.has(t.id),
-      );
+      const firstSelected = transfers.find((t) => selectedTransfers.has(t.id));
       if (firstSelected) {
         handleBargain(firstSelected);
       }
@@ -523,9 +523,7 @@ export default function TransferResults() {
 
   const handleBottomBarViewDetails = () => {
     if (selectedTransfers.size > 0) {
-      const firstSelected = transfers.find((t) =>
-        selectedTransfers.has(t.id),
-      );
+      const firstSelected = transfers.find((t) => selectedTransfers.has(t.id));
       if (firstSelected) {
         navigate(
           `/transfer-details/${firstSelected.id}?price=${firstSelected.pricing.totalPrice}&from=${encodeURIComponent(firstSelected.pickupLocation)}&to=${encodeURIComponent(firstSelected.dropoffLocation)}&vehicle=${encodeURIComponent(firstSelected.vehicleName)}`,
@@ -649,7 +647,7 @@ export default function TransferResults() {
                 <Calendar className="w-4 h-4" />
                 <span>
                   {pickupDate && !isNaN(new Date(pickupDate).getTime())
-                    ? `${new Date(pickupDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} at ${pickupTime}`
+                    ? `${new Date(pickupDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })} at ${pickupTime}`
                     : "Date not selected"}
                 </span>
                 {isRoundTrip && returnDate && (
@@ -657,7 +655,7 @@ export default function TransferResults() {
                     <span>-</span>
                     <span>
                       {!isNaN(new Date(returnDate).getTime())
-                        ? `${new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} at ${returnTime}`
+                        ? `${new Date(returnDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })} at ${returnTime}`
                         : "Return date not selected"}
                     </span>
                   </>
@@ -667,12 +665,24 @@ export default function TransferResults() {
                 <Users className="w-4 h-4" />
                 <span>
                   {(() => {
-                    const totalPassengers = parseInt(adults) + parseInt(children) + parseInt(infants);
+                    const totalPassengers =
+                      parseInt(adults) + parseInt(children) + parseInt(infants);
                     const parts = [];
-                    if (parseInt(adults) > 0) parts.push(`${adults} adult${parseInt(adults) > 1 ? 's' : ''}`);
-                    if (parseInt(children) > 0) parts.push(`${children} child${parseInt(children) > 1 ? 'ren' : ''}`);
-                    if (parseInt(infants) > 0) parts.push(`${infants} infant${parseInt(infants) > 1 ? 's' : ''}`);
-                    return parts.length > 0 ? parts.join(' • ') : `${totalPassengers} passenger${totalPassengers !== 1 ? 's' : ''}`;
+                    if (parseInt(adults) > 0)
+                      parts.push(
+                        `${adults} adult${parseInt(adults) > 1 ? "s" : ""}`,
+                      );
+                    if (parseInt(children) > 0)
+                      parts.push(
+                        `${children} child${parseInt(children) > 1 ? "ren" : ""}`,
+                      );
+                    if (parseInt(infants) > 0)
+                      parts.push(
+                        `${infants} infant${parseInt(infants) > 1 ? "s" : ""}`,
+                      );
+                    return parts.length > 0
+                      ? parts.join(" • ")
+                      : `${totalPassengers} passenger${totalPassengers !== 1 ? "s" : ""}`;
                   })()}
                 </span>
               </div>
@@ -819,7 +829,9 @@ export default function TransferResults() {
               </h2>
 
               <div className="flex items-center space-x-2 sm:space-x-4">
-                <span className="text-xs sm:text-sm text-gray-600 flex-shrink-0">Sort:</span>
+                <span className="text-xs sm:text-sm text-gray-600 flex-shrink-0">
+                  Sort:
+                </span>
                 <div className="relative flex-1 sm:flex-initial">
                   <select
                     value={sortBy}
@@ -847,7 +859,7 @@ export default function TransferResults() {
                     "bg-white rounded-lg shadow-sm border-2 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group mb-4",
                     selectedTransfers.has(transfer.id)
                       ? "border-[#ff6b00] shadow-lg ring-2 ring-[#ff6b00] ring-opacity-30"
-                      : "border-gray-200 hover:border-gray-300"
+                      : "border-gray-200 hover:border-gray-300",
                   )}
                 >
                   {/* Mobile Layout */}
@@ -901,7 +913,9 @@ export default function TransferResults() {
                       </div>
                       <div className="flex items-center space-x-1">
                         <Clock className="w-4 h-4" />
-                        <span>{formatDuration(transfer.estimatedDuration)}</span>
+                        <span>
+                          {formatDuration(transfer.estimatedDuration)}
+                        </span>
                       </div>
                       {transfer.distance && (
                         <div className="flex items-center space-x-1">
@@ -965,7 +979,7 @@ export default function TransferResults() {
                           "w-full py-3 px-4 rounded-full font-semibold text-sm transition-all duration-200 shadow-sm active:scale-95 flex items-center justify-center gap-2 border",
                           selectedTransfers.has(transfer.id)
                             ? "bg-[#003580] text-white border-[#003580] hover:bg-[#002a66] shadow-md"
-                            : "bg-white text-[#003580] border-[#003580] hover:bg-gray-50"
+                            : "bg-white text-[#003580] border-[#003580] hover:bg-gray-50",
                         )}
                       >
                         {selectedTransfers.has(transfer.id) ? (
@@ -1197,7 +1211,9 @@ export default function TransferResults() {
                   {selectedTransfers.size > 1 ? "s" : ""} selected
                 </div>
                 <div className="text-xs text-gray-600">
-                  From {formatPrice(calculateTotalPrice() / selectedTransfers.size)} average
+                  From{" "}
+                  {formatPrice(calculateTotalPrice() / selectedTransfers.size)}{" "}
+                  average
                 </div>
               </div>
               <div className="text-right">

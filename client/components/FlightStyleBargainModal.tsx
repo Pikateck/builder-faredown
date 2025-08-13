@@ -321,7 +321,10 @@ export function FlightStyleBargainModal({
 
   // Handle transfers bargain using intelligent fallback
   const handleTransfersBargain = async (proposedPrice: number) => {
-    console.log("🚀 Starting transfers bargain process", { proposedPrice, type });
+    console.log("🚀 Starting transfers bargain process", {
+      proposedPrice,
+      type,
+    });
 
     // Progress animation first
     const progressInterval = setInterval(() => {
@@ -347,46 +350,62 @@ export function FlightStyleBargainModal({
 
         // Start bargain session if first offer
         if (bargainState.userOffers.length === 0) {
-          const startResponse = await fetch("/api/transfers-bargain/session/start", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              transferData: {
-                id: roomType?.id,
-                vehicleType: roomType?.size,
-                vehicleClass: roomType?.bedType?.split(" ")[0]?.toLowerCase() || "economy",
-                vehicleName: roomType?.name,
-                totalPrice: priceCalculation?.total,
-                maxPassengers: roomType?.maxOccupancy,
-                estimatedDuration: parseInt(roomType?.bedType?.split(" ")[0] || "45"),
-                pricing: { totalPrice: priceCalculation?.total, basePrice: priceCalculation?.subtotal }
-              },
-              userProfile: { tier: "standard" },
-              searchDetails: {
-                pickupLocation: hotel?.location?.split(" → ")[0],
-                dropoffLocation: hotel?.location?.split(" → ")[1],
-                pickupDate: checkInDate.toISOString().split("T")[0]
-              }
-            })
-          });
+          const startResponse = await fetch(
+            "/api/transfers-bargain/session/start",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                transferData: {
+                  id: roomType?.id,
+                  vehicleType: roomType?.size,
+                  vehicleClass:
+                    roomType?.bedType?.split(" ")[0]?.toLowerCase() ||
+                    "economy",
+                  vehicleName: roomType?.name,
+                  totalPrice: priceCalculation?.total,
+                  maxPassengers: roomType?.maxOccupancy,
+                  estimatedDuration: parseInt(
+                    roomType?.bedType?.split(" ")[0] || "45",
+                  ),
+                  pricing: {
+                    totalPrice: priceCalculation?.total,
+                    basePrice: priceCalculation?.subtotal,
+                  },
+                },
+                userProfile: { tier: "standard" },
+                searchDetails: {
+                  pickupLocation: hotel?.location?.split(" → ")[0],
+                  dropoffLocation: hotel?.location?.split(" → ")[1],
+                  pickupDate: checkInDate.toISOString().split("T")[0],
+                },
+              }),
+            },
+          );
 
           if (!startResponse.ok) throw new Error("API not available");
           const startData = await startResponse.json();
 
           // Store session ID for future offers
-          setBargainState(prev => ({ ...prev, sessionId: startData.sessionId }));
+          setBargainState((prev) => ({
+            ...prev,
+            sessionId: startData.sessionId,
+          }));
         }
 
         // Make offer to API
-        const offerResponse = await fetch("/api/transfers-bargain/session/offer", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sessionId: bargainState.sessionId || "temp_session",
-            userOffer: proposedPrice,
-            message: `I'd like to pay ₹${proposedPrice} for this transfer.`
-          })
-        });
+        const offerResponse = await fetch(
+          "/api/transfers-bargain/session/offer",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sessionId: bargainState.sessionId || "temp_session",
+              userOffer: proposedPrice,
+              message: `I'd like to pay ₹${proposedPrice} for this transfer.`,
+            }),
+          },
+        );
 
         if (!offerResponse.ok) throw new Error("API offer failed");
         const offerData = await offerResponse.json();
@@ -397,7 +416,7 @@ export function FlightStyleBargainModal({
             ...prev,
             phase: "accepted",
             isTimerActive: false,
-            sessionId: offerData.sessionId
+            sessionId: offerData.sessionId,
           }));
           setBargainPrice("");
           return;
@@ -409,20 +428,24 @@ export function FlightStyleBargainModal({
             timeRemaining: 30,
             isTimerActive: true,
             sessionId: offerData.sessionId,
-            aiMessage: offerData.aiResponse.message
+            aiMessage: offerData.aiResponse.message,
           }));
           setBargainPrice("");
           return;
         } else {
           // Even if API returns reject, convert to counter offer with suggested price
-          const suggestedPrice = offerData.aiResponse.suggestedPrice || Math.round(originalTotalPrice * 0.85);
+          const suggestedPrice =
+            offerData.aiResponse.suggestedPrice ||
+            Math.round(originalTotalPrice * 0.85);
           setBargainState((prev) => ({
             ...prev,
             phase: "counter_offer",
             currentCounterOffer: suggestedPrice,
             timeRemaining: 30,
             isTimerActive: true,
-            aiMessage: offerData.aiResponse.message || "This is our best possible price considering all factors."
+            aiMessage:
+              offerData.aiResponse.message ||
+              "This is our best possible price considering all factors.",
           }));
           setBargainPrice("");
           return;
@@ -430,9 +453,11 @@ export function FlightStyleBargainModal({
       } else {
         throw new Error("Production mode - using intelligent fallback");
       }
-
     } catch (error) {
-      console.log("🔄 API unavailable, using intelligent transfer bargain logic", error.message);
+      console.log(
+        "🔄 API unavailable, using intelligent transfer bargain logic",
+        error.message,
+      );
 
       // Intelligent fallback using transfer-specific pricing logic
       const originalTotalPrice = priceCalculation?.total || 0;
@@ -441,35 +466,42 @@ export function FlightStyleBargainModal({
       const costPrice = originalTotalPrice * 0.7; // Assume 70% cost
       const minProfitMargin = 0.08; // 8% minimum profit
       const minSellingPrice = costPrice * (1 + minProfitMargin);
-      const maxDiscount = originalTotalPrice * 0.20; // Max 20% discount
+      const maxDiscount = originalTotalPrice * 0.2; // Max 20% discount
 
       console.log("💰 Transfer pricing analysis", {
         originalPrice: originalTotalPrice,
         costPrice,
         minSellingPrice,
         userOffer: proposedPrice,
-        maxDiscount
+        maxDiscount,
       });
 
       // Decision logic based on transfer economics
-      if (proposedPrice >= minSellingPrice && proposedPrice >= originalTotalPrice * 0.85) {
+      if (
+        proposedPrice >= minSellingPrice &&
+        proposedPrice >= originalTotalPrice * 0.85
+      ) {
         // Accept if price is profitable and reasonable
         setBargainState((prev) => ({
           ...prev,
           phase: "accepted",
           isTimerActive: false,
-          aiMessage: "Great! Your offer has been accepted. This ensures we can maintain our service quality."
+          aiMessage:
+            "Great! Your offer has been accepted. This ensures we can maintain our service quality.",
         }));
       } else if (proposedPrice >= minSellingPrice) {
         // Counter offer if price is profitable but low
-        const counterOffer = Math.round(originalTotalPrice * (0.88 + Math.random() * 0.07)); // 88-95% of original
+        const counterOffer = Math.round(
+          originalTotalPrice * (0.88 + Math.random() * 0.07),
+        ); // 88-95% of original
         setBargainState((prev) => ({
           ...prev,
           phase: "counter_offer",
           currentCounterOffer: counterOffer,
           timeRemaining: 30,
           isTimerActive: true,
-          aiMessage: "We appreciate your offer! Considering current fuel costs and driver compensation, this is our best price."
+          aiMessage:
+            "We appreciate your offer! Considering current fuel costs and driver compensation, this is our best price.",
         }));
       } else {
         // Instead of rejecting, provide a final counter offer at minimum selling price
@@ -480,7 +512,7 @@ export function FlightStyleBargainModal({
           currentCounterOffer: finalCounterOffer,
           timeRemaining: 30,
           isTimerActive: true,
-          aiMessage: `This is our absolute final price. It covers all costs and ensures quality service with fair driver compensation.`
+          aiMessage: `This is our absolute final price. It covers all costs and ensures quality service with fair driver compensation.`,
         }));
       }
     }
@@ -497,25 +529,33 @@ export function FlightStyleBargainModal({
         const isDevelopment = window.location.hostname === "localhost";
 
         if (isDevelopment) {
-          const acceptResponse = await fetch("/api/transfers-bargain/session/accept", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId: bargainState.sessionId
-            })
-          });
+          const acceptResponse = await fetch(
+            "/api/transfers-bargain/session/accept",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                sessionId: bargainState.sessionId,
+              }),
+            },
+          );
 
           if (acceptResponse.ok) {
             const acceptData = await acceptResponse.json();
             console.log("✅ Transfer bargain accepted via API:", acceptData);
           } else {
-            console.log("⚠️ API accept failed, proceeding with local acceptance");
+            console.log(
+              "⚠️ API accept failed, proceeding with local acceptance",
+            );
           }
         } else {
           console.log("🌐 Production mode: Local bargain acceptance");
         }
       } catch (error) {
-        console.log("🔄 API unavailable for accept, using local handling:", error.message);
+        console.log(
+          "🔄 API unavailable for accept, using local handling:",
+          error.message,
+        );
       }
     }
 
@@ -523,7 +563,7 @@ export function FlightStyleBargainModal({
     console.log("✅ Accepting transfer bargain", {
       finalPrice,
       originalPrice: priceCalculation?.total,
-      savings: (priceCalculation?.total || 0) - finalPrice
+      savings: (priceCalculation?.total || 0) - finalPrice,
     });
 
     // Close modal immediately to prevent double-click issues
@@ -907,7 +947,7 @@ export function FlightStyleBargainModal({
 
       case "rejected":
         // Convert rejection to final counter offer - no more "Offer Not Accepted"
-        const emergencyPrice = Math.round((priceCalculation?.total || 0) * 0.80); // 20% discount as emergency offer
+        const emergencyPrice = Math.round((priceCalculation?.total || 0) * 0.8); // 20% discount as emergency offer
         return (
           <div className="text-center space-y-6">
             <div className="text-center">
@@ -915,20 +955,26 @@ export function FlightStyleBargainModal({
                 Final Counter Offer!
               </h3>
               <p className="text-gray-600 text-sm">
-                {bargainState.aiMessage || "Here's our absolute best price - this is the lowest we can go while maintaining quality service."}
+                {bargainState.aiMessage ||
+                  "Here's our absolute best price - this is the lowest we can go while maintaining quality service."}
               </p>
             </div>
 
             <div className="bg-white border-2 border-[#003580]/20 rounded-xl p-6 shadow-lg">
               <div className="text-3xl font-bold text-[#003580] mb-2">
-                {selectedCurrency.symbol}{emergencyPrice.toLocaleString()}
+                {selectedCurrency.symbol}
+                {emergencyPrice.toLocaleString()}
               </div>
               <p className="text-sm text-[#003580] font-medium mb-3">
                 {formatPriceInWords(emergencyPrice)}
               </p>
               <div className="text-center">
                 <span className="text-sm font-semibold text-[#003580] bg-[#003580]/10 px-4 py-2 rounded-full">
-                  You save {selectedCurrency.symbol}{((priceCalculation?.total || 0) - emergencyPrice).toLocaleString()}!
+                  You save {selectedCurrency.symbol}
+                  {(
+                    (priceCalculation?.total || 0) - emergencyPrice
+                  ).toLocaleString()}
+                  !
                 </span>
               </div>
             </div>
@@ -943,7 +989,8 @@ export function FlightStyleBargainModal({
                 }}
                 className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
               >
-                Book This Final Deal - {selectedCurrency.symbol}{emergencyPrice.toLocaleString()}
+                Book This Final Deal - {selectedCurrency.symbol}
+                {emergencyPrice.toLocaleString()}
               </Button>
 
               <Button

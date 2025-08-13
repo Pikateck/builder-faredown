@@ -23,10 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export default function TransferConfirmation() {
   const location = useLocation();
@@ -189,14 +186,22 @@ export default function TransferConfirmation() {
                   <MapPin className="w-5 h-5 text-green-600 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Pickup</p>
-                    <p className="font-medium text-gray-900">{transfer.from || transfer.pickupLocation || "Pickup location to be confirmed"}</p>
+                    <p className="font-medium text-gray-900">
+                      {transfer.from ||
+                        transfer.pickupLocation ||
+                        "Pickup location to be confirmed"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <MapPin className="w-5 h-5 text-red-600 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Drop-off</p>
-                    <p className="font-medium text-gray-900">{transfer.to || transfer.dropoffLocation || "Drop-off location to be confirmed"}</p>
+                    <p className="font-medium text-gray-900">
+                      {transfer.to ||
+                        transfer.dropoffLocation ||
+                        "Drop-off location to be confirmed"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -205,12 +210,15 @@ export default function TransferConfirmation() {
                     <p className="text-sm text-gray-500">Date & Time</p>
                     <p className="font-medium text-gray-900">
                       {transfer.pickupDate && transfer.pickupTime
-                        ? `${new Date(transfer.pickupDate).toLocaleDateString('en-GB', {
-                            weekday: 'short',
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric'
-                          })} at ${transfer.pickupTime}`
+                        ? `${new Date(transfer.pickupDate).toLocaleDateString(
+                            "en-GB",
+                            {
+                              weekday: "short",
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            },
+                          )} at ${transfer.pickupTime}`
                         : "Date and time to be confirmed"}
                     </p>
                   </div>
@@ -266,18 +274,32 @@ export default function TransferConfirmation() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Transfer Fare</span>
-                  <span>₹{transfer.originalPrice || transfer.totalPrice || "0"}</span>
+                  <span>
+                    ₹{transfer.originalPrice || transfer.totalPrice || "0"}
+                  </span>
                 </div>
-                {(transfer.originalPrice || transfer.totalPrice) && (transfer.originalPrice || transfer.totalPrice) > (transfer.price || transfer.finalPrice) && (
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>Discount</span>
-                    <span>-₹{(transfer.originalPrice || transfer.totalPrice) - (transfer.price || transfer.finalPrice)}</span>
-                  </div>
-                )}
+                {(transfer.originalPrice || transfer.totalPrice) &&
+                  (transfer.originalPrice || transfer.totalPrice) >
+                    (transfer.price || transfer.finalPrice) && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>Discount</span>
+                      <span>
+                        -₹
+                        {(transfer.originalPrice || transfer.totalPrice) -
+                          (transfer.price || transfer.finalPrice)}
+                      </span>
+                    </div>
+                  )}
                 <div className="border-t pt-2">
                   <div className="flex justify-between font-semibold">
                     <span>Total Paid</span>
-                    <span className="text-lg">₹{transfer.price || transfer.finalPrice || transfer.totalPrice || "0"}</span>
+                    <span className="text-lg">
+                      ₹
+                      {transfer.price ||
+                        transfer.finalPrice ||
+                        transfer.totalPrice ||
+                        "0"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -377,26 +399,37 @@ export default function TransferConfirmation() {
             booking={{
               id: transfer?.id || "N/A",
               transferType: transfer?.type || "Transfer",
-              vehicleName: transfer?.vehicle || transfer?.vehicleName || "Vehicle",
+              vehicleName:
+                transfer?.vehicle || transfer?.vehicleName || "Vehicle",
               vehicleClass: transfer?.vehicleClass || "Standard",
-              pickupLocation: transfer?.from || transfer?.pickupLocation || "Pickup Location",
-              dropoffLocation: transfer?.to || transfer?.dropoffLocation || "Drop-off Location",
-              pickupDate: transfer?.pickupDate || new Date().toISOString().split('T')[0],
+              pickupLocation:
+                transfer?.from || transfer?.pickupLocation || "Pickup Location",
+              dropoffLocation:
+                transfer?.to ||
+                transfer?.dropoffLocation ||
+                "Drop-off Location",
+              pickupDate:
+                transfer?.pickupDate || new Date().toISOString().split("T")[0],
               pickupTime: transfer?.pickupTime || "10:00",
               returnDate: transfer?.returnDate,
               returnTime: transfer?.returnTime,
               bookingRef: bookingRef || "FAREDOWN-TXF-001",
               passengers: transfer?.maxPassengers || 2,
               totalAmount: `₹${transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0"}`,
-              guestName: bookingData?.primaryGuest ?
-                `${bookingData.primaryGuest.title} ${bookingData.primaryGuest.firstName} ${bookingData.primaryGuest.lastName}` :
-                "Guest Name",
-              phone: bookingData?.primaryGuest?.countryCode && bookingData?.primaryGuest?.phone ?
-                `${bookingData.primaryGuest.countryCode} ${bookingData.primaryGuest.phone}` :
-                undefined,
+              guestName: bookingData?.primaryGuest
+                ? `${bookingData.primaryGuest.title} ${bookingData.primaryGuest.firstName} ${bookingData.primaryGuest.lastName}`
+                : "Guest Name",
+              phone:
+                bookingData?.primaryGuest?.countryCode &&
+                bookingData?.primaryGuest?.phone
+                  ? `${bookingData.primaryGuest.countryCode} ${bookingData.primaryGuest.phone}`
+                  : undefined,
               email: bookingData?.primaryGuest?.email,
               providerName: transfer?.providerName || "Faredown Transfers",
-              duration: transfer?.duration || transfer?.estimatedDuration ? `${transfer.estimatedDuration} min` : undefined,
+              duration:
+                transfer?.duration || transfer?.estimatedDuration
+                  ? `${transfer.estimatedDuration} min`
+                  : undefined,
               distance: transfer?.distance,
               isRoundTrip: !!transfer?.returnDate,
               specialRequests: bookingData?.specialRequests,
@@ -416,35 +449,47 @@ export default function TransferConfirmation() {
               invoiceNumber: `INV-${bookingRef || "FAREDOWN-001"}`,
               bookingRef: bookingRef || "FAREDOWN-TXF-001",
               transferType: transfer?.type || "Transfer",
-              vehicleName: transfer?.vehicle || transfer?.vehicleName || "Vehicle",
+              vehicleName:
+                transfer?.vehicle || transfer?.vehicleName || "Vehicle",
               vehicleClass: transfer?.vehicleClass || "Standard",
-              pickupLocation: transfer?.from || transfer?.pickupLocation || "Pickup Location",
-              dropoffLocation: transfer?.to || transfer?.dropoffLocation || "Drop-off Location",
-              pickupDate: transfer?.pickupDate || new Date().toISOString().split('T')[0],
+              pickupLocation:
+                transfer?.from || transfer?.pickupLocation || "Pickup Location",
+              dropoffLocation:
+                transfer?.to ||
+                transfer?.dropoffLocation ||
+                "Drop-off Location",
+              pickupDate:
+                transfer?.pickupDate || new Date().toISOString().split("T")[0],
               pickupTime: transfer?.pickupTime || "10:00",
               returnDate: transfer?.returnDate,
               returnTime: transfer?.returnTime,
               passengers: transfer?.maxPassengers || 2,
-              baseAmount: `₹${Math.round((parseFloat(transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0") * 0.85))}`,
-              taxAmount: `₹${Math.round((parseFloat(transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0") * 0.18))}`,
-              discountAmount: transfer?.originalPrice && transfer?.price ?
-                `₹${parseFloat(transfer.originalPrice) - parseFloat(transfer.price)}` :
-                undefined,
+              baseAmount: `₹${Math.round(parseFloat(transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0") * 0.85)}`,
+              taxAmount: `₹${Math.round(parseFloat(transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0") * 0.18)}`,
+              discountAmount:
+                transfer?.originalPrice && transfer?.price
+                  ? `₹${parseFloat(transfer.originalPrice) - parseFloat(transfer.price)}`
+                  : undefined,
               totalAmount: `₹${transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0"}`,
-              guestName: bookingData?.primaryGuest ?
-                `${bookingData.primaryGuest.title} ${bookingData.primaryGuest.firstName} ${bookingData.primaryGuest.lastName}` :
-                "Guest Name",
-              phone: bookingData?.primaryGuest?.countryCode && bookingData?.primaryGuest?.phone ?
-                `${bookingData.primaryGuest.countryCode} ${bookingData.primaryGuest.phone}` :
-                undefined,
+              guestName: bookingData?.primaryGuest
+                ? `${bookingData.primaryGuest.title} ${bookingData.primaryGuest.firstName} ${bookingData.primaryGuest.lastName}`
+                : "Guest Name",
+              phone:
+                bookingData?.primaryGuest?.countryCode &&
+                bookingData?.primaryGuest?.phone
+                  ? `${bookingData.primaryGuest.countryCode} ${bookingData.primaryGuest.phone}`
+                  : undefined,
               email: bookingData?.primaryGuest?.email,
               providerName: transfer?.providerName || "Faredown Transfers",
-              duration: transfer?.duration || transfer?.estimatedDuration ? `${transfer.estimatedDuration} min` : undefined,
+              duration:
+                transfer?.duration || transfer?.estimatedDuration
+                  ? `${transfer.estimatedDuration} min`
+                  : undefined,
               distance: transfer?.distance,
               isRoundTrip: !!transfer?.returnDate,
               paymentMethod: "Online Payment",
               transactionId: `TXN${bookingRef || Date.now()}`,
-              invoiceDate: new Date().toISOString().split('T')[0],
+              invoiceDate: new Date().toISOString().split("T")[0],
             }}
             onPrint={() => setShowInvoice(false)}
           />

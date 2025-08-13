@@ -59,9 +59,7 @@ router.post("/destinations", auditRequest, async (req, res) => {
       });
     }
 
-    logger.info(
-      `Found ${result.destinations.length} transfer destinations`,
-    );
+    logger.info(`Found ${result.destinations.length} transfer destinations`);
 
     res.json({
       success: true,

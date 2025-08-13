@@ -64,7 +64,8 @@ export default function TransferBooking() {
   const dropoffLocation =
     searchParams.get("dropoffLocation") || "Hotel Taj Mahal Palace";
   const vehicleName = searchParams.get("vehicleName") || "Sedan - Economy";
-  const pickupDate = searchParams.get("pickupDate") || new Date().toISOString().split('T')[0];
+  const pickupDate =
+    searchParams.get("pickupDate") || new Date().toISOString().split("T")[0];
   const pickupTime = searchParams.get("pickupTime") || "10:00";
   const isRoundTrip = searchParams.get("returnDate") !== null;
   const returnDate = searchParams.get("returnDate");
@@ -114,7 +115,13 @@ export default function TransferBooking() {
     outbound: {
       from: pickupLocation,
       to: dropoffLocation,
-      pickupDate: pickupDate ? new Date(pickupDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : "Date TBD",
+      pickupDate: pickupDate
+        ? new Date(pickupDate).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+        : "Date TBD",
       pickupTime: pickupTime || "10:00",
       price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
       originalPrice: 1500,
@@ -124,7 +131,13 @@ export default function TransferBooking() {
         ? {
             from: dropoffLocation,
             to: pickupLocation,
-            pickupDate: returnDate ? new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : "Return Date TBD",
+            pickupDate: returnDate
+              ? new Date(returnDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "Return Date TBD",
             pickupTime: returnTime || "14:00",
             price: bargainApplied ? parseInt(price) : parseInt(price) || 1380,
             originalPrice: 1500,
@@ -259,10 +272,21 @@ export default function TransferBooking() {
                       <span>
                         {(() => {
                           const parts = [];
-                          if (adults > 0) parts.push(`${adults} adult${adults > 1 ? 's' : ''}`);
-                          if (children > 0) parts.push(`${children} child${children > 1 ? 'ren' : ''}`);
-                          if (infants > 0) parts.push(`${infants} infant${infants > 1 ? 's' : ''}`);
-                          return parts.length > 0 ? parts.join(' • ') : `${totalPassengers} passenger${totalPassengers !== 1 ? 's' : ''}`;
+                          if (adults > 0)
+                            parts.push(
+                              `${adults} adult${adults > 1 ? "s" : ""}`,
+                            );
+                          if (children > 0)
+                            parts.push(
+                              `${children} child${children > 1 ? "ren" : ""}`,
+                            );
+                          if (infants > 0)
+                            parts.push(
+                              `${infants} infant${infants > 1 ? "s" : ""}`,
+                            );
+                          return parts.length > 0
+                            ? parts.join(" • ")
+                            : `${totalPassengers} passenger${totalPassengers !== 1 ? "s" : ""}`;
                         })()}
                       </span>
                     </div>
