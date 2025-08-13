@@ -984,14 +984,14 @@ export default function Index() {
             </div>
 
             {/* Mobile Trip Type Selector */}
-            <div className="flex space-x-1 mb-6 bg-white/10 rounded-lg p-1">
+            <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
                 onClick={() => setTripType("round-trip")}
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "round-trip"
-                    ? "bg-white text-[#003580]"
-                    : "text-white",
+                    ? "bg-[#003580] text-white"
+                    : "text-gray-600 hover:text-gray-900",
                 )}
               >
                 Round trip
@@ -1001,8 +1001,8 @@ export default function Index() {
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "one-way"
-                    ? "bg-white text-[#003580]"
-                    : "text-white",
+                    ? "bg-[#003580] text-white"
+                    : "text-gray-600 hover:text-gray-900",
                 )}
               >
                 One way
@@ -1012,8 +1012,8 @@ export default function Index() {
                 className={cn(
                   "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                   tripType === "multi-city"
-                    ? "bg-white text-[#003580]"
-                    : "text-white",
+                    ? "bg-[#003580] text-white"
+                    : "text-gray-600 hover:text-gray-900",
                 )}
               >
                 Multi-city
