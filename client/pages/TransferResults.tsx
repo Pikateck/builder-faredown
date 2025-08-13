@@ -850,7 +850,141 @@ export default function TransferResults() {
                       : "border-gray-200 hover:border-gray-300"
                   )}
                 >
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                  {/* Mobile Layout */}
+                  <div className="md:hidden p-4">
+                    {/* Transfer Header with Selection */}
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex items-center gap-3 flex-1">
+                        {/* Vehicle Icon */}
+                        <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                          {getVehicleIcon(transfer.vehicleType)}
+                        </div>
+
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 text-base mb-1">
+                            {transfer.vehicleName}
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="text-xs">
+                              {transfer.vehicleClass}
+                            </Badge>
+                            <span className="text-sm text-gray-600 truncate">
+                              By {transfer.providerName}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Selection Indicator */}
+                      <div className="flex-shrink-0">
+                        {selectedTransfers.has(transfer.id) ? (
+                          <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
+                            <CheckCircle className="w-5 h-5 text-white" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-8 border-2 border-gray-300 rounded-full flex items-center justify-center">
+                            <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Transfer Details */}
+                    <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-3">
+                      <div className="flex items-center space-x-1">
+                        <Users className="w-4 h-4" />
+                        <span>Up to {transfer.maxPassengers}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Luggage className="w-4 h-4" />
+                        <span>{transfer.maxLuggage} bags</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{formatDuration(transfer.estimatedDuration)}</span>
+                      </div>
+                      {transfer.distance && (
+                        <div className="flex items-center space-x-1">
+                          <Navigation className="w-4 h-4" />
+                          <span>{transfer.distance}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Features */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {transfer.features.slice(0, 3).map((feature) => (
+                        <div
+                          key={feature}
+                          className="flex items-center space-x-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded"
+                        >
+                          {getFeatureIcon(feature)}
+                          <span>
+                            {feature
+                              .replace(/_/g, " ")
+                              .replace(/\b\w/g, (l) => l.toUpperCase())}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Price Section */}
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="text-xs text-gray-500 mb-1">
+                            {isRoundTrip ? "Round trip" : "One way"}
+                          </div>
+                          {transfer.pricing.savings > 0 && (
+                            <div className="text-xs text-green-600 mb-1">
+                              Save {formatPrice(transfer.pricing.savings)}
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <div className="text-lg font-bold text-gray-900">
+                            {formatPrice(transfer.pricing.totalPrice)}
+                          </div>
+                          {transfer.providerRating && (
+                            <div className="flex items-center justify-end gap-1 text-xs">
+                              <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                              <span className="text-gray-600">
+                                {transfer.providerRating}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SELECT Button - Native App Style */}
+                    <div className="pt-2">
+                      <button
+                        onClick={() => handleTransferSelect(transfer)}
+                        className={cn(
+                          "w-full py-3 px-4 rounded-full font-semibold text-sm transition-all duration-200 shadow-sm active:scale-95 flex items-center justify-center gap-2 border",
+                          selectedTransfers.has(transfer.id)
+                            ? "bg-[#003580] text-white border-[#003580] hover:bg-[#002a66] shadow-md"
+                            : "bg-white text-[#003580] border-[#003580] hover:bg-gray-50"
+                        )}
+                      >
+                        {selectedTransfers.has(transfer.id) ? (
+                          <>
+                            <CheckCircle className="w-4 h-4" />
+                            <span className="text-sm">SELECTED</span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            <span className="text-sm">SELECT</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden md:flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 p-4">
                     {/* Left Section - Transfer Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start gap-3">
