@@ -420,7 +420,7 @@ export function FlightStyleBargainModal({
             ...prev,
             phase: "counter_offer",
             currentCounterOffer: suggestedPrice,
-            timeRemaining: 45,
+            timeRemaining: 30,
             isTimerActive: true,
             aiMessage: offerData.aiResponse.message || "This is our best possible price considering all factors."
           }));
@@ -478,7 +478,7 @@ export function FlightStyleBargainModal({
           ...prev,
           phase: "counter_offer",
           currentCounterOffer: finalCounterOffer,
-          timeRemaining: 45,
+          timeRemaining: 30,
           isTimerActive: true,
           aiMessage: `This is our absolute final price. It covers all costs and ensures quality service with fair driver compensation.`
         }));
