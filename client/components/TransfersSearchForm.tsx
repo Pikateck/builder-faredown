@@ -135,6 +135,7 @@ export function TransfersSearchForm() {
     start: null,
     end: null
   });
+  const [isSelectingReturnDate, setIsSelectingReturnDate] = useState(false);
 
   // Passenger states
   const [passengers, setPassengers] = useState<PassengerConfig>({
