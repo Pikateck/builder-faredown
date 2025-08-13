@@ -668,8 +668,21 @@ export default function Index() {
                     {/* Currency Selection Tab */}
                     <div className="border-t border-gray-200 my-4"></div>
                     <div className="px-4 py-2">
-                      <div className="text-xs font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center">
-                        <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
+                      <div
+                        className="text-xs font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center"
+                        style={{
+                          WebkitFontSmoothing: 'antialiased',
+                          textRendering: 'optimizeLegibility',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          letterSpacing: '0.025em',
+                          lineHeight: '1.3',
+                        }}
+                      >
+                        <DollarSign
+                          className="w-4 h-4 mr-2 text-[#003580]"
+                          style={{ strokeWidth: '2.5' }}
+                        />
                         Currency
                       </div>
                       <div className="space-y-1 max-h-32 overflow-y-auto">
