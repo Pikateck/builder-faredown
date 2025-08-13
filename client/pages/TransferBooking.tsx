@@ -174,7 +174,20 @@ export default function TransferBooking() {
       // Navigate to confirmation page
       navigate("/transfer-confirmation", {
         state: {
-          transfer: transferData,
+          transfer: {
+            ...transferData,
+            pickupLocation,
+            dropoffLocation,
+            pickupDate,
+            pickupTime,
+            returnDate,
+            returnTime,
+            adults,
+            children,
+            infants,
+            totalPassengers,
+            isRoundTrip,
+          },
           bookingData: formData,
           bookingRef: `TR${Date.now()}`,
           totalPrice,
