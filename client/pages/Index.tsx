@@ -486,16 +486,44 @@ export default function Index() {
             />
 
             {/* Menu Panel */}
-            <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl">
+            <div
+              className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl"
+              style={{
+                fontSmooth: 'always',
+                WebkitFontSmoothing: 'antialiased',
+                MozOsxFontSmoothing: 'grayscale',
+                textRendering: 'optimizeLegibility',
+                fontFeatureSettings: '"kern" 1',
+                backfaceVisibility: 'hidden',
+                transform: 'translateZ(0)',
+              }}
+            >
               <div className="flex flex-col h-full">
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-[#003580]">
-                  <span className="text-lg font-bold text-white">Menu</span>
+                <div
+                  className="flex items-center justify-between px-4 py-4 border-b border-gray-200 bg-[#003580]"
+                  style={{
+                    WebkitFontSmoothing: 'antialiased',
+                    textRendering: 'optimizeLegibility',
+                  }}
+                >
+                  <span
+                    className="text-lg font-bold text-white leading-none"
+                    style={{
+                      letterSpacing: '0.01em',
+                      fontWeight: '700',
+                    }}
+                  >
+                    Menu
+                  </span>
                   <button
                     onClick={() => setShowMobileMenu(false)}
-                    className="p-2 text-white hover:bg-blue-700 rounded-lg"
+                    className="p-2 text-white hover:bg-blue-700 rounded-lg transition-colors duration-150"
+                    style={{
+                      WebkitTapHighlightColor: 'transparent',
+                    }}
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5" style={{ strokeWidth: '2.5' }} />
                   </button>
                 </div>
 
