@@ -406,6 +406,50 @@ export default function TransferConfirmation() {
           />
         </div>
       )}
+
+      {/* Transfer Invoice Modal */}
+      {showInvoice && (
+        <div className="fixed inset-0 bg-white z-50 overflow-auto">
+          <TransferInvoice
+            booking={{
+              id: transfer?.id || "TXF-001",
+              invoiceNumber: `INV-${bookingRef || "FAREDOWN-001"}`,
+              bookingRef: bookingRef || "FAREDOWN-TXF-001",
+              transferType: transfer?.type || "Transfer",
+              vehicleName: transfer?.vehicle || transfer?.vehicleName || "Vehicle",
+              vehicleClass: transfer?.vehicleClass || "Standard",
+              pickupLocation: transfer?.from || transfer?.pickupLocation || "Pickup Location",
+              dropoffLocation: transfer?.to || transfer?.dropoffLocation || "Drop-off Location",
+              pickupDate: transfer?.pickupDate || new Date().toISOString().split('T')[0],
+              pickupTime: transfer?.pickupTime || "10:00",
+              returnDate: transfer?.returnDate,
+              returnTime: transfer?.returnTime,
+              passengers: transfer?.maxPassengers || 2,
+              baseAmount: `₹${Math.round((parseFloat(transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0") * 0.85))}`,
+              taxAmount: `₹${Math.round((parseFloat(transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0") * 0.18))}`,
+              discountAmount: transfer?.originalPrice && transfer?.price ?
+                `₹${parseFloat(transfer.originalPrice) - parseFloat(transfer.price)}` :
+                undefined,
+              totalAmount: `₹${transfer?.price || transfer?.finalPrice || transfer?.totalPrice || "0"}`,
+              guestName: bookingData?.primaryGuest ?
+                `${bookingData.primaryGuest.title} ${bookingData.primaryGuest.firstName} ${bookingData.primaryGuest.lastName}` :
+                "Guest Name",
+              phone: bookingData?.primaryGuest?.countryCode && bookingData?.primaryGuest?.phone ?
+                `${bookingData.primaryGuest.countryCode} ${bookingData.primaryGuest.phone}` :
+                undefined,
+              email: bookingData?.primaryGuest?.email,
+              providerName: transfer?.providerName || "Faredown Transfers",
+              duration: transfer?.duration || transfer?.estimatedDuration ? `${transfer.estimatedDuration} min` : undefined,
+              distance: transfer?.distance,
+              isRoundTrip: !!transfer?.returnDate,
+              paymentMethod: "Online Payment",
+              transactionId: `TXN${bookingRef || Date.now()}`,
+              invoiceDate: new Date().toISOString().split('T')[0],
+            }}
+            onPrint={() => setShowInvoice(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }
