@@ -1337,14 +1337,14 @@ export default function Index() {
 
         {/* Mobile Sightseeing Section */}
         <div
-          className={`bg-[#003580] text-white pb-8 ${activeTab === "sightseeing" ? "" : "hidden"}`}
+          className={`bg-white text-gray-900 pb-8 ${activeTab === "sightseeing" ? "" : "hidden"}`}
         >
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
                 Discover Amazing Experiences
               </h1>
-              <p className="text-blue-200 text-sm mb-3">
+              <p className="text-gray-600 text-sm mb-3">
                 Explore fascinating attractions, cultural landmarks, and
                 exciting activities...
               </p>
