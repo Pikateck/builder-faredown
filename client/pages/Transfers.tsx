@@ -165,8 +165,8 @@ export default function Transfers() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-orange-600" />
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-gray-600" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Instant Confirmation</h3>
               <p className="text-gray-600 text-sm">
