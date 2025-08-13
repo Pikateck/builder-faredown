@@ -332,14 +332,16 @@ router.post("/session/offer", async (req, res) => {
       sessionData.finalPrice = aiResponse.finalPrice;
       bargainEngine.activeSessions.set(sessionId, sessionData);
 
-      // Update database
-      try {
-        await pgPool.query(
-          "UPDATE ai.transfers_bargain_sessions SET status = 'accepted', final_price = $1 WHERE session_id = $2",
-          [aiResponse.finalPrice, sessionId]
-        );
-      } catch (dbError) {
-        logger.warn("Failed to update session status", { error: dbError.message });
+      // Update database if available
+      if (dbAvailable && pgPool) {
+        try {
+          await pgPool.query(
+            "UPDATE ai.transfers_bargain_sessions SET status = 'accepted', final_price = $1 WHERE session_id = $2",
+            [aiResponse.finalPrice, sessionId]
+          );
+        } catch (dbError) {
+          logger.warn("Failed to update session status", { error: dbError.message });
+        }
       }
     } else if (aiResponse.decision === "reject" && currentRound >= 5) {
       sessionData.status = "rejected";
