@@ -1386,7 +1386,7 @@ export function TransfersSearchForm() {
                 title="Search car rentals"
               >
                 <Search className="mr-2 h-4 w-4" />
-                <span className="text-sm">Search Car Rentals</span>
+                <span className="text-xs sm:text-sm">Search Car Rentals</span>
               </Button>
             </div>
           </div>
