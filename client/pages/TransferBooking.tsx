@@ -64,6 +64,8 @@ export default function TransferBooking() {
   const dropoffLocation =
     searchParams.get("dropoffLocation") || "Hotel Taj Mahal Palace";
   const vehicleName = searchParams.get("vehicleName") || "Sedan - Economy";
+  const pickupDate = searchParams.get("pickupDate") || new Date().toISOString().split('T')[0];
+  const pickupTime = searchParams.get("pickupTime") || "10:00";
   const isRoundTrip = searchParams.get("returnDate") !== null;
   const returnDate = searchParams.get("returnDate");
   const returnTime = searchParams.get("returnTime");
