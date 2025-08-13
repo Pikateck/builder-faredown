@@ -693,14 +693,35 @@ class TransfersService {
    */
   async getDestinations(query = "", limit = 15, popularOnly = false) {
     try {
-      this.logger.info("Getting transfer destinations", {
+      this.logger.info("Getting transfer destinations from Hotelbeds API", {
         query,
         limit,
         popularOnly,
       });
 
-      // For transfers, we can use a combination of airports and major cities
-      // This is a comprehensive list of major airports and cities for transfers
+      // First try to get destinations from Hotelbeds Transfers API
+      try {
+        const apiDestinations = await this.adapters.hotelbeds.getDestinations(
+          query,
+          popularOnly ? "popular" : "",
+          limit
+        );
+
+        if (apiDestinations && apiDestinations.length > 0) {
+          this.logger.info(`Retrieved ${apiDestinations.length} destinations from Hotelbeds API`);
+          return {
+            success: true,
+            destinations: apiDestinations,
+          };
+        }
+      } catch (apiError) {
+        this.logger.warn("Hotelbeds API failed, falling back to static destinations", {
+          error: apiError.message,
+        });
+      }
+
+      // Fallback to static destinations if API fails
+      this.logger.info("Using fallback static destinations");
       const transferDestinations = [
         // Major Indian Airports
         {
