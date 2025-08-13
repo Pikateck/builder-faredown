@@ -1014,22 +1014,34 @@ export function TransfersSearchForm() {
 
               {/* Passengers Field */}
               <div className="flex-1 lg:max-w-[140px]">
-                <Popover
-                  open={isPassengerPopoverOpen}
-                  onOpenChange={setIsPassengerPopoverOpen}
-                >
-                  <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer">
-                      <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                      <Input
-                        type="text"
-                        value={passengerSummary()}
-                        readOnly
-                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
-                        placeholder="Passengers"
-                      />
-                    </div>
-                  </PopoverTrigger>
+                {isMobile ? (
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                    onClick={() => setShowMobilePassengers(true)}
+                  >
+                    <Users className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-xs sm:text-sm">
+                      {passengerSummary()}
+                    </span>
+                  </Button>
+                ) : (
+                  <Popover
+                    open={isPassengerPopoverOpen}
+                    onOpenChange={setIsPassengerPopoverOpen}
+                  >
+                    <PopoverTrigger asChild>
+                      <div className="relative cursor-pointer">
+                        <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                        <Input
+                          type="text"
+                          value={passengerSummary()}
+                          readOnly
+                          className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
+                          placeholder="Passengers"
+                        />
+                      </div>
+                    </PopoverTrigger>
                   <PopoverContent className="w-80 p-4" align="start">
                     <div className="space-y-4">
                       <div>
@@ -1203,6 +1215,7 @@ export function TransfersSearchForm() {
                     </div>
                   </PopoverContent>
                 </Popover>
+                )}
               </div>
 
               {/* Search Button - h-10 sm:h-12 px-5 */}
