@@ -522,7 +522,52 @@ export function TransfersSearchForm() {
       return;
     }
 
-    navigate("/transfer-results");
+    // Build search parameters
+    const searchParams = new URLSearchParams();
+
+    if (transferMode === "airport") {
+      // Airport taxi parameters
+      searchParams.set("mode", "airport");
+      searchParams.set("direction", airportDirection);
+      searchParams.set("pickup", airportDirection === "airport-to-hotel" ? airport : hotel);
+      searchParams.set("dropoff", airportDirection === "airport-to-hotel" ? hotel : airport);
+      searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
+      searchParams.set("pickupTime", pickupTime);
+
+      // Include return date and time for return trips
+      if (airportDirection === "return" && returnDate) {
+        searchParams.set("returnDate", returnDate.toISOString().split('T')[0]);
+        searchParams.set("returnTime", returnTime);
+        searchParams.set("isRoundTrip", "true");
+      }
+
+      if (flightNumber) {
+        searchParams.set("flightNumber", flightNumber);
+      }
+    } else {
+      // Car rental parameters
+      searchParams.set("mode", "rental");
+      searchParams.set("pickup", pickupLocation);
+      searchParams.set("dropoff", sameAsPickup ? pickupLocation : dropoffLocation);
+      searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
+      searchParams.set("pickupTime", pickupTime);
+
+      if (dropoffDate) {
+        searchParams.set("dropoffDate", dropoffDate.toISOString().split('T')[0]);
+        searchParams.set("dropoffTime", dropoffTime);
+      }
+
+      searchParams.set("sameAsPickup", sameAsPickup.toString());
+      searchParams.set("driverAge", driverAge);
+      searchParams.set("vehicleType", vehicleType);
+    }
+
+    // Common parameters
+    searchParams.set("adults", passengers.adults.toString());
+    searchParams.set("children", passengers.children.toString());
+    searchParams.set("infants", passengers.infants.toString());
+
+    navigate(`/transfer-results?${searchParams.toString()}`);
   };
 
   // Passenger summary
