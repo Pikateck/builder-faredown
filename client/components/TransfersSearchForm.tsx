@@ -161,6 +161,17 @@ export function TransfersSearchForm() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Auto-set return date when return mode is selected and pickup date exists
+  useEffect(() => {
+    if (airportDirection === "return" && pickupDate && !returnDate) {
+      const autoReturnDate = addDays(pickupDate, 3);
+      setReturnDate(autoReturnDate);
+      setReturnTime("16:00");
+    } else if (airportDirection !== "return") {
+      setReturnDate(undefined);
+    }
+  }, [airportDirection, pickupDate, returnDate]);
+
   // Debounced search refs
   const debouncedAirportSearchRef = useRef<NodeJS.Timeout>();
   const debouncedHotelSearchRef = useRef<NodeJS.Timeout>();
