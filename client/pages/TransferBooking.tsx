@@ -69,6 +69,10 @@ export default function TransferBooking() {
   const isRoundTrip = searchParams.get("returnDate") !== null;
   const returnDate = searchParams.get("returnDate");
   const returnTime = searchParams.get("returnTime");
+  const adults = parseInt(searchParams.get("adults") || "2");
+  const children = parseInt(searchParams.get("children") || "0");
+  const infants = parseInt(searchParams.get("infants") || "0");
+  const totalPassengers = adults + children + infants;
 
   // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
