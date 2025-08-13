@@ -113,6 +113,12 @@ export default function TransferResults() {
     null,
   );
 
+  // Selection state for mobile
+  const [selectedTransfers, setSelectedTransfers] = useState<Set<string>>(
+    new Set(),
+  );
+  const [showBottomBar, setShowBottomBar] = useState(false);
+
   // Available filters based on current data
   const availableFilters = useMemo(() => {
     const vehicleTypes = [...new Set(transfers.map((t) => t.vehicleType))];
