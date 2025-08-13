@@ -98,12 +98,16 @@ class TransfersBargainEngine {
       }
     }
 
-    // If offer is too low, reject
+    // If offer is too low, provide final counter offer instead of rejecting
     if (userOffer < minSellingPrice) {
+      const finalCounterOffer = Math.round(minSellingPrice * 1.05); // 5% above minimum for sustainability
       return {
-        decision: "reject",
-        message: `Your offer is below our minimum acceptable price of ₹${Math.round(minSellingPrice)}. This ensures we can maintain service quality and driver compensation.`,
-        suggestedPrice: Math.round(minSellingPrice + (displayedPrice - minSellingPrice) * 0.3)
+        decision: "counter",
+        counterPrice: finalCounterOffer,
+        message: `This is our absolute final price of ₹${finalCounterOffer}. It covers all operational costs and ensures quality service with fair driver compensation.`,
+        savings: displayedPrice - finalCounterOffer,
+        acceptanceProbability: 0.95,
+        isFinalOffer: true
       };
     }
 
