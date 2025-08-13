@@ -578,23 +578,18 @@ export default function Index() {
                     </Link>
 
                     {/* Currency Selection Tab */}
-                    <div className="border-t border-gray-200 my-4"></div>
+                    <div className="menu-divider my-4"></div>
                     <div className="px-4 py-2">
                       <div
-                        className="text-xs font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center"
+                        className="menu-subtext font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center"
                         style={{
-                          WebkitFontSmoothing: 'antialiased',
-                          textRendering: 'optimizeLegibility',
                           fontSize: '12px',
+                          lineHeight: '16px',
                           fontWeight: '600',
-                          letterSpacing: '0.025em',
-                          lineHeight: '1.3',
+                          letterSpacing: '0.02em',
                         }}
                       >
-                        <DollarSign
-                          className="w-4 h-4 mr-2 text-[#003580]"
-                          style={{ strokeWidth: '2.5' }}
-                        />
+                        <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
                         Currency
                       </div>
                       <div className="space-y-1 max-h-32 overflow-y-auto">
@@ -604,43 +599,36 @@ export default function Index() {
                             onClick={() => {
                               setCurrency(currency);
                             }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors duration-150 ${
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors duration-150 ${
                               selectedCurrency.code === currency.code
                                 ? "bg-blue-50 text-blue-600 border border-blue-200"
                                 : "text-gray-700"
                             }`}
                             style={{
-                              WebkitFontSmoothing: 'antialiased',
-                              textRendering: 'optimizeLegibility',
                               WebkitTapHighlightColor: 'transparent',
+                              fontSize: '14px',
+                              lineHeight: '18px',
                             }}
                           >
                             <div className="flex items-center gap-2">
+                              <span className="text-base">{currency.flag}</span>
                               <span
-                                className="text-base leading-none"
-                                style={{ lineHeight: '1' }}
-                              >
-                                {currency.flag}
-                              </span>
-                              <span
-                                className="font-medium leading-none"
+                                className="font-medium"
                                 style={{
                                   fontSize: '14px',
+                                  lineHeight: '18px',
                                   fontWeight: '500',
-                                  letterSpacing: '0.005em',
-                                  lineHeight: '1.2',
                                 }}
                               >
                                 {currency.name}
                               </span>
                             </div>
                             <span
-                              className="font-semibold leading-none"
+                              className="font-semibold"
                               style={{
                                 fontSize: '12px',
+                                lineHeight: '16px',
                                 fontWeight: '600',
-                                letterSpacing: '0.01em',
-                                lineHeight: '1.2',
                               }}
                             >
                               {currency.symbol} {currency.code}
@@ -650,90 +638,45 @@ export default function Index() {
                       </div>
                     </div>
 
-                    <div className="border-t border-gray-200 my-4"></div>
+                    <div className="menu-divider my-4"></div>
 
                     <button
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
+                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
                       style={{
-                        WebkitFontSmoothing: 'antialiased',
-                        textRendering: 'optimizeLegibility',
                         WebkitTapHighlightColor: 'transparent',
                       }}
                     >
-                      <Heart
-                        className="w-5 h-5 text-[#003580] flex-shrink-0"
-                        style={{ strokeWidth: '2' }}
-                      />
-                      <span
-                        className="font-medium leading-none"
-                        style={{
-                          fontSize: '16px',
-                          fontWeight: '500',
-                          letterSpacing: '0.005em',
-                          lineHeight: '1.2',
-                        }}
-                      >
-                        Saved
-                      </span>
+                      <Heart className="w-5 h-5 text-[#003580] flex-shrink-0" />
+                      <span className="font-medium">Saved</span>
                     </button>
 
                     <button
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
+                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
                       style={{
-                        WebkitFontSmoothing: 'antialiased',
-                        textRendering: 'optimizeLegibility',
                         WebkitTapHighlightColor: 'transparent',
                       }}
                     >
-                      <Headphones
-                        className="w-5 h-5 text-[#003580] flex-shrink-0"
-                        style={{ strokeWidth: '2' }}
-                      />
-                      <span
-                        className="font-medium leading-none"
-                        style={{
-                          fontSize: '16px',
-                          fontWeight: '500',
-                          letterSpacing: '0.005em',
-                          lineHeight: '1.2',
-                        }}
-                      >
-                        Help & Support
-                      </span>
+                      <Headphones className="w-5 h-5 text-[#003580] flex-shrink-0" />
+                      <span className="font-medium">Help & Support</span>
                     </button>
 
                     <button
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
+                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
                       style={{
-                        WebkitFontSmoothing: 'antialiased',
-                        textRendering: 'optimizeLegibility',
                         WebkitTapHighlightColor: 'transparent',
                       }}
                     >
-                      <Settings
-                        className="w-5 h-5 text-[#003580] flex-shrink-0"
-                        style={{ strokeWidth: '2' }}
-                      />
-                      <span
-                        className="font-medium leading-none"
-                        style={{
-                          fontSize: '16px',
-                          fontWeight: '500',
-                          letterSpacing: '0.005em',
-                          lineHeight: '1.2',
-                        }}
-                      >
-                        Settings
-                      </span>
+                      <Settings className="w-5 h-5 text-[#003580] flex-shrink-0" />
+                      <span className="font-medium">Settings</span>
                     </button>
                   </nav>
 
