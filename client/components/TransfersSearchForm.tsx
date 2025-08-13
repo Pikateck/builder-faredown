@@ -978,7 +978,7 @@ export function TransfersSearchForm() {
                   title={`Search ${transferMode === "airport" ? "transfers" : "car rentals"}`}
                 >
                   <Search className="mr-2 h-4 w-4" />
-                  <span className="text-sm">
+                  <span className="text-xs sm:text-sm">
                     Search{" "}
                     {transferMode === "airport" ? "Transfers" : "Car Rentals"}
                   </span>
