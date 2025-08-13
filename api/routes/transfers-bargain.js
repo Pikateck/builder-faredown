@@ -440,13 +440,15 @@ router.post("/session/accept", async (req, res) => {
     sessionData.bookingPayload = bookingPayload;
     bargainEngine.activeSessions.set(sessionId, sessionData);
 
-    try {
-      await pgPool.query(
-        "UPDATE ai.transfers_bargain_sessions SET status = 'booking_ready', booking_reference = $1 WHERE session_id = $2",
-        [bookingPayload.bookingReference, sessionId]
-      );
-    } catch (dbError) {
-      logger.warn("Failed to update session for booking", { error: dbError.message });
+    if (dbAvailable && pgPool) {
+      try {
+        await pgPool.query(
+          "UPDATE ai.transfers_bargain_sessions SET status = 'booking_ready', booking_reference = $1 WHERE session_id = $2",
+          [bookingPayload.bookingReference, sessionId]
+        );
+      } catch (dbError) {
+        logger.warn("Failed to update session for booking", { error: dbError.message });
+      }
     }
 
     logger.info("Transfers bargain accepted and ready for booking", {
