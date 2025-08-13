@@ -741,33 +741,87 @@ export default function Index() {
                     <div className="border-t border-gray-200 my-4"></div>
 
                     <button
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Heart className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Saved</span>
+                      <Heart
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Saved
+                      </span>
                     </button>
 
                     <button
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Headphones className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Help & Support</span>
+                      <Headphones
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Help & Support
+                      </span>
                     </button>
 
                     <button
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
                       onClick={() => {
                         setShowMobileMenu(false);
                       }}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Settings className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Settings</span>
+                      <Settings
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Settings
+                      </span>
                     </button>
                   </nav>
 
