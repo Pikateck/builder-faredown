@@ -532,7 +532,7 @@ export default function Index() {
                   <nav className="space-y-1 px-4">
                     <Link
                       to="/"
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150 menu-item"
                       onClick={() => setShowMobileMenu(false)}
                       style={{
                         WebkitFontSmoothing: 'antialiased',
