@@ -26,6 +26,16 @@ import {
 export default function TransferConfirmation() {
   const location = useLocation();
   const { transfer, bookingData, bookingRef } = location.state || {};
+  const [showVoucher, setShowVoucher] = useState(false);
+
+  const handleDownloadVoucher = () => {
+    setShowVoucher(true);
+    // Print voucher after a short delay to ensure it's rendered
+    setTimeout(() => {
+      window.print();
+      setShowVoucher(false);
+    }, 500);
+  };
 
   if (!transfer || !bookingData) {
     return (
