@@ -532,47 +532,137 @@ export default function Index() {
                   <nav className="space-y-1 px-4">
                     <Link
                       to="/"
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Plane className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Flights</span>
+                      <Plane
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Flights
+                      </span>
                     </Link>
 
                     <Link
                       to="/hotels"
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Hotel className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Hotels</span>
+                      <Hotel
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Hotels
+                      </span>
                     </Link>
 
                     <Link
                       to="/sightseeing"
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Camera className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Sightseeing</span>
+                      <Camera
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Sightseeing
+                      </span>
                     </Link>
 
                     <Link
                       to="/transfers"
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <Car className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Transfers</span>
+                      <Car
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Transfers
+                      </span>
                     </Link>
 
                     <Link
                       to="/bookings"
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       onClick={() => setShowMobileMenu(false)}
+                      style={{
+                        WebkitFontSmoothing: 'antialiased',
+                        textRendering: 'optimizeLegibility',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
                     >
-                      <BookOpen className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">My Bookings</span>
+                      <BookOpen
+                        className="w-5 h-5 text-[#003580] flex-shrink-0"
+                        style={{ strokeWidth: '2' }}
+                      />
+                      <span
+                        className="font-medium leading-none"
+                        style={{
+                          fontSize: '16px',
+                          fontWeight: '500',
+                          letterSpacing: '0.005em',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        My Bookings
+                      </span>
                     </Link>
 
                     {/* Currency Selection Tab */}
