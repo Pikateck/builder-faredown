@@ -1017,8 +1017,8 @@ export default function TransferResults() {
         </div>
       </div>
 
-      {/* Mobile Bottom Bar */}
-      {isMobile && (
+      {/* Mobile Filters Bottom Bar */}
+      {isMobile && !showBottomBar && (
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
           <div className="flex items-center justify-between">
             <div>
@@ -1045,6 +1045,47 @@ export default function TransferResults() {
               <Filter className="w-4 h-4 mr-2" />
               Filters
             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Transfer Selection Bottom Panel */}
+      {showBottomBar && selectedTransfers.size > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-gray-900 mb-1">
+                  {selectedTransfers.size} transfer
+                  {selectedTransfers.size > 1 ? "s" : ""} selected
+                </div>
+                <div className="text-xs text-gray-600">
+                  From {formatPrice(calculateTotalPrice() / selectedTransfers.size)} average
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-[#003580]">
+                  {formatPrice(calculateTotalPrice())}
+                </div>
+                <div className="text-xs text-gray-500">Total</div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                onClick={handleBottomBarBargain}
+                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+              >
+                <TrendingDown className="w-4 h-4" />
+                Bargain
+              </Button>
+              <Button
+                onClick={handleBottomBarViewDetails}
+                className="flex-1 py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+              >
+                View Details
+              </Button>
+            </div>
           </div>
         </div>
       )}
