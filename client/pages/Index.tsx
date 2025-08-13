@@ -96,6 +96,7 @@ import {
   Linkedin,
   Twitter,
   Camera,
+  Car,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
 import {
