@@ -926,45 +926,68 @@ export function TransfersSearchForm() {
 
               {/* Date Field */}
               <div className="flex-1 lg:max-w-[140px]">
-                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
-                  <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
-                      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
-                      <Input
-                        type="text"
-                        value={pickupDate ? format(pickupDate, "MMM d") : ""}
-                        readOnly
-                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
-                        placeholder="Select date"
-                      />
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <BookingCalendar
-                      onChange={({ startDate, endDate }) => {
-                        // For airport transfers, apply dates based on mode
-                        if (airportDirection === "return") {
-                          // For return trips, set both pickup and return dates
-                          if (startDate) setPickupDate(startDate);
-                          if (endDate) setReturnDate(endDate);
-                          // Don't close until Apply is clicked - let user select range
-                        } else {
-                          // For one-way trips, just set pickup date and close
-                          if (startDate) {
-                            handleDateSelect(startDate, true);
+                {isMobile ? (
+                  <Button
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                    onClick={() => setShowMobileDatePicker(true)}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-xs sm:text-sm">
+                      {pickupDate && (airportDirection !== "return" || returnDate) ? (
+                        airportDirection === "return" && returnDate ? (
+                          <>
+                            {format(pickupDate, "dd-MMM")} - {format(returnDate, "dd-MMM")}
+                          </>
+                        ) : (
+                          format(pickupDate, "dd-MMM-yyyy")
+                        )
+                      ) : (
+                        "Select dates"
+                      )}
+                    </span>
+                  </Button>
+                ) : (
+                  <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                    <PopoverTrigger asChild>
+                      <div className="relative cursor-pointer" onClick={handlePickupDateClick}>
+                        <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                        <Input
+                          type="text"
+                          value={pickupDate ? format(pickupDate, "MMM d") : ""}
+                          readOnly
+                          className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
+                          placeholder="Select date"
+                        />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <BookingCalendar
+                        onChange={({ startDate, endDate }) => {
+                          // For airport transfers, apply dates based on mode
+                          if (airportDirection === "return") {
+                            // For return trips, set both pickup and return dates
+                            if (startDate) setPickupDate(startDate);
+                            if (endDate) setReturnDate(endDate);
+                            // Don't close until Apply is clicked - let user select range
+                          } else {
+                            // For one-way trips, just set pickup date and close
+                            if (startDate) {
+                              handleDateSelect(startDate, true);
+                            }
                           }
+                        }}
+                        initialRange={
+                          airportDirection === "return"
+                            ? { startDate: pickupDate || new Date(), endDate: returnDate || addDays(pickupDate || new Date(), 3) }
+                            : { startDate: pickupDate || new Date(), endDate: pickupDate || new Date() }
                         }
-                      }}
-                      initialRange={
-                        airportDirection === "return"
-                          ? { startDate: pickupDate || new Date(), endDate: returnDate || addDays(pickupDate || new Date(), 3) }
-                          : { startDate: pickupDate || new Date(), endDate: pickupDate || new Date() }
-                      }
-                      onClose={() => setIsPickupDateOpen(false)}
-                      bookingType={airportDirection === "return" ? "hotel" : "sightseeing"}
-                    />
-                  </PopoverContent>
-                </Popover>
+                        onClose={() => setIsPickupDateOpen(false)}
+                        bookingType={airportDirection === "return" ? "hotel" : "sightseeing"}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
 
               {/* Time Field */}
