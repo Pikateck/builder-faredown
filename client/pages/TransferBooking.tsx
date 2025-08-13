@@ -243,7 +243,15 @@ export default function TransferBooking() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
                     <div className="flex items-center space-x-1">
                       <Users className="w-4 h-4" />
-                      <span>Up to {transferData.maxPassengers} passengers</span>
+                      <span>
+                        {(() => {
+                          const parts = [];
+                          if (adults > 0) parts.push(`${adults} adult${adults > 1 ? 's' : ''}`);
+                          if (children > 0) parts.push(`${children} child${children > 1 ? 'ren' : ''}`);
+                          if (infants > 0) parts.push(`${infants} infant${infants > 1 ? 's' : ''}`);
+                          return parts.length > 0 ? parts.join(' • ') : `${totalPassengers} passenger${totalPassengers !== 1 ? 's' : ''}`;
+                        })()}
+                      </span>
                     </div>
                     <div className="flex items-center space-x-1">
                       <span>{transferData.duration}</span>
