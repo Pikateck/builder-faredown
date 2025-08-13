@@ -221,6 +221,7 @@ app.use("/api/test-live-hotel", testLiveHotelRoutes);
 app.use("/api/sightseeing", sightseeingRoutes);
 app.use("/api/sightseeing-search", sightseeingSearchRoutes);
 app.use("/api/transfers", transfersRoutes);
+app.use("/api/transfers-bargain", transfersBargainRoutes);
 
 // New admin module routes
 app.use("/api/markup", authenticateToken, markupRoutes);
