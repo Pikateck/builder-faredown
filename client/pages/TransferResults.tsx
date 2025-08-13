@@ -594,7 +594,7 @@ export default function TransferResults() {
                 <Calendar className="w-4 h-4" />
                 <span>
                   {pickupDate && !isNaN(new Date(pickupDate).getTime())
-                    ? new Date(pickupDate).toLocaleDateString()
+                    ? `${new Date(pickupDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} at ${pickupTime}`
                     : "Date not selected"}
                 </span>
                 {isRoundTrip && returnDate && (
@@ -602,7 +602,7 @@ export default function TransferResults() {
                     <span>-</span>
                     <span>
                       {!isNaN(new Date(returnDate).getTime())
-                        ? new Date(returnDate).toLocaleDateString()
+                        ? `${new Date(returnDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} at ${returnTime}`
                         : "Return date not selected"}
                     </span>
                   </>
