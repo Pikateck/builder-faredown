@@ -487,7 +487,7 @@ export default function Index() {
 
             {/* Menu Panel */}
             <div
-              className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl"
+              className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl mobile-menu-enhanced"
               style={{
                 fontSmooth: 'always',
                 WebkitFontSmoothing: 'antialiased',
