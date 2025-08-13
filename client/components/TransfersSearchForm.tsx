@@ -507,7 +507,7 @@ export function TransfersSearchForm() {
   const handleSearch = () => {
     if (transferMode === "airport") {
       if (!airport || !hotel) {
-        setErrorMessage("Please select both airport and hotel/address");
+        setErrorMessage("Please select both pick-up location and destination");
         setShowError(true);
         return;
       }
