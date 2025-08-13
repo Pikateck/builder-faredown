@@ -491,9 +491,9 @@ export default function Index() {
             >
               <div className="flex flex-col h-full">
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 bg-[#003580]">
+                <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 bg-white">
                   <span
-                    className="text-lg font-bold text-white"
+                    className="text-lg font-bold text-gray-900"
                     style={{
                       fontSize: '18px',
                       lineHeight: '22px',
@@ -505,7 +505,7 @@ export default function Index() {
                   </span>
                   <button
                     onClick={() => setShowMobileMenu(false)}
-                    className="p-2 text-white hover:bg-blue-700 rounded-lg transition-colors duration-150"
+                    className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                     style={{
                       WebkitTapHighlightColor: 'transparent',
                     }}
