@@ -1235,12 +1235,16 @@ export function TransfersSearchForm() {
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <BookingCalendar
-                          mode="single"
-                          selected={returnDate}
-                          onSelect={(date) => date && handleReturnDateSelect(date)}
-                          disabled={(date) => date < (pickupDate || new Date())}
-                          initialFocus
-                          numberOfMonths={isMobile ? 1 : 2}
+                          onChange={({ startDate, endDate }) => {
+                            // For return date, we want to use the endDate if available, otherwise startDate
+                            const selectedDate = endDate || startDate;
+                            if (selectedDate) {
+                              handleReturnDateSelect(selectedDate);
+                            }
+                          }}
+                          initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
+                          onClose={() => setIsDropoffDateOpen(false)}
+                          bookingType="hotel"
                         />
                       </PopoverContent>
                     </Popover>
