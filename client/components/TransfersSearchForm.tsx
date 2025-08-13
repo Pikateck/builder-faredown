@@ -1916,7 +1916,7 @@ export function TransfersSearchForm() {
             <div className="flex-shrink-0">
               <Button
                 onClick={handleSearch}
-                className="h-10 sm:h-12 px-5 bg-white hover:bg-gray-50 active:bg-gray-100 text-black font-bold rounded transition-all duration-150 border border-gray-300"
+                className="h-10 sm:h-12 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
                 title="Search car rentals"
               >
                 <Search className="mr-2 h-4 w-4" />
