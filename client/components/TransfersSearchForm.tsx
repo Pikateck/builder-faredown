@@ -394,8 +394,9 @@ export function TransfersSearchForm() {
         const endDate = addDays(date, daysToAdd);
         setDropoffDate(endDate);
         setCalendarRange({ start: date, end: endDate });
-        setIsPickupDateOpen(false);
-        setIsDropoffDateOpen(false);
+
+        // Only close if we're not using the calendar - this is for direct date selection
+        // Calendar popover will stay open until Apply is clicked
 
         // Auto-suggest optimal pickup time based on date
         const hour = date.getHours();
@@ -411,15 +412,9 @@ export function TransfersSearchForm() {
           setDropoffTime("12:00");
         }
       } else {
-        // For airport taxi, set the date and close
-        setIsPickupDateOpen(false);
-
-        // If return trip is selected, automatically set return date
-        if (airportDirection === "return") {
-          const returnDay = addDays(date, 3); // Default 3-day trip
-          setReturnDate(returnDay);
-          setCalendarRange({ start: date, end: returnDay });
-          setReturnTime("16:00"); // Afternoon return flight
+        // For airport taxi one-way, close immediately
+        if (airportDirection !== "return") {
+          setIsPickupDateOpen(false);
         }
 
         // Smart time suggestion for airport transfers
@@ -453,7 +448,6 @@ export function TransfersSearchForm() {
 
       setDropoffDate(date);
       setCalendarRange(prev => ({ ...prev, end: date }));
-      setIsDropoffDateOpen(false);
 
       // Suggest return time based on trip length
       const tripDays = Math.ceil((date.getTime() - (pickupDate?.getTime() || 0)) / (1000 * 60 * 60 * 24));
