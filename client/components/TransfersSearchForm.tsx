@@ -1249,11 +1249,10 @@ export function TransfersSearchForm() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <BookingCalendar
                           onChange={({ startDate, endDate }) => {
-                            // For return date, we want to use the endDate if available, otherwise startDate
-                            const selectedDate = endDate || startDate;
-                            if (selectedDate) {
-                              handleReturnDateSelect(selectedDate);
-                            }
+                            // Update both dates when range changes
+                            if (startDate) setPickupDate(startDate);
+                            if (endDate) setReturnDate(endDate);
+                            // Don't close until Apply is clicked
                           }}
                           initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
                           onClose={() => setIsDropoffDateOpen(false)}
