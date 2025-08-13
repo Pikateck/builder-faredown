@@ -303,7 +303,11 @@ export default function TransferConfirmation() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" className="flex items-center">
+            <Button
+              variant="outline"
+              className="flex items-center"
+              onClick={handleDownloadVoucher}
+            >
               <Download className="w-4 h-4 mr-2" />
               Download Voucher
             </Button>
