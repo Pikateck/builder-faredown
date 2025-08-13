@@ -143,6 +143,19 @@ export function FlightStyleBargainModal({
           total: roomType.totalPrice, // Use the already calculated total
         };
         setPriceCalculation(calculation);
+      } else if (type === "transfer") {
+        // For transfers, use simple pricing structure
+        const totalPrice = roomType.totalPrice || roomType.marketPrice || 1200;
+        const calculation: PriceCalculation = {
+          perNightPrice: totalPrice,
+          totalNights: 1,
+          roomsCount: 1,
+          subtotal: totalPrice / 1.18, // Remove tax to show breakdown
+          taxes: totalPrice - totalPrice / 1.18,
+          fees: 0,
+          total: totalPrice,
+        };
+        setPriceCalculation(calculation);
       } else {
         // For hotels, use the existing calculation
         const nights = Math.max(
