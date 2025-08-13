@@ -457,7 +457,24 @@ export function TransfersSearchForm() {
     setIsDropoffDateOpen(!isDropoffDateOpen);
     setIsPickupDateOpen(false);
     if (pickupDate) {
-      setCalendarRange({ start: pickupDate, end: dropoffDate || null });
+      setCalendarRange({ start: pickupDate, end: dropoffDate || returnDate || null });
+    }
+  };
+
+  const handleReturnDateSelect = (date: Date) => {
+    setReturnDate(date);
+    setCalendarRange(prev => ({ ...prev, end: date }));
+    setIsDropoffDateOpen(false);
+
+    // Smart time suggestion for return flights
+    const tripDays = pickupDate ? Math.ceil((date.getTime() - pickupDate.getTime()) / (1000 * 60 * 60 * 24)) : 1;
+
+    if (tripDays <= 1) {
+      setReturnTime("20:00"); // Same day return - evening flight
+    } else if (tripDays <= 3) {
+      setReturnTime("16:00"); // Short trip - afternoon return
+    } else {
+      setReturnTime("14:00"); // Longer trip - early afternoon
     }
   };
 
