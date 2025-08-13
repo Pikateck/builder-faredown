@@ -26,6 +26,39 @@
   }
 
   /**
+   * Enhanced font rendering for mobile menu
+   * Ensures maximum crispness and pixel-perfect alignment
+   */
+  .mobile-menu-enhanced {
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility !important;
+    font-feature-settings: "kern" 1, "liga" 1 !important;
+    font-smooth: always !important;
+    backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+    will-change: transform !important;
+  }
+
+  /**
+   * Pixel-perfect icon and text alignment
+   */
+  .mobile-menu-enhanced .menu-item {
+    align-items: center !important;
+    vertical-align: baseline !important;
+  }
+
+  /**
+   * High-DPI optimizations for retina displays
+   */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .mobile-menu-enhanced {
+      -webkit-transform: translateZ(0) scale(1.0001) !important;
+      transform: translateZ(0) scale(1.0001) !important;
+    }
+  }
+
+  /**
    * Faredown brand color system
    * tailwind.config.ts expects the following color variables to be expressed as HSL values.
    */
