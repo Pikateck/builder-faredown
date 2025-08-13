@@ -88,7 +88,7 @@ export default function TransferResults() {
   const children = searchParams.get("children") || "0";
   const infants = searchParams.get("infants") || "0";
   const vehicleType = searchParams.get("vehicleType") || "";
-  const isRoundTrip = searchParams.get("returnDate") !== null;
+  const isRoundTrip = searchParams.get("returnDate") !== null || searchParams.get("isRoundTrip") === "true";
 
   // State for transfers data
   const [transfers, setTransfers] = useState<Transfer[]>([]);
