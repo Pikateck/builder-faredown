@@ -23,39 +23,66 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "kern" 1;
+    font-kerning: normal;
+    font-variant-ligatures: contextual common-ligatures;
+  }
+
+  /* Inherit crisp rendering into menu panels */
+  .menu-panel, .menu-panel * {
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-variant-ligatures: contextual common-ligatures;
   }
 
   /**
-   * Enhanced font rendering for mobile menu
-   * Ensures maximum crispness and pixel-perfect alignment
+   * CRISP MENU - Razor-sharp text rendering
+   * Remove all rasterizing transforms/filters
    */
   .mobile-menu-enhanced {
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
     text-rendering: optimizeLegibility !important;
     font-feature-settings: "kern" 1, "liga" 1 !important;
-    font-smooth: always !important;
-    backface-visibility: hidden !important;
-    transform: translateZ(0) !important;
-    will-change: transform !important;
+    font-kerning: normal !important;
+    font-variant-ligatures: contextual common-ligatures !important;
+    /* Remove all rasterizing properties */
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
+    backface-visibility: visible !important;
+    background: #fff;
+    border-radius: 12px;
   }
 
   /**
-   * Pixel-perfect icon and text alignment
+   * Menu items with whole-pixel values only
    */
-  .mobile-menu-enhanced .menu-item {
-    align-items: center !important;
-    vertical-align: baseline !important;
+  .menu-item {
+    font-weight: 500;          /* use the real 500 font file */
+    font-size: 16px;
+    line-height: 20px;
+    padding: 12px 16px;
+    gap: 12px;
+    display: flex;
+    align-items: center;
   }
 
-  /**
-   * High-DPI optimizations for retina displays
-   */
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .mobile-menu-enhanced {
-      -webkit-transform: translateZ(0) scale(1.0001) !important;
-      transform: translateZ(0) scale(1.0001) !important;
-    }
+  .menu-subtext {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .menu-divider {
+    height: 1px;
+    background: rgba(0,0,0,.06);
+  }
+
+  .menu-item svg {
+    flex-shrink: 0;
+    stroke-width: 2;
+    shape-rendering: geometricPrecision;
   }
 
   /**
@@ -63,6 +90,10 @@
    * tailwind.config.ts expects the following color variables to be expressed as HSL values.
    */
   :root {
+    /* Crisp font rendering at root level */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
     --background: 0 0% 100%;
     --foreground: 214 31% 17%;
 
