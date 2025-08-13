@@ -22,6 +22,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 
 export default function TransferConfirmation() {
   const location = useLocation();
