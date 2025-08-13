@@ -173,6 +173,7 @@ app.get("/", (req, res) => {
       hotels: "/api/hotels",
       sightseeing: "/api/sightseeing",
       transfers: "/api/transfers",
+      transfersBargain: "/api/transfers-bargain",
       bargain: "/api/bargain",
       currency: "/api/currency",
       promo: "/api/promo",
