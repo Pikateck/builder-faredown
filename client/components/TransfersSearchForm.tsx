@@ -1866,10 +1866,15 @@ export function TransfersSearchForm() {
           onClose={() => setShowMobileFromDestination(false)}
           title="Select pick-up location"
           cities={transferCities}
-          selectedCity={airport || ""}
+          selectedCity={transferMode === "rental" ? pickupLocation || "" : airport || ""}
           onSelectCity={(city) => {
-            setAirport(city);
-            setAirportCode(transferCities[city]?.code || "");
+            if (transferMode === "rental") {
+              setPickupLocation(city);
+              setPickupCode(transferCities[city]?.code || "");
+            } else {
+              setAirport(city);
+              setAirportCode(transferCities[city]?.code || "");
+            }
             setShowMobileFromDestination(false);
           }}
           context="hotels"
