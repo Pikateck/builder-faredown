@@ -423,14 +423,34 @@ export function FlightStyleBargainModal({
     setBargainPrice("");
   };
 
-  const handleAcceptCounterOffer = () => {
+  const handleAcceptCounterOffer = async () => {
     const finalPrice = bargainState.currentCounterOffer || 0;
+
+    // If this is a transfer and we have a session ID, accept the bargain via API
+    if (type === "transfer" && bargainState.sessionId) {
+      try {
+        const acceptResponse = await fetch("/api/transfers-bargain/session/accept", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId: bargainState.sessionId
+          })
+        });
+
+        if (acceptResponse.ok) {
+          const acceptData = await acceptResponse.json();
+          console.log("Transfer bargain accepted:", acceptData);
+        }
+      } catch (error) {
+        console.error("Failed to accept transfer bargain:", error);
+      }
+    }
 
     // Close modal immediately to prevent double-click issues
     onClose();
 
     if (onBookingSuccess) {
-      // For sightseeing: call the booking success callback
+      // Call the booking success callback with final price
       onBookingSuccess(finalPrice);
     } else {
       // For hotels: navigate to reservation page
