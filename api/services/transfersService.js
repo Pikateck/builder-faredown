@@ -1065,14 +1065,14 @@ class TransfersService {
       // Limit results
       destinations = destinations.slice(0, limit);
 
-      this.logger.info("Transfer destinations retrieved", {
+      this.logger.info("Transfer destinations retrieved from fallback", {
         query,
         count: destinations.length,
       });
 
       return {
         success: true,
-        data: { destinations },
+        destinations,
       };
     } catch (error) {
       this.logger.error("Failed to get transfer destinations", {
