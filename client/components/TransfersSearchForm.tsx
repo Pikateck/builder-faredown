@@ -1758,6 +1758,160 @@ export function TransfersSearchForm() {
               </Select>
             </div>
 
+            {/* Passengers Field for Car Rentals */}
+            <div className="flex-1 lg:max-w-[140px]">
+              {isMobile ? (
+                <Button
+                  variant="outline"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3 touch-manipulation"
+                  onClick={() => setShowMobilePassengers(true)}
+                >
+                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate text-xs sm:text-sm">
+                    {passengerSummary()}
+                  </span>
+                </Button>
+              ) : (
+                <Popover
+                  open={isPassengerPopoverOpen}
+                  onOpenChange={setIsPassengerPopoverOpen}
+                >
+                  <PopoverTrigger asChild>
+                    <div className="relative cursor-pointer">
+                      <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                      <Input
+                        type="text"
+                        value={passengerSummary()}
+                        readOnly
+                        className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm cursor-pointer touch-manipulation"
+                        placeholder="Passengers"
+                      />
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-4" align="start">
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-medium text-gray-900 mb-3">
+                          Passengers
+                        </h4>
+
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                Adults
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Age 18+
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (passengers.adults > 1) {
+                                    setPassengers({
+                                      ...passengers,
+                                      adults: passengers.adults - 1,
+                                    });
+                                  }
+                                }}
+                                disabled={passengers.adults <= 1}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="text-sm font-medium w-8 text-center">
+                                {passengers.adults}
+                              </span>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (passengers.adults < 8) {
+                                    setPassengers({
+                                      ...passengers,
+                                      adults: passengers.adults + 1,
+                                    });
+                                  }
+                                }}
+                                disabled={passengers.adults >= 8}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                Children
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Age 2-17
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (passengers.children > 0) {
+                                    const newChildrenAges = [
+                                      ...passengers.childrenAges,
+                                    ];
+                                    newChildrenAges.pop();
+                                    setPassengers({
+                                      ...passengers,
+                                      children: passengers.children - 1,
+                                      childrenAges: newChildrenAges,
+                                    });
+                                  }
+                                }}
+                                disabled={passengers.children <= 0}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="text-sm font-medium w-8 text-center">
+                                {passengers.children}
+                              </span>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (passengers.children < 6) {
+                                    setPassengers({
+                                      ...passengers,
+                                      children: passengers.children + 1,
+                                      childrenAges: [
+                                        ...passengers.childrenAges,
+                                        10,
+                                      ],
+                                    });
+                                  }
+                                }}
+                                disabled={passengers.children >= 6}
+                                className="h-8 w-8 p-0"
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
+
             {/* Search Button */}
             <div className="flex-shrink-0">
               <Button
