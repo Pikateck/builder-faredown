@@ -47,7 +47,7 @@ interface PassengerConfig {
 }
 
 type TransferMode = "airport" | "rental";
-type AirportDirection = "airport-to-hotel" | "hotel-to-airport" | "return";
+type AirportDirection = "pickup" | "return";
 
 export function TransfersSearchForm() {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export function TransfersSearchForm() {
 
   // Airport taxi states
   const [airportDirection, setAirportDirection] =
-    useState<AirportDirection>("airport-to-hotel");
+    useState<AirportDirection>("pickup");
   const [airport, setAirport] = useState("Mumbai Airport (BOM)");
   const [airportCode, setAirportCode] = useState("");
   const [hotel, setHotel] = useState("Hotel Taj Mahal Palace");
@@ -638,26 +638,15 @@ export function TransfersSearchForm() {
             {/* Direction Toggles - h-8, text-sm, px-3, mb-2 */}
             <div className="flex gap-2 mb-2">
               <button
-                onClick={() => setAirportDirection("airport-to-hotel")}
+                onClick={() => setAirportDirection("pickup")}
                 className={cn(
                   "h-8 text-xs sm:text-sm px-3 rounded-full font-medium border transition-colors",
-                  airportDirection === "airport-to-hotel"
+                  airportDirection === "pickup"
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-slate-600 border-slate-300 hover:border-slate-400",
                 )}
               >
-                Airport → Hotel
-              </button>
-              <button
-                onClick={() => setAirportDirection("hotel-to-airport")}
-                className={cn(
-                  "h-8 text-xs sm:text-sm px-3 rounded-full font-medium border transition-colors",
-                  airportDirection === "hotel-to-airport"
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-white text-slate-600 border-slate-300 hover:border-slate-400",
-                )}
-              >
-                Hotel → Airport
+                One-way
               </button>
               <button
                 onClick={() => setAirportDirection("return")}
@@ -679,7 +668,7 @@ export function TransfersSearchForm() {
                 <Popover open={isAirportOpen} onOpenChange={setIsAirportOpen}>
                   <PopoverTrigger asChild>
                     <div className="relative cursor-pointer">
-                      <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                       <Input
                         type="text"
                         value={
@@ -719,7 +708,7 @@ export function TransfersSearchForm() {
                           }
                         }}
                         className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
-                        placeholder="Departure airport"
+                        placeholder="Pick-up location"
                         autoComplete="off"
                       />
                       {(airport ||
@@ -814,7 +803,7 @@ export function TransfersSearchForm() {
                 <Popover open={isHotelOpen} onOpenChange={setIsHotelOpen}>
                   <PopoverTrigger asChild>
                     <div className="relative cursor-pointer">
-                      <Hotel className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 h-4 w-4 z-10" />
                       <Input
                         type="text"
                         value={
@@ -852,7 +841,7 @@ export function TransfersSearchForm() {
                           }
                         }}
                         className="pl-10 pr-8 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-blue-600 rounded text-xs sm:text-sm touch-manipulation relative z-10"
-                        placeholder="Hotel or address"
+                        placeholder="Destination"
                         autoComplete="off"
                       />
                       {(hotel || (isHotelUserTyping && hotelInputValue)) && (
