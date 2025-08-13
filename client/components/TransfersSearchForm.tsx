@@ -1913,7 +1913,7 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Search Button */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex justify-center lg:justify-start">
               <Button
                 onClick={handleSearch}
                 className="h-10 sm:h-12 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
