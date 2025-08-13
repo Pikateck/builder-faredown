@@ -157,8 +157,8 @@ export function TransfersSearchForm() {
   // Mobile-specific states
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
-  const [showMobileDestination, setShowMobileDestination] = useState(false);
-  const [showMobileTime, setShowMobileTime] = useState(false);
+  const [showMobileFromDestination, setShowMobileFromDestination] = useState(false);
+  const [showMobileToDestination, setShowMobileToDestination] = useState(false);
   const [showMobilePassengers, setShowMobilePassengers] = useState(false);
 
   // Detect mobile device
