@@ -2024,7 +2024,7 @@ export function TransfersSearchForm() {
           onSelectCity={(city) => {
             if (transferMode === "rental") {
               setPickupLocation(city);
-              setPickupCode(transferCities[city]?.code || "");
+              setPickupLocationCode(transferCities[city]?.code || "");
             } else {
               setAirport(city);
               setAirportCode(transferCities[city]?.code || "");
