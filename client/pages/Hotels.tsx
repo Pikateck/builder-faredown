@@ -222,11 +222,11 @@ export default function Hotels() {
             <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl">
               <div className="flex flex-col h-full">
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-[#003580]">
-                  <span className="text-lg font-bold text-white">Menu</span>
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                  <span className="text-lg font-bold text-gray-900">Menu</span>
                   <button
                     onClick={() => setShowMobileMenu(false)}
-                    className="p-2 text-white hover:bg-blue-700 rounded-lg"
+                    className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg"
                   >
                     <X className="w-5 h-5" />
                   </button>
