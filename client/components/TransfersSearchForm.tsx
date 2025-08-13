@@ -149,6 +149,17 @@ export function TransfersSearchForm() {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
 
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Debounced search refs
   const debouncedAirportSearchRef = useRef<NodeJS.Timeout>();
   const debouncedHotelSearchRef = useRef<NodeJS.Timeout>();
