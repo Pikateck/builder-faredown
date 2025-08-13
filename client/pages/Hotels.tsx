@@ -163,7 +163,7 @@ export default function Hotels() {
       {/* Mobile Layout (≤768px) - Match Index.tsx exactly */}
       <div className="md:hidden">
         {/* Mobile Header */}
-        <header className="bg-[#003580] text-white">
+        <header className="bg-white text-gray-900 border-b border-gray-200">
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
