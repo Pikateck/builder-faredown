@@ -22,8 +22,10 @@ const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 });
 
-// Database connection
-let pgPool;
+// Database connection with fallback
+let pgPool = null;
+let dbAvailable = false;
+
 try {
   const { Pool } = require("pg");
   pgPool = new Pool({
@@ -36,8 +38,11 @@ try {
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
   });
+  dbAvailable = true;
+  logger.info("Database pool initialized for transfers bargain");
 } catch (error) {
-  console.error("❌ Database pool initialization failed:", error);
+  logger.warn("Database pool initialization failed, using in-memory storage", { error: error.message });
+  dbAvailable = false;
 }
 
 // Transfers Bargain Engine
