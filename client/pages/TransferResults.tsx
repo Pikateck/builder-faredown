@@ -81,8 +81,10 @@ export default function TransferResults() {
   // Extract search parameters
   const pickupCode = searchParams.get("pickup") || "";
   const dropoffCode = searchParams.get("dropoff") || "";
-  const pickupLocation = searchParams.get("pickupLocation") || searchParams.get("pickup") || "";
-  const dropoffLocation = searchParams.get("dropoffLocation") || searchParams.get("dropoff") || "";
+  const pickupLocation =
+    searchParams.get("pickupLocation") || searchParams.get("pickup") || "";
+  const dropoffLocation =
+    searchParams.get("dropoffLocation") || searchParams.get("dropoff") || "";
   const pickupDate = searchParams.get("pickupDate") || "";
   const pickupTime = searchParams.get("pickupTime") || "10:00";
   const returnDate = searchParams.get("returnDate") || "";
@@ -538,9 +540,11 @@ export default function TransferResults() {
           adults: adults.toString(),
           children: children.toString(),
           infants: infants.toString(),
-          tripType: isRoundTrip ? "return" : "one-way"
+          tripType: isRoundTrip ? "return" : "one-way",
         });
-        navigate(`/transfer-details/${firstSelected.id}?${detailParams.toString()}`);
+        navigate(
+          `/transfer-details/${firstSelected.id}?${detailParams.toString()}`,
+        );
       }
     }
   };
@@ -1142,9 +1146,11 @@ export default function TransferResults() {
                               adults: adults.toString(),
                               children: children.toString(),
                               infants: infants.toString(),
-                              tripType: isRoundTrip ? "return" : "one-way"
+                              tripType: isRoundTrip ? "return" : "one-way",
                             });
-                            navigate(`/transfer-details/${transfer.id}?${detailParams.toString()}`);
+                            navigate(
+                              `/transfer-details/${transfer.id}?${detailParams.toString()}`,
+                            );
                           }}
                           className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >

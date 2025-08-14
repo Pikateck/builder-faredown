@@ -39,7 +39,8 @@ export default function AdminTestingDashboard() {
               🔴 Live API Testing Dashboard
             </h1>
             <p className="mt-2 text-gray-600">
-              Comprehensive API integration testing tools for Hotels, Transfers, Flights & Sightseeing
+              Comprehensive API integration testing tools for Hotels, Transfers,
+              Flights & Sightseeing
             </p>
           </div>
         </div>
@@ -53,7 +54,8 @@ export default function AdminTestingDashboard() {
             🎯 Live Integration Status
           </h2>
           <p className="text-gray-600 mb-4">
-            Real-time testing of Amadeus & Hotelbeds APIs for comprehensive travel services.
+            Real-time testing of Amadeus & Hotelbeds APIs for comprehensive
+            travel services.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -91,7 +93,8 @@ export default function AdminTestingDashboard() {
               🏨 Hotelbeds Hotels API Test
             </h3>
             <p className="text-sm text-gray-600 mb-4">
-              Test real hotel availability, pricing, and booking with Hotelbeds API
+              Test real hotel availability, pricing, and booking with Hotelbeds
+              API
             </p>
             <div className="space-y-3">
               <button className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">

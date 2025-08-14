@@ -978,7 +978,8 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
+                Turn your seat into an upgrade and your fare into a win, with AI
+                that bargains for you.
               </p>
             </div>
 
@@ -1344,7 +1345,8 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Experience more, spend less — our AI gets you the best price for every adventure.
+                Experience more, spend less — our AI gets you the best price for
+                every adventure.
               </p>
             </div>
 
@@ -1363,7 +1365,8 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Ride in comfort for less — AI secures your best deal on every trip.
+                Ride in comfort for less — AI secures your best deal on every
+                trip.
               </p>
             </div>
 
@@ -1383,7 +1386,8 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                From standard to suite, unlock room upgrades and rates you never thought possible.
+                From standard to suite, unlock room upgrades and rates you never
+                thought possible.
               </p>
             </div>
 
@@ -1667,7 +1671,8 @@ export default function Index() {
                   </h2>
                 </div>
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                  Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
+                  Turn your seat into an upgrade and your fare into a win, with
+                  AI that bargains for you.
                 </h1>
               </div>
 
@@ -2279,7 +2284,8 @@ export default function Index() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                From standard to suite, unlock room upgrades and rates you never thought possible.
+                From standard to suite, unlock room upgrades and rates you never
+                thought possible.
               </h1>
             </div>
 
@@ -2301,7 +2307,8 @@ export default function Index() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Experience more, spend less — our AI gets you the best price for every adventure.
+                Experience more, spend less — our AI gets you the best price for
+                every adventure.
               </h1>
             </div>
 
@@ -2323,7 +2330,8 @@ export default function Index() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Ride in comfort for less — AI secures your best deal on every trip.
+                Ride in comfort for less — AI secures your best deal on every
+                trip.
               </h1>
             </div>
 
@@ -2334,7 +2342,6 @@ export default function Index() {
 
         {/* Content sections shown for all tabs */}
         <div className="">
-
           {/* Desktop Content Sections */}
           {/* Why Choose Faredown Section */}
           <section className="py-16 bg-white">

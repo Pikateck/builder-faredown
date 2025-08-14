@@ -8,7 +8,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { BookingCalendar } from "@/components/BookingCalendar";
-import { MobileDatePicker, MobileTravelers, MobileCityDropdown } from "@/components/MobileDropdowns";
+import {
+  MobileDatePicker,
+  MobileTravelers,
+  MobileCityDropdown,
+} from "@/components/MobileDropdowns";
 import {
   Select,
   SelectContent,
@@ -56,8 +60,16 @@ export function TransfersSearchForm() {
   const [tripType, setTripType] = useState<TripType>("one-way");
 
   // Location states
-  const [pickup, setPickup] = useState<{ code: string; label: string; type: string } | null>(null);
-  const [dropoff, setDropoff] = useState<{ code: string; label: string; type: string } | null>(null);
+  const [pickup, setPickup] = useState<{
+    code: string;
+    label: string;
+    type: string;
+  } | null>(null);
+  const [dropoff, setDropoff] = useState<{
+    code: string;
+    label: string;
+    type: string;
+  } | null>(null);
 
   // Date states
   const [pickupDate, setPickupDate] = useState<Date | null>(null);
@@ -74,7 +86,8 @@ export function TransfersSearchForm() {
   });
 
   // Mobile dropdowns
-  const [showMobileFromDestination, setShowMobileFromDestination] = useState(false);
+  const [showMobileFromDestination, setShowMobileFromDestination] =
+    useState(false);
   const [showMobileToDestination, setShowMobileToDestination] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
   const [showMobilePassengers, setShowMobilePassengers] = useState(false);
@@ -86,7 +99,8 @@ export function TransfersSearchForm() {
   const [isReturnDateOpen, setIsReturnDateOpen] = useState(false);
   const [isPickupTimeOpen, setIsPickupTimeOpen] = useState(false);
   const [isReturnTimeOpen, setIsReturnTimeOpen] = useState(false);
-  const [isPassengersDropdownOpen, setIsPassengersDropdownOpen] = useState(false);
+  const [isPassengersDropdownOpen, setIsPassengersDropdownOpen] =
+    useState(false);
 
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
@@ -95,10 +109,10 @@ export function TransfersSearchForm() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Sample locations for transfers
@@ -110,21 +124,27 @@ export function TransfersSearchForm() {
     { code: "JFK", label: "New York JFK (JFK)", type: "airport" },
     { code: "taj-mumbai", label: "Hotel Taj Mahal Palace", type: "hotel" },
     { code: "oberoi-mumbai", label: "The Oberoi Mumbai", type: "hotel" },
-    { code: "mumbai-central", label: "Mumbai Central Station", type: "station" },
+    {
+      code: "mumbai-central",
+      label: "Mumbai Central Station",
+      type: "station",
+    },
     { code: "colaba", label: "Colaba District", type: "city" },
     { code: "downtown-dubai", label: "Downtown Dubai", type: "city" },
   ];
 
   // Time options
   const timeOptions = Array.from({ length: 24 }, (_, i) => {
-    const hour = i.toString().padStart(2, '0');
+    const hour = i.toString().padStart(2, "0");
     return { value: `${hour}:00`, label: `${hour}:00` };
   });
 
   // Handle search
   const handleSearch = () => {
     if (!pickup || !dropoff || !pickupDate) {
-      setErrorMessage("Please select pickup location, dropoff location, and pickup date");
+      setErrorMessage(
+        "Please select pickup location, dropoff location, and pickup date",
+      );
       setShowError(true);
       return;
     }
@@ -142,11 +162,11 @@ export function TransfersSearchForm() {
     searchParams.set("dropoff", dropoff.code);
     searchParams.set("pickupLocation", pickup.label);
     searchParams.set("dropoffLocation", dropoff.label);
-    searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
+    searchParams.set("pickupDate", pickupDate.toISOString().split("T")[0]);
     searchParams.set("pickupTime", pickupTime);
 
     if (tripType === "return" && returnDate) {
-      searchParams.set("returnDate", returnDate.toISOString().split('T')[0]);
+      searchParams.set("returnDate", returnDate.toISOString().split("T")[0]);
       searchParams.set("returnTime", returnTime);
     }
 
@@ -158,7 +178,8 @@ export function TransfersSearchForm() {
   };
 
   // Check if form is valid
-  const isFormValid = pickup && dropoff && pickupDate && (tripType === "one-way" || returnDate);
+  const isFormValid =
+    pickup && dropoff && pickupDate && (tripType === "one-way" || returnDate);
 
   if (isMobile) {
     // Mobile layout - simplified for small screens
@@ -169,7 +190,7 @@ export function TransfersSearchForm() {
           isVisible={showError}
           onClose={() => setShowError(false)}
         />
-        
+
         <div className="space-y-4">
           {/* Transfer Mode Tabs */}
           <div className="flex border-b border-gray-200 mb-4">
@@ -179,7 +200,7 @@ export function TransfersSearchForm() {
                 "flex-1 px-4 py-3 text-sm font-medium border-b-2 -mb-px",
                 transferMode === "airport"
                   ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500"
+                  : "border-transparent text-gray-500",
               )}
             >
               Airport taxi
@@ -190,7 +211,7 @@ export function TransfersSearchForm() {
                 "flex-1 px-4 py-3 text-sm font-medium border-b-2 -mb-px",
                 transferMode === "rental"
                   ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500"
+                  : "border-transparent text-gray-500",
               )}
             >
               Car rentals
@@ -229,7 +250,9 @@ export function TransfersSearchForm() {
               >
                 <Navigation className="w-5 h-5 text-blue-600" />
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">From pick-up location</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    From pick-up location
+                  </div>
                   <div className="font-medium text-gray-900">
                     {pickup ? pickup.label : "Enter pick-up location"}
                   </div>
@@ -245,7 +268,9 @@ export function TransfersSearchForm() {
               >
                 <MapPin className="w-5 h-5 text-blue-600" />
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">Enter destination</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    Enter destination
+                  </div>
                   <div className="font-medium text-gray-900">
                     {dropoff ? dropoff.label : "Enter destination"}
                   </div>
@@ -262,10 +287,14 @@ export function TransfersSearchForm() {
                 <CalendarIcon className="w-5 h-5 text-blue-600" />
                 <div className="flex-1">
                   <div className="text-xs text-gray-500 mb-1">
-                    {tripType === "return" ? "Pick-up and return dates" : "Pick-up date"}
+                    {tripType === "return"
+                      ? "Pick-up and return dates"
+                      : "Pick-up date"}
                   </div>
                   <div className="font-medium text-gray-900">
-                    {pickupDate ? format(pickupDate, "EEE, MMM d") : "Add dates"}
+                    {pickupDate
+                      ? format(pickupDate, "EEE, MMM d")
+                      : "Add dates"}
                     {tripType === "return" && returnDate && (
                       <span> - {format(returnDate, "EEE, MMM d")}</span>
                     )}
@@ -282,9 +311,12 @@ export function TransfersSearchForm() {
               >
                 <Users className="w-5 h-5 text-blue-600" />
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">No. of passengers</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    No. of passengers
+                  </div>
                   <div className="font-medium text-gray-900">
-                    {passengers.adults + passengers.children} passenger{passengers.adults + passengers.children !== 1 ? 's' : ''}
+                    {passengers.adults + passengers.children} passenger
+                    {passengers.adults + passengers.children !== 1 ? "s" : ""}
                   </div>
                 </div>
               </button>
@@ -337,13 +369,18 @@ export function TransfersSearchForm() {
           isOpen={showMobileFromDestination}
           onClose={() => setShowMobileFromDestination(false)}
           title="Select pickup location"
-          cities={transferLocations.reduce((acc, loc) => {
-            acc[loc.label] = { code: loc.code, name: loc.label };
-            return acc;
-          }, {} as Record<string, { code: string; name: string }>)}
+          cities={transferLocations.reduce(
+            (acc, loc) => {
+              acc[loc.label] = { code: loc.code, name: loc.label };
+              return acc;
+            },
+            {} as Record<string, { code: string; name: string }>,
+          )}
           selectedCity={pickup?.label || ""}
           onSelectCity={(cityLabel) => {
-            const location = transferLocations.find(loc => loc.label === cityLabel);
+            const location = transferLocations.find(
+              (loc) => loc.label === cityLabel,
+            );
             if (location) {
               setPickup(location);
             }
@@ -356,13 +393,18 @@ export function TransfersSearchForm() {
           isOpen={showMobileToDestination}
           onClose={() => setShowMobileToDestination(false)}
           title="Select drop-off location"
-          cities={transferLocations.reduce((acc, loc) => {
-            acc[loc.label] = { code: loc.code, name: loc.label };
-            return acc;
-          }, {} as Record<string, { code: string; name: string }>)}
+          cities={transferLocations.reduce(
+            (acc, loc) => {
+              acc[loc.label] = { code: loc.code, name: loc.label };
+              return acc;
+            },
+            {} as Record<string, { code: string; name: string }>,
+          )}
           selectedCity={dropoff?.label || ""}
           onSelectCity={(cityLabel) => {
-            const location = transferLocations.find(loc => loc.label === cityLabel);
+            const location = transferLocations.find(
+              (loc) => loc.label === cityLabel,
+            );
             if (location) {
               setDropoff(location);
             }
@@ -392,7 +434,7 @@ export function TransfersSearchForm() {
               "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-all duration-200",
               transferMode === "airport"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                : "border-transparent text-gray-500 hover:text-gray-700",
             )}
           >
             Airport taxi
@@ -403,7 +445,7 @@ export function TransfersSearchForm() {
               "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-all duration-200",
               transferMode === "rental"
                 ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                : "border-transparent text-gray-500 hover:text-gray-700",
             )}
           >
             Car rentals
@@ -434,26 +476,35 @@ export function TransfersSearchForm() {
 
         {/* Search Form - Compact Layout */}
         <div className="space-y-3">
-          
           {/* Top Row - Locations */}
           <div className="grid grid-cols-12 gap-2">
             {/* Pick-up Location */}
             <div className="col-span-6">
-              <Popover open={isPickupDropdownOpen} onOpenChange={setIsPickupDropdownOpen}>
+              <Popover
+                open={isPickupDropdownOpen}
+                onOpenChange={setIsPickupDropdownOpen}
+              >
                 <PopoverTrigger asChild>
                   <div className="relative cursor-pointer border border-gray-300 rounded-l-lg h-12 hover:border-gray-400 bg-white border-r-0">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                       <Navigation className="w-4 h-4 text-gray-600" />
                     </div>
                     <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500">From pick-up location</div>
+                      <div className="text-xs text-gray-500">
+                        From pick-up location
+                      </div>
                       <div className="text-sm font-medium text-gray-900 truncate">
-                        {pickup ? pickup.label.split('(')[0].trim() : "Enter pick-up location"}
+                        {pickup
+                          ? pickup.label.split("(")[0].trim()
+                          : "Enter pick-up location"}
                       </div>
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-80 p-0 border shadow-lg" align="start">
+                <PopoverContent
+                  className="w-80 p-0 border shadow-lg"
+                  align="start"
+                >
                   <div className="max-h-64 overflow-y-auto">
                     {transferLocations.map((location) => (
                       <button
@@ -466,9 +517,13 @@ export function TransfersSearchForm() {
                       >
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            {location.type === 'airport' ? <Plane className="h-4 w-4 text-blue-600" /> :
-                             location.type === 'hotel' ? <Hotel className="h-4 w-4 text-blue-600" /> :
-                             <MapPin className="h-4 w-4 text-blue-600" />}
+                            {location.type === "airport" ? (
+                              <Plane className="h-4 w-4 text-blue-600" />
+                            ) : location.type === "hotel" ? (
+                              <Hotel className="h-4 w-4 text-blue-600" />
+                            ) : (
+                              <MapPin className="h-4 w-4 text-blue-600" />
+                            )}
                           </div>
                           <div>
                             <div className="font-medium text-gray-900 text-sm">
@@ -488,21 +543,31 @@ export function TransfersSearchForm() {
 
             {/* Drop-off Location */}
             <div className="col-span-6">
-              <Popover open={isDropoffDropdownOpen} onOpenChange={setIsDropoffDropdownOpen}>
+              <Popover
+                open={isDropoffDropdownOpen}
+                onOpenChange={setIsDropoffDropdownOpen}
+              >
                 <PopoverTrigger asChild>
                   <div className="relative cursor-pointer border border-gray-300 rounded-r-lg h-12 hover:border-gray-400 bg-white border-l-0">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                       <MapPin className="w-4 h-4 text-gray-600" />
                     </div>
                     <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500">Enter destination</div>
+                      <div className="text-xs text-gray-500">
+                        Enter destination
+                      </div>
                       <div className="text-sm font-medium text-gray-900 truncate">
-                        {dropoff ? dropoff.label.split('(')[0].trim() : "Enter destination"}
+                        {dropoff
+                          ? dropoff.label.split("(")[0].trim()
+                          : "Enter destination"}
                       </div>
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-80 p-0 border shadow-lg" align="start">
+                <PopoverContent
+                  className="w-80 p-0 border shadow-lg"
+                  align="start"
+                >
                   <div className="max-h-64 overflow-y-auto">
                     {transferLocations.map((location) => (
                       <button
@@ -515,9 +580,13 @@ export function TransfersSearchForm() {
                       >
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            {location.type === 'airport' ? <Plane className="h-4 w-4 text-blue-600" /> :
-                             location.type === 'hotel' ? <Hotel className="h-4 w-4 text-blue-600" /> :
-                             <MapPin className="h-4 w-4 text-blue-600" />}
+                            {location.type === "airport" ? (
+                              <Plane className="h-4 w-4 text-blue-600" />
+                            ) : location.type === "hotel" ? (
+                              <Hotel className="h-4 w-4 text-blue-600" />
+                            ) : (
+                              <MapPin className="h-4 w-4 text-blue-600" />
+                            )}
                           </div>
                           <div>
                             <div className="font-medium text-gray-900 text-sm">
@@ -540,7 +609,10 @@ export function TransfersSearchForm() {
           <div className="grid grid-cols-12 gap-2">
             {/* Pickup Date */}
             <div className="col-span-2">
-              <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+              <Popover
+                open={isPickupDateOpen}
+                onOpenChange={setIsPickupDateOpen}
+              >
                 <PopoverTrigger asChild>
                   <div className="relative cursor-pointer border border-gray-300 rounded-l-lg h-12 hover:border-gray-400 bg-white border-r-0">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -551,18 +623,32 @@ export function TransfersSearchForm() {
                         {tripType === "return" ? "Pick-up date" : "Date"}
                       </div>
                       <div className="text-sm font-medium text-gray-900">
-                        {pickupDate ? format(pickupDate, "EEE, MMM d") : "Add date"}
+                        {pickupDate
+                          ? format(pickupDate, "EEE, MMM d")
+                          : "Add date"}
                       </div>
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start" side="bottom">
+                <PopoverContent
+                  className="w-auto p-0"
+                  align="start"
+                  side="bottom"
+                >
                   <BookingCalendar
                     onChange={({ startDate, endDate }) => {
                       if (startDate) setPickupDate(startDate);
-                      if (endDate && tripType === "return") setReturnDate(endDate);
+                      if (endDate && tripType === "return")
+                        setReturnDate(endDate);
                     }}
-                    initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
+                    initialRange={
+                      pickupDate
+                        ? {
+                            startDate: pickupDate,
+                            endDate: returnDate || addDays(pickupDate, 3),
+                          }
+                        : undefined
+                    }
                     onClose={() => setIsPickupDateOpen(false)}
                     bookingType="transfers"
                   />
@@ -573,7 +659,10 @@ export function TransfersSearchForm() {
             {/* Return Date (if return trip) */}
             {tripType === "return" && (
               <div className="col-span-2">
-                <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+                <Popover
+                  open={isReturnDateOpen}
+                  onOpenChange={setIsReturnDateOpen}
+                >
                   <PopoverTrigger asChild>
                     <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0 border-r-0">
                       <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -582,18 +671,31 @@ export function TransfersSearchForm() {
                       <div className="pl-10 pr-3 h-full flex flex-col justify-center">
                         <div className="text-xs text-gray-500">Return date</div>
                         <div className="text-sm font-medium text-gray-900">
-                          {returnDate ? format(returnDate, "EEE, MMM d") : "Add date"}
+                          {returnDate
+                            ? format(returnDate, "EEE, MMM d")
+                            : "Add date"}
                         </div>
                       </div>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start" side="bottom">
+                  <PopoverContent
+                    className="w-auto p-0"
+                    align="start"
+                    side="bottom"
+                  >
                     <BookingCalendar
                       onChange={({ startDate, endDate }) => {
                         if (startDate) setPickupDate(startDate);
                         if (endDate) setReturnDate(endDate);
                       }}
-                      initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
+                      initialRange={
+                        pickupDate
+                          ? {
+                              startDate: pickupDate,
+                              endDate: returnDate || addDays(pickupDate, 3),
+                            }
+                          : undefined
+                      }
                       onClose={() => setIsReturnDateOpen(false)}
                       bookingType="transfers"
                     />
@@ -604,7 +706,10 @@ export function TransfersSearchForm() {
 
             {/* Going Time */}
             <div className="col-span-1">
-              <Popover open={isPickupTimeOpen} onOpenChange={setIsPickupTimeOpen}>
+              <Popover
+                open={isPickupTimeOpen}
+                onOpenChange={setIsPickupTimeOpen}
+              >
                 <PopoverTrigger asChild>
                   <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0 border-r-0">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -620,7 +725,10 @@ export function TransfersSearchForm() {
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
+                <PopoverContent
+                  className="w-48 p-2 max-h-64 overflow-y-auto"
+                  align="start"
+                >
                   <div className="grid grid-cols-2 gap-1">
                     {timeOptions.map((time) => (
                       <button
@@ -642,7 +750,10 @@ export function TransfersSearchForm() {
             {/* Coming Time (if return trip) */}
             {tripType === "return" && (
               <div className="col-span-1">
-                <Popover open={isReturnTimeOpen} onOpenChange={setIsReturnTimeOpen}>
+                <Popover
+                  open={isReturnTimeOpen}
+                  onOpenChange={setIsReturnTimeOpen}
+                >
                   <PopoverTrigger asChild>
                     <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0 border-r-0">
                       <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -656,7 +767,10 @@ export function TransfersSearchForm() {
                       </div>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
+                  <PopoverContent
+                    className="w-48 p-2 max-h-64 overflow-y-auto"
+                    align="start"
+                  >
                     <div className="grid grid-cols-2 gap-1">
                       {timeOptions.map((time) => (
                         <button
@@ -677,8 +791,15 @@ export function TransfersSearchForm() {
             )}
 
             {/* Passengers */}
-            <div className={cn(tripType === "one-way" ? "col-span-8" : "col-span-6")}>
-              <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
+            <div
+              className={cn(
+                tripType === "one-way" ? "col-span-8" : "col-span-6",
+              )}
+            >
+              <Popover
+                open={isPassengersDropdownOpen}
+                onOpenChange={setIsPassengersDropdownOpen}
+              >
                 <PopoverTrigger asChild>
                   <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -692,11 +813,16 @@ export function TransfersSearchForm() {
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-64 p-4 border shadow-lg" align="start">
+                <PopoverContent
+                  className="w-64 p-4 border shadow-lg"
+                  align="start"
+                >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">Adults</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          Adults
+                        </div>
                         <div className="text-xs text-gray-500">Age 18+</div>
                       </div>
                       <div className="flex items-center space-x-3">
@@ -704,7 +830,10 @@ export function TransfersSearchForm() {
                           type="button"
                           onClick={() => {
                             if (passengers.adults > 1) {
-                              setPassengers({...passengers, adults: passengers.adults - 1});
+                              setPassengers({
+                                ...passengers,
+                                adults: passengers.adults - 1,
+                              });
                             }
                           }}
                           disabled={passengers.adults <= 1}
@@ -712,12 +841,17 @@ export function TransfersSearchForm() {
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <span className="text-sm font-medium w-8 text-center">{passengers.adults}</span>
+                        <span className="text-sm font-medium w-8 text-center">
+                          {passengers.adults}
+                        </span>
                         <button
                           type="button"
                           onClick={() => {
                             if (passengers.adults < 8) {
-                              setPassengers({...passengers, adults: passengers.adults + 1});
+                              setPassengers({
+                                ...passengers,
+                                adults: passengers.adults + 1,
+                              });
                             }
                           }}
                           disabled={passengers.adults >= 8}
@@ -730,7 +864,9 @@ export function TransfersSearchForm() {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-sm font-medium text-gray-900">Children</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          Children
+                        </div>
                         <div className="text-xs text-gray-500">Age 2-17</div>
                       </div>
                       <div className="flex items-center space-x-3">
@@ -740,7 +876,11 @@ export function TransfersSearchForm() {
                             if (passengers.children > 0) {
                               const newAges = [...passengers.childrenAges];
                               newAges.pop();
-                              setPassengers({...passengers, children: passengers.children - 1, childrenAges: newAges});
+                              setPassengers({
+                                ...passengers,
+                                children: passengers.children - 1,
+                                childrenAges: newAges,
+                              });
                             }
                           }}
                           disabled={passengers.children <= 0}
@@ -748,7 +888,9 @@ export function TransfersSearchForm() {
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <span className="text-sm font-medium w-8 text-center">{passengers.children}</span>
+                        <span className="text-sm font-medium w-8 text-center">
+                          {passengers.children}
+                        </span>
                         <button
                           type="button"
                           onClick={() => {
@@ -756,7 +898,7 @@ export function TransfersSearchForm() {
                               setPassengers({
                                 ...passengers,
                                 children: passengers.children + 1,
-                                childrenAges: [...passengers.childrenAges, 10]
+                                childrenAges: [...passengers.childrenAges, 10],
                               });
                             }
                           }}

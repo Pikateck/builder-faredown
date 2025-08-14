@@ -24,7 +24,8 @@ export default function Sightseeing() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Experience more, spend less — our AI gets you the best price for every adventure.
+                Experience more, spend less — our AI gets you the best price for
+                every adventure.
               </p>
             </div>
 
@@ -48,7 +49,8 @@ export default function Sightseeing() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Experience more, spend less — our AI gets you the best price for every adventure.
+                Experience more, spend less — our AI gets you the best price for
+                every adventure.
               </h1>
             </div>
 

@@ -33,7 +33,8 @@ export default function Transfers() {
               Upgrade. Bargain. Book.
             </h1>
             <p className="text-blue-200 text-sm md:text-base">
-              Ride in comfort for less — AI secures your best deal on every trip.
+              Ride in comfort for less — AI secures your best deal on every
+              trip.
             </p>
           </div>
           <TransfersSearchForm />

@@ -18,13 +18,25 @@ const Bookings: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   // Initialize tab from URL parameter
-  const getInitialTab = (): "all" | "flights" | "hotels" | "sightseeing" | "transfers" => {
+  const getInitialTab = ():
+    | "all"
+    | "flights"
+    | "hotels"
+    | "sightseeing"
+    | "transfers" => {
     const tabParam = searchParams.get("tab");
     if (
       tabParam &&
-      ["all", "flights", "hotels", "sightseeing", "transfers"].includes(tabParam)
+      ["all", "flights", "hotels", "sightseeing", "transfers"].includes(
+        tabParam,
+      )
     ) {
-      return tabParam as "all" | "flights" | "hotels" | "sightseeing" | "transfers";
+      return tabParam as
+        | "all"
+        | "flights"
+        | "hotels"
+        | "sightseeing"
+        | "transfers";
     }
     return "all";
   };
@@ -45,9 +57,13 @@ const Bookings: React.FC = () => {
     const tabParam = searchParams.get("tab");
     if (
       tabParam &&
-      ["all", "flights", "hotels", "sightseeing", "transfers"].includes(tabParam)
+      ["all", "flights", "hotels", "sightseeing", "transfers"].includes(
+        tabParam,
+      )
     ) {
-      setActiveTab(tabParam as "all" | "flights" | "hotels" | "sightseeing" | "transfers");
+      setActiveTab(
+        tabParam as "all" | "flights" | "hotels" | "sightseeing" | "transfers",
+      );
     }
   }, [searchParams]);
 
@@ -645,9 +661,7 @@ const Bookings: React.FC = () => {
                       </div>
                     </div>
                     <div>
-                      <span className="text-gray-500 text-sm block">
-                        Route
-                      </span>
+                      <span className="text-gray-500 text-sm block">Route</span>
                       <p className="font-medium text-gray-900">
                         {booking.route}
                       </p>

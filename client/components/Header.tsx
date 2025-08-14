@@ -187,9 +187,7 @@ export function Header({ className }: HeaderProps) {
                       <div className="w-4 h-4 mr-2 text-red-500">🔴</div>
                       Live API Test
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => navigate("/admin/login")}
-                    >
+                    <DropdownMenuItem onClick={() => navigate("/admin/login")}>
                       <div className="w-4 h-4 mr-2 text-blue-500">🤖</div>
                       AI Admin Tool
                     </DropdownMenuItem>

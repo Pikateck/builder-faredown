@@ -49,9 +49,9 @@ interface Trip {
 export default function MyTrips() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
-  const [filterType, setFilterType] = useState<"all" | "flight" | "hotel" | "sightseeing" | "transfer">(
-    "all",
-  );
+  const [filterType, setFilterType] = useState<
+    "all" | "flight" | "hotel" | "sightseeing" | "transfer"
+  >("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -702,12 +702,32 @@ Thank you for choosing Faredown!
           ) : trip.bookingType === "hotel" ? (
             <Hotel className="w-5 h-5 text-green-600 mr-2" />
           ) : trip.bookingType === "sightseeing" ? (
-            <svg className="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            <svg
+              className="w-5 h-5 text-purple-600 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
             </svg>
           ) : (
-            <svg className="w-5 h-5 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            <svg
+              className="w-5 h-5 text-emerald-600 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+              />
             </svg>
           )}
           <div>
@@ -726,7 +746,13 @@ Thank you for choosing Faredown!
         <Badge
           variant={trip.bookingType === "flight" ? "default" : "secondary"}
         >
-          {trip.bookingType === "flight" ? "Flight" : trip.bookingType === "hotel" ? "Hotel" : trip.bookingType === "sightseeing" ? "Sightseeing" : "Transfer"}
+          {trip.bookingType === "flight"
+            ? "Flight"
+            : trip.bookingType === "hotel"
+              ? "Hotel"
+              : trip.bookingType === "sightseeing"
+                ? "Sightseeing"
+                : "Transfer"}
         </Badge>
       </div>
 
@@ -778,16 +804,22 @@ Thank you for choosing Faredown!
         // Sightseeing Trip Details
         <div className="space-y-3">
           <div className="bg-purple-50 p-3 rounded-lg">
-            <h4 className="font-medium text-gray-900">{trip.name || "Sightseeing Experience"}</h4>
+            <h4 className="font-medium text-gray-900">
+              {trip.name || "Sightseeing Experience"}
+            </h4>
             <div className="flex items-start mt-1">
               <MapPin className="w-4 h-4 text-gray-500 mr-1 mt-0.5" />
-              <p className="text-sm text-gray-600">{trip.location || "Location not specified"}</p>
+              <p className="text-sm text-gray-600">
+                {trip.location || "Location not specified"}
+              </p>
             </div>
           </div>
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center text-gray-600">
               <CalendarDays className="w-4 h-4 mr-1" />
-              {trip.visitDate ? formatDate(trip.visitDate) : "Date not available"}
+              {trip.visitDate
+                ? formatDate(trip.visitDate)
+                : "Date not available"}
             </div>
             <div className="flex items-center text-gray-600">
               <Clock className="w-4 h-4 mr-1" />
@@ -810,16 +842,22 @@ Thank you for choosing Faredown!
         // Transfer Trip Details
         <div className="space-y-3">
           <div className="bg-emerald-50 p-3 rounded-lg">
-            <h4 className="font-medium text-gray-900">{trip.service || "Transfer Service"}</h4>
+            <h4 className="font-medium text-gray-900">
+              {trip.service || "Transfer Service"}
+            </h4>
             <div className="flex items-start mt-1">
               <MapPin className="w-4 h-4 text-gray-500 mr-1 mt-0.5" />
-              <p className="text-sm text-gray-600">{trip.route || "Route not specified"}</p>
+              <p className="text-sm text-gray-600">
+                {trip.route || "Route not specified"}
+              </p>
             </div>
           </div>
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center text-gray-600">
               <CalendarDays className="w-4 h-4 mr-1" />
-              {trip.pickupDate ? formatDate(trip.pickupDate) : "Date not available"}
+              {trip.pickupDate
+                ? formatDate(trip.pickupDate)
+                : "Date not available"}
             </div>
             <div className="flex items-center text-gray-600">
               <Clock className="w-4 h-4 mr-1" />
@@ -954,8 +992,18 @@ Thank you for choosing Faredown!
                 variant={filterType === "sightseeing" ? "default" : "outline"}
                 size="sm"
               >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
                 </svg>
                 Sightseeing
               </Button>
@@ -964,8 +1012,18 @@ Thank you for choosing Faredown!
                 variant={filterType === "transfer" ? "default" : "outline"}
                 size="sm"
               >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                <svg
+                  className="w-4 h-4 mr-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                  />
                 </svg>
                 Transfers
               </Button>

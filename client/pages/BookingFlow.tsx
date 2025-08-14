@@ -349,7 +349,10 @@ const SeatMap = ({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (selectedTraveller === traveller.id && currentFlight === flightLeg) {
+                      if (
+                        selectedTraveller === traveller.id &&
+                        currentFlight === flightLeg
+                      ) {
                         // If already selected, toggle closed
                         setSelectedTraveller(null);
                         setExpandedFlight(null);
