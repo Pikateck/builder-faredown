@@ -237,10 +237,14 @@ export function BookingCalendar({
         }
 
         .booking-calendar .rdrMonthAndYearWrapper {
-          padding: 24px 32px 16px;
+          padding: 16px 20px 12px;
           position: relative;
           background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
           border-bottom: 1px solid #e5e7eb;
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         }
 
         .booking-calendar .rdrMonthAndYearPickers,
