@@ -29,7 +29,7 @@ import {
   Car,
   Plane,
   Hotel,
-  ArrowRightLeft,
+  ArrowRight,
   Building2,
   Settings,
 } from "lucide-react";
@@ -81,6 +81,7 @@ export function TransfersSearchForm() {
   const [showMobileToDestination, setShowMobileToDestination] = useState(false);
   const [showMobileDatePicker, setShowMobileDatePicker] = useState(false);
   const [showMobilePassengers, setShowMobilePassengers] = useState(false);
+  const [showMobileVehicleType, setShowMobileVehicleType] = useState(false);
 
   // Calendar states
   const [isPickupDateOpen, setIsPickupDateOpen] = useState(false);
@@ -206,7 +207,7 @@ export function TransfersSearchForm() {
   const isFormValid = pickup && dropoff && pickupDate && (tripType === "one-way" || returnDate);
 
   if (isMobile) {
-    // Mobile layout with dropdowns
+    // Mobile layout matching flights exactly
     return (
       <>
         <ErrorBanner
@@ -216,61 +217,44 @@ export function TransfersSearchForm() {
         />
         
         <div className="space-y-3">
-          {/* Mobile Mode Selector - matching Flights trip type selector */}
-          <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
+          {/* Trip Type Selector - exactly like flights */}
+          <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
             <button
-              onClick={() => setTransferMode("airport")}
+              onClick={() => setTripType("one-way")}
               className={cn(
-                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
-                transferMode === "airport"
+                "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                tripType === "one-way"
                   ? "bg-[#003580] text-white"
                   : "text-gray-600 hover:text-gray-900",
               )}
             >
-              Airport taxi
+              One way
             </button>
             <button
-              onClick={() => setTransferMode("rental")}
+              onClick={() => setTripType("return")}
               className={cn(
-                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
+                "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                tripType === "return"
+                  ? "bg-[#003580] text-white"
+                  : "text-gray-600 hover:text-gray-900",
+              )}
+            >
+              Return
+            </button>
+            <button
+              onClick={() => setTransferMode(transferMode === "airport" ? "rental" : "airport")}
+              className={cn(
+                "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
                 transferMode === "rental"
                   ? "bg-[#003580] text-white"
                   : "text-gray-600 hover:text-gray-900",
               )}
             >
-              Car rentals
+              {transferMode === "airport" ? "Taxi" : "Rental"}
             </button>
           </div>
 
-          {/* Trip Type Selector for Airport Taxi */}
-          {transferMode === "airport" && (
-            <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
-              <button
-                onClick={() => setTripType("one-way")}
-                className={cn(
-                  "py-1 px-3 rounded-md text-xs font-medium transition-colors",
-                  tripType === "one-way"
-                    ? "bg-[#003580] text-white"
-                    : "text-gray-600 hover:text-gray-900",
-                )}
-              >
-                One-way
-              </button>
-              <button
-                onClick={() => setTripType("return")}
-                className={cn(
-                  "py-1 px-3 rounded-md text-xs font-medium transition-colors",
-                  tripType === "return"
-                    ? "bg-[#003580] text-white"
-                    : "text-gray-600 hover:text-gray-900",
-                )}
-              >
-                Return
-              </button>
-            </div>
-          )}
-
-          {/* Pickup/Dropoff Card - matching Flights From/To layout */}
+          {/* From/To Locations - exactly like flights */}
           <div className="bg-white rounded-xl p-4 shadow-sm">
             <div className="flex items-center space-x-3">
               <div className="flex-1">
@@ -278,7 +262,7 @@ export function TransfersSearchForm() {
                   onClick={() => setShowMobileFromDestination(true)}
                   className="w-full text-left"
                 >
-                  <div className="text-xs text-gray-500 mb-1">Pick-up</div>
+                  <div className="text-xs text-gray-500 mb-1">From</div>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                       <MapPin className="w-4 h-4 text-[#003580]" />
@@ -286,16 +270,16 @@ export function TransfersSearchForm() {
                     <div>
                       {pickup ? (
                         <>
-                          <div className="font-medium text-gray-900 text-sm">
-                            {pickup.label}
+                          <div className="font-medium text-gray-900">
+                            {pickup.code}
                           </div>
-                          <div className="text-xs text-gray-500 capitalize">
-                            {pickup.type}
+                          <div className="text-xs text-gray-500">
+                            {pickup.label}
                           </div>
                         </>
                       ) : (
                         <div className="text-sm text-gray-500">
-                          Pick-up location
+                          Pickup location
                         </div>
                       )}
                     </div>
@@ -307,7 +291,7 @@ export function TransfersSearchForm() {
                 onClick={swapLocations}
                 className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
-                <ArrowRightLeft className="w-4 h-4 text-gray-500" />
+                <ArrowRight className="w-4 h-4 text-gray-500" />
               </button>
 
               <div className="flex-1">
@@ -315,7 +299,7 @@ export function TransfersSearchForm() {
                   onClick={() => setShowMobileToDestination(true)}
                   className="w-full text-left"
                 >
-                  <div className="text-xs text-gray-500 mb-1">Drop-off</div>
+                  <div className="text-xs text-gray-500 mb-1">To</div>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                       <Building2 className="w-4 h-4 text-[#003580]" />
@@ -323,11 +307,11 @@ export function TransfersSearchForm() {
                     <div>
                       {dropoff ? (
                         <>
-                          <div className="font-medium text-gray-900 text-sm">
-                            {dropoff.label}
+                          <div className="font-medium text-gray-900">
+                            {dropoff.code}
                           </div>
-                          <div className="text-xs text-gray-500 capitalize">
-                            {dropoff.type}
+                          <div className="text-xs text-gray-500">
+                            {dropoff.label}
                           </div>
                         </>
                       ) : (
@@ -342,14 +326,14 @@ export function TransfersSearchForm() {
             </div>
           </div>
 
-          {/* Pickup Date & Time Card */}
+          {/* Dates - exactly like flights */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
             <button
               onClick={() => setShowMobileDatePicker(true)}
               className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
             >
               <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
-                Pick-up Date & Time
+                Dates
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -357,44 +341,29 @@ export function TransfersSearchForm() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-semibold text-gray-900 text-base leading-tight">
-                    {pickupDate ? format(pickupDate, "dd MMM") : "Select date"} at {pickupTime}
+                    {pickupDate
+                      ? format(pickupDate, "dd MMM")
+                      : "Select pickup date"}
+                    {tripType === "return" && (
+                      <>
+                        <span className="mx-2 text-gray-400">—</span>
+                        {returnDate
+                          ? format(returnDate, "dd MMM")
+                          : "Select return"}
+                      </>
+                    )}
                   </div>
                   <div className="text-sm text-gray-500 mt-1">
-                    Choose pickup date and time
+                    {tripType === "return"
+                      ? "Add pickup and return dates"
+                      : "Add pickup date"}
                   </div>
                 </div>
               </div>
             </button>
           </div>
 
-          {/* Return Date & Time Card (only for return trips) */}
-          {transferMode === "airport" && tripType === "return" && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
-              <button
-                onClick={() => setShowMobileDatePicker(true)}
-                className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
-              >
-                <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
-                  Return Date & Time
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <CalendarIcon className="w-5 h-5 text-[#003580]" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="font-semibold text-gray-900 text-base leading-tight">
-                      {returnDate ? format(returnDate, "dd MMM") : "Select date"} at {returnTime}
-                    </div>
-                    <div className="text-sm text-gray-500 mt-1">
-                      Choose return date and time
-                    </div>
-                  </div>
-                </div>
-              </button>
-            </div>
-          )}
-
-          {/* Travelers & Vehicle Type - 2 column grid */}
+          {/* Travelers & Vehicle Type - exactly like flights */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white rounded-xl p-4 shadow-sm">
               <button
@@ -409,7 +378,9 @@ export function TransfersSearchForm() {
                       {passengers.adults + passengers.children}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {passengerSummary()}
+                      {passengers.adults} adult{passengers.adults > 1 ? "s" : ""}
+                      {passengers.children > 0 &&
+                        `, ${passengers.children} child${passengers.children > 1 ? "ren" : ""}`}
                     </div>
                   </div>
                 </div>
@@ -417,7 +388,10 @@ export function TransfersSearchForm() {
             </div>
 
             <div className="bg-white rounded-xl p-4 shadow-sm">
-              <button className="w-full text-left">
+              <button
+                onClick={() => setShowMobileVehicleType(true)}
+                className="w-full text-left"
+              >
                 <div className="text-xs text-gray-500 mb-1">Vehicle</div>
                 <div className="flex items-center space-x-2">
                   <Car className="w-5 h-5 text-[#003580]" />
@@ -434,7 +408,7 @@ export function TransfersSearchForm() {
             </div>
           </div>
 
-          {/* Search Button - matching Flights exactly */}
+          {/* Search Button - exactly like flights */}
           <Button
             onClick={handleSearch}
             disabled={!isFormValid}
@@ -480,7 +454,7 @@ export function TransfersSearchForm() {
         <MobileCityDropdown
           isOpen={showMobileFromDestination}
           onClose={() => setShowMobileFromDestination(false)}
-          title="Select pick-up location"
+          title="Select pickup location"
           cities={transferLocations.reduce((acc, loc) => {
             acc[loc.label] = { code: loc.code, name: loc.label };
             return acc;
@@ -518,7 +492,7 @@ export function TransfersSearchForm() {
     );
   }
 
-  // Desktop layout - similar card structure
+  // Desktop layout - similar card structure to flights
   return (
     <>
       <ErrorBanner
@@ -528,62 +502,45 @@ export function TransfersSearchForm() {
       />
       
       <div className="w-full mx-auto rounded-2xl bg-white shadow-md border border-slate-200 px-3 py-3 max-w-screen-xl">
-        {/* Mode Selector - exact Flights styling */}
-        <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
+        {/* Trip Type Selector - exactly like flights */}
+        <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
           <button
-            onClick={() => setTransferMode("airport")}
+            onClick={() => setTripType("one-way")}
             className={cn(
-              "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
-              transferMode === "airport"
+              "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+              tripType === "one-way"
                 ? "bg-[#003580] text-white"
                 : "text-gray-600 hover:text-gray-900",
             )}
           >
-            Airport taxi
+            One way
           </button>
           <button
-            onClick={() => setTransferMode("rental")}
+            onClick={() => setTripType("return")}
             className={cn(
-              "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+              "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+              tripType === "return"
+                ? "bg-[#003580] text-white"
+                : "text-gray-600 hover:text-gray-900",
+            )}
+          >
+            Return
+          </button>
+          <button
+            onClick={() => setTransferMode(transferMode === "airport" ? "rental" : "airport")}
+            className={cn(
+              "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
               transferMode === "rental"
                 ? "bg-[#003580] text-white"
                 : "text-gray-600 hover:text-gray-900",
             )}
           >
-            Car rentals
+            {transferMode === "airport" ? "Taxi" : "Rental"}
           </button>
         </div>
 
-        {/* Trip Type Selector for Airport Taxi - exact Flights styling */}
-        {transferMode === "airport" && (
-          <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
-            <button
-              onClick={() => setTripType("one-way")}
-              className={cn(
-                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
-                tripType === "one-way"
-                  ? "bg-[#003580] text-white"
-                  : "text-gray-600 hover:text-gray-900",
-              )}
-            >
-              One-way
-            </button>
-            <button
-              onClick={() => setTripType("return")}
-              className={cn(
-                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
-                tripType === "return"
-                  ? "bg-[#003580] text-white"
-                  : "text-gray-600 hover:text-gray-900",
-              )}
-            >
-              Return
-            </button>
-          </div>
-        )}
-
         <div className="flex flex-col lg:flex-row gap-3">
-          {/* Pickup/Dropoff Card with proper dropdown functionality */}
+          {/* Pickup/Dropoff Card - exactly like flights */}
           <div className="flex-1 bg-white rounded-xl p-4 shadow-sm">
             <div className="flex items-center space-x-3">
               <div className="flex-1">
@@ -596,7 +553,7 @@ export function TransfersSearchForm() {
                         setIsPickupDropdownOpen(!isPickupDropdownOpen);
                       }}
                     >
-                      <div className="text-xs text-gray-500 mb-1">Pick-up</div>
+                      <div className="text-xs text-gray-500 mb-1">From</div>
                       <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                           <MapPin className="w-4 h-4 text-[#003580]" />
@@ -605,15 +562,15 @@ export function TransfersSearchForm() {
                           {pickup ? (
                             <>
                               <div className="font-medium text-gray-900 text-sm">
-                                {pickup.label}
+                                {pickup.code}
                               </div>
-                              <div className="text-xs text-gray-500 capitalize">
-                                {pickup.type}
+                              <div className="text-xs text-gray-500">
+                                {pickup.label}
                               </div>
                             </>
                           ) : (
                             <div className="text-sm text-gray-500">
-                              Pick-up location
+                              Pickup location
                             </div>
                           )}
                         </div>
@@ -655,9 +612,9 @@ export function TransfersSearchForm() {
               <button
                 onClick={swapLocations}
                 className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                aria-label="Swap pick-up and drop-off"
+                aria-label="Swap pickup and drop-off"
               >
-                <ArrowRightLeft className="w-4 h-4 text-gray-500" />
+                <ArrowRight className="w-4 h-4 text-gray-500" />
               </button>
 
               <div className="flex-1">
@@ -670,7 +627,7 @@ export function TransfersSearchForm() {
                         setIsDropoffDropdownOpen(!isDropoffDropdownOpen);
                       }}
                     >
-                      <div className="text-xs text-gray-500 mb-1">Drop-off</div>
+                      <div className="text-xs text-gray-500 mb-1">To</div>
                       <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                           <Building2 className="w-4 h-4 text-[#003580]" />
@@ -679,10 +636,10 @@ export function TransfersSearchForm() {
                           {dropoff ? (
                             <>
                               <div className="font-medium text-gray-900 text-sm">
-                                {dropoff.label}
+                                {dropoff.code}
                               </div>
-                              <div className="text-xs text-gray-500 capitalize">
-                                {dropoff.type}
+                              <div className="text-xs text-gray-500">
+                                {dropoff.label}
                               </div>
                             </>
                           ) : (
@@ -728,24 +685,36 @@ export function TransfersSearchForm() {
             </div>
           </div>
 
-          {/* Date/Time Fields */}
+          {/* Date/Time Fields - exactly like flights */}
           <div className="flex-1">
             <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
               <PopoverTrigger asChild>
                 <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer p-4">
                   <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
-                    Pick-up Date & Time
+                    Dates
                   </div>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <CalendarIcon className="w-4 h-4 text-[#003580]" />
+                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <CalendarIcon className="w-5 h-5 text-[#003580]" />
                     </div>
-                    <div>
-                      <div className="font-semibold text-gray-900 text-sm">
-                        {pickupDate ? format(pickupDate, "dd MMM") : "Select date"} at {pickupTime}
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-gray-900 text-base leading-tight">
+                        {pickupDate
+                          ? format(pickupDate, "dd MMM")
+                          : "Select pickup date"}
+                        {tripType === "return" && (
+                          <>
+                            <span className="mx-2 text-gray-400">—</span>
+                            {returnDate
+                              ? format(returnDate, "dd MMM")
+                              : "Select return"}
+                          </>
+                        )}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        Choose pickup date and time
+                      <div className="text-sm text-gray-500 mt-1">
+                        {tripType === "return"
+                          ? "Add pickup and return dates"
+                          : "Add pickup date"}
                       </div>
                     </div>
                   </div>
@@ -765,7 +734,7 @@ export function TransfersSearchForm() {
             </Popover>
           </div>
 
-          {/* Travelers with dropdown */}
+          {/* Travelers with dropdown - exactly like flights */}
           <div className="flex-1 bg-white rounded-xl p-4 shadow-sm">
             <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
               <PopoverTrigger asChild>
@@ -784,7 +753,9 @@ export function TransfersSearchForm() {
                         {passengers.adults + passengers.children}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {passengerSummary()}
+                        {passengers.adults} adult{passengers.adults > 1 ? "s" : ""}
+                        {passengers.children > 0 &&
+                          `, ${passengers.children} child${passengers.children > 1 ? "ren" : ""}`}
                       </div>
                     </div>
                   </div>
@@ -870,17 +841,71 @@ export function TransfersSearchForm() {
             </Popover>
           </div>
 
-          {/* Search Button - center aligned and matching Flights button */}
+          {/* Vehicle Type - replacing class selector */}
+          <div className="flex-1 bg-white rounded-xl p-4 shadow-sm">
+            <Popover open={isVehicleDropdownOpen} onOpenChange={setIsVehicleDropdownOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className="w-full text-left"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsVehicleDropdownOpen(!isVehicleDropdownOpen);
+                  }}
+                >
+                  <div className="text-xs text-gray-500 mb-1">Vehicle</div>
+                  <div className="flex items-center space-x-2">
+                    <Car className="w-5 h-5 text-[#003580]" />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {vehicleTypes.find(v => v.value === vehicleType)?.label}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Vehicle type
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-0 border shadow-lg z-50" align="start">
+                <div className="max-h-64 overflow-y-auto">
+                  {vehicleTypes.map((vehicle) => (
+                    <button
+                      key={vehicle.value}
+                      className="w-full px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-left"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setVehicleType(vehicle.value);
+                        setIsVehicleDropdownOpen(false);
+                      }}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Car className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {vehicle.label}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {/* Search Button - exactly like flights */}
           <div className="flex-shrink-0 flex justify-center lg:justify-start">
             <Button
               onClick={handleSearch}
               disabled={!isFormValid}
-              className="h-10 sm:h-12 px-5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded transition-all duration-150"
+              className="h-16 px-8 bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold text-lg rounded-xl shadow-lg"
               title="Search transfers"
             >
-              <Search className="mr-2 h-4 w-4" />
-              <span className="text-xs sm:text-sm">
-                Search Transfers
+              <Search className="mr-2 h-5 w-5" />
+              <span>
+                Search
               </span>
             </Button>
           </div>
