@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -53,6 +53,7 @@ type TransferMode = "airport" | "rental";
 
 export function TransfersSearchForm() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
