@@ -329,4 +329,21 @@
   .safe-area-right {
     padding-right: env(safe-area-inset-right);
   }
+
+  /* React Date Range Calendar Overrides - Global */
+  .rdrMonthAndYearPickers,
+  .rdrMonthAndYearPickers *,
+  .rdrMonthPicker select,
+  .rdrYearPicker select {
+    color: #1f2937 !important;
+    font-weight: 900 !important;
+    font-size: 20px !important;
+  }
+
+  .rdrWeekDay,
+  .rdrWeekDay * {
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+    text-transform: capitalize !important;
+  }
 }
