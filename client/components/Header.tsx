@@ -243,6 +243,13 @@ export function Header({ className }: HeaderProps) {
               >
                 Transfers
               </Link>
+              <Link
+                to="/admin/testing"
+                className="text-red-300 hover:text-red-100 transition-colors py-2 bg-red-500/20 px-3 rounded-md"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                🔴 Live API Test
+              </Link>
 
               {/* Mobile Currency Selector */}
               <div className="py-2">
