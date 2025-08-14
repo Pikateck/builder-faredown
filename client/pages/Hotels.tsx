@@ -637,7 +637,7 @@ export default function Hotels() {
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "الع��بية", flag: "🇸🇦" },
-                          { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                          { code: "hi", name: "हि��्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -814,27 +814,6 @@ export default function Hotels() {
           </div>
         </div>
 
-        {/* Upgrade & Add-ons Section */}
-        <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-[#003580] rounded-lg flex items-center justify-center">
-                  <Hotel className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900">
-                    Want Business Class or Room Upgrade?
-                  </h3>
-                  <p className="text-gray-600">Bargain for It Instantly.</p>
-                </div>
-              </div>
-              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white font-medium px-6 py-2 rounded-lg">
-                Start Bargaining
-              </Button>
-            </div>
-          </div>
-        </section>
 
         {/* Why Choose Faredown Section */}
         <section className="py-16 bg-white">
