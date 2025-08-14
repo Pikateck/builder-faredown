@@ -95,7 +95,7 @@ export function BookingCalendar({
     if (range && range.startDate) {
       let endDate = range.endDate;
 
-      // For sightseeing, allow same-day selections (single day experience)
+      // For sightseeing and transfers, allow same-day selections (single day experience)
       // For hotels, ensure minimum 1 night stay
       if (!endDate) {
         // If no end date selected yet, use start date (user is still selecting)
@@ -107,7 +107,7 @@ export function BookingCalendar({
         // For hotels, ensure at least 1 night stay
         endDate = addDays(range.startDate, 1);
       }
-      // For sightseeing, allow same day (single day experience)
+      // For sightseeing and transfers, allow same day (single day experience)
 
       const newSelection = [
         {
