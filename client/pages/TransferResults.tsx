@@ -547,14 +547,15 @@ export default function TransferResults() {
     const bookingParams = new URLSearchParams({
       transferId: transfer.id,
       rateKey: transfer.rateKey,
+      vehicleName: transfer.vehicleName,
       pickupLocation,
       dropoffLocation,
       pickupDate,
       pickupTime,
       ...(isRoundTrip && { returnDate, returnTime }),
-      adults,
-      children,
-      infants,
+      adults: adults.toString(),
+      children: children.toString(),
+      infants: infants.toString(),
       price: transfer.pricing.totalPrice.toString(),
     });
 
