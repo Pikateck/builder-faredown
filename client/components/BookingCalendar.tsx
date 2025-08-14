@@ -219,7 +219,9 @@ export function BookingCalendar({
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
           border: 1px solid #e5e7eb;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          overflow: hidden;
+          overflow: visible;
+          width: 100%;
+          max-width: 700px;
         }
 
         .booking-calendar .rdrDateRangeWrapper {
