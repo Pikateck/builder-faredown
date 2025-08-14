@@ -18,7 +18,7 @@ import { Header } from "@/components/Header";
 
 interface Trip {
   id: string;
-  bookingType: "flight" | "hotel";
+  bookingType: "flight" | "hotel" | "sightseeing" | "transfer";
   bookingDate: string;
   total: number;
   passengers?: any[];
@@ -28,12 +28,28 @@ interface Trip {
   checkIn?: string;
   checkOut?: string;
   nights?: number;
+  // Sightseeing fields
+  name?: string;
+  location?: string;
+  visitDate?: string;
+  time?: string;
+  duration?: string;
+  ticketType?: string;
+  category?: string;
+  // Transfer fields
+  service?: string;
+  route?: string;
+  pickupDate?: string;
+  pickupTime?: string;
+  vehicle?: string;
+  pickupLocation?: string;
+  dropoffLocation?: string;
 }
 
 export default function MyTrips() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
-  const [filterType, setFilterType] = useState<"all" | "flight" | "hotel">(
+  const [filterType, setFilterType] = useState<"all" | "flight" | "hotel" | "sightseeing" | "transfer">(
     "all",
   );
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,7 +124,7 @@ export default function MyTrips() {
       }
     }
 
-    // Add a test hotel booking if no trips exist (for testing)
+    // Add test bookings if no trips exist (for testing)
     if (existingTrips.length === 0) {
       const testHotelTrip: Trip = {
         id: generateUniqueId("hotel", "HB240001"),
@@ -144,6 +160,40 @@ export default function MyTrips() {
         },
       };
       existingTrips.push(testHotelTrip);
+
+      // Add test sightseeing trip
+      const testSightseeingTrip: Trip = {
+        id: generateUniqueId("sightseeing", "SG240001"),
+        bookingType: "sightseeing",
+        bookingDate: "2024-01-15",
+        total: 2850,
+        guests: 2,
+        name: "Burj Khalifa: Floors 124 and 125",
+        location: "Dubai, UAE",
+        visitDate: "2024-02-03",
+        time: "14:30",
+        duration: "1-2 hours",
+        ticketType: "Standard Admission",
+        category: "landmark",
+      };
+      existingTrips.push(testSightseeingTrip);
+
+      // Add test transfer trip
+      const testTransferTrip: Trip = {
+        id: generateUniqueId("transfer", "TR240001"),
+        bookingType: "transfer",
+        bookingDate: "2024-01-15",
+        total: 425,
+        passengers: 2,
+        service: "Airport Transfer",
+        route: "DXB Airport → Downtown Dubai",
+        pickupDate: "2024-02-01",
+        pickupTime: "12:30",
+        vehicle: "Sedan - Economy",
+        pickupLocation: "Dubai International Airport Terminal 3",
+        dropoffLocation: "Grand Hyatt Dubai",
+      };
+      existingTrips.push(testTransferTrip);
     }
 
     // Remove any potential duplicates by ID (additional safeguard)
@@ -649,14 +699,26 @@ Thank you for choosing Faredown!
         <div className="flex items-center">
           {trip.bookingType === "flight" ? (
             <Plane className="w-5 h-5 text-blue-600 mr-2" />
-          ) : (
+          ) : trip.bookingType === "hotel" ? (
             <Hotel className="w-5 h-5 text-green-600 mr-2" />
+          ) : trip.bookingType === "sightseeing" ? (
+            <svg className="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+            </svg>
           )}
           <div>
             <h3 className="font-semibold text-gray-900">
               {trip.bookingType === "flight"
                 ? "Flight Booking"
-                : "Hotel Booking"}
+                : trip.bookingType === "hotel"
+                  ? "Hotel Booking"
+                  : trip.bookingType === "sightseeing"
+                    ? "Sightseeing Booking"
+                    : "Transfer Booking"}
             </h3>
             <p className="text-sm text-gray-500">Booking ID: {trip.id}</p>
           </div>
@@ -664,7 +726,7 @@ Thank you for choosing Faredown!
         <Badge
           variant={trip.bookingType === "flight" ? "default" : "secondary"}
         >
-          {trip.bookingType === "flight" ? "Flight" : "Hotel"}
+          {trip.bookingType === "flight" ? "Flight" : trip.bookingType === "hotel" ? "Hotel" : trip.bookingType === "sightseeing" ? "Sightseeing" : "Transfer"}
         </Badge>
       </div>
 
@@ -798,7 +860,7 @@ Thank you for choosing Faredown!
                 />
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto">
               <Button
                 onClick={() => setFilterType("all")}
                 variant={filterType === "all" ? "default" : "outline"}
@@ -822,6 +884,26 @@ Thank you for choosing Faredown!
               >
                 <Hotel className="w-4 h-4 mr-1" />
                 Hotels
+              </Button>
+              <Button
+                onClick={() => setFilterType("sightseeing")}
+                variant={filterType === "sightseeing" ? "default" : "outline"}
+                size="sm"
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                Sightseeing
+              </Button>
+              <Button
+                onClick={() => setFilterType("transfer")}
+                variant={filterType === "transfer" ? "default" : "outline"}
+                size="sm"
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                </svg>
+                Transfers
               </Button>
             </div>
           </div>
