@@ -434,6 +434,22 @@ export function BookingCalendar({
             line-height: 32px;
           }
         }
+
+        /* Global overrides for react-date-range components */
+        .rdrMonthAndYearPickers,
+        .rdrMonthAndYearPickers select,
+        .rdrMonthAndYearPickers option {
+          font-weight: 900 !important;
+          color: #1f2937 !important;
+          font-size: 20px !important;
+        }
+
+        .rdrWeekDay,
+        .rdrWeekDay span {
+          color: #1f2937 !important;
+          font-weight: 600 !important;
+          text-transform: capitalize !important;
+        }
       `}</style>
 
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg max-w-full h-auto">
