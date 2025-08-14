@@ -2319,12 +2319,11 @@ export default function Index() {
             <div className="text-center mb-2 sm:mb-3">
               <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  Reliable Airport Transfers
+                  Upgrade. Bargain. Book.
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Book safe, comfortable transfers with professional drivers and
-                competitive rates.
+                Ride in comfort for less — AI secures your best deal on every trip.
               </h1>
             </div>
 
