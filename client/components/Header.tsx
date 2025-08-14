@@ -297,6 +297,17 @@ export function Header({ className }: HeaderProps) {
                       variant="ghost"
                       className="w-full justify-start text-white hover:text-blue-200 hover:bg-blue-600"
                       onClick={() => {
+                        navigate("/admin/login");
+                        setShowMobileMenu(false);
+                      }}
+                    >
+                      <div className="w-4 h-4 mr-2 text-blue-300">🤖</div>
+                      AI Admin Tool
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-white hover:text-blue-200 hover:bg-blue-600"
+                      onClick={() => {
                         handleSignOut();
                         setShowMobileMenu(false);
                       }}
