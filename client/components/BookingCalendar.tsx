@@ -450,38 +450,6 @@ export function BookingCalendar({
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg max-w-full h-auto">
         {/* Removed duplicate header - dates already shown in mobile picker */}
 
-        {/* Quick action buttons - Booking.com style */}
-        <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="text-sm text-gray-600 mr-2 hidden sm:inline">
-              Exact dates:
-            </span>
-            <button
-              onClick={() => addDaysToSelection(1)}
-              className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded hover:bg-blue-700 transition-colors"
-            >
-              1 day
-            </button>
-            <button
-              onClick={() => addDaysToSelection(2)}
-              className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded hover:bg-blue-700 transition-colors"
-            >
-              2 days
-            </button>
-            <button
-              onClick={() => addDaysToSelection(3)}
-              className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded hover:bg-blue-700 transition-colors"
-            >
-              3 days
-            </button>
-            <button
-              onClick={() => addDaysToSelection(7)}
-              className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 border border-blue-600 rounded hover:bg-blue-700 transition-colors"
-            >
-              7 days
-            </button>
-          </div>
-        </div>
 
         {/* Calendar component */}
         <div
