@@ -213,7 +213,7 @@ export function BookingCalendar({
 
         .booking-calendar .rdrMonthAndYearPickers {
           font-weight: 900;
-          color: #000000 !important;
+          color: #1f2937 !important;
           font-size: 20px;
           pointer-events: none;
         }
