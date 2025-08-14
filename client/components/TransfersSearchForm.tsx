@@ -106,6 +106,24 @@ export function TransfersSearchForm() {
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
+  // Sample locations for transfers
+  const transferLocations = [
+    { code: "BOM", label: "Mumbai Airport (BOM)", type: "airport" },
+    { code: "DEL", label: "Delhi Airport (DEL)", type: "airport" },
+    { code: "DXB", label: "Dubai Airport (DXB)", type: "airport" },
+    { code: "LHR", label: "London Heathrow (LHR)", type: "airport" },
+    { code: "JFK", label: "New York JFK (JFK)", type: "airport" },
+    { code: "taj-mumbai", label: "Hotel Taj Mahal Palace", type: "hotel" },
+    { code: "oberoi-mumbai", label: "The Oberoi Mumbai", type: "hotel" },
+    {
+      code: "mumbai-central",
+      label: "Mumbai Central Station",
+      type: "station",
+    },
+    { code: "colaba", label: "Colaba District", type: "city" },
+    { code: "downtown-dubai", label: "Downtown Dubai", type: "city" },
+  ];
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
