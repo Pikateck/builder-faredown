@@ -630,16 +630,30 @@ export default function AdminDashboard() {
         >
           {/* Sidebar Header */}
           <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <div className="ml-3">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Faredown
+                  </h2>
+                  <p className="text-sm text-gray-600">Admin CMS</p>
+                </div>
               </div>
-              <div className="ml-3">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Faredown
-                </h2>
-                <p className="text-sm text-gray-600">Admin CMS</p>
-              </div>
+            </div>
+            {/* Back to Main Site */}
+            <div className="mt-4">
+              <a
+                href="/"
+                className="flex items-center text-sm text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Main Site
+              </a>
             </div>
           </div>
 
