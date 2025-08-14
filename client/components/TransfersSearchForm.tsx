@@ -217,7 +217,7 @@ export function TransfersSearchForm() {
         
         <div className="space-y-3">
           {/* Mobile Mode Selector - matching Flights trip type selector */}
-          <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
+          <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
             <button
               onClick={() => setTransferMode("airport")}
               className={cn(
