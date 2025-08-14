@@ -266,6 +266,8 @@ const Bookings: React.FC = () => {
         return hotelBookings;
       case "sightseeing":
         return sightseeingBookings;
+      case "transfers":
+        return transferBookings;
       default:
         return allBookings;
     }
