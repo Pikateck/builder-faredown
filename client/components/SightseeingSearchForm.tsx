@@ -849,8 +849,8 @@ export function SightseeingSearchForm() {
                 <span className="truncate text-xs sm:text-sm text-black">
                   {checkInDate && checkOutDate ? (
                     <>
-                      {format(checkInDate, "dd-MMM-yyyy")} -{" "}
-                      {format(checkOutDate, "dd-MMM-yyyy")}
+                      {format(checkInDate, "EEE, MMM d")} -{" "}
+                      {format(checkOutDate, "EEE, MMM d")}
                     </>
                   ) : (
                     "Select dates"
@@ -869,8 +869,8 @@ export function SightseeingSearchForm() {
                       <span className="hidden md:inline">
                         {checkInDate && checkOutDate ? (
                           <>
-                            {format(checkInDate, "d-MMM-yyyy")} to{" "}
-                            {format(checkOutDate, "d-MMM-yyyy")}
+                            {format(checkInDate, "EEE, MMM d")} to{" "}
+                            {format(checkOutDate, "EEE, MMM d")}
                           </>
                         ) : (
                           "Check-in to Check-out"
