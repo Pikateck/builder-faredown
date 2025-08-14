@@ -1573,7 +1573,7 @@ export default function FlightResults() {
           </div>
         </div>
 
-        {/* Desktop Header (≥769px) - Builder.io Design Format */}
+        {/* Desktop Header (≥769px) - Consistent Design */}
         <div className="hidden md:block">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between text-white">
@@ -1609,6 +1609,12 @@ export default function FlightResults() {
                   className="text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
                 >
                   Sightseeing
+                </Link>
+                <Link
+                  to="/?tab=transfers"
+                  className="text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Transfers
                 </Link>
               </nav>
 
