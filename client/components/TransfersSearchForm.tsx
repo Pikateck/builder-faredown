@@ -583,64 +583,148 @@ export function TransfersSearchForm() {
         )}
 
         <div className="flex flex-col lg:flex-row gap-3">
-          {/* Pickup/Dropoff Card */}
+          {/* Pickup/Dropoff Card with proper dropdown functionality */}
           <div className="flex-1 bg-white rounded-xl p-4 shadow-sm">
             <div className="flex items-center space-x-3">
               <div className="flex-1">
-                <div className="text-xs text-gray-500 mb-1">Pick-up</div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-[#003580]" />
-                  </div>
-                  <div>
-                    {pickup ? (
-                      <>
-                        <div className="font-medium text-gray-900 text-sm">
-                          {pickup.label}
+                <Popover open={isPickupDropdownOpen} onOpenChange={setIsPickupDropdownOpen}>
+                  <PopoverTrigger asChild>
+                    <button
+                      className="w-full text-left"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setIsPickupDropdownOpen(true);
+                      }}
+                    >
+                      <div className="text-xs text-gray-500 mb-1">Pick-up</div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                          <MapPin className="w-4 h-4 text-[#003580]" />
                         </div>
-                        <div className="text-xs text-gray-500 capitalize">
-                          {pickup.type}
+                        <div>
+                          {pickup ? (
+                            <>
+                              <div className="font-medium text-gray-900 text-sm">
+                                {pickup.label}
+                              </div>
+                              <div className="text-xs text-gray-500 capitalize">
+                                {pickup.type}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-sm text-gray-500">
+                              Pick-up location
+                            </div>
+                          )}
                         </div>
-                      </>
-                    ) : (
-                      <div className="text-sm text-gray-500">
-                        Pick-up location
                       </div>
-                    )}
-                  </div>
-                </div>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-0 border shadow-lg z-50" align="start">
+                    <div className="max-h-64 overflow-y-auto">
+                      {transferLocations.map((location) => (
+                        <button
+                          key={location.code}
+                          className="w-full px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-left"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setPickup(location);
+                            setIsPickupDropdownOpen(false);
+                          }}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <MapPin className="h-4 w-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">
+                                {location.label}
+                              </div>
+                              <div className="text-sm text-gray-500 capitalize">
+                                {location.type}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <button
                 onClick={swapLocations}
                 className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                onMouseDown={(e) => e.preventDefault()}
+                aria-label="Swap pick-up and drop-off"
               >
                 <ArrowRightLeft className="w-4 h-4 text-gray-500" />
               </button>
 
               <div className="flex-1">
-                <div className="text-xs text-gray-500 mb-1">Drop-off</div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <Building2 className="w-4 h-4 text-[#003580]" />
-                  </div>
-                  <div>
-                    {dropoff ? (
-                      <>
-                        <div className="font-medium text-gray-900 text-sm">
-                          {dropoff.label}
+                <Popover open={isDropoffDropdownOpen} onOpenChange={setIsDropoffDropdownOpen}>
+                  <PopoverTrigger asChild>
+                    <button
+                      className="w-full text-left"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setIsDropoffDropdownOpen(true);
+                      }}
+                    >
+                      <div className="text-xs text-gray-500 mb-1">Drop-off</div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                          <Building2 className="w-4 h-4 text-[#003580]" />
                         </div>
-                        <div className="text-xs text-gray-500 capitalize">
-                          {dropoff.type}
+                        <div>
+                          {dropoff ? (
+                            <>
+                              <div className="font-medium text-gray-900 text-sm">
+                                {dropoff.label}
+                              </div>
+                              <div className="text-xs text-gray-500 capitalize">
+                                {dropoff.type}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-sm text-gray-500">
+                              Drop-off location
+                            </div>
+                          )}
                         </div>
-                      </>
-                    ) : (
-                      <div className="text-sm text-gray-500">
-                        Drop-off location
                       </div>
-                    )}
-                  </div>
-                </div>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-0 border shadow-lg z-50" align="start">
+                    <div className="max-h-64 overflow-y-auto">
+                      {transferLocations.map((location) => (
+                        <button
+                          key={location.code}
+                          className="w-full px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-left"
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            setDropoff(location);
+                            setIsDropoffDropdownOpen(false);
+                          }}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <Building2 className="h-4 w-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">
+                                {location.label}
+                              </div>
+                              <div className="text-sm text-gray-500 capitalize">
+                                {location.type}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </div>
