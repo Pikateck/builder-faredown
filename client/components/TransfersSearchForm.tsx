@@ -72,8 +72,6 @@ export function TransfersSearchForm() {
     infants: 0,
   });
 
-  // Driver age
-  const [driverAge, setDriverAge] = useState("30");
 
   // Mobile dropdowns
   const [showMobileFromDestination, setShowMobileFromDestination] = useState(false);
