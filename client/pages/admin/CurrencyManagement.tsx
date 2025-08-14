@@ -896,14 +896,14 @@ export default function CurrencyManagement() {
                               </span>
                             </div>
                             <div>
-                              <p className="font-medium flex items-center gap-2">
+                              <div className="font-medium flex items-center gap-2">
                                 {currency.code}
                                 {currency.isDefault && (
                                   <Badge variant="outline" className="text-xs">
                                     Default
                                   </Badge>
                                 )}
-                              </p>
+                              </div>
                               <p className="text-sm text-gray-600">
                                 {currency.name}
                               </p>
