@@ -254,7 +254,7 @@ export function BookingCalendar({
           color: #1f2937;
           font-weight: 600;
           font-size: 13px;
-          text-transform: uppercase;
+          text-transform: capitalize;
           letter-spacing: 0.5px;
           padding: 8px 0;
         }
