@@ -572,7 +572,7 @@ export function TransfersSearchForm() {
               <div className="col-span-2">
                 <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
                   <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
+                    <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0 border-r-0">
                       <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                         <CalendarIcon className="w-4 h-4 text-gray-600" />
                       </div>
