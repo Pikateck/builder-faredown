@@ -33,7 +33,6 @@ import {
   Building2,
   Settings,
   Navigation,
-  User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ErrorBanner } from "@/components/ErrorBanner";
