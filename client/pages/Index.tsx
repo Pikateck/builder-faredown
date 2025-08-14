@@ -1360,11 +1360,10 @@ export default function Index() {
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
-                Reliable Airport Transfers
+                Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Book safe, comfortable transfers with professional drivers and
-                competitive rates.
+                Ride in comfort for less — AI secures your best deal on every trip.
               </p>
             </div>
 
