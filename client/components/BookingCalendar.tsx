@@ -458,6 +458,7 @@ export function BookingCalendar({
             preventSnapRefocus={true}
             calendarFocus="forwards"
             minDate={tomorrow}
+            monthDisplayFormat="MMMM yyyy"
           />
         </div>
 
