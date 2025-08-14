@@ -525,9 +525,20 @@ export default function TransferResults() {
     if (selectedTransfers.size > 0) {
       const firstSelected = transfers.find((t) => selectedTransfers.has(t.id));
       if (firstSelected) {
-        navigate(
-          `/transfer-details/${firstSelected.id}?price=${firstSelected.pricing.totalPrice}&from=${encodeURIComponent(firstSelected.pickupLocation)}&to=${encodeURIComponent(firstSelected.dropoffLocation)}&vehicle=${encodeURIComponent(firstSelected.vehicleName)}`,
-        );
+        const detailParams = new URLSearchParams({
+          price: firstSelected.pricing.totalPrice.toString(),
+          from: firstSelected.pickupLocation,
+          to: firstSelected.dropoffLocation,
+          vehicle: firstSelected.vehicleName,
+          pickupDate,
+          pickupTime,
+          ...(isRoundTrip && { returnDate, returnTime }),
+          adults: adults.toString(),
+          children: children.toString(),
+          infants: infants.toString(),
+          tripType: isRoundTrip ? "return" : "one-way"
+        });
+        navigate(`/transfer-details/${firstSelected.id}?${detailParams.toString()}`);
       }
     }
   };
