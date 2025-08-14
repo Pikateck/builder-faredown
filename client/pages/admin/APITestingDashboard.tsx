@@ -413,6 +413,12 @@ const APITestingDashboard: React.FC = () => {
   const [selectedEndpoint, setSelectedEndpoint] = useState<APIEndpoint | null>(
     null,
   );
+
+  // Debug tab changes
+  const handleTabChange = (value: string) => {
+    console.log('Tab changed to:', value);
+    setActiveMainTab(value);
+  };
   const [requestUrl, setRequestUrl] = useState("");
   const [requestMethod, setRequestMethod] = useState<string>("GET");
   const [requestHeaders, setRequestHeaders] = useState("{}");
@@ -596,7 +602,7 @@ const APITestingDashboard: React.FC = () => {
 
       <Tabs
         value={activeMainTab}
-        onValueChange={setActiveMainTab}
+        onValueChange={handleTabChange}
         className="space-y-6"
       >
         <TabsList>
