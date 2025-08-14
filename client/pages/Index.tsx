@@ -978,8 +978,7 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Control your price for flights & hotels — with live AI
-                bargaining.
+                Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
               </p>
             </div>
 
