@@ -218,6 +218,10 @@ function App() {
                     element={<AdminTestingDashboard />}
                   />
                   <Route
+                    path="/admin/api"
+                    element={<APITestingDashboard />}
+                  />
+                  <Route
                     path="/admin/AIBargainingDashboard"
                     element={<AIBargainingDashboard />}
                   />
