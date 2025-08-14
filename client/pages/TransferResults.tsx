@@ -79,8 +79,10 @@ export default function TransferResults() {
   const { formatPrice } = useCurrency();
 
   // Extract search parameters
-  const pickupLocation = searchParams.get("pickup") || "";
-  const dropoffLocation = searchParams.get("dropoff") || "";
+  const pickupCode = searchParams.get("pickup") || "";
+  const dropoffCode = searchParams.get("dropoff") || "";
+  const pickupLocation = searchParams.get("pickupLocation") || searchParams.get("pickup") || "";
+  const dropoffLocation = searchParams.get("dropoffLocation") || searchParams.get("dropoff") || "";
   const pickupDate = searchParams.get("pickupDate") || "";
   const pickupTime = searchParams.get("pickupTime") || "10:00";
   const returnDate = searchParams.get("returnDate") || "";
