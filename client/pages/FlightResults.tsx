@@ -1628,7 +1628,7 @@ export default function FlightResults() {
                       { code: "fr", name: "Français", flag: "🇫����" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
-                      { code: "pt", name: "Português", flag: "🇵🇹" },
+                      { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
@@ -1780,20 +1780,6 @@ export default function FlightResults() {
           </div>
         </div>
       </header>
-
-      {/* Upgrade Bargain Book Section - Desktop */}
-      <div className="hidden md:block bg-[#003580] py-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-              Upgrade. Bargain. Book.
-            </h2>
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-              Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
-            </h1>
-          </div>
-        </div>
-      </div>
 
       {/* Desktop Search Form Section - Exact Homepage Design */}
       <div className="hidden md:block bg-white border-b border-gray-200 shadow-sm">
