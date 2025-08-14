@@ -607,7 +607,9 @@ export function TransfersSearchForm() {
           {/* Second Row - Dates, Times & Controls */}
           <div className="grid grid-cols-12 gap-2">
             {/* Pickup Date */}
-            <div className="col-span-2">
+            <div className={cn(
+              tripType === "one-way" ? "col-span-3" : "col-span-2",
+            )}>
               <Popover
                 open={isPickupDateOpen}
                 onOpenChange={setIsPickupDateOpen}
@@ -704,7 +706,9 @@ export function TransfersSearchForm() {
             )}
 
             {/* Going Time */}
-            <div className="col-span-1">
+            <div className={cn(
+              tripType === "one-way" ? "col-span-2" : "col-span-1",
+            )}>
               <Popover
                 open={isPickupTimeOpen}
                 onOpenChange={setIsPickupTimeOpen}
@@ -792,7 +796,7 @@ export function TransfersSearchForm() {
             {/* Passengers */}
             <div
               className={cn(
-                tripType === "one-way" ? "col-span-3" : "col-span-2",
+                tripType === "one-way" ? "col-span-4" : "col-span-3",
               )}
             >
               <Popover
@@ -915,7 +919,7 @@ export function TransfersSearchForm() {
 
             {/* Search Button */}
             <div className={cn(
-              tripType === "one-way" ? "col-span-2" : "col-span-1",
+              tripType === "one-way" ? "col-span-3" : "col-span-2",
             )}>
               <Button
                 onClick={handleSearch}
