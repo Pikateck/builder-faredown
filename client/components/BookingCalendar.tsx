@@ -410,17 +410,22 @@ export function BookingCalendar({
         .booking-calendar .rdrMonths {
           display: flex;
           flex-direction: row;
-          gap: 20px;
+          gap: 0;
+          width: 100%;
         }
 
                 .booking-calendar .rdrMonth {
-          width: 280px;
+          flex: 1;
+          min-width: 280px;
           padding: 0;
+          margin: 0;
         }
 
                 .booking-calendar .rdrDateRangeWrapper {
           width: 100%;
           background: white;
+          margin: 0;
+          padding: 0;
         }
 
         @media (max-width: 768px) {
