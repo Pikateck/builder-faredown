@@ -147,17 +147,6 @@ export function Header({ className }: HeaderProps) {
               >
                 <span>Transfers</span>
               </Link>
-              <Link
-                to="/admin/testing"
-                className={cn(
-                  "text-red-300 hover:text-red-100 cursor-pointer flex items-center py-4 bg-red-500/20 px-3 rounded-md",
-                  location.pathname === "/admin/testing"
-                    ? "font-semibold border-b-2 border-red-300"
-                    : "",
-                )}
-              >
-                <span className="text-xs">🔴 Live Test</span>
-              </Link>
             </nav>
 
             {/* Currency Selector */}
@@ -242,11 +231,11 @@ export function Header({ className }: HeaderProps) {
                 Sightseeing
               </Link>
               <Link
-                to="/admin/testing"
-                className="text-red-300 hover:text-red-100 transition-colors py-2 bg-red-500/20 px-3 rounded-md"
+                to="/transfers"
+                className="hover:text-blue-200 transition-colors py-2"
                 onClick={() => setShowMobileMenu(false)}
               >
-                🔴 Live API Test
+                Transfers
               </Link>
 
               {/* Mobile Currency Selector */}
