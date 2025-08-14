@@ -88,9 +88,9 @@ export default function TransferResults() {
   const returnDate = searchParams.get("returnDate") || "";
   const returnTime = searchParams.get("returnTime") || "14:00";
   const passengers = searchParams.get("passengers") || "2";
-  const adults = searchParams.get("adults") || "2";
-  const children = searchParams.get("children") || "0";
-  const infants = searchParams.get("infants") || "0";
+  const adults = parseInt(searchParams.get("adults") || "2");
+  const children = parseInt(searchParams.get("children") || "0");
+  const infants = parseInt(searchParams.get("infants") || "0");
   const vehicleType = searchParams.get("vehicleType") || "";
   const isRoundTrip =
     searchParams.get("returnDate") !== null ||
