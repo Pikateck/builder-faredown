@@ -325,8 +325,7 @@ export function TransfersSearchForm() {
             {/* Search Button */}
             <Button
               onClick={handleSearch}
-              disabled={!isFormValid}
-              className="w-full bg-[#003580] hover:bg-blue-700 text-white font-bold py-4 text-lg rounded-lg"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 text-lg rounded-lg"
             >
               Search
             </Button>
@@ -918,8 +917,7 @@ export function TransfersSearchForm() {
             <div className="col-span-1">
               <Button
                 onClick={handleSearch}
-                disabled={!isFormValid}
-                className="w-full h-12 bg-[#003580] hover:bg-blue-700 text-white font-bold rounded-r-lg border-0"
+                className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-r-lg border-0"
               >
                 Search
               </Button>
