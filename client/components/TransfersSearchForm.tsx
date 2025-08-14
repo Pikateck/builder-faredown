@@ -116,6 +116,122 @@ export function TransfersSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Initialize form from URL parameters
+  useEffect(() => {
+    console.log("🔄 Initializing transfers form from URL parameters:", searchParams.toString());
+
+    // Initialize transfer mode
+    const urlTransferMode = searchParams.get("transferMode");
+    if (urlTransferMode === "airport" || urlTransferMode === "rental") {
+      setTransferMode(urlTransferMode);
+    }
+
+    // Initialize trip type
+    const urlTripType = searchParams.get("tripType");
+    if (urlTripType === "one-way" || urlTripType === "return") {
+      setTripType(urlTripType);
+      console.log("✅ Set trip type from URL:", urlTripType);
+    }
+
+    // Initialize pickup location
+    const urlPickup = searchParams.get("pickup");
+    const urlPickupLocation = searchParams.get("pickupLocation");
+    if (urlPickup && urlPickupLocation) {
+      const pickupLocation = transferLocations.find(loc => loc.code === urlPickup);
+      if (pickupLocation) {
+        setPickup(pickupLocation);
+        console.log("✅ Set pickup from URL:", pickupLocation.label);
+      } else {
+        // Create location from URL params if not in predefined list
+        setPickup({
+          code: urlPickup,
+          label: decodeURIComponent(urlPickupLocation),
+          type: "unknown"
+        });
+        console.log("✅ Set pickup from URL (custom):", decodeURIComponent(urlPickupLocation));
+      }
+    }
+
+    // Initialize dropoff location
+    const urlDropoff = searchParams.get("dropoff");
+    const urlDropoffLocation = searchParams.get("dropoffLocation");
+    if (urlDropoff && urlDropoffLocation) {
+      const dropoffLocation = transferLocations.find(loc => loc.code === urlDropoff);
+      if (dropoffLocation) {
+        setDropoff(dropoffLocation);
+        console.log("✅ Set dropoff from URL:", dropoffLocation.label);
+      } else {
+        // Create location from URL params if not in predefined list
+        setDropoff({
+          code: urlDropoff,
+          label: decodeURIComponent(urlDropoffLocation),
+          type: "unknown"
+        });
+        console.log("✅ Set dropoff from URL (custom):", decodeURIComponent(urlDropoffLocation));
+      }
+    }
+
+    // Initialize pickup date
+    const urlPickupDate = searchParams.get("pickupDate");
+    if (urlPickupDate) {
+      try {
+        const parsedDate = new Date(urlPickupDate);
+        if (!isNaN(parsedDate.getTime())) {
+          setPickupDate(parsedDate);
+          console.log("✅ Set pickup date from URL:", parsedDate);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing pickup date from URL:", error);
+      }
+    }
+
+    // Initialize return date
+    const urlReturnDate = searchParams.get("returnDate");
+    if (urlReturnDate) {
+      try {
+        const parsedDate = new Date(urlReturnDate);
+        if (!isNaN(parsedDate.getTime())) {
+          setReturnDate(parsedDate);
+          console.log("✅ Set return date from URL:", parsedDate);
+        }
+      } catch (error) {
+        console.error("❌ Error parsing return date from URL:", error);
+      }
+    }
+
+    // Initialize pickup time
+    const urlPickupTime = searchParams.get("pickupTime");
+    if (urlPickupTime) {
+      setPickupTime(decodeURIComponent(urlPickupTime));
+      console.log("✅ Set pickup time from URL:", decodeURIComponent(urlPickupTime));
+    }
+
+    // Initialize return time
+    const urlReturnTime = searchParams.get("returnTime");
+    if (urlReturnTime) {
+      setReturnTime(decodeURIComponent(urlReturnTime));
+      console.log("✅ Set return time from URL:", decodeURIComponent(urlReturnTime));
+    }
+
+    // Initialize passengers
+    const urlAdults = searchParams.get("adults");
+    const urlChildren = searchParams.get("children");
+    const urlInfants = searchParams.get("infants");
+    if (urlAdults || urlChildren || urlInfants) {
+      setPassengers({
+        adults: urlAdults ? parseInt(urlAdults) : 2,
+        children: urlChildren ? parseInt(urlChildren) : 0,
+        childrenAges: [],
+        infants: urlInfants ? parseInt(urlInfants) : 0,
+      });
+      console.log("✅ Set passengers from URL:", {
+        adults: urlAdults ? parseInt(urlAdults) : 2,
+        children: urlChildren ? parseInt(urlChildren) : 0,
+        infants: urlInfants ? parseInt(urlInfants) : 0,
+      });
+    }
+  }, [searchParams]);
+
   // Sample locations for transfers
   const transferLocations = [
     { code: "BOM", label: "Mumbai Airport (BOM)", type: "airport" },
