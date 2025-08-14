@@ -370,6 +370,36 @@ export default function TransferDetails() {
                 <p className="text-gray-600">{transfer.to}</p>
               </div>
               <div>
+                <p className="text-sm font-medium text-gray-700">Pickup Date & Time</p>
+                <p className="text-gray-600">
+                  {new Date(pickupDate).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })} at {pickupTime}
+                </p>
+              </div>
+              {isRoundTrip && returnDate && (
+                <div>
+                  <p className="text-sm font-medium text-gray-700">Return Date & Time</p>
+                  <p className="text-gray-600">
+                    {new Date(returnDate).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })} at {returnTime}
+                  </p>
+                </div>
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-700">Passengers</p>
+                <p className="text-gray-600">
+                  {adults} Adult{parseInt(adults) > 1 ? 's' : ''}
+                  {parseInt(children) > 0 && `, ${children} Child${parseInt(children) > 1 ? 'ren' : ''}`}
+                  {parseInt(infants) > 0 && `, ${infants} Infant${parseInt(infants) > 1 ? 's' : ''}`}
+                </p>
+              </div>
+              <div>
                 <p className="text-sm font-medium text-gray-700">Distance</p>
                 <p className="text-gray-600">
                   33 km • Duration: {transfer.duration}
