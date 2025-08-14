@@ -85,7 +85,6 @@ export function TransfersSearchForm() {
   const [isPickupTimeOpen, setIsPickupTimeOpen] = useState(false);
   const [isReturnTimeOpen, setIsReturnTimeOpen] = useState(false);
   const [isPassengersDropdownOpen, setIsPassengersDropdownOpen] = useState(false);
-  const [isDriverAgeOpen, setIsDriverAgeOpen] = useState(false);
 
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
