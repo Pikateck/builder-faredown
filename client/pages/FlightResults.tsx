@@ -5897,7 +5897,7 @@ export default function FlightResults() {
                       <h5 className="font-medium text-gray-900">
                         Outbound •{" "}
                         {departureDate
-                          ? formatDisplayDate(departureDate, "eee, MMM d, yyyy")
+                          ? formatDisplayDate(departureDate, "eee, MMM d")
                           : "Select date"}
                       </h5>
                       <span className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded">
@@ -5993,7 +5993,7 @@ export default function FlightResults() {
                         <h5 className="font-medium text-gray-900">
                           Return •{" "}
                           {returnDate
-                            ? formatDisplayDate(returnDate, "eee, MMM d, yyyy")
+                            ? formatDisplayDate(returnDate, "eee, MMM d")
                             : "Select date"}
                         </h5>
                         <span className="text-sm px-2 py-1 bg-blue-100 text-blue-800 rounded">
