@@ -211,11 +211,13 @@ export function BookingCalendar({
           border-bottom: 1px solid #e5e7eb;
         }
 
-        .booking-calendar .rdrMonthAndYearPickers {
-          font-weight: 900;
+        .booking-calendar .rdrMonthAndYearPickers,
+        .booking-calendar .rdrMonthAndYearPickers select,
+        .booking-calendar .rdrMonthAndYearPickers option {
+          font-weight: 900 !important;
           color: #1f2937 !important;
-          font-size: 20px;
-          pointer-events: none;
+          font-size: 20px !important;
+          pointer-events: none !important;
         }
 
         .booking-calendar .rdrMonthPicker,
