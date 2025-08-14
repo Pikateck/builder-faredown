@@ -2334,39 +2334,6 @@ export default function Index() {
 
         {/* Content sections shown for all tabs */}
         <div className="">
-          {/* Upgrade & Add-ons Section */}
-          <section className="py-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-[#003580] rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">
-                      Want Business Class or Room Upgrade?
-                    </h3>
-                    <p className="text-gray-600">Bargain for It Instantly.</p>
-                  </div>
-                </div>
-                <Button className="bg-[#003580] hover:bg-[#0071c2] text-white font-medium px-6 py-2 rounded-lg">
-                  Start Bargaining
-                </Button>
-              </div>
-            </div>
-          </section>
 
           {/* Desktop Content Sections */}
           {/* Why Choose Faredown Section */}
