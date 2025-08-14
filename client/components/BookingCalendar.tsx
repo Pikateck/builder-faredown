@@ -284,7 +284,7 @@ export function BookingCalendar({
         }
 
         .booking-calendar .rdrWeekDaysWrapper {
-          padding: 16px 24px 8px;
+          padding: 12px 16px 8px;
           background: #f8fafc;
         }
 
