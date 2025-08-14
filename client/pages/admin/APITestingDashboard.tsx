@@ -794,7 +794,7 @@ const APITestingDashboard: React.FC = () => {
                       </div>
                     </TabsContent>
 
-                    <TabsContent value="body">
+                    <TabsContent value="request-body">
                       <div className="space-y-2">
                         <Label>Request Body (JSON)</Label>
                         <Textarea
@@ -807,7 +807,7 @@ const APITestingDashboard: React.FC = () => {
                       </div>
                     </TabsContent>
 
-                    <TabsContent value="params">
+                    <TabsContent value="request-params">
                       <div className="space-y-2">
                         <Label>Query Parameters</Label>
                         <Input
