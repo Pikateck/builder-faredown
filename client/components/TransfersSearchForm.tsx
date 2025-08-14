@@ -528,7 +528,7 @@ export function TransfersSearchForm() {
       />
       
       <div className="w-full mx-auto rounded-2xl bg-white shadow-md border border-slate-200 px-3 py-3 max-w-screen-xl">
-        {/* Mode Selector - matching Flights trip type selector */}
+        {/* Mode Selector - exact Flights styling */}
         <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
           <button
             onClick={() => setTransferMode("airport")}
@@ -554,7 +554,7 @@ export function TransfersSearchForm() {
           </button>
         </div>
 
-        {/* Trip Type Selector for Airport Taxi */}
+        {/* Trip Type Selector for Airport Taxi - exact Flights styling */}
         {transferMode === "airport" && (
           <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
             <button
@@ -591,9 +591,9 @@ export function TransfersSearchForm() {
                   <PopoverTrigger asChild>
                     <button
                       className="w-full text-left"
-                      onMouseDown={(e) => {
+                      onClick={(e) => {
                         e.preventDefault();
-                        setIsPickupDropdownOpen(true);
+                        setIsPickupDropdownOpen(!isPickupDropdownOpen);
                       }}
                     >
                       <div className="text-xs text-gray-500 mb-1">Pick-up</div>
@@ -626,7 +626,7 @@ export function TransfersSearchForm() {
                         <button
                           key={location.code}
                           className="w-full px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-left"
-                          onMouseDown={(e) => {
+                          onClick={(e) => {
                             e.preventDefault();
                             setPickup(location);
                             setIsPickupDropdownOpen(false);
@@ -655,7 +655,6 @@ export function TransfersSearchForm() {
               <button
                 onClick={swapLocations}
                 className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                onMouseDown={(e) => e.preventDefault()}
                 aria-label="Swap pick-up and drop-off"
               >
                 <ArrowRightLeft className="w-4 h-4 text-gray-500" />
@@ -666,9 +665,9 @@ export function TransfersSearchForm() {
                   <PopoverTrigger asChild>
                     <button
                       className="w-full text-left"
-                      onMouseDown={(e) => {
+                      onClick={(e) => {
                         e.preventDefault();
-                        setIsDropoffDropdownOpen(true);
+                        setIsDropoffDropdownOpen(!isDropoffDropdownOpen);
                       }}
                     >
                       <div className="text-xs text-gray-500 mb-1">Drop-off</div>
@@ -701,7 +700,7 @@ export function TransfersSearchForm() {
                         <button
                           key={location.code}
                           className="w-full px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 text-left"
-                          onMouseDown={(e) => {
+                          onClick={(e) => {
                             e.preventDefault();
                             setDropoff(location);
                             setIsDropoffDropdownOpen(false);
@@ -772,9 +771,9 @@ export function TransfersSearchForm() {
               <PopoverTrigger asChild>
                 <button
                   className="w-full text-left"
-                  onMouseDown={(e) => {
+                  onClick={(e) => {
                     e.preventDefault();
-                    setIsPassengersDropdownOpen(true);
+                    setIsPassengersDropdownOpen(!isPassengersDropdownOpen);
                   }}
                 >
                   <div className="text-xs text-gray-500 mb-1">Travelers</div>
