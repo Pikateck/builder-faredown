@@ -1470,20 +1470,6 @@ export default function HotelDetails() {
       <div className="hidden md:block">
         <Header />
 
-        {/* Upgrade Bargain Book Section */}
-        <div className="bg-[#003580] py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                Upgrade. Bargain. Book.
-              </h2>
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                From standard to suite, unlock room upgrades and rates you never thought possible.
-              </h1>
-            </div>
-          </div>
-        </div>
-
         {/* Desktop Search Bar */}
         <div className="bg-white border-b border-gray-200 px-4 py-4">
           <div className="max-w-6xl mx-auto">
