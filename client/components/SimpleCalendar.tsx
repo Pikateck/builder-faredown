@@ -186,7 +186,7 @@ export function SimpleCalendar({
             <div className="mb-1">
               <span className="font-medium">Check-in: </span>
               <span className="text-blue-600">
-                {format(checkIn, "MMM d, yyyy")}
+                {format(checkIn, "EEE, MMM d")}
               </span>
             </div>
           )}
@@ -194,7 +194,7 @@ export function SimpleCalendar({
             <div className="mb-1">
               <span className="font-medium">Check-out: </span>
               <span className="text-blue-600">
-                {format(checkOut, "MMM d, yyyy")}
+                {format(checkOut, "EEE, MMM d")}
               </span>
             </div>
           )}
