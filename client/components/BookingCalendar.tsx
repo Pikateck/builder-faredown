@@ -31,8 +31,8 @@ export function BookingCalendar({
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const startDate = initialRange?.startDate || tomorrow;
-    // For sightseeing, default to same day (single day activity)
-    const defaultDays = bookingType === "sightseeing" ? 0 : 3;
+    // For sightseeing and transfers, default to same day (single day activity)
+    const defaultDays = (bookingType === "sightseeing" || bookingType === "transfers") ? 0 : 3;
     const endDate = initialRange?.endDate || addDays(startDate, defaultDays);
 
     console.log("Initial calendar range:", { startDate, endDate, bookingType });
