@@ -148,7 +148,6 @@ export function TransfersSearchForm() {
     
     searchParams.set("adults", passengers.adults.toString());
     searchParams.set("children", passengers.children.toString());
-    searchParams.set("driverAge", driverAge);
 
     navigate(`/transfer-results?${searchParams.toString()}`);
   };
