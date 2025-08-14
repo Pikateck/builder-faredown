@@ -677,7 +677,7 @@ export function TransfersSearchForm() {
             <div className={cn(tripType === "one-way" ? "col-span-8" : "col-span-6")}>
               <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
                 <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0 border-r-0">
+                  <div className="relative cursor-pointer border border-gray-300 h-12 hover:border-gray-400 bg-white border-l-0">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                       <Users className="w-4 h-4 text-gray-600" />
                     </div>
