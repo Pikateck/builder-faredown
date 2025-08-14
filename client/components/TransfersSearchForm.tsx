@@ -792,7 +792,7 @@ export function TransfersSearchForm() {
             {/* Passengers */}
             <div
               className={cn(
-                tripType === "one-way" ? "col-span-8" : "col-span-6",
+                tripType === "one-way" ? "col-span-3" : "col-span-2",
               )}
             >
               <Popover
@@ -914,7 +914,9 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Search Button */}
-            <div className="col-span-1">
+            <div className={cn(
+              tripType === "one-way" ? "col-span-2" : "col-span-1",
+            )}>
               <Button
                 onClick={handleSearch}
                 className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-r-lg border-0"
