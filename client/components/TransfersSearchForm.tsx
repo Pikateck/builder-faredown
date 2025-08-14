@@ -567,7 +567,7 @@ export function TransfersSearchForm() {
           {/* Return Date (if return trip) */}
           {tripType === "return" && (
             <div className="col-span-2">
-              <Popover>
+              <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
                 <PopoverTrigger asChild>
                   <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -588,7 +588,7 @@ export function TransfersSearchForm() {
                       if (endDate) setReturnDate(endDate);
                     }}
                     initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
-                    onClose={() => {}}
+                    onClose={() => setIsReturnDateOpen(false)}
                     bookingType="transfers"
                   />
                 </PopoverContent>
