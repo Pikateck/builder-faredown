@@ -21,12 +21,10 @@ export default function Sightseeing() {
           <div className="px-4 pt-6">
             <div className="text-center mb-6">
               <h1 className="text-2xl font-bold mb-2">
-                Discover Amazing Experiences
+                Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Explore fascinating attractions, cultural landmarks, and
-                exciting activities. Create unforgettable memories with our
-                curated sightseeing experiences.
+                Experience more, spend less — our AI gets you the best price for every adventure.
               </p>
             </div>
 
