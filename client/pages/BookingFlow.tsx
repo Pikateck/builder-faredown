@@ -352,9 +352,17 @@ const SeatMap = ({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedTraveller(traveller.id);
-                      setExpandedFlight(flightLeg);
-                      setCurrentFlight(flightLeg);
+                      if (selectedTraveller === traveller.id && currentFlight === flightLeg) {
+                        // If already selected, toggle closed
+                        setSelectedTraveller(null);
+                        setExpandedFlight(null);
+                        setCurrentFlight(null);
+                      } else {
+                        // If not selected, open selection
+                        setSelectedTraveller(traveller.id);
+                        setExpandedFlight(flightLeg);
+                        setCurrentFlight(flightLeg);
+                      }
                     }}
                     className="flex items-center space-x-1 px-3 py-1.5 bg-[#003580] text-white text-sm font-medium rounded-md hover:bg-[#0071c2] transition-colors"
                   >
