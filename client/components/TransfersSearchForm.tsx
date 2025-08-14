@@ -45,12 +45,14 @@ interface PassengerConfig {
 }
 
 type TripType = "one-way" | "return";
+type TransferMode = "airport" | "rental";
 
 export function TransfersSearchForm() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
+  const [transferMode, setTransferMode] = useState<TransferMode>("airport");
   const [tripType, setTripType] = useState<TripType>("one-way");
 
   // Location states
