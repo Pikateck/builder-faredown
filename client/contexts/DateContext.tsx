@@ -68,7 +68,7 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
   );
 
   const formatDisplayDate = useCallback(
-    (date: Date | null, formatString: string = "dd-MMM-yyyy") => {
+    (date: Date | null, formatString: string = "EEE, MMM d") => {
       if (!date) return "";
       try {
         return format(date, formatString);
