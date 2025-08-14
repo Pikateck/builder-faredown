@@ -568,7 +568,7 @@ export function TransfersSearchForm() {
           )}
 
           {/* Pickup Time */}
-          <div className={cn("col-span-1", tripType === "one-way" && "col-span-2")}>
+          <div className="col-span-1">
             <Popover open={isPickupTimeOpen} onOpenChange={setIsPickupTimeOpen}>
               <PopoverTrigger asChild>
                 <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
@@ -576,7 +576,9 @@ export function TransfersSearchForm() {
                     <Clock className="w-4 h-4 text-gray-600" />
                   </div>
                   <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">Time</div>
+                    <div className="text-xs text-gray-500">
+                      {tripType === "return" ? "Going time" : "Time"}
+                    </div>
                     <div className="text-sm font-medium text-gray-900">
                       {pickupTime}
                     </div>
@@ -601,6 +603,43 @@ export function TransfersSearchForm() {
               </PopoverContent>
             </Popover>
           </div>
+
+          {/* Return Time (if return trip) */}
+          {tripType === "return" && (
+            <div className="col-span-1">
+              <Popover open={isReturnTimeOpen} onOpenChange={setIsReturnTimeOpen}>
+                <PopoverTrigger asChild>
+                  <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                      <Clock className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div className="pl-10 pr-3 h-full flex flex-col justify-center">
+                      <div className="text-xs text-gray-500">Coming time</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {returnTime}
+                      </div>
+                    </div>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
+                  <div className="grid grid-cols-2 gap-1">
+                    {timeOptions.map((time) => (
+                      <button
+                        key={time.value}
+                        className="p-2 text-sm hover:bg-gray-100 rounded text-left"
+                        onClick={() => {
+                          setReturnTime(time.value);
+                          setIsReturnTimeOpen(false);
+                        }}
+                      >
+                        {time.label}
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          )}
 
 
           {/* Passengers */}
