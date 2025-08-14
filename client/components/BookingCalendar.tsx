@@ -251,7 +251,7 @@ export function BookingCalendar({
         }
 
         .booking-calendar .rdrWeekDay {
-          color: #64748b;
+          color: #1f2937;
           font-weight: 600;
           font-size: 13px;
           text-transform: uppercase;
