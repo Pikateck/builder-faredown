@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { FlightVoucher } from "@/components/vouchers/FlightVoucher";
 import { HotelVoucher } from "@/components/vouchers/HotelVoucher";
 import { SightseeingVoucher } from "@/components/vouchers/SightseeingVoucher";
+import { TransferVoucher } from "@/components/vouchers/TransferVoucher";
 import { FaredownInvoice } from "@/components/invoices/FaredownInvoice";
 
 const Bookings: React.FC = () => {
