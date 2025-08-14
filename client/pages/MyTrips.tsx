@@ -774,6 +774,70 @@ Thank you for choosing Faredown!
             {trip.passengers?.length || 1} Passenger(s)
           </div>
         </div>
+      ) : trip.bookingType === "sightseeing" ? (
+        // Sightseeing Trip Details
+        <div className="space-y-3">
+          <div className="bg-purple-50 p-3 rounded-lg">
+            <h4 className="font-medium text-gray-900">{trip.name || "Sightseeing Experience"}</h4>
+            <div className="flex items-start mt-1">
+              <MapPin className="w-4 h-4 text-gray-500 mr-1 mt-0.5" />
+              <p className="text-sm text-gray-600">{trip.location || "Location not specified"}</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center text-gray-600">
+              <CalendarDays className="w-4 h-4 mr-1" />
+              {trip.visitDate ? formatDate(trip.visitDate) : "Date not available"}
+            </div>
+            <div className="flex items-center text-gray-600">
+              <Clock className="w-4 h-4 mr-1" />
+              {trip.time || "Time not specified"}
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center text-gray-600">
+              <Users className="w-4 h-4 mr-1" />
+              {trip.guests || 1} Guest(s)
+            </div>
+            <div className="flex items-center text-gray-600">
+              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                {trip.duration || "Duration varies"}
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : trip.bookingType === "transfer" ? (
+        // Transfer Trip Details
+        <div className="space-y-3">
+          <div className="bg-emerald-50 p-3 rounded-lg">
+            <h4 className="font-medium text-gray-900">{trip.service || "Transfer Service"}</h4>
+            <div className="flex items-start mt-1">
+              <MapPin className="w-4 h-4 text-gray-500 mr-1 mt-0.5" />
+              <p className="text-sm text-gray-600">{trip.route || "Route not specified"}</p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center text-gray-600">
+              <CalendarDays className="w-4 h-4 mr-1" />
+              {trip.pickupDate ? formatDate(trip.pickupDate) : "Date not available"}
+            </div>
+            <div className="flex items-center text-gray-600">
+              <Clock className="w-4 h-4 mr-1" />
+              {trip.pickupTime || "Time not specified"}
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center text-gray-600">
+              <Users className="w-4 h-4 mr-1" />
+              {trip.passengers || 1} Passenger(s)
+            </div>
+            <div className="flex items-center text-gray-600">
+              <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded">
+                {trip.vehicle || "Vehicle not specified"}
+              </span>
+            </div>
+          </div>
+        </div>
       ) : (
         // Hotel Trip Details
         <div className="space-y-3">
