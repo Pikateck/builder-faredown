@@ -2275,11 +2275,11 @@ export default function Index() {
             <div className="text-center mb-2 sm:mb-3">
               <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  Find your next stay
+                  Upgrade. Bargain. Book.
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Search low prices on hotels, homes and much more...
+                From standard to suite, unlock room upgrades and rates you never thought possible.
               </h1>
             </div>
 
