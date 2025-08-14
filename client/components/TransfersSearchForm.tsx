@@ -533,30 +533,27 @@ export function TransfersSearchForm() {
             </div>
           </div>
 
-          {/* Second Row - Dates & Times Stacked with Passengers */}
-          <div className="grid grid-cols-12 gap-4">
-            {/* Pickup Date & Time Stack */}
-            <div className="col-span-3 space-y-3">
-              {/* Pickup Date */}
+          {/* Second Row - Dates, Times & Controls */}
+          <div className="grid grid-cols-12 gap-2">
+            {/* Pickup Date */}
+            <div className="col-span-2">
               <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
                 <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border-2 border-gray-200 rounded-xl h-16 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-md group">
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                        <CalendarIcon className="w-5 h-5 text-blue-600" />
-                      </div>
+                  <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                      <CalendarIcon className="w-4 h-4 text-gray-600" />
                     </div>
-                    <div className="pl-16 pr-4 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500 font-semibold mb-1">
+                    <div className="pl-10 pr-3 h-full flex flex-col justify-center">
+                      <div className="text-xs text-gray-500">
                         {tripType === "return" ? "Pick-up date" : "Date"}
                       </div>
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-sm font-medium text-gray-900">
                         {pickupDate ? format(pickupDate, "dd MMM yyyy") : "Add date"}
                       </div>
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className="w-auto p-0" align="start" side="bottom">
                   <BookingCalendar
                     onChange={({ startDate, endDate }) => {
                       if (startDate) setPickupDate(startDate);
@@ -568,28 +565,64 @@ export function TransfersSearchForm() {
                   />
                 </PopoverContent>
               </Popover>
+            </div>
 
-              {/* Going Time below Pickup Date */}
+            {/* Return Date (if return trip) */}
+            {tripType === "return" && (
+              <div className="col-span-2">
+                <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
+                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                        <CalendarIcon className="w-4 h-4 text-gray-600" />
+                      </div>
+                      <div className="pl-10 pr-3 h-full flex flex-col justify-center">
+                        <div className="text-xs text-gray-500">Return date</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {returnDate ? format(returnDate, "dd MMM yyyy") : "Add date"}
+                        </div>
+                      </div>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start" side="bottom">
+                    <BookingCalendar
+                      onChange={({ startDate, endDate }) => {
+                        if (startDate) setPickupDate(startDate);
+                        if (endDate) setReturnDate(endDate);
+                      }}
+                      initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
+                      onClose={() => setIsReturnDateOpen(false)}
+                      bookingType="transfers"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
+
+            {/* Going Time */}
+            <div className="col-span-1">
               <Popover open={isPickupTimeOpen} onOpenChange={setIsPickupTimeOpen}>
                 <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border border-gray-200 rounded-lg h-12 hover:border-blue-300 bg-white transition-all duration-200 group">
+                  <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <Clock className="w-4 h-4 text-blue-600" />
+                      <Clock className="w-4 h-4 text-gray-600" />
                     </div>
                     <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500 font-medium">Going time</div>
-                      <div className="text-sm font-bold text-gray-900">
+                      <div className="text-xs text-gray-500">
+                        {tripType === "return" ? "Going time" : "Time"}
+                      </div>
+                      <div className="text-sm font-medium text-gray-900">
                         {pickupTime}
                       </div>
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto rounded-xl shadow-xl" align="start">
+                <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
                   <div className="grid grid-cols-2 gap-1">
                     {timeOptions.map((time) => (
                       <button
                         key={time.value}
-                        className="p-2 text-sm hover:bg-blue-50 rounded text-left transition-colors font-medium"
+                        className="p-2 text-sm hover:bg-gray-100 rounded text-left"
                         onClick={() => {
                           setPickupTime(time.value);
                           setIsPickupTimeOpen(false);
@@ -603,60 +636,29 @@ export function TransfersSearchForm() {
               </Popover>
             </div>
 
-            {/* Return Date & Time Stack (if return trip) */}
+            {/* Coming Time (if return trip) */}
             {tripType === "return" && (
-              <div className="col-span-3 space-y-3">
-                {/* Return Date */}
-                <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
-                  <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer border-2 border-gray-200 rounded-xl h-16 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-md group">
-                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                          <CalendarIcon className="w-5 h-5 text-blue-600" />
-                        </div>
-                      </div>
-                      <div className="pl-16 pr-4 h-full flex flex-col justify-center">
-                        <div className="text-xs text-gray-500 font-semibold mb-1">Return date</div>
-                        <div className="text-sm font-bold text-gray-900">
-                          {returnDate ? format(returnDate, "dd MMM yyyy") : "Add date"}
-                        </div>
-                      </div>
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <BookingCalendar
-                      onChange={({ startDate, endDate }) => {
-                        if (startDate) setPickupDate(startDate);
-                        if (endDate) setReturnDate(endDate);
-                      }}
-                      initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
-                      onClose={() => setIsReturnDateOpen(false)}
-                      bookingType="transfers"
-                    />
-                  </PopoverContent>
-                </Popover>
-
-                {/* Coming Time below Return Date */}
+              <div className="col-span-1">
                 <Popover open={isReturnTimeOpen} onOpenChange={setIsReturnTimeOpen}>
                   <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer border border-gray-200 rounded-lg h-12 hover:border-blue-300 bg-white transition-all duration-200 group">
+                    <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
                       <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                        <Clock className="w-4 h-4 text-blue-600" />
+                        <Clock className="w-4 h-4 text-gray-600" />
                       </div>
                       <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                        <div className="text-xs text-gray-500 font-medium">Coming time</div>
-                        <div className="text-sm font-bold text-gray-900">
+                        <div className="text-xs text-gray-500">Coming time</div>
+                        <div className="text-sm font-medium text-gray-900">
                           {returnTime}
                         </div>
                       </div>
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto rounded-xl shadow-xl" align="start">
+                  <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
                     <div className="grid grid-cols-2 gap-1">
                       {timeOptions.map((time) => (
                         <button
                           key={time.value}
-                          className="p-2 text-sm hover:bg-blue-50 rounded text-left transition-colors font-medium"
+                          className="p-2 text-sm hover:bg-gray-100 rounded text-left"
                           onClick={() => {
                             setReturnTime(time.value);
                             setIsReturnTimeOpen(false);
@@ -671,123 +673,111 @@ export function TransfersSearchForm() {
               </div>
             )}
 
-            {/* Passengers & Search */}
-            <div className={cn("flex items-start gap-4", tripType === "return" ? "col-span-6" : "col-span-9")}>
-              {/* Passengers */}
-              <div className="flex-1">
-                <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
-                  <PopoverTrigger asChild>
-                    <div className="relative cursor-pointer border-2 border-gray-200 rounded-xl h-16 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-md group">
-                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                          <Users className="w-5 h-5 text-blue-600" />
-                        </div>
-                      </div>
-                      <div className="pl-16 pr-4 h-full flex flex-col justify-center">
-                        <div className="text-xs text-gray-500 font-semibold mb-1">Passengers</div>
-                        <div className="text-sm font-bold text-gray-900">
-                          {passengers.adults + passengers.children}
-                          <span className="text-xs text-gray-500 ml-1">
-                            ({passengers.adults} adult{passengers.adults > 1 ? "s" : ""}
-                            {passengers.children > 0 &&
-                              `, ${passengers.children} child${passengers.children > 1 ? "ren" : ""}`})
-                          </span>
-                        </div>
+            {/* Passengers */}
+            <div className={cn(tripType === "one-way" ? "col-span-8" : "col-span-6")}>
+              <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
+                <PopoverTrigger asChild>
+                  <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                      <Users className="w-4 h-4 text-gray-600" />
+                    </div>
+                    <div className="pl-10 pr-3 h-full flex flex-col justify-center">
+                      <div className="text-xs text-gray-500">Passengers</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {passengers.adults + passengers.children}
                       </div>
                     </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-80 p-6 border-2 shadow-2xl rounded-2xl" align="start">
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-base font-semibold text-gray-900">Adults</div>
-                          <div className="text-sm text-gray-500">Age 18+</div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (passengers.adults > 1) {
-                                setPassengers({...passengers, adults: passengers.adults - 1});
-                              }
-                            }}
-                            disabled={passengers.adults <= 1}
-                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
-                          >
-                            <Minus className="h-5 w-5" />
-                          </button>
-                          <span className="text-base font-bold w-8 text-center">{passengers.adults}</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (passengers.adults < 8) {
-                                setPassengers({...passengers, adults: passengers.adults + 1});
-                              }
-                            }}
-                            disabled={passengers.adults >= 8}
-                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
-                          >
-                            <Plus className="h-5 w-5" />
-                          </button>
-                        </div>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4 border shadow-lg" align="start">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">Adults</div>
+                        <div className="text-xs text-gray-500">Age 18+</div>
                       </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-base font-semibold text-gray-900">Children</div>
-                          <div className="text-sm text-gray-500">Age 2-17</div>
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (passengers.children > 0) {
-                                const newAges = [...passengers.childrenAges];
-                                newAges.pop();
-                                setPassengers({...passengers, children: passengers.children - 1, childrenAges: newAges});
-                              }
-                            }}
-                            disabled={passengers.children <= 0}
-                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
-                          >
-                            <Minus className="h-5 w-5" />
-                          </button>
-                          <span className="text-base font-bold w-8 text-center">{passengers.children}</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (passengers.children < 6) {
-                                setPassengers({
-                                  ...passengers,
-                                  children: passengers.children + 1,
-                                  childrenAges: [...passengers.childrenAges, 10]
-                                });
-                              }
-                            }}
-                            disabled={passengers.children >= 6}
-                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
-                          >
-                            <Plus className="h-5 w-5" />
-                          </button>
-                        </div>
+                      <div className="flex items-center space-x-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (passengers.adults > 1) {
+                              setPassengers({...passengers, adults: passengers.adults - 1});
+                            }
+                          }}
+                          disabled={passengers.adults <= 1}
+                          className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="text-sm font-medium w-8 text-center">{passengers.adults}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (passengers.adults < 8) {
+                              setPassengers({...passengers, adults: passengers.adults + 1});
+                            }
+                          }}
+                          disabled={passengers.adults >= 8}
+                          className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
                       </div>
                     </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
 
-              {/* Search Button */}
-              <div className="flex-shrink-0">
-                <Button
-                  onClick={handleSearch}
-                  disabled={!isFormValid}
-                  className="h-16 px-10 bg-[#003580] hover:bg-blue-700 text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                  title="Search transfers"
-                >
-                  <Search className="mr-3 h-6 w-6" />
-                  <span>Search</span>
-                </Button>
-              </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">Children</div>
+                        <div className="text-xs text-gray-500">Age 2-17</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (passengers.children > 0) {
+                              const newAges = [...passengers.childrenAges];
+                              newAges.pop();
+                              setPassengers({...passengers, children: passengers.children - 1, childrenAges: newAges});
+                            }
+                          }}
+                          disabled={passengers.children <= 0}
+                          className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="text-sm font-medium w-8 text-center">{passengers.children}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (passengers.children < 6) {
+                              setPassengers({
+                                ...passengers,
+                                children: passengers.children + 1,
+                                childrenAges: [...passengers.childrenAges, 10]
+                              });
+                            }
+                          }}
+                          disabled={passengers.children >= 6}
+                          className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Search Button */}
+            <div className="col-span-1">
+              <Button
+                onClick={handleSearch}
+                disabled={!isFormValid}
+                className="w-full h-12 bg-[#003580] hover:bg-blue-700 text-white font-bold rounded-r-lg border-0"
+              >
+                Search
+              </Button>
             </div>
           </div>
         </div>
