@@ -86,6 +86,12 @@ export function TransfersSearchForm() {
   const [isPickupDateOpen, setIsPickupDateOpen] = useState(false);
   const [isReturnDateOpen, setIsReturnDateOpen] = useState(false);
 
+  // Dropdown states for desktop
+  const [isPickupDropdownOpen, setIsPickupDropdownOpen] = useState(false);
+  const [isDropoffDropdownOpen, setIsDropoffDropdownOpen] = useState(false);
+  const [isVehicleDropdownOpen, setIsVehicleDropdownOpen] = useState(false);
+  const [isPassengersDropdownOpen, setIsPassengersDropdownOpen] = useState(false);
+
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
