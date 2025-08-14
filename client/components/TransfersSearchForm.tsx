@@ -244,7 +244,7 @@ export function TransfersSearchForm() {
 
           {/* Trip Type Selector for Airport Taxi */}
           {transferMode === "airport" && (
-            <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
+            <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
               <button
                 onClick={() => setTripType("one-way")}
                 className={cn(
