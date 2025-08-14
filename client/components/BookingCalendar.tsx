@@ -27,27 +27,20 @@ export function BookingCalendar({
   bookingType = "hotel",
 }: BookingCalendarProps) {
   const [selection, setSelection] = useState(() => {
-    // Only set dates if initialRange is provided, otherwise start empty like Booking.com
-    if (initialRange?.startDate) {
-      const startDate = initialRange.startDate;
-      const endDate = initialRange.endDate || (bookingType === "sightseeing" || bookingType === "transfers" ? startDate : addDays(startDate, 3));
+    // Use tomorrow as the default start date to prevent booking today/past dates
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const startDate = initialRange?.startDate || tomorrow;
+    // For sightseeing and transfers, default to same day (single day activity)
+    const defaultDays = (bookingType === "sightseeing" || bookingType === "transfers") ? 0 : 3;
+    const endDate = initialRange?.endDate || addDays(startDate, defaultDays);
 
-      console.log("Initial calendar range:", { startDate, endDate, bookingType });
+    console.log("Initial calendar range:", { startDate, endDate, bookingType });
 
-      return [
-        {
-          startDate,
-          endDate,
-          key: "selection",
-        },
-      ];
-    }
-
-    // No default selection - start empty like Booking.com
     return [
       {
-        startDate: undefined,
-        endDate: undefined,
+        startDate,
+        endDate,
         key: "selection",
       },
     ];
