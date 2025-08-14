@@ -605,11 +605,31 @@ const APITestingDashboard: React.FC = () => {
         onValueChange={handleTabChange}
         className="space-y-6"
       >
-        <TabsList>
-          <TabsTrigger value="testing">API Testing</TabsTrigger>
-          <TabsTrigger value="documentation">Documentation</TabsTrigger>
-          <TabsTrigger value="saved">Saved Requests</TabsTrigger>
-          <TabsTrigger value="auth">Authentication</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 mb-8">
+          <TabsTrigger
+            value="testing"
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            API Testing
+          </TabsTrigger>
+          <TabsTrigger
+            value="documentation"
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            Documentation
+          </TabsTrigger>
+          <TabsTrigger
+            value="saved"
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            Saved Requests
+          </TabsTrigger>
+          <TabsTrigger
+            value="auth"
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            Authentication
+          </TabsTrigger>
         </TabsList>
 
         {/* API Testing Tab */}
