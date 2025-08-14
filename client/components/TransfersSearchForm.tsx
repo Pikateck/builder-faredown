@@ -529,7 +529,7 @@ export function TransfersSearchForm() {
       
       <div className="w-full mx-auto rounded-2xl bg-white shadow-md border border-slate-200 px-3 py-3 max-w-screen-xl">
         {/* Mode Selector - exact Flights styling */}
-        <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
+        <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit mx-auto">
           <button
             onClick={() => setTransferMode("airport")}
             className={cn(
