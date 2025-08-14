@@ -348,9 +348,18 @@ const SeatMap = ({
                     </button>
                   </>
                 ) : (
-                  <span className="text-sm text-[#003580] font-medium">
-                    Select seat
-                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedTraveller(traveller.id);
+                      setExpandedFlight(flightLeg);
+                      setCurrentFlight(flightLeg);
+                    }}
+                    className="flex items-center space-x-1 px-3 py-1.5 bg-[#003580] text-white text-sm font-medium rounded-md hover:bg-[#0071c2] transition-colors"
+                  >
+                    <span>Select seat</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 )}
               </div>
             </div>
@@ -2113,7 +2122,7 @@ export default function BookingFlow() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="5kg">
-                                  5kg - ₹ 1,500
+                                  5kg - ��� 1,500
                                 </SelectItem>
                                 <SelectItem value="10kg">
                                   10kg - ₹ 2,800
