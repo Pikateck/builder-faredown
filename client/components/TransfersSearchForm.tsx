@@ -643,7 +643,7 @@ export function TransfersSearchForm() {
 
 
           {/* Passengers */}
-          <div className="col-span-2">
+          <div className={cn("col-span-1", tripType === "one-way" && "col-span-2")}>
             <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
               <PopoverTrigger asChild>
                 <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
