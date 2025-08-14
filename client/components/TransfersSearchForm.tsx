@@ -766,20 +766,109 @@ export function TransfersSearchForm() {
             </Popover>
           </div>
 
-          {/* Travelers */}
+          {/* Travelers with dropdown */}
           <div className="flex-1 bg-white rounded-xl p-4 shadow-sm">
-            <div className="text-xs text-gray-500 mb-1">Travelers</div>
-            <div className="flex items-center space-x-2">
-              <Users className="w-5 h-5 text-[#003580]" />
-              <div>
-                <div className="font-medium text-gray-900">
-                  {passengers.adults + passengers.children}
+            <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className="w-full text-left"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    setIsPassengersDropdownOpen(true);
+                  }}
+                >
+                  <div className="text-xs text-gray-500 mb-1">Travelers</div>
+                  <div className="flex items-center space-x-2">
+                    <Users className="w-5 h-5 text-[#003580]" />
+                    <div>
+                      <div className="font-medium text-gray-900">
+                        {passengers.adults + passengers.children}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {passengerSummary()}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-4 border shadow-lg z-50" align="start">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">Adults</div>
+                      <div className="text-xs text-gray-500">Age 18+</div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (passengers.adults > 1) {
+                            setPassengers({...passengers, adults: passengers.adults - 1});
+                          }
+                        }}
+                        disabled={passengers.adults <= 1}
+                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <span className="text-sm font-medium w-8 text-center">{passengers.adults}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (passengers.adults < 8) {
+                            setPassengers({...passengers, adults: passengers.adults + 1});
+                          }
+                        }}
+                        disabled={passengers.adults >= 8}
+                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">Children</div>
+                      <div className="text-xs text-gray-500">Age 2-17</div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (passengers.children > 0) {
+                            const newAges = [...passengers.childrenAges];
+                            newAges.pop();
+                            setPassengers({...passengers, children: passengers.children - 1, childrenAges: newAges});
+                          }
+                        }}
+                        disabled={passengers.children <= 0}
+                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <span className="text-sm font-medium w-8 text-center">{passengers.children}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (passengers.children < 6) {
+                            setPassengers({
+                              ...passengers,
+                              children: passengers.children + 1,
+                              childrenAges: [...passengers.childrenAges, 10]
+                            });
+                          }
+                        }}
+                        disabled={passengers.children >= 6}
+                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-xs text-gray-500">
-                  {passengerSummary()}
-                </div>
-              </div>
-            </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Search Button - center aligned and matching Flights button */}
