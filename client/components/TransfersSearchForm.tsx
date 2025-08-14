@@ -380,16 +380,16 @@ export function TransfersSearchForm() {
         onClose={() => setShowError(false)}
       />
 
-      <div className="bg-white p-8 rounded-2xl border-2 border-gray-100 shadow-xl">
+      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-md">
         {/* Transfer Mode Tabs */}
-        <div className="flex border-b border-gray-200 mb-8">
+        <div className="flex border-b border-gray-200 mb-4">
           <button
             onClick={() => setTransferMode("airport")}
             className={cn(
-              "px-8 py-4 text-lg font-semibold border-b-3 -mb-px transition-all duration-300",
+              "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-all duration-200",
               transferMode === "airport"
-                ? "border-blue-600 text-blue-600 bg-blue-50"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700"
             )}
           >
             Airport taxi
@@ -397,10 +397,10 @@ export function TransfersSearchForm() {
           <button
             onClick={() => setTransferMode("rental")}
             className={cn(
-              "px-8 py-4 text-lg font-semibold border-b-3 -mb-px transition-all duration-300",
+              "px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-all duration-200",
               transferMode === "rental"
-                ? "border-blue-600 text-blue-600 bg-blue-50"
-                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700"
             )}
           >
             Car rentals
@@ -408,29 +408,29 @@ export function TransfersSearchForm() {
         </div>
 
         {/* Trip Type Radio Buttons */}
-        <div className="flex space-x-8 mb-8">
-          <label className="flex items-center space-x-3 cursor-pointer">
+        <div className="flex space-x-6 mb-4">
+          <label className="flex items-center space-x-2 cursor-pointer">
             <input
               type="radio"
               checked={tripType === "one-way"}
               onChange={() => setTripType("one-way")}
-              className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
             />
-            <span className="text-lg font-medium text-gray-700">One-way</span>
+            <span className="text-sm font-medium text-gray-700">One-way</span>
           </label>
-          <label className="flex items-center space-x-3 cursor-pointer">
+          <label className="flex items-center space-x-2 cursor-pointer">
             <input
               type="radio"
               checked={tripType === "return"}
               onChange={() => setTripType("return")}
-              className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
             />
-            <span className="text-lg font-medium text-gray-700">Return</span>
+            <span className="text-sm font-medium text-gray-700">Return</span>
           </label>
         </div>
 
-        {/* Search Form - Elegant Stacked Layout */}
-        <div className="space-y-6">
+        {/* Search Form - Compact Layout */}
+        <div className="space-y-3">
           
           {/* Top Row - Locations */}
           <div className="grid grid-cols-12 gap-4">
