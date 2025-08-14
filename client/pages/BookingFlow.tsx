@@ -277,9 +277,6 @@ const SeatMap = ({
               {fareData?.name || "Economy"}
             </p>
           </div>
-          <ChevronDown
-            className={`w-5 h-5 text-[#666] transition-transform ${isExpanded ? "rotate-180" : ""}`}
-          />
         </div>
 
         {/* Show seat selection summary for this flight */}
