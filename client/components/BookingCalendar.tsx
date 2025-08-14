@@ -478,6 +478,7 @@ export function BookingCalendar({
             calendarFocus="forwards"
             minDate={tomorrow}
             monthDisplayFormat="MMMM yyyy"
+            weekdayDisplayFormat="eee"
           />
         </div>
 
