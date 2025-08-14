@@ -757,20 +757,6 @@ export default function SightseeingResults() {
     <div className="min-h-screen bg-gray-50">
       <Header />
 
-      {/* Upgrade Bargain Book Section */}
-      <div className="bg-[#003580] py-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-              Upgrade. Bargain. Book.
-            </h2>
-            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-              Experience more, spend less — our AI gets you the best price for every adventure.
-            </h1>
-          </div>
-        </div>
-      </div>
-
       {/* Search Bar - Same as Landing Page */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
