@@ -38,6 +38,15 @@ export default function TransferDetails() {
   const fromLocation = searchParams.get("from") || "Mumbai Airport (BOM)";
   const toLocation = searchParams.get("to") || "Hotel Taj Mahal Palace";
   const vehicleName = searchParams.get("vehicle") || "Sedan - Economy";
+  const pickupDate = searchParams.get("pickupDate") || new Date().toISOString().split("T")[0];
+  const pickupTime = searchParams.get("pickupTime") || "10:00";
+  const returnDate = searchParams.get("returnDate");
+  const returnTime = searchParams.get("returnTime") || "14:00";
+  const adults = searchParams.get("adults") || "2";
+  const children = searchParams.get("children") || "0";
+  const infants = searchParams.get("infants") || "0";
+  const tripType = searchParams.get("tripType") || "one-way";
+  const isRoundTrip = tripType === "return" && returnDate;
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
