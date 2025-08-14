@@ -354,6 +354,32 @@ export function TransfersSearchForm() {
       />
 
       <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+        {/* Transfer Mode Tabs */}
+        <div className="flex border-b border-gray-200 mb-6">
+          <button
+            onClick={() => setTransferMode("airport")}
+            className={cn(
+              "px-6 py-3 text-sm font-medium border-b-2 -mb-px",
+              transferMode === "airport"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            )}
+          >
+            Airport taxi
+          </button>
+          <button
+            onClick={() => setTransferMode("rental")}
+            className={cn(
+              "px-6 py-3 text-sm font-medium border-b-2 -mb-px",
+              transferMode === "rental"
+                ? "border-blue-600 text-blue-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            )}
+          >
+            Car rentals
+          </button>
+        </div>
+
         {/* Trip Type Radio Buttons */}
         <div className="flex space-x-6 mb-6">
           <label className="flex items-center space-x-2 cursor-pointer">
