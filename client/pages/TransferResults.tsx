@@ -622,6 +622,20 @@ export default function TransferResults() {
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
       <Header />
 
+      {/* Upgrade Bargain Book Section */}
+      <div className="bg-[#003580] py-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+              Upgrade. Bargain. Book.
+            </h2>
+            <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
+              Ride in comfort for less — AI secures your best deal on every trip.
+            </h1>
+          </div>
+        </div>
+      </div>
+
       {/* Error Banner */}
       {error && <ErrorBanner message={error} onClose={() => setError("")} />}
 
