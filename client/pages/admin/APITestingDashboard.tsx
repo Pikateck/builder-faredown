@@ -418,6 +418,16 @@ const APITestingDashboard: React.FC = () => {
   const handleTabChange = (value: string) => {
     console.log('Tab changed to:', value);
     setActiveMainTab(value);
+    // Show visual feedback
+    const notification = document.createElement('div');
+    notification.innerHTML = `Switched to ${value} tab`;
+    notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 8px 16px; border-radius: 4px; z-index: 1000; font-size: 14px;';
+    document.body.appendChild(notification);
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 2000);
   };
   const [requestUrl, setRequestUrl] = useState("");
   const [requestMethod, setRequestMethod] = useState<string>("GET");
