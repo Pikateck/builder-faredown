@@ -7,6 +7,7 @@ export default function AdminTestingDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
       {/* Production Environment Banner */}
       {isProduction && (
         <div className="bg-blue-600 text-white">
