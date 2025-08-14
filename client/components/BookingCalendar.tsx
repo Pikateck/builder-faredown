@@ -62,6 +62,36 @@ export function BookingCalendar({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Force calendar styling after component mounts
+  useEffect(() => {
+    const applyCalendarStyling = () => {
+      // Apply month header styling
+      const monthHeaders = document.querySelectorAll('.rdrMonthAndYearPickers');
+      monthHeaders.forEach(header => {
+        (header as HTMLElement).style.color = '#1f2937';
+        (header as HTMLElement).style.fontWeight = '900';
+        (header as HTMLElement).style.fontSize = '20px';
+      });
+
+      // Apply weekday styling
+      const weekdays = document.querySelectorAll('.rdrWeekDay');
+      weekdays.forEach(weekday => {
+        (weekday as HTMLElement).style.color = '#1f2937';
+        (weekday as HTMLElement).style.fontWeight = '600';
+        (weekday as HTMLElement).style.textTransform = 'capitalize';
+      });
+    };
+
+    // Apply styling immediately and after any changes
+    const timer = setTimeout(applyCalendarStyling, 100);
+    const interval = setInterval(applyCalendarStyling, 500);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
+  }, [selection]);
+
   // Update selection when initialRange changes
   useEffect(() => {
     if (initialRange?.startDate) {
