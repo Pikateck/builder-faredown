@@ -38,7 +38,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Header from "@/components/Header";
+import { Header } from "@/components/Header";
 import {
   Play,
   Save,
