@@ -919,7 +919,7 @@ export function TransfersSearchForm() {
 
             {/* Search Button */}
             <div className={cn(
-              tripType === "one-way" ? "col-span-3" : "col-span-2",
+              tripType === "one-way" ? "col-span-3" : "col-span-3",
             )}>
               <Button
                 onClick={handleSearch}
