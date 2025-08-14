@@ -31,6 +31,7 @@ import {
   CheckCircle,
   User,
   ChevronDown,
+  ChevronRight,
   X,
   ArrowLeft,
   Menu,
