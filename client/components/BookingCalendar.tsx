@@ -506,7 +506,7 @@ export function BookingCalendar({
         }
       `}</style>
 
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg w-full max-w-[700px] h-auto">
+      <div className="w-full max-w-[700px] h-auto">
         {/* Calendar component */}
         <div
           className="w-full overflow-hidden"
