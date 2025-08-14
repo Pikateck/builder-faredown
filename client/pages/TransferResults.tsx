@@ -277,7 +277,9 @@ export default function TransferResults() {
           });
 
           if (!response.ok) {
-            throw new Error(`API returned ${response.status}: ${response.statusText}`);
+            throw new Error(
+              `API returned ${response.status}: ${response.statusText}`,
+            );
           }
 
           const data = await response.json();

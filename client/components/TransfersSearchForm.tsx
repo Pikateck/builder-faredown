@@ -136,7 +136,10 @@ export function TransfersSearchForm() {
 
   // Initialize form from URL parameters
   useEffect(() => {
-    console.log("🔄 Initializing transfers form from URL parameters:", searchParams.toString());
+    console.log(
+      "🔄 Initializing transfers form from URL parameters:",
+      searchParams.toString(),
+    );
 
     // Initialize transfer mode
     const urlTransferMode = searchParams.get("transferMode");
@@ -155,7 +158,9 @@ export function TransfersSearchForm() {
     const urlPickup = searchParams.get("pickup");
     const urlPickupLocation = searchParams.get("pickupLocation");
     if (urlPickup && urlPickupLocation) {
-      const pickupLocation = transferLocations.find(loc => loc.code === urlPickup);
+      const pickupLocation = transferLocations.find(
+        (loc) => loc.code === urlPickup,
+      );
       if (pickupLocation) {
         setPickup(pickupLocation);
         console.log("✅ Set pickup from URL:", pickupLocation.label);
@@ -164,9 +169,12 @@ export function TransfersSearchForm() {
         setPickup({
           code: urlPickup,
           label: decodeURIComponent(urlPickupLocation),
-          type: "unknown"
+          type: "unknown",
         });
-        console.log("✅ Set pickup from URL (custom):", decodeURIComponent(urlPickupLocation));
+        console.log(
+          "✅ Set pickup from URL (custom):",
+          decodeURIComponent(urlPickupLocation),
+        );
       }
     }
 
@@ -174,7 +182,9 @@ export function TransfersSearchForm() {
     const urlDropoff = searchParams.get("dropoff");
     const urlDropoffLocation = searchParams.get("dropoffLocation");
     if (urlDropoff && urlDropoffLocation) {
-      const dropoffLocation = transferLocations.find(loc => loc.code === urlDropoff);
+      const dropoffLocation = transferLocations.find(
+        (loc) => loc.code === urlDropoff,
+      );
       if (dropoffLocation) {
         setDropoff(dropoffLocation);
         console.log("✅ Set dropoff from URL:", dropoffLocation.label);
@@ -183,9 +193,12 @@ export function TransfersSearchForm() {
         setDropoff({
           code: urlDropoff,
           label: decodeURIComponent(urlDropoffLocation),
-          type: "unknown"
+          type: "unknown",
         });
-        console.log("✅ Set dropoff from URL (custom):", decodeURIComponent(urlDropoffLocation));
+        console.log(
+          "✅ Set dropoff from URL (custom):",
+          decodeURIComponent(urlDropoffLocation),
+        );
       }
     }
 
@@ -221,14 +234,20 @@ export function TransfersSearchForm() {
     const urlPickupTime = searchParams.get("pickupTime");
     if (urlPickupTime) {
       setPickupTime(decodeURIComponent(urlPickupTime));
-      console.log("✅ Set pickup time from URL:", decodeURIComponent(urlPickupTime));
+      console.log(
+        "✅ Set pickup time from URL:",
+        decodeURIComponent(urlPickupTime),
+      );
     }
 
     // Initialize return time
     const urlReturnTime = searchParams.get("returnTime");
     if (urlReturnTime) {
       setReturnTime(decodeURIComponent(urlReturnTime));
-      console.log("✅ Set return time from URL:", decodeURIComponent(urlReturnTime));
+      console.log(
+        "✅ Set return time from URL:",
+        decodeURIComponent(urlReturnTime),
+      );
     }
 
     // Initialize passengers
