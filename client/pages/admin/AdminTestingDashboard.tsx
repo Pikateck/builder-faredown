@@ -23,7 +23,7 @@ interface TestResult {
   timestamp?: string;
 }
 
-export default function AdminTestingDashboard() {
+function AdminTestingDashboard() {
   const isProduction =
     typeof window !== "undefined" && window.location.hostname !== "localhost";
 
