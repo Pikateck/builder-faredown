@@ -616,6 +616,43 @@ const Bookings: React.FC = () => {
                       </p>
                     </div>
                   </div>
+                ) : booking.type === "transfer" ? (
+                  <div className="space-y-3 mb-4">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <span className="text-gray-500 block">Pickup Date</span>
+                        <p className="font-medium text-gray-900">
+                          {booking.pickupDate}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Pickup Time</span>
+                        <p className="font-medium text-gray-900">
+                          {booking.pickupTime}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Vehicle</span>
+                        <p className="font-medium text-gray-900">
+                          {booking.vehicle}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500 block">Passengers</span>
+                        <p className="font-medium text-gray-900">
+                          {booking.passengers}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 text-sm block">
+                        Route
+                      </span>
+                      <p className="font-medium text-gray-900">
+                        {booking.route}
+                      </p>
+                    </div>
+                  </div>
                 ) : (
                   <div className="space-y-3 mb-4">
                     <div className="grid grid-cols-2 gap-3 text-sm">
