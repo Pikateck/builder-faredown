@@ -21,7 +21,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "₹",
     name: "Indian Rupee",
     rate: 1,
-    flag: "🇮����",
+    flag: "🇮🇳",
     decimalPlaces: 0,
   },
   {
@@ -101,7 +101,7 @@ export const CURRENCIES: Currency[] = [
     symbol: "₣",
     name: "Swiss Franc",
     rate: 0.011,
-    flag: "����🇭",
+    flag: "🇨🇭",
     decimalPlaces: 2,
   },
   {
