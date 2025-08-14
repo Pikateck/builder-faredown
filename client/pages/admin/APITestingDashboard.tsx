@@ -774,14 +774,14 @@ const APITestingDashboard: React.FC = () => {
                   </div>
 
                   {/* Request Tabs */}
-                  <Tabs defaultValue="headers" className="space-y-4">
+                  <Tabs defaultValue="request-headers" className="space-y-4">
                     <TabsList>
-                      <TabsTrigger value="headers">Headers</TabsTrigger>
-                      <TabsTrigger value="body">Body</TabsTrigger>
-                      <TabsTrigger value="params">Params</TabsTrigger>
+                      <TabsTrigger value="request-headers">Headers</TabsTrigger>
+                      <TabsTrigger value="request-body">Body</TabsTrigger>
+                      <TabsTrigger value="request-params">Params</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="headers">
+                    <TabsContent value="request-headers">
                       <div className="space-y-2">
                         <Label>Request Headers (JSON)</Label>
                         <Textarea
