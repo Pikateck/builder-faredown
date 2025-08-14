@@ -4,19 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
-  RefreshCw, 
+import {
+  CheckCircle,
+  XCircle,
+  Clock,
+  RefreshCw,
   AlertTriangle,
   Wifi,
-  WifiOff 
+  WifiOff,
 } from "lucide-react";
 
 interface TestResult {
   name: string;
-  status: 'idle' | 'testing' | 'success' | 'error';
+  status: "idle" | "testing" | "success" | "error";
   message: string;
   responseTime?: number;
   data?: any;
@@ -32,22 +32,70 @@ function AdminTestingDashboard() {
     uptime: 98.5,
     avgResponseTime: 245,
     servicesOnline: 4,
-    totalServices: 4
+    totalServices: 4,
   });
 
   const [testResults, setTestResults] = useState<Record<string, TestResult>>({
-    hotelSearch: { name: "Hotel Search", status: 'idle', message: 'Ready to test' },
-    hotelPricing: { name: "Hotel Pricing", status: 'idle', message: 'Ready to test' },
-    hotelDetails: { name: "Hotel Details", status: 'idle', message: 'Ready to test' },
-    transferSearch: { name: "Transfer Search", status: 'idle', message: 'Ready to test' },
-    transferVehicles: { name: "Vehicle Availability", status: 'idle', message: 'Ready to test' },
-    transferBooking: { name: "Transfer Booking", status: 'idle', message: 'Ready to test' },
-    flightSearch: { name: "Flight Search", status: 'idle', message: 'Ready to test' },
-    flightPricing: { name: "Flight Pricing", status: 'idle', message: 'Ready to test' },
-    flightBooking: { name: "Flight Booking", status: 'idle', message: 'Ready to test' },
-    sightseeingSearch: { name: "Attraction Search", status: 'idle', message: 'Ready to test' },
-    sightseeingAvailability: { name: "Activity Availability", status: 'idle', message: 'Ready to test' },
-    sightseeingBooking: { name: "Tour Booking", status: 'idle', message: 'Ready to test' },
+    hotelSearch: {
+      name: "Hotel Search",
+      status: "idle",
+      message: "Ready to test",
+    },
+    hotelPricing: {
+      name: "Hotel Pricing",
+      status: "idle",
+      message: "Ready to test",
+    },
+    hotelDetails: {
+      name: "Hotel Details",
+      status: "idle",
+      message: "Ready to test",
+    },
+    transferSearch: {
+      name: "Transfer Search",
+      status: "idle",
+      message: "Ready to test",
+    },
+    transferVehicles: {
+      name: "Vehicle Availability",
+      status: "idle",
+      message: "Ready to test",
+    },
+    transferBooking: {
+      name: "Transfer Booking",
+      status: "idle",
+      message: "Ready to test",
+    },
+    flightSearch: {
+      name: "Flight Search",
+      status: "idle",
+      message: "Ready to test",
+    },
+    flightPricing: {
+      name: "Flight Pricing",
+      status: "idle",
+      message: "Ready to test",
+    },
+    flightBooking: {
+      name: "Flight Booking",
+      status: "idle",
+      message: "Ready to test",
+    },
+    sightseeingSearch: {
+      name: "Attraction Search",
+      status: "idle",
+      message: "Ready to test",
+    },
+    sightseeingAvailability: {
+      name: "Activity Availability",
+      status: "idle",
+      message: "Ready to test",
+    },
+    sightseeingBooking: {
+      name: "Tour Booking",
+      status: "idle",
+      message: "Ready to test",
+    },
   });
 
   const [isSystemTesting, setIsSystemTesting] = useState(false);
@@ -61,7 +109,7 @@ function AdminTestingDashboard() {
         uptime: 97.8 + random * 1.5,
         avgResponseTime: 200 + Math.floor(random * 100),
         servicesOnline: 4,
-        totalServices: 4
+        totalServices: 4,
       });
     };
 
@@ -72,98 +120,145 @@ function AdminTestingDashboard() {
   }, []);
 
   const runTest = async (testKey: string, testType: string) => {
-    setTestResults(prev => ({
+    setTestResults((prev) => ({
       ...prev,
-      [testKey]: { ...prev[testKey], status: 'testing', message: 'Running test...' }
+      [testKey]: {
+        ...prev[testKey],
+        status: "testing",
+        message: "Running test...",
+      },
     }));
 
     // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-      
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 + Math.random() * 2000),
+      );
+
       // Simulate success/failure
       const success = Math.random() > 0.1; // 90% success rate
       const responseTime = 150 + Math.floor(Math.random() * 400);
-      
+
       if (success) {
         const mockData = generateMockTestData(testType);
-        setTestResults(prev => ({
+        setTestResults((prev) => ({
           ...prev,
           [testKey]: {
             ...prev[testKey],
-            status: 'success',
+            status: "success",
             message: `Test completed successfully - ${mockData.summary}`,
             responseTime,
             data: mockData,
-            timestamp: new Date().toLocaleTimeString()
-          }
+            timestamp: new Date().toLocaleTimeString(),
+          },
         }));
       } else {
-        throw new Error('API temporarily unavailable');
+        throw new Error("API temporarily unavailable");
       }
     } catch (error) {
-      setTestResults(prev => ({
+      setTestResults((prev) => ({
         ...prev,
         [testKey]: {
           ...prev[testKey],
-          status: 'error',
+          status: "error",
           message: `Test failed: ${error.message}`,
-          timestamp: new Date().toLocaleTimeString()
-        }
+          timestamp: new Date().toLocaleTimeString(),
+        },
       }));
     }
   };
 
   const generateMockTestData = (testType: string) => {
     switch (testType) {
-      case 'hotel-search':
-        return { summary: '247 hotels found in Dubai', count: 247, avgPrice: '₹8,450' };
-      case 'hotel-pricing':
-        return { summary: 'Pricing data retrieved', rooms: 15, bestRate: '₹6,200' };
-      case 'hotel-details':
-        return { summary: 'Hotel details loaded', amenities: 23, rating: 4.5 };
-      case 'transfer-search':
-        return { summary: '12 transfer options found', vehicles: 12, cheapest: '₹850' };
-      case 'transfer-vehicles':
-        return { summary: 'Vehicle availability confirmed', available: 8, types: 4 };
-      case 'transfer-booking':
-        return { summary: 'Booking simulation successful', bookingId: 'TR' + Date.now() };
-      case 'flight-search':
-        return { summary: '156 flights found DEL-DXB', flights: 156, cheapest: '₹28,500' };
-      case 'flight-pricing':
-        return { summary: 'Flight pricing retrieved', fareClasses: 3, lowestFare: '₹25,200' };
-      case 'flight-booking':
-        return { summary: 'Flight booking simulation successful', pnr: 'FL' + Date.now() };
-      case 'sightseeing-search':
-        return { summary: '89 attractions found in Dubai', attractions: 89, topRated: 'Burj Khalifa' };
-      case 'sightseeing-availability':
-        return { summary: 'Activity availability confirmed', slots: 15, nextAvailable: 'Today 2:30 PM' };
-      case 'sightseeing-booking':
-        return { summary: 'Tour booking simulation successful', confirmationId: 'SG' + Date.now() };
+      case "hotel-search":
+        return {
+          summary: "247 hotels found in Dubai",
+          count: 247,
+          avgPrice: "₹8,450",
+        };
+      case "hotel-pricing":
+        return {
+          summary: "Pricing data retrieved",
+          rooms: 15,
+          bestRate: "₹6,200",
+        };
+      case "hotel-details":
+        return { summary: "Hotel details loaded", amenities: 23, rating: 4.5 };
+      case "transfer-search":
+        return {
+          summary: "12 transfer options found",
+          vehicles: 12,
+          cheapest: "₹850",
+        };
+      case "transfer-vehicles":
+        return {
+          summary: "Vehicle availability confirmed",
+          available: 8,
+          types: 4,
+        };
+      case "transfer-booking":
+        return {
+          summary: "Booking simulation successful",
+          bookingId: "TR" + Date.now(),
+        };
+      case "flight-search":
+        return {
+          summary: "156 flights found DEL-DXB",
+          flights: 156,
+          cheapest: "₹28,500",
+        };
+      case "flight-pricing":
+        return {
+          summary: "Flight pricing retrieved",
+          fareClasses: 3,
+          lowestFare: "₹25,200",
+        };
+      case "flight-booking":
+        return {
+          summary: "Flight booking simulation successful",
+          pnr: "FL" + Date.now(),
+        };
+      case "sightseeing-search":
+        return {
+          summary: "89 attractions found in Dubai",
+          attractions: 89,
+          topRated: "Burj Khalifa",
+        };
+      case "sightseeing-availability":
+        return {
+          summary: "Activity availability confirmed",
+          slots: 15,
+          nextAvailable: "Today 2:30 PM",
+        };
+      case "sightseeing-booking":
+        return {
+          summary: "Tour booking simulation successful",
+          confirmationId: "SG" + Date.now(),
+        };
       default:
-        return { summary: 'Test completed', result: 'success' };
+        return { summary: "Test completed", result: "success" };
     }
   };
 
   const runAllTests = async () => {
     setIsSystemTesting(true);
     const testKeys = Object.keys(testResults);
-    
+
     for (const testKey of testKeys) {
-      const testType = testKey.replace(/([A-Z])/g, '-$1').toLowerCase();
+      const testType = testKey.replace(/([A-Z])/g, "-$1").toLowerCase();
       await runTest(testKey, testType);
       // Small delay between tests
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
-    
+
     setIsSystemTesting(false);
   };
 
   const resetAllTests = () => {
-    setTestResults(prev => {
+    setTestResults((prev) => {
       const reset = {};
-      Object.keys(prev).forEach(key => {
-        reset[key] = { ...prev[key], status: 'idle', message: 'Ready to test' };
+      Object.keys(prev).forEach((key) => {
+        reset[key] = { ...prev[key], status: "idle", message: "Ready to test" };
       });
       return reset;
     });
@@ -171,26 +266,34 @@ function AdminTestingDashboard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'testing': return <RefreshCw className="w-4 h-4 animate-spin text-blue-500" />;
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'error': return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return <Clock className="w-4 h-4 text-gray-400" />;
+      case "testing":
+        return <RefreshCw className="w-4 h-4 animate-spin text-blue-500" />;
+      case "success":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "error":
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      default:
+        return <Clock className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'testing': return 'border-blue-200 bg-blue-50';
-      case 'success': return 'border-green-200 bg-green-50';
-      case 'error': return 'border-red-200 bg-red-50';
-      default: return 'border-gray-200 bg-white';
+      case "testing":
+        return "border-blue-200 bg-blue-50";
+      case "success":
+        return "border-green-200 bg-green-50";
+      case "error":
+        return "border-red-200 bg-red-50";
+      default:
+        return "border-gray-200 bg-white";
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       {/* Production Environment Banner */}
       {isProduction && (
         <div className="bg-blue-600 text-white">
@@ -199,9 +302,12 @@ function AdminTestingDashboard() {
               <div className="flex items-center">
                 <span className="text-lg mr-3">🏭</span>
                 <div>
-                  <div className="font-semibold">Production Environment Detected</div>
+                  <div className="font-semibold">
+                    Production Environment Detected
+                  </div>
                   <div className="text-sm text-blue-100">
-                    Tests use intelligent simulation data. All tests are safe to run.
+                    Tests use intelligent simulation data. All tests are safe to
+                    run.
                   </div>
                 </div>
               </div>
@@ -228,7 +334,8 @@ function AdminTestingDashboard() {
                   )}
                 </h1>
                 <p className="mt-2 text-gray-600">
-                  Comprehensive API integration testing tools for Hotels, Transfers, Flights & Sightseeing
+                  Comprehensive API integration testing tools for Hotels,
+                  Transfers, Flights & Sightseeing
                 </p>
               </div>
               <div className="flex gap-2">
@@ -250,7 +357,7 @@ function AdminTestingDashboard() {
                       Testing...
                     </>
                   ) : (
-                    'Run All Tests'
+                    "Run All Tests"
                   )}
                 </Button>
               </div>
@@ -261,10 +368,11 @@ function AdminTestingDashboard() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         {/* System Health Summary */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">📊 System Health Overview</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            📊 System Health Overview
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-green-600">
@@ -286,7 +394,11 @@ function AdminTestingDashboard() {
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-emerald-600">
-                {Object.values(testResults).filter(t => t.status === 'success').length}
+                {
+                  Object.values(testResults).filter(
+                    (t) => t.status === "success",
+                  ).length
+                }
               </div>
               <div className="text-sm text-gray-600">Tests Passed</div>
             </div>
@@ -295,19 +407,23 @@ function AdminTestingDashboard() {
 
         {/* API Testing Tools */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
           {/* Hotelbeds Hotels Testing */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 🏨 Hotelbeds Hotels API
-                <Badge variant="outline" className="ml-2 bg-green-50 text-green-700">Live</Badge>
+                <Badge
+                  variant="outline"
+                  className="ml-2 bg-green-50 text-green-700"
+                >
+                  Live
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Button
-                onClick={() => runTest('hotelSearch', 'hotel-search')}
-                disabled={testResults.hotelSearch.status === 'testing'}
+                onClick={() => runTest("hotelSearch", "hotel-search")}
+                disabled={testResults.hotelSearch.status === "testing"}
                 className="w-full bg-green-600 hover:bg-green-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -315,10 +431,10 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.hotelSearch.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('hotelPricing', 'hotel-pricing')}
-                disabled={testResults.hotelPricing.status === 'testing'}
+                onClick={() => runTest("hotelPricing", "hotel-pricing")}
+                disabled={testResults.hotelPricing.status === "testing"}
                 className="w-full bg-green-600 hover:bg-green-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -326,10 +442,10 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.hotelPricing.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('hotelDetails', 'hotel-details')}
-                disabled={testResults.hotelDetails.status === 'testing'}
+                onClick={() => runTest("hotelDetails", "hotel-details")}
+                disabled={testResults.hotelDetails.status === "testing"}
                 className="w-full bg-green-600 hover:bg-green-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -340,14 +456,19 @@ function AdminTestingDashboard() {
 
               {/* Results */}
               <div className="mt-4 space-y-2">
-                {['hotelSearch', 'hotelPricing', 'hotelDetails'].map(key => {
+                {["hotelSearch", "hotelPricing", "hotelDetails"].map((key) => {
                   const result = testResults[key];
                   return (
-                    <div key={key} className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}>
+                    <div
+                      key={key}
+                      className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}
+                    >
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{result.name}</span>
                         {result.responseTime && (
-                          <span className="text-gray-600">{result.responseTime}ms</span>
+                          <span className="text-gray-600">
+                            {result.responseTime}ms
+                          </span>
                         )}
                       </div>
                       <div className="text-gray-700 mt-1">{result.message}</div>
@@ -363,13 +484,18 @@ function AdminTestingDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 🚗 Hotelbeds Transfers API
-                <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700">Live</Badge>
+                <Badge
+                  variant="outline"
+                  className="ml-2 bg-blue-50 text-blue-700"
+                >
+                  Live
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Button
-                onClick={() => runTest('transferSearch', 'transfer-search')}
-                disabled={testResults.transferSearch.status === 'testing'}
+                onClick={() => runTest("transferSearch", "transfer-search")}
+                disabled={testResults.transferSearch.status === "testing"}
                 className="w-full bg-blue-600 hover:bg-blue-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -377,10 +503,10 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.transferSearch.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('transferVehicles', 'transfer-vehicles')}
-                disabled={testResults.transferVehicles.status === 'testing'}
+                onClick={() => runTest("transferVehicles", "transfer-vehicles")}
+                disabled={testResults.transferVehicles.status === "testing"}
                 className="w-full bg-blue-600 hover:bg-blue-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -388,10 +514,10 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.transferVehicles.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('transferBooking', 'transfer-booking')}
-                disabled={testResults.transferBooking.status === 'testing'}
+                onClick={() => runTest("transferBooking", "transfer-booking")}
+                disabled={testResults.transferBooking.status === "testing"}
                 className="w-full bg-blue-600 hover:bg-blue-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -402,20 +528,29 @@ function AdminTestingDashboard() {
 
               {/* Results */}
               <div className="mt-4 space-y-2">
-                {['transferSearch', 'transferVehicles', 'transferBooking'].map(key => {
-                  const result = testResults[key];
-                  return (
-                    <div key={key} className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}>
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">{result.name}</span>
-                        {result.responseTime && (
-                          <span className="text-gray-600">{result.responseTime}ms</span>
-                        )}
+                {["transferSearch", "transferVehicles", "transferBooking"].map(
+                  (key) => {
+                    const result = testResults[key];
+                    return (
+                      <div
+                        key={key}
+                        className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{result.name}</span>
+                          {result.responseTime && (
+                            <span className="text-gray-600">
+                              {result.responseTime}ms
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-gray-700 mt-1">
+                          {result.message}
+                        </div>
                       </div>
-                      <div className="text-gray-700 mt-1">{result.message}</div>
-                    </div>
-                  );
-                })}
+                    );
+                  },
+                )}
               </div>
             </CardContent>
           </Card>
@@ -425,13 +560,18 @@ function AdminTestingDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 ✈️ Amadeus Flights API
-                <Badge variant="outline" className="ml-2 bg-purple-50 text-purple-700">Test Mode</Badge>
+                <Badge
+                  variant="outline"
+                  className="ml-2 bg-purple-50 text-purple-700"
+                >
+                  Test Mode
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Button
-                onClick={() => runTest('flightSearch', 'flight-search')}
-                disabled={testResults.flightSearch.status === 'testing'}
+                onClick={() => runTest("flightSearch", "flight-search")}
+                disabled={testResults.flightSearch.status === "testing"}
                 className="w-full bg-purple-600 hover:bg-purple-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -439,10 +579,10 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.flightSearch.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('flightPricing', 'flight-pricing')}
-                disabled={testResults.flightPricing.status === 'testing'}
+                onClick={() => runTest("flightPricing", "flight-pricing")}
+                disabled={testResults.flightPricing.status === "testing"}
                 className="w-full bg-purple-600 hover:bg-purple-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -450,10 +590,10 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.flightPricing.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('flightBooking', 'flight-booking')}
-                disabled={testResults.flightBooking.status === 'testing'}
+                onClick={() => runTest("flightBooking", "flight-booking")}
+                disabled={testResults.flightBooking.status === "testing"}
                 className="w-full bg-purple-600 hover:bg-purple-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -464,20 +604,29 @@ function AdminTestingDashboard() {
 
               {/* Results */}
               <div className="mt-4 space-y-2">
-                {['flightSearch', 'flightPricing', 'flightBooking'].map(key => {
-                  const result = testResults[key];
-                  return (
-                    <div key={key} className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}>
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">{result.name}</span>
-                        {result.responseTime && (
-                          <span className="text-gray-600">{result.responseTime}ms</span>
-                        )}
+                {["flightSearch", "flightPricing", "flightBooking"].map(
+                  (key) => {
+                    const result = testResults[key];
+                    return (
+                      <div
+                        key={key}
+                        className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{result.name}</span>
+                          {result.responseTime && (
+                            <span className="text-gray-600">
+                              {result.responseTime}ms
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-gray-700 mt-1">
+                          {result.message}
+                        </div>
                       </div>
-                      <div className="text-gray-700 mt-1">{result.message}</div>
-                    </div>
-                  );
-                })}
+                    );
+                  },
+                )}
               </div>
             </CardContent>
           </Card>
@@ -487,13 +636,20 @@ function AdminTestingDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 🗺️ Sightseeing API
-                <Badge variant="outline" className="ml-2 bg-indigo-50 text-indigo-700">Live</Badge>
+                <Badge
+                  variant="outline"
+                  className="ml-2 bg-indigo-50 text-indigo-700"
+                >
+                  Live
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Button
-                onClick={() => runTest('sightseeingSearch', 'sightseeing-search')}
-                disabled={testResults.sightseeingSearch.status === 'testing'}
+                onClick={() =>
+                  runTest("sightseeingSearch", "sightseeing-search")
+                }
+                disabled={testResults.sightseeingSearch.status === "testing"}
                 className="w-full bg-indigo-600 hover:bg-indigo-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -501,10 +657,14 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.sightseeingSearch.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('sightseeingAvailability', 'sightseeing-availability')}
-                disabled={testResults.sightseeingAvailability.status === 'testing'}
+                onClick={() =>
+                  runTest("sightseeingAvailability", "sightseeing-availability")
+                }
+                disabled={
+                  testResults.sightseeingAvailability.status === "testing"
+                }
                 className="w-full bg-indigo-600 hover:bg-indigo-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -512,10 +672,12 @@ function AdminTestingDashboard() {
                   {getStatusIcon(testResults.sightseeingAvailability.status)}
                 </div>
               </Button>
-              
+
               <Button
-                onClick={() => runTest('sightseeingBooking', 'sightseeing-booking')}
-                disabled={testResults.sightseeingBooking.status === 'testing'}
+                onClick={() =>
+                  runTest("sightseeingBooking", "sightseeing-booking")
+                }
+                disabled={testResults.sightseeingBooking.status === "testing"}
                 className="w-full bg-indigo-600 hover:bg-indigo-700"
               >
                 <div className="flex items-center justify-between w-full">
@@ -526,14 +688,23 @@ function AdminTestingDashboard() {
 
               {/* Results */}
               <div className="mt-4 space-y-2">
-                {['sightseeingSearch', 'sightseeingAvailability', 'sightseeingBooking'].map(key => {
+                {[
+                  "sightseeingSearch",
+                  "sightseeingAvailability",
+                  "sightseeingBooking",
+                ].map((key) => {
                   const result = testResults[key];
                   return (
-                    <div key={key} className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}>
+                    <div
+                      key={key}
+                      className={`p-2 rounded text-xs ${getStatusColor(result.status)}`}
+                    >
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{result.name}</span>
                         {result.responseTime && (
-                          <span className="text-gray-600">{result.responseTime}ms</span>
+                          <span className="text-gray-600">
+                            {result.responseTime}ms
+                          </span>
                         )}
                       </div>
                       <div className="text-gray-700 mt-1">{result.message}</div>
@@ -547,13 +718,17 @@ function AdminTestingDashboard() {
 
         {/* Testing Guidelines */}
         <div className="mt-8 bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">💡 Testing Guidelines</h3>
-          
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            💡 Testing Guidelines
+          </h3>
+
           <Alert className="mb-4">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              <strong>Safe Testing Environment:</strong> All tests use simulation data and do not affect production systems. 
-              You can safely run any test without risk of creating real bookings or charges.
+              <strong>Safe Testing Environment:</strong> All tests use
+              simulation data and do not affect production systems. You can
+              safely run any test without risk of creating real bookings or
+              charges.
             </AlertDescription>
           </Alert>
 
@@ -568,7 +743,9 @@ function AdminTestingDashboard() {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-gray-900 mb-2">🎯 What Gets Tested</h4>
+              <h4 className="font-medium text-gray-900 mb-2">
+                🎯 What Gets Tested
+              </h4>
               <ul className="text-sm text-gray-600 space-y-1">
                 <li>• API endpoint connectivity and response times</li>
                 <li>• Data structure validation and completeness</li>
