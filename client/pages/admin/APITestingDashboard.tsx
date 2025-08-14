@@ -587,6 +587,13 @@ const APITestingDashboard: React.FC = () => {
           <p className="text-gray-600">
             Comprehensive API testing interface for all system endpoints
           </p>
+          <div className="mt-2">
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+              Current Tab: {activeMainTab === 'testing' ? 'API Testing' :
+                           activeMainTab === 'documentation' ? 'Documentation' :
+                           activeMainTab === 'saved' ? 'Saved Requests' : 'Authentication'}
+            </Badge>
+          </div>
         </div>
         <div className="flex items-center space-x-2">
           <Badge variant="outline" className="bg-blue-50">
