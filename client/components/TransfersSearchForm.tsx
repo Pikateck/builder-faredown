@@ -262,9 +262,9 @@ export function TransfersSearchForm() {
                     {tripType === "return" ? "Pick-up and return dates" : "Pick-up date"}
                   </div>
                   <div className="font-medium text-gray-900">
-                    {pickupDate ? format(pickupDate, "dd MMM yyyy") : "Add dates"}
+                    {pickupDate ? format(pickupDate, "EEE, MMM d") : "Add dates"}
                     {tripType === "return" && returnDate && (
-                      <span> - {format(returnDate, "dd MMM yyyy")}</span>
+                      <span> - {format(returnDate, "EEE, MMM d")}</span>
                     )}
                   </div>
                 </div>
@@ -548,7 +548,7 @@ export function TransfersSearchForm() {
                         {tripType === "return" ? "Pick-up date" : "Date"}
                       </div>
                       <div className="text-sm font-medium text-gray-900">
-                        {pickupDate ? format(pickupDate, "dd MMM yyyy") : "Add date"}
+                        {pickupDate ? format(pickupDate, "EEE, MMM d") : "Add date"}
                       </div>
                     </div>
                   </div>
@@ -579,7 +579,7 @@ export function TransfersSearchForm() {
                       <div className="pl-10 pr-3 h-full flex flex-col justify-center">
                         <div className="text-xs text-gray-500">Return date</div>
                         <div className="text-sm font-medium text-gray-900">
-                          {returnDate ? format(returnDate, "dd MMM yyyy") : "Add date"}
+                          {returnDate ? format(returnDate, "EEE, MMM d") : "Add date"}
                         </div>
                       </div>
                     </div>
