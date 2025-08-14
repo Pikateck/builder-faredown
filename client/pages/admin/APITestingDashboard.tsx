@@ -38,6 +38,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Header from "@/components/Header";
 import {
   Play,
   Save,
@@ -571,7 +572,9 @@ const APITestingDashboard: React.FC = () => {
   );
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">API Testing Dashboard</h1>
@@ -1475,6 +1478,7 @@ const APITestingDashboard: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 };
