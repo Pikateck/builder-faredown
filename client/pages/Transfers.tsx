@@ -30,10 +30,10 @@ export default function Transfers() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-6 md:mb-8">
             <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
-              Reliable Airport Transfers
+              Upgrade. Bargain. Book.
             </h1>
             <p className="text-blue-200 text-sm md:text-base">
-              Professional drivers, comfortable vehicles, on-time service
+              Ride in comfort for less — AI secures your best deal on every trip.
             </p>
           </div>
           <TransfersSearchForm />
