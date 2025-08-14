@@ -504,6 +504,17 @@ export function BookingCalendar({
           font-weight: 600 !important;
           text-transform: capitalize !important;
         }
+
+        /* Specific fixes for flight calendar border issues */
+        .rdrCalendarWrapper {
+          border: 1px solid #e5e7eb !important;
+          border-radius: 16px !important;
+          overflow: hidden !important;
+        }
+
+        .rdrDateRangeWrapper {
+          border: none !important;
+        }
       `}</style>
 
       <div className="w-full max-w-[700px] h-auto">
