@@ -575,40 +575,6 @@ export function TransfersSearchForm() {
             </Popover>
           </div>
 
-          {/* Add Driver (Driver Age) */}
-          <div className={cn("col-span-1", tripType === "one-way" && "col-span-1")}>
-            <Popover open={isDriverAgeOpen} onOpenChange={setIsDriverAgeOpen}>
-              <PopoverTrigger asChild>
-                <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <User className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">Add driver</div>
-                    <div className="text-sm font-medium text-gray-900">
-                      Age {driverAge}
-                    </div>
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-32 p-2 max-h-64 overflow-y-auto" align="start">
-                <div className="space-y-1">
-                  {driverAgeOptions.map((age) => (
-                    <button
-                      key={age.value}
-                      className="w-full p-2 text-sm hover:bg-gray-100 rounded text-left"
-                      onClick={() => {
-                        setDriverAge(age.value);
-                        setIsDriverAgeOpen(false);
-                      }}
-                    >
-                      {age.label}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
 
           {/* Passengers */}
           <div className="col-span-1">
