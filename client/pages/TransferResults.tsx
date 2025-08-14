@@ -1316,16 +1316,17 @@ export default function TransferResults() {
           const bookingParams = new URLSearchParams({
             transferId: selectedTransfer?.id || "",
             rateKey: selectedTransfer?.rateKey || "",
-            vehicleCode: selectedTransfer?.vehicleCode || "",
+            vehicleName: selectedTransfer?.vehicleName || "",
             price: finalPrice.toString(),
             bargainApplied: "true",
             pickupLocation: pickupLocation,
             dropoffLocation: dropoffLocation,
             pickupDate: pickupDate,
             pickupTime: pickupTime,
-            adults: passengers,
-            children: "0",
-            infants: "0",
+            ...(isRoundTrip && { returnDate, returnTime }),
+            adults: adults.toString(),
+            children: children.toString(),
+            infants: infants.toString(),
           });
 
           navigate(`/transfer-booking?${bookingParams.toString()}`);
