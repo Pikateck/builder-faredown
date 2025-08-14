@@ -88,7 +88,7 @@ export function BookingCalendar({
   }, [initialRange?.startDate?.getTime(), initialRange?.endDate?.getTime()]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
-    console.log("🗓️ Calendar selection changed:", ranges);
+    console.log("🗓�� Calendar selection changed:", ranges);
     console.log("🗓️ Current selection state:", selection);
     const range = ranges.selection;
 
@@ -135,20 +135,6 @@ export function BookingCalendar({
     }
   };
 
-  const addDaysToSelection = (days: number) => {
-    const newEndDate = addDays(selection[0].startDate, days);
-    const newSelection = [
-      {
-        ...selection[0],
-        endDate: newEndDate,
-      },
-    ];
-    setSelection(newSelection);
-    onChange?.({
-      startDate: selection[0].startDate,
-      endDate: newEndDate,
-    });
-  };
 
   const formatSelectionText = () => {
     const { startDate, endDate } = selection[0];
