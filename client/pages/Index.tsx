@@ -1667,8 +1667,7 @@ export default function Index() {
                   </h2>
                 </div>
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                  Control your price for flights & hotels — with live AI
-                  bargaining.
+                  Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
                 </h1>
               </div>
 
