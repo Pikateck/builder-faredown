@@ -230,6 +230,7 @@ const Bookings: React.FC = () => {
     ...flightBookings,
     ...hotelBookings,
     ...sightseeingBookings,
+    ...transferBookings,
   ].sort((a, b) => {
     let dateA: string;
     let dateB: string;
@@ -238,6 +239,8 @@ const Bookings: React.FC = () => {
       dateA = a.date;
     } else if (a.type === "hotel") {
       dateA = a.checkIn;
+    } else if (a.type === "transfer") {
+      dateA = a.pickupDate;
     } else {
       dateA = a.visitDate;
     }
@@ -246,6 +249,8 @@ const Bookings: React.FC = () => {
       dateB = b.date;
     } else if (b.type === "hotel") {
       dateB = b.checkIn;
+    } else if (b.type === "transfer") {
+      dateB = b.pickupDate;
     } else {
       dateB = b.visitDate;
     }
