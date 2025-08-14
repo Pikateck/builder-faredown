@@ -73,7 +73,6 @@ export function TransfersSearchForm() {
     infants: 0,
   });
 
-
   // Mobile dropdowns
   const [showMobileFromDestination, setShowMobileFromDestination] = useState(false);
   const [showMobileToDestination, setShowMobileToDestination] = useState(false);
@@ -121,7 +120,6 @@ export function TransfersSearchForm() {
     const hour = i.toString().padStart(2, '0');
     return { value: `${hour}:00`, label: `${hour}:00` };
   });
-
 
   // Handle search
   const handleSearch = () => {
@@ -373,7 +371,7 @@ export function TransfersSearchForm() {
     );
   }
 
-  // Desktop layout - exactly like Booking.com
+  // Desktop layout - Elegant Classy Design
   return (
     <>
       <ErrorBanner
@@ -382,15 +380,15 @@ export function TransfersSearchForm() {
         onClose={() => setShowError(false)}
       />
 
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+      <div className="bg-white p-8 rounded-2xl border-2 border-gray-100 shadow-xl">
         {/* Transfer Mode Tabs */}
-        <div className="flex border-b border-gray-200 mb-6">
+        <div className="flex border-b border-gray-200 mb-8">
           <button
             onClick={() => setTransferMode("airport")}
             className={cn(
-              "px-6 py-3 text-sm font-medium border-b-2 -mb-px",
+              "px-8 py-4 text-lg font-semibold border-b-3 -mb-px transition-all duration-300",
               transferMode === "airport"
-                ? "border-blue-600 text-blue-600"
+                ? "border-blue-600 text-blue-600 bg-blue-50"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             )}
           >
@@ -399,9 +397,9 @@ export function TransfersSearchForm() {
           <button
             onClick={() => setTransferMode("rental")}
             className={cn(
-              "px-6 py-3 text-sm font-medium border-b-2 -mb-px",
+              "px-8 py-4 text-lg font-semibold border-b-3 -mb-px transition-all duration-300",
               transferMode === "rental"
-                ? "border-blue-600 text-blue-600"
+                ? "border-blue-600 text-blue-600 bg-blue-50"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             )}
           >
@@ -410,173 +408,154 @@ export function TransfersSearchForm() {
         </div>
 
         {/* Trip Type Radio Buttons */}
-        <div className="flex space-x-6 mb-6">
-          <label className="flex items-center space-x-2 cursor-pointer">
+        <div className="flex space-x-8 mb-8">
+          <label className="flex items-center space-x-3 cursor-pointer">
             <input
               type="radio"
               checked={tripType === "one-way"}
               onChange={() => setTripType("one-way")}
-              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500"
             />
-            <span className="text-sm font-medium text-gray-700">One-way</span>
+            <span className="text-lg font-medium text-gray-700">One-way</span>
           </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
+          <label className="flex items-center space-x-3 cursor-pointer">
             <input
               type="radio"
               checked={tripType === "return"}
               onChange={() => setTripType("return")}
-              className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500"
             />
-            <span className="text-sm font-medium text-gray-700">Return</span>
+            <span className="text-lg font-medium text-gray-700">Return</span>
           </label>
         </div>
 
-        {/* Search Form - Horizontal Layout like Booking.com */}
-        <div className="grid grid-cols-12 gap-2">
+        {/* Search Form - Elegant Stacked Layout */}
+        <div className="space-y-6">
           
-          {/* Pick-up Location */}
-          <div className="col-span-3">
-            <Popover open={isPickupDropdownOpen} onOpenChange={setIsPickupDropdownOpen}>
-              <PopoverTrigger asChild>
-                <div className="relative cursor-pointer border border-gray-300 rounded-l-lg h-12 hover:border-gray-400 bg-white">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <Navigation className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">From pick-up location</div>
-                    <div className="text-sm font-medium text-gray-900 truncate">
-                      {pickup ? pickup.label.split('(')[0].trim() : "Enter pick-up location"}
-                    </div>
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-0 border shadow-lg" align="start">
-                <div className="max-h-64 overflow-y-auto">
-                  {transferLocations.map((location) => (
-                    <button
-                      key={location.code}
-                      className="w-full px-4 py-3 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0"
-                      onClick={() => {
-                        setPickup(location);
-                        setIsPickupDropdownOpen(false);
-                      }}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          {location.type === 'airport' ? <Plane className="h-4 w-4 text-blue-600" /> :
-                           location.type === 'hotel' ? <Hotel className="h-4 w-4 text-blue-600" /> :
-                           <MapPin className="h-4 w-4 text-blue-600" />}
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900 text-sm">
-                            {location.label}
-                          </div>
-                          <div className="text-xs text-gray-500 capitalize">
-                            {location.type}
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Drop-off Location */}
-          <div className="col-span-3">
-            <Popover open={isDropoffDropdownOpen} onOpenChange={setIsDropoffDropdownOpen}>
-              <PopoverTrigger asChild>
-                <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <MapPin className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">Enter destination</div>
-                    <div className="text-sm font-medium text-gray-900 truncate">
-                      {dropoff ? dropoff.label.split('(')[0].trim() : "Enter destination"}
-                    </div>
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-0 border shadow-lg" align="start">
-                <div className="max-h-64 overflow-y-auto">
-                  {transferLocations.map((location) => (
-                    <button
-                      key={location.code}
-                      className="w-full px-4 py-3 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0"
-                      onClick={() => {
-                        setDropoff(location);
-                        setIsDropoffDropdownOpen(false);
-                      }}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          {location.type === 'airport' ? <Plane className="h-4 w-4 text-blue-600" /> :
-                           location.type === 'hotel' ? <Hotel className="h-4 w-4 text-blue-600" /> :
-                           <MapPin className="h-4 w-4 text-blue-600" />}
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900 text-sm">
-                            {location.label}
-                          </div>
-                          <div className="text-xs text-gray-500 capitalize">
-                            {location.type}
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Pickup Date */}
-          <div className="col-span-2">
-            <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
-              <PopoverTrigger asChild>
-                <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <CalendarIcon className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">
-                      {tripType === "return" ? "Pick-up date" : "Date"}
-                    </div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {pickupDate ? format(pickupDate, "dd MMM yyyy") : "Add date"}
-                    </div>
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <BookingCalendar
-                  onChange={({ startDate, endDate }) => {
-                    if (startDate) setPickupDate(startDate);
-                    if (endDate && tripType === "return") setReturnDate(endDate);
-                  }}
-                  initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
-                  onClose={() => setIsPickupDateOpen(false)}
-                  bookingType="transfers"
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Return Date (if return trip) */}
-          {tripType === "return" && (
-            <div className="col-span-2">
-              <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+          {/* Top Row - Locations */}
+          <div className="grid grid-cols-12 gap-4">
+            {/* Pick-up Location */}
+            <div className="col-span-6">
+              <Popover open={isPickupDropdownOpen} onOpenChange={setIsPickupDropdownOpen}>
                 <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <CalendarIcon className="w-4 h-4 text-gray-600" />
+                  <div className="relative cursor-pointer border-2 border-gray-200 rounded-2xl h-20 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-lg group">
+                    <div className="absolute left-5 top-1/2 transform -translate-y-1/2">
+                      <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                        <Navigation className="w-6 h-6 text-blue-600" />
+                      </div>
                     </div>
-                    <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500">Return date</div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {returnDate ? format(returnDate, "dd MMM yyyy") : "Add date"}
+                    <div className="pl-20 pr-5 h-full flex flex-col justify-center">
+                      <div className="text-sm text-gray-500 font-semibold mb-1">From pick-up location</div>
+                      <div className="text-lg font-bold text-gray-900 truncate">
+                        {pickup ? pickup.label.split('(')[0].trim() : "Enter pick-up location"}
+                      </div>
+                    </div>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-96 p-0 border-2 shadow-2xl rounded-2xl" align="start">
+                  <div className="max-h-80 overflow-y-auto">
+                    {transferLocations.map((location) => (
+                      <button
+                        key={location.code}
+                        className="w-full px-6 py-4 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0 transition-colors"
+                        onClick={() => {
+                          setPickup(location);
+                          setIsPickupDropdownOpen(false);
+                        }}
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            {location.type === 'airport' ? <Plane className="h-5 w-5 text-blue-600" /> :
+                             location.type === 'hotel' ? <Hotel className="h-5 w-5 text-blue-600" /> :
+                             <MapPin className="h-5 w-5 text-blue-600" />}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900 text-base">
+                              {location.label}
+                            </div>
+                            <div className="text-sm text-gray-500 capitalize">
+                              {location.type}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Drop-off Location */}
+            <div className="col-span-6">
+              <Popover open={isDropoffDropdownOpen} onOpenChange={setIsDropoffDropdownOpen}>
+                <PopoverTrigger asChild>
+                  <div className="relative cursor-pointer border-2 border-gray-200 rounded-2xl h-20 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-lg group">
+                    <div className="absolute left-5 top-1/2 transform -translate-y-1/2">
+                      <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                        <MapPin className="w-6 h-6 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="pl-20 pr-5 h-full flex flex-col justify-center">
+                      <div className="text-sm text-gray-500 font-semibold mb-1">Enter destination</div>
+                      <div className="text-lg font-bold text-gray-900 truncate">
+                        {dropoff ? dropoff.label.split('(')[0].trim() : "Enter destination"}
+                      </div>
+                    </div>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-96 p-0 border-2 shadow-2xl rounded-2xl" align="start">
+                  <div className="max-h-80 overflow-y-auto">
+                    {transferLocations.map((location) => (
+                      <button
+                        key={location.code}
+                        className="w-full px-6 py-4 hover:bg-gray-50 text-left border-b border-gray-100 last:border-b-0 transition-colors"
+                        onClick={() => {
+                          setDropoff(location);
+                          setIsDropoffDropdownOpen(false);
+                        }}
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                            {location.type === 'airport' ? <Plane className="h-5 w-5 text-blue-600" /> :
+                             location.type === 'hotel' ? <Hotel className="h-5 w-5 text-blue-600" /> :
+                             <MapPin className="h-5 w-5 text-blue-600" />}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-900 text-base">
+                              {location.label}
+                            </div>
+                            <div className="text-sm text-gray-500 capitalize">
+                              {location.type}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
+          {/* Second Row - Dates & Times Stacked with Passengers */}
+          <div className="grid grid-cols-12 gap-4">
+            {/* Pickup Date & Time Stack */}
+            <div className="col-span-3 space-y-3">
+              {/* Pickup Date */}
+              <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                <PopoverTrigger asChild>
+                  <div className="relative cursor-pointer border-2 border-gray-200 rounded-xl h-16 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-md group">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                      <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                        <CalendarIcon className="w-5 h-5 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="pl-16 pr-4 h-full flex flex-col justify-center">
+                      <div className="text-xs text-gray-500 font-semibold mb-1">
+                        {tripType === "return" ? "Pick-up date" : "Date"}
+                      </div>
+                      <div className="text-sm font-bold text-gray-900">
+                        {pickupDate ? format(pickupDate, "dd MMM yyyy") : "Add date"}
                       </div>
                     </div>
                   </div>
@@ -585,80 +564,39 @@ export function TransfersSearchForm() {
                   <BookingCalendar
                     onChange={({ startDate, endDate }) => {
                       if (startDate) setPickupDate(startDate);
-                      if (endDate) setReturnDate(endDate);
+                      if (endDate && tripType === "return") setReturnDate(endDate);
                     }}
                     initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
-                    onClose={() => setIsReturnDateOpen(false)}
+                    onClose={() => setIsPickupDateOpen(false)}
                     bookingType="transfers"
                   />
                 </PopoverContent>
               </Popover>
-            </div>
-          )}
 
-          {/* Pickup Time */}
-          <div className="col-span-1">
-            <Popover open={isPickupTimeOpen} onOpenChange={setIsPickupTimeOpen}>
-              <PopoverTrigger asChild>
-                <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <Clock className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">
-                      {tripType === "return" ? "Going time" : "Time"}
-                    </div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {pickupTime}
-                    </div>
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
-                <div className="grid grid-cols-2 gap-1">
-                  {timeOptions.map((time) => (
-                    <button
-                      key={time.value}
-                      className="p-2 text-sm hover:bg-gray-100 rounded text-left"
-                      onClick={() => {
-                        setPickupTime(time.value);
-                        setIsPickupTimeOpen(false);
-                      }}
-                    >
-                      {time.label}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Return Time (if return trip) */}
-          {tripType === "return" && (
-            <div className="col-span-1">
-              <Popover open={isReturnTimeOpen} onOpenChange={setIsReturnTimeOpen}>
+              {/* Going Time below Pickup Date */}
+              <Popover open={isPickupTimeOpen} onOpenChange={setIsPickupTimeOpen}>
                 <PopoverTrigger asChild>
-                  <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
+                  <div className="relative cursor-pointer border border-gray-200 rounded-lg h-12 hover:border-blue-300 bg-white transition-all duration-200 group">
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      <Clock className="w-4 h-4 text-gray-600" />
+                      <Clock className="w-4 h-4 text-blue-600" />
                     </div>
                     <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                      <div className="text-xs text-gray-500">Coming time</div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {returnTime}
+                      <div className="text-xs text-gray-500 font-medium">Going time</div>
+                      <div className="text-sm font-bold text-gray-900">
+                        {pickupTime}
                       </div>
                     </div>
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto" align="start">
+                <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto rounded-xl shadow-xl" align="start">
                   <div className="grid grid-cols-2 gap-1">
                     {timeOptions.map((time) => (
                       <button
                         key={time.value}
-                        className="p-2 text-sm hover:bg-gray-100 rounded text-left"
+                        className="p-2 text-sm hover:bg-blue-50 rounded text-left transition-colors font-medium"
                         onClick={() => {
-                          setReturnTime(time.value);
-                          setIsReturnTimeOpen(false);
+                          setPickupTime(time.value);
+                          setIsPickupTimeOpen(false);
                         }}
                       >
                         {time.label}
@@ -668,116 +606,194 @@ export function TransfersSearchForm() {
                 </PopoverContent>
               </Popover>
             </div>
-          )}
 
+            {/* Return Date & Time Stack (if return trip) */}
+            {tripType === "return" && (
+              <div className="col-span-3 space-y-3">
+                {/* Return Date */}
+                <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative cursor-pointer border-2 border-gray-200 rounded-xl h-16 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-md group">
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                          <CalendarIcon className="w-5 h-5 text-blue-600" />
+                        </div>
+                      </div>
+                      <div className="pl-16 pr-4 h-full flex flex-col justify-center">
+                        <div className="text-xs text-gray-500 font-semibold mb-1">Return date</div>
+                        <div className="text-sm font-bold text-gray-900">
+                          {returnDate ? format(returnDate, "dd MMM yyyy") : "Add date"}
+                        </div>
+                      </div>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <BookingCalendar
+                      onChange={({ startDate, endDate }) => {
+                        if (startDate) setPickupDate(startDate);
+                        if (endDate) setReturnDate(endDate);
+                      }}
+                      initialRange={pickupDate ? { startDate: pickupDate, endDate: returnDate || addDays(pickupDate, 3) } : undefined}
+                      onClose={() => setIsReturnDateOpen(false)}
+                      bookingType="transfers"
+                    />
+                  </PopoverContent>
+                </Popover>
 
-          {/* Passengers */}
-          <div className={cn("col-span-1", tripType === "one-way" && "col-span-2")}>
-            <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
-              <PopoverTrigger asChild>
-                <div className="relative cursor-pointer border-t border-b border-r border-gray-300 h-12 hover:border-gray-400 bg-white">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    <Users className="w-4 h-4 text-gray-600" />
-                  </div>
-                  <div className="pl-10 pr-3 h-full flex flex-col justify-center">
-                    <div className="text-xs text-gray-500">Passengers</div>
-                    <div className="text-sm font-medium text-gray-900">
-                      {passengers.adults + passengers.children}
+                {/* Coming Time below Return Date */}
+                <Popover open={isReturnTimeOpen} onOpenChange={setIsReturnTimeOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative cursor-pointer border border-gray-200 rounded-lg h-12 hover:border-blue-300 bg-white transition-all duration-200 group">
+                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                        <Clock className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="pl-10 pr-3 h-full flex flex-col justify-center">
+                        <div className="text-xs text-gray-500 font-medium">Coming time</div>
+                        <div className="text-sm font-bold text-gray-900">
+                          {returnTime}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-64 p-4 border shadow-lg" align="start">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">Adults</div>
-                      <div className="text-xs text-gray-500">Age 18+</div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-48 p-2 max-h-64 overflow-y-auto rounded-xl shadow-xl" align="start">
+                    <div className="grid grid-cols-2 gap-1">
+                      {timeOptions.map((time) => (
+                        <button
+                          key={time.value}
+                          className="p-2 text-sm hover:bg-blue-50 rounded text-left transition-colors font-medium"
+                          onClick={() => {
+                            setReturnTime(time.value);
+                            setIsReturnTimeOpen(false);
+                          }}
+                        >
+                          {time.label}
+                        </button>
+                      ))}
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (passengers.adults > 1) {
-                            setPassengers({...passengers, adults: passengers.adults - 1});
-                          }
-                        }}
-                        disabled={passengers.adults <= 1}
-                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      <span className="text-sm font-medium w-8 text-center">{passengers.adults}</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (passengers.adults < 8) {
-                            setPassengers({...passengers, adults: passengers.adults + 1});
-                          }
-                        }}
-                        disabled={passengers.adults >= 8}
-                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">Children</div>
-                      <div className="text-xs text-gray-500">Age 2-17</div>
+            {/* Passengers & Search */}
+            <div className={cn("flex items-start gap-4", tripType === "return" ? "col-span-6" : "col-span-9")}>
+              {/* Passengers */}
+              <div className="flex-1">
+                <Popover open={isPassengersDropdownOpen} onOpenChange={setIsPassengersDropdownOpen}>
+                  <PopoverTrigger asChild>
+                    <div className="relative cursor-pointer border-2 border-gray-200 rounded-xl h-16 hover:border-blue-300 bg-white transition-all duration-300 shadow-sm hover:shadow-md group">
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                          <Users className="w-5 h-5 text-blue-600" />
+                        </div>
+                      </div>
+                      <div className="pl-16 pr-4 h-full flex flex-col justify-center">
+                        <div className="text-xs text-gray-500 font-semibold mb-1">Passengers</div>
+                        <div className="text-sm font-bold text-gray-900">
+                          {passengers.adults + passengers.children}
+                          <span className="text-xs text-gray-500 ml-1">
+                            ({passengers.adults} adult{passengers.adults > 1 ? "s" : ""}
+                            {passengers.children > 0 &&
+                              `, ${passengers.children} child${passengers.children > 1 ? "ren" : ""}`})
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (passengers.children > 0) {
-                            const newAges = [...passengers.childrenAges];
-                            newAges.pop();
-                            setPassengers({...passengers, children: passengers.children - 1, childrenAges: newAges});
-                          }
-                        }}
-                        disabled={passengers.children <= 0}
-                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      <span className="text-sm font-medium w-8 text-center">{passengers.children}</span>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (passengers.children < 6) {
-                            setPassengers({
-                              ...passengers,
-                              children: passengers.children + 1,
-                              childrenAges: [...passengers.childrenAges, 10]
-                            });
-                          }
-                        }}
-                        disabled={passengers.children >= 6}
-                        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-6 border-2 shadow-2xl rounded-2xl" align="start">
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-base font-semibold text-gray-900">Adults</div>
+                          <div className="text-sm text-gray-500">Age 18+</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (passengers.adults > 1) {
+                                setPassengers({...passengers, adults: passengers.adults - 1});
+                              }
+                            }}
+                            disabled={passengers.adults <= 1}
+                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                          >
+                            <Minus className="h-5 w-5" />
+                          </button>
+                          <span className="text-base font-bold w-8 text-center">{passengers.adults}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (passengers.adults < 8) {
+                                setPassengers({...passengers, adults: passengers.adults + 1});
+                              }
+                            }}
+                            disabled={passengers.adults >= 8}
+                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                          >
+                            <Plus className="h-5 w-5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-base font-semibold text-gray-900">Children</div>
+                          <div className="text-sm text-gray-500">Age 2-17</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (passengers.children > 0) {
+                                const newAges = [...passengers.childrenAges];
+                                newAges.pop();
+                                setPassengers({...passengers, children: passengers.children - 1, childrenAges: newAges});
+                              }
+                            }}
+                            disabled={passengers.children <= 0}
+                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                          >
+                            <Minus className="h-5 w-5" />
+                          </button>
+                          <span className="text-base font-bold w-8 text-center">{passengers.children}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (passengers.children < 6) {
+                                setPassengers({
+                                  ...passengers,
+                                  children: passengers.children + 1,
+                                  childrenAges: [...passengers.childrenAges, 10]
+                                });
+                              }
+                            }}
+                            disabled={passengers.children >= 6}
+                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                          >
+                            <Plus className="h-5 w-5" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Search Button */}
+              <div className="flex-shrink-0">
+                <Button
+                  onClick={handleSearch}
+                  disabled={!isFormValid}
+                  className="h-16 px-10 bg-[#003580] hover:bg-blue-700 text-white font-bold text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                  title="Search transfers"
+                >
+                  <Search className="mr-3 h-6 w-6" />
+                  <span>Search</span>
+                </Button>
+              </div>
+            </div>
           </div>
-
-          {/* Search Button */}
-          <div className="col-span-1">
-            <Button
-              onClick={handleSearch}
-              disabled={!isFormValid}
-              className="w-full h-12 bg-[#003580] hover:bg-blue-700 text-white font-bold rounded-r-lg border-0"
-            >
-              Search
-            </Button>
-          </div>
-
         </div>
       </div>
     </>
