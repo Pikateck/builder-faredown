@@ -136,6 +136,7 @@ export function TransfersSearchForm() {
     }
 
     const searchParams = new URLSearchParams();
+    searchParams.set("transferMode", transferMode);
     searchParams.set("tripType", tripType);
     searchParams.set("pickup", pickup.code);
     searchParams.set("dropoff", dropoff.code);
