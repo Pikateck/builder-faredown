@@ -119,11 +119,6 @@ export function TransfersSearchForm() {
     return { value: `${hour}:00`, label: `${hour}:00` };
   });
 
-  // Driver age options
-  const driverAgeOptions = Array.from({ length: 46 }, (_, i) => {
-    const age = i + 25; // 25 to 70
-    return { value: age.toString(), label: age.toString() };
-  });
 
   // Handle search
   const handleSearch = () => {
