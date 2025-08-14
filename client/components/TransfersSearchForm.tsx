@@ -221,7 +221,7 @@ export function TransfersSearchForm() {
             <button
               onClick={() => setTransferMode("airport")}
               className={cn(
-                "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
                 transferMode === "airport"
                   ? "bg-[#003580] text-white"
                   : "text-gray-600 hover:text-gray-900",
@@ -232,7 +232,7 @@ export function TransfersSearchForm() {
             <button
               onClick={() => setTransferMode("rental")}
               className={cn(
-                "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
                 transferMode === "rental"
                   ? "bg-[#003580] text-white"
                   : "text-gray-600 hover:text-gray-900",
@@ -248,7 +248,7 @@ export function TransfersSearchForm() {
               <button
                 onClick={() => setTripType("one-way")}
                 className={cn(
-                  "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+                  "py-1 px-3 rounded-md text-xs font-medium transition-colors",
                   tripType === "one-way"
                     ? "bg-[#003580] text-white"
                     : "text-gray-600 hover:text-gray-900",
@@ -259,7 +259,7 @@ export function TransfersSearchForm() {
               <button
                 onClick={() => setTripType("return")}
                 className={cn(
-                  "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+                  "py-1 px-3 rounded-md text-xs font-medium transition-colors",
                   tripType === "return"
                     ? "bg-[#003580] text-white"
                     : "text-gray-600 hover:text-gray-900",
@@ -560,7 +560,7 @@ export function TransfersSearchForm() {
             <button
               onClick={() => setTripType("one-way")}
               className={cn(
-                "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
                 tripType === "one-way"
                   ? "bg-[#003580] text-white"
                   : "text-gray-600 hover:text-gray-900",
@@ -571,7 +571,7 @@ export function TransfersSearchForm() {
             <button
               onClick={() => setTripType("return")}
               className={cn(
-                "flex-1 py-1 px-2 rounded-md text-xs font-medium transition-colors",
+                "py-1 px-3 rounded-md text-xs font-medium transition-colors",
                 tripType === "return"
                   ? "bg-[#003580] text-white"
                   : "text-gray-600 hover:text-gray-900",
