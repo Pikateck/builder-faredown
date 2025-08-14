@@ -442,12 +442,13 @@ export function BookingCalendar({
 
           .booking-calendar .rdrMonths {
             flex-direction: column;
-            gap: 10px;
+            gap: 0;
           }
 
           .booking-calendar .rdrMonth {
             width: 100% !important;
             padding: 0 !important;
+            min-width: auto !important;
           }
 
           .booking-calendar .rdrCalendarWrapper {
@@ -455,14 +456,16 @@ export function BookingCalendar({
             border-radius: 8px;
             overflow: visible;
             height: auto;
+            max-width: 100%;
           }
 
           .booking-calendar .rdrMonthAndYearWrapper {
             padding: 12px 16px 8px;
+            min-height: 50px;
           }
 
           .booking-calendar .rdrMonthWrapper {
-            padding: 0 12px 12px;
+            padding: 0 8px 8px;
           }
 
           .booking-calendar .rdrNextPrevButton {
@@ -470,10 +473,19 @@ export function BookingCalendar({
             height: 32px;
           }
 
-          .booking-calendar .rdrDayNumber span {
+          .booking-calendar .rdrDayNumber {
             width: 32px;
             height: 32px;
-            line-height: 32px;
+            font-size: 13px;
+            margin: 1px;
+          }
+
+          .booking-calendar .rdrDays {
+            padding: 8px;
+          }
+
+          .booking-calendar .rdrWeekDaysWrapper {
+            padding: 8px;
           }
         }
 
