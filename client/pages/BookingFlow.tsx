@@ -1433,7 +1433,7 @@ export default function BookingFlow() {
             from: "Mumbai",
             to: "Dubai",
             date: departureDate
-              ? formatDisplayDate(departureDate, "MMM d, yyyy")
+              ? formatDisplayDate(departureDate, "EEE, MMM d")
               : "Select date",
             time: selectedFlight?.departureTime || "14:35",
             duration: selectedFlight?.duration || "3h 15m",
@@ -1445,7 +1445,7 @@ export default function BookingFlow() {
                 {
                   from: "Dubai",
                   to: "Mumbai",
-                  date: formatDisplayDate(returnDate, "MMM d, yyyy"),
+                  date: formatDisplayDate(returnDate, "EEE, MMM d"),
                   time: selectedFlight?.returnDepartureTime || "08:45",
                   duration: selectedFlight?.returnDuration || "3h 20m",
                   airline: selectedFlight?.airline || "Airlines",
