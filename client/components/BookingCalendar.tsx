@@ -295,19 +295,20 @@ export function BookingCalendar({
         }
 
         .booking-calendar .rdrDays {
-          padding: 16px 24px 24px;
+          padding: 12px 16px 16px;
         }
 
         .booking-calendar .rdrDayNumber {
           font-weight: 500;
-          font-size: 15px;
+          font-size: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
+          width: 36px;
+          height: 36px;
+          border-radius: 8px;
           transition: all 0.2s ease;
+          margin: 2px;
         }
 
         .booking-calendar .rdrDayToday .rdrDayNumber {
