@@ -17,19 +17,19 @@ const Bookings: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   // Initialize tab from URL parameter
-  const getInitialTab = (): "all" | "flights" | "hotels" | "sightseeing" => {
+  const getInitialTab = (): "all" | "flights" | "hotels" | "sightseeing" | "transfers" => {
     const tabParam = searchParams.get("tab");
     if (
       tabParam &&
-      ["all", "flights", "hotels", "sightseeing"].includes(tabParam)
+      ["all", "flights", "hotels", "sightseeing", "transfers"].includes(tabParam)
     ) {
-      return tabParam as "all" | "flights" | "hotels" | "sightseeing";
+      return tabParam as "all" | "flights" | "hotels" | "sightseeing" | "transfers";
     }
     return "all";
   };
 
   const [activeTab, setActiveTab] = useState<
-    "all" | "flights" | "hotels" | "sightseeing"
+    "all" | "flights" | "hotels" | "sightseeing" | "transfers"
   >(getInitialTab());
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [viewDetailsModal, setViewDetailsModal] = useState(false);
@@ -44,9 +44,9 @@ const Bookings: React.FC = () => {
     const tabParam = searchParams.get("tab");
     if (
       tabParam &&
-      ["all", "flights", "hotels", "sightseeing"].includes(tabParam)
+      ["all", "flights", "hotels", "sightseeing", "transfers"].includes(tabParam)
     ) {
-      setActiveTab(tabParam as "all" | "flights" | "hotels" | "sightseeing");
+      setActiveTab(tabParam as "all" | "flights" | "hotels" | "sightseeing" | "transfers");
     }
   }, [searchParams]);
 
