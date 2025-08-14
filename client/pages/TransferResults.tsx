@@ -1116,11 +1116,22 @@ export default function TransferResults() {
                       {/* Action Buttons */}
                       <div className="space-y-2">
                         <Button
-                          onClick={() =>
-                            navigate(
-                              `/transfer-details/${transfer.id}?price=${transfer.pricing.totalPrice}&from=${encodeURIComponent(transfer.pickupLocation)}&to=${encodeURIComponent(transfer.dropoffLocation)}&vehicle=${encodeURIComponent(transfer.vehicleName)}`,
-                            )
-                          }
+                          onClick={() => {
+                            const detailParams = new URLSearchParams({
+                              price: transfer.pricing.totalPrice.toString(),
+                              from: transfer.pickupLocation,
+                              to: transfer.dropoffLocation,
+                              vehicle: transfer.vehicleName,
+                              pickupDate,
+                              pickupTime,
+                              ...(isRoundTrip && { returnDate, returnTime }),
+                              adults: adults.toString(),
+                              children: children.toString(),
+                              infants: infants.toString(),
+                              tripType: isRoundTrip ? "return" : "one-way"
+                            });
+                            navigate(`/transfer-details/${transfer.id}?${detailParams.toString()}`);
+                          }}
                           className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
                           View Details
