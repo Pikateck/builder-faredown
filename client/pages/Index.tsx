@@ -131,7 +131,6 @@ export default function Index() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [activeTab, setActiveTab] = useState("flights"); // Track active tab
-  const [activeTabs, setActiveTabs] = useState(["flights", "hotels"]); // Track multiple active tabs
 
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
@@ -1467,12 +1466,8 @@ export default function Index() {
                     setActiveTab("flights");
                     window.history.pushState({}, "", "/?tab=flights");
                   }}
-                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 transition-all duration-200 ${
-                    activeTabs.includes("flights")
-                      ? "border-b-3 border-orange-400 text-orange-200 bg-orange-500/20"
-                      : activeTab === "flights"
-                        ? "border-b-2 border-white"
-                        : ""
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "flights" ? "border-b-2 border-white" : ""
                   }`}
                 >
                   <span>Flights</span>
@@ -1482,12 +1477,8 @@ export default function Index() {
                     setActiveTab("hotels");
                     window.history.pushState({}, "", "/?tab=hotels");
                   }}
-                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 transition-all duration-200 ${
-                    activeTabs.includes("hotels")
-                      ? "border-b-3 border-orange-400 text-orange-200 bg-orange-500/20"
-                      : activeTab === "hotels"
-                        ? "border-b-2 border-white"
-                        : ""
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "hotels" ? "border-b-2 border-white" : ""
                   }`}
                 >
                   <span>Hotels</span>
@@ -1497,12 +1488,8 @@ export default function Index() {
                     setActiveTab("sightseeing");
                     window.history.pushState({}, "", "/?tab=sightseeing");
                   }}
-                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 transition-all duration-200 ${
-                    activeTabs.includes("sightseeing")
-                      ? "border-b-3 border-orange-400 text-orange-200 bg-orange-500/20"
-                      : activeTab === "sightseeing"
-                        ? "border-b-2 border-white"
-                        : ""
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "sightseeing" ? "border-b-2 border-white" : ""
                   }`}
                 >
                   <span>Sightseeing</span>
@@ -1512,12 +1499,8 @@ export default function Index() {
                     setActiveTab("transfers");
                     window.history.pushState({}, "", "/?tab=transfers");
                   }}
-                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 transition-all duration-200 ${
-                    activeTabs.includes("transfers")
-                      ? "border-b-3 border-orange-400 text-orange-200 bg-orange-500/20"
-                      : activeTab === "transfers"
-                        ? "border-b-2 border-white"
-                        : ""
+                  className={`text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 ${
+                    activeTab === "transfers" ? "border-b-2 border-white" : ""
                   }`}
                 >
                   <span>Transfers</span>
