@@ -582,3 +582,5 @@ function AdminTestingDashboard() {
     </div>
   );
 }
+
+export default AdminTestingDashboard;
