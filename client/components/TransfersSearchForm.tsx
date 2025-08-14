@@ -140,16 +140,19 @@ export function TransfersSearchForm() {
     searchParams.set("tripType", tripType);
     searchParams.set("pickup", pickup.code);
     searchParams.set("dropoff", dropoff.code);
+    searchParams.set("pickupLocation", pickup.label);
+    searchParams.set("dropoffLocation", dropoff.label);
     searchParams.set("pickupDate", pickupDate.toISOString().split('T')[0]);
     searchParams.set("pickupTime", pickupTime);
-    
+
     if (tripType === "return" && returnDate) {
       searchParams.set("returnDate", returnDate.toISOString().split('T')[0]);
       searchParams.set("returnTime", returnTime);
     }
-    
+
     searchParams.set("adults", passengers.adults.toString());
     searchParams.set("children", passengers.children.toString());
+    searchParams.set("infants", passengers.infants.toString());
 
     navigate(`/transfer-results?${searchParams.toString()}`);
   };
