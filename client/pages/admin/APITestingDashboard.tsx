@@ -854,21 +854,21 @@ const APITestingDashboard: React.FC = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Tabs defaultValue="body">
+                    <Tabs defaultValue="response-body">
                       <TabsList>
-                        <TabsTrigger value="body">Response Body</TabsTrigger>
-                        <TabsTrigger value="headers">
+                        <TabsTrigger value="response-body">Response Body</TabsTrigger>
+                        <TabsTrigger value="response-headers">
                           Response Headers
                         </TabsTrigger>
                       </TabsList>
 
-                      <TabsContent value="body">
+                      <TabsContent value="response-body">
                         <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm">
                           {JSON.stringify(response.data, null, 2)}
                         </pre>
                       </TabsContent>
 
-                      <TabsContent value="headers">
+                      <TabsContent value="response-headers">
                         <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-sm">
                           {JSON.stringify(response.headers, null, 2)}
                         </pre>
