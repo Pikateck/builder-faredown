@@ -93,10 +93,14 @@ export default function SightseeingDetails() {
         <Header />
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Attraction Not Found</h1>
-            <p className="text-gray-600 mb-6">The attraction you're looking for doesn't exist.</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              Attraction Not Found
+            </h1>
+            <p className="text-gray-600 mb-6">
+              The attraction you're looking for doesn't exist.
+            </p>
             <Button
-              onClick={() => navigate('/?tab=sightseeing')}
+              onClick={() => navigate("/?tab=sightseeing")}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Back to Sightseeing
@@ -139,7 +143,7 @@ export default function SightseeingDetails() {
     searchParams: Object.fromEntries(searchParams.entries()),
     loading,
     error,
-    attraction: attraction?.name || 'null',
+    attraction: attraction?.name || "null",
   });
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
@@ -351,7 +355,12 @@ export default function SightseeingDetails() {
         };
 
         const attractionData = sampleAttractions[attractionId || ""];
-        console.log("📊 Looking for attraction:", attractionId, "Found:", !!attractionData);
+        console.log(
+          "📊 Looking for attraction:",
+          attractionId,
+          "Found:",
+          !!attractionData,
+        );
 
         if (!attractionData) {
           console.log("❌ Attraction not found");
@@ -528,12 +537,15 @@ export default function SightseeingDetails() {
   ) => {
     setPassengerQuantities((prev) => {
       // Ensure prev is defined and has the required properties
-      if (!prev || typeof prev !== 'object') {
+      if (!prev || typeof prev !== "object") {
         prev = { adults: 1, children: 0, infants: 0 };
       }
 
       const currentValue = prev[type] || 0;
-      const newQuantity = Math.max(type === "adults" ? 1 : 0, currentValue + change);
+      const newQuantity = Math.max(
+        type === "adults" ? 1 : 0,
+        currentValue + change,
+      );
 
       return {
         ...prev,
@@ -1425,45 +1437,49 @@ export default function SightseeingDetails() {
       </AlertDialog>
 
       {/* Sightseeing Bargain Modal */}
-      {attraction && attraction.ticketTypes && attraction.ticketTypes[bargainTicketType] && (
-        <FlightStyleBargainModal
-          type="sightseeing"
-          roomType={{
-            id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
-            name:
-              attraction.ticketTypes[bargainTicketType]?.name ||
-              "Standard Admission",
-            description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
-            image: attraction.images?.[0] || "",
-            marketPrice:
-              getTicketTotalPrice(bargainTicketType) ||
-              attraction.ticketTypes[bargainTicketType]?.price ||
-              149,
-            totalPrice:
-              getTicketTotalPrice(bargainTicketType) ||
-              attraction.ticketTypes[bargainTicketType]?.price ||
-              149,
-            features: attraction.ticketTypes[bargainTicketType]?.features || [],
-            maxOccupancy: adults || 2,
-            bedType: attraction.duration || "1-2 hours",
-            size: attraction.category || "activity",
-            cancellation: "Free cancellation up to 24 hours before visit date",
-          }}
-          hotel={{
-            id: attraction.id || "unknown",
-            name: attraction.name || "Unknown Attraction",
-            location: attraction.location || "Unknown Location",
-            checkIn: new Date().toISOString().split("T")[0],
-            checkOut: new Date().toISOString().split("T")[0],
-          }}
-          isOpen={isBargainModalOpen}
-          onClose={() => setIsBargainModalOpen(false)}
-          checkInDate={new Date()}
-          checkOutDate={new Date()}
-          roomsCount={1}
-          onBookingSuccess={handleBargainSuccess}
-        />
-      )}
+      {attraction &&
+        attraction.ticketTypes &&
+        attraction.ticketTypes[bargainTicketType] && (
+          <FlightStyleBargainModal
+            type="sightseeing"
+            roomType={{
+              id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
+              name:
+                attraction.ticketTypes[bargainTicketType]?.name ||
+                "Standard Admission",
+              description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
+              image: attraction.images?.[0] || "",
+              marketPrice:
+                getTicketTotalPrice(bargainTicketType) ||
+                attraction.ticketTypes[bargainTicketType]?.price ||
+                149,
+              totalPrice:
+                getTicketTotalPrice(bargainTicketType) ||
+                attraction.ticketTypes[bargainTicketType]?.price ||
+                149,
+              features:
+                attraction.ticketTypes[bargainTicketType]?.features || [],
+              maxOccupancy: adults || 2,
+              bedType: attraction.duration || "1-2 hours",
+              size: attraction.category || "activity",
+              cancellation:
+                "Free cancellation up to 24 hours before visit date",
+            }}
+            hotel={{
+              id: attraction.id || "unknown",
+              name: attraction.name || "Unknown Attraction",
+              location: attraction.location || "Unknown Location",
+              checkIn: new Date().toISOString().split("T")[0],
+              checkOut: new Date().toISOString().split("T")[0],
+            }}
+            isOpen={isBargainModalOpen}
+            onClose={() => setIsBargainModalOpen(false)}
+            checkInDate={new Date()}
+            checkOutDate={new Date()}
+            roomsCount={1}
+            onBookingSuccess={handleBargainSuccess}
+          />
+        )}
     </div>
   );
 }

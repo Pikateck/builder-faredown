@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Play, 
-  CheckCircle, 
-  XCircle, 
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Play,
+  CheckCircle,
+  XCircle,
   Clock,
   RefreshCw,
   Code,
   Database,
-  Zap
-} from 'lucide-react';
-import { apiClient } from '@/lib/api';
+  Zap,
+} from "lucide-react";
+import { apiClient } from "@/lib/api";
 
 interface TestResult {
   name: string;
@@ -30,41 +30,41 @@ const APITestDashboard: React.FC = () => {
   const runPricingTests = async () => {
     setIsRunning(true);
     setTestResults([]);
-    
+
     const tests = [
       {
-        name: 'Test Quote Generation',
-        endpoint: '/api/pricing/test-quote',
-        method: 'POST'
+        name: "Test Quote Generation",
+        endpoint: "/api/pricing/test-quote",
+        method: "POST",
       },
       {
-        name: 'Get Markup Rules',
-        endpoint: '/api/pricing/markup-rules',
-        method: 'GET'
+        name: "Get Markup Rules",
+        endpoint: "/api/pricing/markup-rules",
+        method: "GET",
       },
       {
-        name: 'Get Promo Codes',
-        endpoint: '/api/pricing/promo-codes',
-        method: 'GET'
+        name: "Get Promo Codes",
+        endpoint: "/api/pricing/promo-codes",
+        method: "GET",
       },
       {
-        name: 'Get Analytics',
-        endpoint: '/api/pricing/analytics',
-        method: 'GET'
-      }
+        name: "Get Analytics",
+        endpoint: "/api/pricing/analytics",
+        method: "GET",
+      },
     ];
 
     for (const test of tests) {
       const startTime = Date.now();
       try {
         let response;
-        
-        if (test.method === 'POST') {
+
+        if (test.method === "POST") {
           response = await fetch(`${window.location.origin}${test.endpoint}`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json'
-            }
+              "Content-Type": "application/json",
+            },
           });
         } else {
           response = await fetch(`${window.location.origin}${test.endpoint}`);
@@ -73,101 +73,114 @@ const APITestDashboard: React.FC = () => {
         const data = await response.json();
         const duration = Date.now() - startTime;
 
-        setTestResults(prev => [...prev, {
-          name: test.name,
-          success: response.ok,
-          data: data,
-          duration: duration
-        }]);
-
+        setTestResults((prev) => [
+          ...prev,
+          {
+            name: test.name,
+            success: response.ok,
+            data: data,
+            duration: duration,
+          },
+        ]);
       } catch (error) {
         const duration = Date.now() - startTime;
-        setTestResults(prev => [...prev, {
-          name: test.name,
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
-          duration: duration
-        }]);
+        setTestResults((prev) => [
+          ...prev,
+          {
+            name: test.name,
+            success: false,
+            error: error instanceof Error ? error.message : "Unknown error",
+            duration: duration,
+          },
+        ]);
       }
     }
-    
+
     setIsRunning(false);
   };
 
   const runSingleQuote = async (quoteType: string) => {
     setIsRunning(true);
-    
+
     const quoteParams = {
-      'business-flight': {
-        module: 'air',
+      "business-flight": {
+        module: "air",
         baseNetAmount: 5000,
-        origin: 'DXB',
-        destination: 'LHR',
-        serviceClass: 'Business',
-        promoCode: 'BUSINESSDEAL'
+        origin: "DXB",
+        destination: "LHR",
+        serviceClass: "Business",
+        promoCode: "BUSINESSDEAL",
       },
-      'first-flight': {
-        module: 'air',
+      "first-flight": {
+        module: "air",
         baseNetAmount: 8000,
-        origin: 'JFK',
-        destination: 'LAX',
-        serviceClass: 'First',
-        promoCode: 'FIRSTLUXE'
+        origin: "JFK",
+        destination: "LAX",
+        serviceClass: "First",
+        promoCode: "FIRSTLUXE",
       },
-      '5-star-hotel': {
-        module: 'hotel',
+      "5-star-hotel": {
+        module: "hotel",
         baseNetAmount: 3000,
-        destination: 'Dubai',
-        hotelCategory: '5-star',
-        promoCode: 'FIVESTARSTAY'
+        destination: "Dubai",
+        hotelCategory: "5-star",
+        promoCode: "FIVESTARSTAY",
       },
-      'luxury-transfer': {
-        module: 'transfer',
+      "luxury-transfer": {
+        module: "transfer",
         baseNetAmount: 800,
-        origin: 'Dubai Airport',
-        destination: 'Dubai Marina',
-        serviceType: 'Luxury',
-        promoCode: 'LUXURYTREAT'
-      }
+        origin: "Dubai Airport",
+        destination: "Dubai Marina",
+        serviceType: "Luxury",
+        promoCode: "LUXURYTREAT",
+      },
     };
 
     const params = quoteParams[quoteType as keyof typeof quoteParams];
-    
+
     try {
       const startTime = Date.now();
-      const response = await fetch(`${window.location.origin}/api/pricing/quote`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `${window.location.origin}/api/pricing/quote`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(params),
         },
-        body: JSON.stringify(params)
-      });
+      );
 
       const data = await response.json();
       const duration = Date.now() - startTime;
 
-      setTestResults(prev => [...prev, {
-        name: `Single Quote: ${quoteType}`,
-        success: response.ok,
-        data: data,
-        duration: duration
-      }]);
-
+      setTestResults((prev) => [
+        ...prev,
+        {
+          name: `Single Quote: ${quoteType}`,
+          success: response.ok,
+          data: data,
+          duration: duration,
+        },
+      ]);
     } catch (error) {
-      setTestResults(prev => [...prev, {
-        name: `Single Quote: ${quoteType}`,
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      }]);
+      setTestResults((prev) => [
+        ...prev,
+        {
+          name: `Single Quote: ${quoteType}`,
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error",
+        },
+      ]);
     }
-    
+
     setIsRunning(false);
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
   };
 
@@ -176,8 +189,8 @@ const APITestDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">API Test Dashboard</h1>
-        <Button 
-          onClick={runPricingTests} 
+        <Button
+          onClick={runPricingTests}
           disabled={isRunning}
           className="bg-blue-600 hover:bg-blue-700"
         >
@@ -205,39 +218,39 @@ const APITestDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Button 
-              variant="outline" 
-              onClick={() => runSingleQuote('business-flight')}
+            <Button
+              variant="outline"
+              onClick={() => runSingleQuote("business-flight")}
               disabled={isRunning}
               className="h-20 flex flex-col"
             >
               <div className="font-semibold">Business Flight</div>
               <div className="text-xs text-gray-500">DXB → LHR + Promo</div>
             </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={() => runSingleQuote('first-flight')}
+
+            <Button
+              variant="outline"
+              onClick={() => runSingleQuote("first-flight")}
               disabled={isRunning}
               className="h-20 flex flex-col"
             >
               <div className="font-semibold">First Class</div>
               <div className="text-xs text-gray-500">JFK → LAX + Promo</div>
             </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={() => runSingleQuote('5-star-hotel')}
+
+            <Button
+              variant="outline"
+              onClick={() => runSingleQuote("5-star-hotel")}
               disabled={isRunning}
               className="h-20 flex flex-col"
             >
               <div className="font-semibold">5-Star Hotel</div>
               <div className="text-xs text-gray-500">Dubai + Promo</div>
             </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={() => runSingleQuote('luxury-transfer')}
+
+            <Button
+              variant="outline"
+              onClick={() => runSingleQuote("luxury-transfer")}
               disabled={isRunning}
               className="h-20 flex flex-col"
             >
@@ -266,10 +279,10 @@ const APITestDashboard: React.FC = () => {
                 </div>
               ) : (
                 testResults.map((result, index) => (
-                  <div 
+                  <div
                     key={index}
                     className={`p-3 rounded-lg border cursor-pointer hover:bg-gray-50 ${
-                      selectedTest === result ? 'ring-2 ring-blue-500' : ''
+                      selectedTest === result ? "ring-2 ring-blue-500" : ""
                     }`}
                     onClick={() => setSelectedTest(result)}
                   >
@@ -289,8 +302,10 @@ const APITestDashboard: React.FC = () => {
                             {result.duration}ms
                           </Badge>
                         )}
-                        <Badge variant={result.success ? 'default' : 'destructive'}>
-                          {result.success ? 'Pass' : 'Fail'}
+                        <Badge
+                          variant={result.success ? "default" : "destructive"}
+                        >
+                          {result.success ? "Pass" : "Fail"}
                         </Badge>
                       </div>
                     </div>
@@ -314,40 +329,59 @@ const APITestDashboard: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{selectedTest.name}</h3>
-                  <Badge variant={selectedTest.success ? 'default' : 'destructive'}>
-                    {selectedTest.success ? 'Success' : 'Error'}
+                  <Badge
+                    variant={selectedTest.success ? "default" : "destructive"}
+                  >
+                    {selectedTest.success ? "Success" : "Error"}
                   </Badge>
                 </div>
-                
+
                 {selectedTest.success ? (
                   <div>
                     <h4 className="font-medium mb-2">Response Data:</h4>
-                    
+
                     {/* Special formatting for quote results */}
-                    {selectedTest.data?.data && selectedTest.data.data.length > 0 ? (
+                    {selectedTest.data?.data &&
+                    selectedTest.data.data.length > 0 ? (
                       <div className="space-y-3">
-                        {selectedTest.data.data.map((quote: any, idx: number) => (
-                          <div key={idx} className="border rounded-lg p-3 bg-gray-50">
-                            <div className="font-medium text-green-600 mb-2">
-                              ✅ {quote.name}
-                            </div>
-                            {quote.quote && (
-                              <div className="text-sm space-y-1">
-                                <div>Base: {formatCurrency(quote.quote.baseNetAmount)}</div>
-                                <div>Markup: +{formatCurrency(quote.quote.markupRule.value)}</div>
-                                {quote.quote.promoCode && (
-                                  <div className="text-blue-600">
-                                    Promo ({quote.quote.promoCode.code}): 
-                                    -{formatCurrency(quote.quote.promoCode.discount)}
-                                  </div>
-                                )}
-                                <div className="font-semibold border-t pt-1">
-                                  Final: {formatCurrency(quote.quote.finalPrice)}
-                                </div>
+                        {selectedTest.data.data.map(
+                          (quote: any, idx: number) => (
+                            <div
+                              key={idx}
+                              className="border rounded-lg p-3 bg-gray-50"
+                            >
+                              <div className="font-medium text-green-600 mb-2">
+                                ✅ {quote.name}
                               </div>
-                            )}
-                          </div>
-                        ))}
+                              {quote.quote && (
+                                <div className="text-sm space-y-1">
+                                  <div>
+                                    Base:{" "}
+                                    {formatCurrency(quote.quote.baseNetAmount)}
+                                  </div>
+                                  <div>
+                                    Markup: +
+                                    {formatCurrency(
+                                      quote.quote.markupRule.value,
+                                    )}
+                                  </div>
+                                  {quote.quote.promoCode && (
+                                    <div className="text-blue-600">
+                                      Promo ({quote.quote.promoCode.code}): -
+                                      {formatCurrency(
+                                        quote.quote.promoCode.discount,
+                                      )}
+                                    </div>
+                                  )}
+                                  <div className="font-semibold border-t pt-1">
+                                    Final:{" "}
+                                    {formatCurrency(quote.quote.finalPrice)}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ),
+                        )}
                       </div>
                     ) : (
                       <pre className="bg-gray-100 p-3 rounded text-xs overflow-auto max-h-60">
@@ -383,20 +417,52 @@ const APITestDashboard: React.FC = () => {
             <div>
               <h4 className="font-semibold mb-2">Pricing Engine</h4>
               <div className="space-y-1 text-sm">
-                <div><code className="bg-gray-100 px-2 py-1 rounded">POST /api/pricing/quote</code></div>
-                <div><code className="bg-gray-100 px-2 py-1 rounded">POST /api/pricing/bargain</code></div>
-                <div><code className="bg-gray-100 px-2 py-1 rounded">POST /api/pricing/confirm</code></div>
-                <div><code className="bg-gray-100 px-2 py-1 rounded">POST /api/pricing/test-quote</code></div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    POST /api/pricing/quote
+                  </code>
+                </div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    POST /api/pricing/bargain
+                  </code>
+                </div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    POST /api/pricing/confirm
+                  </code>
+                </div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    POST /api/pricing/test-quote
+                  </code>
+                </div>
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-2">Admin Reports</h4>
               <div className="space-y-1 text-sm">
-                <div><code className="bg-gray-100 px-2 py-1 rounded">GET /api/admin/reports/bookings</code></div>
-                <div><code className="bg-gray-100 px-2 py-1 rounded">GET /api/admin/reports/analytics</code></div>
-                <div><code className="bg-gray-100 px-2 py-1 rounded">GET /api/pricing/markup-rules</code></div>
-                <div><code className="bg-gray-100 px-2 py-1 rounded">GET /api/pricing/promo-codes</code></div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    GET /api/admin/reports/bookings
+                  </code>
+                </div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    GET /api/admin/reports/analytics
+                  </code>
+                </div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    GET /api/pricing/markup-rules
+                  </code>
+                </div>
+                <div>
+                  <code className="bg-gray-100 px-2 py-1 rounded">
+                    GET /api/pricing/promo-codes
+                  </code>
+                </div>
               </div>
             </div>
           </div>

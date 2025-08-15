@@ -3,171 +3,201 @@
  * Provides comprehensive booking and pricing reports for admin dashboard
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { query, validationResult } = require('express-validator');
+const { query, validationResult } = require("express-validator");
 
 // Database connection
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString:
+    process.env.DATABASE_URL ||
+    "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 // GET /api/admin/reports/bookings - Get comprehensive booking reports
-router.get('/bookings', [
-  query('module').optional().isIn(['air', 'hotel', 'sightseeing', 'transfer']),
-  query('status').optional().isIn(['pending', 'confirmed', 'cancelled']),
-  query('start_date').optional().isISO8601().withMessage('Invalid start date format'),
-  query('end_date').optional().isISO8601().withMessage('Invalid end date format'),
-  query('search').optional().trim().isLength({ max: 100 }),
-  query('page').optional().isInt({ min: 1 }),
-  query('limit').optional().isInt({ min: 1, max: 100 })
-], async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation failed',
-        details: errors.array()
-      });
-    }
+router.get(
+  "/bookings",
+  [
+    query("module")
+      .optional()
+      .isIn(["air", "hotel", "sightseeing", "transfer"]),
+    query("status").optional().isIn(["pending", "confirmed", "cancelled"]),
+    query("start_date")
+      .optional()
+      .isISO8601()
+      .withMessage("Invalid start date format"),
+    query("end_date")
+      .optional()
+      .isISO8601()
+      .withMessage("Invalid end date format"),
+    query("search").optional().trim().isLength({ max: 100 }),
+    query("page").optional().isInt({ min: 1 }),
+    query("limit").optional().isInt({ min: 1, max: 100 }),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation failed",
+          details: errors.array(),
+        });
+      }
 
-    const {
-      module,
-      status,
-      start_date,
-      end_date,
-      search,
-      page = 1,
-      limit = 20
-    } = req.query;
+      const {
+        module,
+        status,
+        start_date,
+        end_date,
+        search,
+        page = 1,
+        limit = 20,
+      } = req.query;
 
-    const offset = (page - 1) * limit;
-    
-    // Build WHERE conditions
-    let whereConditions = [];
-    let queryParams = [];
-    let paramIndex = 1;
+      const offset = (page - 1) * limit;
 
-    if (module) {
-      whereConditions.push(`module = $${paramIndex}`);
-      queryParams.push(module);
-      paramIndex++;
-    }
+      // Build WHERE conditions
+      let whereConditions = [];
+      let queryParams = [];
+      let paramIndex = 1;
 
-    if (status) {
-      whereConditions.push(`booking_status = $${paramIndex}`);
-      queryParams.push(status);
-      paramIndex++;
-    }
+      if (module) {
+        whereConditions.push(`module = $${paramIndex}`);
+        queryParams.push(module);
+        paramIndex++;
+      }
 
-    if (start_date) {
-      whereConditions.push(`created_at >= $${paramIndex}`);
-      queryParams.push(start_date);
-      paramIndex++;
-    }
+      if (status) {
+        whereConditions.push(`booking_status = $${paramIndex}`);
+        queryParams.push(status);
+        paramIndex++;
+      }
 
-    if (end_date) {
-      whereConditions.push(`created_at <= $${paramIndex}`);
-      queryParams.push(end_date + ' 23:59:59');
-      paramIndex++;
-    }
+      if (start_date) {
+        whereConditions.push(`created_at >= $${paramIndex}`);
+        queryParams.push(start_date);
+        paramIndex++;
+      }
 
-    if (search) {
-      whereConditions.push(`(
+      if (end_date) {
+        whereConditions.push(`created_at <= $${paramIndex}`);
+        queryParams.push(end_date + " 23:59:59");
+        paramIndex++;
+      }
+
+      if (search) {
+        whereConditions.push(`(
         booking_reference ILIKE $${paramIndex} OR 
         payment_reference ILIKE $${paramIndex} OR 
         user_id::text ILIKE $${paramIndex} OR
         markup_rule_name ILIKE $${paramIndex}
       )`);
-      queryParams.push(`%${search}%`);
-      paramIndex++;
-    }
+        queryParams.push(`%${search}%`);
+        paramIndex++;
+      }
 
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+      const whereClause =
+        whereConditions.length > 0
+          ? `WHERE ${whereConditions.join(" AND ")}`
+          : "";
 
-    // Get total count
-    const countQuery = `SELECT COUNT(*) as total FROM v_bookings_report ${whereClause}`;
-    const countResult = await pool.query(countQuery, queryParams);
-    const total = parseInt(countResult.rows[0].total);
+      // Get total count
+      const countQuery = `SELECT COUNT(*) as total FROM v_bookings_report ${whereClause}`;
+      const countResult = await pool.query(countQuery, queryParams);
+      const total = parseInt(countResult.rows[0].total);
 
-    // Get paginated data
-    const dataQuery = `
+      // Get paginated data
+      const dataQuery = `
       SELECT * FROM v_bookings_report 
       ${whereClause}
       ORDER BY created_at DESC
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `;
-    queryParams.push(limit, offset);
-    const dataResult = await pool.query(dataQuery, queryParams);
+      queryParams.push(limit, offset);
+      const dataResult = await pool.query(dataQuery, queryParams);
 
-    res.json({
-      success: true,
-      data: dataResult.rows,
-      pagination: {
-        current_page: parseInt(page),
-        per_page: parseInt(limit),
-        total_items: total,
-        total_pages: Math.ceil(total / limit)
-      }
-    });
-
-  } catch (error) {
-    console.error('Error fetching booking reports:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch booking reports',
-      message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-});
-
-// GET /api/admin/reports/analytics - Get analytics overview
-router.get('/analytics', [
-  query('module').optional().isIn(['air', 'hotel', 'sightseeing', 'transfer']),
-  query('start_date').optional().isISO8601(),
-  query('end_date').optional().isISO8601()
-], async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
+      res.json({
+        success: true,
+        data: dataResult.rows,
+        pagination: {
+          current_page: parseInt(page),
+          per_page: parseInt(limit),
+          total_items: total,
+          total_pages: Math.ceil(total / limit),
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching booking reports:", error);
+      res.status(500).json({
         success: false,
-        error: 'Validation failed',
-        details: errors.array()
+        error: "Failed to fetch booking reports",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal server error",
       });
     }
+  },
+);
 
-    const { module, start_date, end_date } = req.query;
+// GET /api/admin/reports/analytics - Get analytics overview
+router.get(
+  "/analytics",
+  [
+    query("module")
+      .optional()
+      .isIn(["air", "hotel", "sightseeing", "transfer"]),
+    query("start_date").optional().isISO8601(),
+    query("end_date").optional().isISO8601(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation failed",
+          details: errors.array(),
+        });
+      }
 
-    let whereConditions = [];
-    let queryParams = [];
-    let paramIndex = 1;
+      const { module, start_date, end_date } = req.query;
 
-    if (module) {
-      whereConditions.push(`module = $${paramIndex}`);
-      queryParams.push(module);
-      paramIndex++;
-    }
+      let whereConditions = [];
+      let queryParams = [];
+      let paramIndex = 1;
 
-    if (start_date) {
-      whereConditions.push(`created_at >= $${paramIndex}`);
-      queryParams.push(start_date);
-      paramIndex++;
-    }
+      if (module) {
+        whereConditions.push(`module = $${paramIndex}`);
+        queryParams.push(module);
+        paramIndex++;
+      }
 
-    if (end_date) {
-      whereConditions.push(`created_at <= $${paramIndex}`);
-      queryParams.push(end_date + ' 23:59:59');
-      paramIndex++;
-    }
+      if (start_date) {
+        whereConditions.push(`created_at >= $${paramIndex}`);
+        queryParams.push(start_date);
+        paramIndex++;
+      }
 
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+      if (end_date) {
+        whereConditions.push(`created_at <= $${paramIndex}`);
+        queryParams.push(end_date + " 23:59:59");
+        paramIndex++;
+      }
 
-    // Main analytics query
-    const analyticsQuery = `
+      const whereClause =
+        whereConditions.length > 0
+          ? `WHERE ${whereConditions.join(" AND ")}`
+          : "";
+
+      // Main analytics query
+      const analyticsQuery = `
       SELECT 
         module,
         COUNT(*) as total_bookings,
@@ -186,10 +216,10 @@ router.get('/analytics', [
       ORDER BY total_revenue DESC
     `;
 
-    const analyticsResult = await pool.query(analyticsQuery, queryParams);
+      const analyticsResult = await pool.query(analyticsQuery, queryParams);
 
-    // Summary metrics
-    const summaryQuery = `
+      // Summary metrics
+      const summaryQuery = `
       SELECT 
         COUNT(*) as total_bookings,
         SUM(final_payable) as total_revenue,
@@ -198,10 +228,10 @@ router.get('/analytics', [
       FROM v_bookings_report
       ${whereClause}
     `;
-    const summaryResult = await pool.query(summaryQuery, queryParams);
+      const summaryResult = await pool.query(summaryQuery, queryParams);
 
-    // Top performing markup rules
-    const topRulesQuery = `
+      // Top performing markup rules
+      const topRulesQuery = `
       SELECT 
         markup_rule_name,
         module,
@@ -215,10 +245,10 @@ router.get('/analytics', [
       ORDER BY total_markup_generated DESC
       LIMIT 10
     `;
-    const topRulesResult = await pool.query(topRulesQuery, queryParams);
+      const topRulesResult = await pool.query(topRulesQuery, queryParams);
 
-    // Promo code performance
-    const promoQuery = `
+      // Promo code performance
+      const promoQuery = `
       SELECT 
         promo_code,
         module,
@@ -232,84 +262,98 @@ router.get('/analytics', [
       ORDER BY usage_count DESC
       LIMIT 10
     `;
-    const promoResult = await pool.query(promoQuery, queryParams);
+      const promoResult = await pool.query(promoQuery, queryParams);
 
-    res.json({
-      success: true,
-      data: {
-        by_module: analyticsResult.rows,
-        summary: summaryResult.rows[0],
-        top_markup_rules: topRulesResult.rows,
-        top_promo_codes: promoResult.rows
-      }
-    });
-
-  } catch (error) {
-    console.error('Error fetching analytics:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch analytics',
-      message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-});
-
-// GET /api/admin/reports/revenue-trends - Get revenue trends over time
-router.get('/revenue-trends', [
-  query('period').optional().isIn(['daily', 'weekly', 'monthly']).withMessage('Period must be daily, weekly, or monthly'),
-  query('module').optional().isIn(['air', 'hotel', 'sightseeing', 'transfer']),
-  query('start_date').optional().isISO8601(),
-  query('end_date').optional().isISO8601()
-], async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
+      res.json({
+        success: true,
+        data: {
+          by_module: analyticsResult.rows,
+          summary: summaryResult.rows[0],
+          top_markup_rules: topRulesResult.rows,
+          top_promo_codes: promoResult.rows,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({
         success: false,
-        error: 'Validation failed',
-        details: errors.array()
+        error: "Failed to fetch analytics",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal server error",
       });
     }
+  },
+);
 
-    const { period = 'daily', module, start_date, end_date } = req.query;
+// GET /api/admin/reports/revenue-trends - Get revenue trends over time
+router.get(
+  "/revenue-trends",
+  [
+    query("period")
+      .optional()
+      .isIn(["daily", "weekly", "monthly"])
+      .withMessage("Period must be daily, weekly, or monthly"),
+    query("module")
+      .optional()
+      .isIn(["air", "hotel", "sightseeing", "transfer"]),
+    query("start_date").optional().isISO8601(),
+    query("end_date").optional().isISO8601(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          error: "Validation failed",
+          details: errors.array(),
+        });
+      }
 
-    let dateGrouping;
-    switch (period) {
-      case 'weekly':
-        dateGrouping = "DATE_TRUNC('week', created_at)";
-        break;
-      case 'monthly':
-        dateGrouping = "DATE_TRUNC('month', created_at)";
-        break;
-      default:
-        dateGrouping = "DATE(created_at)";
-    }
+      const { period = "daily", module, start_date, end_date } = req.query;
 
-    let whereConditions = [];
-    let queryParams = [];
-    let paramIndex = 1;
+      let dateGrouping;
+      switch (period) {
+        case "weekly":
+          dateGrouping = "DATE_TRUNC('week', created_at)";
+          break;
+        case "monthly":
+          dateGrouping = "DATE_TRUNC('month', created_at)";
+          break;
+        default:
+          dateGrouping = "DATE(created_at)";
+      }
 
-    if (module) {
-      whereConditions.push(`module = $${paramIndex}`);
-      queryParams.push(module);
-      paramIndex++;
-    }
+      let whereConditions = [];
+      let queryParams = [];
+      let paramIndex = 1;
 
-    if (start_date) {
-      whereConditions.push(`created_at >= $${paramIndex}`);
-      queryParams.push(start_date);
-      paramIndex++;
-    }
+      if (module) {
+        whereConditions.push(`module = $${paramIndex}`);
+        queryParams.push(module);
+        paramIndex++;
+      }
 
-    if (end_date) {
-      whereConditions.push(`created_at <= $${paramIndex}`);
-      queryParams.push(end_date + ' 23:59:59');
-      paramIndex++;
-    }
+      if (start_date) {
+        whereConditions.push(`created_at >= $${paramIndex}`);
+        queryParams.push(start_date);
+        paramIndex++;
+      }
 
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+      if (end_date) {
+        whereConditions.push(`created_at <= $${paramIndex}`);
+        queryParams.push(end_date + " 23:59:59");
+        paramIndex++;
+      }
 
-    const trendsQuery = `
+      const whereClause =
+        whereConditions.length > 0
+          ? `WHERE ${whereConditions.join(" AND ")}`
+          : "";
+
+      const trendsQuery = `
       SELECT 
         ${dateGrouping} as period,
         module,
@@ -324,43 +368,51 @@ router.get('/revenue-trends', [
       ORDER BY period DESC, module
     `;
 
-    const trendsResult = await pool.query(trendsQuery, queryParams);
+      const trendsResult = await pool.query(trendsQuery, queryParams);
 
-    res.json({
-      success: true,
-      data: {
-        period: period,
-        trends: trendsResult.rows
-      }
-    });
-
-  } catch (error) {
-    console.error('Error fetching revenue trends:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch revenue trends',
-      message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-});
+      res.json({
+        success: true,
+        data: {
+          period: period,
+          trends: trendsResult.rows,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching revenue trends:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch revenue trends",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal server error",
+      });
+    }
+  },
+);
 
 // GET /api/admin/reports/markup-performance - Get markup rule performance
-router.get('/markup-performance', [
-  query('module').optional().isIn(['air', 'hotel', 'sightseeing', 'transfer'])
-], async (req, res) => {
-  try {
-    const { module } = req.query;
+router.get(
+  "/markup-performance",
+  [
+    query("module")
+      .optional()
+      .isIn(["air", "hotel", "sightseeing", "transfer"]),
+  ],
+  async (req, res) => {
+    try {
+      const { module } = req.query;
 
-    let whereCondition = '';
-    let queryParams = [];
+      let whereCondition = "";
+      let queryParams = [];
 
-    if (module) {
-      whereCondition = 'WHERE module = $1';
-      queryParams.push(module);
-    }
+      if (module) {
+        whereCondition = "WHERE module = $1";
+        queryParams.push(module);
+      }
 
-    // Active rules vs usage
-    const performanceQuery = `
+      // Active rules vs usage
+      const performanceQuery = `
       SELECT 
         mr.id,
         mr.rule_name,
@@ -387,21 +439,24 @@ router.get('/markup-performance', [
       ORDER BY COALESCE(usage.total_markup_generated, 0) DESC, mr.priority DESC
     `;
 
-    const performanceResult = await pool.query(performanceQuery, queryParams);
+      const performanceResult = await pool.query(performanceQuery, queryParams);
 
-    res.json({
-      success: true,
-      data: performanceResult.rows
-    });
-
-  } catch (error) {
-    console.error('Error fetching markup performance:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch markup performance',
-      message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    });
-  }
-});
+      res.json({
+        success: true,
+        data: performanceResult.rows,
+      });
+    } catch (error) {
+      console.error("Error fetching markup performance:", error);
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch markup performance",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error.message
+            : "Internal server error",
+      });
+    }
+  },
+);
 
 module.exports = router;

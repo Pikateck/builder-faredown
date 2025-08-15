@@ -113,7 +113,7 @@ let activitiesService;
 try {
   activitiesService = new HotelbedsActivitiesService();
 } catch (error) {
-  console.warn('HotelbedsActivitiesService not available, using fallback');
+  console.warn("HotelbedsActivitiesService not available, using fallback");
   activitiesService = null;
 }
 
@@ -138,24 +138,28 @@ router.post("/destinations", async (req, res) => {
       });
     }
 
-    console.log(`🎯 Sightseeing destinations API called with query: "${query}"`);
+    console.log(
+      `🎯 Sightseeing destinations API called with query: "${query}"`,
+    );
 
     // Create cache key
     const cacheKey = `${query.toLowerCase()}_${limit}_${popularOnly}`;
 
     // Check cache first
     const cached = destinationsCache.get(cacheKey);
-    if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
-      console.log(`✅ Returning cached sightseeing destinations for: "${query}"`);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      console.log(
+        `✅ Returning cached sightseeing destinations for: "${query}"`,
+      );
       // Set cache headers
       res.set({
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=300',
-        'X-Cache': 'HIT'
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=300",
+        "X-Cache": "HIT",
       });
       return res.json({
         success: true,
         data: { destinations: cached.data },
-        cached: true
+        cached: true,
       });
     }
 
@@ -178,17 +182,46 @@ router.post("/destinations", async (req, res) => {
       destinations = destinations.filter(
         (dest) =>
           dest.name.toLowerCase().includes(lowerQuery) ||
-          (dest.countryName && dest.countryName.toLowerCase().includes(lowerQuery)) ||
-          dest.code.toLowerCase().includes(lowerQuery)
+          (dest.countryName &&
+            dest.countryName.toLowerCase().includes(lowerQuery)) ||
+          dest.code.toLowerCase().includes(lowerQuery),
       );
     }
 
     // Mark popular destinations (major cities/tourist destinations)
     const popularCodes = [
-      "DXB", "LON", "PAR", "BCN", "NYC", "BOM", "SIN", "BKK",
-      "ROM", "MAD", "AMS", "BER", "MIL", "VEN", "FLR", "NAP",
-      "ATH", "IST", "CAI", "JNB", "CPT", "SYD", "MEL", "PER",
-      "HKG", "TPE", "SEL", "TYO", "OSA", "KUL", "JKT", "MNL"
+      "DXB",
+      "LON",
+      "PAR",
+      "BCN",
+      "NYC",
+      "BOM",
+      "SIN",
+      "BKK",
+      "ROM",
+      "MAD",
+      "AMS",
+      "BER",
+      "MIL",
+      "VEN",
+      "FLR",
+      "NAP",
+      "ATH",
+      "IST",
+      "CAI",
+      "JNB",
+      "CPT",
+      "SYD",
+      "MEL",
+      "PER",
+      "HKG",
+      "TPE",
+      "SEL",
+      "TYO",
+      "OSA",
+      "KUL",
+      "JKT",
+      "MNL",
     ];
 
     destinations = destinations.map((dest) => ({
@@ -214,21 +247,23 @@ router.post("/destinations", async (req, res) => {
     // Cache the results
     destinationsCache.set(cacheKey, {
       data: destinations,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
-    console.log(`✅ Found ${destinations.length} sightseeing destinations (cached)`);
+    console.log(
+      `✅ Found ${destinations.length} sightseeing destinations (cached)`,
+    );
 
     // Set cache headers
     res.set({
-      'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=300',
-      'X-Cache': 'MISS'
+      "Cache-Control": "public, s-maxage=300, stale-while-revalidate=300",
+      "X-Cache": "MISS",
     });
 
     res.json({
       success: true,
       data: { destinations },
-      cached: false
+      cached: false,
     });
   } catch (error) {
     console.error("❌ Sightseeing destinations API error:", error);
@@ -904,7 +939,7 @@ try {
   const SightseeingVoucherService = require("../services/sightseeingVoucherService");
   voucherService = new SightseeingVoucherService();
 } catch (error) {
-  console.warn('SightseeingVoucherService not available, using fallback');
+  console.warn("SightseeingVoucherService not available, using fallback");
   voucherService = null;
 }
 

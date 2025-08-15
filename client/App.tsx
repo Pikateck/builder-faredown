@@ -75,7 +75,6 @@ import AIBargainingDashboard from "./pages/admin/AIBargainingDashboard";
 import APITestingDashboard from "./pages/admin/APITestingDashboard";
 
 function App() {
-
   return (
     <div className="App">
       <AuthProvider>

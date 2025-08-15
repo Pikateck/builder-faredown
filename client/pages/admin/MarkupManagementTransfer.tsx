@@ -132,11 +132,15 @@ export default function MarkupManagementTransfer() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [transferTypeFilter, setTransferTypeFilter] = useState("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingMarkup, setEditingMarkup] = useState<TransferMarkup | null>(null);
+  const [editingMarkup, setEditingMarkup] = useState<TransferMarkup | null>(
+    null,
+  );
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
 
   // Form state for creating/editing markups
-  const [formData, setFormData] = useState<Partial<CreateTransferMarkupRequest>>({
+  const [formData, setFormData] = useState<
+    Partial<CreateTransferMarkupRequest>
+  >({
     name: "",
     description: "",
     originCity: "",
@@ -152,7 +156,9 @@ export default function MarkupManagementTransfer() {
     bargainFareMin: 10,
     bargainFareMax: 20,
     validFrom: new Date().toISOString().split("T")[0],
-    validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0],
     status: "active",
     priority: 1,
     userType: "all",
@@ -279,10 +285,10 @@ export default function MarkupManagementTransfer() {
       }
 
       // For now, just update local state - replace with API call when backend is ready
-      const updatedMarkups = markups.map(markup =>
+      const updatedMarkups = markups.map((markup) =>
         markup.id === editingMarkup.id
           ? { ...markup, ...formData, updatedAt: new Date().toISOString() }
-          : markup
+          : markup,
       );
 
       setMarkups(updatedMarkups);
@@ -297,7 +303,7 @@ export default function MarkupManagementTransfer() {
   const handleDeleteMarkup = async (markupId: string) => {
     try {
       // For now, just remove from local state - replace with API call when backend is ready
-      setMarkups(markups.filter(markup => markup.id !== markupId));
+      setMarkups(markups.filter((markup) => markup.id !== markupId));
       setDeleteConfirmId(null);
     } catch (error) {
       console.error("Error deleting transfer markup:", error);
@@ -308,14 +314,14 @@ export default function MarkupManagementTransfer() {
   const toggleMarkupStatus = async (markupId: string) => {
     try {
       // For now, just toggle in local state - replace with API call when backend is ready
-      const updatedMarkups = markups.map(markup =>
+      const updatedMarkups = markups.map((markup) =>
         markup.id === markupId
-          ? { 
-              ...markup, 
+          ? {
+              ...markup,
               status: markup.status === "active" ? "inactive" : "active",
-              updatedAt: new Date().toISOString()
+              updatedAt: new Date().toISOString(),
             }
-          : markup
+          : markup,
       );
       setMarkups(updatedMarkups);
     } catch (error) {
@@ -341,7 +347,9 @@ export default function MarkupManagementTransfer() {
       bargainFareMin: 10,
       bargainFareMax: 20,
       validFrom: new Date().toISOString().split("T")[0],
-      validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
       status: "active",
       priority: 1,
       userType: "all",
@@ -376,13 +384,17 @@ export default function MarkupManagementTransfer() {
     setShowCreateModal(true);
   };
 
-  const filteredMarkups = markups.filter(markup => {
-    const matchesSearch = markup.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         markup.originCity.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         markup.destinationCity.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || markup.status === statusFilter;
-    const matchesTransferType = transferTypeFilter === "all" || markup.transferType === transferTypeFilter;
-    
+  const filteredMarkups = markups.filter((markup) => {
+    const matchesSearch =
+      markup.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      markup.originCity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      markup.destinationCity.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || markup.status === statusFilter;
+    const matchesTransferType =
+      transferTypeFilter === "all" ||
+      markup.transferType === transferTypeFilter;
+
     return matchesSearch && matchesStatus && matchesTransferType;
   });
 
@@ -416,8 +428,12 @@ export default function MarkupManagementTransfer() {
             <Car className="w-6 h-6 text-orange-600" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Transfer Markup Management</h1>
-            <p className="text-gray-600">Manage markup rules for transfer bookings</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Transfer Markup Management
+            </h1>
+            <p className="text-gray-600">
+              Manage markup rules for transfer bookings
+            </p>
           </div>
         </div>
         <Button
@@ -460,17 +476,22 @@ export default function MarkupManagementTransfer() {
                   <SelectItem value="expired">Expired</SelectItem>
                 </SelectContent>
               </Select>
-              <Select value={transferTypeFilter} onValueChange={setTransferTypeFilter}>
+              <Select
+                value={transferTypeFilter}
+                onValueChange={setTransferTypeFilter}
+              >
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
-                  {TRANSFER_TYPES.filter(type => type.value !== "ALL").map(type => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
+                  {TRANSFER_TYPES.filter((type) => type.value !== "ALL").map(
+                    (type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -504,37 +525,56 @@ export default function MarkupManagementTransfer() {
                   <TableRow key={markup.id}>
                     <TableCell>
                       <div>
-                        <div className="font-medium truncate max-w-48" title={markup.name}>
+                        <div
+                          className="font-medium truncate max-w-48"
+                          title={markup.name}
+                        >
                           {markup.name}
                         </div>
-                        <div className="text-sm text-gray-500 truncate max-w-48" title={markup.description}>
+                        <div
+                          className="text-sm text-gray-500 truncate max-w-48"
+                          title={markup.description}
+                        >
                           {markup.description}
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="text-sm font-medium">{markup.originCity} → {markup.destinationCity}</div>
+                        <div className="text-sm font-medium">
+                          {markup.originCity} → {markup.destinationCity}
+                        </div>
                         <div className="flex gap-1">
-                          <Badge variant="outline" className="text-xs">{markup.transferType}</Badge>
-                          <Badge variant="outline" className="text-xs">{markup.vehicleType}</Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {markup.transferType}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {markup.vehicleType}
+                          </Badge>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
                         <div className="font-medium">
-                          {markup.markupType === "percentage" ? `${markup.markupValue}%` : `₹${markup.markupValue}`}
+                          {markup.markupType === "percentage"
+                            ? `${markup.markupValue}%`
+                            : `₹${markup.markupValue}`}
                         </div>
                         <div className="text-xs text-gray-500">
-                          Range: {markup.currentFareMin}% - {markup.currentFareMax}%
+                          Range: {markup.currentFareMin}% -{" "}
+                          {markup.currentFareMax}%
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        <div>{new Date(markup.validFrom).toLocaleDateString()}</div>
-                        <div className="text-gray-500">to {new Date(markup.validTo).toLocaleDateString()}</div>
+                        <div>
+                          {new Date(markup.validFrom).toLocaleDateString()}
+                        </div>
+                        <div className="text-gray-500">
+                          to {new Date(markup.validTo).toLocaleDateString()}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>{getStatusBadge(markup.status)}</TableCell>
@@ -550,11 +590,15 @@ export default function MarkupManagementTransfer() {
                             <Edit className="w-4 h-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => toggleMarkupStatus(markup.id)}>
+                          <DropdownMenuItem
+                            onClick={() => toggleMarkupStatus(markup.id)}
+                          >
                             <Settings className="w-4 h-4 mr-2" />
-                            {markup.status === "active" ? "Deactivate" : "Activate"}
+                            {markup.status === "active"
+                              ? "Deactivate"
+                              : "Activate"}
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => setDeleteConfirmId(markup.id)}
                             className="text-red-600"
                           >
@@ -573,7 +617,9 @@ export default function MarkupManagementTransfer() {
             <div className="text-center py-8">
               <Car className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No transfer markups found</p>
-              <p className="text-sm text-gray-400">Create your first transfer markup to get started</p>
+              <p className="text-sm text-gray-400">
+                Create your first transfer markup to get started
+              </p>
             </div>
           )}
         </CardContent>
@@ -584,10 +630,13 @@ export default function MarkupManagementTransfer() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingMarkup ? "Edit Transfer Markup" : "Create New Transfer Markup"}
+              {editingMarkup
+                ? "Edit Transfer Markup"
+                : "Create New Transfer Markup"}
             </DialogTitle>
             <DialogDescription>
-              Set up markup rules for transfer bookings based on routes, vehicle types, and other criteria.
+              Set up markup rules for transfer bookings based on routes, vehicle
+              types, and other criteria.
             </DialogDescription>
           </DialogHeader>
 
@@ -599,7 +648,9 @@ export default function MarkupManagementTransfer() {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="e.g., Dubai Airport to Marina"
                 />
               </div>
@@ -608,7 +659,9 @@ export default function MarkupManagementTransfer() {
                 <Input
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   placeholder="Enter description"
                 />
               </div>
@@ -618,12 +671,17 @@ export default function MarkupManagementTransfer() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="originCity">Origin City *</Label>
-                <Select value={formData.originCity} onValueChange={(value) => setFormData({ ...formData, originCity: value })}>
+                <Select
+                  value={formData.originCity}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, originCity: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select origin" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CITIES.map(city => (
+                    {CITIES.map((city) => (
                       <SelectItem key={city.value} value={city.value}>
                         {city.label}
                       </SelectItem>
@@ -633,12 +691,17 @@ export default function MarkupManagementTransfer() {
               </div>
               <div>
                 <Label htmlFor="destinationCity">Destination City *</Label>
-                <Select value={formData.destinationCity} onValueChange={(value) => setFormData({ ...formData, destinationCity: value })}>
+                <Select
+                  value={formData.destinationCity}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, destinationCity: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select destination" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CITIES.map(city => (
+                    {CITIES.map((city) => (
                       <SelectItem key={city.value} value={city.value}>
                         {city.label}
                       </SelectItem>
@@ -652,12 +715,17 @@ export default function MarkupManagementTransfer() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="transferType">Transfer Type</Label>
-                <Select value={formData.transferType} onValueChange={(value) => setFormData({ ...formData, transferType: value as any })}>
+                <Select
+                  value={formData.transferType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, transferType: value as any })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {TRANSFER_TYPES.map(type => (
+                    {TRANSFER_TYPES.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.label}
                       </SelectItem>
@@ -667,12 +735,17 @@ export default function MarkupManagementTransfer() {
               </div>
               <div>
                 <Label htmlFor="vehicleType">Vehicle Type</Label>
-                <Select value={formData.vehicleType} onValueChange={(value) => setFormData({ ...formData, vehicleType: value as any })}>
+                <Select
+                  value={formData.vehicleType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, vehicleType: value as any })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {VEHICLE_TYPES.map(type => (
+                    {VEHICLE_TYPES.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.label}
                       </SelectItem>
@@ -686,7 +759,12 @@ export default function MarkupManagementTransfer() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="markupType">Markup Type</Label>
-                <Select value={formData.markupType} onValueChange={(value) => setFormData({ ...formData, markupType: value as any })}>
+                <Select
+                  value={formData.markupType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, markupType: value as any })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -702,7 +780,12 @@ export default function MarkupManagementTransfer() {
                   id="markupValue"
                   type="number"
                   value={formData.markupValue}
-                  onChange={(e) => setFormData({ ...formData, markupValue: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      markupValue: parseFloat(e.target.value) || 0,
+                    })
+                  }
                   placeholder="20"
                 />
               </div>
@@ -711,37 +794,65 @@ export default function MarkupManagementTransfer() {
             {/* Fare Ranges */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <Label className="text-sm font-medium">Current Fare Range (%)</Label>
-                <p className="text-xs text-gray-500 mb-2">Markup percentage range for user-visible pricing</p>
+                <Label className="text-sm font-medium">
+                  Current Fare Range (%)
+                </Label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Markup percentage range for user-visible pricing
+                </p>
                 <div className="grid grid-cols-2 gap-2">
                   <Input
                     type="number"
                     value={formData.currentFareMin}
-                    onChange={(e) => setFormData({ ...formData, currentFareMin: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        currentFareMin: parseFloat(e.target.value) || 0,
+                      })
+                    }
                     placeholder="Min %"
                   />
                   <Input
                     type="number"
                     value={formData.currentFareMax}
-                    onChange={(e) => setFormData({ ...formData, currentFareMax: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        currentFareMax: parseFloat(e.target.value) || 0,
+                      })
+                    }
                     placeholder="Max %"
                   />
                 </div>
               </div>
               <div>
-                <Label className="text-sm font-medium">Bargain Fare Range (%)</Label>
-                <p className="text-xs text-gray-500 mb-2">Acceptable bargain percentage range</p>
+                <Label className="text-sm font-medium">
+                  Bargain Fare Range (%)
+                </Label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Acceptable bargain percentage range
+                </p>
                 <div className="grid grid-cols-2 gap-2">
                   <Input
                     type="number"
                     value={formData.bargainFareMin}
-                    onChange={(e) => setFormData({ ...formData, bargainFareMin: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        bargainFareMin: parseFloat(e.target.value) || 0,
+                      })
+                    }
                     placeholder="Min %"
                   />
                   <Input
                     type="number"
                     value={formData.bargainFareMax}
-                    onChange={(e) => setFormData({ ...formData, bargainFareMax: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        bargainFareMax: parseFloat(e.target.value) || 0,
+                      })
+                    }
                     placeholder="Max %"
                   />
                 </div>
@@ -756,7 +867,9 @@ export default function MarkupManagementTransfer() {
                   id="validFrom"
                   type="date"
                   value={formData.validFrom}
-                  onChange={(e) => setFormData({ ...formData, validFrom: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, validFrom: e.target.value })
+                  }
                 />
               </div>
               <div>
@@ -765,7 +878,9 @@ export default function MarkupManagementTransfer() {
                   id="validTo"
                   type="date"
                   value={formData.validTo}
-                  onChange={(e) => setFormData({ ...formData, validTo: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, validTo: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -773,7 +888,12 @@ export default function MarkupManagementTransfer() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value as any })}>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, status: value as any })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -785,7 +905,12 @@ export default function MarkupManagementTransfer() {
               </div>
               <div>
                 <Label htmlFor="userType">User Type</Label>
-                <Select value={formData.userType} onValueChange={(value) => setFormData({ ...formData, userType: value as any })}>
+                <Select
+                  value={formData.userType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, userType: value as any })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -802,7 +927,12 @@ export default function MarkupManagementTransfer() {
                   id="priority"
                   type="number"
                   value={formData.priority}
-                  onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) || 1 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      priority: parseInt(e.target.value) || 1,
+                    })
+                  }
                   placeholder="1"
                 />
               </div>
@@ -810,11 +940,18 @@ export default function MarkupManagementTransfer() {
 
             {/* Special Conditions */}
             <div>
-              <Label htmlFor="specialConditions">Special Conditions (Optional)</Label>
+              <Label htmlFor="specialConditions">
+                Special Conditions (Optional)
+              </Label>
               <Textarea
                 id="specialConditions"
                 value={formData.specialConditions}
-                onChange={(e) => setFormData({ ...formData, specialConditions: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    specialConditions: e.target.value,
+                  })
+                }
                 placeholder="Any special conditions or notes for this markup rule..."
                 rows={3}
               />
@@ -843,12 +980,16 @@ export default function MarkupManagementTransfer() {
       </Dialog>
 
       {/* Delete Confirmation */}
-      <Dialog open={!!deleteConfirmId} onOpenChange={() => setDeleteConfirmId(null)}>
+      <Dialog
+        open={!!deleteConfirmId}
+        onOpenChange={() => setDeleteConfirmId(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Delete Transfer Markup</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this transfer markup? This action cannot be undone.
+              Are you sure you want to delete this transfer markup? This action
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -857,7 +998,9 @@ export default function MarkupManagementTransfer() {
             </Button>
             <Button
               variant="destructive"
-              onClick={() => deleteConfirmId && handleDeleteMarkup(deleteConfirmId)}
+              onClick={() =>
+                deleteConfirmId && handleDeleteMarkup(deleteConfirmId)
+              }
             >
               Delete
             </Button>

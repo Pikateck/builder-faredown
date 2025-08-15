@@ -5,7 +5,7 @@
 
 const express = require("express");
 const cors = require("cors");
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 // Initialize Express app
 const app = express();
@@ -32,8 +32,9 @@ app.use(cors(corsOptions));
 
 // Database connection
 const pool = new Pool({
-  connectionString: 'postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db',
-  ssl: { rejectUnauthorized: false }
+  connectionString:
+    "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
+  ssl: { rejectUnauthorized: false },
 });
 
 // Import pricing routes
@@ -43,20 +44,20 @@ const pricingRoutes = require("./routes/pricing");
 app.get("/health", async (req, res) => {
   try {
     // Check database health
-    const result = await pool.query('SELECT 1');
-    
+    const result = await pool.query("SELECT 1");
+
     res.json({
       status: "healthy",
       timestamp: new Date().toISOString(),
       database: "connected",
-      tables_check: "ok"
+      tables_check: "ok",
     });
   } catch (error) {
     res.status(500).json({
       status: "degraded",
       timestamp: new Date().toISOString(),
       database: "offline",
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -69,8 +70,8 @@ app.get("/", (req, res) => {
     description: "Pricing Engine API for markup and bargain management",
     endpoints: {
       pricing: "/api/pricing",
-      health: "/health"
-    }
+      health: "/health",
+    },
   });
 });
 
@@ -80,10 +81,13 @@ app.use("/api/pricing", pricingRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error("Error:", err);
-  
+
   res.status(err.status || 500).json({
     error: "Internal server error",
-    message: process.env.NODE_ENV === "production" ? "Something went wrong" : err.message,
+    message:
+      process.env.NODE_ENV === "production"
+        ? "Something went wrong"
+        : err.message,
   });
 });
 
@@ -97,7 +101,7 @@ app.use("*", (req, res) => {
       "/api/pricing/test-quote",
       "/api/pricing/markup-rules",
       "/api/pricing/promo-codes",
-      "/health"
+      "/health",
     ],
   });
 });
@@ -107,7 +111,7 @@ async function startServer() {
   try {
     // Test database connection
     console.log("🔌 Testing database connection...");
-    await pool.query('SELECT 1');
+    await pool.query("SELECT 1");
     console.log("✅ Database connected successfully");
 
     // Test if our new tables exist
@@ -117,9 +121,9 @@ async function startServer() {
       WHERE table_schema = 'public' 
       AND table_name IN ('markup_rules', 'promo_codes', 'bookings', 'bargain_events', 'pricing_quotes')
     `);
-    
+
     console.log(`✅ Found ${tablesResult.rows.length}/5 pricing tables`);
-    tablesResult.rows.forEach(row => {
+    tablesResult.rows.forEach((row) => {
       console.log(`   - ${row.table_name}`);
     });
 
@@ -129,7 +133,9 @@ async function startServer() {
       console.log("================================");
       console.log(`📍 Server URL: http://localhost:${PORT}`);
       console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
-      console.log(`🧪 Test Endpoint: http://localhost:${PORT}/api/pricing/test-quote`);
+      console.log(
+        `🧪 Test Endpoint: http://localhost:${PORT}/api/pricing/test-quote`,
+      );
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(`🗄️  Database: Connected to PostgreSQL`);
       console.log("================================\n");

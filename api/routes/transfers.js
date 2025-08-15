@@ -12,21 +12,21 @@ let promoService, voucherService, emailService;
 try {
   promoService = require("../services/promoService");
 } catch (error) {
-  console.warn('promoService not available in transfers routes');
+  console.warn("promoService not available in transfers routes");
   promoService = null;
 }
 
 try {
   voucherService = require("../services/voucherService");
 } catch (error) {
-  console.warn('voucherService not available in transfers routes');
+  console.warn("voucherService not available in transfers routes");
   voucherService = null;
 }
 
 try {
   emailService = require("../services/emailService");
 } catch (error) {
-  console.warn('emailService not available in transfers routes');
+  console.warn("emailService not available in transfers routes");
   emailService = null;
 }
 const { validateBookingData } = require("../middleware/validation");

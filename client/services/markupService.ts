@@ -614,7 +614,11 @@ class MarkupService {
       const queryParams = new URLSearchParams();
 
       if (filters.search) queryParams.set("search", filters.search);
-      if (filters.status) queryParams.set("is_active", filters.status === "active" ? "true" : "false");
+      if (filters.status)
+        queryParams.set(
+          "is_active",
+          filters.status === "active" ? "true" : "false",
+        );
       if (filters.page) queryParams.set("page", filters.page.toString());
       if (filters.limit) queryParams.set("limit", filters.limit.toString());
 
@@ -643,17 +647,19 @@ class MarkupService {
             bargainFareMin: Math.max(markup.markup_value - 10, 5),
             bargainFareMax: markup.markup_value + 10,
             validFrom: new Date().toISOString(),
-            validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+            validTo: new Date(
+              Date.now() + 365 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
             status: markup.is_active ? "active" : "inactive",
             priority: markup.priority || 50,
             userType: "all",
             specialConditions: "",
             createdAt: markup.created_at,
-            updatedAt: markup.updated_at
+            updatedAt: markup.updated_at,
           })),
           total: data.pagination.total_items,
           page: data.pagination.current_page,
-          totalPages: data.pagination.total_pages
+          totalPages: data.pagination.total_pages,
         };
       } else {
         throw new Error(response.error || "Failed to fetch transfer markups");
@@ -681,7 +687,7 @@ class MarkupService {
         min_fare_range: markupData.minAmount,
         max_fare_range: markupData.maxAmount,
         is_active: markupData.status === "active",
-        priority: markupData.priority
+        priority: markupData.priority,
       };
 
       const response = await apiClient.post(
@@ -708,13 +714,15 @@ class MarkupService {
           bargainFareMin: Math.max(data.markup_value - 10, 5),
           bargainFareMax: data.markup_value + 10,
           validFrom: new Date().toISOString(),
-          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
           status: data.is_active ? "active" : "inactive",
           priority: data.priority || 50,
           userType: "all",
           specialConditions: "",
           createdAt: data.created_at,
-          updatedAt: data.updated_at
+          updatedAt: data.updated_at,
         };
       } else {
         throw new Error(response.error || "Failed to create transfer markup");
@@ -743,7 +751,7 @@ class MarkupService {
         min_fare_range: markupData.minAmount,
         max_fare_range: markupData.maxAmount,
         is_active: markupData.status === "active",
-        priority: markupData.priority
+        priority: markupData.priority,
       };
 
       const response = await apiClient.put(
@@ -770,13 +778,15 @@ class MarkupService {
           bargainFareMin: Math.max(data.markup_value - 10, 5),
           bargainFareMax: data.markup_value + 10,
           validFrom: new Date().toISOString(),
-          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
           status: data.is_active ? "active" : "inactive",
           priority: data.priority || 50,
           userType: "all",
           specialConditions: "",
           createdAt: data.created_at,
-          updatedAt: data.updated_at
+          updatedAt: data.updated_at,
         };
       } else {
         throw new Error(response.error || "Failed to update transfer markup");
@@ -833,13 +843,15 @@ class MarkupService {
           bargainFareMin: 0,
           bargainFareMax: 0,
           validFrom: new Date().toISOString(),
-          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
           status: data.is_active ? "active" : "inactive",
           priority: 50,
           userType: "all",
           specialConditions: "",
           createdAt: data.created_at || new Date().toISOString(),
-          updatedAt: data.updated_at
+          updatedAt: data.updated_at,
         };
       } else {
         throw new Error(
