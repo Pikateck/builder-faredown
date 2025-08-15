@@ -607,21 +607,54 @@ class MarkupService {
   async getTransferMarkups(filters: MarkupFilters = {}): Promise<{
     markups: TransferMarkup[];
     total: number;
+    page: number;
+    totalPages: number;
   }> {
     try {
       const queryParams = new URLSearchParams();
 
       if (filters.search) queryParams.set("search", filters.search);
-      if (filters.status) queryParams.set("status", filters.status);
+      if (filters.status) queryParams.set("is_active", filters.status === "active" ? "true" : "false");
       if (filters.page) queryParams.set("page", filters.page.toString());
       if (filters.limit) queryParams.set("limit", filters.limit.toString());
 
       const response = await apiClient.get(
-        `${this.baseUrl}/transfer?${queryParams}`,
+        `/api/admin/transfers-markup?${queryParams}`,
       );
 
       if (response.ok) {
-        return response.data;
+        // Transform API response to match expected format
+        const data = response.data;
+        return {
+          markups: data.data.map((markup: any) => ({
+            id: markup.id.toString(),
+            name: markup.rule_name,
+            description: markup.rule_name,
+            originCity: markup.origin_city,
+            destinationCity: markup.destination_city,
+            transferType: "ALL",
+            vehicleType: markup.vehicle_type,
+            markupType: markup.markup_type,
+            markupValue: markup.markup_value,
+            minAmount: markup.min_fare_range || 0,
+            maxAmount: markup.max_fare_range || 999999,
+            currentFareMin: markup.markup_value - 5,
+            currentFareMax: markup.markup_value + 5,
+            bargainFareMin: Math.max(markup.markup_value - 10, 5),
+            bargainFareMax: markup.markup_value + 10,
+            validFrom: new Date().toISOString(),
+            validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+            status: markup.is_active ? "active" : "inactive",
+            priority: markup.priority || 50,
+            userType: "all",
+            specialConditions: "",
+            createdAt: markup.created_at,
+            updatedAt: markup.updated_at
+          })),
+          total: data.pagination.total_items,
+          page: data.pagination.current_page,
+          totalPages: data.pagination.total_pages
+        };
       } else {
         throw new Error(response.error || "Failed to fetch transfer markups");
       }
