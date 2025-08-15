@@ -152,13 +152,16 @@ export default function SightseeingDetails() {
 
   // Load attraction data
   useEffect(() => {
+    console.log("🔄 useEffect triggered for attractionId:", attractionId);
+
     const loadAttraction = async () => {
+      console.log("📝 Starting loadAttraction");
       setLoading(true);
       setError("");
 
       try {
         // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 50));
 
         // Sample attraction data (in real app, this would come from API)
         const sampleAttractions: Record<string, SightseeingAttraction> = {
