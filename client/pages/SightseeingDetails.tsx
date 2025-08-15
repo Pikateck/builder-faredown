@@ -92,14 +92,26 @@ export default function SightseeingDetails() {
     searchParams: Object.fromEntries(searchParams.entries()),
   });
 
-  // Redirect to sightseeing if no attractionId
-  useEffect(() => {
-    if (!attractionId) {
-      console.log("🔄 No attractionId, redirecting to sightseeing");
-      navigate('/?tab=sightseeing');
-      return;
-    }
-  }, [attractionId, navigate]);
+  // Handle missing attractionId
+  if (!attractionId) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Attraction Not Found</h1>
+            <p className="text-gray-600 mb-6">The attraction you're looking for doesn't exist.</p>
+            <Button
+              onClick={() => navigate('/?tab=sightseeing')}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Back to Sightseeing
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const [attraction, setAttraction] = useState<SightseeingAttraction | null>(
     null,
