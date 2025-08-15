@@ -52,6 +52,7 @@ const sightseeingSearchRoutes = require("./routes/sightseeing-search");
 const adminAiRoutes = require("./routes/admin-ai");
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
 const pricingRoutes = require("./routes/pricing");
+const adminReportsRoutes = require("./routes/admin-reports");
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
