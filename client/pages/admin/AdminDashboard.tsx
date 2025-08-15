@@ -15,6 +15,7 @@ import MarkupManagementAir from "./MarkupManagementAir";
 import MarkupManagementHotel from "./MarkupManagementHotel";
 import MarkupManagementSightseeing from "./MarkupManagementSightseeing";
 import MarkupManagementTransfer from "./MarkupManagementTransfer";
+import BookingReports from "./BookingReports";
 import VATManagement from "./VATManagement";
 import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
