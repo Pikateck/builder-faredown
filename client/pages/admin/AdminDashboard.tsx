@@ -161,6 +161,12 @@ const adminModules = [
     icon: Camera,
     color: "bg-purple-600",
   },
+  {
+    id: "markup-transfer",
+    name: "Markup Management (Transfer)",
+    icon: Car,
+    color: "bg-orange-600",
+  },
   { id: "vat", name: "VAT Management", icon: FileText, color: "bg-purple-600" },
   { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
   {
