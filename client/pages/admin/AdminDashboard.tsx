@@ -787,6 +787,8 @@ export default function AdminDashboard() {
               <MarkupManagementSightseeing />
             ) : activeModule === "markup-transfer" ? (
               <MarkupManagementTransfer />
+            ) : activeModule === "reports" ? (
+              <BookingReports />
             ) : activeModule === "vat" ? (
               <VATManagement />
             ) : activeModule === "promos" ? (
