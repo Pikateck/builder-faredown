@@ -366,6 +366,11 @@ export default function SightseeingDetails() {
     }
   }, [attractionId]);
 
+  // Load context data from URL parameters
+  useEffect(() => {
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
+
   // Mobile detection
   useEffect(() => {
     const checkMobile = () => {
