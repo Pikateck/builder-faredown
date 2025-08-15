@@ -12,7 +12,7 @@ import { DateProvider } from "./contexts/DateContext";
 import { LoyaltyProvider } from "./contexts/LoyaltyContext";
 
 // Original pages
-import Index from "./pages/Index";
+import Index from "./pages/IndexTest";
 import FlightResults from "./pages/FlightResults";
 import FlightDetails from "./pages/FlightDetails";
 import BookingFlow from "./pages/BookingFlow";
