@@ -115,6 +115,8 @@ export default function HotelDetails() {
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { formatPrice } = useCurrency();
+  const { loadDatesFromParams } = useDateContext();
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
