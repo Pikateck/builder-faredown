@@ -357,6 +357,7 @@ export default function SightseeingDetails() {
         setError("Failed to load attraction details. Please try again.");
       } finally {
         setLoading(false);
+        console.log("🎯 Loading complete, attraction:", attraction);
       }
     };
 
