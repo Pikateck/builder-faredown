@@ -500,10 +500,11 @@ export default function SightseeingDetails() {
 
   // Calculate total passengers
   const getTotalPassengers = () => {
+    if (!passengerQuantities) return 1;
     return (
-      passengerQuantities.adults +
-      passengerQuantities.children +
-      passengerQuantities.infants
+      (passengerQuantities.adults || 0) +
+      (passengerQuantities.children || 0) +
+      (passengerQuantities.infants || 0)
     );
   };
 
