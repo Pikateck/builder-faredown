@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useDateContext } from "@/contexts/DateContext";
 import {
   MapPin,
   Star,
@@ -436,7 +437,7 @@ export default function SightseeingDetails() {
     });
 
     if (!selectedTime) {
-      console.log("❌ No time selected");
+      console.log("�� No time selected");
       setShowTimeAlert(true);
       return;
     }
