@@ -109,7 +109,13 @@ async function applyMarkupRules(basePrice, destination, category, supplier_id) {
 }
 
 // Initialize the Hotelbeds Activities service
-const activitiesService = new HotelbedsActivitiesService();
+let activitiesService;
+try {
+  activitiesService = new HotelbedsActivitiesService();
+} catch (error) {
+  console.warn('HotelbedsActivitiesService not available, using fallback');
+  activitiesService = null;
+}
 
 // In-memory cache for destinations with 5-minute TTL
 const destinationsCache = new Map();
