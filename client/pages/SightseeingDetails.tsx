@@ -155,7 +155,7 @@ export default function SightseeingDetails() {
 
       try {
         // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         // Sample attraction data (in real app, this would come from API)
         const sampleAttractions: Record<string, SightseeingAttraction> = {
