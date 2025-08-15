@@ -90,6 +90,9 @@ export default function SightseeingDetails() {
   console.log("🎯 SightseeingDetails component loaded", {
     attractionId,
     searchParams: Object.fromEntries(searchParams.entries()),
+    loading,
+    error,
+    attraction: attraction?.name || 'null',
   });
 
   // Handle missing attractionId
