@@ -132,6 +132,15 @@ export default function SightseeingDetails() {
       infants: 0,
     };
   });
+
+  // Debug logging (after state declarations)
+  console.log("🎯 SightseeingDetails component loaded", {
+    attractionId,
+    searchParams: Object.fromEntries(searchParams.entries()),
+    loading,
+    error,
+    attraction: attraction?.name || 'null',
+  });
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
