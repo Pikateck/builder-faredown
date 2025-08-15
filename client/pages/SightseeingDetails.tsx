@@ -84,6 +84,12 @@ export default function SightseeingDetails() {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
 
+  // Debug logging
+  console.log("🎯 SightseeingDetails component loaded", {
+    attractionId,
+    searchParams: Object.fromEntries(searchParams.entries()),
+  });
+
   const [attraction, setAttraction] = useState<SightseeingAttraction | null>(
     null,
   );
