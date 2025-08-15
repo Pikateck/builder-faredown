@@ -107,6 +107,8 @@ import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { hotelsService } from "@/services/hotelsService";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { useDateContext } from "@/contexts/DateContext";
 
 export default function HotelDetails() {
   useScrollToTop();
