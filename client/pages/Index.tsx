@@ -256,38 +256,55 @@ export default function Index() {
       </div>
 
       {/* Features */}
-      <div className="py-16 bg-gray-50">
+      <div className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Faredown?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">Why Faredown Is Reinventing Travel Booking</h2>
+          <p className="text-center text-gray-600 mb-12">The future of booking isn't fixed pricing - it's live bargaining.</p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="font-semibold mb-2">Live Bargaining</h3>
-              <p className="text-gray-600">Negotiate real-time prices with AI</p>
-            </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold mb-2">Best Prices</h3>
-              <p className="text-gray-600">Pay what you feel is fair</p>
+              <h3 className="font-semibold mb-2">Live Bargain Technology</h3>
+              <p className="text-gray-600 text-sm">Negotiate, negotiate, negotiate instantly online without switching your browser. Turn that deal into Business class.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="font-semibold mb-2">Pay What You Feel is Fair</h3>
+              <p className="text-gray-600 text-sm">For the first time ever, you get to propose a price. Air miles, your time, or experience in the booking, to an offer they can't refuse.</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold mb-2">Secure Booking</h3>
-              <p className="text-gray-600">Instant confirmations</p>
+              <h3 className="font-semibold mb-2">Secure. Real-Time Bookings.</h3>
+              <p className="text-gray-600 text-sm">Your data is guaranteed to be safe with enhanced architecture. We only negotiate when availability is live and guarantee confirmed prices.</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-[#003580] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Headphones className="w-8 h-8 text-white" />
+                <Smartphone className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-semibold mb-2">24/7 Support</h3>
-              <p className="text-gray-600">Always here to help</p>
+              <h3 className="font-semibold mb-2">Smarter Than Any Travel Agent</h3>
+              <p className="text-gray-600 text-sm">Real-time data lets you know how to secure faster flights and cheaper bookings than any air travel booking site, or any travel agent.</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust Section */}
+      <div className="py-12 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-2xl font-bold mb-4">Trusted by 500+ Travelers</h2>
+          <p className="text-gray-600 mb-8">Real reviews from verified travelers</p>
+          <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
+              ))}
+            </div>
+            <span className="text-lg font-semibold">4.9</span>
           </div>
         </div>
       </div>
