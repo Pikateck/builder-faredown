@@ -251,6 +251,13 @@ app.use(
   transfersMarkupRoutes,
 );
 app.use("/api/pricing", pricingRoutes);
+app.use(
+  "/api/admin/reports",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminReportsRoutes,
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
