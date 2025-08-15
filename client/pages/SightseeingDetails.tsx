@@ -100,10 +100,14 @@ export default function SightseeingDetails() {
   const [isMobile, setIsMobile] = useState(false);
 
   // Unified passenger quantities for all ticket types
-  const [passengerQuantities, setPassengerQuantities] = useState({
-    adults: 1, // Default to 1 adult
-    children: 0,
-    infants: 0,
+  const [passengerQuantities, setPassengerQuantities] = useState(() => {
+    const adultsFromParams = parseInt(searchParams.get("adults") || "2");
+    const childrenFromParams = parseInt(searchParams.get("children") || "0");
+    return {
+      adults: adultsFromParams > 0 ? adultsFromParams : 1, // Default to 1 adult if invalid
+      children: childrenFromParams >= 0 ? childrenFromParams : 0,
+      infants: 0,
+    };
   });
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
