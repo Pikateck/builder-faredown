@@ -1,0 +1,572 @@
+/* Markup Management Mobile Responsive Fixes */
+/* Addresses text truncation and mobile responsiveness issues */
+
+@media (max-width: 768px) {
+  /* Table cell content fixes */
+  .markup-table-cell {
+    max-width: 120px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .markup-table-cell .truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Expandable content for mobile */
+  .markup-table-cell.expandable {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .markup-table-cell.expandable::after {
+    content: "...";
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    background: white;
+    padding: 0 2px;
+    font-weight: bold;
+    color: #3b82f6;
+  }
+
+  .markup-table-cell.expanded {
+    white-space: normal;
+    max-width: none;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px;
+    z-index: 10;
+    position: relative;
+  }
+
+  .markup-table-cell.expanded::after {
+    content: "×";
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #64748b;
+  }
+
+  /* Enhanced tooltip for mobile */
+  .markup-tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+  .markup-tooltip:hover .markup-tooltip-content,
+  .markup-tooltip.active .markup-tooltip-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+
+  .markup-tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -120px;
+    width: 240px;
+    background-color: #1f2937;
+    color: white;
+    text-align: left;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    transform: translateY(0);
+  }
+
+  .markup-tooltip-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #1f2937 transparent transparent transparent;
+  }
+
+  /* Mobile table improvements */
+  .markup-mobile-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .markup-mobile-table table {
+    width: 100%;
+    min-width: 800px;
+  }
+
+  .markup-mobile-table th,
+  .markup-mobile-table td {
+    padding: 12px 8px;
+    vertical-align: top;
+  }
+
+  /* Card layout for mobile tables */
+  .markup-card-layout {
+    display: none;
+  }
+
+  .markup-card-layout.active {
+    display: block;
+  }
+
+  .markup-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .markup-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .markup-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+
+  .markup-card-status {
+    margin-left: auto;
+  }
+
+  .markup-card-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .markup-card-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .markup-card-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+
+  .markup-card-value {
+    font-size: 14px;
+    color: #1f2937;
+    font-weight: 500;
+  }
+
+  .markup-card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  /* Search improvements for mobile */
+  .markup-search-mobile {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 20;
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    margin: -16px -16px 16px -16px;
+  }
+
+  .markup-search-input {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+  }
+
+  .markup-search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .markup-search-icon {
+    position: absolute;
+    left: 28px;
+    top: 28px;
+    color: #64748b;
+    pointer-events: none;
+  }
+
+  /* Filter improvements */
+  .markup-filters-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .markup-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .markup-filter-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .markup-filter-select {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+    color: #1f2937;
+  }
+
+  /* Action buttons improvements */
+  .markup-action-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 40px;
+  }
+
+  .markup-action-button:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+  }
+
+  .markup-action-button.primary {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+
+  .markup-action-button.primary:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+  }
+
+  .markup-action-button.danger {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+  }
+
+  .markup-action-button.danger:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+  }
+
+  /* Modal improvements for mobile */
+  .markup-modal-mobile {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    overflow-y: auto;
+  }
+
+  .markup-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 49;
+  }
+
+  .markup-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: white;
+    min-height: 100vh;
+    z-index: 51;
+  }
+
+  .markup-modal-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 52;
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: between;
+  }
+
+  .markup-modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+
+  .markup-modal-close {
+    padding: 8px;
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .markup-modal-close:hover {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  .markup-modal-body {
+    padding: 20px 16px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+
+  .markup-modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 16px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  /* Form improvements */
+  .markup-form-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .markup-form-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .markup-form-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .markup-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .markup-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .markup-form-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .markup-form-label.required::after {
+    content: " *";
+    color: #ef4444;
+  }
+
+  .markup-form-input,
+  .markup-form-select,
+  .markup-form-textarea {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px;
+    background: white;
+    color: #1f2937;
+    transition: all 0.2s ease;
+  }
+
+  .markup-form-input:focus,
+  .markup-form-select:focus,
+  .markup-form-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .markup-form-help {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  /* Progress indicators */
+  .markup-progress {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .markup-progress-bar {
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+
+  /* Toast notifications */
+  .markup-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    left: 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    z-index: 100;
+    transform: translateY(-100px);
+    transition: transform 0.3s ease;
+  }
+
+  .markup-toast.show {
+    transform: translateY(0);
+  }
+
+  .markup-toast.success {
+    border-left: 4px solid #10b981;
+  }
+
+  .markup-toast.error {
+    border-left: 4px solid #ef4444;
+  }
+
+  .markup-toast.warning {
+    border-left: 4px solid #f59e0b;
+  }
+}
+
+/* Tablet specific improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .markup-card-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .markup-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .markup-filters-mobile {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Large screen improvements */
+@media (min-width: 1025px) {
+  .markup-card-layout {
+    display: none !important;
+  }
+
+  .markup-mobile-table {
+    display: block;
+  }
+
+  .markup-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .markup-filters-mobile {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .markup-tooltip-content,
+  .markup-action-button,
+  .markup-form-input,
+  .markup-form-select,
+  .markup-form-textarea,
+  .markup-toast {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .markup-card,
+  .markup-form-section {
+    border-width: 2px;
+    border-color: #000;
+  }
+
+  .markup-action-button {
+    border-width: 2px;
+  }
+
+  .markup-action-button.primary {
+    background: #000;
+    border-color: #000;
+  }
+}
