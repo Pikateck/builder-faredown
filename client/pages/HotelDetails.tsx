@@ -206,6 +206,11 @@ export default function HotelDetails() {
     (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
   );
 
+  // Load context data from URL parameters
+  useEffect(() => {
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
+
   // Fetch live hotel data from Hotelbeds API
   useEffect(() => {
     const fetchHotelData = async () => {
