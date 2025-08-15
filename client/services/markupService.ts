@@ -600,6 +600,123 @@ class MarkupService {
       markupRange: { min: baseMarkupMin, max: baseMarkupMax },
     };
   }
+
+  /**
+   * Get all transfer markups with optional filters
+   */
+  async getTransferMarkups(filters: MarkupFilters = {}): Promise<{
+    markups: TransferMarkup[];
+    total: number;
+  }> {
+    try {
+      const queryParams = new URLSearchParams();
+
+      if (filters.search) queryParams.set("search", filters.search);
+      if (filters.status) queryParams.set("status", filters.status);
+      if (filters.page) queryParams.set("page", filters.page.toString());
+      if (filters.limit) queryParams.set("limit", filters.limit.toString());
+
+      const response = await apiClient.get(
+        `${this.baseUrl}/transfer?${queryParams}`,
+      );
+
+      if (response.ok) {
+        return response.data;
+      } else {
+        throw new Error(response.error || "Failed to fetch transfer markups");
+      }
+    } catch (error) {
+      console.error("Error fetching transfer markups:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create a new transfer markup
+   */
+  async createTransferMarkup(
+    markupData: CreateTransferMarkupRequest,
+  ): Promise<TransferMarkup> {
+    try {
+      const response = await apiClient.post(
+        `${this.baseUrl}/transfer`,
+        markupData,
+      );
+
+      if (response.ok) {
+        return response.data.markup;
+      } else {
+        throw new Error(response.error || "Failed to create transfer markup");
+      }
+    } catch (error) {
+      console.error("Error creating transfer markup:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update an existing transfer markup
+   */
+  async updateTransferMarkup(
+    markupId: string,
+    markupData: Partial<CreateTransferMarkupRequest>,
+  ): Promise<TransferMarkup> {
+    try {
+      const response = await apiClient.put(
+        `${this.baseUrl}/transfer/${markupId}`,
+        markupData,
+      );
+
+      if (response.ok) {
+        return response.data.markup;
+      } else {
+        throw new Error(response.error || "Failed to update transfer markup");
+      }
+    } catch (error) {
+      console.error("Error updating transfer markup:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a transfer markup
+   */
+  async deleteTransferMarkup(markupId: string): Promise<void> {
+    try {
+      const response = await apiClient.delete(
+        `${this.baseUrl}/transfer/${markupId}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(response.error || "Failed to delete transfer markup");
+      }
+    } catch (error) {
+      console.error("Error deleting transfer markup:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Toggle transfer markup status (active/inactive)
+   */
+  async toggleTransferMarkupStatus(markupId: string): Promise<TransferMarkup> {
+    try {
+      const response = await apiClient.post(
+        `${this.baseUrl}/transfer/${markupId}/toggle-status`,
+      );
+
+      if (response.ok) {
+        return response.data.markup;
+      } else {
+        throw new Error(
+          response.error || "Failed to toggle transfer markup status",
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling transfer markup status:", error);
+      throw error;
+    }
+  }
 }
 
 export const markupService = new MarkupService();
