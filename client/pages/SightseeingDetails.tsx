@@ -1370,7 +1370,7 @@ export default function SightseeingDetails() {
       </AlertDialog>
 
       {/* Sightseeing Bargain Modal */}
-      {attraction && (
+      {attraction && attraction.ticketTypes && attraction.ticketTypes[bargainTicketType] && (
         <FlightStyleBargainModal
           type="sightseeing"
           roomType={{
@@ -1379,7 +1379,7 @@ export default function SightseeingDetails() {
               attraction.ticketTypes[bargainTicketType]?.name ||
               "Standard Admission",
             description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
-            image: attraction.images[0],
+            image: attraction.images?.[0] || "",
             marketPrice:
               getTicketTotalPrice(bargainTicketType) ||
               attraction.ticketTypes[bargainTicketType]?.price ||
@@ -1389,15 +1389,15 @@ export default function SightseeingDetails() {
               attraction.ticketTypes[bargainTicketType]?.price ||
               149,
             features: attraction.ticketTypes[bargainTicketType]?.features || [],
-            maxOccupancy: adults,
-            bedType: attraction.duration,
-            size: attraction.category,
+            maxOccupancy: adults || 2,
+            bedType: attraction.duration || "1-2 hours",
+            size: attraction.category || "activity",
             cancellation: "Free cancellation up to 24 hours before visit date",
           }}
           hotel={{
-            id: attraction.id,
-            name: attraction.name,
-            location: attraction.location,
+            id: attraction.id || "unknown",
+            name: attraction.name || "Unknown Attraction",
+            location: attraction.location || "Unknown Location",
             checkIn: new Date().toISOString().split("T")[0],
             checkOut: new Date().toISOString().split("T")[0],
           }}
