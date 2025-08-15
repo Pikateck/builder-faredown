@@ -84,6 +84,7 @@ export default function SightseeingDetails() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
+  const { loadDatesFromParams } = useDateContext();
 
   // Debug logging
   console.log("🎯 SightseeingDetails component loaded", {
@@ -437,7 +438,7 @@ export default function SightseeingDetails() {
     });
 
     if (!selectedTime) {
-      console.log("�� No time selected");
+      console.log("❌ No time selected");
       setShowTimeAlert(true);
       return;
     }
