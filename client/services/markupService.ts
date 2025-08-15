@@ -95,6 +95,34 @@ export interface CreateAirMarkupRequest {
   specialConditions?: string;
 }
 
+export interface TransferMarkup {
+  id: string;
+  name: string;
+  description: string;
+  originCity: string;
+  destinationCity: string;
+  transferType: "Private" | "Shared" | "Luxury" | "Economy" | "ALL";
+  vehicleType: "Sedan" | "SUV" | "Van" | "Bus" | "ALL";
+  markupType: "percentage" | "fixed";
+  markupValue: number;
+  minAmount: number;
+  maxAmount: number;
+  // Current Fare Range (for dynamic pricing display)
+  currentFareMin: number; // Min markup percentage for user-visible transfer rates
+  currentFareMax: number; // Max markup percentage for user-visible transfer rates
+  // Bargain Fare Range (for user-entered price validation)
+  bargainFareMin: number; // Min acceptable bargain percentage for transfers
+  bargainFareMax: number; // Max acceptable bargain percentage for transfers
+  validFrom: string;
+  validTo: string;
+  status: "active" | "inactive" | "expired";
+  priority: number;
+  userType: "all" | "b2c" | "b2b";
+  specialConditions: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreateHotelMarkupRequest {
   name: string;
   description: string;
