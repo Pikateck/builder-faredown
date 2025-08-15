@@ -14,7 +14,13 @@ try {
   console.warn('promoService not available, using fallback');
   promoService = null;
 }
-const auditService = require("./auditService");
+let auditService;
+try {
+  auditService = require("./auditService");
+} catch (error) {
+  console.warn('auditService not available, using fallback');
+  auditService = null;
+}
 const winston = require("winston");
 
 class TransfersService {
