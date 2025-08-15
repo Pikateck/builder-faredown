@@ -241,6 +241,13 @@ app.use(
   auditLogger,
   adminSightseeingRoutes,
 );
+app.use(
+  "/api/admin/transfers-markup",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  transfersMarkupRoutes,
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
