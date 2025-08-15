@@ -14,6 +14,7 @@ import UserManagement from "./UserManagement";
 import MarkupManagementAir from "./MarkupManagementAir";
 import MarkupManagementHotel from "./MarkupManagementHotel";
 import MarkupManagementSightseeing from "./MarkupManagementSightseeing";
+import MarkupManagementTransfer from "./MarkupManagementTransfer";
 import VATManagement from "./VATManagement";
 import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
