@@ -153,6 +153,31 @@ export interface CreateHotelMarkupRequest {
   specialConditions?: string;
 }
 
+export interface CreateTransferMarkupRequest {
+  name: string;
+  description: string;
+  originCity: string;
+  destinationCity: string;
+  transferType: "Private" | "Shared" | "Luxury" | "Economy" | "ALL";
+  vehicleType: "Sedan" | "SUV" | "Van" | "Bus" | "ALL";
+  markupType: "percentage" | "fixed";
+  markupValue: number;
+  minAmount: number;
+  maxAmount: number;
+  // Current Fare Range fields
+  currentFareMin: number; // Min markup percentage for user-visible transfer rates
+  currentFareMax: number; // Max markup percentage for user-visible transfer rates
+  // Bargain Fare Range fields
+  bargainFareMin: number; // Min acceptable bargain percentage for transfers
+  bargainFareMax: number; // Max acceptable bargain percentage for transfers
+  validFrom: string;
+  validTo: string;
+  status: "active" | "inactive";
+  priority: number;
+  userType: "all" | "b2c" | "b2b";
+  specialConditions?: string;
+}
+
 export interface MarkupFilters {
   search?: string;
   airline?: string;
