@@ -747,7 +747,15 @@ export default function ReservationPage() {
                         Payment Method
                       </Label>
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between py-2 min-h-[48px] px-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 active:scale-[0.98] touch-manipulation">
+                        <div
+                          onClick={() =>
+                            setPaymentDetails((prev) => ({
+                              ...prev,
+                              paymentMethod: "card",
+                            }))
+                          }
+                          className="flex items-center justify-between py-2 min-h-[48px] px-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 active:scale-[0.98] touch-manipulation"
+                        >
                           <div className="flex items-center gap-3 flex-1">
                             <div className="relative">
                               <input
@@ -796,7 +804,15 @@ export default function ReservationPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between py-2 min-h-[48px] px-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 active:scale-[0.98] touch-manipulation">
+                        <div
+                          onClick={() =>
+                            setPaymentDetails((prev) => ({
+                              ...prev,
+                              paymentMethod: "pay_at_hotel",
+                            }))
+                          }
+                          className="flex items-center justify-between py-2 min-h-[48px] px-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 active:scale-[0.98] touch-manipulation"
+                        >
                           <div className="flex items-center gap-3 flex-1">
                             <div className="relative">
                               <input
