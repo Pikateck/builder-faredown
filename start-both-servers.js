@@ -1,44 +1,27 @@
 import { spawn } from 'child_process';
-import path from 'path';
 
-// Start the frontend dev server
-console.log('🚀 Starting frontend dev server...');
-const frontend = spawn('npm', ['run', 'dev'], {
+// Start ONLY the unified dev server
+console.log('🚀 Starting unified Faredown server...');
+const server = spawn('npm', ['run', 'dev'], {
   stdio: 'pipe',
   shell: true
 });
 
-frontend.stdout.on('data', (data) => {
-  console.log(`[FRONTEND] ${data.toString().trim()}`);
+server.stdout.on('data', (data) => {
+  console.log(`${data.toString().trim()}`);
 });
 
-frontend.stderr.on('data', (data) => {
-  console.error(`[FRONTEND ERROR] ${data.toString().trim()}`);
-});
-
-// Start the API server
-console.log('🚀 Starting API server...');
-const api = spawn('node', ['api/pricing-server.js'], {
-  stdio: 'pipe',
-  shell: true
-});
-
-api.stdout.on('data', (data) => {
-  console.log(`[API] ${data.toString().trim()}`);
-});
-
-api.stderr.on('data', (data) => {
-  console.error(`[API ERROR] ${data.toString().trim()}`);
+server.stderr.on('data', (data) => {
+  console.error(`[ERROR] ${data.toString().trim()}`);
 });
 
 // Handle process termination
 process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down servers...');
-  frontend.kill();
-  api.kill();
+  console.log('\n🛑 Shutting down server...');
+  server.kill();
   process.exit(0);
 });
 
-console.log('✅ Both servers starting...');
-console.log('📱 Frontend: http://localhost:8080');
-console.log('🔧 API: http://localhost:3001');
+console.log('✅ Unified server starting...');
+console.log('📱 Faredown: http://localhost:8080');
+console.log('🔧 Frontend + API: Single port 8080');
