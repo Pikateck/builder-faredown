@@ -7,9 +7,28 @@ const express = require("express");
 const transfersService = require("../services/transfersService");
 const transfersRepository = require("../repositories/transfersRepository");
 const markupService = require("../services/markupService");
-const promoService = require("../services/promoService");
-const voucherService = require("../services/voucherService");
-const emailService = require("../services/emailService");
+
+let promoService, voucherService, emailService;
+try {
+  promoService = require("../services/promoService");
+} catch (error) {
+  console.warn('promoService not available in transfers routes');
+  promoService = null;
+}
+
+try {
+  voucherService = require("../services/voucherService");
+} catch (error) {
+  console.warn('voucherService not available in transfers routes');
+  voucherService = null;
+}
+
+try {
+  emailService = require("../services/emailService");
+} catch (error) {
+  console.warn('emailService not available in transfers routes');
+  emailService = null;
+}
 const { validateBookingData } = require("../middleware/validation");
 const { auditRequest } = require("../middleware/audit");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
