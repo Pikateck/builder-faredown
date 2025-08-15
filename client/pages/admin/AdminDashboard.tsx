@@ -58,6 +58,7 @@ import {
   Hotel,
   Plane,
   Camera,
+  Car,
   DollarSign,
   Settings,
   Shield,
