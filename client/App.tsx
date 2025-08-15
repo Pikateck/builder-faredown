@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { initializeBargainPlatform } from "./services/bargainAppInit";
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -76,10 +75,6 @@ import AIBargainingDashboard from "./pages/admin/AIBargainingDashboard";
 import APITestingDashboard from "./pages/admin/APITestingDashboard";
 
 function App() {
-  // Initialize bargain platform on app startup
-  useEffect(() => {
-    initializeBargainPlatform();
-  }, []);
 
   return (
     <div className="App">
