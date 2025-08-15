@@ -671,13 +671,51 @@ class MarkupService {
     markupData: CreateTransferMarkupRequest,
   ): Promise<TransferMarkup> {
     try {
+      const requestData = {
+        rule_name: markupData.name,
+        origin_city: markupData.originCity,
+        destination_city: markupData.destinationCity,
+        vehicle_type: markupData.vehicleType.toLowerCase(),
+        markup_type: markupData.markupType,
+        markup_value: markupData.markupValue,
+        min_fare_range: markupData.minAmount,
+        max_fare_range: markupData.maxAmount,
+        is_active: markupData.status === "active",
+        priority: markupData.priority
+      };
+
       const response = await apiClient.post(
-        `${this.baseUrl}/transfer`,
-        markupData,
+        `/api/admin/transfers-markup`,
+        requestData,
       );
 
       if (response.ok) {
-        return response.data.markup;
+        const data = response.data.data;
+        return {
+          id: data.id.toString(),
+          name: data.rule_name,
+          description: data.rule_name,
+          originCity: data.origin_city,
+          destinationCity: data.destination_city,
+          transferType: "ALL",
+          vehicleType: data.vehicle_type,
+          markupType: data.markup_type,
+          markupValue: data.markup_value,
+          minAmount: data.min_fare_range || 0,
+          maxAmount: data.max_fare_range || 999999,
+          currentFareMin: data.markup_value - 5,
+          currentFareMax: data.markup_value + 5,
+          bargainFareMin: Math.max(data.markup_value - 10, 5),
+          bargainFareMax: data.markup_value + 10,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          status: data.is_active ? "active" : "inactive",
+          priority: data.priority || 50,
+          userType: "all",
+          specialConditions: "",
+          createdAt: data.created_at,
+          updatedAt: data.updated_at
+        };
       } else {
         throw new Error(response.error || "Failed to create transfer markup");
       }
@@ -695,13 +733,51 @@ class MarkupService {
     markupData: Partial<CreateTransferMarkupRequest>,
   ): Promise<TransferMarkup> {
     try {
+      const requestData = {
+        rule_name: markupData.name,
+        origin_city: markupData.originCity,
+        destination_city: markupData.destinationCity,
+        vehicle_type: markupData.vehicleType?.toLowerCase(),
+        markup_type: markupData.markupType,
+        markup_value: markupData.markupValue,
+        min_fare_range: markupData.minAmount,
+        max_fare_range: markupData.maxAmount,
+        is_active: markupData.status === "active",
+        priority: markupData.priority
+      };
+
       const response = await apiClient.put(
-        `${this.baseUrl}/transfer/${markupId}`,
-        markupData,
+        `/api/admin/transfers-markup/${markupId}`,
+        requestData,
       );
 
       if (response.ok) {
-        return response.data.markup;
+        const data = response.data.data;
+        return {
+          id: data.id.toString(),
+          name: data.rule_name,
+          description: data.rule_name,
+          originCity: data.origin_city,
+          destinationCity: data.destination_city,
+          transferType: "ALL",
+          vehicleType: data.vehicle_type,
+          markupType: data.markup_type,
+          markupValue: data.markup_value,
+          minAmount: data.min_fare_range || 0,
+          maxAmount: data.max_fare_range || 999999,
+          currentFareMin: data.markup_value - 5,
+          currentFareMax: data.markup_value + 5,
+          bargainFareMin: Math.max(data.markup_value - 10, 5),
+          bargainFareMax: data.markup_value + 10,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          status: data.is_active ? "active" : "inactive",
+          priority: data.priority || 50,
+          userType: "all",
+          specialConditions: "",
+          createdAt: data.created_at,
+          updatedAt: data.updated_at
+        };
       } else {
         throw new Error(response.error || "Failed to update transfer markup");
       }
@@ -717,7 +793,7 @@ class MarkupService {
   async deleteTransferMarkup(markupId: string): Promise<void> {
     try {
       const response = await apiClient.delete(
-        `${this.baseUrl}/transfer/${markupId}`,
+        `/api/admin/transfers-markup/${markupId}`,
       );
 
       if (!response.ok) {
@@ -734,12 +810,37 @@ class MarkupService {
    */
   async toggleTransferMarkupStatus(markupId: string): Promise<TransferMarkup> {
     try {
-      const response = await apiClient.post(
-        `${this.baseUrl}/transfer/${markupId}/toggle-status`,
+      const response = await apiClient.patch(
+        `/api/admin/transfers-markup/${markupId}/toggle`,
       );
 
       if (response.ok) {
-        return response.data.markup;
+        const data = response.data.data;
+        return {
+          id: data.id.toString(),
+          name: data.rule_name,
+          description: data.rule_name,
+          originCity: "",
+          destinationCity: "",
+          transferType: "ALL",
+          vehicleType: "economy",
+          markupType: "percentage",
+          markupValue: 0,
+          minAmount: 0,
+          maxAmount: 999999,
+          currentFareMin: 0,
+          currentFareMax: 0,
+          bargainFareMin: 0,
+          bargainFareMax: 0,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          status: data.is_active ? "active" : "inactive",
+          priority: 50,
+          userType: "all",
+          specialConditions: "",
+          createdAt: data.created_at || new Date().toISOString(),
+          updatedAt: data.updated_at
+        };
       } else {
         throw new Error(
           response.error || "Failed to toggle transfer markup status",
