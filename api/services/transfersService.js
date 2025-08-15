@@ -7,7 +7,13 @@
 const HotelbedsTransfersAdapter = require("./adapters/hotelbedsTransfersAdapter");
 const transfersRepository = require("../repositories/transfersRepository");
 const markupService = require("./markupService");
-const promoService = require("./promoService");
+let promoService;
+try {
+  promoService = require("./promoService");
+} catch (error) {
+  console.warn('promoService not available, using fallback');
+  promoService = null;
+}
 const auditService = require("./auditService");
 const winston = require("winston");
 
