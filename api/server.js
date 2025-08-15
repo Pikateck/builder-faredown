@@ -249,6 +249,7 @@ app.use(
   auditLogger,
   transfersMarkupRoutes,
 );
+app.use("/api/pricing", pricingRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
