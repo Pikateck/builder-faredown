@@ -86,15 +86,6 @@ export default function SightseeingDetails() {
   const { formatPrice } = useCurrency();
   const { loadDatesFromParams } = useDateContext();
 
-  // Debug logging
-  console.log("🎯 SightseeingDetails component loaded", {
-    attractionId,
-    searchParams: Object.fromEntries(searchParams.entries()),
-    loading,
-    error,
-    attraction: attraction?.name || 'null',
-  });
-
   // Handle missing attractionId
   if (!attractionId) {
     return (
