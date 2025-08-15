@@ -483,7 +483,13 @@ export default function SightseeingDetails() {
     change: number,
   ) => {
     setPassengerQuantities((prev) => {
-      const newQuantity = Math.max(0, prev[type] + change);
+      // Ensure prev is defined and has the required properties
+      if (!prev || typeof prev !== 'object') {
+        prev = { adults: 1, children: 0, infants: 0 };
+      }
+
+      const currentValue = prev[type] || 0;
+      const newQuantity = Math.max(type === "adults" ? 1 : 0, currentValue + change);
 
       return {
         ...prev,
