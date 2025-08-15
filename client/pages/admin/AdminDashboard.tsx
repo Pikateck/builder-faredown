@@ -790,6 +790,8 @@ export default function AdminDashboard() {
               <MarkupManagementTransfer />
             ) : activeModule === "reports" ? (
               <BookingReports />
+            ) : activeModule === "api-testing" ? (
+              <APITestDashboard />
             ) : activeModule === "vat" ? (
               <VATManagement />
             ) : activeModule === "promos" ? (
