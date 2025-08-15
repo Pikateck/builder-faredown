@@ -351,12 +351,15 @@ export default function SightseeingDetails() {
         };
 
         const attractionData = sampleAttractions[attractionId || ""];
+        console.log("📊 Looking for attraction:", attractionId, "Found:", !!attractionData);
 
         if (!attractionData) {
+          console.log("❌ Attraction not found");
           setError("Attraction not found");
           return;
         }
 
+        console.log("✅ Setting attraction data:", attractionData.name);
         setAttraction(attractionData);
       } catch (err) {
         console.error("Error loading attraction:", err);
