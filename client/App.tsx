@@ -27,6 +27,7 @@ import HotelBookingConfirmation from "./pages/HotelBookingConfirmation";
 import BookingVoucher from "./pages/BookingVoucher";
 import BookingInvoice from "./pages/BookingInvoice";
 import Bookings from "./pages/Bookings";
+import Sightseeing from "./pages/Sightseeing";
 import SightseeingResults from "./pages/SightseeingResults";
 import SightseeingDetails from "./pages/SightseeingDetails";
 import SightseeingBooking from "./pages/SightseeingBooking";
