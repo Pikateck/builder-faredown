@@ -100,7 +100,7 @@ export default function SightseeingDetails() {
               The attraction you're looking for doesn't exist.
             </p>
             <Button
-              onClick={() => navigate("/?tab=sightseeing")}
+              onClick={() => navigate("/sightseeing")}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Back to Sightseeing
