@@ -107,6 +107,60 @@ export default function Index() {
     setSearchParams({ tab });
   };
 
+  // Render search form based on active tab
+  const renderSearchForm = () => {
+    switch (activeTab) {
+      case "hotels":
+        return <BookingSearchForm />;
+      case "sightseeing":
+        return <SightseeingSearchForm />;
+      case "transfers":
+        return <TransfersSearchForm />;
+      case "flights":
+      default:
+        return (
+          <div className="bg-white rounded-lg p-6 text-gray-900">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">From</label>
+                <input
+                  type="text"
+                  placeholder="Departure city"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">To</label>
+                <input
+                  type="text"
+                  placeholder="Destination city"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Departure</label>
+                <input
+                  type="date"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Return</label>
+                <input
+                  type="date"
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </div>
+            <Button className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-3 text-lg">
+              <Search className="w-5 h-5 mr-2" />
+              Search Flights
+            </Button>
+          </div>
+        );
+    }
+  };
+
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
