@@ -574,7 +574,6 @@ export default function SightseeingDetails() {
       ticket.price,
       passengerQuantities.adults,
       passengerQuantities.children,
-      passengerQuantities.infants,
     );
 
     return priceCalc.totalPrice;
@@ -1282,7 +1281,6 @@ export default function SightseeingDetails() {
                                     ticket.price,
                                     passengerQuantities.adults,
                                     passengerQuantities.children,
-                                    passengerQuantities.infants,
                                   );
 
                                 return (
