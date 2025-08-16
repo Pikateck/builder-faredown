@@ -289,7 +289,6 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
 router.post(
   "/checkout/book",
   requireAuth,
-  validateBookingData,
   auditRequest,
   async (req, res) => {
     try {
