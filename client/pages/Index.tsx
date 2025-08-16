@@ -560,8 +560,7 @@ export default function Index() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Faredown is the world's first travel portal where you control
-                the price — for flights and hotels.
+                Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
               </h1>
               <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
                 Don't Just Book It. <strong>Bargain It™.</strong>
