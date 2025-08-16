@@ -1229,7 +1229,7 @@ export default function Hotels() {
                   </li>
                   <li>
                     <Link
-                      to="/?tab=sightseeing"
+                      to="/sightseeing"
                       onClick={() =>
                         window.scrollTo({ top: 0, behavior: "smooth" })
                       }
