@@ -1258,11 +1258,11 @@ export default function SightseeingDetails() {
                           {getTotalPassengers() > 1 ? "s" : ""}
                         </div>
                         <div className="text-xs text-gray-500 mb-2">
-                          {passengerQuantities.adults} Adults
-                          {passengerQuantities.children > 0
+                          {passengerQuantities?.adults || 1} Adults
+                          {(passengerQuantities?.children || 0) > 0
                             ? `, ${passengerQuantities.children} Children`
                             : ""}
-                          {passengerQuantities.infants > 0
+                          {(passengerQuantities?.infants || 0) > 0
                             ? `, ${passengerQuantities.infants} Infants`
                             : ""}
                         </div>
