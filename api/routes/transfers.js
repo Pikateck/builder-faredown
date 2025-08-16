@@ -29,7 +29,7 @@ try {
   console.warn("emailService not available in transfers routes");
   emailService = null;
 }
-const { validateBookingData } = require("../middleware/validation");
+// const { validateBookingData } = require("../middleware/validation"); // Not available
 const { auditLogger: auditRequest } = require("../middleware/audit");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
