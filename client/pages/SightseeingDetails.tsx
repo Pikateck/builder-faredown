@@ -1067,7 +1067,7 @@ export default function SightseeingDetails() {
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengerQuantity("adults", -1)}
-                          disabled={passengerQuantities.adults <= 0}
+                          disabled={(passengerQuantities?.adults || 1) <= 0}
                           className="w-8 h-8 p-0"
                         >
                           -
