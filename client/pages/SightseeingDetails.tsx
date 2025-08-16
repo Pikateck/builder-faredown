@@ -1101,13 +1101,13 @@ export default function SightseeingDetails() {
                           onClick={() =>
                             updatePassengerQuantity("children", -1)
                           }
-                          disabled={passengerQuantities.children <= 0}
+                          disabled={(passengerQuantities?.children || 0) <= 0}
                           className="w-8 h-8 p-0"
                         >
                           -
                         </Button>
                         <span className="w-8 text-center font-medium">
-                          {passengerQuantities.children}
+                          {passengerQuantities?.children || 0}
                         </span>
                         <Button
                           variant="outline"
@@ -1133,13 +1133,13 @@ export default function SightseeingDetails() {
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengerQuantity("infants", -1)}
-                          disabled={passengerQuantities.infants <= 0}
+                          disabled={(passengerQuantities?.infants || 0) <= 0}
                           className="w-8 h-8 p-0"
                         >
                           -
                         </Button>
                         <span className="w-8 text-center font-medium">
-                          {passengerQuantities.infants}
+                          {passengerQuantities?.infants || 0}
                         </span>
                         <Button
                           variant="outline"
