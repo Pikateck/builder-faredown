@@ -161,6 +161,37 @@ export default function Index() {
     }
   };
 
+  // Get tab-specific content
+  const getTabContent = () => {
+    switch (activeTab) {
+      case "hotels":
+        return {
+          title: "Find your perfect stay",
+          subtitle: "Search hotels with live AI bargaining.",
+          description: "Don't Just Book It. Bargain It™.",
+        };
+      case "sightseeing":
+        return {
+          title: "Discover amazing experiences",
+          subtitle: "Book sightseeing tours and activities with the best prices.",
+          description: "Explore more, pay less.",
+        };
+      case "transfers":
+        return {
+          title: "Travel in comfort",
+          subtitle: "Book reliable transfers and ground transportation.",
+          description: "Seamless journeys, every time.",
+        };
+      case "flights":
+      default:
+        return {
+          title: "Upgrade. Bargain. Book.",
+          subtitle: "Faredown is the world's first travel portal where you control the price — for flights and hotels.",
+          description: "Don't Just Book It. Bargain It™.",
+        };
+    }
+  };
+
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
