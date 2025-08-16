@@ -30,7 +30,7 @@ try {
   emailService = null;
 }
 const { validateBookingData } = require("../middleware/validation");
-const { audit: auditRequest } = require("../middleware/audit");
+const { auditLogger: auditRequest } = require("../middleware/audit");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
 
