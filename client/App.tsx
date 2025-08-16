@@ -105,10 +105,7 @@ function App() {
                   <Route path="/account/trips" element={<MyTrips />} />
                   <Route path="/account/payment" element={<Account />} />
                   <Route path="/saved" element={<Saved />} />
-                  <Route
-                    path="/hotels"
-                    element={<Navigate to="/?tab=hotels" replace />}
-                  />
+                  <Route path="/hotels" element={<Hotels />} />
                   <Route path="/hotels/results" element={<HotelResults />} />
                   <Route path="/hotels/:hotelId" element={<HotelDetails />} />
                   <Route path="/hotels/booking" element={<HotelBooking />} />
