@@ -79,12 +79,24 @@ import {
 import { downloadProjectInfo } from "@/lib/codeExport";
 
 export default function Index() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState("flights");
   const [departureDate, setDepartureDate] = useState<Date>();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  // Handle URL tab parameter
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab && ["flights", "hotels", "sightseeing", "transfers"].includes(tab)) {
+      setActiveTab(tab);
+    } else {
+      setActiveTab("flights"); // Default to flights
+    }
+  }, [searchParams]);
 
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
