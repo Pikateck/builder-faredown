@@ -86,7 +86,6 @@ export default function Index() {
   const [userName, setUserName] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -252,21 +251,21 @@ export default function Index() {
       setSelectedDepartureDate(clickedDate);
       setShowCalendar(false);
     } else {
-      // For round-trip bookings (hotels)
+      // For round-trip bookings
       if (selectingDeparture || !selectedDepartureDate) {
-        // Selecting check-in date - always start fresh
+        // Selecting departure date - always start fresh
         setSelectedDepartureDate(clickedDate);
         setSelectedReturnDate(null); // Clear any existing return date
-        setSelectingDeparture(false); // Now we'll select check-out date
+        setSelectingDeparture(false); // Now we'll select return date
       } else {
-        // Selecting check-out date
+        // Selecting return date
         if (clickedDate <= selectedDepartureDate) {
-          // If clicked date is before or same as check-in, start over with new check-in
+          // If clicked date is before or same as departure, start over with new departure
           setSelectedDepartureDate(clickedDate);
           setSelectedReturnDate(null);
           setSelectingDeparture(false);
         } else {
-          // Valid check-out date (after check-in)
+          // Valid return date (after departure)
           setSelectedReturnDate(clickedDate);
           setShowCalendar(false); // Close calendar after selecting both dates
         }
@@ -314,29 +313,23 @@ export default function Index() {
   };
 
   return (
-    <div
-      className="min-h-screen bg-white"
-      style={{
-        fontFamily:
-          'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
-      }}
-    >
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header
-        className="text-white sticky top-0 z-40"
-        style={{ backgroundColor: "#003580" }}
-      >
+      <header className="text-white sticky top-0 z-40" style={{ backgroundColor: "#003580" }}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                <Plane className="w-4 h-4 text-black" />
+              </div>
               <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
               </span>
             </Link>
 
             {/* Centered Navigation */}
-            <nav className="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+            <nav className="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-medium">
               <Link
                 to="/"
                 className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold border-b-2 border-white py-3 lg:py-4"
@@ -372,11 +365,8 @@ export default function Index() {
                 <Menu className="w-6 h-6" />
               </button>
 
-              {/* Language and Currency */}
+              {/* Currency */}
               <div className="hidden md:flex items-center space-x-4 text-sm">
-                <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                  <span>English (UK)</span>
-                </button>
                 <div className="relative">
                   <button
                     onClick={() =>
@@ -384,9 +374,7 @@ export default function Index() {
                     }
                     className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
                   >
-                    <span>
-                      {selectedCurrency.symbol} {selectedCurrency.code}
-                    </span>
+                    <span>Curr {selectedCurrency.symbol} {selectedCurrency.code}</span>
                     <ChevronDown className="w-4 h-4" />
                   </button>
                   {showCurrencyDropdown && (
@@ -397,24 +385,6 @@ export default function Index() {
                         { code: "GBP", symbol: "£", name: "British Pound" },
                         { code: "INR", symbol: "₹", name: "Indian Rupee" },
                         { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
-                        { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
-                        { code: "JPY", symbol: "¥", name: "Japanese Yen" },
-                        { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
-                        { code: "KRW", symbol: "₩", name: "South Korean Won" },
-                        { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
-                        {
-                          code: "AUD",
-                          symbol: "A$",
-                          name: "Australian Dollar",
-                        },
-                        { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
-                        { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
-                        { code: "THB", symbol: "฿", name: "Thai Baht" },
-                        {
-                          code: "MYR",
-                          symbol: "RM",
-                          name: "Malaysian Ringgit",
-                        },
                       ].map((currency) => (
                         <button
                           key={currency.code}
@@ -546,949 +516,240 @@ export default function Index() {
             </div>
           </div>
         )}
-
-        {/* Hero Search Section */}
-        <div
-          className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
-          style={{ backgroundColor: "#003580" }}
-        >
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <div className="text-center mb-4 sm:mb-6">
-              <div className="mb-3 sm:mb-5">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  Upgrade. Bargain. Book.
-                </h2>
-              </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
-              </h1>
-              <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
-                Don't Just Book It. <strong>Bargain It™.</strong>
-              </p>
-              <p className="text-white text-xs sm:text-sm opacity-70">
-                Join 50M+ travelers who bargain for more.
-              </p>
-            </div>
-
-            {/* Dynamic Search Form - Hidden on mobile, shown in sticky bottom */}
-            <div className="hidden sm:block rounded-t-lg">
-              <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
-                <div className="flex flex-col gap-4">
-                  {/* Trip Type Selector - Feb 14, 2025 Design: Gray background container */}
-                  <div className="flex space-x-1 mb-2 bg-gray-100 rounded-lg p-1">
-                    <button
-                      onClick={() => setTripType("round-trip")}
-                      className={cn(
-                        "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                        tripType === "round-trip"
-                          ? "bg-[#003580] text-white"
-                          : "text-gray-600 hover:text-gray-900",
-                      )}
-                    >
-                      Round trip
-                    </button>
-                    <button
-                      onClick={() => setTripType("one-way")}
-                      className={cn(
-                        "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                        tripType === "one-way"
-                          ? "bg-[#003580] text-white"
-                          : "text-gray-600 hover:text-gray-900",
-                      )}
-                    >
-                      One way
-                    </button>
-                    <button
-                      onClick={() => setTripType("multi-city")}
-                      className={cn(
-                        "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                        tripType === "multi-city"
-                          ? "bg-[#003580] text-white"
-                          : "text-gray-600 hover:text-gray-900",
-                      )}
-                    >
-                      Multi-city
-                    </button>
-                  </div>
-
-                  {/* Class Selector - Separate row */}
-                  <div className="flex justify-start">
-                    <div className="relative">
-                      <button
-                        onClick={() =>
-                          setShowClassDropdown(!showClassDropdown)
-                        }
-                        className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded transition-colors border border-gray-300"
-                      >
-                        <span className="text-sm text-gray-700">
-                          {selectedClass}
-                        </span>
-                        <ChevronDown className="w-3 h-3 text-gray-500" />
-                      </button>
-                      {showClassDropdown && (
-                        <div className="absolute top-10 left-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999] w-48">
-                          {[
-                            "Economy",
-                            "Premium Economy",
-                            "Business",
-                            "First Class",
-                          ].map((classType) => (
-                            <button
-                              key={classType}
-                              onClick={() => {
-                                setSelectedClass(classType);
-                                setShowClassDropdown(false);
-                              }}
-                              className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
-                            >
-                              {classType}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Search inputs */}
-                <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-2 mt-2 w-full max-w-5xl overflow-visible">
-                  <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                      Leaving from
-                    </label>
-                    <button
-                      onClick={() => setShowFromCities(!showFromCities)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 focus:border-blue-500 touch-manipulation"
-                    >
-                      <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-700 font-medium">
-                        Leaving from
-                      </span>
-                    </button>
-
-                    {showFromCities && (
-                      <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                        <div className="mb-3">
-                          <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                            Airport, city or country
-                          </h3>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              placeholder="Mumbai"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          {Object.entries(cityData).map(([city, data]) => (
-                            <button
-                              key={city}
-                              onClick={() => {
-                                setSelectedFromCity(city);
-                                setShowFromCities(false);
-                              }}
-                              className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                                  <span className="text-xs font-bold text-gray-600">
-                                    ✈
-                                  </span>
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {city} • {data.airport}
-                                  </div>
-                                  <div className="text-xs text-gray-500">
-                                    {data.fullName}
-                                  </div>
-                                </div>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="relative flex-1 lg:max-w-xs w-full lg:w-auto">
-                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                      Going to
-                    </label>
-                    <button
-                      onClick={() => setShowToCities(!showToCities)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 focus:border-blue-500 touch-manipulation"
-                    >
-                      <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-700 font-medium">
-                        Going to
-                      </span>
-                    </button>
-
-                    {showToCities && (
-                      <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                        <div className="mb-3">
-                          <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                            Airport, city or country
-                          </h3>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              placeholder="Dubai"
-                              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          {Object.entries(cityData).map(([city, data]) => (
-                            <button
-                              key={city}
-                              onClick={() => {
-                                setSelectedToCity(city);
-                                setShowToCities(false);
-                              }}
-                              className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                                  <span className="text-xs font-bold text-gray-600">
-                                    ✈
-                                  </span>
-                                </div>
-                                <div>
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {city} • {data.airport}
-                                  </div>
-                                  <div className="text-xs text-gray-500">
-                                    {data.fullName}
-                                  </div>
-                                </div>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="relative overflow-visible lg:max-w-[200px] w-full lg:w-auto">
-                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                      Travel dates
-                    </label>
-                    <button
-                      onClick={() => {
-                        if (!showCalendar) {
-                          // Reset selection state when opening calendar
-                          setSelectingDeparture(true);
-                          // Ensure we start with a clean state
-                          setCurrentMonth(new Date().getMonth());
-                          setCurrentYear(new Date().getFullYear());
-                        }
-                        setShowCalendar(!showCalendar);
-                      }}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[180px] hover:border-blue-500 touch-manipulation"
-                    >
-                      <svg
-                        className="w-4 h-4 text-gray-500 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span className="text-sm text-gray-700 font-medium">
-                        {tripType === "one-way"
-                          ? formatDate(selectedDepartureDate) || "Select date"
-                          : selectedDepartureDate
-                            ? `${formatDate(selectedDepartureDate)} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate)}` : "- Return"}`
-                            : "Select dates"}
-                      </span>
-                    </button>
-
-                    {showCalendar && (
-                      <div className="absolute top-14 left-0 right-0 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] w-full sm:w-[700px] max-w-[700px] overflow-hidden">
-                        <div className="flex justify-between items-center p-4 bg-white border-b border-gray-200">
-                          <button
-                            onClick={() => navigateMonth("prev")}
-                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                          >
-                            <ChevronLeft className="w-4 h-4 text-gray-600" />
-                          </button>
-                          <div className="flex space-x-16">
-                            <div className="text-center">
-                              <div className="font-medium text-gray-900">
-                                {getMonthName(currentMonth)} {currentYear}
-                              </div>
-                            </div>
-                            <div className="text-center">
-                              <div className="font-medium text-gray-900">
-                                {getMonthName(
-                                  currentMonth === 11 ? 0 : currentMonth + 1,
-                                )}{" "}
-                                {currentMonth === 11
-                                  ? currentYear + 1
-                                  : currentYear}
-                              </div>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => navigateMonth("next")}
-                            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                          >
-                            <ChevronRight className="w-4 h-4 text-gray-600" />
-                          </button>
-                        </div>
-
-                        <div className="grid grid-cols-2 divide-x divide-gray-200">
-                          {/* Current Month Calendar */}
-                          <div className="p-4">
-                            <div className="grid grid-cols-7 gap-1 mb-3">
-                              {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(
-                                (day) => (
-                                  <div
-                                    key={day}
-                                    className="text-center py-2 text-xs font-medium text-gray-500"
-                                  >
-                                    {day}
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                            <div className="grid grid-cols-7 gap-1">
-                              {Array.from({ length: 42 }, (_, i) => {
-                                const firstDay = getFirstDayOfMonth(
-                                  currentMonth,
-                                  currentYear,
-                                );
-                                const daysInMonth = getDaysInMonth(
-                                  currentMonth,
-                                  currentYear,
-                                );
-                                const day = i - firstDay + 1;
-                                const isValidDay =
-                                  day >= 1 && day <= daysInMonth;
-                                const currentDate = isValidDay
-                                  ? new Date(currentYear, currentMonth, day)
-                                  : null;
-                                const isPastDate =
-                                  currentDate &&
-                                  currentDate < today &&
-                                  !isDateEqual(currentDate, today);
-
-                                if (!isValidDay) {
-                                  return <div key={i} className="h-10"></div>;
-                                }
-
-                                const isDeparture = isDateEqual(
-                                  currentDate,
-                                  selectedDepartureDate,
-                                );
-                                const isReturn = isDateEqual(
-                                  currentDate,
-                                  selectedReturnDate,
-                                );
-                                const isInRange =
-                                  selectedDepartureDate &&
-                                  selectedReturnDate &&
-                                  currentDate &&
-                                  isDateInRange(
-                                    currentDate,
-                                    selectedDepartureDate,
-                                    selectedReturnDate,
-                                  ) &&
-                                  !isDeparture &&
-                                  !isReturn;
-                                const isToday = isDateEqual(currentDate, today);
-
-                                return (
-                                  <button
-                                    key={i}
-                                    disabled={isPastDate}
-                                    onClick={() =>
-                                      handleDateClick(
-                                        day,
-                                        currentMonth,
-                                        currentYear,
-                                      )
-                                    }
-                                    className={cn(
-                                      "h-10 w-10 text-sm font-medium flex items-center justify-center hover:bg-gray-100 transition-colors rounded relative",
-                                      isPastDate &&
-                                        "text-gray-300 cursor-not-allowed hover:bg-transparent",
-                                      isToday &&
-                                        !isDeparture &&
-                                        !isReturn &&
-                                        "bg-gray-100 font-semibold",
-                                      isDeparture &&
-                                        "bg-gray-900 text-white hover:bg-gray-800",
-                                      isReturn &&
-                                        "bg-gray-900 text-white hover:bg-gray-800",
-                                      isInRange && "bg-gray-100 text-gray-700",
-                                      !isPastDate &&
-                                        !isDeparture &&
-                                        !isReturn &&
-                                        !isInRange &&
-                                        !isToday &&
-                                        "text-gray-900",
-                                    )}
-                                  >
-                                    {day}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-
-                          {/* Next Month Calendar */}
-                          <div className="p-4">
-                            <div className="grid grid-cols-7 gap-1 mb-3">
-                              {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(
-                                (day) => (
-                                  <div
-                                    key={day}
-                                    className="text-center py-2 text-xs font-medium text-gray-500"
-                                  >
-                                    {day}
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                            <div className="grid grid-cols-7 gap-1">
-                              {Array.from({ length: 42 }, (_, i) => {
-                                const nextMonth =
-                                  currentMonth === 11 ? 0 : currentMonth + 1;
-                                const nextYear =
-                                  currentMonth === 11
-                                    ? currentYear + 1
-                                    : currentYear;
-                                const firstDay = getFirstDayOfMonth(
-                                  nextMonth,
-                                  nextYear,
-                                );
-                                const daysInMonth = getDaysInMonth(
-                                  nextMonth,
-                                  nextYear,
-                                );
-                                const day = i - firstDay + 1;
-                                const isValidDay =
-                                  day >= 1 && day <= daysInMonth;
-                                const currentDate = isValidDay
-                                  ? new Date(nextYear, nextMonth, day)
-                                  : null;
-                                const isPastDate =
-                                  currentDate &&
-                                  currentDate < today &&
-                                  !isDateEqual(currentDate, today);
-
-                                if (!isValidDay) {
-                                  return <div key={i} className="h-10"></div>;
-                                }
-
-                                const isDeparture = isDateEqual(
-                                  currentDate,
-                                  selectedDepartureDate,
-                                );
-                                const isReturn = isDateEqual(
-                                  currentDate,
-                                  selectedReturnDate,
-                                );
-                                const isInRange =
-                                  selectedDepartureDate &&
-                                  selectedReturnDate &&
-                                  currentDate &&
-                                  isDateInRange(
-                                    currentDate,
-                                    selectedDepartureDate,
-                                    selectedReturnDate,
-                                  ) &&
-                                  !isDeparture &&
-                                  !isReturn;
-                                const isToday = isDateEqual(currentDate, today);
-
-                                return (
-                                  <button
-                                    key={i}
-                                    disabled={isPastDate}
-                                    onClick={() =>
-                                      handleDateClick(day, nextMonth, nextYear)
-                                    }
-                                    className={cn(
-                                      "h-10 w-10 text-sm font-medium flex items-center justify-center hover:bg-gray-100 transition-colors rounded relative",
-                                      isPastDate &&
-                                        "text-gray-300 cursor-not-allowed hover:bg-transparent",
-                                      isToday &&
-                                        !isDeparture &&
-                                        !isReturn &&
-                                        "bg-gray-100 font-semibold",
-                                      isDeparture &&
-                                        "bg-gray-900 text-white hover:bg-gray-800",
-                                      isReturn &&
-                                        "bg-gray-900 text-white hover:bg-gray-800",
-                                      isInRange && "bg-gray-100 text-gray-700",
-                                      !isPastDate &&
-                                        !isDeparture &&
-                                        !isReturn &&
-                                        !isInRange &&
-                                        !isToday &&
-                                        "text-gray-900",
-                                    )}
-                                  >
-                                    {day}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Calendar Instructions */}
-                        <div className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                          <div className="flex items-center justify-between text-xs text-gray-600">
-                            <div className="flex items-center space-x-4">
-                              <div className="flex items-center space-x-1">
-                                <div className="w-3 h-3 bg-gray-900 rounded"></div>
-                                <span>Selected</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <div className="w-3 h-3 bg-gray-100 rounded"></div>
-                                <span>Range</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <div className="w-3 h-3 bg-gray-100 border border-gray-400 rounded"></div>
-                                <span>Today</span>
-                              </div>
-                              {(selectedDepartureDate ||
-                                selectedReturnDate) && (
-                                <button
-                                  onClick={() => {
-                                    setSelectedDepartureDate(null);
-                                    setSelectedReturnDate(null);
-                                    setSelectingDeparture(true);
-                                  }}
-                                  className="text-blue-600 hover:text-blue-800 font-medium text-xs"
-                                >
-                                  Clear dates
-                                </button>
-                              )}
-                            </div>
-                            {tripType === "round-trip" && (
-                              <span>
-                                {selectingDeparture
-                                  ? "Select check-in date"
-                                  : "Select check-out date"}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="relative lg:max-w-[150px] w-full lg:w-auto">
-                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                      Travelers
-                    </label>
-                    <button
-                      onClick={() => setShowTravelers(!showTravelers)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full min-w-[120px] hover:border-blue-500 touch-manipulation"
-                    >
-                      <svg
-                        className="w-4 h-4 text-gray-500 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                      <span className="text-sm text-gray-700 font-medium">
-                        {travelers.adults} adult
-                        {travelers.adults > 1 ? "s" : ""}
-                        {travelers.children > 0
-                          ? `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`
-                          : ""}
-                      </span>
-                    </button>
-
-                    {showTravelers && (
-                      <div className="absolute top-14 left-0 right-0 sm:right-0 sm:left-auto bg-white border border-gray-300 rounded-md shadow-xl p-4 z-50 w-full sm:w-72">
-                        <div className="space-y-6">
-                          <div className="flex items-center justify-between py-2">
-                            <div>
-                              <div className="font-medium text-gray-900">
-                                Adults
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                Age 18+
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                              <button
-                                onClick={() =>
-                                  setTravelers((prev) => ({
-                                    ...prev,
-                                    adults: Math.max(1, prev.adults - 1),
-                                  }))
-                                }
-                                disabled={travelers.adults <= 1}
-                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
-                              >
-                                −
-                              </button>
-                              <span className="w-8 text-center font-medium text-gray-900">
-                                {travelers.adults}
-                              </span>
-                              <button
-                                onClick={() =>
-                                  setTravelers((prev) => ({
-                                    ...prev,
-                                    adults: prev.adults + 1,
-                                  }))
-                                }
-                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-between py-2">
-                            <div>
-                              <div className="font-medium text-gray-900">
-                                Children
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                Age 0-17
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                              <button
-                                onClick={() =>
-                                  setTravelers((prev) => ({
-                                    ...prev,
-                                    children: Math.max(0, prev.children - 1),
-                                  }))
-                                }
-                                disabled={travelers.children <= 0}
-                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 disabled:border-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-600 font-bold"
-                              >
-                                −
-                              </button>
-                              <span className="w-8 text-center font-medium text-gray-900">
-                                {travelers.children}
-                              </span>
-                              <button
-                                onClick={() =>
-                                  setTravelers((prev) => ({
-                                    ...prev,
-                                    children: prev.children + 1,
-                                  }))
-                                }
-                                className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-
-                          <div className="pt-2">
-                            <Button
-                              onClick={() => setShowTravelers(false)}
-                              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3"
-                            >
-                              Done
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="lg:max-w-[100px] w-full lg:w-auto">
-                    <Link
-                      to={`/flights/results?adults=${travelers.adults}&children=${travelers.children}`}
-                      className="w-full"
-                    >
-                      <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
-                        Search
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </header>
 
-      {/* Features Section - Below Search Form */}
-      <div className="bg-white py-8 md:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Features Column */}
-            <div className="lg:col-span-2">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Best Price Guarantee */}
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Best Price Guarantee</h3>
-                    <p className="text-sm text-gray-600">Find a similar price elsewhere? We'll match it and give you extra 5% off your next booking with us.</p>
-                  </div>
-                </div>
-
-                {/* Instant Confirmation */}
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Instant Confirmation</h3>
-                    <p className="text-sm text-gray-600">Get instant booking confirmations and e-tickets delivered to your inbox immediately.</p>
-                  </div>
-                </div>
-
-                {/* Flexible Booking Options */}
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Flexible Booking Options</h3>
-                    <p className="text-sm text-gray-600">Change or cancel your bookings easily with our flexible policies and get refunds quickly.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Customer Support Section */}
-            <div className="lg:col-span-1">
-              <div className="bg-blue-600 rounded-lg p-6 text-white">
-                <h3 className="text-xl font-bold mb-4">Top-Rated Customer Support</h3>
-                <p className="text-blue-100 mb-6">Our award winning support team is available 24/7 to help with any booking questions or issues.</p>
-
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.959 8.959 0 01-4.906-1.458L3 21l3.458-5.094A8.959 8.959 0 013 12c0-4.418 3.582-8 8-8s8 3.582 8 8z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm">Live Chat</span>
-                  </div>
-
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm">Phone Call</span>
-                  </div>
-
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm">Email</span>
-                  </div>
-
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <span className="text-sm">24/7 Support</span>
-                  </div>
-                </div>
-
-                <button className="w-full bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg mt-6 hover:bg-blue-50 transition-colors">
-                  Get Help Now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Sticky Bottom Search Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
-        <div className="px-4 py-3">
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            <button
-              onClick={() => setShowFromCities(!showFromCities)}
-              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
-            >
-              <div className="flex items-center space-x-2">
-                <Plane className="w-4 h-4 text-gray-500" />
-                <div className="text-left">
-                  <div className="text-xs text-gray-500">From</div>
-                  <div className="text-sm font-medium text-gray-900">
-                    {cityData[selectedFromCity]?.code}
-                  </div>
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={() => setShowToCities(!showToCities)}
-              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
-            >
-              <div className="flex items-center space-x-2">
-                <Plane className="w-4 h-4 text-gray-500" />
-                <div className="text-left">
-                  <div className="text-xs text-gray-500">To</div>
-                  <div className="text-sm font-medium text-gray-900">
-                    {cityData[selectedToCity]?.code}
-                  </div>
-                </div>
-              </div>
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            <button
-              onClick={() => {
-                if (!showCalendar) {
-                  // Reset selection state when opening calendar
-                  setSelectingDeparture(true);
-                  // Ensure we start with a clean state
-                  setCurrentMonth(new Date().getMonth());
-                  setCurrentYear(new Date().getFullYear());
-                }
-                setShowCalendar(!showCalendar);
-              }}
-              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
-            >
-              <div className="flex items-center space-x-2">
-                <CalendarIcon className="w-4 h-4 text-gray-500" />
-                <div className="text-left">
-                  <div className="text-xs text-gray-500">Dates</div>
-                  <div className="text-sm font-medium text-gray-900 truncate">
-                    {tripType === "one-way"
-                      ? selectedDepartureDate
-                        ? formatDate(selectedDepartureDate).split("-")[0]
-                        : "Select"
-                      : selectedDepartureDate
-                        ? `${formatDate(selectedDepartureDate).split("-")[0]} ${selectedReturnDate ? `- ${formatDate(selectedReturnDate).split("-")[0]}` : "- Return"}`
-                        : "Select dates"}
-                  </div>
-                </div>
-              </div>
-            </button>
-            <button
-              onClick={() => setShowTravelers(!showTravelers)}
-              className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-4 border touch-manipulation"
-            >
-              <div className="flex items-center space-x-2">
-                <Users className="w-4 h-4 text-gray-500" />
-                <div className="text-left">
-                  <div className="text-xs text-gray-500">Travelers</div>
-                  <div className="text-sm font-medium text-gray-900">
-                    {travelers.adults + travelers.children}
-                  </div>
-                </div>
-              </div>
-            </button>
-          </div>
-          <Link
-            to={`/flights/results?adults=${travelers.adults}&children=${travelers.children}`}
-            className="w-full"
-          >
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation">
-              Search Flights
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Why Choose Faredown Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[1280px] mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Why Faredown Is Reinventing Travel Booking
-            </h2>
-            <p className="text-gray-600 text-lg">
-              The future of booking isn't fixed pricing — it's{" "}
-              <strong>live bargaining.</strong>
+      {/* Hero Search Section */}
+      <div className="py-8 pb-16" style={{ backgroundColor: "#003580" }}>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Upgrade. Bargain. Book.
+            </h1>
+            <p className="text-xl text-white mb-2 opacity-90">
+              Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
             </p>
           </div>
 
+          {/* Search Form */}
+          <div className="bg-white rounded-lg p-6 shadow-lg max-w-6xl mx-auto">
+            {/* Trip Type Radio Buttons */}
+            <div className="flex space-x-6 mb-6">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  checked={tripType === "round-trip"}
+                  onChange={() => setTripType("round-trip")}
+                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">Round trip</span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  checked={tripType === "one-way"}
+                  onChange={() => setTripType("one-way")}
+                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">One way</span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  checked={tripType === "multi-city"}
+                  onChange={() => setTripType("multi-city")}
+                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">Multi-city</span>
+              </label>
+              <div className="ml-auto">
+                <div className="relative">
+                  <button
+                    onClick={() => setShowClassDropdown(!showClassDropdown)}
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded transition-colors border border-gray-300"
+                  >
+                    <span className="text-sm text-gray-700">{selectedClass}</span>
+                    <ChevronDown className="w-3 h-3 text-gray-500" />
+                  </button>
+                  {showClassDropdown && (
+                    <div className="absolute top-10 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999] w-48">
+                      {["Economy", "Premium Economy", "Business", "First Class"].map((classType) => (
+                        <button
+                          key={classType}
+                          onClick={() => {
+                            setSelectedClass(classType);
+                            setShowClassDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
+                        >
+                          {classType}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Search Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+              {/* From */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Leaving from
+                </label>
+                <button
+                  onClick={() => setShowFromCities(!showFromCities)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 focus:border-blue-500 bg-white"
+                >
+                  <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">Leaving from</span>
+                </button>
+                {showFromCities && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50 mt-1">
+                    {Object.entries(cityData).map(([city, data]) => (
+                      <button
+                        key={city}
+                        onClick={() => {
+                          setSelectedFromCity(city);
+                          setShowFromCities(false);
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="font-medium text-gray-900">{city} • {data.airport}</div>
+                        <div className="text-sm text-gray-500">{data.fullName}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* To */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Going to
+                </label>
+                <button
+                  onClick={() => setShowToCities(!showToCities)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 focus:border-blue-500 bg-white"
+                >
+                  <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">Going to</span>
+                </button>
+                {showToCities && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50 mt-1">
+                    {Object.entries(cityData).map(([city, data]) => (
+                      <button
+                        key={city}
+                        onClick={() => {
+                          setSelectedToCity(city);
+                          setShowToCities(false);
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="font-medium text-gray-900">{city} • {data.airport}</div>
+                        <div className="text-sm text-gray-500">{data.fullName}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Travel dates */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Travel dates
+                </label>
+                <button
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 bg-white"
+                >
+                  <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">
+                    Sun, Aug 17 — Wed, ...
+                  </span>
+                </button>
+              </div>
+
+              {/* Travelers */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Travelers
+                </label>
+                <button
+                  onClick={() => setShowTravelers(!showTravelers)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 bg-white"
+                >
+                  <Users className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">1 adult</span>
+                </button>
+              </div>
+
+              {/* Search Button */}
+              <div>
+                <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg">
+                  Search
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Why Faredown Is Reinventing Travel Booking */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Why Faredown Is Reinventing Travel Booking
+          </h2>
+          <p className="text-xl text-gray-600 mb-12">
+            The future of booking isn't fixed pricing — it's <strong>live bargaining.</strong>
+          </p>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Live Bargain Technology
               </h3>
-              <p className="text-gray-600 text-sm">
-                Negotiate upgrades instantly — from economy to business, from
-                standard to suite.
+              <p className="text-gray-600">
+                Negotiate upgrades instantly — from economy to business, from standard to suite.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <BarChart3 className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Pay What You Feel Is Fair
               </h3>
-              <p className="text-gray-600 text-sm">
-                Set your price and let Faredown try to get it for you — no more
-                overpaying.
+              <p className="text-gray-600">
+                Set your price and let Faredown try to get it for you — no more overpaying.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Secure, Real-Time Bookings
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600">
                 Your data is encrypted and bookings are confirmed instantly.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Headphones className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Smarter Than Any Travel Agent
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600">
                 Skip the back and forth. Our AI works faster, 24/7.
               </p>
             </div>
@@ -1496,152 +757,16 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Why Travelers Love Faredown */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-[1280px] mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-[#003580] mb-8">
-                Why travelers
-                <br />
-                love Faredown
-              </h2>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center flex-shrink-0">
-                    <DollarSign className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-1">
-                      Best Price Guarantee
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Find a better price elsewhere? We'll match it and give you
-                      an extra 5% off your next booking.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-1">
-                      Instant Confirmation
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Get instant booking confirmations and e-tickets delivered
-                      to your inbox immediately.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Settings className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-1">
-                      Flexible Booking Options
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Change or cancel your bookings easily with our flexible
-                      policies and get refunds quickly.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="bg-[#003580] text-white p-8 rounded-lg">
-                <div className="absolute top-4 right-4">
-                  <div className="bg-white text-[#003580] px-3 py-1 rounded-full text-sm font-semibold">
-                    4.8★
-                  </div>
-                </div>
-                <div className="text-right mb-4 text-sm">24M+ reviews</div>
-                <div className="aspect-video bg-gray-200 rounded-lg mb-4 relative overflow-hidden">
-                  <img
-                    src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=250&fit=crop"
-                    alt="Customer support team"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold mb-2">
-                    Top-Rated Customer Support
-                  </h3>
-                  <p className="text-sm opacity-90 mb-4">
-                    Our award-winning support team is available 24/7 to help
-                    with any booking questions or changes.
-                  </p>
-                  <Button className="bg-white text-[#003580] hover:bg-gray-100">
-                    Get Help Now
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mobile dropdowns */}
-      <MobileCityDropdown
-        isOpen={showFromCities}
-        onClose={() => setShowFromCities(false)}
-        title="Select departure city"
-        cities={cityData}
-        selectedCity={selectedFromCity}
-        onSelectCity={(city) => {
-          setSelectedFromCity(city);
-          setShowFromCities(false);
-        }}
-      />
-
-      <MobileCityDropdown
-        isOpen={showToCities}
-        onClose={() => setShowToCities(false)}
-        title="Select destination city"
-        cities={cityData}
-        selectedCity={selectedToCity}
-        onSelectCity={(city) => {
-          setSelectedToCity(city);
-          setShowToCities(false);
-        }}
-      />
-
-      <MobileDatePicker
-        isOpen={showCalendar}
-        onClose={() => setShowCalendar(false)}
-        tripType={tripType === "one-way" ? "one-way" : "round-trip"}
-        selectedDepartureDate={selectedDepartureDate}
-        selectedReturnDate={selectedReturnDate}
-        setSelectedDepartureDate={setSelectedDepartureDate}
-        setSelectedReturnDate={setSelectedReturnDate}
-        selectingDeparture={selectingDeparture}
-        setSelectingDeparture={setSelectingDeparture}
-      />
-
-      <MobileTravelers
-        isOpen={showTravelers}
-        onClose={() => setShowTravelers(false)}
-        travelers={travelers}
-        setTravelers={setTravelers}
-      />
-
-      {/* Sign In Modal */}
+      {/* Auth Dialogs */}
       <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Sign in to Faredown</DialogTitle>
+            <DialogTitle>Sign in to your account</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {authError && (
-              <div className="bg-red-50 border border-red-200 rounded-md p-3">
-                <p className="text-sm text-red-600">{authError}</p>
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                {authError}
               </div>
             )}
             <div>
@@ -1652,8 +777,7 @@ export default function Index() {
                 type="email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
-                placeholder="test@faredown.com"
-                className="w-full"
+                placeholder="Enter your email"
               />
             </div>
             <div>
@@ -1664,84 +788,54 @@ export default function Index() {
                 type="password"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="password123"
-                className="w-full"
+                placeholder="Enter your password"
               />
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-              <p className="text-xs text-blue-600">
-                <strong>Demo credentials:</strong>
-                <br />
-                Email: test@faredown.com
-                <br />
-                Password: password123
-              </p>
+            <div className="text-sm text-gray-600">
+              Test credentials: test@faredown.com / password123
             </div>
-            <div className="flex space-x-3">
-              <Button
-                onClick={handleSignIn}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
-              >
-                Sign In
+            <div className="flex space-x-2">
+              <Button onClick={handleSignIn} className="flex-1">
+                Sign in
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowSignIn(false)}
-                className="flex-1"
-              >
+              <Button variant="outline" onClick={() => setShowSignIn(false)}>
                 Cancel
               </Button>
-            </div>
-            <div className="text-center">
-              <button
-                onClick={() => {
-                  setShowSignIn(false);
-                  setShowRegister(true);
-                }}
-                className="text-sm text-blue-600 hover:text-blue-800"
-              >
-                Don't have an account? Register
-              </button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Register Modal */}
       <Dialog open={showRegister} onOpenChange={setShowRegister}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Create your Faredown account</DialogTitle>
+            <DialogTitle>Create your account</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {authError && (
-              <div className="bg-red-50 border border-red-200 rounded-md p-3">
-                <p className="text-sm text-red-600">{authError}</p>
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                {authError}
               </div>
             )}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
+                  First name
                 </label>
                 <Input
-                  type="text"
                   value={registerFirstName}
                   onChange={(e) => setRegisterFirstName(e.target.value)}
-                  placeholder="John"
-                  className="w-full"
+                  placeholder="First name"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
+                  Last name
                 </label>
                 <Input
-                  type="text"
                   value={registerLastName}
                   onChange={(e) => setRegisterLastName(e.target.value)}
-                  placeholder="Doe"
-                  className="w-full"
+                  placeholder="Last name"
                 />
               </div>
             </div>
@@ -1753,8 +847,7 @@ export default function Index() {
                 type="email"
                 value={registerEmail}
                 onChange={(e) => setRegisterEmail(e.target.value)}
-                placeholder="john@example.com"
-                className="w-full"
+                placeholder="Enter your email"
               />
             </div>
             <div>
@@ -1765,35 +858,16 @@ export default function Index() {
                 type="password"
                 value={registerPassword}
                 onChange={(e) => setRegisterPassword(e.target.value)}
-                placeholder="At least 8 characters"
-                className="w-full"
+                placeholder="Create a password"
               />
             </div>
-            <div className="flex space-x-3">
-              <Button
-                onClick={handleRegister}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
-              >
-                Create Account
+            <div className="flex space-x-2">
+              <Button onClick={handleRegister} className="flex-1">
+                Create account
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowRegister(false)}
-                className="flex-1"
-              >
+              <Button variant="outline" onClick={() => setShowRegister(false)}>
                 Cancel
               </Button>
-            </div>
-            <div className="text-center">
-              <button
-                onClick={() => {
-                  setShowRegister(false);
-                  setShowSignIn(true);
-                }}
-                className="text-sm text-blue-600 hover:text-blue-800"
-              >
-                Already have an account? Sign in
-              </button>
             </div>
           </div>
         </DialogContent>
