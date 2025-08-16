@@ -23,6 +23,9 @@ import {
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { BookingCalendar } from "@/components/BookingCalendar";
+import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
+import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 import {
   Popover,
   PopoverContent,
