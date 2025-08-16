@@ -683,8 +683,8 @@ export default function Index() {
               </p>
             </div>
 
-            {/* Search Form - Hidden on mobile, shown in sticky bottom */}
-            <div className="hidden sm:block bg-white border-b border-gray-200 overflow-visible rounded-t-lg">
+            {/* Dynamic Search Form - Hidden on mobile, shown in sticky bottom */}
+            <div className="hidden sm:block rounded-t-lg">
               <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
