@@ -125,10 +125,7 @@ function App() {
                   <Route path="/booking-voucher" element={<BookingVoucher />} />
                   <Route path="/booking-invoice" element={<BookingInvoice />} />
                   <Route path="/bookings" element={<Bookings />} />
-                  <Route
-                    path="/sightseeing"
-                    element={<Navigate to="/?tab=sightseeing" replace />}
-                  />
+                  <Route path="/sightseeing" element={<Sightseeing />} />
                   <Route
                     path="/sightseeing/results"
                     element={<SightseeingResults />}
