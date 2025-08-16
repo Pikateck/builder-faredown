@@ -1276,11 +1276,16 @@ export default function SightseeingDetails() {
                               {(() => {
                                 const ticket =
                                   attraction.ticketTypes[selectedTicketType];
+
+                                if (!ticket || !passengerQuantities) {
+                                  return null;
+                                }
+
                                 const priceCalc =
                                   sightseeingService.calculatePrice(
                                     ticket.price,
-                                    passengerQuantities.adults,
-                                    passengerQuantities.children,
+                                    passengerQuantities.adults || 1,
+                                    passengerQuantities.children || 0,
                                   );
 
                                 return (
