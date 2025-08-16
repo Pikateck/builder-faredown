@@ -568,12 +568,12 @@ export default function SightseeingDetails() {
   const getTicketTotalPrice = (ticketIndex: number) => {
     const ticket = attraction?.ticketTypes[ticketIndex];
 
-    if (!ticket) return 0;
+    if (!ticket || !passengerQuantities) return 0;
 
     const priceCalc = sightseeingService.calculatePrice(
       ticket.price,
-      passengerQuantities.adults,
-      passengerQuantities.children,
+      passengerQuantities.adults || 1,
+      passengerQuantities.children || 0,
     );
 
     return priceCalc.totalPrice;
