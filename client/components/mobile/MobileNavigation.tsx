@@ -28,7 +28,7 @@ export function MobileNavigation() {
       label: "Sightseeing",
     },
     {
-      path: "/?tab=transfers",
+      path: "/transfers",
       icon: Car,
       label: "Transfers",
     },
