@@ -1260,10 +1260,10 @@ export default function SightseeingDetails() {
                         <div className="text-xs text-gray-500 mb-2">
                           {passengerQuantities?.adults || 1} Adults
                           {(passengerQuantities?.children || 0) > 0
-                            ? `, ${passengerQuantities.children} Children`
+                            ? `, ${passengerQuantities?.children} Children`
                             : ""}
                           {(passengerQuantities?.infants || 0) > 0
-                            ? `, ${passengerQuantities.infants} Infants`
+                            ? `, ${passengerQuantities?.infants} Infants`
                             : ""}
                         </div>
                       </div>
