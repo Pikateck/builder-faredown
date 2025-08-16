@@ -1256,7 +1256,7 @@ export default function Index() {
                       to={`/flights/results?adults=${travelers.adults}&children=${travelers.children}`}
                       className="w-full"
                     >
-                      <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
+                      <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
                         Search
                       </Button>
                     </Link>
