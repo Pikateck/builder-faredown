@@ -23,7 +23,7 @@ export function MobileNavigation() {
       label: "Hotels",
     },
     {
-      path: "/?tab=sightseeing",
+      path: "/sightseeing",
       icon: Camera,
       label: "Sightseeing",
     },
