@@ -1605,7 +1605,7 @@ export default function FlightResults() {
                   Hotels
                 </Link>
                 <Link
-                  to="/?tab=sightseeing"
+                  to="/sightseeing"
                   className="text-white font-medium px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
                 >
                   Sightseeing
