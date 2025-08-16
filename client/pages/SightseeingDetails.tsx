@@ -1307,19 +1307,19 @@ export default function SightseeingDetails() {
                                         </span>
                                       </div>
                                     )}
-                                    {priceCalc.breakdown.children.count > 0 && (
+                                    {priceCalc?.breakdown?.children?.count > 0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc.breakdown.children.count} ×
+                                          {priceCalc?.breakdown?.children?.count || 0} ×
                                           Child (
                                           {formatPrice(
-                                            priceCalc.breakdown.children.price,
+                                            priceCalc?.breakdown?.children?.price || 0,
                                           )}
                                           )
                                         </span>
                                         <span className="font-medium text-gray-900">
                                           {formatPrice(
-                                            priceCalc.breakdown.children.total,
+                                            priceCalc?.breakdown?.children?.total || 0,
                                           )}
                                         </span>
                                       </div>
