@@ -1290,7 +1290,7 @@ export default function SightseeingDetails() {
 
                                 return (
                                   <>
-                                    {priceCalc.breakdown.adults.count > 0 && (
+                                    {priceCalc?.breakdown?.adults?.count > 0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
                                           {priceCalc.breakdown.adults.count} ×
@@ -1414,7 +1414,7 @@ export default function SightseeingDetails() {
                         Why is time selection important?
                       </p>
                       <ul className="space-y-1 text-xs">
-                        <li>• Ensures availability for your preferred slot</li>
+                        <li>��� Ensures availability for your preferred slot</li>
                         <li>• Helps us prepare for your visit</li>
                         <li>• Avoids waiting times and disappointment</li>
                       </ul>
