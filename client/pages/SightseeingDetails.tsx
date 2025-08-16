@@ -1324,10 +1324,10 @@ export default function SightseeingDetails() {
                                         </span>
                                       </div>
                                     )}
-                                    {priceCalc.breakdown.infants.count > 0 && (
+                                    {priceCalc?.breakdown?.infants?.count > 0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc.breakdown.infants.count} ×
+                                          {priceCalc?.breakdown?.infants?.count || 0} ×
                                           Infant (Free)
                                         </span>
                                         <span className="font-medium text-gray-900">
