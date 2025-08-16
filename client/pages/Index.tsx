@@ -1472,7 +1472,7 @@ export default function Index() {
             </button>
           </div>
           <Link
-            to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
+            to={`/flights/results?adults=${travelers.adults}&children=${travelers.children}`}
             className="w-full"
           >
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-base touch-manipulation">
