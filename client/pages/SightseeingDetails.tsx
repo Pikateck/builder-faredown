@@ -470,9 +470,9 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", ticketToBook.toString());
     params.set("selectedTime", selectedTime);
-    params.set("adults", passengerQuantities.adults.toString());
-    params.set("children", passengerQuantities.children.toString());
-    params.set("infants", passengerQuantities.infants.toString());
+    params.set("adults", (passengerQuantities?.adults || 1).toString());
+    params.set("children", (passengerQuantities?.children || 0).toString());
+    params.set("infants", (passengerQuantities?.infants || 0).toString());
 
     // Add visitDate - use the current date if not already set
     if (!params.get("visitDate")) {
@@ -516,9 +516,9 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", bargainTicketType.toString());
     params.set("selectedTime", selectedTime || "10:30");
-    params.set("adults", passengerQuantities.adults.toString());
-    params.set("children", passengerQuantities.children.toString());
-    params.set("infants", passengerQuantities.infants.toString());
+    params.set("adults", (passengerQuantities?.adults || 1).toString());
+    params.set("children", (passengerQuantities?.children || 0).toString());
+    params.set("infants", (passengerQuantities?.infants || 0).toString());
     params.set("bargainApplied", "true");
     params.set("bargainPrice", finalPrice.toString());
 
