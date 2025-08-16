@@ -444,38 +444,30 @@ export default function Index() {
 
             {/* Centered Navigation */}
             <nav className="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
-              <button
-                onClick={() => handleTabChange("flights")}
-                className={`text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4 ${
-                  activeTab === "flights" ? "font-semibold border-b-2 border-white" : ""
-                }`}
+              <Link
+                to="/"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold border-b-2 border-white py-3 lg:py-4"
               >
                 <span>Flights</span>
-              </button>
-              <button
-                onClick={() => handleTabChange("hotels")}
-                className={`text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4 ${
-                  activeTab === "hotels" ? "font-semibold border-b-2 border-white" : ""
-                }`}
+              </Link>
+              <Link
+                to="/hotels"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
               >
                 <span>Hotels</span>
-              </button>
-              <button
-                onClick={() => handleTabChange("sightseeing")}
-                className={`text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4 ${
-                  activeTab === "sightseeing" ? "font-semibold border-b-2 border-white" : ""
-                }`}
+              </Link>
+              <Link
+                to="/sightseeing"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
               >
                 <span>Sightseeing</span>
-              </button>
-              <button
-                onClick={() => handleTabChange("transfers")}
-                className={`text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4 ${
-                  activeTab === "transfers" ? "font-semibold border-b-2 border-white" : ""
-                }`}
+              </Link>
+              <Link
+                to="/transfers"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
               >
                 <span>Transfers</span>
-              </button>
+              </Link>
             </nav>
 
             <div className="flex items-center space-x-2 md:space-x-6">
