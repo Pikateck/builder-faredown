@@ -669,15 +669,14 @@ export default function Index() {
             <div className="text-center mb-4 sm:mb-6">
               <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  Upgrade. Bargain. Book.
+                  {getTabContent().title}
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Faredown is the world's first travel portal where you control
-                the price — for flights and hotels.
+                {getTabContent().subtitle}
               </h1>
               <p className="text-white text-sm sm:text-base md:text-lg opacity-80 mb-3 sm:mb-4 px-4">
-                Don't Just Book It. <strong>Bargain It™.</strong>
+                <strong>{getTabContent().description}</strong>
               </p>
               <p className="text-white text-xs sm:text-sm opacity-70">
                 Join 50M+ travelers who bargain for more.
