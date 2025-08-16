@@ -536,8 +536,24 @@ export class HotelsService {
   ): Promise<Hotel> {
     try {
       const queryParams = searchParams || {};
+
+      // Try the enhanced hotels-live endpoint first
+      try {
+        const response = await apiClient.get<ApiResponse<Hotel>>(
+          `/api/hotels-live/hotel/${hotelId}`,
+          queryParams,
+        );
+
+        if (response.success && response.data) {
+          return response.data;
+        }
+      } catch (liveError) {
+        console.warn("Hotels-live endpoint failed, trying fallback:", liveError);
+      }
+
+      // Fallback to basic hotels endpoint
       const response = await apiClient.get<ApiResponse<Hotel>>(
-        `${this.baseUrl}/${hotelId}`,
+        `${this.baseUrl}/details/${hotelId}`,
         queryParams,
       );
 
