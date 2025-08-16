@@ -558,9 +558,9 @@ export default function SightseeingDetails() {
   const getTotalPassengers = () => {
     if (!passengerQuantities) return 1;
     return (
-      (passengerQuantities.adults || 0) +
-      (passengerQuantities.children || 0) +
-      (passengerQuantities.infants || 0)
+      (passengerQuantities?.adults || 0) +
+      (passengerQuantities?.children || 0) +
+      (passengerQuantities?.infants || 0)
     );
   };
 
