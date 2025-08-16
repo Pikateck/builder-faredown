@@ -10,43 +10,53 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 1) API routes FIRST - Proxy to actual API server
-app.use("/api", async (req, res) => {
-  const apiServerUrl = process.env.API_SERVER_URL || "http://localhost:3001";
-  const targetUrl = `${apiServerUrl}${req.path}${req.url.includes('?') ? '?' + req.url.split('?')[1] : ''}`;
+// 1) Import and use the actual API routes directly
+try {
+  const hotelsLiveRoutes = require('./api/routes/hotels-live');
+  const hotelRoutes = require('./api/routes/hotels');
+  const bargainRoutes = require('./api/routes/bargain');
+  const pricingRoutes = require('./api/routes/pricing');
 
-  try {
-    const fetch = (await import('node-fetch')).default;
-    const response = await fetch(targetUrl, {
-      method: req.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...req.headers,
-        host: undefined, // Remove host header to avoid conflicts
-      },
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined,
+  console.log("✅ Loading API routes directly into dev server...");
+
+  // Basic health check
+  app.get("/api/health", (req, res) => {
+    res.json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      frontend: "connected",
+      message: "Faredown system operational",
     });
+  });
 
-    const data = await response.text();
-    res.status(response.status);
+  // Mount API routes
+  app.use("/api/hotels-live", hotelsLiveRoutes);
+  app.use("/api/hotels", hotelRoutes);
+  app.use("/api/bargain", bargainRoutes);
+  app.use("/api/pricing", pricingRoutes);
 
-    // Copy response headers
-    for (const [key, value] of response.headers.entries()) {
-      if (key !== 'content-encoding' && key !== 'transfer-encoding') {
-        res.setHeader(key, value);
-      }
-    }
+  console.log("✅ API routes loaded successfully");
+} catch (error) {
+  console.error("❌ Error loading API routes:", error);
 
-    res.send(data);
-  } catch (error) {
-    console.error(`API proxy error for ${req.path}:`, error);
+  // Fallback API routes
+  app.get("/api/health", (req, res) => {
+    res.json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      frontend: "connected",
+      message: "Faredown system operational (fallback mode)",
+    });
+  });
+
+  app.use("/api/*", (req, res) => {
     res.status(503).json({
-      error: "API server unavailable",
+      error: "API routes unavailable",
       path: req.path,
-      message: error.message
+      message: "API server could not be loaded"
     });
-  }
-});
+  });
+}
 
 // 2) Create Vite dev server for React app
 const vite = await createServer({
