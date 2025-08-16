@@ -31,7 +31,7 @@ try {
 }
 // const { validateBookingData } = require("../middleware/validation"); // Not available
 const { auditLogger: auditRequest } = require("../middleware/audit");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+const { authenticateToken: requireAuth, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
 
 const router = express.Router();
