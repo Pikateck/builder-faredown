@@ -1073,7 +1073,7 @@ export default function SightseeingDetails() {
                           -
                         </Button>
                         <span className="w-8 text-center font-medium">
-                          {passengerQuantities.adults}
+                          {passengerQuantities?.adults || 1}
                         </span>
                         <Button
                           variant="outline"
