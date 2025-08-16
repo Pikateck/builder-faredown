@@ -1378,7 +1378,7 @@ export default function Index() {
 
                   <div className="lg:max-w-[100px] w-full lg:w-auto">
                     <Link
-                      to={`/flights?adults=${travelers.adults}&children=${travelers.children}`}
+                      to={`/flights/results?adults=${travelers.adults}&children=${travelers.children}`}
                       className="w-full"
                     >
                       <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-12 font-medium text-sm w-full touch-manipulation">
