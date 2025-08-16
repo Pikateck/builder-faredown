@@ -754,18 +754,12 @@ export default function Index() {
                     </label>
                     <button
                       onClick={() => setShowToCities(!showToCities)}
-                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 touch-manipulation"
+                      className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-12 w-full hover:border-blue-500 focus:border-blue-500 touch-manipulation"
                     >
                       <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                      <div className="flex items-center space-x-2">
-                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                          {cityData[selectedToCity]?.code || "DXB"}
-                        </div>
-                        <span className="text-sm text-gray-700 font-medium">
-                          {cityData[selectedToCity]?.airport ||
-                            "Dubai International Airport"}
-                        </span>
-                      </div>
+                      <span className="text-sm text-gray-700 font-medium">
+                        Going to
+                      </span>
                     </button>
 
                     {showToCities && (
