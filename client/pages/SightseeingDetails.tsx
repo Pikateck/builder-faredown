@@ -572,8 +572,8 @@ export default function SightseeingDetails() {
 
     const priceCalc = sightseeingService.calculatePrice(
       ticket.price,
-      passengerQuantities.adults || 1,
-      passengerQuantities.children || 0,
+      passengerQuantities?.adults || 1,
+      passengerQuantities?.children || 0,
     );
 
     return priceCalc.totalPrice;
