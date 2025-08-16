@@ -575,112 +575,78 @@ export default function Index() {
             <div className="hidden sm:block rounded-t-lg">
               <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
                 <div className="flex flex-col gap-4">
-                  <div className="flex items-center bg-white rounded-lg p-2 sm:p-3 flex-1 w-full border sm:border-0">
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-6 w-full sm:w-auto">
+                  {/* Trip Type Selector - Feb 14, 2025 Design: Gray background container */}
+                  <div className="flex space-x-1 mb-2 bg-gray-100 rounded-lg p-1">
+                    <button
+                      onClick={() => setTripType("round-trip")}
+                      className={cn(
+                        "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                        tripType === "round-trip"
+                          ? "bg-[#003580] text-white"
+                          : "text-gray-600 hover:text-gray-900",
+                      )}
+                    >
+                      Round trip
+                    </button>
+                    <button
+                      onClick={() => setTripType("one-way")}
+                      className={cn(
+                        "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                        tripType === "one-way"
+                          ? "bg-[#003580] text-white"
+                          : "text-gray-600 hover:text-gray-900",
+                      )}
+                    >
+                      One way
+                    </button>
+                    <button
+                      onClick={() => setTripType("multi-city")}
+                      className={cn(
+                        "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
+                        tripType === "multi-city"
+                          ? "bg-[#003580] text-white"
+                          : "text-gray-600 hover:text-gray-900",
+                      )}
+                    >
+                      Multi-city
+                    </button>
+                  </div>
+
+                  {/* Class Selector - Separate row */}
+                  <div className="flex justify-start">
+                    <div className="relative">
                       <button
-                        onClick={() => setTripType("round-trip")}
-                        className="flex items-center space-x-2"
+                        onClick={() =>
+                          setShowClassDropdown(!showClassDropdown)
+                        }
+                        className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded transition-colors border border-gray-300"
                       >
-                        <div
-                          className={cn(
-                            "w-3 h-3 rounded-full border-2",
-                            tripType === "round-trip"
-                              ? "bg-blue-600 border-white ring-1 ring-blue-600"
-                              : "border-gray-300",
-                          )}
-                        ></div>
-                        <span
-                          className={cn(
-                            "text-sm",
-                            tripType === "round-trip"
-                              ? "font-medium text-gray-900"
-                              : "text-gray-500",
-                          )}
-                        >
-                          Round trip
+                        <span className="text-sm text-gray-700">
+                          {selectedClass}
                         </span>
+                        <ChevronDown className="w-3 h-3 text-gray-500" />
                       </button>
-                      <button
-                        onClick={() => setTripType("one-way")}
-                        className="flex items-center space-x-2"
-                      >
-                        <div
-                          className={cn(
-                            "w-3 h-3 rounded-full border-2",
-                            tripType === "one-way"
-                              ? "bg-blue-600 border-white ring-1 ring-blue-600"
-                              : "border-gray-300",
-                          )}
-                        ></div>
-                        <span
-                          className={cn(
-                            "text-sm",
-                            tripType === "one-way"
-                              ? "font-medium text-gray-900"
-                              : "text-gray-500",
-                          )}
-                        >
-                          One way
-                        </span>
-                      </button>
-                      <button
-                        onClick={() => setTripType("multi-city")}
-                        className="flex items-center space-x-2"
-                      >
-                        <div
-                          className={cn(
-                            "w-3 h-3 rounded-full border-2",
-                            tripType === "multi-city"
-                              ? "bg-blue-600 border-white ring-1 ring-blue-600"
-                              : "border-gray-300",
-                          )}
-                        ></div>
-                        <span
-                          className={cn(
-                            "text-sm",
-                            tripType === "multi-city"
-                              ? "font-medium text-gray-900"
-                              : "text-gray-500",
-                          )}
-                        >
-                          Multi-city
-                        </span>
-                      </button>
-                      <div className="relative">
-                        <button
-                          onClick={() =>
-                            setShowClassDropdown(!showClassDropdown)
-                          }
-                          className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded transition-colors"
-                        >
-                          <div className="w-3 h-3 border-2 border-gray-300 rounded-full"></div>
-                          <span className="text-sm text-gray-500">
-                            {selectedClass}
-                          </span>
-                          <ChevronDown className="w-3 h-3 text-gray-500" />
-                        </button>
-                        {showClassDropdown && (
-                          <div className="absolute top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999] w-48">
-                            {[
-                              "Economy",
-                              "Premium Economy",
-                              "Business",
-                              "First Class",
-                            ].map((classType) => (
-                              <button
-                                key={classType}
-                                onClick={() => {
-                                  setSelectedClass(classType);
-                                  setShowClassDropdown(false);
-                                }}
-                                className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
-                              >
-                                {classType}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                      {showClassDropdown && (
+                        <div className="absolute top-10 left-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999] w-48">
+                          {[
+                            "Economy",
+                            "Premium Economy",
+                            "Business",
+                            "First Class",
+                          ].map((classType) => (
+                            <button
+                              key={classType}
+                              onClick={() => {
+                                setSelectedClass(classType);
+                                setShowClassDropdown(false);
+                              }}
+                              className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
+                            >
+                              {classType}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
