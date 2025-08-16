@@ -152,10 +152,12 @@ export default function Index() {
                 />
               </div>
             </div>
-            <Button className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-3 text-lg">
-              <Search className="w-5 h-5 mr-2" />
-              Search Flights
-            </Button>
+            <Link to="/flights/results" className="w-full">
+              <Button className="w-full bg-[#febb02] hover:bg-[#d19900] text-[#003580] font-bold py-3 text-lg">
+                <Search className="w-5 h-5 mr-2" />
+                Search Flights
+              </Button>
+            </Link>
           </div>
         );
     }
