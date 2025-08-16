@@ -82,8 +82,6 @@ import {
 import { downloadProjectInfo } from "@/lib/codeExport";
 
 export default function Index() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState("flights");
   const [departureDate, setDepartureDate] = useState<Date>();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
