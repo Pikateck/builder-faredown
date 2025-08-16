@@ -12,14 +12,7 @@ app.use(express.json());
 
 // 1) Import and use the actual API routes directly
 try {
-  const hotelsLiveRoutes = require('./api/routes/hotels-live');
-  const hotelRoutes = require('./api/routes/hotels');
-  const bargainRoutes = require('./api/routes/bargain');
-  const pricingRoutes = require('./api/routes/pricing');
-
-  console.log("✅ Loading API routes directly into dev server...");
-
-  // Basic health check
+  // Basic health check first
   app.get("/api/health", (req, res) => {
     res.json({
       status: "healthy",
@@ -29,15 +22,30 @@ try {
     });
   });
 
-  // Mount API routes
+  // Load essential API routes
+  const hotelsLiveRoutes = require('./api/routes/hotels-live');
+  const hotelRoutes = require('./api/routes/hotels');
+  const bargainRoutes = require('./api/routes/bargain');
+  const pricingRoutes = require('./api/routes/pricing');
+  const flightRoutes = require('./api/routes/flights');
+  const sightseeingRoutes = require('./api/routes/sightseeing');
+  const transfersRoutes = require('./api/routes/transfers');
+
+  console.log("✅ Loading API routes directly into dev server...");
+
+  // Mount API routes (order matters - more specific first)
   app.use("/api/hotels-live", hotelsLiveRoutes);
   app.use("/api/hotels", hotelRoutes);
+  app.use("/api/flights", flightRoutes);
+  app.use("/api/sightseeing", sightseeingRoutes);
+  app.use("/api/transfers", transfersRoutes);
   app.use("/api/bargain", bargainRoutes);
   app.use("/api/pricing", pricingRoutes);
 
-  console.log("✅ API routes loaded successfully");
+  console.log("✅ Essential API routes loaded successfully");
 } catch (error) {
   console.error("❌ Error loading API routes:", error);
+  console.error("Stack trace:", error.stack);
 
   // Fallback API routes
   app.get("/api/health", (req, res) => {
@@ -53,7 +61,7 @@ try {
     res.status(503).json({
       error: "API routes unavailable",
       path: req.path,
-      message: "API server could not be loaded"
+      message: "API server could not be loaded: " + (error.message || "Unknown error")
     });
   });
 }
