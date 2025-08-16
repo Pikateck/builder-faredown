@@ -10,20 +10,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 1) Basic API routes with proxy to external API server
-app.get("/api/health", (req, res) => {
-  res.json({
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    frontend: "connected",
-    message: "Faredown system operational",
-  });
-});
-
-// Proxy all other API requests to the external API server
+// 1) API proxy to external API server
 app.use("/api", async (req, res) => {
+  // Special case for frontend health check
+  if (req.path === "/api/health") {
+    return res.json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      frontend: "connected",
+      message: "Faredown system operational",
+    });
+  }
+
   const apiServerUrl = process.env.API_SERVER_URL || "http://localhost:3001";
-  const targetUrl = `${apiServerUrl}${req.path}${req.url.includes('?') ? '?' + req.url.split('?')[1] : ''}`;
+  const targetUrl = `${apiServerUrl}${req.originalUrl}`;
 
   try {
     const fetch = (await import('node-fetch')).default;
@@ -46,10 +46,10 @@ app.use("/api", async (req, res) => {
 
     res.send(data);
   } catch (error) {
-    console.error(`API proxy error for ${req.path}:`, error);
+    console.error(`API proxy error for ${req.originalUrl}:`, error);
     res.status(503).json({
       error: "API server unavailable",
-      path: req.path,
+      path: req.originalUrl,
       message: error.message
     });
   }
