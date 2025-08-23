@@ -1,0 +1,357 @@
+/* Bargain Button Styling CSS */
+/* Elegant golden gradient with locked styles and advanced effects */
+
+/* Core bargain button styles - LOCKED and cannot be overridden */
+.bargain-button-locked {
+  /* CSS Custom Properties for consistent theming */
+  --bargain-bg-start: #febb02;
+  --bargain-bg-end: #f4a902;
+  --bargain-text: #000000;
+  --bargain-radius: 9999px;
+  --bargain-shadow-color: rgb(254 187 2 / 0.3);
+  --bargain-shadow-hover: rgb(254 187 2 / 0.5);
+  
+  /* Locked base styles - high specificity to prevent overrides */
+  background: linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end)) !important;
+  color: var(--bargain-text) !important;
+  border-radius: var(--bargain-radius) !important;
+  font-weight: 700 !important;
+  border: none !important;
+  outline: none !important;
+  
+  /* Advanced shadow system */
+  box-shadow: 
+    0 10px 25px -3px var(--bargain-shadow-color),
+    0 4px 6px -2px rgb(254 187 2 / 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    
+  /* Performance optimizations */
+  transform: translateZ(0);
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  
+  /* Typography */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  
+  /* Ensure minimum touch target */
+  min-height: 44px;
+  min-width: 44px;
+  
+  /* Touch optimizations */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Shimmer effect using pseudo-element */
+.bargain-button-locked::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.7s ease-out;
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Shimmer activation on hover */
+.bargain-button-locked:hover::before {
+  transform: translateX(100%);
+}
+
+/* Hover state enhancements */
+.bargain-button-locked:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 
+    0 15px 35px -3px var(--bargain-shadow-hover),
+    0 8px 15px -2px rgb(254 187 2 / 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Active/pressed state */
+.bargain-button-locked:active {
+  transform: translateY(0) scale(0.98) !important;
+  box-shadow: 
+    0 5px 15px -3px var(--bargain-shadow-color),
+    0 2px 4px -2px rgb(254 187 2 / 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.1s ease-out !important;
+}
+
+/* Focus state for accessibility */
+.bargain-button-locked:focus {
+  outline: none !important;
+  box-shadow: 
+    0 10px 25px -3px var(--bargain-shadow-color),
+    0 4px 6px -2px rgb(254 187 2 / 0.1),
+    0 0 0 4px rgba(254, 187, 2, 0.3) !important;
+}
+
+/* Disabled state */
+.bargain-button-locked:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: 
+    0 4px 8px -2px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.bargain-button-locked:disabled::before {
+  display: none;
+}
+
+/* Loading state */
+.bargain-button-loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.bargain-button-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  color: var(--bargain-text);
+}
+
+/* Size variations */
+.bargain-button-sm {
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  min-height: 40px !important;
+}
+
+.bargain-button-md {
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+  min-height: 44px !important;
+}
+
+.bargain-button-lg {
+  padding: 16px 32px !important;
+  font-size: 18px !important;
+  min-height: 48px !important;
+}
+
+/* Pulse animation variant */
+.bargain-button-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 
+      0 10px 25px -3px var(--bargain-shadow-color),
+      0 4px 6px -2px rgb(254 187 2 / 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 15px 35px -3px var(--bargain-shadow-hover),
+      0 8px 15px -2px rgb(254 187 2 / 0.3);
+  }
+  100% {
+    box-shadow: 
+      0 10px 25px -3px var(--bargain-shadow-color),
+      0 4px 6px -2px rgb(254 187 2 / 0.1);
+  }
+}
+
+/* Glow effect variant */
+.bargain-button-glow {
+  box-shadow: 
+    0 10px 25px -3px var(--bargain-shadow-color),
+    0 4px 6px -2px rgb(254 187 2 / 0.1),
+    0 0 20px rgba(254, 187, 2, 0.4) !important;
+}
+
+/* Success state (for completed actions) */
+.bargain-button-success {
+  --bargain-bg-start: #10b981;
+  --bargain-bg-end: #059669;
+  --bargain-shadow-color: rgb(16 185 129 / 0.3);
+}
+
+/* Warning state */
+.bargain-button-warning {
+  --bargain-bg-start: #f59e0b;
+  --bargain-bg-end: #d97706;
+  --bargain-shadow-color: rgb(245 158 11 / 0.3);
+}
+
+/* Spin animation for loading */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ripple effect */
+.bargain-button-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.bargain-button-ripple::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.bargain-button-ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+  .bargain-button-locked {
+    min-height: 44px !important; /* iOS accessibility guidelines */
+    min-width: 44px !important;
+    font-size: 16px !important; /* Prevent iOS zoom */
+    padding: 12px 20px !important;
+  }
+  
+  /* Reduce hover effects on touch devices */
+  .bargain-button-locked:hover {
+    transform: none !important;
+  }
+  
+  /* Enhanced active state for touch */
+  .bargain-button-locked:active {
+    transform: scale(0.95) !important;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .bargain-button-locked {
+    padding: 14px 28px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .bargain-button-locked,
+  .bargain-button-locked::before,
+  .bargain-button-pulse {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  .bargain-button-locked:hover {
+    transform: none !important;
+  }
+  
+  .bargain-button-locked:active {
+    transform: scale(0.98) !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .bargain-button-locked {
+    border: 2px solid currentColor !important;
+    background: #febb02 !important;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .bargain-button-locked {
+    /* Keep the golden theme even in dark mode */
+    --bargain-bg-start: #febb02;
+    --bargain-bg-end: #f4a902;
+    --bargain-text: #000000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .bargain-button-locked {
+    background: #febb02 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    border: 1px solid #f4a902 !important;
+  }
+  
+  .bargain-button-locked::before {
+    display: none;
+  }
+}
+
+/* Button group styles */
+.bargain-button-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bargain-button-group .bargain-button-locked {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Full width variant */
+.bargain-button-full {
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+/* Icon positioning */
+.bargain-button-locked .icon {
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.bargain-button-locked .icon-only {
+  margin: 0;
+}
+
+/* Text content positioning */
+.bargain-button-text {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Ensure button text is always visible */
+.bargain-button-locked .bargain-button-text {
+  color: var(--bargain-text) !important;
+  font-weight: 700 !important;
+}
