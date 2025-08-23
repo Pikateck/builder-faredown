@@ -360,7 +360,7 @@ router.post(
  * @desc Get booking details
  * @access Private (user's own bookings or admin)
  */
-router.get("/booking/:id", requireAuth, auditRequest, async (req, res) => {
+router.get("/booking/:id", authenticateToken, auditRequest, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user?.id;
