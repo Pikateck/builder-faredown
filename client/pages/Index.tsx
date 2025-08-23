@@ -3387,6 +3387,7 @@ export default function Index() {
         onSelectCity={(city) => {
           console.log("🏙️ Selected to city:", city);
           setSelectedToCity(city);
+          setShowToCities(false);
         }}
       />
 
