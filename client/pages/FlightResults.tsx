@@ -479,8 +479,9 @@ export default function FlightResults() {
     [key: string]: "itinerary" | "fare-rules";
   }>({});
 
-  // Removed old bargain states - now using ConversationalBargainModal via BargainIntegration
-  // Removed old bargain progress/result states
+  // Bargain modal states - restored for functional buttons
+  const [showBargainModal, setShowBargainModal] = useState(false);
+  const [selectedBargainFlight, setSelectedBargainFlight] = useState<any>(null);
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -3653,7 +3654,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ₹0
+                                                    ���0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
