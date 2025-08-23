@@ -130,24 +130,6 @@ export function ConversationalBargainModal({
   const config = moduleConfig[module];
   const ModuleIcon = config.icon;
 
-  // Safety checks for required props - moved after hooks to comply with Rules of Hooks
-  if (!isOpen) return null;
-
-  if (!onClose || !onAccept) {
-    console.error('ConversationalBargainModal: Missing required callback props');
-    return null;
-  }
-
-  if (module === 'flights' && !flight) {
-    console.error('ConversationalBargainModal: Flight data required for flights module');
-    return null;
-  }
-
-  if (module === 'hotels' && !hotel) {
-    console.error('ConversationalBargainModal: Hotel data required for hotels module');
-    return null;
-  }
-
   // Initialize welcome message
   useEffect(() => {
     if (isOpen && messages.length === 0) {
