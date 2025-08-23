@@ -1582,7 +1582,7 @@ export default function FlightResults() {
                       { code: "fr", name: "Français", flag: "🇫�����" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
-                      { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
+                      { code: "pt", name: "Portugu��s", flag: "🇵��" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
@@ -2911,29 +2911,20 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <FlightBargainButton
-                          flight={{
-                            id: flight.id.toString(),
-                            airline: flight.airline,
-                            flightNumber: flight.flightNumber,
-                            from: selectedFromCity,
-                            to: selectedToCity,
-                            departureTime: flight.departureTime,
-                            arrivalTime: flight.arrivalTime,
-                            price: flight.fareTypes?.[0]?.price || 0,
-                            duration: flight.duration
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log("Mobile Bargain clicked for flight:", flight.id);
                           }}
-                          basePrice={flight.fareTypes?.[0]?.price || 0}
-                          productRef={`flight-${flight.id}-${flight.fareTypes?.[0]?.id || 'default'}`}
-                          selectedFareType={{
-                            type: flight.fareTypes?.[0]?.name || 'Economy',
-                            price: flight.fareTypes?.[0]?.price || 0,
-                            features: flight.fareTypes?.[0]?.features || []
-                          }}
-                          buttonText="Bargain Now"
-                          buttonSize="sm"
                           className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                        />
+                          onTouchStart={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -3232,29 +3223,20 @@ export default function FlightResults() {
                             >
                               View Details
                             </Button>
-                            <FlightBargainButton
-                              flight={{
-                                id: flight.id.toString(),
-                                airline: flight.airline,
-                                flightNumber: flight.flightNumber,
-                                from: selectedFromCity,
-                                to: selectedToCity,
-                                departureTime: flight.departureTime,
-                                arrivalTime: flight.arrivalTime,
-                                price: flight.fareTypes?.[0]?.price || 0,
-                                duration: flight.duration
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log("Desktop Bargain clicked for flight:", flight.id);
                               }}
-                              basePrice={flight.fareTypes?.[0]?.price || 0}
-                              productRef={`flight-${flight.id}-${flight.fareTypes?.[0]?.id || 'default'}`}
-                              selectedFareType={{
-                                type: flight.fareTypes?.[0]?.name || 'Economy',
-                                price: flight.fareTypes?.[0]?.price || 0,
-                                features: flight.fareTypes?.[0]?.features || []
-                              }}
-                              buttonText="Bargain Now"
-                              buttonSize="sm"
                               className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                            />
+                              onTouchStart={(e) => {
+                                e.stopPropagation();
+                              }}
+                            >
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
+                            </Button>
                           </div>
                         </div>
                       </div>
