@@ -3762,9 +3762,9 @@ export default function FlightResults() {
                                             const [flightId, fareTypeId] =
                                               detailKey.split("-");
                                             const fareType =
-                                              flight.fareTypes.find(
+                                              flight.fareTypes?.find(
                                                 (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes[0];
+                                              ) || flight.fareTypes?.[0] || { id: 'default', name: 'Economy', price: 0 };
                                             handleBooking(flight, fareType);
                                           }}
                                           className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 touch-manipulation"
