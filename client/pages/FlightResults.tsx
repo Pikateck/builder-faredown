@@ -338,7 +338,7 @@ export default function FlightResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Load dates and city selections from URL parameters when component mounts
+  // Load all filter states from URL parameters when component mounts
   useEffect(() => {
     loadDatesFromParams(searchParams);
 
@@ -363,6 +363,29 @@ export default function FlightResults() {
       if (toCity) {
         setSelectedToCity(toCity);
       }
+    }
+
+    // Load class selection from URL parameters
+    const classParam = searchParams.get("class");
+    if (classParam) {
+      const className = classParam.charAt(0).toUpperCase() + classParam.slice(1);
+      setSelectedClass(className);
+    }
+
+    // Load trip type from URL parameters (sync with DateContext)
+    const tripTypeParam = searchParams.get("tripType");
+    if (tripTypeParam && ["round-trip", "one-way", "multi-city"].includes(tripTypeParam)) {
+      setEditTripType(tripTypeParam as "round-trip" | "one-way" | "multi-city");
+    }
+
+    // Load traveler counts from URL parameters
+    const adultsParam = searchParams.get("adults");
+    const childrenParam = searchParams.get("children");
+    if (adultsParam || childrenParam) {
+      setTravelers({
+        adults: adultsParam ? parseInt(adultsParam) : 1,
+        children: childrenParam ? parseInt(childrenParam) : 0,
+      });
     }
   }, [searchParams, loadDatesFromParams]);
 
