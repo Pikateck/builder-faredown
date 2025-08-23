@@ -2598,7 +2598,7 @@ export default function FlightResults() {
                                         Taxes & fees:
                                       </span>
                                       <span className="font-medium text-gray-900">
-                                        ₹
+                                        ��
                                         {(
                                           flight.price.breakdown.taxes +
                                           flight.price.breakdown.fees
@@ -2815,23 +2815,30 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                          onClick={() => {
-                            setBargainFlight(flight);
-                            setBargainFareType({
-                              id: "default",
-                              name: flight.fareClass || "Economy",
-                              price: flight.price.amount,
-                              refundability: "Non-Refundable",
-                            });
-                            setShowBargainModal(true);
-                            setBargainStep("input");
+                        <FlightBargainButton
+                          flight={{
+                            id: flight.id.toString(),
+                            airline: flight.airline,
+                            flightNumber: flight.flightNumber || flight.id.toString(),
+                            from: flight.origin,
+                            to: flight.destination,
+                            departureTime: flight.departureTime,
+                            arrivalTime: flight.arrivalTime,
+                            price: flight.price?.amount || 0,
+                            duration: flight.duration
                           }}
-                        >
-                          <TrendingDown className="w-4 h-4" />
-                          Bargain Now
-                        </Button>
+                          basePrice={flight.price?.amount || 0}
+                          productRef={flight.id.toString()}
+                          selectedFareType={{
+                            type: flight.fareClass || "Economy",
+                            price: flight.price?.amount || 0,
+                            features: []
+                          }}
+                          userName={userName || "Guest"}
+                          buttonText="Bargain Now"
+                          buttonSize="md"
+                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                        />
                       </div>
                     </div>
                   </div>
