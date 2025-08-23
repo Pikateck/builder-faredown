@@ -3488,48 +3488,7 @@ export default function FlightResults() {
                                       {/* Book Now & Start Bargain Buttons */}
                                       <div className="border-t border-gray-200 pt-4 mt-6 space-y-3">
                                         {/* Start Bargain Button - Phase 1 */}
-                                        <Button
-                                          onClick={() => {
-                                            const [flightId, fareTypeId] =
-                                              detailKey.split("-");
-                                            const fareType =
-                                              flight.fareTypes.find(
-                                                (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes[0];
-
-                                            const bargainItem =
-                                              createFlightBargainItem({
-                                                id: flight.id.toString(),
-                                                airline: flight.airline,
-                                                route: {
-                                                  from:
-                                                    selectedFromCity ||
-                                                    flight.origin,
-                                                  to:
-                                                    selectedToCity ||
-                                                    flight.destination,
-                                                },
-                                                class: selectedClass,
-                                                price:
-                                                  fareType.price ||
-                                                  flight.price?.amount ||
-                                                  0,
-                                              });
-
-                                            console.log(
-                                              "🚀 Starting live API bargain (desktop):",
-                                              bargainItem,
-                                            );
-
-                                            bargainHook.startBargain(
-                                              bargainItem,
-                                            );
-                                          }}
-                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 transform hover:scale-[1.01] flex items-center justify-center gap-2"
-                                        >
-                                          <TrendingDown className="w-4 h-4" />
-                                          Bargain Now
-                                        </Button>
+                                        {/* Old bargain button removed - using FlightBargainButton instead */}
 
                                         {/* AI Bargain Button */}
                                         <FlightBargainButton
@@ -3727,7 +3686,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��500
+                                                    ���500
                                                   </span>
                                                 </div>
                                               </div>
