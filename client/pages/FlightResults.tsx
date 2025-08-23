@@ -331,58 +331,8 @@ export default function FlightResults() {
   } = useDateContext();
   const userName = user?.name || "";
 
-  // Live flight data states - Initialize with basic demo flights
-  const [flights, setFlights] = useState<Flight[]>([
-    {
-      id: 1,
-      departureTime: "10:15",
-      arrivalTime: "11:45",
-      departureCode: "BOM",
-      arrivalCode: "DXB",
-      duration: "3h 30m",
-      returnDepartureTime: "13:00",
-      returnArrivalTime: "17:40",
-      returnDuration: "4h 40m",
-      airline: "Emirates",
-      returnAirline: "Emirates",
-      flightNumber: "EK 500",
-      returnFlightNumber: "EK 501",
-      logo: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
-      returnLogo:
-        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F64e4a8449d984f8fb3cfc5224927fe3c?format=webp&width=800",
-      aircraft: "Boeing 777-300ER",
-      returnAircraft: "Boeing 777-200LR",
-      flightType: "Direct",
-      stops: 0,
-      refundability: "Refundable",
-      price: {
-        amount: 32168,
-        currency: "INR",
-        breakdown: {
-          baseFare: 25000,
-          taxes: 5168,
-          fees: 2000,
-          total: 32168,
-        },
-      },
-      fareTypes: [
-        {
-          name: "Eco Saver",
-          price: 32168,
-          features: ["Carry-on included"],
-          baggage: "23kg",
-          refundability: "Non-Refundable",
-        },
-        {
-          name: "Eco Flex",
-          price: 35253,
-          features: ["Carry-on + checked bag", "Free cancellation"],
-          baggage: "23kg",
-          refundability: "Refundable",
-        },
-      ],
-    },
-  ]);
+  // Live flight data states - Initialize with fallback demo flights
+  const [flights, setFlights] = useState<Flight[]>(flightData);
   const [isLoading, setIsLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
