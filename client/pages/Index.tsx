@@ -1045,9 +1045,11 @@ export default function Index() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-1">
                     <button
-                      onClick={() => {
-                        console.log("🛫 From city button clicked!");
+                      onClick={(e) => {
+                        e.preventDefault();
+                        console.log("🛫 From city button clicked! Current state:", showFromCities);
                         setShowFromCities(true);
+                        console.log("✅ Setting showFromCities to true");
                       }}
                       className="w-full text-left touch-manipulation active:bg-gray-50 hover:bg-gray-50 rounded-lg p-2 transition-colors"
                     >
