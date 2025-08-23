@@ -2693,7 +2693,7 @@ export default function FlightResults() {
                                         Taxes & fees:
                                       </span>
                                       <span className="font-medium text-gray-900">
-                                        ��
+                                        ₹
                                         {(
                                           (flight.price?.breakdown?.taxes || 0) +
                                           (flight.price?.breakdown?.fees || 0)
