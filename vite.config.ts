@@ -10,6 +10,11 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
+    sourcemap: false, // Disable source maps
+  },
+  define: {
+    // Force production mode for React to disable debug features
+    'process.env.NODE_ENV': '"production"',
   },
   plugins: [
     react({
