@@ -2,6 +2,7 @@
 @import "./styles/mobile-enhancements.css";
 @import "./styles/admin-mobile.css";
 @import "./styles/mobile-optimizations.css";
+@import "./styles/global-bargain-button.css";
 
 @tailwind base;
 @tailwind components;
