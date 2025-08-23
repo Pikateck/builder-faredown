@@ -109,7 +109,7 @@ async function applyMarkupRules(basePrice, destination, category, supplier_id) {
 }
 
 // Initialize the Hotelbeds Activities service
-const activitiesService = new HotelbedsActivitiesService();
+const activitiesService = HotelbedsActivitiesService;
 
 // In-memory cache for destinations with 5-minute TTL
 const destinationsCache = new Map();
