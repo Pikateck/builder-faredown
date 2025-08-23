@@ -12,19 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { SimpleCalendar } from "@/components/SimpleCalendar";
-import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import { addDays } from "date-fns";
-import {
   Plane,
   ChevronDown,
-  ArrowRightLeft,
-  MapPin,
-  Calendar as CalendarIcon,
   Users,
   Settings,
   User,
@@ -34,8 +23,6 @@ import {
   DollarSign,
   Shield,
   Headphones,
-  ArrowRight,
-  Search,
   X,
   Globe,
   Zap,
@@ -43,66 +30,18 @@ import {
   Menu,
   LogOut,
   Code,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Twitter,
-  BookOpen,
   Camera,
   Car,
 } from "lucide-react";
-import {
-  MobileCityDropdown,
-  MobileDatePicker,
-  MobileTravelers,
-} from "@/components/MobileDropdowns";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 
 export default function Sightseeing() {
   const navigate = useNavigate();
   const { isLoggedIn, user, logout } = useAuth();
-  const {
-    departureDate,
-    returnDate,
-    setDepartureDate,
-    setReturnDate,
-    tripType,
-    setTripType,
-    formatDisplayDate,
-  } = useDateContext();
-
   const { selectedCurrency, currencies, setCurrency } = useCurrency();
 
-  // State for sightseeing search functionality
-  const [activeTab, setActiveTab] = useState("sightseeing");
+  // State for sightseeing functionality
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  const [showFromCities, setShowFromCities] = useState(false);
-  const [showToCities, setShowToCities] = useState(false);
-  const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
-  const [selectedToCity, setSelectedToCity] = useState("Dubai");
-  const [showMobileCalendar, setShowMobileCalendar] = useState(false);
-  const [showDesktopCalendar, setShowDesktopCalendar] = useState(false);
-  const [showClassDropdown, setShowClassDropdown] = useState(false);
-  const [selectedClass, setSelectedClass] = useState("Economy");
-  const [showTravelers, setShowTravelers] = useState(false);
-  const [travelers, setTravelers] = useState({
-    adults: 1,
-    children: 0,
-    childAges: [] as number[],
-  });
-
-  // Mobile dropdown states
-  const [showMobileDestination, setShowMobileDestination] = useState(false);
-  const [showMobileDates, setShowMobileDates] = useState(false);
-  const [showMobileGuests, setShowMobileGuests] = useState(false);
-  const [selectedDepartureDate, setSelectedDepartureDate] =
-    useState<Date | null>(null);
-  const [selectedReturnDate, setSelectedReturnDate] = useState<Date | null>(
-    null,
-  );
-  const [selectingDeparture, setSelectingDeparture] = useState(true);
-
-  // Mobile menu states to match hotels page
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
@@ -120,40 +59,6 @@ export default function Sightseeing() {
   // Handle sign out
   const handleSignOut = () => {
     logout();
-  };
-
-  // City data for sightseeing
-  const cityData = {
-    Mumbai: {
-      code: "BOM",
-      name: "Mumbai",
-      airport: "Mumbai, Maharashtra, India",
-      fullName: "Mumbai, Maharashtra, India",
-    },
-    Delhi: {
-      code: "DEL",
-      name: "Delhi",
-      airport: "New Delhi, Delhi, India",
-      fullName: "New Delhi, Delhi, India",
-    },
-    Dubai: {
-      code: "DXB",
-      name: "Dubai",
-      airport: "Dubai, United Arab Emirates",
-      fullName: "Dubai, United Arab Emirates",
-    },
-    "Abu Dhabi": {
-      code: "AUH",
-      name: "Abu Dhabi",
-      airport: "Abu Dhabi, United Arab Emirates",
-      fullName: "Abu Dhabi, United Arab Emirates",
-    },
-    Singapore: {
-      code: "SIN",
-      name: "Singapore",
-      airport: "Singapore, Singapore",
-      fullName: "Singapore, Singapore",
-    },
   };
 
   return (
@@ -300,34 +205,6 @@ export default function Sightseeing() {
                         <LogOut className="w-4 h-4" />
                         <span className="text-sm">Sign Out</span>
                       </button>
-                      <div className="border-t border-gray-100 pt-2 mt-2">
-                        <div className="grid grid-cols-2 gap-2">
-                          <button
-                            className="flex items-center space-x-2 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors text-left text-sm"
-                            onClick={() => {
-                              window.open("/admin/login", "_blank");
-                              setShowMobileMenu(false);
-                            }}
-                          >
-                            <Shield className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              Admin Panel
-                            </span>
-                          </button>
-                          <button
-                            className="flex items-center space-x-2 text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors text-left text-sm"
-                            onClick={() => {
-                              window.open("/admin/api", "_blank");
-                              setShowMobileMenu(false);
-                            }}
-                          >
-                            <Code className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              Live API
-                            </span>
-                          </button>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 ) : (
@@ -355,8 +232,8 @@ export default function Sightseeing() {
                 )}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </header>
 
         {/* Mobile Search Section */}
         <div className="pb-8 pt-4 bg-white">
@@ -427,9 +304,6 @@ export default function Sightseeing() {
             <Link
               to="/"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() =>
-                console.log("Flights button clicked - navigating to /")
-              }
             >
               <Plane className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Flights</span>
@@ -437,9 +311,6 @@ export default function Sightseeing() {
             <Link
               to="/hotels"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() =>
-                console.log("Hotels button clicked - navigating to /hotels")
-              }
             >
               <Hotel className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Hotels</span>
@@ -447,11 +318,6 @@ export default function Sightseeing() {
             <Link
               to="/sightseeing"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() =>
-                console.log(
-                  "Sightseeing button clicked - already on Sightseeing page",
-                )
-              }
             >
               <Camera className="w-5 h-5 text-[#003580]" />
               <span className="text-xs text-[#003580] font-medium">Sightseeing</span>
@@ -459,9 +325,6 @@ export default function Sightseeing() {
             <Link
               to="/saved"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() =>
-                console.log("Saved button clicked - navigating to /saved")
-              }
             >
               <Heart className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Saved</span>
@@ -469,9 +332,6 @@ export default function Sightseeing() {
             <Link
               to="/account"
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
-              onClick={() =>
-                console.log("Account button clicked - navigating to /account")
-              }
             >
               <User className="w-5 h-5 text-gray-400" />
               <span className="text-xs text-gray-500">Account</span>
@@ -499,37 +359,25 @@ export default function Sightseeing() {
               {/* Centered Navigation */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <Link
-                  to="/?tab=flights"
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
+                  to="/"
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Flights</span>
                 </Link>
                 <Link
-                  to="/?tab=hotels"
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
+                  to="/hotels"
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Hotels</span>
                 </Link>
                 <Link
                   to="/sightseeing"
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4 border-b-2 border-white"
                 >
                   <span>Sightseeing</span>
                 </Link>
                 <Link
-                  to="/?tab=transfers"
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
+                  to="/transfers"
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Transfers</span>
