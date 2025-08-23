@@ -3152,7 +3152,7 @@ export default function FlightResults() {
                               userName={userName}
                               buttonText="Bargain Now"
                               buttonSize="md"
-                              className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
+                              className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                             />
                           </div>
                         </div>
