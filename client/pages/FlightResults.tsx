@@ -14,6 +14,7 @@ import {
   useBargainPhase1,
   createFlightBargainItem,
 } from "@/hooks/useBargainPhase1";
+import { FlightBargainButton } from "@/components/BargainIntegration";
 import {
   Dialog,
   DialogContent,
