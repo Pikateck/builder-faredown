@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
 import { flightsService, Flight } from "@/services/flightsService";
+import { FlightBargainButton } from "@/components/BargainIntegration";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
@@ -344,6 +345,23 @@ export default function FlightResults() {
 
   // Load all filter states from URL parameters when component mounts
   useEffect(() => {
+    // Force reload dates from URL parameters to ensure sync
+    const departureDateParam = searchParams.get("departureDate");
+    const returnDateParam = searchParams.get("returnDate");
+    const tripTypeParam = searchParams.get("tripType");
+
+    console.log("🔄 Loading URL params:", { departureDateParam, returnDateParam, tripTypeParam });
+
+    if (departureDateParam) {
+      setDepartureDate(departureDateParam);
+    }
+    if (returnDateParam) {
+      setReturnDate(returnDateParam);
+    }
+    if (tripTypeParam) {
+      setTripType(tripTypeParam as "one-way" | "round-trip" | "multi-city");
+    }
+
     loadDatesFromParams(searchParams);
 
     // Load city selections from URL parameters
@@ -3222,8 +3240,29 @@ export default function FlightResults() {
                                 e.stopPropagation();
                               }}
                             >
-                              <TrendingDown className="w-4 h-4" />
-                              Bargain Now
+                              <FlightBargainButton
+                                flight={{
+                                  id: flight.id.toString(),
+                                  airline: flight.airline,
+                                  flightNumber: flight.flightNumber,
+                                  from: selectedFromCity,
+                                  to: selectedToCity,
+                                  departureTime: flight.departureTime,
+                                  arrivalTime: flight.arrivalTime,
+                                  price: fareType.price,
+                                  duration: flight.duration
+                                }}
+                                basePrice={fareType.price}
+                                productRef={`flight-${flight.id}-${fareType.id}`}
+                                selectedFareType={{
+                                  type: fareType.name,
+                                  price: fareType.price,
+                                  features: fareType.features || []
+                                }}
+                                buttonText="Bargain Now"
+                                buttonSize="sm"
+                                className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold"
+                              />
                             </Button>
                           </div>
                         </div>
