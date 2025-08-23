@@ -3123,7 +3123,7 @@ export default function FlightResults() {
                                 });
                               }}
                               variant="outline"
-                              className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
+                              className="text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation relative z-50"
                               onTouchStart={(e) => {
                                 e.stopPropagation();
                               }}
