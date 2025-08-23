@@ -1214,6 +1214,29 @@ export default function FlightResults() {
       return 0;
     });
 
+  // Bargain modal handlers
+  const handleBargainClick = (flight: any) => {
+    console.log("🚀 Starting bargain for flight:", flight.id);
+    setSelectedBargainFlight(flight);
+    setShowBargainModal(true);
+  };
+
+  const handleBargainAccept = (finalPrice: number, orderRef: string) => {
+    console.log("✅ Bargain accepted:", finalPrice, orderRef);
+    setShowBargainModal(false);
+    // Navigate to booking flow with negotiated price
+    navigate("/booking-flow");
+  };
+
+  const handleBargainHold = (orderRef: string) => {
+    console.log("⏱️ Price hold created:", orderRef);
+  };
+
+  const handleBargainClose = () => {
+    setShowBargainModal(false);
+    setSelectedBargainFlight(null);
+  };
+
   // Authentication functions
   const handleSignIn = () => {
     setAuthError("");
@@ -3654,7 +3677,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ���0
+                                                    ₹0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
