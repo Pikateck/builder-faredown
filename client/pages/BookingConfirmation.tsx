@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { useBooking } from "@/contexts/BookingContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,8 +25,9 @@ import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 export default function BookingConfirmation() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { booking: bookingContext, generateBookingData } = useBooking();
   const [booking, setBooking] = useState<any>(null);
-  const [bookingType, setBookingType] = useState<"flight" | "hotel">("hotel");
+  const [bookingType, setBookingType] = useState<"flight" | "hotel">("flight");
   const [showVoucher, setShowVoucher] = useState(false);
   const [showInvoice, setShowInvoice] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -54,7 +56,16 @@ export default function BookingConfirmation() {
   };
 
   useEffect(() => {
-    // Load booking data from localStorage - check for flight bookings first
+    // Prioritize booking context data first (most reliable)
+    if (bookingContext.isComplete && bookingContext.selectedFlight) {
+      console.log("🎯 Using booking context data - most reliable source");
+      const contextBookingData = generateBookingData();
+      setBooking(contextBookingData);
+      setBookingType("flight");
+      return;
+    }
+
+    // Fallback to localStorage if no context data
     const savedFlightBooking = localStorage.getItem("latestBooking");
     const savedHotelBooking = localStorage.getItem("latestHotelBooking");
 

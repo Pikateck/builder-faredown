@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
+import { useBooking } from "@/contexts/BookingContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -875,17 +876,21 @@ export default function BookingFlow() {
     loadDatesFromParams,
   } = useDateContext();
 
-  // Get passenger data and flight data from navigation state
-  const passengersFromState = location.state?.passengers || {
-    adults: 1,
-    children: 0,
-  };
+  // Use booking context for centralized state management
+  const {
+    booking,
+    updateTravellers,
+    updateContactDetails,
+    updateExtras,
+    setCurrentStep,
+    completeBooking,
+    generateBookingData
+  } = useBooking();
 
-  // Get flight booking data from navigation state
-  const selectedFlight = location.state?.selectedFlight;
-  const selectedFareType = location.state?.selectedFareType;
-  const negotiatedPrice =
-    location.state?.negotiatedPrice || selectedFareType?.price || 32168; // fallback price
+  // Get data from booking context instead of location state
+  const selectedFlight = booking.selectedFlight;
+  const selectedFareType = booking.selectedFare;
+  const passengersFromState = booking.searchParams.passengers;
 
   // Define renderFlightSegment function after selectedFlight is available
 
