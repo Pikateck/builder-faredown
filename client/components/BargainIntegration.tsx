@@ -175,7 +175,14 @@ export function BargainIntegration({
 // Convenience components for specific modules
 
 export function FlightBargainButton(props: Omit<BargainIntegrationProps, 'module'>) {
-  return <BargainIntegration {...props} module="flights" />;
+  return (
+    <BargainIntegration
+      {...props}
+      module="flights"
+      className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+      buttonSize="lg"
+    />
+  );
 }
 
 export function HotelBargainButton(props: Omit<BargainIntegrationProps, 'module'>) {
