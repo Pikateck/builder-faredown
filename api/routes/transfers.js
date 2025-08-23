@@ -12,7 +12,7 @@ const voucherService = require("../services/voucherService");
 const emailService = require("../services/emailService");
 const { validateBookingData } = require("../middleware/validation");
 const { auditRequest } = require("../middleware/audit");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+const { authenticateToken, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
 
 const router = express.Router();
