@@ -231,9 +231,15 @@ export function MobileCityDropdown({
   // Focus input when component opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
+      // Focus immediately and on next tick
+      inputRef.current.focus();
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 100);
+      }, 50);
+      // Additional focus after potential layout shifts
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 200);
     }
   }, [isOpen]);
 
