@@ -2770,8 +2770,7 @@ export default function FlightResults() {
                           productRef={flight.id || 'flight-' + Math.random()}
                           userName={userName}
                           buttonText="Bargain Now"
-                          buttonSize="md"
-                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                          buttonSize="lg"
                         />
                       </div>
                     </div>
