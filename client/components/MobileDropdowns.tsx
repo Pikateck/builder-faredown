@@ -281,6 +281,7 @@ export function MobileCityDropdown({
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck="false"
+              onMouseDown={(e) => e.preventDefault()}
             />
             {searchQuery && (
               <button
