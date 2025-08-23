@@ -983,6 +983,11 @@ export default function Index() {
               </p>
             </div>
 
+            {/* Debug display for state values */}
+            <div className="mb-4 p-2 bg-yellow-100 rounded text-xs">
+              Debug: showFromCities={showFromCities.toString()}, showToCities={showToCities.toString()}
+            </div>
+
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
