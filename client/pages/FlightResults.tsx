@@ -318,6 +318,9 @@ const flightData = [
 
 export default function FlightResults() {
   useScrollToTop();
+
+  // Use booking context for comprehensive state management
+  const { updateSearchParams, setSelectedFlight, setSelectedFare } = useBooking();
   const { isLoggedIn, user, login, logout } = useAuth();
   const {
     departureDate,
@@ -1304,14 +1307,69 @@ export default function FlightResults() {
   }, [updateFiltersAndSearch]);
 
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
-    navigate("/booking-flow", {
-      state: {
-        selectedFlight: flight,
-        selectedFareType: fareType,
-        negotiatedPrice: fareType.price,
-        passengers: { adults, children },
+    // Update booking context with current search parameters
+    updateSearchParams({
+      from: selectedFromCity,
+      to: selectedToCity,
+      fromCode: Object.entries({
+        Mumbai: "BOM", Delhi: "DEL", Bangalore: "BLR", Chennai: "MAA", Kolkata: "CCU"
+      }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
+      toCode: Object.entries({
+        Dubai: "DXB", London: "LHR", "New York": "JFK", Singapore: "SIN", Tokyo: "NRT"
+      }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
+      departureDate: departureDate || "",
+      returnDate: returnDate,
+      tripType: tripType,
+      passengers: {
+        adults: travelers.adults,
+        children: travelers.children,
+        infants: travelers.infants || 0,
       },
+      class: selectedClass as any,
     });
+
+    // Update booking context with selected flight
+    setSelectedFlight({
+      id: flight.id.toString(),
+      airline: flight.airline,
+      flightNumber: flight.flightNumber,
+      departureTime: flight.departureTime,
+      arrivalTime: flight.arrivalTime,
+      duration: flight.duration,
+      aircraft: flight.aircraft || "Aircraft",
+      stops: flight.stops || 0,
+      departureCode: flight.departureCode,
+      arrivalCode: flight.arrivalCode,
+      departureCity: selectedFromCity,
+      arrivalCity: selectedToCity,
+      departureDate: departureDate || "",
+      arrivalDate: departureDate || "",
+      returnFlightNumber: flight.returnFlightNumber,
+      returnDepartureTime: flight.returnDepartureTime,
+      returnArrivalTime: flight.returnArrivalTime,
+      returnDuration: flight.returnDuration,
+      returnDepartureDate: returnDate,
+      returnArrivalDate: returnDate,
+    });
+
+    // Update booking context with selected fare
+    setSelectedFare({
+      id: fareType.id || `fare_${Date.now()}`,
+      name: fareType.name,
+      type: fareType.type || "economy",
+      price: fareType.price,
+      originalPrice: undefined,
+      isRefundable: fareType.refundable || false,
+      isBargained: false,
+      includedBaggage: fareType.includedBaggage || "23kg",
+      includedMeals: fareType.includedMeals || false,
+      seatSelection: fareType.seatSelection || false,
+      changes: fareType.changes || { allowed: false },
+      cancellation: fareType.cancellation || { allowed: false },
+    });
+
+    // Navigate to booking flow - context will provide all data
+    navigate("/booking-flow");
   };
 
 
