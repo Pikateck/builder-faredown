@@ -3159,15 +3159,30 @@ export default function FlightResults() {
                             >
                               View Details
                             </Button>
-                            <Button
-                              onClick={() =>
-                                handleBargain(flight, flight.fareTypes[0])
-                              }
+                            <FlightBargainButton
+                              flight={{
+                                id: flight.id.toString(),
+                                airline: flight.airline,
+                                flightNumber: flight.flightNumber,
+                                from: flight.departureCode,
+                                to: flight.arrivalCode,
+                                departureTime: flight.departureTime,
+                                arrivalTime: flight.arrivalTime,
+                                price: flight.fareTypes[0]?.price || 0,
+                                duration: flight.duration
+                              }}
+                              basePrice={flight.fareTypes[0]?.price || 0}
+                              productRef={flight.id.toString()}
+                              selectedFareType={{
+                                type: flight.fareTypes[0]?.name || "Economy",
+                                price: flight.fareTypes[0]?.price || 0,
+                                features: flight.fareTypes[0]?.features || []
+                              }}
+                              userName={userName}
+                              buttonText="Bargain Now"
+                              buttonSize="md"
                               className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
-                            >
-                              <TrendingDown className="w-4 h-4" />
-                              Bargain Now
-                            </Button>
+                            />
                           </div>
                         </div>
                       </div>
