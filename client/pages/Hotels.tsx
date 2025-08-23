@@ -637,7 +637,7 @@ export default function Hotels() {
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "الع��بية", flag: "🇸🇦" },
-                          { code: "hi", name: "��ि����्दी", flag: "🇮🇳" },
+                          { code: "hi", name: "��ि��्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -923,14 +923,17 @@ export default function Hotels() {
               </div>
             </div>
 
-            {/* Customer Support Section */}
-            <div className="text-center mb-12">
-              <div className="bg-[#003580] text-white py-4 px-8 rounded-xl inline-block">
-                <div className="flex items-center space-x-3">
-                  <Headphones className="w-6 h-6" />
-                  <span className="text-lg font-semibold">
-                    24/7 Customer Support | Live Chat & Call Available
-                  </span>
+            {/* Customer Support Banner */}
+            <div className="text-center mb-16">
+              <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white py-6 px-8 rounded-2xl inline-block shadow-xl">
+                <div className="flex items-center justify-center space-x-4">
+                  <div className="bg-white/20 p-3 rounded-full">
+                    <Headphones className="w-6 h-6" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-xl font-bold">24/7 Customer Support</div>
+                    <div className="text-blue-100">Live Chat & Call Available</div>
+                  </div>
                 </div>
               </div>
             </div>
