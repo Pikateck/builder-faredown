@@ -4,7 +4,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
 import { flightsService, Flight } from "@/services/flightsService";
-import { FlightBargainButton } from "@/components/BargainIntegration";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
@@ -1582,7 +1581,7 @@ export default function FlightResults() {
                       { code: "fr", name: "Français", flag: "🇫�����" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
-                      { code: "pt", name: "Portugu��s", flag: "🇵��" },
+                      { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
@@ -3060,7 +3059,7 @@ export default function FlightResults() {
                                       {flight.returnArrivalTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {flight.departureCode} •{" "}
+                                      {flight.departureCode} ��{" "}
                                       {returnDate
                                         ? formatDisplayDate(returnDate, "MMM d")
                                         : "Select return date"}
