@@ -495,7 +495,7 @@ const getAuditStats = (timeframe = "24h") => {
 // Simple audit request middleware for non-admin routes
 const auditRequest = (req, res, next) => {
   // Skip audit for health checks
-  if (req.originalUrl.includes('/health')) {
+  if (req.originalUrl.includes("/health")) {
     return next();
   }
 

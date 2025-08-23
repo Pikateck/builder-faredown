@@ -14,7 +14,7 @@ class PromoService {
   async validatePromo(promoCode, bookingDetails) {
     // Basic promo validation logic
     const promo = this.promos.get(promoCode);
-    
+
     if (!promo || !promo.active) {
       return { valid: false, message: "Invalid promo code" };
     }
@@ -22,7 +22,7 @@ class PromoService {
     return {
       valid: true,
       discount: promo.discount || 0,
-      discountType: promo.discountType || "percentage"
+      discountType: promo.discountType || "percentage",
     };
   }
 
@@ -31,7 +31,7 @@ class PromoService {
    */
   async applyPromo(price, promoCode) {
     const validation = await this.validatePromo(promoCode);
-    
+
     if (!validation.valid) {
       return { originalPrice: price, finalPrice: price, discount: 0 };
     }
@@ -46,7 +46,7 @@ class PromoService {
     return {
       originalPrice: price,
       finalPrice: Math.max(0, price - discount),
-      discount: discount
+      discount: discount,
     };
   }
 
@@ -54,7 +54,7 @@ class PromoService {
    * Get available promos
    */
   async getAvailablePromos() {
-    return Array.from(this.promos.values()).filter(promo => promo.active);
+    return Array.from(this.promos.values()).filter((promo) => promo.active);
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
@@ -21,7 +21,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Error Boundary caught an error:', error, errorInfo);
+    console.error("Error Boundary caught an error:", error, errorInfo);
     this.setState({ errorInfo });
   }
 
@@ -39,11 +39,15 @@ export class ErrorBoundary extends Component<Props, State> {
                 <span className="text-red-600 text-xl">⚠️</span>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Something went wrong</h2>
-                <p className="text-sm text-gray-600">We encountered an unexpected error</p>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Something went wrong
+                </h2>
+                <p className="text-sm text-gray-600">
+                  We encountered an unexpected error
+                </p>
               </div>
             </div>
-            
+
             <div className="space-y-3">
               <button
                 onClick={() => window.location.reload()}
@@ -51,23 +55,25 @@ export class ErrorBoundary extends Component<Props, State> {
               >
                 Reload Page
               </button>
-              
+
               <button
-                onClick={() => window.location.href = '/'}
+                onClick={() => (window.location.href = "/")}
                 className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors"
               >
                 Go to Home
               </button>
             </div>
 
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === "development" && this.state.error && (
               <details className="mt-4 text-xs">
-                <summary className="cursor-pointer text-gray-600">Error Details (Dev Mode)</summary>
+                <summary className="cursor-pointer text-gray-600">
+                  Error Details (Dev Mode)
+                </summary>
                 <pre className="mt-2 p-2 bg-gray-100 rounded text-red-600 overflow-auto">
                   {this.state.error.toString()}
                   {this.state.errorInfo && (
                     <>
-                      {'\n\nComponent Stack:'}
+                      {"\n\nComponent Stack:"}
                       {this.state.errorInfo.componentStack}
                     </>
                   )}

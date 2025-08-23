@@ -496,18 +496,8 @@
     }
   },
   "template_variables": {
-    "pricing": [
-      "base_price",
-      "offer",
-      "counter",
-      "final_price",
-      "savings"
-    ],
-    "user": [
-      "user_name",
-      "user_location",
-      "user_currency"
-    ],
+    "pricing": ["base_price", "offer", "counter", "final_price", "savings"],
+    "user": ["user_name", "user_location", "user_currency"],
     "product": [
       "airline",
       "flight_no",
@@ -517,17 +507,7 @@
       "activity_name",
       "vehicle_type"
     ],
-    "booking": [
-      "order_ref",
-      "date",
-      "check_in",
-      "check_out",
-      "participants"
-    ],
-    "system": [
-      "hold_seconds",
-      "round_number",
-      "max_rounds"
-    ]
+    "booking": ["order_ref", "date", "check_in", "check_out", "participants"],
+    "system": ["hold_seconds", "round_number", "max_rounds"]
   }
 }

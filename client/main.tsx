@@ -4,6 +4,4 @@ import App from "./App.tsx";
 import "./global.css";
 import "./styles/print.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <App />
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);

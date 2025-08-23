@@ -884,7 +884,7 @@ export default function BookingFlow() {
     updateExtras,
     setCurrentStep,
     completeBooking,
-    generateBookingData
+    generateBookingData,
   } = useBooking();
 
   // Get data from booking context instead of location state

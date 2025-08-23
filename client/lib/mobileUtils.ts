@@ -113,7 +113,7 @@ export const showOnTabletUp = "hidden sm:block";
 export const isMobileDevice = (): boolean => {
   if (typeof window === "undefined") return false;
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
+    navigator.userAgent,
   );
 };
 
@@ -129,7 +129,7 @@ export const isAndroid = (): boolean => {
 
 export const isTouchDevice = (): boolean => {
   if (typeof window === "undefined") return false;
-  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 };
 
 export const getViewportHeight = (): number => {
@@ -141,30 +141,30 @@ export const preventZoomOnInput = (element: HTMLInputElement): void => {
   if (!element) return;
 
   // Set font-size to 16px to prevent iOS zoom
-  element.style.fontSize = '16px';
+  element.style.fontSize = "16px";
 
   // Add attributes to prevent autocorrect/autocomplete
-  element.setAttribute('autocomplete', 'off');
-  element.setAttribute('autocorrect', 'off');
-  element.setAttribute('autocapitalize', 'none');
-  element.setAttribute('spellcheck', 'false');
+  element.setAttribute("autocomplete", "off");
+  element.setAttribute("autocorrect", "off");
+  element.setAttribute("autocapitalize", "none");
+  element.setAttribute("spellcheck", "false");
 };
 
 export const addMobileTouchOptimizations = (element: HTMLElement): void => {
   if (!element) return;
 
   // Add touch optimization styles
-  element.style.touchAction = 'manipulation';
-  element.style.webkitTouchCallout = 'none';
-  element.style.webkitUserSelect = 'none';
-  element.style.webkitTapHighlightColor = 'transparent';
+  element.style.touchAction = "manipulation";
+  element.style.webkitTouchCallout = "none";
+  element.style.webkitUserSelect = "none";
+  element.style.webkitTapHighlightColor = "transparent";
 
   // Add minimum touch target size
   if (element.offsetHeight < 44) {
-    element.style.minHeight = '44px';
+    element.style.minHeight = "44px";
   }
   if (element.offsetWidth < 44) {
-    element.style.minWidth = '44px';
+    element.style.minWidth = "44px";
   }
 };
 
@@ -181,9 +181,9 @@ export const getMobileKeyboardHeight = (): number => {
 export const addMobileScrollOptimizations = (element: HTMLElement): void => {
   if (!element) return;
 
-  element.style.webkitOverflowScrolling = 'touch';
-  element.style.scrollBehavior = 'smooth';
-  element.style.overscrollBehavior = 'contain';
+  element.style.webkitOverflowScrolling = "touch";
+  element.style.scrollBehavior = "smooth";
+  element.style.overscrollBehavior = "contain";
 };
 
 export const vibrate = (pattern: number | number[]): void => {
@@ -194,20 +194,20 @@ export const vibrate = (pattern: number | number[]): void => {
 
 export const hapticFeedback = (type: "light" | "medium" | "heavy"): void => {
   // iOS haptic feedback
-  if (isIOS() && 'Haptics' in window) {
+  if (isIOS() && "Haptics" in window) {
     try {
       switch (type) {
-        case 'light':
+        case "light":
           // @ts-ignore - iOS specific API
-          window.Haptics.impactOccurred({ intensity: 'light' });
+          window.Haptics.impactOccurred({ intensity: "light" });
           break;
-        case 'medium':
+        case "medium":
           // @ts-ignore - iOS specific API
-          window.Haptics.impactOccurred({ intensity: 'medium' });
+          window.Haptics.impactOccurred({ intensity: "medium" });
           break;
-        case 'heavy':
+        case "heavy":
           // @ts-ignore - iOS specific API
-          window.Haptics.impactOccurred({ intensity: 'heavy' });
+          window.Haptics.impactOccurred({ intensity: "heavy" });
           break;
       }
     } catch (e) {
@@ -215,7 +215,7 @@ export const hapticFeedback = (type: "light" | "medium" | "heavy"): void => {
       const patterns = {
         light: [10],
         medium: [20],
-        heavy: [30]
+        heavy: [30],
       };
       vibrate(patterns[type]);
     }
@@ -224,7 +224,7 @@ export const hapticFeedback = (type: "light" | "medium" | "heavy"): void => {
     const patterns = {
       light: [10],
       medium: [20],
-      heavy: [30]
+      heavy: [30],
     };
     vibrate(patterns[type]);
   }

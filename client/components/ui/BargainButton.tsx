@@ -1,7 +1,11 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { addMobileTouchOptimizations, hapticFeedback, isMobileDevice } from "@/lib/mobileUtils";
+import {
+  addMobileTouchOptimizations,
+  hapticFeedback,
+  isMobileDevice,
+} from "@/lib/mobileUtils";
 import { Sparkles } from "lucide-react";
 
 interface BargainButtonProps {
@@ -26,18 +30,20 @@ export function BargainButton({
 }: BargainButtonProps) {
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
-    
+
     // Haptic feedback for mobile devices
     if (isMobileDevice()) {
       hapticFeedback("light");
     }
-    
+
     onClick?.(e);
   };
 
   React.useEffect(() => {
     // Add mobile touch optimizations when component mounts
-    const buttonElement = document.querySelector('.bargain-button-locked') as HTMLElement;
+    const buttonElement = document.querySelector(
+      ".bargain-button-locked",
+    ) as HTMLElement;
     if (buttonElement && isMobileDevice()) {
       addMobileTouchOptimizations(buttonElement);
     }
@@ -46,16 +52,17 @@ export function BargainButton({
   const sizeClasses = {
     sm: "px-4 py-2 text-sm min-h-[40px]",
     md: "px-6 py-3 text-base min-h-[44px]",
-    lg: "px-8 py-4 text-lg min-h-[48px]"
+    lg: "px-8 py-4 text-lg min-h-[48px]",
   };
 
   return (
     <button
       className={cn(
         // Base styles with className override support
-        !className.includes('bg-') && "bg-gradient-to-br from-[#febb02] to-[#f4a902]",
-        !className.includes('text-') && "text-black",
-        !className.includes('rounded') && "rounded-full",
+        !className.includes("bg-") &&
+          "bg-gradient-to-br from-[#febb02] to-[#f4a902]",
+        !className.includes("text-") && "text-black",
+        !className.includes("rounded") && "rounded-full",
         "relative overflow-hidden",
         "inline-flex items-center justify-center gap-2",
         "font-bold tracking-wide",
@@ -66,9 +73,9 @@ export function BargainButton({
         "active:scale-95", // Press animation
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none",
         "hover:scale-105 hover:shadow-xl",
-        !className.includes('shadow') && "shadow-lg shadow-yellow-200/30",
-        !className.includes('min-h') && sizeClasses[size],
-        className
+        !className.includes("shadow") && "shadow-lg shadow-yellow-200/30",
+        !className.includes("min-h") && sizeClasses[size],
+        className,
       )}
       onClick={handleClick}
       disabled={disabled || loading}
@@ -78,27 +85,24 @@ export function BargainButton({
       <div
         className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-700"
         style={{
-          background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)",
+          background:
+            "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)",
           transform: "translateX(-100%)",
-          animation: "shimmer 2s infinite"
+          animation: "shimmer 2s infinite",
         }}
       />
-      
+
       {/* Loading Spinner */}
       {loading && (
         <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
       )}
-      
+
       {/* Icon */}
-      {icon && !loading && (
-        <Sparkles className="w-4 h-4" />
-      )}
-      
+      {icon && !loading && <Sparkles className="w-4 h-4" />}
+
       {/* Button Text */}
-      <span className="relative z-10 font-bold">
-        {children}
-      </span>
-      
+      <span className="relative z-10 font-bold">{children}</span>
+
       {/* Ripple effect container */}
       <div className="absolute inset-0 rounded-full overflow-hidden">
         <div className="absolute inset-0 bg-white opacity-0 transform scale-0 transition-all duration-300 hover:opacity-20 hover:scale-100" />
@@ -117,7 +121,7 @@ export function BargainButton({
             transform: translateX(100%);
           }
         }
-        
+
         .bargain-button-locked::before {
           content: "";
           position: absolute;
@@ -125,33 +129,44 @@ export function BargainButton({
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+          );
           transform: translateX(-100%);
           transition: transform 0.7s ease-out;
           z-index: 1;
         }
-        
+
         .bargain-button-locked:hover::before {
           transform: translateX(100%);
         }
-        
+
         /* Pulse animation for special states */
         .bargain-button-pulse {
           animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
           0% {
-            box-shadow: 0 10px 25px -3px rgb(254 187 2 / 0.3), 0 4px 6px -2px rgb(254 187 2 / 0.1);
+            box-shadow:
+              0 10px 25px -3px rgb(254 187 2 / 0.3),
+              0 4px 6px -2px rgb(254 187 2 / 0.1);
           }
           50% {
-            box-shadow: 0 15px 35px -3px rgb(254 187 2 / 0.5), 0 8px 15px -2px rgb(254 187 2 / 0.3);
+            box-shadow:
+              0 15px 35px -3px rgb(254 187 2 / 0.5),
+              0 8px 15px -2px rgb(254 187 2 / 0.3);
           }
           100% {
-            box-shadow: 0 10px 25px -3px rgb(254 187 2 / 0.3), 0 4px 6px -2px rgb(254 187 2 / 0.1);
+            box-shadow:
+              0 10px 25px -3px rgb(254 187 2 / 0.3),
+              0 4px 6px -2px rgb(254 187 2 / 0.1);
           }
         }
-        
+
         /* Mobile optimizations */
         @media (max-width: 640px) {
           .bargain-button-locked {
@@ -162,7 +177,7 @@ export function BargainButton({
             -webkit-user-select: none;
           }
         }
-        
+
         /* Accessibility improvements */
         @media (prefers-reduced-motion: reduce) {
           .bargain-button-locked {
@@ -170,12 +185,12 @@ export function BargainButton({
             animation: none !important;
             transform: none !important;
           }
-          
+
           .bargain-button-locked::before {
             display: none;
           }
         }
-        
+
         /* High contrast mode support */
         @media (prefers-contrast: high) {
           .bargain-button-locked {
@@ -188,19 +203,19 @@ export function BargainButton({
 }
 
 // Convenience exports for different sizes
-export function BargainButtonSmall(props: Omit<BargainButtonProps, 'size'>) {
+export function BargainButtonSmall(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="sm" {...props} />;
 }
 
-export function BargainButtonLarge(props: Omit<BargainButtonProps, 'size'>) {
+export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="lg" {...props} />;
 }
 
 // Specialized variants
 export function BargainButtonPulse(props: BargainButtonProps) {
   return (
-    <BargainButton 
-      {...props} 
+    <BargainButton
+      {...props}
       className={cn("bargain-button-pulse", props.className)}
     />
   );

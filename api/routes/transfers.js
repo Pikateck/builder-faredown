@@ -360,48 +360,56 @@ router.post(
  * @desc Get booking details
  * @access Private (user's own bookings or admin)
  */
-router.get("/booking/:id", authenticateToken, auditRequest, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const userId = req.user?.id;
-    const isAdmin = req.user?.role === "admin";
+router.get(
+  "/booking/:id",
+  authenticateToken,
+  auditRequest,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user?.id;
+      const isAdmin = req.user?.role === "admin";
 
-    logger.info("Transfer booking details requested", {
-      bookingId: id,
-      userId,
-      isAdmin,
-    });
-
-    const booking = await transfersService.getBooking(id, { userId, isAdmin });
-
-    if (!booking.success) {
-      logger.error("Transfer booking not found", {
+      logger.info("Transfer booking details requested", {
         bookingId: id,
         userId,
-        error: booking.error,
+        isAdmin,
       });
-      return res.status(404).json({
+
+      const booking = await transfersService.getBooking(id, {
+        userId,
+        isAdmin,
+      });
+
+      if (!booking.success) {
+        logger.error("Transfer booking not found", {
+          bookingId: id,
+          userId,
+          error: booking.error,
+        });
+        return res.status(404).json({
+          success: false,
+          error: "Booking not found",
+        });
+      }
+
+      res.json({
+        success: true,
+        data: booking.data,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      logger.error("Transfer booking details error", {
+        error: error.message,
+        bookingId: req.params.id,
+      });
+      res.status(500).json({
         success: false,
-        error: "Booking not found",
+        error: error.message || "Internal server error",
       });
     }
-
-    res.json({
-      success: true,
-      data: booking.data,
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    logger.error("Transfer booking details error", {
-      error: error.message,
-      bookingId: req.params.id,
-    });
-    res.status(500).json({
-      success: false,
-      error: error.message || "Internal server error",
-    });
-  }
-});
+  },
+);
 
 /**
  * @route POST /api/transfers/booking/:id/cancel

@@ -165,6 +165,6 @@ export function formatPriceWithoutDecimals(
 
 // Format number with commas for readability
 export function formatNumberWithCommas(num: number | string): string {
-  const numStr = typeof num === 'string' ? num : num.toString();
-  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const numStr = typeof num === "string" ? num : num.toString();
+  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

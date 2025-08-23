@@ -11,12 +11,14 @@
   font-weight: 600;
   font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
 
-  color: #003580;               /* Faredown primary blue for text/icon */
-  background-color: #febb02;    /* Accent Yellow */
+  color: #003580; /* Faredown primary blue for text/icon */
+  background-color: #febb02; /* Accent Yellow */
   border: none;
-  border-radius: 9999px;        /* fully rounded pill style */
+  border-radius: 9999px; /* fully rounded pill style */
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   min-height: 48px;
@@ -25,19 +27,19 @@
 }
 
 .bargain-btn:hover {
-  background-color: #e6a602;   /* darker yellow hover */
+  background-color: #e6a602; /* darker yellow hover */
   transform: translateY(-1px); /* subtle lift */
 }
 
 .bargain-btn:active {
-  background-color: #cc9300;   /* pressed state */
-  transform: translateY(0);    /* reset lift */
+  background-color: #cc9300; /* pressed state */
+  transform: translateY(0); /* reset lift */
 }
 
 .bargain-btn svg {
   width: 18px;
   height: 18px;
-  fill: currentColor;          /* inherit blue */
+  fill: currentColor; /* inherit blue */
 }
 
 /* Responsive sizing */
@@ -52,7 +54,9 @@
 /* Accessibility */
 .bargain-btn:focus {
   outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(254, 187, 2, 0.3);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.15),
+    0 0 0 4px rgba(254, 187, 2, 0.3);
 }
 
 .bargain-btn:disabled {

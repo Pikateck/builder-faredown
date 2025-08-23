@@ -1,7 +1,7 @@
-import React from 'react';
-import { useBooking } from '@/contexts/BookingContext';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { useBooking } from "@/contexts/BookingContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export function BookingDataSummary() {
   const { booking } = useBooking();
@@ -24,29 +24,38 @@ export function BookingDataSummary() {
           <h3 className="font-semibold text-lg mb-2">Search Parameters</h3>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium">Route:</span> {booking.searchParams.from} → {booking.searchParams.to}
+              <span className="font-medium">Route:</span>{" "}
+              {booking.searchParams.from} → {booking.searchParams.to}
             </div>
             <div>
-              <span className="font-medium">Codes:</span> {booking.searchParams.fromCode} → {booking.searchParams.toCode}
+              <span className="font-medium">Codes:</span>{" "}
+              {booking.searchParams.fromCode} → {booking.searchParams.toCode}
             </div>
             <div>
-              <span className="font-medium">Departure:</span> {booking.searchParams.departureDate}
+              <span className="font-medium">Departure:</span>{" "}
+              {booking.searchParams.departureDate}
             </div>
             <div>
-              <span className="font-medium">Return:</span> {booking.searchParams.returnDate || 'N/A'}
+              <span className="font-medium">Return:</span>{" "}
+              {booking.searchParams.returnDate || "N/A"}
             </div>
             <div>
-              <span className="font-medium">Trip Type:</span> {booking.searchParams.tripType}
+              <span className="font-medium">Trip Type:</span>{" "}
+              {booking.searchParams.tripType}
             </div>
             <div>
-              <span className="font-medium">Class:</span> {booking.searchParams.class}
+              <span className="font-medium">Class:</span>{" "}
+              {booking.searchParams.class}
             </div>
             <div>
-              <span className="font-medium">Passengers:</span> 
-              {booking.searchParams.passengers.adults}A/{booking.searchParams.passengers.children}C/{booking.searchParams.passengers.infants}I
+              <span className="font-medium">Passengers:</span>
+              {booking.searchParams.passengers.adults}A/
+              {booking.searchParams.passengers.children}C/
+              {booking.searchParams.passengers.infants}I
             </div>
             <div>
-              <span className="font-medium">Airline:</span> {booking.searchParams.airline || 'Any'}
+              <span className="font-medium">Airline:</span>{" "}
+              {booking.searchParams.airline || "Any"}
             </div>
           </div>
         </div>
@@ -57,30 +66,41 @@ export function BookingDataSummary() {
             <h3 className="font-semibold text-lg mb-2">Selected Flight</h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium">Airline:</span> {booking.selectedFlight.airline}
+                <span className="font-medium">Airline:</span>{" "}
+                {booking.selectedFlight.airline}
               </div>
               <div>
-                <span className="font-medium">Flight Number:</span> {booking.selectedFlight.flightNumber}
+                <span className="font-medium">Flight Number:</span>{" "}
+                {booking.selectedFlight.flightNumber}
               </div>
               <div>
-                <span className="font-medium">Departure:</span> {booking.selectedFlight.departureTime} from {booking.selectedFlight.departureCode}
+                <span className="font-medium">Departure:</span>{" "}
+                {booking.selectedFlight.departureTime} from{" "}
+                {booking.selectedFlight.departureCode}
               </div>
               <div>
-                <span className="font-medium">Arrival:</span> {booking.selectedFlight.arrivalTime} at {booking.selectedFlight.arrivalCode}
+                <span className="font-medium">Arrival:</span>{" "}
+                {booking.selectedFlight.arrivalTime} at{" "}
+                {booking.selectedFlight.arrivalCode}
               </div>
               <div>
-                <span className="font-medium">Duration:</span> {booking.selectedFlight.duration}
+                <span className="font-medium">Duration:</span>{" "}
+                {booking.selectedFlight.duration}
               </div>
               <div>
-                <span className="font-medium">Aircraft:</span> {booking.selectedFlight.aircraft}
+                <span className="font-medium">Aircraft:</span>{" "}
+                {booking.selectedFlight.aircraft}
               </div>
               {booking.selectedFlight.returnFlightNumber && (
                 <>
                   <div>
-                    <span className="font-medium">Return Flight:</span> {booking.selectedFlight.returnFlightNumber}
+                    <span className="font-medium">Return Flight:</span>{" "}
+                    {booking.selectedFlight.returnFlightNumber}
                   </div>
                   <div>
-                    <span className="font-medium">Return Time:</span> {booking.selectedFlight.returnDepartureTime} - {booking.selectedFlight.returnArrivalTime}
+                    <span className="font-medium">Return Time:</span>{" "}
+                    {booking.selectedFlight.returnDepartureTime} -{" "}
+                    {booking.selectedFlight.returnArrivalTime}
                   </div>
                 </>
               )}
@@ -94,39 +114,61 @@ export function BookingDataSummary() {
             <h3 className="font-semibold text-lg mb-2">Selected Fare</h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="font-medium">Name:</span> {booking.selectedFare.name}
+                <span className="font-medium">Name:</span>{" "}
+                {booking.selectedFare.name}
               </div>
               <div>
-                <span className="font-medium">Type:</span> {booking.selectedFare.type}
+                <span className="font-medium">Type:</span>{" "}
+                {booking.selectedFare.type}
               </div>
               <div>
-                <span className="font-medium">Price:</span> ₹{booking.selectedFare.price.toLocaleString()}
-                {booking.selectedFare.isBargained && booking.selectedFare.originalPrice && (
-                  <span className="ml-2 text-green-600">
-                    (Saved ₹{(booking.selectedFare.originalPrice - booking.selectedFare.price).toLocaleString()})
-                  </span>
-                )}
+                <span className="font-medium">Price:</span> ₹
+                {booking.selectedFare.price.toLocaleString()}
+                {booking.selectedFare.isBargained &&
+                  booking.selectedFare.originalPrice && (
+                    <span className="ml-2 text-green-600">
+                      (Saved ₹
+                      {(
+                        booking.selectedFare.originalPrice -
+                        booking.selectedFare.price
+                      ).toLocaleString()}
+                      )
+                    </span>
+                  )}
               </div>
               <div>
-                <span className="font-medium">Refundable:</span> 
-                <Badge variant={booking.selectedFare.isRefundable ? "default" : "secondary"} className="ml-2">
+                <span className="font-medium">Refundable:</span>
+                <Badge
+                  variant={
+                    booking.selectedFare.isRefundable ? "default" : "secondary"
+                  }
+                  className="ml-2"
+                >
                   {booking.selectedFare.isRefundable ? "Yes" : "No"}
                 </Badge>
               </div>
               <div>
-                <span className="font-medium">Bargained:</span> 
-                <Badge variant={booking.selectedFare.isBargained ? "default" : "secondary"} className="ml-2">
+                <span className="font-medium">Bargained:</span>
+                <Badge
+                  variant={
+                    booking.selectedFare.isBargained ? "default" : "secondary"
+                  }
+                  className="ml-2"
+                >
                   {booking.selectedFare.isBargained ? "Yes" : "No"}
                 </Badge>
               </div>
               <div>
-                <span className="font-medium">Baggage:</span> {booking.selectedFare.includedBaggage}
+                <span className="font-medium">Baggage:</span>{" "}
+                {booking.selectedFare.includedBaggage}
               </div>
               <div>
-                <span className="font-medium">Meals:</span> {booking.selectedFare.includedMeals ? "Included" : "Extra"}
+                <span className="font-medium">Meals:</span>{" "}
+                {booking.selectedFare.includedMeals ? "Included" : "Extra"}
               </div>
               <div>
-                <span className="font-medium">Seat Selection:</span> {booking.selectedFare.seatSelection ? "Included" : "Extra"}
+                <span className="font-medium">Seat Selection:</span>{" "}
+                {booking.selectedFare.seatSelection ? "Included" : "Extra"}
               </div>
             </div>
           </div>
@@ -135,16 +177,23 @@ export function BookingDataSummary() {
         {/* Travellers */}
         {booking.travellers.length > 0 && (
           <div>
-            <h3 className="font-semibold text-lg mb-2">Travellers ({booking.travellers.length})</h3>
+            <h3 className="font-semibold text-lg mb-2">
+              Travellers ({booking.travellers.length})
+            </h3>
             <div className="space-y-2">
               {booking.travellers.map((traveller, index) => (
-                <div key={traveller.id} className="text-sm border-l-2 border-blue-500 pl-3">
+                <div
+                  key={traveller.id}
+                  className="text-sm border-l-2 border-blue-500 pl-3"
+                >
                   <div className="font-medium">
-                    {traveller.firstName} {traveller.lastName} ({traveller.type})
+                    {traveller.firstName} {traveller.lastName} ({traveller.type}
+                    )
                   </div>
                   <div className="text-gray-600">
                     {traveller.gender && `${traveller.gender} • `}
-                    {traveller.dateOfBirth && `DOB: ${traveller.dateOfBirth} • `}
+                    {traveller.dateOfBirth &&
+                      `DOB: ${traveller.dateOfBirth} • `}
                     {traveller.nationality}
                   </div>
                 </div>
@@ -158,8 +207,15 @@ export function BookingDataSummary() {
           <div>
             <h3 className="font-semibold text-lg mb-2">Contact Details</h3>
             <div className="text-sm">
-              <div><span className="font-medium">Email:</span> {booking.contactDetails.email}</div>
-              <div><span className="font-medium">Phone:</span> {booking.contactDetails.countryCode} {booking.contactDetails.phone}</div>
+              <div>
+                <span className="font-medium">Email:</span>{" "}
+                {booking.contactDetails.email}
+              </div>
+              <div>
+                <span className="font-medium">Phone:</span>{" "}
+                {booking.contactDetails.countryCode}{" "}
+                {booking.contactDetails.phone}
+              </div>
             </div>
           </div>
         )}
@@ -174,7 +230,12 @@ export function BookingDataSummary() {
             </div>
             <div className="flex justify-between">
               <span>Taxes & Fees:</span>
-              <span>₹{(booking.priceBreakdown.taxes + booking.priceBreakdown.fees).toLocaleString()}</span>
+              <span>
+                ₹
+                {(
+                  booking.priceBreakdown.taxes + booking.priceBreakdown.fees
+                ).toLocaleString()}
+              </span>
             </div>
             {booking.priceBreakdown.extras > 0 && (
               <div className="flex justify-between">
@@ -191,7 +252,9 @@ export function BookingDataSummary() {
             {booking.priceBreakdown.insurance > 0 && (
               <div className="flex justify-between">
                 <span>Insurance:</span>
-                <span>₹{booking.priceBreakdown.insurance.toLocaleString()}</span>
+                <span>
+                  ₹{booking.priceBreakdown.insurance.toLocaleString()}
+                </span>
               </div>
             )}
             <div className="flex justify-between font-semibold text-lg border-t pt-1">
@@ -211,10 +274,26 @@ export function BookingDataSummary() {
         <div>
           <h3 className="font-semibold text-lg mb-2">Booking Status</h3>
           <div className="text-sm">
-            <div><span className="font-medium">Current Step:</span> {booking.currentStep}/5</div>
-            <div><span className="font-medium">Complete:</span> {booking.isComplete ? "Yes" : "No"}</div>
-            {booking.bookingId && <div><span className="font-medium">Booking ID:</span> {booking.bookingId}</div>}
-            {booking.paymentStatus && <div><span className="font-medium">Payment:</span> {booking.paymentStatus}</div>}
+            <div>
+              <span className="font-medium">Current Step:</span>{" "}
+              {booking.currentStep}/5
+            </div>
+            <div>
+              <span className="font-medium">Complete:</span>{" "}
+              {booking.isComplete ? "Yes" : "No"}
+            </div>
+            {booking.bookingId && (
+              <div>
+                <span className="font-medium">Booking ID:</span>{" "}
+                {booking.bookingId}
+              </div>
+            )}
+            {booking.paymentStatus && (
+              <div>
+                <span className="font-medium">Payment:</span>{" "}
+                {booking.paymentStatus}
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

@@ -11,20 +11,25 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    winston.format.json()
+    winston.format.json(),
   ),
   defaultMeta: { service: "audit-service" },
   transports: [
-    new winston.transports.File({ filename: "logs/audit-error.log", level: "error" }),
+    new winston.transports.File({
+      filename: "logs/audit-error.log",
+      level: "error",
+    }),
     new winston.transports.File({ filename: "logs/audit-combined.log" }),
   ],
 });
 
 // Add console transport in development
 if (process.env.NODE_ENV !== "production") {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    }),
+  );
 }
 
 class AuditService {
@@ -43,11 +48,11 @@ class AuditService {
       details,
       timestamp: new Date().toISOString(),
       ip: details.ip || "unknown",
-      userAgent: details.userAgent || "unknown"
+      userAgent: details.userAgent || "unknown",
     };
 
     this.logger.info("Audit Event", auditEvent);
-    
+
     // In a real implementation, this would also save to database
     return auditEvent;
   }
@@ -58,7 +63,7 @@ class AuditService {
   async logSecurityEvent(eventType, userId, details = {}) {
     return this.logEvent("SECURITY", userId, eventType, {
       ...details,
-      severity: "high"
+      severity: "high",
     });
   }
 
@@ -68,7 +73,7 @@ class AuditService {
   async logBookingEvent(eventType, userId, bookingId, details = {}) {
     return this.logEvent("BOOKING", userId, eventType, {
       ...details,
-      bookingId
+      bookingId,
     });
   }
 

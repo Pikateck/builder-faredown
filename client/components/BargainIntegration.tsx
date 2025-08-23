@@ -41,23 +41,23 @@ interface BargainIntegrationProps {
   hotel?: Hotel;
   sightseeing?: any;
   transfer?: any;
-  
+
   // Module type
   module: "flights" | "hotels" | "sightseeing" | "transfers";
-  
+
   // Price and product reference
   basePrice: number;
   productRef: string;
   selectedFareType?: FareType;
-  
+
   // User context
   userName?: string;
-  
+
   // Callbacks
   onAccept?: (finalPrice: number, orderRef: string) => void;
   onHold?: (orderRef: string) => void;
   onBackToResults?: () => void;
-  
+
   // UI customization
   buttonText?: string;
   buttonSize?: "sm" | "md" | "lg";
@@ -81,25 +81,29 @@ export function BargainIntegration({
   buttonText = "Bargain Now",
   buttonSize = "md",
   showIcon = true,
-  className = ""
+  className = "",
 }: BargainIntegrationProps) {
   const [showBargainModal, setShowBargainModal] = useState(false);
 
   // Safety checks for required props
   if (!basePrice || !productRef) {
-    console.error('BargainIntegration: Missing required props - basePrice and productRef are required');
+    console.error(
+      "BargainIntegration: Missing required props - basePrice and productRef are required",
+    );
     return null;
   }
 
-  if (module === 'flights' && !flight) {
-    console.error('BargainIntegration: Flight data required for flights module');
+  if (module === "flights" && !flight) {
+    console.error(
+      "BargainIntegration: Flight data required for flights module",
+    );
     return null;
   }
 
   const handleAccept = (finalPrice: number, orderRef: string) => {
     console.log(`✅ Bargain accepted: ${finalPrice} (Order: ${orderRef})`);
     setShowBargainModal(false);
-    
+
     // Navigate to booking flow with negotiated price
     if (onAccept) {
       onAccept(finalPrice, orderRef);
@@ -108,20 +112,20 @@ export function BargainIntegration({
       const baseParams = new URLSearchParams({
         price: finalPrice.toString(),
         orderRef,
-        bargainApplied: 'true'
+        bargainApplied: "true",
       });
-      
+
       switch (module) {
-        case 'flights':
+        case "flights":
           window.location.href = `/booking?flight=${productRef}&${baseParams.toString()}`;
           break;
-        case 'hotels':
+        case "hotels":
           window.location.href = `/hotels/booking?hotel=${productRef}&${baseParams.toString()}`;
           break;
-        case 'sightseeing':
+        case "sightseeing":
           window.location.href = `/sightseeing/booking?activity=${productRef}&${baseParams.toString()}`;
           break;
-        case 'transfers':
+        case "transfers":
           window.location.href = `/transfer-booking?transfer=${productRef}&${baseParams.toString()}`;
           break;
       }
@@ -136,10 +140,10 @@ export function BargainIntegration({
   };
 
   const handleBargainClick = () => {
-    console.log(`🚀 Starting bargain for ${module}:`, { 
-      productRef, 
-      basePrice, 
-      module 
+    console.log(`🚀 Starting bargain for ${module}:`, {
+      productRef,
+      basePrice,
+      module,
     });
     setShowBargainModal(true);
   };
@@ -185,7 +189,9 @@ export function BargainIntegration({
 
 // Convenience components for specific modules
 
-export function FlightBargainButton(props: Omit<BargainIntegrationProps, 'module'>) {
+export function FlightBargainButton(
+  props: Omit<BargainIntegrationProps, "module">,
+) {
   const {
     className,
     buttonSize = "lg",
@@ -197,10 +203,17 @@ export function FlightBargainButton(props: Omit<BargainIntegrationProps, 'module
 
   // Safety checks
   if (!basePrice || !productRef || !flight) {
-    console.error('FlightBargainButton: Missing required props', { basePrice, productRef, flight });
+    console.error("FlightBargainButton: Missing required props", {
+      basePrice,
+      productRef,
+      flight,
+    });
     return (
       <button
-        className={className || "flex-1 py-4 bg-gray-300 text-gray-500 font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl cursor-not-allowed"}
+        className={
+          className ||
+          "flex-1 py-4 bg-gray-300 text-gray-500 font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl cursor-not-allowed"
+        }
         disabled
       >
         Bargain Unavailable
@@ -215,26 +228,37 @@ export function FlightBargainButton(props: Omit<BargainIntegrationProps, 'module
       basePrice={basePrice}
       productRef={productRef}
       module="flights"
-      className={className || "flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"}
+      className={
+        className ||
+        "flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+      }
       buttonSize={buttonSize}
     />
   );
 }
 
-export function HotelBargainButton(props: Omit<BargainIntegrationProps, 'module'>) {
+export function HotelBargainButton(
+  props: Omit<BargainIntegrationProps, "module">,
+) {
   return <BargainIntegration {...props} module="hotels" />;
 }
 
-export function SightseeingBargainButton(props: Omit<BargainIntegrationProps, 'module'>) {
+export function SightseeingBargainButton(
+  props: Omit<BargainIntegrationProps, "module">,
+) {
   return <BargainIntegration {...props} module="sightseeing" />;
 }
 
-export function TransferBargainButton(props: Omit<BargainIntegrationProps, 'module'>) {
+export function TransferBargainButton(
+  props: Omit<BargainIntegrationProps, "module">,
+) {
   return <BargainIntegration {...props} module="transfers" />;
 }
 
 // Hook for easier integration
-export function useBargainIntegration(module: BargainIntegrationProps['module']) {
+export function useBargainIntegration(
+  module: BargainIntegrationProps["module"],
+) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<any>(null);
 
@@ -253,16 +277,20 @@ export function useBargainIntegration(module: BargainIntegrationProps['module'])
     currentItem,
     openBargain,
     closeBargain,
-    BargainModal: ({ onAccept, onHold, userName }: { 
+    BargainModal: ({
+      onAccept,
+      onHold,
+      userName,
+    }: {
       onAccept?: (finalPrice: number, orderRef: string) => void;
       onHold?: (orderRef: string) => void;
       userName?: string;
-    }) => (
+    }) =>
       currentItem ? (
         <ConversationalBargainModal
           isOpen={isOpen}
-          flight={module === 'flights' ? currentItem.item : undefined}
-          hotel={module === 'hotels' ? currentItem.item : undefined}
+          flight={module === "flights" ? currentItem.item : undefined}
+          hotel={module === "hotels" ? currentItem.item : undefined}
           onClose={closeBargain}
           onAccept={onAccept || (() => {})}
           onHold={onHold || (() => {})}
@@ -271,8 +299,7 @@ export function useBargainIntegration(module: BargainIntegrationProps['module'])
           basePrice={currentItem.basePrice}
           productRef={currentItem.productRef}
         />
-      ) : null
-    )
+      ) : null,
   };
 }
 

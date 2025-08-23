@@ -446,7 +446,7 @@ const validateBookingData = (req, res, next) => {
 
     // Payment info
     payment: Joi.object({
-      method: Joi.string().valid('card', 'wallet', 'upi').default('card'),
+      method: Joi.string().valid("card", "wallet", "upi").default("card"),
       amount: Joi.number().positive().required(),
     }).required(),
 
@@ -457,7 +457,7 @@ const validateBookingData = (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
     return res.status(400).json({
-      error: 'Validation failed',
+      error: "Validation failed",
       message: error.details[0].message,
       details: error.details,
     });

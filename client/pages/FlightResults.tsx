@@ -321,7 +321,8 @@ export default function FlightResults() {
   useScrollToTop();
 
   // Use booking context for comprehensive state management
-  const { updateSearchParams, setSelectedFlight, setSelectedFare } = useBooking();
+  const { updateSearchParams, setSelectedFlight, setSelectedFare } =
+    useBooking();
   const { isLoggedIn, user, login, logout } = useAuth();
   const {
     departureDate,
@@ -350,7 +351,11 @@ export default function FlightResults() {
     const returnDateParam = searchParams.get("returnDate");
     const tripTypeParam = searchParams.get("tripType");
 
-    console.log("🔄 Loading URL params:", { departureDateParam, returnDateParam, tripTypeParam });
+    console.log("🔄 Loading URL params:", {
+      departureDateParam,
+      returnDateParam,
+      tripTypeParam,
+    });
 
     if (departureDateParam) {
       setDepartureDate(departureDateParam);
@@ -390,12 +395,16 @@ export default function FlightResults() {
     // Load class selection from URL parameters
     const classParam = searchParams.get("class");
     if (classParam) {
-      const className = classParam.charAt(0).toUpperCase() + classParam.slice(1);
+      const className =
+        classParam.charAt(0).toUpperCase() + classParam.slice(1);
       setSelectedClass(className);
     }
 
     // Load trip type from URL parameters (sync with DateContext)
-    if (tripTypeParam && ["round-trip", "one-way", "multi-city"].includes(tripTypeParam)) {
+    if (
+      tripTypeParam &&
+      ["round-trip", "one-way", "multi-city"].includes(tripTypeParam)
+    ) {
       setEditTripType(tripTypeParam as "round-trip" | "one-way" | "multi-city");
     }
 
@@ -1293,68 +1302,98 @@ export default function FlightResults() {
   };
 
   // Handle filter updates and sync with URL
-  const updateFiltersAndSearch = useCallback((newFilters: Record<string, string>) => {
-    const currentParams = new URLSearchParams(window.location.search);
+  const updateFiltersAndSearch = useCallback(
+    (newFilters: Record<string, string>) => {
+      const currentParams = new URLSearchParams(window.location.search);
 
-    // Update URL parameters with new filter values
-    Object.entries(newFilters).forEach(([key, value]) => {
-      if (value) {
-        currentParams.set(key, value);
-      } else {
-        currentParams.delete(key);
-      }
-    });
+      // Update URL parameters with new filter values
+      Object.entries(newFilters).forEach(([key, value]) => {
+        if (value) {
+          currentParams.set(key, value);
+        } else {
+          currentParams.delete(key);
+        }
+      });
 
-    // Update URL without page reload
-    navigate(`/flights/results?${currentParams.toString()}`, { replace: true });
-  }, [navigate]);
+      // Update URL without page reload
+      navigate(`/flights/results?${currentParams.toString()}`, {
+        replace: true,
+      });
+    },
+    [navigate],
+  );
 
   // Handle city changes
-  const handleFromCityChange = useCallback((cityName: string) => {
-    setSelectedFromCity(cityName);
-    const cityCode = cityData[cityName]?.code || "";
-    updateFiltersAndSearch({ from: cityCode });
-  }, [updateFiltersAndSearch]);
+  const handleFromCityChange = useCallback(
+    (cityName: string) => {
+      setSelectedFromCity(cityName);
+      const cityCode = cityData[cityName]?.code || "";
+      updateFiltersAndSearch({ from: cityCode });
+    },
+    [updateFiltersAndSearch],
+  );
 
-  const handleToCityChange = useCallback((cityName: string) => {
-    setSelectedToCity(cityName);
-    const cityCode = cityData[cityName]?.code || "";
-    updateFiltersAndSearch({ to: cityCode });
-  }, [updateFiltersAndSearch]);
+  const handleToCityChange = useCallback(
+    (cityName: string) => {
+      setSelectedToCity(cityName);
+      const cityCode = cityData[cityName]?.code || "";
+      updateFiltersAndSearch({ to: cityCode });
+    },
+    [updateFiltersAndSearch],
+  );
 
   // Handle class change
-  const handleClassChange = useCallback((className: string) => {
-    setSelectedClass(className);
-    updateFiltersAndSearch({ class: className.toLowerCase() });
-  }, [updateFiltersAndSearch]);
+  const handleClassChange = useCallback(
+    (className: string) => {
+      setSelectedClass(className);
+      updateFiltersAndSearch({ class: className.toLowerCase() });
+    },
+    [updateFiltersAndSearch],
+  );
 
   // Handle trip type change
-  const handleTripTypeChange = useCallback((newTripType: "round-trip" | "one-way" | "multi-city") => {
-    setEditTripType(newTripType);
-    setTripType(newTripType); // Also update DateContext
-    updateFiltersAndSearch({ tripType: newTripType });
-  }, [updateFiltersAndSearch, setTripType]);
+  const handleTripTypeChange = useCallback(
+    (newTripType: "round-trip" | "one-way" | "multi-city") => {
+      setEditTripType(newTripType);
+      setTripType(newTripType); // Also update DateContext
+      updateFiltersAndSearch({ tripType: newTripType });
+    },
+    [updateFiltersAndSearch, setTripType],
+  );
 
   // Handle travelers change
-  const handleTravelersChange = useCallback((newTravelers: { adults: number; children: number }) => {
-    setTravelers(newTravelers);
-    updateFiltersAndSearch({
-      adults: newTravelers.adults.toString(),
-      children: newTravelers.children.toString()
-    });
-  }, [updateFiltersAndSearch]);
+  const handleTravelersChange = useCallback(
+    (newTravelers: { adults: number; children: number }) => {
+      setTravelers(newTravelers);
+      updateFiltersAndSearch({
+        adults: newTravelers.adults.toString(),
+        children: newTravelers.children.toString(),
+      });
+    },
+    [updateFiltersAndSearch],
+  );
 
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
     // Update booking context with current search parameters
     updateSearchParams({
       from: selectedFromCity,
       to: selectedToCity,
-      fromCode: Object.entries({
-        Mumbai: "BOM", Delhi: "DEL", Bangalore: "BLR", Chennai: "MAA", Kolkata: "CCU"
-      }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
-      toCode: Object.entries({
-        Dubai: "DXB", London: "LHR", "New York": "JFK", Singapore: "SIN", Tokyo: "NRT"
-      }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
+      fromCode:
+        Object.entries({
+          Mumbai: "BOM",
+          Delhi: "DEL",
+          Bangalore: "BLR",
+          Chennai: "MAA",
+          Kolkata: "CCU",
+        }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
+      toCode:
+        Object.entries({
+          Dubai: "DXB",
+          London: "LHR",
+          "New York": "JFK",
+          Singapore: "SIN",
+          Tokyo: "NRT",
+        }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
       departureDate: departureDate || "",
       returnDate: returnDate,
       tripType: tripType,
@@ -1409,7 +1448,6 @@ export default function FlightResults() {
     // Navigate to booking flow - context will provide all data
     navigate("/booking-flow");
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
@@ -2689,7 +2727,10 @@ export default function FlightResults() {
                         <div className="text-right relative">
                           <div className="flex items-center justify-end space-x-1">
                             <div className="text-lg font-bold text-gray-900">
-                              ₹{(flight.price?.amount || 0).toLocaleString("en-IN")}
+                              ₹
+                              {(flight.price?.amount || 0).toLocaleString(
+                                "en-IN",
+                              )}
                             </div>
                             <div className="relative group">
                               <button className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
@@ -2708,9 +2749,9 @@ export default function FlightResults() {
                                       </span>
                                       <span className="font-medium text-gray-900">
                                         ₹
-                                        {(flight.price?.breakdown?.baseFare || 0).toLocaleString(
-                                          "en-IN",
-                                        )}
+                                        {(
+                                          flight.price?.breakdown?.baseFare || 0
+                                        ).toLocaleString("en-IN")}
                                       </span>
                                     </div>
                                     <div className="flex justify-between items-center">
@@ -2720,7 +2761,8 @@ export default function FlightResults() {
                                       <span className="font-medium text-gray-900">
                                         ₹
                                         {(
-                                          (flight.price?.breakdown?.taxes || 0) +
+                                          (flight.price?.breakdown?.taxes ||
+                                            0) +
                                           (flight.price?.breakdown?.fees || 0)
                                         ).toLocaleString("en-IN")}
                                       </span>
@@ -2732,9 +2774,11 @@ export default function FlightResults() {
                                         </span>
                                         <span className="text-blue-600">
                                           ₹
-                                          {(flight.price?.breakdown?.total || flight.price?.amount || 0).toLocaleString(
-                                            "en-IN",
-                                          )}
+                                          {(
+                                            flight.price?.breakdown?.total ||
+                                            flight.price?.amount ||
+                                            0
+                                          ).toLocaleString("en-IN")}
                                         </span>
                                       </div>
                                     </div>
@@ -3602,7 +3646,12 @@ export default function FlightResults() {
                                             const fareType =
                                               flight.fareTypes?.find(
                                                 (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes?.[0] || { id: 'default', name: 'Economy', price: 0 };
+                                              ) ||
+                                                flight.fareTypes?.[0] || {
+                                                  id: "default",
+                                                  name: "Economy",
+                                                  price: 0,
+                                                };
                                             handleBooking(flight, fareType);
                                           }}
                                           className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 touch-manipulation"
@@ -3723,13 +3772,14 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  ���� Cancellation/Flight change
-                                                  charges are indicated per
-                                                  traveller. Clearing will stop
-                                                  accepting cancellation/change
-                                                  request if 72 hours before
-                                                  departure of the flight,
-                                                  depending on the airline.
+                                                  ���� Cancellation/Flight
+                                                  change charges are indicated
+                                                  per traveller. Clearing will
+                                                  stop accepting
+                                                  cancellation/change request if
+                                                  72 hours before departure of
+                                                  the flight, depending on the
+                                                  airline.
                                                 </p>
                                               </div>
                                             </div>
@@ -3857,7 +3907,12 @@ export default function FlightResults() {
                                             const fareType =
                                               flight.fareTypes?.find(
                                                 (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes?.[0] || { id: 'default', name: 'Economy', price: 0 };
+                                              ) ||
+                                                flight.fareTypes?.[0] || {
+                                                  id: "default",
+                                                  name: "Economy",
+                                                  price: 0,
+                                                };
                                             handleBooking(flight, fareType);
                                           }}
                                           className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 touch-manipulation"
@@ -4114,9 +4169,9 @@ export default function FlightResults() {
                                         change your flight.
                                       </p>
                                       <p>
-                                        �� Cancellation/Flight change charges are
-                                        indicated per traveller. Clearing will
-                                        stop accepting cancellation/change
+                                        �� Cancellation/Flight change charges
+                                        are indicated per traveller. Clearing
+                                        will stop accepting cancellation/change
                                         request if 72 hours before departure of
                                         the flight, depending on the airline.
                                       </p>
@@ -5506,12 +5561,26 @@ export default function FlightResults() {
                             updateSearchParams({
                               from: selectedFromCity,
                               to: selectedToCity,
-                              fromCode: Object.entries({
-                                Mumbai: "BOM", Delhi: "DEL", Bangalore: "BLR", Chennai: "MAA", Kolkata: "CCU"
-                              }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
-                              toCode: Object.entries({
-                                Dubai: "DXB", London: "LHR", "New York": "JFK", Singapore: "SIN", Tokyo: "NRT"
-                              }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
+                              fromCode:
+                                Object.entries({
+                                  Mumbai: "BOM",
+                                  Delhi: "DEL",
+                                  Bangalore: "BLR",
+                                  Chennai: "MAA",
+                                  Kolkata: "CCU",
+                                }).find(
+                                  ([city]) => city === selectedFromCity,
+                                )?.[1] || "BOM",
+                              toCode:
+                                Object.entries({
+                                  Dubai: "DXB",
+                                  London: "LHR",
+                                  "New York": "JFK",
+                                  Singapore: "SIN",
+                                  Tokyo: "NRT",
+                                }).find(
+                                  ([city]) => city === selectedToCity,
+                                )?.[1] || "DXB",
                               departureDate: departureDate || "",
                               returnDate: returnDate,
                               tripType: tripType,
@@ -5539,9 +5608,12 @@ export default function FlightResults() {
                               arrivalCity: selectedToCity,
                               departureDate: departureDate || "",
                               arrivalDate: departureDate || "",
-                              returnFlightNumber: bargainFlight.returnFlightNumber,
-                              returnDepartureTime: bargainFlight.returnDepartureTime,
-                              returnArrivalTime: bargainFlight.returnArrivalTime,
+                              returnFlightNumber:
+                                bargainFlight.returnFlightNumber,
+                              returnDepartureTime:
+                                bargainFlight.returnDepartureTime,
+                              returnArrivalTime:
+                                bargainFlight.returnArrivalTime,
                               returnDuration: bargainFlight.returnDuration,
                               returnDepartureDate: returnDate,
                               returnArrivalDate: returnDate,
@@ -5556,7 +5628,8 @@ export default function FlightResults() {
                               originalPrice: bargainFareType.price,
                               isRefundable: true, // Bargained fares get better refund terms
                               isBargained: true,
-                              includedBaggage: bargainFareType.includedBaggage || "23kg",
+                              includedBaggage:
+                                bargainFareType.includedBaggage || "23kg",
                               includedMeals: true, // Bargained fares include meals
                               seatSelection: true, // Bargained fares include seat selection
                               changes: { allowed: true, fee: 0 }, // Free changes for bargained fares
@@ -6135,9 +6208,7 @@ export default function FlightResults() {
                       Important Terms & Conditions
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
-                      <li>
-                        • Passenger names cannot be changed after booking
-                      </li>
+                      <li>• Passenger names cannot be changed after booking</li>
                       <li>
                         • Check-in must be completed 2 hours before departure
                       </li>
@@ -6284,9 +6355,9 @@ export default function FlightResults() {
         isOpen={showBargainModal}
         flight={selectedBargainFlight}
         selectedFareType={{
-          type: selectedBargainFlight?.fareTypes?.[0]?.name || 'Economy',
+          type: selectedBargainFlight?.fareTypes?.[0]?.name || "Economy",
           price: selectedBargainFlight?.fareTypes?.[0]?.price || 0,
-          features: selectedBargainFlight?.fareTypes?.[0]?.features || []
+          features: selectedBargainFlight?.fareTypes?.[0]?.features || [],
         }}
         onClose={handleBargainClose}
         onAccept={handleBargainAccept}
@@ -6295,7 +6366,9 @@ export default function FlightResults() {
         module="flights"
         onBackToResults={handleBargainClose}
         basePrice={selectedBargainFlight?.fareTypes?.[0]?.price || 0}
-        productRef={selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""}
+        productRef={
+          selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""
+        }
       />
     </div>
   );

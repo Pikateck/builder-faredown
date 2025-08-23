@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import BargainButton from "@/components/ui/BargainButton";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
-import { 
-  isMobileDevice, 
-  isIOS, 
-  isAndroid, 
-  isTouchDevice, 
+import {
+  isMobileDevice,
+  isIOS,
+  isAndroid,
+  isTouchDevice,
   hapticFeedback,
   getViewportHeight,
-  preventZoomOnInput
+  preventZoomOnInput,
 } from "@/lib/mobileUtils";
 import { Check, X, Smartphone, Monitor, Tablet } from "lucide-react";
 
@@ -36,7 +36,7 @@ export function MobileBargainTestSuite() {
     departureTime: "10:00",
     arrivalTime: "12:30",
     price: 25000,
-    duration: "3h 30m"
+    duration: "3h 30m",
   };
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function MobileBargainTestSuite() {
       screenHeight: window.screen.height,
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight,
-      pixelRatio: window.devicePixelRatio || 1
+      pixelRatio: window.devicePixelRatio || 1,
     });
   }, []);
 
@@ -64,15 +64,15 @@ export function MobileBargainTestSuite() {
     // Test 1: Device Detection
     results.push({
       test: "Device Detection",
-      passed: typeof isMobileDevice() === 'boolean',
-      details: `Mobile: ${isMobileDevice()}, iOS: ${isIOS()}, Android: ${isAndroid()}`
+      passed: typeof isMobileDevice() === "boolean",
+      details: `Mobile: ${isMobileDevice()}, iOS: ${isIOS()}, Android: ${isAndroid()}`,
     });
 
     // Test 2: Touch Device Detection
     results.push({
       test: "Touch Device Detection",
-      passed: typeof isTouchDevice() === 'boolean',
-      details: `Touch supported: ${isTouchDevice()}`
+      passed: typeof isTouchDevice() === "boolean",
+      details: `Touch supported: ${isTouchDevice()}`,
     });
 
     // Test 3: Viewport Height
@@ -80,7 +80,7 @@ export function MobileBargainTestSuite() {
     results.push({
       test: "Viewport Height Function",
       passed: viewportHeight > 0,
-      details: `Height: ${viewportHeight}px`
+      details: `Height: ${viewportHeight}px`,
     });
 
     // Test 4: Input Zoom Prevention
@@ -89,8 +89,8 @@ export function MobileBargainTestSuite() {
       const fontSize = window.getComputedStyle(inputRef.current).fontSize;
       results.push({
         test: "Input Zoom Prevention",
-        passed: fontSize === '16px',
-        details: `Font size: ${fontSize}`
+        passed: fontSize === "16px",
+        details: `Font size: ${fontSize}`,
       });
     }
 
@@ -100,67 +100,70 @@ export function MobileBargainTestSuite() {
       const minTouchTarget = 44; // iOS accessibility guidelines
       results.push({
         test: "Button Touch Target Size",
-        passed: buttonRect.height >= minTouchTarget && buttonRect.width >= minTouchTarget,
-        details: `Size: ${Math.round(buttonRect.width)}x${Math.round(buttonRect.height)}px`
+        passed:
+          buttonRect.height >= minTouchTarget &&
+          buttonRect.width >= minTouchTarget,
+        details: `Size: ${Math.round(buttonRect.width)}x${Math.round(buttonRect.height)}px`,
       });
     }
 
     // Test 6: CSS Custom Properties Support
-    const testElement = document.createElement('div');
-    testElement.style.setProperty('--test-property', 'test');
-    const supportsCustomProps = testElement.style.getPropertyValue('--test-property') === 'test';
+    const testElement = document.createElement("div");
+    testElement.style.setProperty("--test-property", "test");
+    const supportsCustomProps =
+      testElement.style.getPropertyValue("--test-property") === "test";
     results.push({
       test: "CSS Custom Properties",
       passed: supportsCustomProps,
-      details: `Supported: ${supportsCustomProps}`
+      details: `Supported: ${supportsCustomProps}`,
     });
 
     // Test 7: Touch Events Support
-    const supportsTouchEvents = 'ontouchstart' in window;
+    const supportsTouchEvents = "ontouchstart" in window;
     results.push({
       test: "Touch Events API",
       passed: supportsTouchEvents,
-      details: `Supported: ${supportsTouchEvents}`
+      details: `Supported: ${supportsTouchEvents}`,
     });
 
     // Test 8: Vibration API (for haptic feedback fallback)
-    const supportsVibration = 'vibrate' in navigator;
+    const supportsVibration = "vibrate" in navigator;
     results.push({
       test: "Vibration API",
       passed: true, // Not required, but nice to have
-      details: `Supported: ${supportsVibration}`
+      details: `Supported: ${supportsVibration}`,
     });
 
     // Test 9: CSS Grid Support
-    const supportsGrid = CSS.supports('display', 'grid');
+    const supportsGrid = CSS.supports("display", "grid");
     results.push({
       test: "CSS Grid Support",
       passed: supportsGrid,
-      details: `Supported: ${supportsGrid}`
+      details: `Supported: ${supportsGrid}`,
     });
 
     // Test 10: Flexbox Support
-    const supportsFlexbox = CSS.supports('display', 'flex');
+    const supportsFlexbox = CSS.supports("display", "flex");
     results.push({
       test: "CSS Flexbox Support",
       passed: supportsFlexbox,
-      details: `Supported: ${supportsFlexbox}`
+      details: `Supported: ${supportsFlexbox}`,
     });
 
     // Test 11: Intersection Observer (for scroll optimizations)
-    const supportsIntersectionObserver = 'IntersectionObserver' in window;
+    const supportsIntersectionObserver = "IntersectionObserver" in window;
     results.push({
       test: "Intersection Observer API",
       passed: supportsIntersectionObserver,
-      details: `Supported: ${supportsIntersectionObserver}`
+      details: `Supported: ${supportsIntersectionObserver}`,
     });
 
     // Test 12: CSS Transform3D (for hardware acceleration)
-    const supportsTransform3D = CSS.supports('transform', 'translate3d(0,0,0)');
+    const supportsTransform3D = CSS.supports("transform", "translate3d(0,0,0)");
     results.push({
       test: "CSS Transform3D",
       passed: supportsTransform3D,
-      details: `Supported: ${supportsTransform3D}`
+      details: `Supported: ${supportsTransform3D}`,
     });
 
     setTestResults(results);
@@ -168,7 +171,7 @@ export function MobileBargainTestSuite() {
   };
 
   const testHapticFeedback = () => {
-    hapticFeedback('medium');
+    hapticFeedback("medium");
   };
 
   const getDeviceIcon = () => {
@@ -181,7 +184,7 @@ export function MobileBargainTestSuite() {
     }
   };
 
-  const passedTests = testResults.filter(result => result.passed).length;
+  const passedTests = testResults.filter((result) => result.passed).length;
   const totalTests = testResults.length;
 
   return (
@@ -191,17 +194,40 @@ export function MobileBargainTestSuite() {
           {getDeviceIcon()}
           Mobile Bargain Feature Test Suite
         </h2>
-        
+
         {/* Device Information */}
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-gray-800 mb-3">Device Information</h3>
+          <h3 className="font-semibold text-gray-800 mb-3">
+            Device Information
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-            <div><strong>Device Type:</strong> {deviceInfo.isMobile ? 'Mobile' : 'Desktop'}</div>
-            <div><strong>Touch Device:</strong> {deviceInfo.isTouchDevice ? 'Yes' : 'No'}</div>
-            <div><strong>Operating System:</strong> {deviceInfo.isIOS ? 'iOS' : deviceInfo.isAndroid ? 'Android' : 'Other'}</div>
-            <div><strong>Screen Size:</strong> {deviceInfo.screenWidth}x{deviceInfo.screenHeight}</div>
-            <div><strong>Viewport Size:</strong> {deviceInfo.windowWidth}x{deviceInfo.windowHeight}</div>
-            <div><strong>Pixel Ratio:</strong> {deviceInfo.pixelRatio}</div>
+            <div>
+              <strong>Device Type:</strong>{" "}
+              {deviceInfo.isMobile ? "Mobile" : "Desktop"}
+            </div>
+            <div>
+              <strong>Touch Device:</strong>{" "}
+              {deviceInfo.isTouchDevice ? "Yes" : "No"}
+            </div>
+            <div>
+              <strong>Operating System:</strong>{" "}
+              {deviceInfo.isIOS
+                ? "iOS"
+                : deviceInfo.isAndroid
+                  ? "Android"
+                  : "Other"}
+            </div>
+            <div>
+              <strong>Screen Size:</strong> {deviceInfo.screenWidth}x
+              {deviceInfo.screenHeight}
+            </div>
+            <div>
+              <strong>Viewport Size:</strong> {deviceInfo.windowWidth}x
+              {deviceInfo.windowHeight}
+            </div>
+            <div>
+              <strong>Pixel Ratio:</strong> {deviceInfo.pixelRatio}
+            </div>
           </div>
         </div>
 
@@ -213,16 +239,16 @@ export function MobileBargainTestSuite() {
               disabled={isRunning}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
-              {isRunning ? 'Running Tests...' : 'Run All Tests'}
+              {isRunning ? "Running Tests..." : "Run All Tests"}
             </button>
-            
+
             <button
               onClick={testHapticFeedback}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
               Test Haptic Feedback
             </button>
-            
+
             <button
               onClick={() => setShowModal(true)}
               className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
@@ -251,7 +277,7 @@ export function MobileBargainTestSuite() {
             </label>
             <BargainButton
               ref={buttonRef}
-              onClick={() => console.log('Bargain button clicked!')}
+              onClick={() => console.log("Bargain button clicked!")}
               size="md"
             >
               Test Bargain Now
@@ -265,18 +291,22 @@ export function MobileBargainTestSuite() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-gray-800">Test Results</h3>
               <div className="text-sm">
-                <span className={`font-medium ${passedTests === totalTests ? 'text-green-600' : 'text-yellow-600'}`}>
+                <span
+                  className={`font-medium ${passedTests === totalTests ? "text-green-600" : "text-yellow-600"}`}
+                >
                   {passedTests}/{totalTests} tests passed
                 </span>
               </div>
             </div>
-            
+
             <div className="space-y-2">
               {testResults.map((result, index) => (
                 <div
                   key={index}
                   className={`flex items-start gap-3 p-3 rounded-lg ${
-                    result.passed ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+                    result.passed
+                      ? "bg-green-50 border border-green-200"
+                      : "bg-red-50 border border-red-200"
                   }`}
                 >
                   {result.passed ? (
@@ -285,11 +315,15 @@ export function MobileBargainTestSuite() {
                     <X className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   )}
                   <div className="flex-1">
-                    <div className={`font-medium ${result.passed ? 'text-green-800' : 'text-red-800'}`}>
+                    <div
+                      className={`font-medium ${result.passed ? "text-green-800" : "text-red-800"}`}
+                    >
                       {result.test}
                     </div>
                     {result.details && (
-                      <div className={`text-sm ${result.passed ? 'text-green-600' : 'text-red-600'}`}>
+                      <div
+                        className={`text-sm ${result.passed ? "text-green-600" : "text-red-600"}`}
+                      >
                         {result.details}
                       </div>
                     )}
@@ -302,7 +336,9 @@ export function MobileBargainTestSuite() {
 
         {/* Usage Instructions */}
         <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-medium text-blue-800 mb-2">Testing Instructions:</h4>
+          <h4 className="font-medium text-blue-800 mb-2">
+            Testing Instructions:
+          </h4>
           <ul className="text-sm text-blue-700 space-y-1">
             <li>• Run on actual mobile devices for accurate results</li>
             <li>• Test with Chrome DevTools mobile simulation</li>
@@ -320,11 +356,11 @@ export function MobileBargainTestSuite() {
         flight={mockFlight}
         onClose={() => setShowModal(false)}
         onAccept={(price, orderRef) => {
-          console.log('Accepted:', price, orderRef);
+          console.log("Accepted:", price, orderRef);
           setShowModal(false);
         }}
         onHold={(orderRef) => {
-          console.log('Hold created:', orderRef);
+          console.log("Hold created:", orderRef);
         }}
         userName="Test User"
         module="flights"

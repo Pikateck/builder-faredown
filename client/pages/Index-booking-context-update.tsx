@@ -13,7 +13,7 @@ const handleFlightSearch = () => {
     from: fromCity,
     to: toCity,
     fromCode: fromCityCode,
-    toCode: toCityCode, 
+    toCode: toCityCode,
     departureDate: departureDate,
     returnDate: returnDate,
     tripType: tripType,

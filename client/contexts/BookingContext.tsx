@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Types for comprehensive booking state
 export interface SearchParams {
@@ -9,13 +15,13 @@ export interface SearchParams {
   toCode: string;
   departureDate: string;
   returnDate?: string;
-  tripType: 'one-way' | 'round-trip';
+  tripType: "one-way" | "round-trip";
   passengers: {
     adults: number;
     children: number;
     infants: number;
   };
-  class: 'economy' | 'premium-economy' | 'business' | 'first';
+  class: "economy" | "premium-economy" | "business" | "first";
   airline?: string;
   preferredFare?: string;
 }
@@ -46,7 +52,7 @@ export interface SelectedFlight {
 export interface SelectedFare {
   id: string;
   name: string;
-  type: 'economy' | 'premium-economy' | 'business' | 'first';
+  type: "economy" | "premium-economy" | "business" | "first";
   price: number;
   originalPrice?: number;
   isRefundable: boolean;
@@ -66,7 +72,7 @@ export interface SelectedFare {
 
 export interface Traveller {
   id: number;
-  type: 'Adult' | 'Child' | 'Infant';
+  type: "Adult" | "Child" | "Infant";
   title: string;
   firstName: string;
   middleName?: string;
@@ -115,7 +121,7 @@ export interface BookingExtras {
   insurance: {
     refundProtection: boolean;
     refundProtectionCost: number;
-    baggageProtection: 'none' | 'bronze' | 'gold';
+    baggageProtection: "none" | "bronze" | "gold";
     baggageProtectionCost: number;
   };
   otherServices: Array<{
@@ -147,7 +153,7 @@ export interface BookingState {
   currentStep: number;
   isComplete: boolean;
   bookingId?: string;
-  paymentStatus?: 'pending' | 'processing' | 'completed' | 'failed';
+  paymentStatus?: "pending" | "processing" | "completed" | "failed";
 }
 
 interface BookingContextType {
@@ -170,26 +176,26 @@ const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
 const initialBookingState: BookingState = {
   searchParams: {
-    from: '',
-    to: '',
-    fromCode: '',
-    toCode: '',
-    departureDate: '',
-    tripType: 'round-trip',
+    from: "",
+    to: "",
+    fromCode: "",
+    toCode: "",
+    departureDate: "",
+    tripType: "round-trip",
     passengers: {
       adults: 1,
       children: 0,
       infants: 0,
     },
-    class: 'economy',
+    class: "economy",
   },
   selectedFlight: null,
   selectedFare: null,
   travellers: [],
   contactDetails: {
-    email: '',
-    phone: '',
-    countryCode: '+91',
+    email: "",
+    phone: "",
+    countryCode: "+91",
   },
   extras: {
     meals: [],
@@ -198,7 +204,7 @@ const initialBookingState: BookingState = {
     insurance: {
       refundProtection: false,
       refundProtectionCost: 0,
-      baggageProtection: 'none',
+      baggageProtection: "none",
       baggageProtectionCost: 0,
     },
     otherServices: [],
@@ -221,13 +227,13 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   const [booking, setBooking] = useState<BookingState>(() => {
     // Try to restore from localStorage
     try {
-      const saved = localStorage.getItem('faredown_booking_state');
+      const saved = localStorage.getItem("faredown_booking_state");
       if (saved) {
         const parsed = JSON.parse(saved);
         return { ...initialBookingState, ...parsed };
       }
     } catch (error) {
-      console.warn('Failed to restore booking state:', error);
+      console.warn("Failed to restore booking state:", error);
     }
     return initialBookingState;
   });
@@ -238,9 +244,9 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   // Save to localStorage whenever booking state changes
   useEffect(() => {
     try {
-      localStorage.setItem('faredown_booking_state', JSON.stringify(booking));
+      localStorage.setItem("faredown_booking_state", JSON.stringify(booking));
     } catch (error) {
-      console.warn('Failed to save booking state:', error);
+      console.warn("Failed to save booking state:", error);
     }
   }, [booking]);
 
@@ -249,37 +255,47 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     const newSearchParams: Partial<SearchParams> = {};
 
     // Extract search parameters
-    if (urlParams.get('from')) newSearchParams.from = urlParams.get('from')!;
-    if (urlParams.get('to')) newSearchParams.to = urlParams.get('to')!;
-    if (urlParams.get('fromCode')) newSearchParams.fromCode = urlParams.get('fromCode')!;
-    if (urlParams.get('toCode')) newSearchParams.toCode = urlParams.get('toCode')!;
-    if (urlParams.get('departureDate')) newSearchParams.departureDate = urlParams.get('departureDate')!;
-    if (urlParams.get('returnDate')) newSearchParams.returnDate = urlParams.get('returnDate')!;
-    if (urlParams.get('tripType')) newSearchParams.tripType = urlParams.get('tripType') as 'one-way' | 'round-trip';
-    if (urlParams.get('class')) newSearchParams.class = urlParams.get('class') as any;
-    if (urlParams.get('airline')) newSearchParams.airline = urlParams.get('airline')!;
+    if (urlParams.get("from")) newSearchParams.from = urlParams.get("from")!;
+    if (urlParams.get("to")) newSearchParams.to = urlParams.get("to")!;
+    if (urlParams.get("fromCode"))
+      newSearchParams.fromCode = urlParams.get("fromCode")!;
+    if (urlParams.get("toCode"))
+      newSearchParams.toCode = urlParams.get("toCode")!;
+    if (urlParams.get("departureDate"))
+      newSearchParams.departureDate = urlParams.get("departureDate")!;
+    if (urlParams.get("returnDate"))
+      newSearchParams.returnDate = urlParams.get("returnDate")!;
+    if (urlParams.get("tripType"))
+      newSearchParams.tripType = urlParams.get("tripType") as
+        | "one-way"
+        | "round-trip";
+    if (urlParams.get("class"))
+      newSearchParams.class = urlParams.get("class") as any;
+    if (urlParams.get("airline"))
+      newSearchParams.airline = urlParams.get("airline")!;
 
     // Extract passenger counts
-    const adults = parseInt(urlParams.get('adults') || '1');
-    const children = parseInt(urlParams.get('children') || '0');
-    const infants = parseInt(urlParams.get('infants') || '0');
-    
+    const adults = parseInt(urlParams.get("adults") || "1");
+    const children = parseInt(urlParams.get("children") || "0");
+    const infants = parseInt(urlParams.get("infants") || "0");
+
     newSearchParams.passengers = { adults, children, infants };
 
     // Update booking state
-    setBooking(prev => ({
+    setBooking((prev) => ({
       ...prev,
-      searchParams: { ...prev.searchParams, ...newSearchParams }
+      searchParams: { ...prev.searchParams, ...newSearchParams },
     }));
   };
 
   // Load from location state (from flight results selection)
   useEffect(() => {
     if (location.state) {
-      const { selectedFlight, selectedFareType, negotiatedPrice, passengers } = location.state;
+      const { selectedFlight, selectedFareType, negotiatedPrice, passengers } =
+        location.state;
 
       if (selectedFlight) {
-        setBooking(prev => ({
+        setBooking((prev) => ({
           ...prev,
           selectedFlight: {
             id: selectedFlight.id || `flight_${Date.now()}`,
@@ -288,13 +304,16 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             departureTime: selectedFlight.departureTime,
             arrivalTime: selectedFlight.arrivalTime,
             duration: selectedFlight.duration,
-            aircraft: selectedFlight.aircraft || 'Aircraft',
+            aircraft: selectedFlight.aircraft || "Aircraft",
             stops: selectedFlight.stops || 0,
-            departureCode: selectedFlight.departureCode || prev.searchParams.fromCode,
+            departureCode:
+              selectedFlight.departureCode || prev.searchParams.fromCode,
             arrivalCode: selectedFlight.arrivalCode || prev.searchParams.toCode,
-            departureCity: selectedFlight.departureCity || prev.searchParams.from,
+            departureCity:
+              selectedFlight.departureCity || prev.searchParams.from,
             arrivalCity: selectedFlight.arrivalCity || prev.searchParams.to,
-            departureDate: selectedFlight.departureDate || prev.searchParams.departureDate,
+            departureDate:
+              selectedFlight.departureDate || prev.searchParams.departureDate,
             arrivalDate: selectedFlight.arrivalDate,
             returnFlightNumber: selectedFlight.returnFlightNumber,
             returnDepartureTime: selectedFlight.returnDepartureTime,
@@ -302,32 +321,32 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             returnDuration: selectedFlight.returnDuration,
             returnDepartureDate: selectedFlight.returnDepartureDate,
             returnArrivalDate: selectedFlight.returnArrivalDate,
-          }
+          },
         }));
       }
 
       if (selectedFareType) {
-        setBooking(prev => ({
+        setBooking((prev) => ({
           ...prev,
           selectedFare: {
             id: selectedFareType.id || `fare_${Date.now()}`,
             name: selectedFareType.name,
-            type: selectedFareType.type || 'economy',
+            type: selectedFareType.type || "economy",
             price: negotiatedPrice || selectedFareType.price,
             originalPrice: negotiatedPrice ? selectedFareType.price : undefined,
             isRefundable: selectedFareType.isRefundable || false,
             isBargained: !!negotiatedPrice,
-            includedBaggage: selectedFareType.includedBaggage || '23kg',
+            includedBaggage: selectedFareType.includedBaggage || "23kg",
             includedMeals: selectedFareType.includedMeals || false,
             seatSelection: selectedFareType.seatSelection || false,
             changes: selectedFareType.changes || { allowed: false },
             cancellation: selectedFareType.cancellation || { allowed: false },
-          }
+          },
         }));
       }
 
       if (passengers) {
-        setBooking(prev => ({
+        setBooking((prev) => ({
           ...prev,
           searchParams: {
             ...prev.searchParams,
@@ -335,8 +354,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
               adults: passengers.adults || 1,
               children: passengers.children || 0,
               infants: passengers.infants || 0,
-            }
-          }
+            },
+          },
         }));
       }
     }
@@ -351,79 +370,95 @@ export function BookingProvider({ children }: { children: ReactNode }) {
   }, [location.search]);
 
   const updateSearchParams = (params: Partial<SearchParams>) => {
-    setBooking(prev => ({
+    setBooking((prev) => ({
       ...prev,
-      searchParams: { ...prev.searchParams, ...params }
+      searchParams: { ...prev.searchParams, ...params },
     }));
   };
 
   const setSelectedFlight = (flight: SelectedFlight) => {
-    setBooking(prev => ({ ...prev, selectedFlight: flight }));
+    setBooking((prev) => ({ ...prev, selectedFlight: flight }));
   };
 
   const setSelectedFare = (fare: SelectedFare) => {
-    setBooking(prev => ({ ...prev, selectedFare: fare }));
+    setBooking((prev) => ({ ...prev, selectedFare: fare }));
     // Recalculate price breakdown when fare changes
     updatePriceBreakdown({});
   };
 
   const updateTravellers = (travellers: Traveller[]) => {
-    setBooking(prev => ({ ...prev, travellers }));
+    setBooking((prev) => ({ ...prev, travellers }));
   };
 
   const updateContactDetails = (contact: ContactDetails) => {
-    setBooking(prev => ({ ...prev, contactDetails: contact }));
+    setBooking((prev) => ({ ...prev, contactDetails: contact }));
   };
 
   const updateExtras = (extras: Partial<BookingExtras>) => {
-    setBooking(prev => ({
+    setBooking((prev) => ({
       ...prev,
-      extras: { ...prev.extras, ...extras }
+      extras: { ...prev.extras, ...extras },
     }));
     // Recalculate price breakdown when extras change
     setTimeout(() => updatePriceBreakdown({}), 0);
   };
 
   const updatePriceBreakdown = (prices: Partial<PriceBreakdown>) => {
-    setBooking(prev => {
+    setBooking((prev) => {
       const passengers = prev.searchParams.passengers;
-      const totalPassengers = passengers.adults + passengers.children + passengers.infants;
+      const totalPassengers =
+        passengers.adults + passengers.children + passengers.infants;
       const fare = prev.selectedFare;
-      
+
       if (!fare) return prev;
 
       // Calculate base fare
       const adultFare = fare.price;
       const childFare = fare.price * 0.75; // 75% of adult fare
       const infantFare = fare.price * 0.1; // 10% of adult fare
-      
-      const baseFare = (passengers.adults * adultFare) + 
-                      (passengers.children * childFare) + 
-                      (passengers.infants * infantFare);
+
+      const baseFare =
+        passengers.adults * adultFare +
+        passengers.children * childFare +
+        passengers.infants * infantFare;
 
       // Calculate taxes (18% of base fare)
       const taxes = baseFare * 0.18;
-      
+
       // Calculate fees (airport charges, fuel surcharge, etc.)
       const fees = baseFare * 0.05;
 
       // Calculate extras total
-      const extrasTotal = prev.extras.meals.reduce((sum, meal) => sum + meal.price, 0) +
-                         prev.extras.baggage.reduce((sum, bag) => sum + (bag.price * bag.quantity), 0) +
-                         prev.extras.otherServices.reduce((sum, service) => sum + service.price, 0);
+      const extrasTotal =
+        prev.extras.meals.reduce((sum, meal) => sum + meal.price, 0) +
+        prev.extras.baggage.reduce(
+          (sum, bag) => sum + bag.price * bag.quantity,
+          0,
+        ) +
+        prev.extras.otherServices.reduce(
+          (sum, service) => sum + service.price,
+          0,
+        );
 
       // Calculate seats total
-      const seatsTotal = prev.extras.seats.reduce((sum, seat) => sum + seat.price, 0);
+      const seatsTotal = prev.extras.seats.reduce(
+        (sum, seat) => sum + seat.price,
+        0,
+      );
 
       // Calculate insurance total
-      const insuranceTotal = prev.extras.insurance.refundProtectionCost + 
-                            prev.extras.insurance.baggageProtectionCost;
+      const insuranceTotal =
+        prev.extras.insurance.refundProtectionCost +
+        prev.extras.insurance.baggageProtectionCost;
 
       // Calculate savings if bargained
-      const savings = fare.isBargained && fare.originalPrice ? 
-                     ((fare.originalPrice - fare.price) * totalPassengers) : 0;
+      const savings =
+        fare.isBargained && fare.originalPrice
+          ? (fare.originalPrice - fare.price) * totalPassengers
+          : 0;
 
-      const total = baseFare + taxes + fees + extrasTotal + seatsTotal + insuranceTotal;
+      const total =
+        baseFare + taxes + fees + extrasTotal + seatsTotal + insuranceTotal;
 
       const newPriceBreakdown: PriceBreakdown = {
         baseFare,
@@ -434,42 +469,50 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         insurance: insuranceTotal,
         total,
         savings,
-        ...prices
+        ...prices,
       };
 
       return {
         ...prev,
-        priceBreakdown: newPriceBreakdown
+        priceBreakdown: newPriceBreakdown,
       };
     });
   };
 
   const setCurrentStep = (step: number) => {
-    setBooking(prev => ({ ...prev, currentStep: step }));
+    setBooking((prev) => ({ ...prev, currentStep: step }));
   };
 
   const completeBooking = (bookingId: string) => {
-    setBooking(prev => ({
+    setBooking((prev) => ({
       ...prev,
       isComplete: true,
       bookingId,
-      paymentStatus: 'completed'
+      paymentStatus: "completed",
     }));
   };
 
   const resetBooking = () => {
     setBooking(initialBookingState);
-    localStorage.removeItem('faredown_booking_state');
+    localStorage.removeItem("faredown_booking_state");
   };
 
   const generateBookingData = () => {
-    const { searchParams, selectedFlight, selectedFare, travellers, contactDetails, extras, priceBreakdown } = booking;
-    
+    const {
+      searchParams,
+      selectedFlight,
+      selectedFare,
+      travellers,
+      contactDetails,
+      extras,
+      priceBreakdown,
+    } = booking;
+
     return {
       id: booking.bookingId || `FD${Date.now().toString().slice(-8)}`,
-      type: 'flight',
+      type: "flight",
       bookingDate: new Date().toISOString(),
-      
+
       // Search parameters
       route: {
         from: searchParams.from,
@@ -479,23 +522,26 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         tripType: searchParams.tripType,
         class: searchParams.class,
       },
-      
+
       // Dates
       departureDate: searchParams.departureDate,
       returnDate: searchParams.returnDate,
-      
+
       // Passengers
       passengers: {
         adults: searchParams.passengers.adults,
         children: searchParams.passengers.children,
         infants: searchParams.passengers.infants,
-        total: searchParams.passengers.adults + searchParams.passengers.children + searchParams.passengers.infants,
+        total:
+          searchParams.passengers.adults +
+          searchParams.passengers.children +
+          searchParams.passengers.infants,
       },
-      
+
       // Flight details
       flights: [
         {
-          type: 'outbound',
+          type: "outbound",
           airline: selectedFlight?.airline,
           flightNumber: selectedFlight?.flightNumber,
           aircraft: selectedFlight?.aircraft,
@@ -514,28 +560,33 @@ export function BookingProvider({ children }: { children: ReactNode }) {
           duration: selectedFlight?.duration,
           stops: selectedFlight?.stops,
         },
-        ...(searchParams.tripType === 'round-trip' && selectedFlight?.returnFlightNumber ? [{
-          type: 'return',
-          airline: selectedFlight.airline,
-          flightNumber: selectedFlight.returnFlightNumber,
-          aircraft: selectedFlight.aircraft,
-          departure: {
-            city: selectedFlight.arrivalCity,
-            code: selectedFlight.arrivalCode,
-            time: selectedFlight.returnDepartureTime,
-            date: selectedFlight.returnDepartureDate,
-          },
-          arrival: {
-            city: selectedFlight.departureCity,
-            code: selectedFlight.departureCode,
-            time: selectedFlight.returnArrivalTime,
-            date: selectedFlight.returnArrivalDate,
-          },
-          duration: selectedFlight.returnDuration,
-          stops: selectedFlight.stops,
-        }] : [])
+        ...(searchParams.tripType === "round-trip" &&
+        selectedFlight?.returnFlightNumber
+          ? [
+              {
+                type: "return",
+                airline: selectedFlight.airline,
+                flightNumber: selectedFlight.returnFlightNumber,
+                aircraft: selectedFlight.aircraft,
+                departure: {
+                  city: selectedFlight.arrivalCity,
+                  code: selectedFlight.arrivalCode,
+                  time: selectedFlight.returnDepartureTime,
+                  date: selectedFlight.returnDepartureDate,
+                },
+                arrival: {
+                  city: selectedFlight.departureCity,
+                  code: selectedFlight.departureCode,
+                  time: selectedFlight.returnArrivalTime,
+                  date: selectedFlight.returnArrivalDate,
+                },
+                duration: selectedFlight.returnDuration,
+                stops: selectedFlight.stops,
+              },
+            ]
+          : []),
       ],
-      
+
       // Fare details
       fare: {
         type: selectedFare?.type,
@@ -545,9 +596,9 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         originalPrice: selectedFare?.originalPrice,
         finalPrice: selectedFare?.price,
       },
-      
+
       // Traveller details
-      travellers: travellers.map(t => ({
+      travellers: travellers.map((t) => ({
         id: t.id,
         type: t.type,
         name: {
@@ -571,26 +622,26 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         },
         contact: t.id === 1 ? contactDetails : undefined, // Primary traveller gets contact details
       })),
-      
+
       // Contact details
       contactDetails,
-      
+
       // Extras
       extras,
-      
+
       // Price breakdown
       pricing: priceBreakdown,
-      
+
       // Booking status
-      status: 'confirmed',
-      paymentStatus: booking.paymentStatus || 'completed',
-      
+      status: "confirmed",
+      paymentStatus: booking.paymentStatus || "completed",
+
       // Additional metadata
       metadata: {
         userAgent: navigator.userAgent,
         timestamp: Date.now(),
-        source: 'faredown_web',
-      }
+        source: "faredown_web",
+      },
     };
   };
 
@@ -620,7 +671,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
 export function useBooking() {
   const context = useContext(BookingContext);
   if (context === undefined) {
-    throw new Error('useBooking must be used within a BookingProvider');
+    throw new Error("useBooking must be used within a BookingProvider");
   }
   return context;
 }

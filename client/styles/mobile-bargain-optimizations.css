@@ -23,7 +23,7 @@
     margin: 0 !important;
     transform: none !important;
   }
-  
+
   /* Ensure proper z-index for mobile modal */
   .mobile-modal .dialog-content {
     z-index: 60;
@@ -92,7 +92,7 @@
   .keyboard-visible {
     padding-bottom: env(keyboard-inset-height, 0px);
   }
-  
+
   /* Adjust modal height when keyboard is visible */
   .mobile-modal.keyboard-visible {
     max-height: calc(100vh - env(keyboard-inset-height, 0px));
@@ -134,7 +134,9 @@
 
 /* Mobile timer styling */
 .mobile-timer {
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', monospace;
+  font-family:
+    "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", "Courier New",
+    monospace;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
@@ -165,7 +167,7 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   .typing-indicator {
     animation: none;
   }
@@ -176,7 +178,7 @@
   .mobile-bargain-modal {
     border: 2px solid;
   }
-  
+
   .chat-message-bubble {
     border: 1px solid;
   }
@@ -188,7 +190,7 @@
     background-color: #1f2937;
     color: #f9fafb;
   }
-  
+
   .mobile-input {
     background-color: #374151;
     color: #f9fafb;
@@ -198,7 +200,12 @@
 
 /* Loading state optimizations */
 .loading-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }

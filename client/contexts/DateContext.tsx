@@ -18,7 +18,9 @@ interface DateContextType {
   formatDisplayDate: (date: Date | null, format?: string) => string;
   getUrlDateString: (date: Date | null) => string;
   loadDatesFromParams: (searchParams: URLSearchParams) => void;
-  getSearchParams: (additionalParams?: Record<string, string>) => URLSearchParams;
+  getSearchParams: (
+    additionalParams?: Record<string, string>,
+  ) => URLSearchParams;
 }
 
 const DateContext = createContext<DateContextType | undefined>(undefined);
@@ -123,30 +125,33 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
     [tripType],
   );
 
-  const getSearchParams = useCallback((additionalParams?: Record<string, string>) => {
-    const params = new URLSearchParams();
+  const getSearchParams = useCallback(
+    (additionalParams?: Record<string, string>) => {
+      const params = new URLSearchParams();
 
-    if (departureDate) {
-      params.set("departureDate", getUrlDateString(departureDate));
-    }
+      if (departureDate) {
+        params.set("departureDate", getUrlDateString(departureDate));
+      }
 
-    if (returnDate && tripType === "round-trip") {
-      params.set("returnDate", getUrlDateString(returnDate));
-    }
+      if (returnDate && tripType === "round-trip") {
+        params.set("returnDate", getUrlDateString(returnDate));
+      }
 
-    params.set("tripType", tripType);
+      params.set("tripType", tripType);
 
-    // Add any additional parameters passed in
-    if (additionalParams) {
-      Object.entries(additionalParams).forEach(([key, value]) => {
-        if (value) {
-          params.set(key, value);
-        }
-      });
-    }
+      // Add any additional parameters passed in
+      if (additionalParams) {
+        Object.entries(additionalParams).forEach(([key, value]) => {
+          if (value) {
+            params.set(key, value);
+          }
+        });
+      }
 
-    return params;
-  }, [departureDate, returnDate, tripType, getUrlDateString]);
+      return params;
+    },
+    [departureDate, returnDate, tripType, getUrlDateString],
+  );
 
   const value: DateContextType = {
     departureDate,

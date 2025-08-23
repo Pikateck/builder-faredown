@@ -10,38 +10,43 @@
   --bargain-radius: 9999px;
   --bargain-shadow-color: rgb(254 187 2 / 0.3);
   --bargain-shadow-hover: rgb(254 187 2 / 0.5);
-  
+
   /* Locked base styles - high specificity to prevent overrides */
-  background: linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end)) !important;
+  background: linear-gradient(
+    135deg,
+    var(--bargain-bg-start),
+    var(--bargain-bg-end)
+  ) !important;
   color: var(--bargain-text) !important;
   border-radius: var(--bargain-radius) !important;
   font-weight: 700 !important;
   border: none !important;
   outline: none !important;
-  
+
   /* Advanced shadow system */
-  box-shadow: 
+  box-shadow:
     0 10px 25px -3px var(--bargain-shadow-color),
     0 4px 6px -2px rgb(254 187 2 / 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-    
+
   /* Performance optimizations */
   transform: translateZ(0);
   will-change: transform, box-shadow;
   backface-visibility: hidden;
-  
+
   /* Smooth transitions */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  
+
   /* Typography */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   letter-spacing: 0.025em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  
+
   /* Ensure minimum touch target */
   min-height: 44px;
   min-width: 44px;
-  
+
   /* Touch optimizations */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -78,7 +83,7 @@
 /* Hover state enhancements */
 .bargain-button-locked:hover {
   transform: translateY(-2px) scale(1.02) !important;
-  box-shadow: 
+  box-shadow:
     0 15px 35px -3px var(--bargain-shadow-hover),
     0 8px 15px -2px rgb(254 187 2 / 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
@@ -87,7 +92,7 @@
 /* Active/pressed state */
 .bargain-button-locked:active {
   transform: translateY(0) scale(0.98) !important;
-  box-shadow: 
+  box-shadow:
     0 5px 15px -3px var(--bargain-shadow-color),
     0 2px 4px -2px rgb(254 187 2 / 0.1),
     inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
@@ -97,7 +102,7 @@
 /* Focus state for accessibility */
 .bargain-button-locked:focus {
   outline: none !important;
-  box-shadow: 
+  box-shadow:
     0 10px 25px -3px var(--bargain-shadow-color),
     0 4px 6px -2px rgb(254 187 2 / 0.1),
     0 0 0 4px rgba(254, 187, 2, 0.3) !important;
@@ -108,7 +113,7 @@
   opacity: 0.6 !important;
   cursor: not-allowed !important;
   transform: none !important;
-  box-shadow: 
+  box-shadow:
     0 4px 8px -2px rgba(0, 0, 0, 0.1),
     0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
 }
@@ -164,17 +169,17 @@
 
 @keyframes pulse {
   0% {
-    box-shadow: 
+    box-shadow:
       0 10px 25px -3px var(--bargain-shadow-color),
       0 4px 6px -2px rgb(254 187 2 / 0.1);
   }
   50% {
-    box-shadow: 
+    box-shadow:
       0 15px 35px -3px var(--bargain-shadow-hover),
       0 8px 15px -2px rgb(254 187 2 / 0.3);
   }
   100% {
-    box-shadow: 
+    box-shadow:
       0 10px 25px -3px var(--bargain-shadow-color),
       0 4px 6px -2px rgb(254 187 2 / 0.1);
   }
@@ -182,7 +187,7 @@
 
 /* Glow effect variant */
 .bargain-button-glow {
-  box-shadow: 
+  box-shadow:
     0 10px 25px -3px var(--bargain-shadow-color),
     0 4px 6px -2px rgb(254 187 2 / 0.1),
     0 0 20px rgba(254, 187, 2, 0.4) !important;
@@ -225,7 +230,9 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition:
+    width 0.6s,
+    height 0.6s;
 }
 
 .bargain-button-ripple:active::after {
@@ -241,12 +248,12 @@
     font-size: 16px !important; /* Prevent iOS zoom */
     padding: 12px 20px !important;
   }
-  
+
   /* Reduce hover effects on touch devices */
   .bargain-button-locked:hover {
     transform: none !important;
   }
-  
+
   /* Enhanced active state for touch */
   .bargain-button-locked:active {
     transform: scale(0.95) !important;
@@ -270,11 +277,11 @@
     animation: none !important;
     transform: none !important;
   }
-  
+
   .bargain-button-locked:hover {
     transform: none !important;
   }
-  
+
   .bargain-button-locked:active {
     transform: scale(0.98) !important;
   }
@@ -306,7 +313,7 @@
     box-shadow: none !important;
     border: 1px solid #f4a902 !important;
   }
-  
+
   .bargain-button-locked::before {
     display: none;
   }

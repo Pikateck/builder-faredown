@@ -13,17 +13,17 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
   },
   esbuild: {
-    drop: mode === 'production' ? ['console', 'debugger'] : [],
+    drop: mode === "production" ? ["console", "debugger"] : [],
   },
   define: {
-    'process.env.NODE_ENV': '"production"',
-    '__DEV__': false,
+    "process.env.NODE_ENV": '"production"',
+    __DEV__: false,
   },
   plugins: [
     react({
       jsxRuntime: "automatic",
     }),
-    ...(mode === "development" ? [expressPlugin()] : [])
+    ...(mode === "development" ? [expressPlugin()] : []),
   ],
   resolve: {
     alias: {

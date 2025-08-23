@@ -983,7 +983,6 @@ export default function Index() {
               </p>
             </div>
 
-
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
               <button
@@ -2170,8 +2169,12 @@ export default function Index() {
                       <Button
                         onClick={() => {
                           // Get city codes for from/to
-                          const fromCode = selectedFromCity ? cityData[selectedFromCity]?.code || "" : "";
-                          const toCode = selectedToCity ? cityData[selectedToCity]?.code || "" : "";
+                          const fromCode = selectedFromCity
+                            ? cityData[selectedFromCity]?.code || ""
+                            : "";
+                          const toCode = selectedToCity
+                            ? cityData[selectedToCity]?.code || ""
+                            : "";
 
                           const additionalParams: Record<string, string> = {
                             adults: travelers.adults.toString(),
@@ -2182,10 +2185,12 @@ export default function Index() {
                           };
 
                           if (tripType === "multi-city") {
-                            additionalParams.segments = JSON.stringify(flightSegments);
+                            additionalParams.segments =
+                              JSON.stringify(flightSegments);
                           }
 
-                          const searchParams = getSearchParams(additionalParams);
+                          const searchParams =
+                            getSearchParams(additionalParams);
                           navigate(
                             `/flights/results?${searchParams.toString()}`,
                           );

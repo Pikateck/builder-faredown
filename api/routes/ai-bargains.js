@@ -15,10 +15,10 @@ const rateLimit = require("express-rate-limit");
 const bargainRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 20, // limit each IP to 20 bargain requests per minute
-  message: { 
-    error: "Too many bargain attempts", 
+  message: {
+    error: "Too many bargain attempts",
     code: "RATE_LIMIT_EXCEEDED",
-    retryAfter: 60 
+    retryAfter: 60,
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -30,7 +30,7 @@ router.use(bargainRateLimit);
 /**
  * POST /bargains/quote
  * Core AI bargaining endpoint - atomic decision in one call
- * 
+ *
  * Request Body:
  * {
  *   module: "flights" | "hotels" | "sightseeing" | "transfers",
@@ -45,7 +45,7 @@ router.use(bargainRateLimit);
  */
 router.post("/quote", async (req, res) => {
   const startTime = Date.now();
-  
+
   try {
     const {
       module,
@@ -56,13 +56,14 @@ router.post("/quote", async (req, res) => {
       userId,
       routeInfo = {},
       departureDate,
-      attemptNumber = 1
+      attemptNumber = 1,
     } = req.body;
 
     // Validation
     if (!module || !productRef || !userOffer || !basePrice) {
       return res.status(400).json({
-        error: "Missing required fields: module, productRef, userOffer, basePrice",
+        error:
+          "Missing required fields: module, productRef, userOffer, basePrice",
         code: "INVALID_REQUEST",
       });
     }
@@ -86,33 +87,38 @@ router.post("/quote", async (req, res) => {
 
     // AI Decision Logic
     const discountPercentage = (basePrice - userOffer) / basePrice;
-    
+
     // Acceptance probability based on discount percentage
     let acceptanceChance;
-    if (discountPercentage <= 0.2) { // 20% or less discount
+    if (discountPercentage <= 0.2) {
+      // 20% or less discount
       acceptanceChance = 0.8; // 80% chance
-    } else if (discountPercentage <= 0.3) { // 30% or less discount
+    } else if (discountPercentage <= 0.3) {
+      // 30% or less discount
       acceptanceChance = 0.6; // 60% chance
-    } else { // More than 30% discount
+    } else {
+      // More than 30% discount
       acceptanceChance = 0.4; // 40% chance
     }
 
     // Add some randomness based on attempt number (lower chance on later attempts)
     if (attemptNumber > 1) {
-      acceptanceChance *= (1 - (attemptNumber - 1) * 0.1); // Reduce by 10% per attempt
+      acceptanceChance *= 1 - (attemptNumber - 1) * 0.1; // Reduce by 10% per attempt
     }
 
     const isAccepted = Math.random() < acceptanceChance;
-    
+
     let resultPrice = userOffer;
-    let status = 'accepted';
-    
+    let status = "accepted";
+
     if (!isAccepted) {
       // Counter offer calculation - gets more aggressive with each round
-      const counterFactors = [0.10, 0.05, 0.02]; // Round 1: 10%, Round 2: 5%, Round 3: 2%
+      const counterFactors = [0.1, 0.05, 0.02]; // Round 1: 10%, Round 2: 5%, Round 3: 2%
       const counterFactor = counterFactors[attemptNumber - 1] || 0.02;
-      resultPrice = Math.round(userOffer + (basePrice - userOffer) * counterFactor);
-      status = 'counter';
+      resultPrice = Math.round(
+        userOffer + (basePrice - userOffer) * counterFactor,
+      );
+      status = "counter";
     }
 
     // Calculate savings
@@ -120,12 +126,12 @@ router.post("/quote", async (req, res) => {
     const savingsPercentage = (savings / basePrice) * 100;
 
     // AI emotional state and decision path for analytics
-    const aiEmotion = isAccepted ? 'agreeable' : 'negotiating';
+    const aiEmotion = isAccepted ? "agreeable" : "negotiating";
     const decisionPath = [
-      { step: 'discount_analysis', discountPercentage },
-      { step: 'acceptance_probability', acceptanceChance },
-      { step: 'decision', isAccepted },
-      { step: 'counter_calculation', resultPrice }
+      { step: "discount_analysis", discountPercentage },
+      { step: "acceptance_probability", acceptanceChance },
+      { step: "decision", isAccepted },
+      { step: "counter_calculation", resultPrice },
     ];
 
     // User behavior tracking
@@ -133,30 +139,33 @@ router.post("/quote", async (req, res) => {
       discountRequested: discountPercentage,
       priceGap: basePrice - userOffer,
       attemptNumber,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     try {
       // Log the bargain event to database
-      const eventResult = await db.query(`
+      const eventResult = await db.query(
+        `
         INSERT INTO bargain_events (
           session_id, attempt_no, user_offer, base_price, result_price, 
           status, latency_ms, decision_path, ai_emotion, user_behavior
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING id
-      `, [
-        finalSessionId, 
-        attemptNumber, 
-        userOffer, 
-        basePrice, 
-        resultPrice, 
-        status, 
-        Date.now() - startTime,
-        JSON.stringify(decisionPath),
-        aiEmotion,
-        JSON.stringify(userBehavior)
-      ]);
+      `,
+        [
+          finalSessionId,
+          attemptNumber,
+          userOffer,
+          basePrice,
+          resultPrice,
+          status,
+          Date.now() - startTime,
+          JSON.stringify(decisionPath),
+          aiEmotion,
+          JSON.stringify(userBehavior),
+        ],
+      );
 
       console.log(`✅ Bargain event logged: ${eventResult.rows[0].id}`);
     } catch (dbError) {
@@ -178,15 +187,14 @@ router.post("/quote", async (req, res) => {
       attemptNumber,
       aiEmotion,
       latencyMs: Date.now() - startTime,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("❌ Bargain quote error:", error);
     res.status(500).json({
       error: "Internal server error during bargain processing",
       code: "PROCESSING_ERROR",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -194,7 +202,7 @@ router.post("/quote", async (req, res) => {
 /**
  * POST /bargains/hold
  * Create a 30-second hold on accepted price
- * 
+ *
  * Request Body:
  * {
  *   sessionId: string,
@@ -205,33 +213,36 @@ router.post("/quote", async (req, res) => {
 router.post("/hold", async (req, res) => {
   try {
     const { sessionId, finalPrice, holdSeconds = 30 } = req.body;
-    
+
     // Validation
     if (!sessionId || !finalPrice) {
       return res.status(400).json({
         error: "Missing required fields: sessionId, finalPrice",
-        code: "INVALID_REQUEST"
+        code: "INVALID_REQUEST",
       });
     }
 
     if (typeof finalPrice !== "number" || finalPrice <= 0) {
       return res.status(400).json({
         error: "finalPrice must be a positive number",
-        code: "INVALID_PRICE"
+        code: "INVALID_PRICE",
       });
     }
 
     const holdId = uuidv4();
     const expiresAt = new Date(Date.now() + holdSeconds * 1000);
-    
+
     // Create hold record
-    await db.query(`
+    await db.query(
+      `
       INSERT INTO bargain_holds (id, session_id, final_price, hold_seconds, expires_at)
       VALUES ($1, $2, $3, $4, $5)
-    `, [holdId, sessionId, finalPrice, holdSeconds, expiresAt]);
-    
+    `,
+      [holdId, sessionId, finalPrice, holdSeconds, expiresAt],
+    );
+
     console.log(`✅ Bargain hold created: ${holdId} for ${finalPrice}`);
-    
+
     res.json({
       success: true,
       holdId,
@@ -239,15 +250,14 @@ router.post("/hold", async (req, res) => {
       finalPrice,
       holdSeconds,
       expiresAt: expiresAt.toISOString(),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-    
   } catch (error) {
     console.error("❌ Hold creation error:", error);
     res.status(500).json({
       error: "Failed to create price hold",
       code: "HOLD_ERROR",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -264,48 +274,55 @@ router.put("/hold/:holdId/book", async (req, res) => {
     if (!holdId) {
       return res.status(400).json({
         error: "Missing holdId parameter",
-        code: "INVALID_REQUEST"
+        code: "INVALID_REQUEST",
       });
     }
 
     // Check if hold exists and is still valid
-    const holdResult = await db.query(`
+    const holdResult = await db.query(
+      `
       SELECT * FROM bargain_holds 
       WHERE id = $1 AND status = 'holding' AND expires_at > NOW()
-    `, [holdId]);
+    `,
+      [holdId],
+    );
 
     if (holdResult.rows.length === 0) {
       return res.status(404).json({
         error: "Hold not found or expired",
-        code: "HOLD_NOT_FOUND"
+        code: "HOLD_NOT_FOUND",
       });
     }
 
     const hold = holdResult.rows[0];
 
     // Update hold status to booked
-    await db.query(`
+    await db.query(
+      `
       UPDATE bargain_holds 
       SET status = 'booked', order_ref = $1 
       WHERE id = $2
-    `, [orderRef, holdId]);
+    `,
+      [orderRef, holdId],
+    );
 
-    console.log(`✅ Bargain hold converted to booking: ${holdId} -> ${orderRef}`);
+    console.log(
+      `✅ Bargain hold converted to booking: ${holdId} -> ${orderRef}`,
+    );
 
     res.json({
       success: true,
       holdId,
       orderRef,
       finalPrice: hold.final_price,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("❌ Booking conversion error:", error);
     res.status(500).json({
       error: "Failed to convert hold to booking",
       code: "BOOKING_ERROR",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -321,23 +338,29 @@ router.get("/session/:sessionId", async (req, res) => {
     if (!sessionId) {
       return res.status(400).json({
         error: "Missing sessionId parameter",
-        code: "INVALID_REQUEST"
+        code: "INVALID_REQUEST",
       });
     }
 
     // Get session events
-    const eventsResult = await db.query(`
+    const eventsResult = await db.query(
+      `
       SELECT * FROM bargain_events 
       WHERE session_id = $1 
       ORDER BY created_at ASC
-    `, [sessionId]);
+    `,
+      [sessionId],
+    );
 
     // Get any holds for this session
-    const holdsResult = await db.query(`
+    const holdsResult = await db.query(
+      `
       SELECT * FROM bargain_holds 
       WHERE session_id = $1 
       ORDER BY created_at DESC
-    `, [sessionId]);
+    `,
+      [sessionId],
+    );
 
     res.json({
       success: true,
@@ -345,15 +368,14 @@ router.get("/session/:sessionId", async (req, res) => {
       events: eventsResult.rows,
       holds: holdsResult.rows,
       totalAttempts: eventsResult.rows.length,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("❌ Session history error:", error);
     res.status(500).json({
       error: "Failed to retrieve session history",
       code: "SESSION_ERROR",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -364,19 +386,22 @@ router.get("/session/:sessionId", async (req, res) => {
  */
 router.get("/analytics", async (req, res) => {
   try {
-    const { timeframe = '24h', module } = req.query;
+    const { timeframe = "24h", module } = req.query;
 
     // Calculate time filter
     let timeFilter = "created_at > NOW() - INTERVAL '24 hours'";
-    if (timeframe === '7d') {
+    if (timeframe === "7d") {
       timeFilter = "created_at > NOW() - INTERVAL '7 days'";
-    } else if (timeframe === '30d') {
+    } else if (timeframe === "30d") {
       timeFilter = "created_at > NOW() - INTERVAL '30 days'";
     }
 
     // Module filter
-    let moduleFilter = '';
-    if (module && ['flights', 'hotels', 'sightseeing', 'transfers'].includes(module)) {
+    let moduleFilter = "";
+    if (
+      module &&
+      ["flights", "hotels", "sightseeing", "transfers"].includes(module)
+    ) {
       moduleFilter = `AND EXISTS (
         SELECT 1 FROM bargain_sessions bs 
         JOIN modules m ON bs.module_id = m.id 
@@ -418,30 +443,41 @@ router.get("/analytics", async (req, res) => {
     res.json({
       success: true,
       timeframe,
-      module: module || 'all',
+      module: module || "all",
       analytics: {
         totalAttempts: parseInt(analytics.total_attempts) || 0,
         acceptedOffers: parseInt(analytics.accepted_offers) || 0,
         counterOffers: parseInt(analytics.counter_offers) || 0,
-        overallSuccessRate: analytics.total_attempts > 0 
-          ? Math.round((analytics.accepted_offers / analytics.total_attempts) * 100 * 100) / 100
-          : 0,
+        overallSuccessRate:
+          analytics.total_attempts > 0
+            ? Math.round(
+                (analytics.accepted_offers / analytics.total_attempts) *
+                  100 *
+                  100,
+              ) / 100
+            : 0,
         averageUserOffer: Math.round(parseFloat(analytics.avg_user_offer) || 0),
         averageBasePrice: Math.round(parseFloat(analytics.avg_base_price) || 0),
-        averageResultPrice: Math.round(parseFloat(analytics.avg_result_price) || 0),
-        averageResponseTime: Math.round(parseFloat(analytics.avg_response_time) || 0),
-        averageSavingsPercentage: Math.round((parseFloat(analytics.avg_savings_percentage) || 0) * 100) / 100
+        averageResultPrice: Math.round(
+          parseFloat(analytics.avg_result_price) || 0,
+        ),
+        averageResponseTime: Math.round(
+          parseFloat(analytics.avg_response_time) || 0,
+        ),
+        averageSavingsPercentage:
+          Math.round(
+            (parseFloat(analytics.avg_savings_percentage) || 0) * 100,
+          ) / 100,
       },
       successRatesByAttempt: successRates,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("❌ Analytics error:", error);
     res.status(500).json({
       error: "Failed to retrieve analytics",
       code: "ANALYTICS_ERROR",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -465,15 +501,14 @@ router.delete("/cleanup", async (req, res) => {
     res.json({
       success: true,
       expiredHolds: expiredCount,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("❌ Cleanup error:", error);
     res.status(500).json({
       error: "Failed to cleanup expired holds",
       code: "CLEANUP_ERROR",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -485,7 +520,7 @@ router.get("/health", (req, res) => {
     service: "ai-bargains",
     status: "healthy",
     timestamp: new Date().toISOString(),
-    version: "1.0.0"
+    version: "1.0.0",
   });
 });
 
