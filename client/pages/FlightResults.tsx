@@ -1583,7 +1583,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮����" },
+                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨���" },
@@ -4024,7 +4024,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹500
+                                          ��500
                                         </span>
                                       </div>
                                     </div>
@@ -6010,7 +6010,7 @@ export default function FlightResults() {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-blue-700">Cabin:</span>
-                          <span className="font-medium">1 �� 7 kg / Adult</span>
+                          <span className="font-medium">1 × 7 kg / Adult</span>
                         </div>
                         <p className="text-xs text-blue-600 mt-2">
                           Additional baggage charges apply for excess weight
