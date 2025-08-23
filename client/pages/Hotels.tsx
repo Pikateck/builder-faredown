@@ -57,6 +57,7 @@ import {
   MobileTravelers,
 } from "@/components/MobileDropdowns";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { TrustSection } from "@/components/TrustSection";
 
 export default function Hotels() {
   const navigate = useNavigate();
@@ -639,7 +640,7 @@ export default function Hotels() {
                           { code: "ar", name: "الع��بي��", flag: "🇸🇦" },
                           { code: "hi", name: "��ि��्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
-                          { code: "ko", name: "한국어", flag: "🇰🇷" },
+                          { code: "ko", name: "��국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
                         ].map((language) => (
                           <DropdownMenuItem
