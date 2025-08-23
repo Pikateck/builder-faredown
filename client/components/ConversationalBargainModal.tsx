@@ -326,6 +326,24 @@ export function ConversationalBargainModal({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Safety checks for required props - handled in JSX instead of early returns
+  if (!isOpen) return null;
+
+  if (!onClose || !onAccept) {
+    console.error('ConversationalBargainModal: Missing required callback props');
+    return null;
+  }
+
+  if (module === 'flights' && !flight) {
+    console.error('ConversationalBargainModal: Flight data required for flights module');
+    return null;
+  }
+
+  if (module === 'hotels' && !hotel) {
+    console.error('ConversationalBargainModal: Hotel data required for hotels module');
+    return null;
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
