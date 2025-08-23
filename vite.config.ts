@@ -18,13 +18,10 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      // Disable React development tools and debugging features
-      include: "**/*.{tsx,ts,jsx,js}",
-      exclude: /node_modules/,
-      babel: {
-        plugins: [],
-        presets: [],
-      },
+      // Disable all React development features and debugging
+      devTarget: "esnext",
+      fastRefresh: false, // Disable fast refresh
+      jsxRuntime: "automatic",
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
