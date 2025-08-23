@@ -3738,7 +3738,7 @@ export default function FlightResults() {
                                                     Faredown Fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ���500
+                                                    ₹500
                                                   </span>
                                                 </div>
                                               </div>
