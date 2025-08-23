@@ -92,7 +92,8 @@ function App() {
         <CurrencyProvider>
           <DateProvider>
             <LoyaltyProvider>
-              <Router>
+              <BookingProvider>
+                <Router>
                 <Routes>
                   {/* Original Web Routes */}
                   <Route path="/" element={<Index />} />
@@ -272,7 +273,8 @@ function App() {
                   {/* Fallback */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </Router>
+                </Router>
+              </BookingProvider>
             </LoyaltyProvider>
           </DateProvider>
         </CurrencyProvider>
