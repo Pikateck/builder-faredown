@@ -11,7 +11,16 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist/spa",
   },
-  plugins: [react(), ...(mode === "development" ? [expressPlugin()] : [])],
+  plugins: [
+    react({
+      // Disable development debugging features that add data-loc attributes
+      jsxImportSource: undefined,
+      babel: {
+        plugins: mode === "development" ? [] : [],
+      },
+    }),
+    ...(mode === "development" ? [expressPlugin()] : [])
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
