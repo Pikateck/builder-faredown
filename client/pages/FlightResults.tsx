@@ -1250,6 +1250,58 @@ export default function FlightResults() {
     }
   };
 
+  // Handle filter updates and sync with URL
+  const updateFiltersAndSearch = useCallback((newFilters: Record<string, string>) => {
+    const currentParams = new URLSearchParams(window.location.search);
+
+    // Update URL parameters with new filter values
+    Object.entries(newFilters).forEach(([key, value]) => {
+      if (value) {
+        currentParams.set(key, value);
+      } else {
+        currentParams.delete(key);
+      }
+    });
+
+    // Update URL without page reload
+    navigate(`/flights/results?${currentParams.toString()}`, { replace: true });
+  }, [navigate]);
+
+  // Handle city changes
+  const handleFromCityChange = useCallback((cityName: string) => {
+    setSelectedFromCity(cityName);
+    const cityCode = cityData[cityName]?.code || "";
+    updateFiltersAndSearch({ from: cityCode });
+  }, [updateFiltersAndSearch]);
+
+  const handleToCityChange = useCallback((cityName: string) => {
+    setSelectedToCity(cityName);
+    const cityCode = cityData[cityName]?.code || "";
+    updateFiltersAndSearch({ to: cityCode });
+  }, [updateFiltersAndSearch]);
+
+  // Handle class change
+  const handleClassChange = useCallback((className: string) => {
+    setSelectedClass(className);
+    updateFiltersAndSearch({ class: className.toLowerCase() });
+  }, [updateFiltersAndSearch]);
+
+  // Handle trip type change
+  const handleTripTypeChange = useCallback((newTripType: "round-trip" | "one-way" | "multi-city") => {
+    setEditTripType(newTripType);
+    setTripType(newTripType); // Also update DateContext
+    updateFiltersAndSearch({ tripType: newTripType });
+  }, [updateFiltersAndSearch, setTripType]);
+
+  // Handle travelers change
+  const handleTravelersChange = useCallback((newTravelers: { adults: number; children: number }) => {
+    setTravelers(newTravelers);
+    updateFiltersAndSearch({
+      adults: newTravelers.adults.toString(),
+      children: newTravelers.children.toString()
+    });
+  }, [updateFiltersAndSearch]);
+
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
     navigate("/booking-flow", {
       state: {
