@@ -1,0 +1,97 @@
+/* Global Bargain Button Styling CSS */
+/* Standardized across Flights, Hotels, Transfers, Sightseeing */
+
+.bargain-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* space between icon + text */
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  color: #003580;               /* Faredown primary blue for text/icon */
+  background-color: #febb02;    /* Accent Yellow */
+  border: none;
+  border-radius: 9999px;        /* fully rounded pill style */
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  min-height: 48px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bargain-btn:hover {
+  background-color: #e6a602;   /* darker yellow hover */
+  transform: translateY(-1px); /* subtle lift */
+}
+
+.bargain-btn:active {
+  background-color: #cc9300;   /* pressed state */
+  transform: translateY(0);    /* reset lift */
+}
+
+.bargain-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;          /* inherit blue */
+}
+
+/* Responsive sizing */
+@media (max-width: 640px) {
+  .bargain-btn {
+    min-height: 44px;
+    font-size: 16px;
+    padding: 12px 20px;
+  }
+}
+
+/* Accessibility */
+.bargain-btn:focus {
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(254, 187, 2, 0.3);
+}
+
+.bargain-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Hotel-style button variant - exact match */
+.bargain-btn-hotel-style {
+  flex: 1;
+  padding: 16px 24px;
+  background-color: #febb02;
+  color: #000000;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  transform: translateZ(0);
+}
+
+.bargain-btn-hotel-style:hover {
+  background-color: #e6a602;
+}
+
+.bargain-btn-hotel-style:active {
+  background-color: #d19900;
+  transform: scale(0.95);
+}
+
+.bargain-btn-hotel-style svg {
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+}
