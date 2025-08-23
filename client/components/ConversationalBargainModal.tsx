@@ -417,21 +417,23 @@ export function ConversationalBargainModal({
   const shouldRenderModal =
     isOpen && hasValidCallbacks && hasValidFlightData && hasValidHotelData;
 
-  // Log validation errors
-  if (!hasValidCallbacks) {
-    console.error(
-      "ConversationalBargainModal: Missing required callback props",
-    );
-  }
-  if (module === "flights" && !flight) {
-    console.error(
-      "ConversationalBargainModal: Flight data required for flights module",
-    );
-  }
-  if (module === "hotels" && !hotel) {
-    console.error(
-      "ConversationalBargainModal: Hotel data required for hotels module",
-    );
+  // Log validation errors only when modal is open
+  if (isOpen) {
+    if (!hasValidCallbacks) {
+      console.error(
+        "ConversationalBargainModal: Missing required callback props",
+      );
+    }
+    if (module === "flights" && !flight) {
+      console.error(
+        "ConversationalBargainModal: Flight data required for flights module",
+      );
+    }
+    if (module === "hotels" && !hotel) {
+      console.error(
+        "ConversationalBargainModal: Hotel data required for hotels module",
+      );
+    }
   }
 
   return shouldRenderModal ? (
