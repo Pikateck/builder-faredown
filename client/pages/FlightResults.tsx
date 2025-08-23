@@ -3620,7 +3620,7 @@ export default function FlightResults() {
                                                     Airline fee:
                                                   </span>
                                                   <span className="text-gray-900 font-medium">
-                                                    ��0
+                                                    ₹0
                                                   </span>
                                                 </div>
                                                 <div className="flex justify-between">
