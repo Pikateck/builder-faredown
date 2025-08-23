@@ -12,14 +12,10 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist/spa",
     sourcemap: false,
   },
-  define: {
-    "process.env.NODE_ENV": JSON.stringify("production"),
-  },
   plugins: [
     react({
-      // Force production mode to disable data-loc attributes
-      jsxRuntime: "automatic",
-      devTarget: "es2022"
+      jsxRuntime: "classic",
+      jsxImportSource: "react"
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
