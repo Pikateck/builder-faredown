@@ -1072,7 +1072,7 @@ export default function Index() {
                   <div className="flex-1">
                     <button
                       onClick={() => {
-                        console.log("🛬 To city button clicked!");
+                        console.log("��� To city button clicked!");
                         setShowToCities(true);
                       }}
                       className="w-full text-left"
@@ -1351,7 +1351,7 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Experience more, spend less ��� our AI gets you the best price for
+                Experience more, spend less — our AI gets you the best price for
                 every adventure.
               </p>
             </div>
@@ -3343,20 +3343,32 @@ export default function Index() {
       {/* Mobile Dropdown Components */}
       <MobileCityDropdown
         isOpen={showFromCities}
-        onClose={() => setShowFromCities(false)}
+        onClose={() => {
+          console.log("🚫 From cities dropdown closed");
+          setShowFromCities(false);
+        }}
         title="Select departure city"
         cities={cityData}
         selectedCity={selectedFromCity}
-        onSelectCity={setSelectedFromCity}
+        onSelectCity={(city) => {
+          console.log("🏙️ Selected from city:", city);
+          setSelectedFromCity(city);
+        }}
       />
 
       <MobileCityDropdown
         isOpen={showToCities}
-        onClose={() => setShowToCities(false)}
+        onClose={() => {
+          console.log("🚫 To cities dropdown closed");
+          setShowToCities(false);
+        }}
         title="Select destination city"
         cities={cityData}
         selectedCity={selectedToCity}
-        onSelectCity={setSelectedToCity}
+        onSelectCity={(city) => {
+          console.log("🏙️ Selected to city:", city);
+          setSelectedToCity(city);
+        }}
       />
 
       <MobileDatePicker
