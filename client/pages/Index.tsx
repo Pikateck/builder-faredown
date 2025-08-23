@@ -1036,7 +1036,7 @@ export default function Index() {
                         console.log("🛫 From city button clicked!");
                         setShowFromCities(true);
                       }}
-                      className="w-full text-left"
+                      className="w-full text-left touch-manipulation active:bg-gray-50 hover:bg-gray-50 rounded-lg p-2 transition-colors"
                     >
                       <div className="text-xs text-gray-500 mb-1">From</div>
                       <div className="flex items-center space-x-2">
