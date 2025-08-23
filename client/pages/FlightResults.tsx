@@ -1238,7 +1238,12 @@ export default function FlightResults() {
     });
   };
 
-  // Old bargain functions removed - now using ConversationalBargainModal via BargainIntegration
+  // Handle bargain click for flights
+  const handleBargainClick = (flight: any) => {
+    console.log("Bargain clicked for flight:", flight.id);
+    // Add your bargain logic here
+    // This could open a bargain modal or navigate to a bargain page
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
@@ -2742,11 +2747,11 @@ export default function FlightResults() {
                         </div>
                       </div>
 
-                      {/* Action Button - Hotel Section Style Mobile */}
-                      <div className="mt-3 relative z-50 pointer-events-auto">
+                      {/* Action Buttons - Hotel Section Style Mobile */}
+                      <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
                         <Button
                           variant="outline"
-                          className="w-full py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation relative z-50"
+                          className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation relative z-50"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2763,6 +2768,20 @@ export default function FlightResults() {
                           }}
                         >
                           View Details
+                        </Button>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleBargainClick(flight);
+                          }}
+                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                          onTouchStart={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <TrendingDown className="w-4 h-4" />
+                          Bargain Now
                         </Button>
                       </div>
                     </div>
@@ -3040,8 +3059,8 @@ export default function FlightResults() {
                             {flight.fareTypes[0].refundability}
                           </div>
 
-                          {/* Action button - Hotel Section Style */}
-                          <div className="mt-3 relative z-50 pointer-events-auto">
+                          {/* Action buttons - Hotel Section Style */}
+                          <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
                             <Button
                               onClick={(e) => {
                                 e.preventDefault();
@@ -3055,12 +3074,26 @@ export default function FlightResults() {
                                 });
                               }}
                               variant="outline"
-                              className="w-full text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation relative z-50"
+                              className="text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation relative z-50"
                               onTouchStart={(e) => {
                                 e.stopPropagation();
                               }}
                             >
                               View Details
+                            </Button>
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleBargainClick(flight);
+                              }}
+                              className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                              onTouchStart={(e) => {
+                                e.stopPropagation();
+                              }}
+                            >
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
                             </Button>
                           </div>
                         </div>
