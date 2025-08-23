@@ -52,8 +52,10 @@ export function BargainButton({
   return (
     <button
       className={cn(
-        // Base styles - locked and cannot be overridden
-        "bargain-button-locked",
+        // Base styles with className override support
+        !className.includes('bg-') && "bg-gradient-to-br from-[#febb02] to-[#f4a902]",
+        !className.includes('text-') && "text-black",
+        !className.includes('rounded') && "rounded-full",
         "relative overflow-hidden",
         "inline-flex items-center justify-center gap-2",
         "font-bold tracking-wide",
@@ -64,23 +66,12 @@ export function BargainButton({
         "active:scale-95", // Press animation
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none",
         "hover:scale-105 hover:shadow-xl",
-        sizeClasses[size],
+        !className.includes('shadow') && "shadow-lg shadow-yellow-200/30",
+        !className.includes('min-h') && sizeClasses[size],
         className
       )}
       onClick={handleClick}
       disabled={disabled || loading}
-      style={{
-        // CSS variables for golden gradient - locked styles
-        "--bargain-bg-start": "#febb02",
-        "--bargain-bg-end": "#f4a902", 
-        "--bargain-text": "#000000",
-        "--bargain-radius": "9999px",
-        // Apply locked styles directly
-        background: "linear-gradient(135deg, var(--bargain-bg-start), var(--bargain-bg-end))",
-        color: "var(--bargain-text)",
-        borderRadius: "var(--bargain-radius)",
-        boxShadow: "0 10px 25px -3px rgb(254 187 2 / 0.3), 0 4px 6px -2px rgb(254 187 2 / 0.1)",
-      }}
       {...props}
     >
       {/* Shimmer Effect */}
