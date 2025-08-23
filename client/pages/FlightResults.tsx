@@ -5214,7 +5214,7 @@ export default function FlightResults() {
                         British Airways • Non-stop • 9h 25m
                       </div>
                     </div>
-                    <div className="text-lg font-bold">��45200</div>
+                    <div className="text-lg font-bold">₹45,200</div>
                   </div>
                 </div>
               </div>
