@@ -1586,7 +1586,7 @@ export default function FlightResults() {
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
-                      { code: "zh", name: "中文", flag: "🇨���" },
+                      { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
                         key={language.code}
@@ -4024,7 +4024,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ��500
+                                          ₹500
                                         </span>
                                       </div>
                                     </div>
