@@ -2920,15 +2920,15 @@ export default function FlightResults() {
                             to: selectedToCity,
                             departureTime: flight.departureTime,
                             arrivalTime: flight.arrivalTime,
-                            price: fareType.price,
+                            price: flight.fareTypes?.[0]?.price || 0,
                             duration: flight.duration
                           }}
-                          basePrice={fareType.price}
-                          productRef={`flight-${flight.id}-${fareType.id}`}
+                          basePrice={flight.fareTypes?.[0]?.price || 0}
+                          productRef={`flight-${flight.id}-${flight.fareTypes?.[0]?.id || 'default'}`}
                           selectedFareType={{
-                            type: fareType.name,
-                            price: fareType.price,
-                            features: fareType.features || []
+                            type: flight.fareTypes?.[0]?.name || 'Economy',
+                            price: flight.fareTypes?.[0]?.price || 0,
+                            features: flight.fareTypes?.[0]?.features || []
                           }}
                           buttonText="Bargain Now"
                           buttonSize="sm"
