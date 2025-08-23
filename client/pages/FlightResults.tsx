@@ -3082,20 +3082,15 @@ export default function FlightResults() {
                             >
                               View Details
                             </Button>
-                            <Button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleBargainClick(flight);
-                              }}
+                            <FlightBargainButton
+                              flight={flight}
+                              basePrice={flight.price?.amount || flight.fareTypes?.[0]?.price || 0}
+                              productRef={flight.id || 'flight-' + Math.random()}
+                              userName={userName}
+                              buttonText="Bargain Now"
+                              buttonSize="md"
                               className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                              onTouchStart={(e) => {
-                                e.stopPropagation();
-                              }}
-                            >
-                              <TrendingDown className="w-4 h-4" />
-                              Bargain Now
-                            </Button>
+                            />
                           </div>
                         </div>
                       </div>
