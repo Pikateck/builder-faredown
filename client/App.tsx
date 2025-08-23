@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
+import ErrorBoundary from "./components/ErrorBoundary";
 // Import CSS for conversational bargain feature
 import "./styles/mobile-bargain-optimizations.css";
 import "./styles/bargain-button.css";
