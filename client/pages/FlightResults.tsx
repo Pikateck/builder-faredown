@@ -2097,10 +2097,10 @@ export default function FlightResults() {
                         </span>
                         <button
                           onClick={() =>
-                            setTravelers((prev) => ({
-                              ...prev,
-                              children: prev.children + 1,
-                            }))
+                            handleTravelersChange({
+                              ...travelers,
+                              children: travelers.children + 1,
+                            })
                           }
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
                         >
