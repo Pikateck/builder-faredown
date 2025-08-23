@@ -200,6 +200,10 @@ function App() {
                     path="/bargain-error-test"
                     element={<BargainErrorTest />}
                   />
+                  <Route
+                    path="/mobile-bargain-test"
+                    element={<MobileBargainTestSuite />}
+                  />
                   <Route path="/logo-designs" element={<LogoDesignOptions />} />
                   <Route
                     path="/color-palette"
