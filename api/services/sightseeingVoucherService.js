@@ -16,7 +16,7 @@ const pool = new Pool({
 
 class SightseeingVoucherService {
   constructor() {
-    this.voucherModel = new Voucher();
+    this.voucherModel = Voucher;
     this.vouchersDir = path.join(__dirname, "../../vouchers/sightseeing");
 
     // Ensure vouchers directory exists
