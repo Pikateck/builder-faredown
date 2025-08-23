@@ -13,10 +13,12 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      // Disable development debugging features that add data-loc attributes
-      jsxImportSource: undefined,
+      // Disable React development tools and debugging features
+      include: "**/*.{tsx,ts,jsx,js}",
+      exclude: /node_modules/,
       babel: {
-        plugins: mode === "development" ? [] : [],
+        plugins: [],
+        presets: [],
       },
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
