@@ -85,6 +85,17 @@ export function BargainIntegration({
 }: BargainIntegrationProps) {
   const [showBargainModal, setShowBargainModal] = useState(false);
 
+  // Safety checks for required props
+  if (!basePrice || !productRef) {
+    console.error('BargainIntegration: Missing required props - basePrice and productRef are required');
+    return null;
+  }
+
+  if (module === 'flights' && !flight) {
+    console.error('BargainIntegration: Flight data required for flights module');
+    return null;
+  }
+
   const handleAccept = (finalPrice: number, orderRef: string) => {
     console.log(`✅ Bargain accepted: ${finalPrice} (Order: ${orderRef})`);
     setShowBargainModal(false);
