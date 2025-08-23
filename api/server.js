@@ -176,6 +176,7 @@ app.get("/", (req, res) => {
       transfers: "/api/transfers",
       transfersBargain: "/api/transfers-bargain",
       bargain: "/api/bargain",
+      aiBargains: "/api/ai-bargains",
       currency: "/api/currency",
       promo: "/api/promo",
       analytics: "/api/analytics",
