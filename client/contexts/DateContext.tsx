@@ -123,7 +123,7 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
     [tripType],
   );
 
-  const getSearchParams = useCallback(() => {
+  const getSearchParams = useCallback((additionalParams?: Record<string, string>) => {
     const params = new URLSearchParams();
 
     if (departureDate) {
@@ -135,6 +135,15 @@ export const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
     }
 
     params.set("tripType", tripType);
+
+    // Add any additional parameters passed in
+    if (additionalParams) {
+      Object.entries(additionalParams).forEach(([key, value]) => {
+        if (value) {
+          params.set(key, value);
+        }
+      });
+    }
 
     return params;
   }, [departureDate, returnDate, tripType, getUrlDateString]);
