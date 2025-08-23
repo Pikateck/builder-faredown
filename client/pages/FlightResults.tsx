@@ -2771,7 +2771,7 @@ export default function FlightResults() {
                           userName={userName}
                           buttonText="Bargain Now"
                           buttonSize="lg"
-                          showIcon={false}
+                          showIcon={true}
                           className="flex-1 py-4 text-sm font-semibold bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation relative z-50"
                         />
                       </div>
@@ -4033,7 +4033,7 @@ export default function FlightResults() {
                                     </p>
                                     <div className="text-xs text-gray-700 space-y-1">
                                       <p>
-                                        • Direct flights are usually cheaper
+                                        �� Direct flights are usually cheaper
                                         than refundable flights. However, you
                                         may have to pay a large fee to cancel or
                                         change your flight.
