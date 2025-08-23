@@ -78,6 +78,7 @@ import {
   MobileClassDropdown,
 } from "@/components/MobileDropdowns";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { FlightBargainButton } from "@/components/BargainIntegration";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
