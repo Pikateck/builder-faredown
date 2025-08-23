@@ -518,16 +518,7 @@ export default function FlightResults() {
     [key: string]: "itinerary" | "fare-rules";
   }>({});
 
-  // Bargain states
-  const [showBargainModal, setShowBargainModal] = useState(false);
-  const [bargainFlight, setBargainFlight] = useState<
-    (typeof flightData)[0] | null
-  >(null);
-  const [bargainFareType, setBargainFareType] = useState<any>(null);
-  const [bargainStep, setBargainStep] = useState<
-    "input" | "progress" | "result"
-  >("input");
-  const [bargainPrice, setBargainPrice] = useState("");
+  // Removed old bargain states - now using ConversationalBargainModal via BargainIntegration
   const [bargainProgress, setBargainProgress] = useState(0);
   const [bargainResult, setBargainResult] = useState<
     "accepted" | "rejected" | "counter" | null
