@@ -71,15 +71,9 @@ export function SightseeingSearchForm() {
   // Debounced search function
   const debouncedSearchRef = useRef<NodeJS.Timeout>();
 
-  // Debug effect to track destination changes
+  // Track destination changes
   useEffect(() => {
-    console.log("🔍 [DEBUG] Destination state changed:", {
-      destination,
-      destinationCode,
-      isUserTyping,
-      inputValue,
-      displayValue: isUserTyping ? inputValue : destination || "",
-    });
+    // State tracking for destination changes
   }, [destination, destinationCode, isUserTyping, inputValue]);
 
   // Mobile-optimized destination selection handler
