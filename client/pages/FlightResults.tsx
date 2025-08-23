@@ -519,13 +519,7 @@ export default function FlightResults() {
   }>({});
 
   // Removed old bargain states - now using ConversationalBargainModal via BargainIntegration
-  const [bargainProgress, setBargainProgress] = useState(0);
-  const [bargainResult, setBargainResult] = useState<
-    "accepted" | "rejected" | "counter" | null
-  >(null);
-  const [finalPrice, setFinalPrice] = useState(0);
-  const [bargainTimer, setBargainTimer] = useState(0);
-  const [faredownBonus, setFaredownBonus] = useState(0);
+  // Removed old bargain progress/result states
 
   const [sortBy, setSortBy] = useState<"cheapest" | "fastest">("cheapest");
   const [expandedTicketOptions, setExpandedTicketOptions] = useState<
@@ -537,11 +531,7 @@ export default function FlightResults() {
     symbol: "₹",
     name: "Indian Rupee",
   });
-  const [usedPrices, setUsedPrices] = useState<Set<string>>(new Set());
-  const [aiOfferPrice, setAiOfferPrice] = useState<number | null>(null);
-  const [isOfferValid, setIsOfferValid] = useState(false);
-  const [offerExpiryTime, setOfferExpiryTime] = useState(0);
-  const [duplicatePriceError, setDuplicatePriceError] = useState(false);
+  // Removed old bargain offer states
 
   // Load flights from Amadeus API
   useEffect(() => {
