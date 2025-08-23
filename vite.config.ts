@@ -22,12 +22,6 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react({
       jsxRuntime: "automatic",
-      // Force production mode
-      devTarget: 'es2022',
-      plugins: [
-        // Disable development transforms completely
-        ['@swc/plugin-styled-jsx', {}],
-      ]
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
