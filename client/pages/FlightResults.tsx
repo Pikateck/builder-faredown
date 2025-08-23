@@ -2797,7 +2797,7 @@ export default function FlightResults() {
                       <div className="grid grid-cols-2 gap-2 mt-3 relative z-50 pointer-events-auto">
                         <Button
                           variant="outline"
-                          className="min-h-[44px] px-6 py-3 font-semibold text-sm touch-manipulation flex items-center justify-center relative z-50"
+                          className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation relative z-50"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -2816,7 +2816,7 @@ export default function FlightResults() {
                           View Details
                         </Button>
                         <Button
-                          className="min-h-[44px] px-6 py-3 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm touch-manipulation flex items-center justify-center gap-2"
+                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                           onClick={() => {
                             setBargainFlight(flight);
                             setBargainFareType({
