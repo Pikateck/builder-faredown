@@ -1071,7 +1071,10 @@ export default function Index() {
 
                   <div className="flex-1">
                     <button
-                      onClick={() => setShowToCities(true)}
+                      onClick={() => {
+                        console.log("🛬 To city button clicked!");
+                        setShowToCities(true);
+                      }}
                       className="w-full text-left"
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
@@ -1348,7 +1351,7 @@ export default function Index() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Experience more, spend less — our AI gets you the best price for
+                Experience more, spend less ��� our AI gets you the best price for
                 every adventure.
               </p>
             </div>
