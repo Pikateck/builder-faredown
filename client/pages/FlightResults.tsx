@@ -395,7 +395,6 @@ export default function FlightResults() {
     }
 
     // Load trip type from URL parameters (sync with DateContext)
-    const tripTypeParam = searchParams.get("tripType");
     if (tripTypeParam && ["round-trip", "one-way", "multi-city"].includes(tripTypeParam)) {
       setEditTripType(tripTypeParam as "round-trip" | "one-way" | "multi-city");
     }
@@ -414,9 +413,6 @@ export default function FlightResults() {
   // Get passenger data from URL params
   const adults = parseInt(searchParams.get("adults") || "1");
   const children = parseInt(searchParams.get("children") || "0");
-  const [selectedFlight, setSelectedFlight] = useState<
-    (typeof flightData)[0] | null
-  >(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
