@@ -3873,7 +3873,7 @@ export default function FlightResults() {
                         </div>
 
                         <div className="space-y-6">
-                          {/* Force mixed airline display for debugging */}
+                          {/* Mixed airline display */}
                           {true ? (
                             <>
                               {/* First Sector Rules - Outbound */}
