@@ -3628,7 +3628,7 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  �� Cancellation/Flight change
+                                                  ���� Cancellation/Flight change
                                                   charges are indicated per
                                                   traveller. Clearing will stop
                                                   accepting cancellation/change
@@ -6120,7 +6120,7 @@ export default function FlightResults() {
         isOpen={showClassDropdown}
         onClose={() => setShowClassDropdown(false)}
         selectedClass={selectedClass}
-        onSelectClass={setSelectedClass}
+        onSelectClass={handleClassChange}
       />
 
       <MobileNavigation />
