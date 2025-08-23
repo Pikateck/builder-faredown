@@ -423,6 +423,49 @@ const validateDateRange = (req, res, next) => {
   next();
 };
 
+/**
+ * Validate booking data for transfers
+ */
+const validateBookingData = (req, res, next) => {
+  const schema = Joi.object({
+    // Basic booking info
+    customer: Joi.object({
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      email: Joi.string().email().required(),
+      phone: Joi.string().required(),
+    }).required(),
+
+    // Transfer details
+    transfer: Joi.object({
+      transferId: Joi.string().required(),
+      pickupDate: Joi.string().required(),
+      pickupLocation: Joi.string().required(),
+      dropoffLocation: Joi.string().required(),
+    }).required(),
+
+    // Payment info
+    payment: Joi.object({
+      method: Joi.string().valid('card', 'wallet', 'upi').default('card'),
+      amount: Joi.number().positive().required(),
+    }).required(),
+
+    // Optional promo code
+    promoCode: Joi.string().optional(),
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({
+      error: 'Validation failed',
+      message: error.details[0].message,
+      details: error.details,
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   schemas,
   validateRequest,
@@ -430,4 +473,5 @@ module.exports = {
   validatePagination,
   validateId,
   validateDateRange,
+  validateBookingData,
 };
