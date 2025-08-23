@@ -3241,15 +3241,15 @@ export default function FlightResults() {
                                 to: selectedToCity,
                                 departureTime: flight.departureTime,
                                 arrivalTime: flight.arrivalTime,
-                                price: fareType.price,
+                                price: flight.fareTypes?.[0]?.price || 0,
                                 duration: flight.duration
                               }}
-                              basePrice={fareType.price}
-                              productRef={`flight-${flight.id}-${fareType.id}`}
+                              basePrice={flight.fareTypes?.[0]?.price || 0}
+                              productRef={`flight-${flight.id}-${flight.fareTypes?.[0]?.id || 'default'}`}
                               selectedFareType={{
-                                type: fareType.name,
-                                price: fareType.price,
-                                features: fareType.features || []
+                                type: flight.fareTypes?.[0]?.name || 'Economy',
+                                price: flight.fareTypes?.[0]?.price || 0,
+                                features: flight.fareTypes?.[0]?.features || []
                               }}
                               buttonText="Bargain Now"
                               buttonSize="sm"
@@ -4686,7 +4686,7 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "���️" },
+                    { label: "Afternoon", range: [12, 18], icon: "�����️" },
                     { label: "Evening", range: [18, 24], icon: "����" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
