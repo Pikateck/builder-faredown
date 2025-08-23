@@ -492,8 +492,21 @@ const getAuditStats = (timeframe = "24h") => {
   return stats;
 };
 
+// Simple audit request middleware for non-admin routes
+const auditRequest = (req, res, next) => {
+  // Skip audit for health checks
+  if (req.originalUrl.includes('/health')) {
+    return next();
+  }
+
+  // Log the request
+  logAuditEvent(ACTION_TYPES.API_ACCESS, req);
+  next();
+};
+
 module.exports = {
   auditLogger: auditMiddleware,
+  auditRequest,
   logAuditEvent,
   audit,
   getAuditTrail,
