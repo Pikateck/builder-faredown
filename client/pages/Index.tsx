@@ -2169,21 +2169,23 @@ export default function Index() {
                     <div className="lg:max-w-[100px] w-full lg:w-auto">
                       <Button
                         onClick={() => {
-                          const searchParams = getSearchParams();
-                          searchParams.set(
-                            "adults",
-                            travelers.adults.toString(),
-                          );
-                          searchParams.set(
-                            "children",
-                            travelers.children.toString(),
-                          );
+                          // Get city codes for from/to
+                          const fromCode = selectedFromCity ? cityData[selectedFromCity]?.code || "" : "";
+                          const toCode = selectedToCity ? cityData[selectedToCity]?.code || "" : "";
+
+                          const additionalParams: Record<string, string> = {
+                            adults: travelers.adults.toString(),
+                            children: travelers.children.toString(),
+                            from: fromCode,
+                            to: toCode,
+                            class: selectedClass.toLowerCase(),
+                          };
+
                           if (tripType === "multi-city") {
-                            searchParams.set(
-                              "segments",
-                              JSON.stringify(flightSegments),
-                            );
+                            additionalParams.segments = JSON.stringify(flightSegments);
                           }
+
+                          const searchParams = getSearchParams(additionalParams);
                           navigate(
                             `/flights/results?${searchParams.toString()}`,
                           );
