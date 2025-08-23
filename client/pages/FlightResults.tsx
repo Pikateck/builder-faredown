@@ -9,11 +9,6 @@ import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import BargainModalPhase1 from "@/components/BargainModalPhase1";
-import {
-  useBargainPhase1,
-  createFlightBargainItem,
-} from "@/hooks/useBargainPhase1";
 import { FlightBargainButton } from "@/components/BargainIntegration";
 import {
   Dialog,
@@ -1488,7 +1483,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫����" },
+                      { code: "fr", name: "Français", flag: "🇫�����" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
