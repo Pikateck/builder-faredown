@@ -4290,13 +4290,13 @@ export default function FlightResults() {
                                       </p>
                                       <div className="text-xs text-gray-700 space-y-1">
                                         <p>
-                                          �� Direct flights are usually cheaper
+                                          • Direct flights are usually cheaper
                                           than refundable flights. However, you
                                           may have to pay a large fee to cancel
                                           or change your flight.
                                         </p>
                                         <p>
-                                          ��� Cancellation/Flight change charges
+                                          • Cancellation/Flight change charges
                                           are indicated per traveller. Clearing
                                           will stop accepting
                                           cancellation/change request if 72
