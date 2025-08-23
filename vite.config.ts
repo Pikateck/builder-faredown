@@ -12,10 +12,22 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist/spa",
     sourcemap: false,
   },
+  esbuild: {
+    drop: mode === 'production' ? ['console', 'debugger'] : [],
+  },
+  define: {
+    'process.env.NODE_ENV': '"production"',
+    '__DEV__': false,
+  },
   plugins: [
     react({
-      // Use automatic JSX runtime consistently
       jsxRuntime: "automatic",
+      // Force production mode
+      devTarget: 'es2022',
+      plugins: [
+        // Disable development transforms completely
+        ['@swc/plugin-styled-jsx', {}],
+      ]
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
