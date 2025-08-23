@@ -449,7 +449,7 @@ export default function FlightResults() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
-    symbol: "₹",
+    symbol: "���",
     name: "Indian Rupee",
   });
   // Removed old bargain offer states
@@ -2764,20 +2764,15 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleBargainClick(flight);
-                          }}
+                        <FlightBargainButton
+                          flight={flight}
+                          basePrice={flight.price?.amount || flight.fareTypes?.[0]?.price || 0}
+                          productRef={flight.id || 'flight-' + Math.random()}
+                          userName={userName}
+                          buttonText="Bargain Now"
+                          buttonSize="md"
                           className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          <TrendingDown className="w-4 h-4" />
-                          Bargain Now
-                        </Button>
+                        />
                       </div>
                     </div>
                   </div>
