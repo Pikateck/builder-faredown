@@ -1,16 +1,15 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useDateContext } from "@/contexts/DateContext";
-import { useCurrency } from "@/contexts/CurrencyContext";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-
-import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import { useScrollToTop } from "@/hooks/useScrollToTop";
+import {
+  MobileCityDropdown,
+  MobileDatePicker,
+  MobileTravelers,
+} from "@/components/MobileDropdowns";
 import {
   formatDateToDDMMMYYYY,
   formatDateToDisplayString,
@@ -22,16 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
 import { BookingCalendar } from "@/components/BookingCalendar";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
-import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
-import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { addDays } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -62,8 +58,6 @@ import {
   Bell,
   DollarSign,
   MapPin,
-  Building2,
-  Building,
   Star,
   Users,
   Phone,
@@ -73,7 +67,6 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  Check,
   User,
   BookOpen,
   Award,
@@ -82,55 +75,16 @@ import {
   LogOut,
   Menu,
   Code,
-  Hotel,
-  Globe,
-  Zap,
-  Target,
-  Gift,
-  Plus,
-  Minus,
-  Navigation,
-  Compass,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Twitter,
-  Camera,
-  Car,
 } from "lucide-react";
 import { downloadProjectInfo } from "@/lib/codeExport";
-import {
-  MobileCityDropdown,
-  MobileDatePicker,
-  MobileTravelers,
-  MobileClassDropdown,
-} from "@/components/MobileDropdowns";
 
 export default function Index() {
-  useScrollToTop();
-  const { isLoggedIn, user, login, logout } = useAuth();
-  const { selectedCurrency, currencies, setCurrency, lastUpdated, isLoading } =
-    useCurrency();
-  const {
-    departureDate,
-    returnDate,
-    tripType,
-    setDepartureDate,
-    setReturnDate,
-    setTripType,
-    formatDisplayDate,
-    getSearchParams,
-  } = useDateContext();
-  const userName = user?.name || "";
-  const navigate = useNavigate();
-
-  // Date state now managed by DateContext
+  const [departureDate, setDepartureDate] = useState<Date>();
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
-  const [activeTab, setActiveTab] = useState("flights"); // Track active tab
 
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
@@ -155,12 +109,8 @@ export default function Index() {
       loginEmail === testCredentials.email &&
       loginPassword === testCredentials.password
     ) {
-      login({
-        id: "1",
-        name: testCredentials.name,
-        email: loginEmail,
-        loyaltyLevel: 1,
-      });
+      setIsLoggedIn(true);
+      setUserName(testCredentials.name);
       setShowSignIn(false);
       setLoginEmail("");
       setLoginPassword("");
@@ -181,12 +131,8 @@ export default function Index() {
         setAuthError("Password must be at least 8 characters long");
         return;
       }
-      login({
-        id: "1",
-        name: `${registerFirstName} ${registerLastName}`,
-        email: registerEmail,
-        loyaltyLevel: 1,
-      });
+      setIsLoggedIn(true);
+      setUserName(`${registerFirstName} ${registerLastName}`);
       setShowRegister(false);
       setRegisterEmail("");
       setRegisterPassword("");
@@ -198,105 +144,38 @@ export default function Index() {
   };
 
   const handleSignOut = () => {
-    logout();
+    setIsLoggedIn(false);
+    setUserName("");
   };
-
-  // Return date and trip type now managed by DateContext
+  const [returnDate, setReturnDate] = useState<Date>();
+  const [tripType, setTripType] = useState<
+    "round-trip" | "one-way" | "multi-city"
+  >("round-trip");
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
-  const [selectedFromCity, setSelectedFromCity] = useState("");
-  const [selectedToCity, setSelectedToCity] = useState("");
+  const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
+  const [selectedToCity, setSelectedToCity] = useState("Dubai");
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTravelers, setShowTravelers] = useState(false);
   const [travelers, setTravelers] = useState({ adults: 1, children: 0 });
 
   // Live calendar states
   const today = new Date();
+  const [selectedDepartureDate, setSelectedDepartureDate] =
+    useState<Date | null>(null);
+  const [selectedReturnDate, setSelectedReturnDate] = useState<Date | null>(
+    null,
+  );
   const [selectingDeparture, setSelectingDeparture] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
-  // Multi-city segment dropdown states
-  const [showSegmentFromCities, setShowSegmentFromCities] = useState<
-    string | null
-  >(null);
-  const [showSegmentToCities, setShowSegmentToCities] = useState<string | null>(
-    null,
-  );
-  const [showSegmentCalendar, setShowSegmentCalendar] = useState<string | null>(
-    null,
-  );
-
-  // Multi-city flight segments state
-  interface FlightSegment {
-    id: string;
-    from: string;
-    to: string;
-    departureDate: Date | null;
-  }
-
-  const [flightSegments, setFlightSegments] = useState<FlightSegment[]>([
-    { id: "1", from: "", to: "", departureDate: null },
-    { id: "2", from: "", to: "", departureDate: null },
-  ]);
-
-  // Handle URL parameters for tab switching
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tabParam = urlParams.get("tab");
-    if (
-      tabParam &&
-      ["flights", "hotels", "sightseeing", "transfers"].includes(tabParam)
-    ) {
-      setActiveTab(tabParam);
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  // Add flight segment function
-  const addFlightSegment = () => {
-    const newSegment: FlightSegment = {
-      id: Date.now().toString(),
-      from: "",
-      to: "",
-      departureDate: null,
-    };
-    setFlightSegments([...flightSegments, newSegment]);
-  };
-
-  // Remove flight segment function
-  const removeFlightSegment = (id: string) => {
-    if (flightSegments.length > 2) {
-      setFlightSegments(flightSegments.filter((segment) => segment.id !== id));
-    }
-  };
-
-  // Update flight segment function
-  const updateFlightSegment = (
-    id: string,
-    field: keyof FlightSegment,
-    value: string | Date | null,
-  ) => {
-    setFlightSegments(
-      flightSegments.map((segment) =>
-        segment.id === id ? { ...segment, [field]: value } : segment,
-      ),
-    );
-  };
-
   // Calendar helper functions
-  const formatDate = (date: Date | null, compact = false) => {
+  const formatDate = (date: Date | null) => {
     if (!date) return "";
-    if (compact) {
-      // For mobile and compact display - just day and month
-      return date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-      });
-    }
     return date
       .toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -366,28 +245,38 @@ export default function Index() {
 
   const handleDateClick = (day: number, month: number, year: number) => {
     const clickedDate = new Date(year, month, day);
-    clickedDate.setHours(0, 0, 0, 0);
+    clickedDate.setHours(0, 0, 0, 0); // Normalize time
 
     if (tripType === "one-way") {
-      setDepartureDate(clickedDate);
+      setSelectedDepartureDate(clickedDate);
       setShowCalendar(false);
     } else {
-      if (selectingDeparture || !departureDate) {
-        setDepartureDate(clickedDate);
-        setReturnDate(null);
-        setSelectingDeparture(false);
+      // For round-trip bookings
+      if (selectingDeparture || !selectedDepartureDate) {
+        // Selecting departure date - always start fresh
+        setSelectedDepartureDate(clickedDate);
+        setSelectedReturnDate(null); // Clear any existing return date
+        setSelectingDeparture(false); // Now we'll select return date
       } else {
-        if (clickedDate <= departureDate) {
-          setDepartureDate(clickedDate);
-          setReturnDate(null);
+        // Selecting return date
+        if (clickedDate <= selectedDepartureDate) {
+          // If clicked date is before or same as departure, start over with new departure
+          setSelectedDepartureDate(clickedDate);
+          setSelectedReturnDate(null);
           setSelectingDeparture(false);
         } else {
-          setReturnDate(clickedDate);
-          setShowCalendar(false);
+          // Valid return date (after departure)
+          setSelectedReturnDate(clickedDate);
+          setShowCalendar(false); // Close calendar after selecting both dates
         }
       }
     }
   };
+  const [selectedCurrency, setSelectedCurrency] = useState({
+    code: "INR",
+    symbol: "₹",
+    name: "Indian Rupee",
+  });
 
   // City data mapping
   const cityData = {
@@ -424,575 +313,315 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* MOBILE-FIRST DESIGN: App-style layout for mobile, standard for desktop */}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="text-white sticky top-0 z-40" style={{ backgroundColor: "#003580" }}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                <Plane className="w-4 h-4 text-black" />
+              </div>
+              <span className="text-lg sm:text-xl font-bold tracking-tight">
+                faredown.com
+              </span>
+            </Link>
 
-      {/* Mobile Header & Search (≤768px) - Booking.com Style */}
-      <div className="block md:hidden pb-16">
-        {/* Mobile Header */}
-        <header className="bg-[#003580] text-white">
-          <div className="px-4 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                  <Plane className="w-4 h-4 text-[#003580]" />
+            {/* Centered Navigation */}
+            <nav className="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-medium">
+              <Link
+                to="/"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold border-b-2 border-white py-3 lg:py-4"
+              >
+                <span>Flights</span>
+              </Link>
+              <Link
+                to="/hotels"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
+              >
+                <span>Hotels</span>
+              </Link>
+              <Link
+                to="/sightseeing"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
+              >
+                <span>Sightseeing</span>
+              </Link>
+              <Link
+                to="/transfers"
+                className="text-white hover:text-blue-200 cursor-pointer flex items-center py-3 lg:py-4"
+              >
+                <span>Transfers</span>
+              </Link>
+            </nav>
+
+            <div className="flex items-center space-x-2 md:space-x-6">
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                className="md:hidden text-white p-2 touch-manipulation"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+
+              {/* Currency */}
+              <div className="hidden md:flex items-center space-x-4 text-sm">
+                <div className="relative">
+                  <button
+                    onClick={() =>
+                      setShowCurrencyDropdown(!showCurrencyDropdown)
+                    }
+                    className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
+                  >
+                    <span>Curr {selectedCurrency.symbol} {selectedCurrency.code}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                  {showCurrencyDropdown && (
+                    <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-48 max-h-60 overflow-y-auto">
+                      {[
+                        { code: "USD", symbol: "$", name: "US Dollar" },
+                        { code: "EUR", symbol: "€", name: "Euro" },
+                        { code: "GBP", symbol: "£", name: "British Pound" },
+                        { code: "INR", symbol: "₹", name: "Indian Rupee" },
+                        { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+                      ].map((currency) => (
+                        <button
+                          key={currency.code}
+                          onClick={() => {
+                            setSelectedCurrency(currency);
+                            setShowCurrencyDropdown(false);
+                          }}
+                          className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm text-gray-900 flex items-center justify-between"
+                        >
+                          <span>{currency.name}</span>
+                          <span className="font-medium">
+                            {currency.symbol} {currency.code}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <span className="text-lg font-bold">faredown.com</span>
               </div>
               <div className="flex items-center space-x-3">
-                <button
-                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
-                  onClick={() => {
-                    setShowLanguageMenu(!showLanguageMenu);
-                    setShowNotifications(false);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <Globe className="w-5 h-5" />
-                </button>
-                <button
-                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
-                  onClick={() => {
-                    setShowNotifications(!showNotifications);
-                    setShowLanguageMenu(false);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <Bell className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg"></span>
-                </button>
-                <button
-                  onClick={() => {
-                    setShowMobileMenu(!showMobileMenu);
-                    setShowNotifications(false);
-                    setShowLanguageMenu(false);
-                  }}
-                  className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
-                >
-                  <Menu className="w-5 h-5" />
-                </button>
+                {isLoggedIn ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-2 md:px-3 py-2 hover:bg-blue-800">
+                      <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-bold text-black">
+                          {userName.charAt(0)}
+                        </span>
+                      </div>
+                      <span className="text-sm text-white hidden sm:inline">
+                        {userName}
+                      </span>
+                      <span className="text-xs text-yellow-300 hidden md:inline">
+                        Loyalty Level 1
+                      </span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem>
+                        <Link to="/account" className="flex items-center">
+                          <User className="w-4 h-4 mr-2" />
+                          My account
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link to="/account/trips" className="flex items-center">
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          Bookings & Trips
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Award className="w-4 h-4 mr-2" />
+                        Loyalty program
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link
+                          to="/account/payment"
+                          className="flex items-center"
+                        >
+                          <CreditCard className="w-4 h-4 mr-2" />
+                          Rewards & Wallet
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={downloadProjectInfo}
+                        className="border-t mt-1 pt-2"
+                      >
+                        <Code className="w-4 h-4 mr-2" />
+                        Download Code Info
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut}>
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-white text-blue-700 border-white hover:bg-gray-100 rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
+                      onClick={() => setShowRegister(true)}
+                    >
+                      Register
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-800 text-white rounded text-xs md:text-sm font-medium px-2 md:px-4 py-1.5"
+                      onClick={() => setShowSignIn(true)}
+                    >
+                      Sign in
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
-        </header>
+        </div>
 
         {/* Mobile Menu Overlay */}
         {showMobileMenu && (
-          <div className="fixed inset-0 z-50 md:hidden">
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50"
-              onClick={() => setShowMobileMenu(false)}
-            />
+          <div className="md:hidden bg-blue-800 border-t border-blue-600 absolute w-full z-50">
+            <div className="px-4 py-4 space-y-2">
+              <Link
+                to="/flights"
+                className="flex items-center space-x-2 text-white py-3 px-2 rounded hover:bg-blue-700 border-b border-blue-600"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <Plane className="w-4 h-4" />
+                <span>Flights</span>
+              </Link>
+              <Link
+                to="/hotels"
+                className="flex items-center space-x-2 text-white py-3 px-2 rounded hover:bg-blue-700 border-b border-blue-600"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <div className="w-4 h-4" />
+                <span>Hotels</span>
+              </Link>
+              {isLoggedIn && (
+                <Link
+                  to="/my-account"
+                  className="flex items-center space-x-2 text-white py-3 px-2 rounded hover:bg-blue-700"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  <User className="w-4 h-4" />
+                  <span>My Account</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
+      </header>
 
-            {/* Menu Panel */}
-            <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-xl menu-panel mobile-menu-enhanced">
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 bg-white">
-                  <span
-                    className="text-lg font-bold text-gray-900"
-                    style={{
-                      fontSize: "18px",
-                      lineHeight: "22px",
-                      letterSpacing: "0.01em",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Menu
-                  </span>
+      {/* Hero Search Section */}
+      <div className="py-8 pb-16" style={{ backgroundColor: "#003580" }}>
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Upgrade. Bargain. Book.
+            </h1>
+            <p className="text-xl text-white mb-2 opacity-90">
+              Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.
+            </p>
+          </div>
+
+          {/* Search Form */}
+          <div className="bg-white rounded-lg p-6 shadow-lg max-w-6xl mx-auto">
+            {/* Trip Type Radio Buttons */}
+            <div className="flex space-x-6 mb-6">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  checked={tripType === "round-trip"}
+                  onChange={() => setTripType("round-trip")}
+                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">Round trip</span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  checked={tripType === "one-way"}
+                  onChange={() => setTripType("one-way")}
+                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">One way</span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  checked={tripType === "multi-city"}
+                  onChange={() => setTripType("multi-city")}
+                  className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span className="text-sm font-medium text-gray-700">Multi-city</span>
+              </label>
+              <div className="ml-auto">
+                <div className="relative">
                   <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-150"
-                    style={{
-                      WebkitTapHighlightColor: "transparent",
-                    }}
+                    onClick={() => setShowClassDropdown(!showClassDropdown)}
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded transition-colors border border-gray-300"
                   >
-                    <X className="w-5 h-5" style={{ strokeWidth: "2" }} />
+                    <span className="text-sm text-gray-700">{selectedClass}</span>
+                    <ChevronDown className="w-3 h-3 text-gray-500" />
                   </button>
-                </div>
-
-                {/* Menu Items */}
-                <div className="flex-1 py-4">
-                  <nav className="space-y-1 px-4">
-                    <Link
-                      to="/"
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
-                      onClick={() => setShowMobileMenu(false)}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Plane className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Flights</span>
-                    </Link>
-
-                    <Link
-                      to="/hotels"
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
-                      onClick={() => setShowMobileMenu(false)}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Hotel className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Hotels</span>
-                    </Link>
-
-                    <Link
-                      to="/sightseeing"
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
-                      onClick={() => setShowMobileMenu(false)}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Camera className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Sightseeing</span>
-                    </Link>
-
-                    <Link
-                      to="/transfers"
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
-                      onClick={() => setShowMobileMenu(false)}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Car className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Transfers</span>
-                    </Link>
-
-                    <Link
-                      to="/bookings"
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-150"
-                      onClick={() => setShowMobileMenu(false)}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <BookOpen className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">My Bookings</span>
-                    </Link>
-
-                    {/* Currency Selection Tab */}
-                    <div className="menu-divider my-4"></div>
-                    <div className="px-4 py-2">
-                      <div
-                        className="menu-subtext font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center"
-                        style={{
-                          fontSize: "12px",
-                          lineHeight: "16px",
-                          fontWeight: "600",
-                          letterSpacing: "0.02em",
-                        }}
-                      >
-                        <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
-                        Currency
-                      </div>
-                      <div className="space-y-1 max-h-32 overflow-y-auto">
-                        {currencies.map((currency) => (
-                          <button
-                            key={currency.code}
-                            onClick={() => {
-                              setCurrency(currency);
-                            }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg flex items-center justify-between transition-colors duration-150 ${
-                              selectedCurrency.code === currency.code
-                                ? "bg-blue-50 text-blue-600 border border-blue-200"
-                                : "text-gray-700"
-                            }`}
-                            style={{
-                              WebkitTapHighlightColor: "transparent",
-                              fontSize: "14px",
-                              lineHeight: "18px",
-                            }}
-                          >
-                            <div className="flex items-center gap-2">
-                              <span className="text-base">{currency.flag}</span>
-                              <span
-                                className="font-medium"
-                                style={{
-                                  fontSize: "14px",
-                                  lineHeight: "18px",
-                                  fontWeight: "500",
-                                }}
-                              >
-                                {currency.name}
-                              </span>
-                            </div>
-                            <span
-                              className="font-semibold"
-                              style={{
-                                fontSize: "12px",
-                                lineHeight: "16px",
-                                fontWeight: "600",
-                              }}
-                            >
-                              {currency.symbol} {currency.code}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="menu-divider my-4"></div>
-
-                    <button
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Heart className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Saved</span>
-                    </button>
-
-                    <button
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Headphones className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Help & Support</span>
-                    </button>
-
-                    <button
-                      className="menu-item text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors duration-150"
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                      style={{
-                        WebkitTapHighlightColor: "transparent",
-                      }}
-                    >
-                      <Settings className="w-5 h-5 text-[#003580] flex-shrink-0" />
-                      <span className="font-medium">Settings</span>
-                    </button>
-                  </nav>
-
-                  {/* User Section */}
-                  {isLoggedIn ? (
-                    <div className="mt-8 px-4">
-                      <div className="bg-blue-50 rounded-lg p-4">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
-                            <span
-                              className="text-white font-bold"
-                              style={{
-                                fontSize: "14px",
-                                lineHeight: "18px",
-                                fontWeight: "700",
-                              }}
-                            >
-                              {userName.charAt(0)}
-                            </span>
-                          </div>
-                          <div>
-                            <div
-                              className="font-medium text-gray-900"
-                              style={{
-                                fontSize: "16px",
-                                lineHeight: "20px",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {userName}
-                            </div>
-                            <div
-                              className="text-gray-600 mt-1"
-                              style={{
-                                fontSize: "14px",
-                                lineHeight: "18px",
-                                fontWeight: "400",
-                              }}
-                            >
-                              Loyalty Level 1
-                            </div>
-                          </div>
-                        </div>
+                  {showClassDropdown && (
+                    <div className="absolute top-10 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-2 z-[9999] w-48">
+                      {["Economy", "Premium Economy", "Business", "First Class"].map((classType) => (
                         <button
-                          className="flex items-center gap-2 text-red-600 hover:text-red-700 w-full transition-colors duration-150"
+                          key={classType}
                           onClick={() => {
-                            handleSignOut();
-                            setShowMobileMenu(false);
+                            setSelectedClass(classType);
+                            setShowClassDropdown(false);
                           }}
-                          style={{
-                            WebkitTapHighlightColor: "transparent",
-                            fontSize: "14px",
-                            lineHeight: "18px",
-                            padding: "8px 0",
-                          }}
+                          className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm"
                         >
-                          <LogOut className="w-4 h-4 flex-shrink-0" />
-                          <span className="font-medium">Sign Out</span>
+                          {classType}
                         </button>
-
-                        {/* Admin Panel Access */}
-                        <div className="border-t border-gray-200 pt-4 mt-4">
-                          <button
-                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
-                            onClick={() => {
-                              // Navigate to admin panel
-                              window.open("/admin/login", "_blank");
-                              setShowMobileMenu(false);
-                            }}
-                            style={{
-                              fontSize: "14px",
-                              lineHeight: "18px",
-                              padding: "8px 0",
-                            }}
-                          >
-                            <Shield className="w-4 h-4" />
-                            <span className="font-medium">Admin Panel</span>
-                          </button>
-                          <button
-                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
-                            onClick={() => {
-                              // Navigate to live API
-                              window.open("/admin/api", "_blank");
-                              setShowMobileMenu(false);
-                            }}
-                            style={{
-                              fontSize: "14px",
-                              lineHeight: "18px",
-                              padding: "8px 0",
-                            }}
-                          >
-                            <Code className="w-4 h-4" />
-                            <span className="font-medium">Live API</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-8 px-4 space-y-3">
-                      <Button
-                        className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
-                        onClick={() => {
-                          setShowSignIn(true);
-                          setShowMobileMenu(false);
-                        }}
-                      >
-                        Sign In
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
-                        onClick={() => {
-                          setShowRegister(true);
-                          setShowMobileMenu(false);
-                        }}
-                      >
-                        Register
-                      </Button>
+                      ))}
                     </div>
                   )}
                 </div>
               </div>
             </div>
-          </div>
-        )}
 
-        {/* Notifications Overlay */}
-        {showNotifications && (
-          <div className="fixed inset-0 z-50 md:hidden">
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50"
-              onClick={() => setShowNotifications(false)}
-            />
-            <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-xl">
-              <div className="flex items-center justify-between p-4 border-b bg-[#003580] text-white">
-                <div>
-                  <h2 className="text-lg font-semibold">Notifications</h2>
-                  <p className="text-xs text-blue-200">3 new messages</p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <button
-                    className="text-xs text-blue-200 hover:text-white transition-colors"
-                    onClick={() => {
-                      // Clear notifications logic would go here
-                    }}
-                  >
-                    Clear all
-                  </button>
-                  <button
-                    onClick={() => setShowNotifications(false)}
-                    className="p-2 text-white hover:bg-white/20 rounded-lg"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-              <div className="p-4 space-y-4">
-                <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                    <Bell className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">
-                      Welcome to Faredown!
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Start bargaining for your next flight and save up to 40%
-                      on travel costs.
-                    </p>
-                    <span className="text-xs text-gray-500 mt-2 block">
-                      Just now
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                    <DollarSign className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">
-                      Special Offer Available
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Extra 10% off on your first booking. Use code: FIRST10
-                    </p>
-                    <span className="text-xs text-gray-500 mt-2 block">
-                      2 hours ago
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
-                  <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <Plane className="w-4 h-4 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">
-                      Price Drop Alert
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Flights to Dubai are now 25% cheaper than last week!
-                    </p>
-                    <span className="text-xs text-gray-500 mt-2 block">
-                      1 day ago
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Language/Currency Menu */}
-        {showLanguageMenu && (
-          <div className="fixed inset-0 z-50 md:hidden">
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50"
-              onClick={() => setShowLanguageMenu(false)}
-            />
-            <div className="fixed top-0 right-0 w-80 h-full bg-white shadow-xl">
-              <div className="flex items-center justify-between p-4 border-b bg-[#003580] text-white">
-                <h2 className="text-lg font-semibold">Settings</h2>
+            {/* Search Inputs */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+              {/* From */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Leaving from
+                </label>
                 <button
-                  onClick={() => setShowLanguageMenu(false)}
-                  className="p-2 text-white hover:bg-white/20 rounded-lg"
+                  onClick={() => setShowFromCities(!showFromCities)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 focus:border-blue-500 bg-white"
                 >
-                  <X className="w-5 h-5" />
+                  <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">Leaving from</span>
                 </button>
-              </div>
-              <div className="p-4 space-y-6">
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-3">Language</h3>
-                  <div className="space-y-2">
-                    <button className="w-full flex items-center justify-between p-3 bg-[#003580] text-white rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-lg">🇺🇸</span>
-                        <span>English (US)</span>
-                      </div>
-                      <Check className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    More languages coming soon!
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-3">Currency</h3>
-                  <div className="max-h-64 overflow-y-auto space-y-2 pr-2">
-                    {currencies.map((currency) => (
+                {showFromCities && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50 mt-1">
+                    {Object.entries(cityData).map(([city, data]) => (
                       <button
-                        key={currency.code}
+                        key={city}
                         onClick={() => {
-                          setCurrency(currency);
-                          setShowLanguageMenu(false);
+                          setSelectedFromCity(city);
+                          setShowFromCities(false);
                         }}
-                        className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
-                          selectedCurrency.code === currency.code
-                            ? "bg-[#003580] text-white"
-                            : "hover:bg-gray-50"
-                        }`}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
                       >
-                        <div className="flex items-center space-x-3">
-                          <span className="text-lg">{currency.flag}</span>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{currency.name}</span>
-                            <span className="text-xs text-gray-500">
-                              {currency.symbol} • {currency.code}
-                            </span>
-                          </div>
-                        </div>
-                        {selectedCurrency.code === currency.code && (
-                          <Check className="w-4 h-4" />
-                        )}
+                        <div className="font-medium text-gray-900">{city} • {data.airport}</div>
+                        <div className="text-sm text-gray-500">{data.fullName}</div>
                       </button>
                     ))}
                   </div>
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
-                        {lastUpdated
-                          ? `Updated: ${new Date(lastUpdated).toLocaleTimeString()}`
-                          : "Using static rates"}
-                      </span>
-                      {isLoading && (
-                        <div className="w-3 h-3 border border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Mobile Hero Section */}
-        <div
-          className={`bg-white text-gray-900 pb-8 ${activeTab === "flights" ? "" : "hidden"}`}
-        >
-          <div className="px-4 pt-6">
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2">
-                Upgrade. Bargain. Book.
-              </h1>
-              <p className="text-gray-600 text-sm mb-3">
-                Turn your seat into an upgrade and your fare into a win, with AI
-                that bargains for you.
-              </p>
-            </div>
-
-            {/* Mobile Trip Type Selector */}
-            <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setTripType("round-trip")}
-                className={cn(
-                  "flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors",
-                  tripType === "round-trip"
-                    ? "bg-[#003580] text-white"
-                    : "text-gray-600 hover:text-gray-900",
                 )}
+<<<<<<< HEAD
               >
                 Round trip
               </button>
@@ -1102,92 +731,73 @@ export default function Index() {
                     </button>
                   </div>
                 </div>
+=======
+>>>>>>> refs/remotes/origin/main
               </div>
 
-              {/* Dates */}
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+              {/* To */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Going to
+                </label>
                 <button
-                  onClick={() => setShowCalendar(true)}
-                  className="w-full text-left p-5 hover:bg-gray-50 rounded-xl transition-colors duration-200"
+                  onClick={() => setShowToCities(!showToCities)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 focus:border-blue-500 bg-white"
                 >
-                  <div className="text-xs font-medium text-gray-600 mb-2 uppercase tracking-wide">
-                    Dates
+                  <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">Going to</span>
+                </button>
+                {showToCities && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50 mt-1">
+                    {Object.entries(cityData).map(([city, data]) => (
+                      <button
+                        key={city}
+                        onClick={() => {
+                          setSelectedToCity(city);
+                          setShowToCities(false);
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="font-medium text-gray-900">{city} • {data.airport}</div>
+                        <div className="text-sm text-gray-500">{data.fullName}</div>
+                      </button>
+                    ))}
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <CalendarIcon className="w-5 h-5 text-[#003580]" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-semibold text-gray-900 text-base leading-tight">
-                        {departureDate
-                          ? formatDisplayDate(departureDate, "dd MMM")
-                          : "Select departure"}
-                        {tripType === "round-trip" && (
-                          <>
-                            <span className="mx-2 text-gray-400">—</span>
-                            {returnDate
-                              ? formatDisplayDate(returnDate, "dd MMM")
-                              : "Select return"}
-                          </>
-                        )}
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1">
-                        {tripType === "round-trip"
-                          ? "Add departure and return dates"
-                          : "Add departure date"}
-                      </div>
-                    </div>
-                  </div>
+                )}
+              </div>
+
+              {/* Travel dates */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Travel dates
+                </label>
+                <button
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 bg-white"
+                >
+                  <CalendarIcon className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">
+                    Sun, Aug 17 — Wed, ...
+                  </span>
                 </button>
               </div>
 
-              {/* Travelers & Class */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <button
-                    onClick={() => setShowTravelers(true)}
-                    className="w-full text-left"
-                  >
-                    <div className="text-xs text-gray-500 mb-1">Travelers</div>
-                    <div className="flex items-center space-x-2">
-                      <Users className="w-5 h-5 text-[#003580]" />
-                      <div>
-                        <div className="font-medium text-gray-900">
-                          {travelers.adults + travelers.children}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {travelers.adults} adult
-                          {travelers.adults > 1 ? "s" : ""}
-                          {travelers.children > 0 &&
-                            `, ${travelers.children} child${travelers.children > 1 ? "ren" : ""}`}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-xl p-4 shadow-sm">
-                  <button
-                    onClick={() => setShowClassDropdown(true)}
-                    className="w-full text-left"
-                  >
-                    <div className="text-xs text-gray-500 mb-1">Class</div>
-                    <div className="flex items-center space-x-2">
-                      <Settings className="w-5 h-5 text-[#003580]" />
-                      <div>
-                        <div className="font-medium text-gray-900">
-                          {selectedClass}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Travel class
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
+              {/* Travelers */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Travelers
+                </label>
+                <button
+                  onClick={() => setShowTravelers(!showTravelers)}
+                  className="w-full flex items-center border border-gray-300 rounded-lg px-3 py-3 hover:border-blue-500 bg-white"
+                >
+                  <Users className="w-4 h-4 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-medium">1 adult</span>
+                </button>
               </div>
 
               {/* Search Button */}
+<<<<<<< HEAD
               <Button
                 onClick={() => {
                   const searchParams = getSearchParams();
@@ -2832,471 +2442,196 @@ export default function Index() {
                 />
                 <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8">
                   Subscribe
+=======
+              <div>
+                <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg">
+                  Search
+>>>>>>> refs/remotes/origin/main
                 </Button>
               </div>
-              <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
-                </svg>
-                <span>We respect your inbox.</span>
-              </div>
             </div>
-          </section>
-
-          {/* Footer */}
-          <footer className="bg-[#1a1a2e] text-white py-8">
-            <div className="max-w-7xl mx-auto px-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div>
-                  <h3 className="text-lg font-bold mb-3">Faredown</h3>
-                  <p className="text-gray-400 text-sm mb-4">
-                    The world's first travel portal where you can negotiate and
-                    bargain for better deals.
-                  </p>
-                  <div className="flex space-x-3">
-                    <a
-                      href="https://facebook.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                    >
-                      <Facebook className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://instagram.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
-                    >
-                      <Instagram className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://twitter.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
-                    >
-                      <Twitter className="w-4 h-4" />
-                    </a>
-                    <a
-                      href="https://linkedin.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
-                    >
-                      <Linkedin className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-3">Quick Links</h4>
-                  <ul className="space-y-1 text-sm text-gray-400">
-                    <li>
-                      <Link to="/about" className="hover:text-white">
-                        About Us
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/how-it-works" className="hover:text-white">
-                        How It Works
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/contact" className="hover:text-white">
-                        Contact
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/help" className="hover:text-white">
-                        Help Center
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-3">Services</h4>
-                  <ul className="space-y-0.5 text-sm text-gray-400">
-                    <li>
-                      <button
-                        onClick={() => {
-                          setActiveTab("flights");
-                          window.history.pushState({}, "", "/?tab=flights");
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="hover:text-white text-left"
-                      >
-                        Flights
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => {
-                          setActiveTab("hotels");
-                          window.history.pushState({}, "", "/?tab=hotels");
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="hover:text-white text-left"
-                      >
-                        Hotels
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => {
-                          setActiveTab("sightseeing");
-                          window.history.pushState({}, "", "/?tab=sightseeing");
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="hover:text-white text-left"
-                      >
-                        Sightseeing
-                      </button>
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => {
-                          setActiveTab("transfers");
-                          window.history.pushState({}, "", "/?tab=transfers");
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                        className="hover:text-white text-left"
-                      >
-                        Transfers
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-3">Legal</h4>
-                  <ul className="space-y-1 text-sm text-gray-400">
-                    <li>
-                      <Link to="/privacy" className="hover:text-white">
-                        Privacy Policy
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/terms" className="hover:text-white">
-                        Terms of Service
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/refund" className="hover:text-white">
-                        Refund Policy
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-700 mt-6 pt-6">
-                <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                  <div className="flex items-center space-x-6">
-                    <div className="flex items-center space-x-3 text-xs text-gray-400">
-                      <span className="font-semibold">Certified by:</span>
-                      <div className="flex items-center space-x-4">
-                        <div className="bg-white rounded px-2 py-1">
-                          <span className="text-[#003580] font-bold text-xs">
-                            TAAI
-                          </span>
-                        </div>
-                        <div className="bg-white rounded px-2 py-1">
-                          <span className="text-[#003580] font-bold text-xs">
-                            TAAFI
-                          </span>
-                        </div>
-                        <div className="bg-white rounded px-2 py-1">
-                          <span className="text-[#003580] font-bold text-xs">
-                            IATA
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-gray-400 text-sm">
-                    © 2025 Faredown.com. All rights reserved.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </footer>
+          </div>
         </div>
       </div>
 
-      {/* Sign In Modal */}
-      <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center">
-              Sign in or create an account
-            </DialogTitle>
-          </DialogHeader>
+      {/* Why Faredown Is Reinventing Travel Booking */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Why Faredown Is Reinventing Travel Booking
+          </h2>
+          <p className="text-xl text-gray-600 mb-12">
+            The future of booking isn't fixed pricing — it's <strong>live bargaining.</strong>
+          </p>
 
-          <div className="space-y-4 p-4">
-            {/* Test Credentials Info */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p className="text-sm font-medium text-blue-900 mb-1">
-                Test Credentials:
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Live Bargain Technology
+              </h3>
+              <p className="text-gray-600">
+                Negotiate upgrades instantly — from economy to business, from standard to suite.
               </p>
-              <p className="text-xs text-blue-700">Email: test@faredown.com</p>
-              <p className="text-xs text-blue-700">Password: password123</p>
             </div>
 
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Pay What You Feel Is Fair
+              </h3>
+              <p className="text-gray-600">
+                Set your price and let Faredown try to get it for you — no more overpaying.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Secure, Real-Time Bookings
+              </h3>
+              <p className="text-gray-600">
+                Your data is encrypted and bookings are confirmed instantly.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Headphones className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Smarter Than Any Travel Agent
+              </h3>
+              <p className="text-gray-600">
+                Skip the back and forth. Our AI works faster, 24/7.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Auth Dialogs */}
+      <Dialog open={showSignIn} onOpenChange={setShowSignIn}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Sign in to your account</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
             {authError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-600">{authError}</p>
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                {authError}
               </div>
             )}
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email address
+                Email
               </label>
               <Input
                 type="email"
-                placeholder="Enter your email address"
-                className="w-full"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
+                placeholder="Enter your email"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <Input
                 type="password"
-                placeholder="Enter your password"
-                className="w-full"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
+                placeholder="Enter your password"
               />
             </div>
-
-            <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-              onClick={handleSignIn}
-            >
-              Sign in
-            </Button>
-
-            <div className="text-center">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">or</span>
-                </div>
-              </div>
+            <div className="text-sm text-gray-600">
+              Test credentials: test@faredown.com / password123
             </div>
-
-            <div className="space-y-3">
-              <Button
-                variant="outline"
-                className="w-full py-3 flex items-center justify-center space-x-2"
-              >
-                <span>🔍</span>
-                <span>Continue with Google</span>
+            <div className="flex space-x-2">
+              <Button onClick={handleSignIn} className="flex-1">
+                Sign in
               </Button>
-
-              <Button
-                variant="outline"
-                className="w-full py-3 flex items-center justify-center space-x-2"
-              >
-                <span>📧</span>
-                <span>Continue with Apple</span>
+              <Button variant="outline" onClick={() => setShowSignIn(false)}>
+                Cancel
               </Button>
-
-              <Button
-                variant="outline"
-                className="w-full py-3 flex items-center justify-center space-x-2"
-              >
-                <span>📘</span>
-                <span>Continue with Facebook</span>
-              </Button>
-            </div>
-
-            <div className="text-xs text-gray-500 text-center">
-              By signing in or creating an account, you agree with our{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Terms & conditions
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Privacy statement
-              </a>
-            </div>
-
-            <div className="text-center">
-              <button
-                onClick={() => {
-                  setShowSignIn(false);
-                  setShowRegister(true);
-                }}
-                className="text-blue-600 hover:underline text-sm"
-              >
-                Create account
-              </button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Register Modal */}
       <Dialog open={showRegister} onOpenChange={setShowRegister}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center">
-              Create your account
-            </DialogTitle>
+            <DialogTitle>Create your account</DialogTitle>
           </DialogHeader>
-
-          <div className="space-y-4 p-4">
+          <div className="space-y-4">
             {authError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-600">{authError}</p>
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                {authError}
               </div>
             )}
-
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  First name
+                </label>
+                <Input
+                  value={registerFirstName}
+                  onChange={(e) => setRegisterFirstName(e.target.value)}
+                  placeholder="First name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Last name
+                </label>
+                <Input
+                  value={registerLastName}
+                  onChange={(e) => setRegisterLastName(e.target.value)}
+                  placeholder="Last name"
+                />
+              </div>
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email address
+                Email
               </label>
               <Input
                 type="email"
-                placeholder="Enter your email address"
-                className="w-full"
                 value={registerEmail}
                 onChange={(e) => setRegisterEmail(e.target.value)}
+                placeholder="Enter your email"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <Input
                 type="password"
-                placeholder="Create a password"
-                className="w-full"
                 value={registerPassword}
                 onChange={(e) => setRegisterPassword(e.target.value)}
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Use at least 8 characters with a mix of letters, numbers &
-                symbols
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                First name
-              </label>
-              <Input
-                type="text"
-                placeholder="Enter your first name"
-                className="w-full"
-                value={registerFirstName}
-                onChange={(e) => setRegisterFirstName(e.target.value)}
+                placeholder="Create a password"
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Last name
-              </label>
-              <Input
-                type="text"
-                placeholder="Enter your last name"
-                className="w-full"
-                value={registerLastName}
-                onChange={(e) => setRegisterLastName(e.target.value)}
-              />
-            </div>
-
-            <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-              onClick={handleRegister}
-            >
-              Create account
-            </Button>
-
-            <div className="text-center">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">or</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <Button
-                variant="outline"
-                className="w-full py-3 flex items-center justify-center space-x-2"
-              >
-                <span>🇬</span>
-                <span>Sign up with Google</span>
+            <div className="flex space-x-2">
+              <Button onClick={handleRegister} className="flex-1">
+                Create account
               </Button>
-
-              <Button
-                variant="outline"
-                className="w-full py-3 flex items-center justify-center space-x-2"
-              >
-                <span>📧</span>
-                <span>Sign up with Apple</span>
+              <Button variant="outline" onClick={() => setShowRegister(false)}>
+                Cancel
               </Button>
-
-              <Button
-                variant="outline"
-                className="w-full py-3 flex items-center justify-center space-x-2"
-              >
-                <span>📘</span>
-                <span>Sign up with Facebook</span>
-              </Button>
-            </div>
-
-            <div className="text-xs text-gray-500 text-center">
-              By signing in or creating an account, you agree with our{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Terms & conditions
-              </a>{" "}
-              and{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Privacy statement
-              </a>
-            </div>
-
-            <div className="text-center">
-              <button
-                onClick={() => {
-                  setShowRegister(false);
-                  setShowSignIn(true);
-                }}
-                className="text-blue-600 hover:underline text-sm"
-              >
-                Already have an account? Sign in
-              </button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
+<<<<<<< HEAD
 
       {/* Multi-city segment dropdowns */}
       {tripType === "multi-city" &&
@@ -3395,6 +2730,8 @@ export default function Index() {
         selectedClass={selectedClass}
         onSelectClass={setSelectedClass}
       />
+=======
+>>>>>>> refs/remotes/origin/main
     </div>
   );
 }

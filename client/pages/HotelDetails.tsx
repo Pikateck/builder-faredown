@@ -107,12 +107,16 @@ import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { hotelsService } from "@/services/hotelsService";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { useDateContext } from "@/contexts/DateContext";
 
 export default function HotelDetails() {
   useScrollToTop();
   const { hotelId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { formatPrice } = useCurrency();
+  const { loadDatesFromParams } = useDateContext();
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
@@ -201,6 +205,11 @@ export default function HotelDetails() {
   const totalNights = Math.ceil(
     (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
   );
+
+  // Load context data from URL parameters
+  useEffect(() => {
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
 
   // Fetch live hotel data from Hotelbeds API
   useEffect(() => {

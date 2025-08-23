@@ -1,15 +1,8 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { Header } from "@/components/Header";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 
 export default function Sightseeing() {
-  const navigate = useNavigate();
-
-  // Redirect to homepage with sightseeing tab active
-  useEffect(() => {
-    navigate("/?tab=sightseeing", { replace: true });
-  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gray-50">

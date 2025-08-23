@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useDateContext } from "@/contexts/DateContext";
 import {
   MapPin,
   Star,
@@ -83,6 +84,32 @@ export default function SightseeingDetails() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
+  const { loadDatesFromParams } = useDateContext();
+
+  // Handle missing attractionId
+  if (!attractionId) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              Attraction Not Found
+            </h1>
+            <p className="text-gray-600 mb-6">
+              The attraction you're looking for doesn't exist.
+            </p>
+            <Button
+              onClick={() => navigate("/sightseeing")}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+            >
+              Back to Sightseeing
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const [attraction, setAttraction] = useState<SightseeingAttraction | null>(
     null,
@@ -100,10 +127,23 @@ export default function SightseeingDetails() {
   const [isMobile, setIsMobile] = useState(false);
 
   // Unified passenger quantities for all ticket types
-  const [passengerQuantities, setPassengerQuantities] = useState({
-    adults: 1, // Default to 1 adult
-    children: 0,
-    infants: 0,
+  const [passengerQuantities, setPassengerQuantities] = useState(() => {
+    const adultsFromParams = parseInt(searchParams.get("adults") || "2");
+    const childrenFromParams = parseInt(searchParams.get("children") || "0");
+    return {
+      adults: adultsFromParams > 0 ? adultsFromParams : 1, // Default to 1 adult if invalid
+      children: childrenFromParams >= 0 ? childrenFromParams : 0,
+      infants: 0,
+    };
+  });
+
+  // Debug logging (after state declarations)
+  console.log("🎯 SightseeingDetails component loaded", {
+    attractionId,
+    searchParams: Object.fromEntries(searchParams.entries()),
+    loading,
+    error,
+    attraction: attraction?.name || "null",
   });
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
@@ -116,13 +156,16 @@ export default function SightseeingDetails() {
 
   // Load attraction data
   useEffect(() => {
+    console.log("🔄 useEffect triggered for attractionId:", attractionId);
+
     const loadAttraction = async () => {
+      console.log("📝 Starting loadAttraction");
       setLoading(true);
       setError("");
 
       try {
         // Simulate API call delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 50));
 
         // Sample attraction data (in real app, this would come from API)
         const sampleAttractions: Record<string, SightseeingAttraction> = {
@@ -312,17 +355,26 @@ export default function SightseeingDetails() {
         };
 
         const attractionData = sampleAttractions[attractionId || ""];
+        console.log(
+          "📊 Looking for attraction:",
+          attractionId,
+          "Found:",
+          !!attractionData,
+        );
 
         if (!attractionData) {
+          console.log("❌ Attraction not found");
           setError("Attraction not found");
           return;
         }
 
+        console.log("✅ Setting attraction data:", attractionData.name);
         setAttraction(attractionData);
       } catch (err) {
         console.error("Error loading attraction:", err);
         setError("Failed to load attraction details. Please try again.");
       } finally {
+        console.log("🏁 Loading complete");
         setLoading(false);
       }
     };
@@ -331,6 +383,11 @@ export default function SightseeingDetails() {
       loadAttraction();
     }
   }, [attractionId]);
+
+  // Load context data from URL parameters
+  useEffect(() => {
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
 
   // Mobile detection
   useEffect(() => {
@@ -413,9 +470,9 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", ticketToBook.toString());
     params.set("selectedTime", selectedTime);
-    params.set("adults", passengerQuantities.adults.toString());
-    params.set("children", passengerQuantities.children.toString());
-    params.set("infants", passengerQuantities.infants.toString());
+    params.set("adults", (passengerQuantities?.adults || 1).toString());
+    params.set("children", (passengerQuantities?.children || 0).toString());
+    params.set("infants", (passengerQuantities?.infants || 0).toString());
 
     // Add visitDate - use the current date if not already set
     if (!params.get("visitDate")) {
@@ -459,9 +516,9 @@ export default function SightseeingDetails() {
     params.set("attractionId", attraction?.id || "");
     params.set("ticketType", bargainTicketType.toString());
     params.set("selectedTime", selectedTime || "10:30");
-    params.set("adults", passengerQuantities.adults.toString());
-    params.set("children", passengerQuantities.children.toString());
-    params.set("infants", passengerQuantities.infants.toString());
+    params.set("adults", (passengerQuantities?.adults || 1).toString());
+    params.set("children", (passengerQuantities?.children || 0).toString());
+    params.set("infants", (passengerQuantities?.infants || 0).toString());
     params.set("bargainApplied", "true");
     params.set("bargainPrice", finalPrice.toString());
 
@@ -479,7 +536,16 @@ export default function SightseeingDetails() {
     change: number,
   ) => {
     setPassengerQuantities((prev) => {
-      const newQuantity = Math.max(0, prev[type] + change);
+      // Ensure prev is defined and has the required properties
+      if (!prev || typeof prev !== "object") {
+        prev = { adults: 1, children: 0, infants: 0 };
+      }
+
+      const currentValue = prev[type] || 0;
+      const newQuantity = Math.max(
+        type === "adults" ? 1 : 0,
+        currentValue + change,
+      );
 
       return {
         ...prev,
@@ -490,10 +556,11 @@ export default function SightseeingDetails() {
 
   // Calculate total passengers
   const getTotalPassengers = () => {
+    if (!passengerQuantities) return 1;
     return (
-      passengerQuantities.adults +
-      passengerQuantities.children +
-      passengerQuantities.infants
+      (passengerQuantities?.adults || 0) +
+      (passengerQuantities?.children || 0) +
+      (passengerQuantities?.infants || 0)
     );
   };
 
@@ -501,13 +568,12 @@ export default function SightseeingDetails() {
   const getTicketTotalPrice = (ticketIndex: number) => {
     const ticket = attraction?.ticketTypes[ticketIndex];
 
-    if (!ticket) return 0;
+    if (!ticket || !passengerQuantities) return 0;
 
     const priceCalc = sightseeingService.calculatePrice(
       ticket.price,
-      passengerQuantities.adults,
-      passengerQuantities.children,
-      passengerQuantities.infants,
+      passengerQuantities?.adults || 1,
+      passengerQuantities?.children || 0,
     );
 
     return priceCalc.totalPrice;
@@ -1001,13 +1067,13 @@ export default function SightseeingDetails() {
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengerQuantity("adults", -1)}
-                          disabled={passengerQuantities.adults <= 0}
+                          disabled={(passengerQuantities?.adults || 1) <= 0}
                           className="w-8 h-8 p-0"
                         >
                           -
                         </Button>
                         <span className="w-8 text-center font-medium">
-                          {passengerQuantities.adults}
+                          {passengerQuantities?.adults || 1}
                         </span>
                         <Button
                           variant="outline"
@@ -1035,13 +1101,13 @@ export default function SightseeingDetails() {
                           onClick={() =>
                             updatePassengerQuantity("children", -1)
                           }
-                          disabled={passengerQuantities.children <= 0}
+                          disabled={(passengerQuantities?.children || 0) <= 0}
                           className="w-8 h-8 p-0"
                         >
                           -
                         </Button>
                         <span className="w-8 text-center font-medium">
-                          {passengerQuantities.children}
+                          {passengerQuantities?.children || 0}
                         </span>
                         <Button
                           variant="outline"
@@ -1067,13 +1133,13 @@ export default function SightseeingDetails() {
                           variant="outline"
                           size="sm"
                           onClick={() => updatePassengerQuantity("infants", -1)}
-                          disabled={passengerQuantities.infants <= 0}
+                          disabled={(passengerQuantities?.infants || 0) <= 0}
                           className="w-8 h-8 p-0"
                         >
                           -
                         </Button>
                         <span className="w-8 text-center font-medium">
-                          {passengerQuantities.infants}
+                          {passengerQuantities?.infants || 0}
                         </span>
                         <Button
                           variant="outline"
@@ -1192,12 +1258,12 @@ export default function SightseeingDetails() {
                           {getTotalPassengers() > 1 ? "s" : ""}
                         </div>
                         <div className="text-xs text-gray-500 mb-2">
-                          {passengerQuantities.adults} Adults
-                          {passengerQuantities.children > 0
-                            ? `, ${passengerQuantities.children} Children`
+                          {passengerQuantities?.adults || 1} Adults
+                          {(passengerQuantities?.children || 0) > 0
+                            ? `, ${passengerQuantities?.children} Children`
                             : ""}
-                          {passengerQuantities.infants > 0
-                            ? `, ${passengerQuantities.infants} Infants`
+                          {(passengerQuantities?.infants || 0) > 0
+                            ? `, ${passengerQuantities?.infants} Infants`
                             : ""}
                         </div>
                       </div>
@@ -1210,54 +1276,58 @@ export default function SightseeingDetails() {
                               {(() => {
                                 const ticket =
                                   attraction.ticketTypes[selectedTicketType];
+
+                                if (!ticket || !passengerQuantities) {
+                                  return null;
+                                }
+
                                 const priceCalc =
                                   sightseeingService.calculatePrice(
                                     ticket.price,
-                                    passengerQuantities.adults,
-                                    passengerQuantities.children,
-                                    passengerQuantities.infants,
+                                    passengerQuantities?.adults || 1,
+                                    passengerQuantities?.children || 0,
                                   );
 
                                 return (
                                   <>
-                                    {priceCalc.breakdown.adults.count > 0 && (
+                                    {priceCalc?.breakdown?.adults?.count > 0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc.breakdown.adults.count} ×
+                                          {priceCalc?.breakdown?.adults?.count || 0} ×
                                           Adult (
                                           {formatPrice(
-                                            priceCalc.breakdown.adults.price,
+                                            priceCalc?.breakdown?.adults?.price || 0,
                                           )}
                                           )
                                         </span>
                                         <span className="font-medium text-gray-900">
                                           {formatPrice(
-                                            priceCalc.breakdown.adults.total,
+                                            priceCalc?.breakdown?.adults?.total || 0,
                                           )}
                                         </span>
                                       </div>
                                     )}
-                                    {priceCalc.breakdown.children.count > 0 && (
+                                    {priceCalc?.breakdown?.children?.count > 0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc.breakdown.children.count} ×
+                                          {priceCalc?.breakdown?.children?.count || 0} ×
                                           Child (
                                           {formatPrice(
-                                            priceCalc.breakdown.children.price,
+                                            priceCalc?.breakdown?.children?.price || 0,
                                           )}
                                           )
                                         </span>
                                         <span className="font-medium text-gray-900">
                                           {formatPrice(
-                                            priceCalc.breakdown.children.total,
+                                            priceCalc?.breakdown?.children?.total || 0,
                                           )}
                                         </span>
                                       </div>
                                     )}
-                                    {priceCalc.breakdown.infants.count > 0 && (
+                                    {priceCalc?.breakdown?.infants?.count > 0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc.breakdown.infants.count} ×
+                                          {priceCalc?.breakdown?.infants?.count || 0} ×
                                           Infant (Free)
                                         </span>
                                         <span className="font-medium text-gray-900">
@@ -1370,45 +1440,49 @@ export default function SightseeingDetails() {
       </AlertDialog>
 
       {/* Sightseeing Bargain Modal */}
-      {attraction && (
-        <FlightStyleBargainModal
-          type="sightseeing"
-          roomType={{
-            id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
-            name:
-              attraction.ticketTypes[bargainTicketType]?.name ||
-              "Standard Admission",
-            description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
-            image: attraction.images[0],
-            marketPrice:
-              getTicketTotalPrice(bargainTicketType) ||
-              attraction.ticketTypes[bargainTicketType]?.price ||
-              149,
-            totalPrice:
-              getTicketTotalPrice(bargainTicketType) ||
-              attraction.ticketTypes[bargainTicketType]?.price ||
-              149,
-            features: attraction.ticketTypes[bargainTicketType]?.features || [],
-            maxOccupancy: adults,
-            bedType: attraction.duration,
-            size: attraction.category,
-            cancellation: "Free cancellation up to 24 hours before visit date",
-          }}
-          hotel={{
-            id: attraction.id,
-            name: attraction.name,
-            location: attraction.location,
-            checkIn: new Date().toISOString().split("T")[0],
-            checkOut: new Date().toISOString().split("T")[0],
-          }}
-          isOpen={isBargainModalOpen}
-          onClose={() => setIsBargainModalOpen(false)}
-          checkInDate={new Date()}
-          checkOutDate={new Date()}
-          roomsCount={1}
-          onBookingSuccess={handleBargainSuccess}
-        />
-      )}
+      {attraction &&
+        attraction.ticketTypes &&
+        attraction.ticketTypes[bargainTicketType] && (
+          <FlightStyleBargainModal
+            type="sightseeing"
+            roomType={{
+              id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
+              name:
+                attraction.ticketTypes[bargainTicketType]?.name ||
+                "Standard Admission",
+              description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
+              image: attraction.images?.[0] || "",
+              marketPrice:
+                getTicketTotalPrice(bargainTicketType) ||
+                attraction.ticketTypes[bargainTicketType]?.price ||
+                149,
+              totalPrice:
+                getTicketTotalPrice(bargainTicketType) ||
+                attraction.ticketTypes[bargainTicketType]?.price ||
+                149,
+              features:
+                attraction.ticketTypes[bargainTicketType]?.features || [],
+              maxOccupancy: adults || 2,
+              bedType: attraction.duration || "1-2 hours",
+              size: attraction.category || "activity",
+              cancellation:
+                "Free cancellation up to 24 hours before visit date",
+            }}
+            hotel={{
+              id: attraction.id || "unknown",
+              name: attraction.name || "Unknown Attraction",
+              location: attraction.location || "Unknown Location",
+              checkIn: new Date().toISOString().split("T")[0],
+              checkOut: new Date().toISOString().split("T")[0],
+            }}
+            isOpen={isBargainModalOpen}
+            onClose={() => setIsBargainModalOpen(false)}
+            checkInDate={new Date()}
+            checkOutDate={new Date()}
+            roomsCount={1}
+            onBookingSuccess={handleBargainSuccess}
+          />
+        )}
     </div>
   );
 }

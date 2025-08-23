@@ -109,7 +109,17 @@ async function applyMarkupRules(basePrice, destination, category, supplier_id) {
 }
 
 // Initialize the Hotelbeds Activities service
+<<<<<<< HEAD
 const activitiesService = HotelbedsActivitiesService;
+=======
+let activitiesService;
+try {
+  activitiesService = new HotelbedsActivitiesService();
+} catch (error) {
+  console.warn("HotelbedsActivitiesService not available, using fallback");
+  activitiesService = null;
+}
+>>>>>>> refs/remotes/origin/main
 
 // In-memory cache for destinations with 5-minute TTL
 const destinationsCache = new Map();
@@ -928,8 +938,14 @@ router.get("/bookings", async (req, res) => {
 });
 
 // Import voucher service
-const SightseeingVoucherService = require("../services/sightseeingVoucherService");
-const voucherService = new SightseeingVoucherService();
+let voucherService;
+try {
+  const SightseeingVoucherService = require("../services/sightseeingVoucherService");
+  voucherService = new SightseeingVoucherService();
+} catch (error) {
+  console.warn("SightseeingVoucherService not available, using fallback");
+  voucherService = null;
+}
 
 // Route: Generate voucher for booking
 router.post("/voucher/generate/:bookingId", async (req, res) => {

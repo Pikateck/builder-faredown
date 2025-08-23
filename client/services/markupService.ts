@@ -95,6 +95,34 @@ export interface CreateAirMarkupRequest {
   specialConditions?: string;
 }
 
+export interface TransferMarkup {
+  id: string;
+  name: string;
+  description: string;
+  originCity: string;
+  destinationCity: string;
+  transferType: "Private" | "Shared" | "Luxury" | "Economy" | "ALL";
+  vehicleType: "Sedan" | "SUV" | "Van" | "Bus" | "ALL";
+  markupType: "percentage" | "fixed";
+  markupValue: number;
+  minAmount: number;
+  maxAmount: number;
+  // Current Fare Range (for dynamic pricing display)
+  currentFareMin: number; // Min markup percentage for user-visible transfer rates
+  currentFareMax: number; // Max markup percentage for user-visible transfer rates
+  // Bargain Fare Range (for user-entered price validation)
+  bargainFareMin: number; // Min acceptable bargain percentage for transfers
+  bargainFareMax: number; // Max acceptable bargain percentage for transfers
+  validFrom: string;
+  validTo: string;
+  status: "active" | "inactive" | "expired";
+  priority: number;
+  userType: "all" | "b2c" | "b2b";
+  specialConditions: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreateHotelMarkupRequest {
   name: string;
   description: string;
@@ -119,6 +147,31 @@ export interface CreateHotelMarkupRequest {
   applicableDays: string[];
   minStay: number;
   maxStay: number;
+  status: "active" | "inactive";
+  priority: number;
+  userType: "all" | "b2c" | "b2b";
+  specialConditions?: string;
+}
+
+export interface CreateTransferMarkupRequest {
+  name: string;
+  description: string;
+  originCity: string;
+  destinationCity: string;
+  transferType: "Private" | "Shared" | "Luxury" | "Economy" | "ALL";
+  vehicleType: "Sedan" | "SUV" | "Van" | "Bus" | "ALL";
+  markupType: "percentage" | "fixed";
+  markupValue: number;
+  minAmount: number;
+  maxAmount: number;
+  // Current Fare Range fields
+  currentFareMin: number; // Min markup percentage for user-visible transfer rates
+  currentFareMax: number; // Max markup percentage for user-visible transfer rates
+  // Bargain Fare Range fields
+  bargainFareMin: number; // Min acceptable bargain percentage for transfers
+  bargainFareMax: number; // Max acceptable bargain percentage for transfers
+  validFrom: string;
+  validTo: string;
   status: "active" | "inactive";
   priority: number;
   userType: "all" | "b2c" | "b2b";
@@ -546,6 +599,269 @@ class MarkupService {
       finalPrice,
       markupRange: { min: baseMarkupMin, max: baseMarkupMax },
     };
+  }
+
+  /**
+   * Get all transfer markups with optional filters
+   */
+  async getTransferMarkups(filters: MarkupFilters = {}): Promise<{
+    markups: TransferMarkup[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    try {
+      const queryParams = new URLSearchParams();
+
+      if (filters.search) queryParams.set("search", filters.search);
+      if (filters.status)
+        queryParams.set(
+          "is_active",
+          filters.status === "active" ? "true" : "false",
+        );
+      if (filters.page) queryParams.set("page", filters.page.toString());
+      if (filters.limit) queryParams.set("limit", filters.limit.toString());
+
+      const response = await apiClient.get(
+        `/api/admin/transfers-markup?${queryParams}`,
+      );
+
+      if (response.ok) {
+        // Transform API response to match expected format
+        const data = response.data;
+        return {
+          markups: data.data.map((markup: any) => ({
+            id: markup.id.toString(),
+            name: markup.rule_name,
+            description: markup.rule_name,
+            originCity: markup.origin_city,
+            destinationCity: markup.destination_city,
+            transferType: "ALL",
+            vehicleType: markup.vehicle_type,
+            markupType: markup.markup_type,
+            markupValue: markup.markup_value,
+            minAmount: markup.min_fare_range || 0,
+            maxAmount: markup.max_fare_range || 999999,
+            currentFareMin: markup.markup_value - 5,
+            currentFareMax: markup.markup_value + 5,
+            bargainFareMin: Math.max(markup.markup_value - 10, 5),
+            bargainFareMax: markup.markup_value + 10,
+            validFrom: new Date().toISOString(),
+            validTo: new Date(
+              Date.now() + 365 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
+            status: markup.is_active ? "active" : "inactive",
+            priority: markup.priority || 50,
+            userType: "all",
+            specialConditions: "",
+            createdAt: markup.created_at,
+            updatedAt: markup.updated_at,
+          })),
+          total: data.pagination.total_items,
+          page: data.pagination.current_page,
+          totalPages: data.pagination.total_pages,
+        };
+      } else {
+        throw new Error(response.error || "Failed to fetch transfer markups");
+      }
+    } catch (error) {
+      console.error("Error fetching transfer markups:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create a new transfer markup
+   */
+  async createTransferMarkup(
+    markupData: CreateTransferMarkupRequest,
+  ): Promise<TransferMarkup> {
+    try {
+      const requestData = {
+        rule_name: markupData.name,
+        origin_city: markupData.originCity,
+        destination_city: markupData.destinationCity,
+        vehicle_type: markupData.vehicleType.toLowerCase(),
+        markup_type: markupData.markupType,
+        markup_value: markupData.markupValue,
+        min_fare_range: markupData.minAmount,
+        max_fare_range: markupData.maxAmount,
+        is_active: markupData.status === "active",
+        priority: markupData.priority,
+      };
+
+      const response = await apiClient.post(
+        `/api/admin/transfers-markup`,
+        requestData,
+      );
+
+      if (response.ok) {
+        const data = response.data.data;
+        return {
+          id: data.id.toString(),
+          name: data.rule_name,
+          description: data.rule_name,
+          originCity: data.origin_city,
+          destinationCity: data.destination_city,
+          transferType: "ALL",
+          vehicleType: data.vehicle_type,
+          markupType: data.markup_type,
+          markupValue: data.markup_value,
+          minAmount: data.min_fare_range || 0,
+          maxAmount: data.max_fare_range || 999999,
+          currentFareMin: data.markup_value - 5,
+          currentFareMax: data.markup_value + 5,
+          bargainFareMin: Math.max(data.markup_value - 10, 5),
+          bargainFareMax: data.markup_value + 10,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+          status: data.is_active ? "active" : "inactive",
+          priority: data.priority || 50,
+          userType: "all",
+          specialConditions: "",
+          createdAt: data.created_at,
+          updatedAt: data.updated_at,
+        };
+      } else {
+        throw new Error(response.error || "Failed to create transfer markup");
+      }
+    } catch (error) {
+      console.error("Error creating transfer markup:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update an existing transfer markup
+   */
+  async updateTransferMarkup(
+    markupId: string,
+    markupData: Partial<CreateTransferMarkupRequest>,
+  ): Promise<TransferMarkup> {
+    try {
+      const requestData = {
+        rule_name: markupData.name,
+        origin_city: markupData.originCity,
+        destination_city: markupData.destinationCity,
+        vehicle_type: markupData.vehicleType?.toLowerCase(),
+        markup_type: markupData.markupType,
+        markup_value: markupData.markupValue,
+        min_fare_range: markupData.minAmount,
+        max_fare_range: markupData.maxAmount,
+        is_active: markupData.status === "active",
+        priority: markupData.priority,
+      };
+
+      const response = await apiClient.put(
+        `/api/admin/transfers-markup/${markupId}`,
+        requestData,
+      );
+
+      if (response.ok) {
+        const data = response.data.data;
+        return {
+          id: data.id.toString(),
+          name: data.rule_name,
+          description: data.rule_name,
+          originCity: data.origin_city,
+          destinationCity: data.destination_city,
+          transferType: "ALL",
+          vehicleType: data.vehicle_type,
+          markupType: data.markup_type,
+          markupValue: data.markup_value,
+          minAmount: data.min_fare_range || 0,
+          maxAmount: data.max_fare_range || 999999,
+          currentFareMin: data.markup_value - 5,
+          currentFareMax: data.markup_value + 5,
+          bargainFareMin: Math.max(data.markup_value - 10, 5),
+          bargainFareMax: data.markup_value + 10,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+          status: data.is_active ? "active" : "inactive",
+          priority: data.priority || 50,
+          userType: "all",
+          specialConditions: "",
+          createdAt: data.created_at,
+          updatedAt: data.updated_at,
+        };
+      } else {
+        throw new Error(response.error || "Failed to update transfer markup");
+      }
+    } catch (error) {
+      console.error("Error updating transfer markup:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a transfer markup
+   */
+  async deleteTransferMarkup(markupId: string): Promise<void> {
+    try {
+      const response = await apiClient.delete(
+        `/api/admin/transfers-markup/${markupId}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(response.error || "Failed to delete transfer markup");
+      }
+    } catch (error) {
+      console.error("Error deleting transfer markup:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Toggle transfer markup status (active/inactive)
+   */
+  async toggleTransferMarkupStatus(markupId: string): Promise<TransferMarkup> {
+    try {
+      const response = await apiClient.patch(
+        `/api/admin/transfers-markup/${markupId}/toggle`,
+      );
+
+      if (response.ok) {
+        const data = response.data.data;
+        return {
+          id: data.id.toString(),
+          name: data.rule_name,
+          description: data.rule_name,
+          originCity: "",
+          destinationCity: "",
+          transferType: "ALL",
+          vehicleType: "economy",
+          markupType: "percentage",
+          markupValue: 0,
+          minAmount: 0,
+          maxAmount: 999999,
+          currentFareMin: 0,
+          currentFareMax: 0,
+          bargainFareMin: 0,
+          bargainFareMax: 0,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+          status: data.is_active ? "active" : "inactive",
+          priority: 50,
+          userType: "all",
+          specialConditions: "",
+          createdAt: data.created_at || new Date().toISOString(),
+          updatedAt: data.updated_at,
+        };
+      } else {
+        throw new Error(
+          response.error || "Failed to toggle transfer markup status",
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling transfer markup status:", error);
+      throw error;
+    }
   }
 }
 

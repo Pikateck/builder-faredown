@@ -14,6 +14,9 @@ import UserManagement from "./UserManagement";
 import MarkupManagementAir from "./MarkupManagementAir";
 import MarkupManagementHotel from "./MarkupManagementHotel";
 import MarkupManagementSightseeing from "./MarkupManagementSightseeing";
+import MarkupManagementTransfer from "./MarkupManagementTransfer";
+import BookingReports from "./BookingReports";
+import APITestDashboard from "./APITestDashboard";
 import VATManagement from "./VATManagement";
 import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
@@ -57,6 +60,7 @@ import {
   Hotel,
   Plane,
   Camera,
+  Car,
   DollarSign,
   Settings,
   Shield,
@@ -159,6 +163,12 @@ const adminModules = [
     name: "Markup Management (Sightseeing)",
     icon: Camera,
     color: "bg-purple-600",
+  },
+  {
+    id: "markup-transfer",
+    name: "Markup Management (Transfer)",
+    icon: Car,
+    color: "bg-orange-600",
   },
   { id: "vat", name: "VAT Management", icon: FileText, color: "bg-purple-600" },
   { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
@@ -776,6 +786,12 @@ export default function AdminDashboard() {
               <MarkupManagementHotel />
             ) : activeModule === "markup-sightseeing" ? (
               <MarkupManagementSightseeing />
+            ) : activeModule === "markup-transfer" ? (
+              <MarkupManagementTransfer />
+            ) : activeModule === "reports" ? (
+              <BookingReports />
+            ) : activeModule === "api-testing" ? (
+              <APITestDashboard />
             ) : activeModule === "vat" ? (
               <VATManagement />
             ) : activeModule === "promos" ? (

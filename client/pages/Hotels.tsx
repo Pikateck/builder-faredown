@@ -597,7 +597,7 @@ export default function Hotels() {
                   <span>Hotels</span>
                 </Link>
                 <Link
-                  to="/?tab=sightseeing"
+                  to="/sightseeing"
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
@@ -637,7 +637,7 @@ export default function Hotels() {
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "الع��بية", flag: "🇸🇦" },
-                          { code: "hi", name: "हि��्दी", flag: "🇮🇳" },
+                          { code: "hi", name: "��ि��्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -1229,7 +1229,7 @@ export default function Hotels() {
                   </li>
                   <li>
                     <Link
-                      to="/?tab=sightseeing"
+                      to="/sightseeing"
                       onClick={() =>
                         window.scrollTo({ top: 0, behavior: "smooth" })
                       }
