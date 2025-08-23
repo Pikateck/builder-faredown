@@ -1080,7 +1080,7 @@ export default function Index() {
                         console.log("��� To city button clicked!");
                         setShowToCities(true);
                       }}
-                      className="w-full text-left"
+                      className="w-full text-left touch-manipulation active:bg-gray-50 hover:bg-gray-50 rounded-lg p-2 transition-colors"
                     >
                       <div className="text-xs text-gray-500 mb-1">To</div>
                       <div className="flex items-center space-x-2">
