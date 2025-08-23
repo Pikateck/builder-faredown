@@ -5465,10 +5465,69 @@ export default function FlightResults() {
                         <Button
                           onClick={() => {
                             setShowBargainModal(false);
-                            handleBooking(bargainFlight, {
-                              ...bargainFareType,
-                              price: aiOfferPrice || parseInt(bargainPrice),
+
+                            // Update booking context with search parameters first
+                            updateSearchParams({
+                              from: selectedFromCity,
+                              to: selectedToCity,
+                              fromCode: Object.entries({
+                                Mumbai: "BOM", Delhi: "DEL", Bangalore: "BLR", Chennai: "MAA", Kolkata: "CCU"
+                              }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
+                              toCode: Object.entries({
+                                Dubai: "DXB", London: "LHR", "New York": "JFK", Singapore: "SIN", Tokyo: "NRT"
+                              }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
+                              departureDate: departureDate || "",
+                              returnDate: returnDate,
+                              tripType: tripType,
+                              passengers: {
+                                adults: travelers.adults,
+                                children: travelers.children,
+                                infants: travelers.infants || 0,
+                              },
+                              class: selectedClass as any,
                             });
+
+                            // Update booking context with selected flight
+                            setSelectedFlight({
+                              id: bargainFlight.id.toString(),
+                              airline: bargainFlight.airline,
+                              flightNumber: bargainFlight.flightNumber,
+                              departureTime: bargainFlight.departureTime,
+                              arrivalTime: bargainFlight.arrivalTime,
+                              duration: bargainFlight.duration,
+                              aircraft: bargainFlight.aircraft || "Aircraft",
+                              stops: bargainFlight.stops || 0,
+                              departureCode: bargainFlight.departureCode,
+                              arrivalCode: bargainFlight.arrivalCode,
+                              departureCity: selectedFromCity,
+                              arrivalCity: selectedToCity,
+                              departureDate: departureDate || "",
+                              arrivalDate: departureDate || "",
+                              returnFlightNumber: bargainFlight.returnFlightNumber,
+                              returnDepartureTime: bargainFlight.returnDepartureTime,
+                              returnArrivalTime: bargainFlight.returnArrivalTime,
+                              returnDuration: bargainFlight.returnDuration,
+                              returnDepartureDate: returnDate,
+                              returnArrivalDate: returnDate,
+                            });
+
+                            // Update booking context with bargained fare - better terms
+                            setSelectedFare({
+                              id: bargainFareType.id || `fare_${Date.now()}`,
+                              name: bargainFareType.name,
+                              type: bargainFareType.type || "economy",
+                              price: aiOfferPrice || parseInt(bargainPrice),
+                              originalPrice: bargainFareType.price,
+                              isRefundable: true, // Bargained fares get better refund terms
+                              isBargained: true,
+                              includedBaggage: bargainFareType.includedBaggage || "23kg",
+                              includedMeals: true, // Bargained fares include meals
+                              seatSelection: true, // Bargained fares include seat selection
+                              changes: { allowed: true, fee: 0 }, // Free changes for bargained fares
+                              cancellation: { allowed: true, fee: 500 }, // Better cancellation terms
+                            });
+
+                            navigate("/booking-flow");
                           }}
                           disabled={!isOfferValid}
                           className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d6b] hover:to-[#005a9f] text-white py-5 text-xl font-bold rounded-xl shadow-lg"
