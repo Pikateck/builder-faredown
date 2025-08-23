@@ -3659,6 +3659,32 @@ export default function FlightResults() {
                                           Bargain Now
                                         </Button>
 
+                                        {/* AI Bargain Button */}
+                                        <FlightBargainButton
+                                          flight={{
+                                            id: flight.id.toString(),
+                                            airline: flight.airline,
+                                            flightNumber: flight.flightNumber || flight.id.toString(),
+                                            from: flight.origin,
+                                            to: flight.destination,
+                                            departureTime: flight.departureTime,
+                                            arrivalTime: flight.arrivalTime,
+                                            price: flight.fareTypes[0]?.price || 0,
+                                            duration: flight.duration
+                                          }}
+                                          basePrice={flight.fareTypes[0]?.price || 0}
+                                          productRef={flight.id.toString()}
+                                          selectedFareType={{
+                                            type: flight.fareTypes[0]?.name || "Economy",
+                                            price: flight.fareTypes[0]?.price || 0,
+                                            features: flight.fareTypes[0]?.features || []
+                                          }}
+                                          userName="Guest"
+                                          buttonText="Bargain This Price"
+                                          buttonSize="md"
+                                          className="w-full mb-3"
+                                        />
+
                                         {/* Book Now Button */}
                                         <Button
                                           onClick={() => {
@@ -4804,7 +4830,7 @@ export default function FlightResults() {
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
                     { label: "Afternoon", range: [12, 18], icon: "���️" },
-                    { label: "Evening", range: [18, 24], icon: "🌙" },
+                    { label: "Evening", range: [18, 24], icon: "����" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
                     <button
