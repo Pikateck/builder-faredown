@@ -358,6 +358,8 @@ export function MobileCityDropdown({
                     onSelectCity(dest.name);
                     onClose();
                   }}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onTouchEnd={(e) => e.preventDefault()}
                   className="w-full text-left px-4 py-4 hover:bg-blue-50 rounded-lg border border-gray-100 touch-manipulation transition-colors duration-150"
                 >
                   <div className="flex items-center space-x-3">
