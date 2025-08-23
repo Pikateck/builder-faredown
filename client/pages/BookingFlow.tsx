@@ -1159,7 +1159,6 @@ export default function BookingFlow() {
     return calculateTotalAdultsPrice() + calculateTotalChildrenPrice();
   };
   const [countrySearch, setCountrySearch] = useState("");
-  const [currentStep, setCurrentStep] = useState(1); // Start at step 1 (Travelers)
 
   const steps = [
     {

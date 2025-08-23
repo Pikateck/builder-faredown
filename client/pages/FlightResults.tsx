@@ -2927,8 +2927,29 @@ export default function FlightResults() {
                             e.stopPropagation();
                           }}
                         >
-                          <TrendingDown className="w-4 h-4" />
-                          Bargain Now
+                          <FlightBargainButton
+                            flight={{
+                              id: flight.id.toString(),
+                              airline: flight.airline,
+                              flightNumber: flight.flightNumber,
+                              from: selectedFromCity,
+                              to: selectedToCity,
+                              departureTime: flight.departureTime,
+                              arrivalTime: flight.arrivalTime,
+                              price: fareType.price,
+                              duration: flight.duration
+                            }}
+                            basePrice={fareType.price}
+                            productRef={`flight-${flight.id}-${fareType.id}`}
+                            selectedFareType={{
+                              type: fareType.name,
+                              price: fareType.price,
+                              features: fareType.features || []
+                            }}
+                            buttonText="Bargain Now"
+                            buttonSize="sm"
+                            className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold"
+                          />
                         </Button>
                       </div>
                     </div>
