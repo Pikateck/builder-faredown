@@ -882,7 +882,8 @@ export default function Hotels() {
           </div>
         </section>
 
-        {/* Trust & Social Proof Section */}
+        {/* Trust & Social Proof Section - Enhanced Classy Design */}
+        <TrustSection />
         <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-[1280px] mx-auto px-6">
             {/* Header with Trust Indicators */}
