@@ -80,6 +80,24 @@ export function ConversationalBargainModal({
   basePrice,
   productRef
 }: Props) {
+  // Safety checks for required props
+  if (!isOpen) return null;
+
+  if (!onClose || !onAccept) {
+    console.error('ConversationalBargainModal: Missing required callback props');
+    return null;
+  }
+
+  if (module === 'flights' && !flight) {
+    console.error('ConversationalBargainModal: Flight data required for flights module');
+    return null;
+  }
+
+  if (module === 'hotels' && !hotel) {
+    console.error('ConversationalBargainModal: Hotel data required for hotels module');
+    return null;
+  }
+
   // State Management
   const [currentPrice, setCurrentPrice] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
