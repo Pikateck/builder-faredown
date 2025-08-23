@@ -1578,7 +1578,7 @@ export default function FlightResults() {
                     {[
                       { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
-                      { code: "fr", name: "Français", flag: "🇫�����" },
+                      { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
@@ -6010,7 +6010,7 @@ export default function FlightResults() {
                         </div>
                         <div className="flex justify-between">
                           <span className="text-blue-700">Cabin:</span>
-                          <span className="font-medium">1 × 7 kg / Adult</span>
+                          <span className="font-medium">1 �� 7 kg / Adult</span>
                         </div>
                         <p className="text-xs text-blue-600 mt-2">
                           Additional baggage charges apply for excess weight
