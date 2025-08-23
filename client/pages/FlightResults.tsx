@@ -3941,49 +3941,31 @@ export default function FlightResults() {
 
                                       {/* Book Now & Start Bargain Buttons - Mobile */}
                                       <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
-                                        {/* Start Bargain Button - Phase 1 Mobile */}
-                                        <Button
-                                          onClick={() => {
-                                            const [flightId, fareTypeId] =
-                                              detailKey.split("-");
-                                            const fareType =
-                                              flight.fareTypes.find(
-                                                (ft) => ft.id === fareTypeId,
-                                              ) || flight.fareTypes[0];
-
-                                            const bargainItem =
-                                              createFlightBargainItem({
-                                                id: flight.id.toString(),
-                                                airline: flight.airline,
-                                                route: {
-                                                  from:
-                                                    selectedFromCity ||
-                                                    flight.origin,
-                                                  to:
-                                                    selectedToCity ||
-                                                    flight.destination,
-                                                },
-                                                class: selectedClass,
-                                                price:
-                                                  fareType.price ||
-                                                  flight.price?.amount ||
-                                                  0,
-                                              });
-
-                                            console.log(
-                                              "📱 Starting live API bargain (mobile):",
-                                              bargainItem,
-                                            );
-
-                                            bargainHook.startBargain(
-                                              bargainItem,
-                                            );
+                                        {/* AI Bargain Button - Mobile */}
+                                        <FlightBargainButton
+                                          flight={{
+                                            id: flight.id.toString(),
+                                            airline: flight.airline,
+                                            flightNumber: flight.flightNumber || flight.id.toString(),
+                                            from: flight.origin,
+                                            to: flight.destination,
+                                            departureTime: flight.departureTime,
+                                            arrivalTime: flight.arrivalTime,
+                                            price: flight.fareTypes[0]?.price || 0,
+                                            duration: flight.duration
                                           }}
-                                          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-3 text-base font-semibold rounded-lg shadow-md transition-all duration-200 flex items-center justify-center gap-2"
-                                        >
-                                          <TrendingDown className="w-4 h-4" />
-                                          Bargain Now
-                                        </Button>
+                                          basePrice={flight.fareTypes[0]?.price || 0}
+                                          productRef={flight.id.toString()}
+                                          selectedFareType={{
+                                            type: flight.fareTypes[0]?.name || "Economy",
+                                            price: flight.fareTypes[0]?.price || 0,
+                                            features: flight.fareTypes[0]?.features || []
+                                          }}
+                                          userName="Guest"
+                                          buttonText="Bargain This Price"
+                                          buttonSize="md"
+                                          className="w-full mb-3"
+                                        />
 
                                         {/* Book Now Button Mobile */}
                                         <Button
