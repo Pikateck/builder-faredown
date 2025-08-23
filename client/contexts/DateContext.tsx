@@ -18,7 +18,7 @@ interface DateContextType {
   formatDisplayDate: (date: Date | null, format?: string) => string;
   getUrlDateString: (date: Date | null) => string;
   loadDatesFromParams: (searchParams: URLSearchParams) => void;
-  getSearchParams: () => URLSearchParams;
+  getSearchParams: (additionalParams?: Record<string, string>) => URLSearchParams;
 }
 
 const DateContext = createContext<DateContextType | undefined>(undefined);
