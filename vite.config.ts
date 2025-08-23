@@ -1,5 +1,5 @@
 import { defineConfig, Plugin } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 // https://vitejs.dev/config/
@@ -17,12 +17,9 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
+      // Force production mode to disable data-loc attributes
       jsxRuntime: "automatic",
-      babel: {
-        plugins: [
-          ["@babel/plugin-transform-react-jsx", { development: false }]
-        ]
-      }
+      devTarget: "es2022"
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
