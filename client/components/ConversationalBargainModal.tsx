@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star, 
-  TrendingUp, CheckCircle, Sparkles, Crown, ArrowLeft, Users
+import {
+  X, Plane, Building, MapPin, Car, Clock, Shield, Target, Zap, Star,
+  TrendingUp, CheckCircle, Sparkles, Crown, ArrowLeft, Users, Handshake
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { numberToWords, formatNumberWithCommas, formatPriceInWords, formatPriceInWordsShort } from "@/lib/numberToWords";
@@ -360,7 +360,8 @@ export function ConversationalBargainModal({
         <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 sm:p-6 rounded-t-xl">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-lg transition-colors"
+            className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10"
+            style={{ minWidth: '36px', minHeight: '36px' }}
           >
             <X className="w-5 h-5" />
           </button>
@@ -403,7 +404,7 @@ export function ConversationalBargainModal({
                     ) : message.speaker === 'supplier' ? (
                       <Crown className="w-4 h-4" />
                     ) : (
-                      <Star className="w-4 h-4" />
+                      <Handshake className="w-4 h-4" />
                     )}
                   </div>
                   
@@ -468,7 +469,7 @@ export function ConversationalBargainModal({
               <Button
                 onClick={handleAcceptOffer}
                 disabled={timerExpired}
-                className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d66] hover:to-[#005ba8] text-white font-semibold py-3 mobile-touch-target"
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 mobile-touch-target"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Book Now at {formatPrice(finalOffer)}
@@ -517,9 +518,9 @@ export function ConversationalBargainModal({
                 <button
                   onClick={handleSubmitOffer}
                   disabled={isNegotiating || !currentPrice}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d66] hover:to-[#005ba8] disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Handshake className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -534,7 +535,7 @@ export function ConversationalBargainModal({
             </div>
             <Button
               onClick={() => onAccept(basePrice, `ORD_ORIGINAL_${Date.now()}`)}
-              className="w-full bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002d66] hover:to-[#005ba8] text-white font-semibold py-3"
+              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3"
             >
               Book at Original Price {formatPrice(basePrice)}
             </Button>
