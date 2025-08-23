@@ -12,16 +12,14 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist/spa",
     sourcemap: false,
   },
-  define: {
-    "process.env.NODE_ENV": JSON.stringify("production"),
-  },
   plugins: [
     react({
+      // Use automatic JSX runtime consistently
+      jsxRuntime: "automatic",
+      // Remove babel plugins that might interfere
       babel: {
-        plugins: [
-          ["@babel/plugin-transform-react-jsx", { development: false }]
-        ]
-      }
+        plugins: [],
+      },
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
