@@ -454,31 +454,7 @@ export default function FlightResults() {
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
 
-  // Phase 1 Bargain Engine integration with live API
-  const bargainHook = useBargainPhase1({
-    useLiveAPI: true, // Enable live API integration
-    onBookingConfirmed: (item, finalPrice) => {
-      // Custom handling after bargain success
-      console.log("✅ Live bargain successful!", { item, finalPrice });
-
-      // Create flight object for booking flow
-      const flightForBooking = flightData.find(
-        (f) => f.id.toString() === item.itemId,
-      );
-      if (flightForBooking) {
-        handleBooking(flightForBooking, {
-          id: "bargained",
-          name: item.class || "Economy",
-          price: finalPrice,
-          refundability: "Non-Refundable",
-          features: ["AI Bargained Price"],
-          baggage: "23kg",
-        });
-      }
-    },
-    redirectToBooking: true,
-    deviceType: window.innerWidth <= 768 ? "mobile" : "desktop",
-  });
+  // Old bargain hook removed - now using ConversationalBargainModal via BargainIntegration
 
   // Search panel states
   const [showClassDropdown, setShowClassDropdown] = useState(false);
@@ -5907,7 +5883,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return ���{" "}
+                          Return •{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d")
                             : "Select date"}
