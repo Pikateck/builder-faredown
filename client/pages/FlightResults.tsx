@@ -6029,7 +6029,7 @@ export default function FlightResults() {
                           <span className="text-red-700 font-medium">
                             Airline fee:
                           </span>
-                          <p className="text-red-600">��3,500 per passenger</p>
+                          <p className="text-red-600">₹3,500 per passenger</p>
                         </div>
                         <div>
                           <span className="text-red-700 font-medium">
