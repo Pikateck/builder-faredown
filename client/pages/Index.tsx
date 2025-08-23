@@ -983,33 +983,6 @@ export default function Index() {
               </p>
             </div>
 
-            {/* Debug display for state values */}
-            <div className="mb-4 p-2 bg-yellow-100 rounded text-xs">
-              Debug: showFromCities={showFromCities.toString()}, showToCities={showToCities.toString()}
-              <br />
-              Selected: from="{selectedFromCity || 'none'}", to="{selectedToCity || 'none'}"
-              <br />
-              Active Tab: {activeTab}
-              <br />
-              <button
-                onClick={() => {
-                  console.log("🔧 Force opening From Cities dropdown");
-                  setShowFromCities(true);
-                }}
-                className="mt-2 px-3 py-1 bg-blue-500 text-white rounded text-xs"
-              >
-                Force Open From Cities
-              </button>
-              <button
-                onClick={() => {
-                  console.log("🔧 Force opening To Cities dropdown");
-                  setShowToCities(true);
-                }}
-                className="mt-2 ml-2 px-3 py-1 bg-green-500 text-white rounded text-xs"
-              >
-                Force Open To Cities
-              </button>
-            </div>
 
             {/* Mobile Trip Type Selector */}
             <div className="flex space-x-1 mb-6 bg-gray-100 rounded-lg p-1">
