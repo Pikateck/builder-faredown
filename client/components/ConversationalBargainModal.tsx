@@ -326,23 +326,24 @@ export function ConversationalBargainModal({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Safety checks for required props - handled in JSX instead of early returns
-  if (!isOpen) return null;
+  // Validation flags - no early returns to maintain hooks consistency
+  const hasValidCallbacks = onClose && onAccept;
+  const hasValidFlightData = module !== 'flights' || flight;
+  const hasValidHotelData = module !== 'hotels' || hotel;
+  const shouldRenderModal = isOpen && hasValidCallbacks && hasValidFlightData && hasValidHotelData;
 
-  if (!onClose || !onAccept) {
+  // Log validation errors
+  if (!hasValidCallbacks) {
     console.error('ConversationalBargainModal: Missing required callback props');
-    return null;
   }
-
   if (module === 'flights' && !flight) {
     console.error('ConversationalBargainModal: Flight data required for flights module');
-    return null;
   }
-
   if (module === 'hotels' && !hotel) {
     console.error('ConversationalBargainModal: Hotel data required for hotels module');
-    return null;
   }
+
+  if (!shouldRenderModal) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
