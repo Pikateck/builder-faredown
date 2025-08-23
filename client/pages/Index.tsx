@@ -986,6 +986,19 @@ export default function Index() {
             {/* Debug display for state values */}
             <div className="mb-4 p-2 bg-yellow-100 rounded text-xs">
               Debug: showFromCities={showFromCities.toString()}, showToCities={showToCities.toString()}
+              <br />
+              <button
+                onClick={() => setShowFromCities(true)}
+                className="mt-2 px-3 py-1 bg-blue-500 text-white rounded text-xs"
+              >
+                Force Open From Cities
+              </button>
+              <button
+                onClick={() => setShowToCities(true)}
+                className="mt-2 ml-2 px-3 py-1 bg-green-500 text-white rounded text-xs"
+              >
+                Force Open To Cities
+              </button>
             </div>
 
             {/* Mobile Trip Type Selector */}
