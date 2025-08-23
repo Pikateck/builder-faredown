@@ -410,7 +410,7 @@ router.get("/booking/:id", authenticateToken, auditRequest, async (req, res) => 
  */
 router.post(
   "/booking/:id/cancel",
-  requireAuth,
+  authenticateToken,
   auditRequest,
   async (req, res) => {
     try {
