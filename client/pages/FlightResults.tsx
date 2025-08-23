@@ -2060,10 +2060,10 @@ export default function FlightResults() {
                         </span>
                         <button
                           onClick={() =>
-                            setTravelers((prev) => ({
-                              ...prev,
-                              adults: prev.adults + 1,
-                            }))
+                            handleTravelersChange({
+                              ...travelers,
+                              adults: travelers.adults + 1,
+                            })
                           }
                           className="w-8 h-8 rounded-full border-2 border-blue-600 flex items-center justify-center hover:bg-blue-50 text-blue-600 font-bold"
                         >
