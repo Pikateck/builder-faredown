@@ -1030,9 +1030,7 @@ export default function Index() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        console.log("🛫 From city button clicked! Current state:", showFromCities);
                         setShowFromCities(true);
-                        console.log("✅ Setting showFromCities to true");
                       }}
                       className="w-full text-left touch-manipulation active:bg-gray-50 hover:bg-gray-50 rounded-lg p-2 transition-colors"
                     >
@@ -1076,9 +1074,7 @@ export default function Index() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        console.log("🛩️ To city button clicked! Current state:", showToCities);
                         setShowToCities(true);
-                        console.log("✅ Setting showToCities to true");
                       }}
                       className="w-full text-left touch-manipulation active:bg-gray-50 hover:bg-gray-50 rounded-lg p-2 transition-colors"
                     >
@@ -2031,10 +2027,6 @@ export default function Index() {
                                           )),
                                   }}
                                   onChange={(range) => {
-                                    console.log(
-                                      "Flight calendar range selected:",
-                                      range,
-                                    );
                                     setDepartureDate(range.startDate);
                                     if (tripType === "round-trip") {
                                       setReturnDate(range.endDate);
@@ -3348,15 +3340,11 @@ export default function Index() {
       {/* Mobile Dropdown Components */}
       <MobileCityDropdown
         isOpen={showFromCities}
-        onClose={() => {
-          console.log("🚫 From cities dropdown closed");
-          setShowFromCities(false);
-        }}
+        onClose={() => setShowFromCities(false)}
         title="Select departure city"
         cities={cityData}
         selectedCity={selectedFromCity}
         onSelectCity={(city) => {
-          console.log("🏙️ Selected from city:", city);
           setSelectedFromCity(city);
           setShowFromCities(false);
         }}
@@ -3364,15 +3352,11 @@ export default function Index() {
 
       <MobileCityDropdown
         isOpen={showToCities}
-        onClose={() => {
-          console.log("🚫 To cities dropdown closed");
-          setShowToCities(false);
-        }}
+        onClose={() => setShowToCities(false)}
         title="Select destination city"
         cities={cityData}
         selectedCity={selectedToCity}
         onSelectCity={(city) => {
-          console.log("🏙️ Selected to city:", city);
           setSelectedToCity(city);
           setShowToCities(false);
         }}
