@@ -6113,7 +6113,7 @@ export default function FlightResults() {
         isOpen={showTravelers}
         onClose={() => setShowTravelers(false)}
         travelers={travelers}
-        setTravelers={setTravelers}
+        setTravelers={handleTravelersChange}
       />
 
       <MobileClassDropdown
