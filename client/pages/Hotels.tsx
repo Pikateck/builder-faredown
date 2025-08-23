@@ -882,8 +882,8 @@ export default function Hotels() {
         </section>
 
         {/* Trust & Social Proof Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-[1280px] mx-auto px-4">
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-[1280px] mx-auto px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Trusted by 50M+ Travelers
