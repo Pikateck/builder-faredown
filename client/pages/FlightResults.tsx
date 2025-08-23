@@ -2538,7 +2538,7 @@ export default function FlightResults() {
                                       </span>
                                       <span className="font-medium text-gray-900">
                                         ₹
-                                        {flight.price.breakdown.baseFare.toLocaleString(
+                                        {(flight.price?.breakdown?.baseFare || 0).toLocaleString(
                                           "en-IN",
                                         )}
                                       </span>
@@ -2550,8 +2550,8 @@ export default function FlightResults() {
                                       <span className="font-medium text-gray-900">
                                         ��
                                         {(
-                                          flight.price.breakdown.taxes +
-                                          flight.price.breakdown.fees
+                                          (flight.price?.breakdown?.taxes || 0) +
+                                          (flight.price?.breakdown?.fees || 0)
                                         ).toLocaleString("en-IN")}
                                       </span>
                                     </div>
@@ -2562,7 +2562,7 @@ export default function FlightResults() {
                                         </span>
                                         <span className="text-blue-600">
                                           ₹
-                                          {flight.price.breakdown.total.toLocaleString(
+                                          {(flight.price?.breakdown?.total || flight.price?.amount || 0).toLocaleString(
                                             "en-IN",
                                           )}
                                         </span>
@@ -5146,7 +5146,7 @@ export default function FlightResults() {
                         British Airways • Non-stop • 9h 25m
                       </div>
                     </div>
-                    <div className="text-lg font-bold">₹45200</div>
+                    <div className="text-lg font-bold">��45200</div>
                   </div>
                 </div>
               </div>
