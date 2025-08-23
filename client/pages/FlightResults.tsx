@@ -449,7 +449,7 @@ export default function FlightResults() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
-    symbol: "���",
+    symbol: "₹",
     name: "Indian Rupee",
   });
   // Removed old bargain offer states
@@ -3078,7 +3078,6 @@ export default function FlightResults() {
                               userName={userName}
                               buttonText="Bargain Now"
                               buttonSize="md"
-                              className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                             />
                           </div>
                         </div>
